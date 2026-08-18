@@ -51,7 +51,7 @@ http://localhost:8788/create-user
 # Apply schema to Cloudflare
 wrangler d1 execute mystical-data --remote --file=./schema.sql
 
-# See Cloudflare users
+# See Cloudflare users and data
 wrangler d1 execute mystical-data --remote --command="SELECT * FROM users;"
 
 # Delete all
