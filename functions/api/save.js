@@ -1,52 +1,117 @@
+import {
+    jsonResponse,
+    getUser
+} from "../_utils.js";
 
-export async function onRequest(context) {
 
-  const { request, env } = context
-  const url = new URL(request.url)
+function getCookie(request, name) {
 
-  // -----------------------
-  // UPLOAD SAVE FILE
-  // -----------------------
+    const cookies =
+        request.headers.get("Cookie") || "";
 
-  if (request.method === "POST") {
 
-    const form = await request.formData()
+    for (
+        const cookie of cookies.split(";")
+    ) {
 
-    const username = form.get("username")
-    const file = form.get("file")
+        const [key, ...value] =
+            cookie.trim().split("=");
 
-    if (!username || !file) {
-      return new Response("Missing username or file", { status: 400 })
+
+        if (key === name) {
+
+            return decodeURIComponent(
+                value.join("=")
+            );
+
+        }
     }
 
-    const saveText = await file.text()
 
-    // store save
-    await env.SAVES.put(username, saveText)
+    return null;
+}
 
-    return new Response("Save uploaded successfully")
-  }
 
-  // -----------------------
-  // LOAD SAVE FILE
-  // -----------------------
+export async function onRequestPost(context) {
 
-  if (request.method === "GET") {
+    const { request, env } =
+        context;
 
-    const username = url.searchParams.get("username")
+
+    const username =
+        getCookie(
+            request,
+            "username"
+        );
+
 
     if (!username) {
-      return new Response("Username required", { status: 400 })
+
+        return jsonResponse({
+            success: false,
+            error: "Not logged in."
+        }, 401);
+
     }
 
-    const save = await env.SAVES.get(username)
 
-    if (!save) {
-      return new Response("Save not found", { status: 404 })
+    const user =
+        await getUser(
+            env,
+            username
+        );
+
+
+    if (!user) {
+
+        return jsonResponse({
+            success: false,
+            error: "User not found."
+        }, 404);
+
     }
 
-    return new Response(save)
-  }
 
-  return new Response("Invalid request", { status: 400 })
+    const body =
+        await request.json();
+
+
+    const data =
+        body.data;
+
+
+    if (
+        !data ||
+        typeof data !== "object" ||
+        Array.isArray(data)
+    ) {
+
+        return jsonResponse({
+            success: false,
+            error:
+                "Save data must be a JSON object."
+        }, 400);
+
+    }
+
+
+    await env.DB
+        .prepare(`
+            UPDATE users
+            SET
+                save_data = ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        `)
+        .bind(
+            JSON.stringify(data),
+            user.id
+        )
+        .run();
+
+
+    return jsonResponse({
+        success: true,
+        data
+    });
 }

@@ -1,0 +1,7 @@
+name = "mystical-universe"
+compatibility_date = "2026-08-18"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mystical-data"
+database_id = "e6835e5c-04af-4d35-a5dd-09a8ec980243"

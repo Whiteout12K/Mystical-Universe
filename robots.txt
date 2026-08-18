@@ -10,24 +10,54 @@ Main:
     mystical, but twice
 
 
-# > For database
-Wrangler: 
-    npm install --save-dev wrangler
-    npx wrangler login
-    npx wrangler whoami
 
-    npx wrangler d1 migrations apply ml-game-db --local
-    npx wrangler d1 execute ml-game-db --local --command="SELECT name FROM sqlite_master WHERE type='table';"
-    npx wrangler d1 execute ml-game-db --local --command="SELECT * FROM players;"
+> Wrangler Cloudflare D1 Database (mystical-data)
 
-    # > Run local database
-    npx wrangler pages dev .
-    http://localhost:8788/api/player?username=AveryTest
+# Login / ID
+npm install --save-dev wrangler
+wrangler login
+wrangler whoami
+
+# Create D1 database - ONCE
+wrangler d1 create mystical-data
+
+# Apply schema locally
+wrangler d1 execute mystical-data --local --file=./schema.sql
+
+# Start local website
+wrangler pages dev .
+
+# See local users
+wrangler d1 execute mystical-data --local --command="SELECT * FROM users;"
+
+# Delete all local users
+wrangler d1 execute mystical-data --local --command="DELETE FROM users;"
+
+# Inspect save data
+wrangler d1 execute mystical-data --local --command="SELECT username, save_data FROM users;"
+
+# Database information
+wrangler d1 list
+wrangler d1 info mystical-data
+
+# Tests
+http://localhost:8788/view/avery - to view user
 
 
-    npx wrangler d1 execute ml-game-db --local --command="INSERT INTO players (username, password_hash, game_data) VALUES ('AveryTest', 'TEST', '{\"level\":99,\"coins\":999999}');"
+
+> Remote Export to Official
+
+# Apply schema to Cloudflare
+wrangler d1 execute mystical-data --remote --file=./schema.sql
+
+# See Cloudflare users
+wrangler d1 execute mystical-data --remote --command="SELECT * FROM users;"
 
 
 
-    npx wrangler d1 migrations apply ml-game-db --remote
-    npx wrangler d1 execute ml-game-db --remote --command="SELECT name FROM sqlite_master WHERE type='table';"
+
+# > git Stuff
+    git add .
+    git rm -r --cached .
+    git add .
+    git commit -m "Fix .gitignore tracking"
