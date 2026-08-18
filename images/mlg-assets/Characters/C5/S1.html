@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #FFEBEE;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .effect-icon {
+      flex-shrink: 0;
+    }
+
+    .effect-text {
+      flex: 1;
+    }
+
+    .body-text {
+      background-color: #63141462;
+      font-size: 9px;
+      padding-left: 1em;
+      padding-right: 1.5em;
+      padding-top: 4em;
+      padding-bottom: 4em;
+    }
+
+    .level-display {
+      margin-top: 15px;
+      font-size: 8px;
+      color: #FFEBEE;
+    }
+  </style>
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Special Skill: Bubble Barrier</b></div>
+
+  <div id="des1" style="padding-top:7px"></div>
+
+  <div id="des2" style="padding-top:7px"></div>
+
+  <div style="padding-top:7px">After the barrier dissipates, gain a stack of <b style="color:#3c78d8">[Overwhelming Mana]</b>.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon">
+      <img src="../../Effect-Icons/overwhelming-mana.svg" alt="Mana Icon" style="width:20px; height:20px" />
+    </div>
+    <div class="effect-text">
+      <b style="color:#3c78d8">[Overwhelming Mana]</b>
+      <div style="padding-top:3px"><span style="color:#969595ad">Buff</span>: Stackable charge of energy (Infinite Stacks).</div>
+    </div>
+  </div>
+
+  <div style="padding-top:7px">Cooldown: 16 seconds</div>
+  <div>Mana Cost: 120 MP</div>
+
+  <div class="level-display" id="level"></div>
+
+  <script>
+    const maxLevel = 10;
+    const baseDamage = [5, 25, 1.5];
+
+    // Read level from ?id=# in URL
+    const params = new URLSearchParams(window.location.search);
+    let level = parseInt(params.get("id")) || 1; // default = 1
+    level = Math.min(maxLevel, Math.max(1, level)); // clamp between 1 and 10
+
+    function updateSkill() {
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      document.getElementById("des1").innerHTML =
+        `Form a large bubble barrier around River that protects herself and party members. The bubble appears for 10 seconds, and allies who stand within it will take no damage from opponents and heal for <b>${(baseDamage[0] * multiplier).toFixed(1)}%</b> of River’s health per second; however, they cannot damage opponents though special skill activation or basic skills (activated damage over time and off-field attacks that triggered before entry still function without interruption).`;
+
+      document.getElementById("des2").innerHTML =
+        `If River is outside of the active barrier, increase her damage by <b>+${(baseDamage[1] * multiplier).toFixed(1)}%</b> during the barrier’s duration and passively heal the rest of the party by <b>+${(baseDamage[2] * multiplier).toFixed(1)}%</b> of her health per half-second.`;
+
+      document.getElementById("level").textContent = `< Skill Level: ${level} >`;
+    }
+
+    updateSkill();
+  </script>
+
+</body>
+
+</html>

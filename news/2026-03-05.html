@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mystical Legends first art dump">
+  <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures">
+  
+  <meta name="news-title" content="2026/03/05 - Mystical Legends: Art Dump #1">
+  <meta name="news-image" content="../images/website/sketch-art/averypark.jpg">
+  <meta name="news-date" content="2026-03-05">
+  <meta name="news-tags" content="Series">
+  <title>Mystical Legends: Art Dump #1</title>
+  
+  <link rel="icon" href="../images/website/favicon.png" type="image/png">
+
+  <link href="../css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/news.css">
+  <link rel="stylesheet" href="../css/mlg.css">
+  <script src="../js/bootstrap-bundle-min.js"></script>
+</head>
+
+<body>
+
+<!-- Navbar/Header -->
+<div id="subheader-placeholder"></div>
+<h2 style="color:rgb(19, 19, 19);padding:10px;">Mystical Legends</h2>
+
+
+<section class="article-section">
+
+  <!-- Article content -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <!-- Article Date and Heading -->
+        <p class="mb-2">March 5, 2026</p>
+        <h1 class="mb-4">Mystical Legends: Art Dump #1</h1>
+
+        <!-- Article Text -->
+        <p>
+          In this post, I've decided to share some of the important art that I've done to showcase my style and the work effort to
+          bring out the full potential of the Mystical Legends series thus far. First and foremost, I want to share what the original concepts were 
+          and how far I've come to develop an anime style colored edition that fit a general critiera. 
+        </p>
+
+        <p>
+          The designs are definitely far from final but these are just the small traces of improvement and initialization. Don't mind certain details, 
+          trying to think of it too hard may ruin one's experience of the lore for the main series.
+        </p>
+
+        <br>
+        <img src="../images/website/sketch-art/averypark.jpg" alt="Sketch Art 1" class="img-fluid mb-4">
+        <center>OG Avery In the Park</center>
+        <br><br>
+
+        <br>
+        <img src="../images/website/sketch-art/skyhouse.png" alt="Sketch Art 1" class="img-fluid mb-4">
+        <center>Avery, Ted, and River on the Sky House</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/avery_obtainia_poster.png" alt="Sketch Art 1" class="img-fluid mb-4">
+        <center>A concept of Avery's powers in the future.</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/avery_and_lux.png" alt="Sketch Art 1" class="img-fluid mb-4" style="background-color: #242424;">
+        <center>Avery Obtainia and Lux Luces</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/kiara_and_raymond.png" alt="Sketch Art 1" class="img-fluid mb-4" style="background-color: #242424;">
+        <center>Kiara Katzol and Raymond Valoris</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/teddric_tech_magnet.png" alt="Sketch Art 1" class="img-fluid mb-4" style="background-color: #242424;">
+        <center>Teddric Tech with Magnetism powers.</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/kaden_icelander_magni.png" alt="Sketch Art 1" class="img-fluid mb-4" style="background-color: #242424;">
+        <center>Kaden Icelander with cultivator's garment.</center>
+        <br><br>
+
+        <br>
+        <img src="../images/character_art/lorares_full.png" alt="Sketch Art 1" class="img-fluid mb-4" style="background-color: #242424;">
+        <center>Deity Lorares's show of power.</center>
+        <br><br>
+
+        <p>
+          And that's all for now, more to come in the future! Currently working on a large landscape piece of all the Mystical Legends. 
+          With each art added, I feel the vision of the series coming alive more and more. I hope to share even more in another post in the 
+          near future!
+        </p>
+
+        <p>
+            - Kenny Calhoun, The Author, (And..., the MLG Developer)
+        </p>
+
+
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<script src="../js/include.js"></script>
+
+
+<script>
+  document.addEventListener('contextmenu', function (e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Collect all data-img values
+  const preloadImages = [];
+  document.querySelectorAll('.char-thumb').forEach(thumb => {
+    const img = thumb.getAttribute('data-img');
+    if (img) preloadImages.push(img);
+  });
+
+  // Preload them
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+});
+</script>
+
+
+
+
+
+<!-- Footer Section -->
+<div id="subfooter-placeholder"></div>
+
+
+</body>
+</html>

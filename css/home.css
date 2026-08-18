@@ -1,0 +1,190 @@
+
+/* Essential Code for Species Tags */
+
+.species {
+  display: inline-block;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px; }
+.species-none { color: #ffffff; background-color: #3a3131; }
+.species-angelor { color: #fffcfc; background-color: #d88eb8; }
+.species-metalor { color: #ffffff; background-color: #797070; }
+.species-naiad { color: #ffffff; background-color: #7ec0ae; }
+.species-waterspirit { color: #ffffff; background-color: #88a0c7; }
+.species-icelorian { color: #ffffff; background-color: #0f477a; }
+.species-gostlynger { color: #ffffff; background-color: #320f57; }
+.species-herbovir { color: #ffffff; background-color: #6bd56b; }
+.species-magnivirigentis { color: #ffffff; background-color: #c25338; }
+.species-elf { color: #ffffff; background-color: #174422; }
+.species-larvan { color: #ffffff; background-color: #c14414; }
+.species-felior { color: #ffffff; background-color: #251b09; }
+.species-vulpivor { color: #ffffff; background-color: #93507b; }
+
+
+/* Home Page CSS */
+
+body {
+  background-color: #111;
+  color: white;
+}
+
+.hero {
+  height: 100vh;
+  background: url('../images/website/main-bg.png') center/cover no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 10%;
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.logo-img {
+  height: 40px;
+  width: auto;    
+  max-height: 100%;
+}
+
+img {
+  -webkit-user-drag: none; /* WebKit browsers */
+  user-select: none;       /* Prevent selection highlight */
+  -webkit-user-select: none;
+}
+
+
+
+
+
+
+
+/* Everything Below was used for the rotating Carousel */
+
+.characters-section {
+  background: linear-gradient(180deg, #111 0%, #1a1a1a 100%);
+  color: white;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.character-image-wrapper {
+  width: 35vw;                  /* scales with screen width */
+  aspect-ratio: 4 / 5;          /* fixed portrait aspect ratio */
+  max-width: 500px;             /* optional safety limit */
+  min-width: 250px;             /* optional small-screen limit */
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;             /* keeps image inside bounds */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;      /* optional — could add subtle bg if needed */
+}
+
+.character-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.25));
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.character-img.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Text fade animation */
+.fade-text {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Carousel styling */
+.character-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  overflow-x: auto;
+  gap: 2.5rem;
+  padding: 1rem 0;
+  scroll-behavior: smooth;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.char-thumb {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.5;
+  flex-shrink: 0;
+  transition: transform 0.4s ease, opacity 0.4s ease, border 0.4s ease;
+}
+
+.char-thumb.active {
+  opacity: 1;
+  transform: scale(1.15);
+  border: 2px solid #fff;
+}
+
+.char-thumb:hover {
+  opacity: 0.9;
+}
+
+/* Gradient fade edges */
+.character-carousel::before,
+.character-carousel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 70px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.character-carousel::before {
+  left: 0;
+  background: linear-gradient(to right, #1a1a1a 0%, transparent 100%);
+}
+
+.character-carousel::after {
+  right: 0;
+  background: linear-gradient(to left, #1a1a1a 0%, transparent 100%);
+}
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+  .characters-section {
+    text-align: center;
+  }
+  .char-thumb {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+
+

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mystical Legends Game is based off the original story and series featuring Avery Obtainia and his discovery of the mystical beings living among us in modern times.">
+  <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures, epic fantasy stories, supernatural powers">
+
+  <title>MLG Hub</title>
+  
+  <link rel="icon" href="/images/website/favicon.png" type="image/png">
+
+  <link href="/css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <link rel="stylesheet" href="/css/mlg.css">
+  <script src="/js/bootstrap-bundle-min.js"></script>
+
+</head>
+
+
+<body>
+<h1 style="color:rgb(19, 19, 19);padding:7px;">Mystical Legends Game</h1>
+
+<!-- Navbar/Header -->
+<div id="header-placeholder"></div>
+
+<!-- Full-width heading image with responsive overlay -->
+<div class="container-fluid p-0 position-relative">
+  <img 
+    src="/images/website/mlg/og-menu.png" 
+    alt="Article Header Image" 
+    class="img-fluid w-100"
+    style="object-fit: cover;">
+
+  <!-- Overlay image -->
+  <div class="overlay-image" style="top: 20%; left: 22%;">
+    <img src="/images/mlg-assets/mlg-logo.png" alt="Icon">
+  </div>
+</div>
+
+
+
+
+<!-- News Section -->
+<section class="news-section" style="background-color:#5070ff15">
+  <h2><b>Latest News</b></h2>
+  <div id="tagBar"></div>
+  <div id="newsContainer"></div>
+  <button id="loadMoreBtn">Load More</button>
+</section>
+
+
+<section>
+    <main class="col-12 main-content" style="padding:40px;background-color:#272727">
+
+        <!-- Header Row -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+            <h2>Playable Characters</h2>
+        </div>
+
+        <!-- Character Grid -->
+        <div class="character-grid">
+            
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:90%; left:50%" loading="lazy" src="/images/character_art/avery_obtainia_magni.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c1_role.svg">
+                <div class="character-name name-ssr">Avery Obtainia</div>
+            </div>
+
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:105%; left:25%" loading="lazy"  src="/images/character_art/kaden_icelander_magni.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c2_role.svg">
+                <div class="character-name name-ssr">Kaden Icelander</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:95%; left:50%" loading="lazy"  src="/images/character_art/teddric_tech_full.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c3_role.svg">
+                <div class="character-name name-sr">Teddric Tech</div>
+            </div>
+            
+            <div class="character-card rarity-c">
+                <img class="avatar" style="top:95%; left:50%; transform: scale(2.0);" loading="lazy" src="">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c4_role.svg">
+                <div class="character-name name-c">Main Character</div>
+                <div class="character-event" style="background-color: #252525ab;">Starting Unit</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:95%; left:55%; transform: scale(2.0);" loading="lazy"  src="/images/character_art/river_grant_civilian.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c5_role.svg">
+                <div class="character-name name-sr">River Grant</div>
+            </div>
+
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:135%; left:55%; transform: scale(2.9);" loading="lazy"  src="/images/character_art/atlas_aquia_full.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c6_role.svg">
+                <div class="character-name name-ssr">Atlas Aquia</div>
+            </div>
+
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:107%; left:25%; transform: scale(2.7);" loading="lazy" src="/images/character_art/pyrus_bourn_combustion1.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c7_role.svg">
+                <div class="character-name name-ssr">Pyrus Bourn</div>
+                <div class="character-event" style="background-color: #e3b733ab;">Version 1.1</div>
+            </div>
+
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:115%; left:52%; transform: scale(2.7);" loading="lazy"  src="/images/character_art/charlotte_levy_full.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c8_role.svg">
+                <div class="character-name name-ssr">Charlotte Levy</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:115%; left:45%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/carla_storm_full.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c9_role.svg">
+                <div class="character-name name-sr">Carla Storm</div>
+            </div>
+
+            <div class="character-card rarity-ssr">
+                <img class="avatar" style="top:115%; left:85%; transform: scale(2.3);" loading="lazy"  src="/images/character_art/kiara_katzol_full.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c10_role.svg">
+                <div class="character-name name-ssr">Kiara Katzol</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:115%; left:45%; transform: scale(2.4);" loading="lazy"  src="">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c11_role.svg">
+                <div class="character-name name-sr" style="font-size:13px">Pyro's Subordinates</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:120%; left:55%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/jane_tee_academy.png">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c12_role.svg">
+                <div class="character-name name-sr">Jane Tee</div>
+            </div>
+
+            <div class="character-card rarity-sr">
+                <img class="avatar" style="top:120%; left:55%; transform: scale(2.4);" loading="lazy"  src="">
+                <img class="character-role" src="/images/mlg-assets/Characters/c-roles/c13_role.svg">
+                <div class="character-name name-sr">Elmor Locks</div>
+            </div>
+
+            <div class="character-card rarity-sr" style="opacity:0.5">
+                <img class="avatar" style="top:95%; left:55%; transform: scale(2.6);" loading="lazy"  src="/images/character_art/cedric_paine_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c15_role.svg">-->
+                <div class="character-name name-sr">Cedric Paine</div>
+                <div class="character-event" style="background-color: #597994b9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:105%; left:35%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/lucy_terner_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c14_role.svg">-->
+                <div class="character-name name-ssr">Lucy Terner</div>
+                <div class="character-event" style="background-color: #597994b9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:38%; transform: scale(2.5);" loading="lazy"  src="/images/character_art/amos_black_military.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr">Amos Black</div>
+                <div class="character-event" style="background-color: #597994b9;">Later Release</div>
+            </div>
+
+
+
+
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:85%; left:55%; transform: scale(1.8);" loading="lazy"  src="/images/character_art/iter_max.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr">I.T.E.R.</div>
+                <div class="character-event" style="background-color: #597994b9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-sr" style="opacity:0.5">
+                <img class="avatar" style="top:115%; left:65%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/raymond_valoris.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-sr">Raymond Valoris</div>
+                <div class="character-event" style="background-color: #597994b9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ur" style="opacity:0.5">
+                <img class="avatar" style="top:115%; left:55%; transform: scale(2.4);" loading="lazy"  src="">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ur" style="font-size:0.8rem">Caela Obtainia <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #8d2d2db9;">2.0 Release</div>
+            </div>
+
+            <div class="character-card rarity-ur" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:60%; transform: scale(2.4);" loading="lazy"  src="">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ur" style="font-size:0.9rem">Ion Mustard <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #8d2d2db9;">2.0 Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:60%; transform: scale(2.4);" loading="lazy"  src="">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr" style="font-size:0.9rem">Zenith Luces <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #8d2d2db9;">2.0 Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:60%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/lux_luces_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr">Lux Luces</div>
+                <div class="character-event" style="background-color: #8d2d2db9;">2.0 Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:40%; transform: scale(2.6);" loading="lazy"  src="/images/character_art/josh_picard_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr">Josh Picard</div>
+                <div class="character-event" style="background-color: #8d2d2db9;">2.0 Release</div>
+            </div>
+
+
+            <div class="character-card rarity-ur" style="opacity:0.5">
+                <img class="avatar" style="top:100%; left:35%; transform: scale(2.0);" loading="lazy"  src="/images/character_art/zekron_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ur">Zekron <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #378d2db9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ur" style="opacity:0.5">
+                <img class="avatar" style="top:100%; left:37%; transform: scale(2.0);" loading="lazy"  src="/images/character_art/artiana_empowered.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ur">Artiana <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #378d2db9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ssr" style="opacity:0.5">
+                <img class="avatar" style="top:108%; left:52%; transform: scale(2.4);" loading="lazy"  src="/images/character_art/ceresara_empowered.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ssr">Ceresara</div>
+                <div class="character-event" style="background-color: #378d2db9;">Later Release</div>
+            </div>
+
+            <div class="character-card rarity-ur" style="opacity:0.5">
+                <img class="avatar" style="top:95%; left:48%; transform: scale(2.1);" loading="lazy"  src="/images/character_art/lorares_full.png">
+                <!--<img class="character-role" src="/ml-game/Assets/Characters/c-roles/c11_role.svg">-->
+                <div class="character-name name-ur">Lorares <b class="alter">Alter</b></div>
+                <div class="character-event" style="background-color: #378d2db9;">Later Release</div>
+            </div>
+
+        </div>
+
+    </main>
+</section>
+
+
+
+<script>
+  // Map character names to URLs
+  const characterLinks = {
+    "Avery Obtainia": "/webpages/c1.html",
+    "Kaden Icelander": "/webpages/c2.html",
+    "Teddric Tech": "/webpages/c3.html",
+    "Main Character": "",
+    "River Grant": "/webpages/c5.html",
+    "Atlas Aquia": "/webpages/c6.html",
+    "Pyrus Bourn": "/webpages/c7.html",
+    "Charlotte Levy": "/webpages/c8.html",
+    "Carla Storm": "",
+    "Kiara Katzol": "/webpages/c10.html",
+    "Cedric Paine": "",
+    "Amos Black": "",
+    "Lucy Terner": "",
+
+    "I.T.E.R.": "",
+    "Raymond Valoris": "",
+    "Caela Obtainia Alter": "",
+    "Ion Mustard Alter": "",
+    "Lux Luces": "",
+    "Josh Picard": "",
+
+    "Zekron Alter": "",
+    "Artiana Alter": "",
+    "Ceresara": "",
+    "Lorares Alter": "",
+  };
+
+  // Select all character cards
+  const characterCards = document.querySelectorAll('.character-card');
+
+  characterCards.forEach(card => {
+    const nameDiv = card.querySelector('.character-name');
+    const characterName = nameDiv ? nameDiv.textContent.trim() : null;
+
+    if (characterName && characterLinks[characterName]) {
+      card.style.cursor = 'pointer'; // show pointer on hover
+      card.addEventListener('click', () => {
+        window.location.href = characterLinks[characterName];
+      });
+    }
+  });
+</script>
+
+
+<div id="floatingSearch">
+  <input type="text" id="searchInput" placeholder="Search for News...">
+</div>
+
+<script src="/js/include.js"></script>
+<script src="/js/home.js"></script>
+<script src="/js/news.js"></script>
+
+<!-- Footer Section -->
+<div id="footer-placeholder"></div>
+
+</body>
+
+</html>

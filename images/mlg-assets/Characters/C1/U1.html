@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Ultimate Skill: Limitless Light Beam</b></div>
+
+  <div style="padding-top:7px">Avery’s body begins to glow with immense light. He shoots a beam of laser that can be directed towards opponents for a short duration dealing <b><span id="dmg1">400</span>%</b> of attack as <b class="light">[Light]</b> ranged damage per second. The rate increases to per half-second when hitting a single target.</div>
+  <div style="padding-top:7px">Hit opponents receive the <b class="blind">[Blind]</b> effect. Upon activation, allies and self receive the buff <b class="enlightened">[Enlightened]</b>.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/blind.svg" alt="Blind Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="blind">[Blind]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Prevent target from attacking for 3 seconds.</div></div>
+  </div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/enlightened.svg" alt="Enlightened Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="enlightened">[Enlightened]</b><div style="padding-top:3px"><span class="buff">Buff</span>: Increases attack by +15% and receives +15% damage reduction for 20 seconds.</div></div>
+  </div>
+
+  <div style="padding-top:7px">Energy Gauge: 100%</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [400];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+</html>

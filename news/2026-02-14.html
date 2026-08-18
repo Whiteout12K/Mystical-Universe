@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mystical Legends Game prerelease test of the game character menu.">
+  <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures">
+  
+  <meta name="news-title" content="2026/02/14 - Mystical Legends Game: Character Menu Preview">
+  <meta name="news-image" content="../images/website/mlg/mlg-logo-stars.jpg">
+  <meta name="news-date" content="2026-02-14">
+  <meta name="news-tags" content="Game">
+  <title>Mystical Legends Game: Character Menu Preview</title>
+  
+  <link rel="icon" href="../images/website/favicon.png" type="image/png">
+
+  <link href="../css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/news.css">
+  <link rel="stylesheet" href="../css/mlg.css">
+  <script src="../js/bootstrap-bundle-min.js"></script>
+</head>
+
+<body>
+
+<!-- Navbar/Header -->
+<div id="subheader-placeholder"></div>
+<h2 style="color:rgb(19, 19, 19);padding:10px;">Mystical Legends</h2>
+
+
+<section class="article-section">
+
+  <!-- Full-width heading image -->
+  <div class="container-fluid p-0">
+    <img 
+      src="../images/website/mlg/mlg-logo-stars.jpg" 
+      alt="Article Header Image" 
+      class="img-fluid w-100"
+      style="object-fit: cover;"
+    >
+  </div>
+
+  <!-- Article content -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <!-- Article Date and Heading -->
+        <p class="mb-2">February 14, 2026</p>
+        <h1 class="mb-4">Mystical Legends Game: Character Menu Preview</h1>
+
+        <!-- Article Text -->
+        <p>
+          With the continuation of the Mystical Legends Game, we've decided to share a small snippit
+          of the character menu and main menu in progress for the first installation of the Mystical Legends Game series.
+        </p>
+
+        <p>
+          Check out the game with this following <a href="https://mlg.mysticallegends.org/main/index.html" target="_blank" rel="noopener noreferrer" style="color:rgb(228, 57, 57);text-decoration: none;">link</a>.
+        </p>
+
+        <p>
+          The game is built on a program called Turbowarp inspired from Scratch with many rudimentary features but additional
+          tools to add complex functionalities and interactions outside the project. The game has be incepted for a while since my
+          teens so that is the reason I am still using such a simple (but still sophisticated) game engine. Future projects, with
+          the same game assets will be used to produce a (work in progress) polished game that won't be quite the same as this upcoming
+          Mystical Legends Game.
+        </p>
+
+        <p>
+          This showcase is to also get development out there and show that the game is actively in development and that
+          I have proof of my skillset especially for my first large game project.
+        </p>
+
+        <p>
+            - Kenny Calhoun, The MLG Developer
+        </p>
+
+
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<script src="../js/include.js"></script>
+
+
+<script>
+  document.addEventListener('contextmenu', function (e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Collect all data-img values
+  const preloadImages = [];
+  document.querySelectorAll('.char-thumb').forEach(thumb => {
+    const img = thumb.getAttribute('data-img');
+    if (img) preloadImages.push(img);
+  });
+
+  // Preload them
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+});
+</script>
+
+
+
+
+
+<!-- Footer Section -->
+<div id="subfooter-placeholder"></div>
+
+
+</body>
+</html>

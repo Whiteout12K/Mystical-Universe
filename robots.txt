@@ -1,0 +1,33 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mysticallegends.org/sitemap.xml
+
+
+
+
+Main: 
+    mystical, but twice
+
+
+# > For database
+Wrangler: 
+    npm install --save-dev wrangler
+    npx wrangler login
+    npx wrangler whoami
+
+    npx wrangler d1 migrations apply ml-game-db --local
+    npx wrangler d1 execute ml-game-db --local --command="SELECT name FROM sqlite_master WHERE type='table';"
+    npx wrangler d1 execute ml-game-db --local --command="SELECT * FROM players;"
+
+    # > Run local database
+    npx wrangler pages dev .
+    http://localhost:8788/api/player?username=AveryTest
+
+
+    npx wrangler d1 execute ml-game-db --local --command="INSERT INTO players (username, password_hash, game_data) VALUES ('AveryTest', 'TEST', '{\"level\":99,\"coins\":999999}');"
+
+
+
+    npx wrangler d1 migrations apply ml-game-db --remote
+    npx wrangler d1 execute ml-game-db --remote --command="SELECT name FROM sqlite_master WHERE type='table';"

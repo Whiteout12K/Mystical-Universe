@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MLG - Atlas Aquia</title>
+  
+  <link rel="icon" href="/images/website/favicon.png" type="image/png">
+
+  <link href="/css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <link rel="stylesheet" href="/css/mlg.css">
+  <script src="/js/bootstrap-bundle-min.js"></script>
+
+<style>
+body {
+    background-color: #121212;
+}
+
+/* Splash Art */
+.splash-art {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    filter: drop-shadow(0 0 18px rgba(80, 168, 240, 0.378));
+}
+
+/* Role Icon */
+.role-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* Skill Sidebar */
+.skill-sidebar {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+.skill-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    background-color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.skill-btn img {
+    width: 63px;
+    height: 63px;
+}
+
+.skill-btn.active {
+    border-color: #618cfa;
+}
+
+.skill-divider {
+    width: 2px;
+    background-color: #444;
+    margin: 0 6px;
+}
+
+.skill-panel {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 140px;
+}
+    
+.skill-content-override {
+  background-color: #0f0f0f;
+  color: #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#skillPanel {
+  display: block; /* allow inner HTML to dictate layout */
+  width: 100%;
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+<!-- Navbar/Header -->
+<div id="subheader-placeholder"></div>
+<h1 style="color:rgb(19, 19, 19);padding:7px;">Mystical Legends Game - Atlas Aquia</h1>
+
+
+<div class="container py-4">
+
+<!-- SECTION 1: PROFILE -->
+<section class="row g-4 align-items-center">
+
+  <!-- Splash Art -->
+  <div class="col-12 col-md-5">
+    <img src="/images/character_art/atlas_aquia_full.png" class="splash-art" alt="Character Splash">
+  </div>
+
+  <!-- Basic Info -->
+  <div class="col-12 col-md-7" style="padding:30px">
+
+    <!-- Name -->
+    <h1 class="display-6">Atlas Aquia</h1>
+
+    <!-- Rarity + Role -->
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <b class="ssr" style="font-size:1.5rem;">SSR</b>
+      <img src="/images/mlg-assets/Characters/c-roles/c6_role.svg" class="role-icon">
+    </div>
+
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="padding-right:8px;"><span style="opacity:0.8">Species</span>:</span>
+        <div class='species species-waterspirit'>Water Spirit</div>
+    </div>
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Specialty</span>: DPS, Defense Penetration, Accuracy, Agility, Debuffer, AoE Damage</div>
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Affiliation</span>: Tempest Aquia Cohort, Captain</div>
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Attribute</span>: Water Breathing, Flight</div>
+
+  </div>
+
+</section>
+
+
+<h3>Skills</h3>
+<hr class="my-4">
+
+<!-- SECTION 2: SKILLS -->
+
+<section>
+<!-- Skill Icon Bar -->
+<div class="skill-sidebar mb-3">
+
+  <!-- Basic Skills -->
+  <div class="skill-btn active" onclick="showSkill(0)">
+    <img src="/images/mlg-assets/Characters/C6/skill_b/b1.svg" alt="Basic 1">
+  </div>
+
+  <div class="skill-divider"></div>
+
+  <!-- Special Skills -->
+  <div class="skill-btn" onclick="showSkill(1)">
+    <img src="/images/mlg-assets/Characters/C6/skill_b/s1.svg" alt="Special 1">
+  </div>
+
+  <div class="skill-btn" onclick="showSkill(2)">
+    <img src="/images/mlg-assets/Characters/C6/skill_b/s2.svg" alt="Special 2">
+  </div>
+
+  <div class="skill-divider"></div>
+
+  <!-- Ultimate -->
+  <div class="skill-btn" onclick="showSkill(3)">
+    <img src="/images/mlg-assets/Characters/C6/skill_b/u1.svg" alt="Ultimate 1">
+  </div>
+
+  <div class="skill-divider"></div>
+
+  <div class="skill-btn" onclick="showSkill(4)">
+    <img src="/images/mlg-assets/Characters/C6/skill_b/t1.svg" alt="Technical 1">
+  </div>
+
+  <div class="skill-divider"></div>
+
+  <div class="skill-btn" onclick="showSkill(5)">
+    <img src="/images/mlg-assets/Stars/dupe.svg" alt="Dupe">
+  </div>
+
+</div>
+
+<!-- Skill Information Panel -->
+<div id="skillPanel" class="skill-panel">
+  <!-- External skill HTML loads here -->
+</div>
+
+</section>
+
+</div>
+
+
+
+<div id="skillPanel" class="skill-content-override"></div>
+
+<script>
+const skills = [
+  { file: "/images/mlg-assets/Characters/C6/B1.html" },
+  { file: "/images/mlg-assets/Characters/C6/S1.html" },
+  { file: "/images/mlg-assets/Characters/C6/S2.html" },
+  { file: "/images/mlg-assets/Characters/C6/U1.html" },
+  { file: "/images/mlg-assets/Characters/C6/T1.html" },
+  { file: "/images/mlg-assets/Characters/C6/Dupes.html?id=15" }
+];
+
+const FONT_SCALE = 1.3;
+const TRANSITION_DURATION = 300; // ms
+const HEIGHT_TRANSITION_DURATION = 300; // ms
+
+function showSkill(index) {
+  const panel = document.getElementById("skillPanel");
+  const oldIframe = panel.querySelector("iframe");
+
+  // Lock panel height during fade
+  if (oldIframe) {
+    panel.style.height = oldIframe.offsetHeight + "px";
+    oldIframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
+    oldIframe.style.opacity = 0;
+  }
+
+  // Create new iframe
+  const iframe = document.createElement("iframe");
+  iframe.src = skills[index].file;
+  iframe.style.width = "100%";
+  iframe.style.border = "0";
+  iframe.style.display = "block";
+  iframe.style.backgroundColor = "#0f0f0f";
+  iframe.style.color = "#e6e6e6";
+  iframe.style.opacity = 0;
+  iframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
+
+  iframe.onload = () => {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+      // Inject dark theme and font scaling
+      const style = doc.createElement("style");
+      style.textContent = `
+        body {
+          background-color: #0f0f0f !important;
+          color: #e6e6e6 !important;
+          font-size: ${FONT_SCALE * 90}% !important;
+        }
+        body * {
+          font-size: inherit !important;
+          background-color: inherit !important;
+        }
+      `;
+      doc.head.appendChild(style);
+
+      // Resize iframe to fit content
+      function resizeIframe() {
+        iframe.style.height = doc.body.scrollHeight + 20 + "px";
+      }
+      resizeIframe();
+
+      // Observe dynamic changes
+      const observer = new MutationObserver(resizeIframe);
+      observer.observe(doc.body, { childList: true, subtree: true, characterData: true });
+
+      // Fade in new iframe
+      requestAnimationFrame(() => {
+        iframe.style.opacity = 1;
+      });
+
+      // Animate panel height to match new content
+      const newHeight = doc.body.scrollHeight + 20;
+      panel.style.transition = `height ${HEIGHT_TRANSITION_DURATION}ms`;
+      panel.style.height = newHeight + "px";
+
+      // Remove old iframe after fade
+      if (oldIframe) {
+        setTimeout(() => oldIframe.remove(), TRANSITION_DURATION);
+      }
+
+      // Reset panel height after transition to auto
+      setTimeout(() => {
+        panel.style.height = "auto";
+      }, Math.max(TRANSITION_DURATION, HEIGHT_TRANSITION_DURATION));
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Append new iframe
+  panel.appendChild(iframe);
+
+  // Highlight active button
+  document.querySelectorAll(".skill-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".skill-btn")[index].classList.add("active");
+}
+
+// Load first skill
+showSkill(0);
+</script>
+
+<style>
+.skill-content-override {
+  background-color: #0f0f0f;
+  color: #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+  overflow: hidden; /* prevent scrollbars during fade/resize */
+  transition: height 0.3s ease; /* smooth panel height animation */
+}
+.skill-content-override iframe {
+  display: block;
+}
+</style>
+
+
+<script src="/js/include.js"></script>
+
+<!-- Footer Section -->
+<div id="subfooter-placeholder"></div>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mystical Legends is a fantasy series featuring Avery Obtainia and his exploration into the mystical beings hiding in the modern times.">
+  <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures, epic fantasy stories, supernatural powers">
+  <title>Mystical Legends - Home</title>
+  <link rel="icon" href="images/website/favicon.png" type="image/png">
+
+  <link href="css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/news.css">
+  <script src="js/bootstrap-bundle-min.js"></script>
+</head>
+
+<body>
+
+  <!-- Navbar/Header -->
+  <div id="header-placeholder"></div>
+
+
+  
+  <!-- Top of Page, Important -->
+  <a id="top"></a>
+
+  <!-- Hero Section -->
+  <section class="hero" style="padding:20px">
+    <div class="hero-content">
+      <h1 class="display-4 fw-bold mb-3">Mystical Legends, Unite!</h1>
+      <!--<p class="lead mb-4">Become a part of the Mystical.</p>
+      <a href="#" class="btn btn-primary btn-lg" style="border:none;background-color: rgb(124, 19, 19);">Get Started</a> -->
+    </div>
+  <a id="news"></a>
+  </section>
+
+
+  <!-- News Section -->
+  <section class="news-section">
+    <h2>Latest News</h2>
+    <div id="tagBar"></div>
+    <div id="newsContainer"></div>
+    <button id="loadMoreBtn">Load More</button>
+  </section>
+
+
+  <!-- Characters Section -->
+  <section id="characters" class="characters-section py-5">
+    <div class="container">
+      <h2 class="fw-bold text-center mb-5">Meet the Characters</h2>
+    
+     <div class="row align-items-center">
+       <!-- Left: Character Image -->
+       <div class="col-lg-6 text-center mb-4 mb-lg-0 position-relative">
+         <div class="character-image-wrapper mx-auto">
+           <img id="char-img" src="images/character_art/avery_obtainia_main.png" alt="Avery Obtainia" class="character-img img-fluid show">
+         </div>
+       </div>
+
+        <!-- Right: Character Info and Carousel -->
+        <div class="col-lg-6 text-center text-lg-start">
+          <h3 id="char-name" class="fw-bold mb-3 fade-text">Avery Obtainia</h3>
+          <p id="char-desc" class="lead text-light mb-5 fade-text">
+            A calm Angelor boy with angelic and light powers, guided by a quiet sense of purpose and healing energy.
+          </p>
+
+          <!-- Character Carousel -->
+          <div class="character-carousel d-flex align-items-center justify-content-center justify-content-lg-start gap-3 position-relative">
+            <div class="carousel-track d-flex flex-row gap-4 px-3" id="char-list">
+              <img src="images/character_art/Character_Heads/avery_obtainia_head.png" alt="Avery" class="char-thumb active"
+                data-name="Avery Obtainia"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-angelor'>Angelor</div>
+                  <div class='species species-waterspirit'>Water Spirit</div>
+                </div>
+                <p>A gifted Angelor demihuman and Regnum Academy student who wields light magic and the Compression Regnum Spei, catching the eye of the Tempest Aquia cohort. With the Seal Ring, Rune of the Spellcaster, he conceals his wings and channels the power of a mysterious entity, with whom he shares a spiritual bond.</p>
+                "
+                data-img="images/character_art/avery_obtainia_winged.png">
+              <img src="images/character_art/Character_Heads/teddric_tech_head.png" alt="Teddric" class="char-thumb"
+                data-name="Teddric Tech"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-metalor'>Metalor</div>
+                </div>
+                <p>A laid-back yet driven Metalor student at Regnum Academy who excels in metal manipulation and runecrafting. His mastery allows him to forge magical metals and invent gadgets like hoverboards, earning him a place in the Dai-Battalion cohort.</p>
+                "
+                data-img="images/character_art/teddric_tech_full.png">
+              <img src="images/character_art/Character_Heads/river_grant_head.png" alt="River" class="char-thumb"
+                data-name="River Grant"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-naiad'>Naiad</div>
+                  <div class='species species-vulpivor'>Vulpivor</div>
+                </div>
+                <p>A shy Naiad demihuman and student of Regnum Academy with powerful water magic and exceptional mana reserves. Despite her timid nature, she proves herself a skilled combatant and loyal companion to her friends, even earning a spot in the Black Rampart cohort.</p>
+                "
+                data-img="images/character_art/river_grant_civilian.png">
+              <img src="images/character_art/Character_Heads/kaden_icelander_head.png" alt="Kaden" class="char-thumb"
+                data-name="Kaden Icelander"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-icelorian'>Icelorian</div>
+                </div>
+                <p>A brilliant Icelorian prodigy, wielding powerful ice magic, including the ellusive Ice Travel. A technological genius and strategic leader, a founder of IT and the ITA, commands the Blue Legion cohort, and wields the transformative Seal Ring, the Icelorian Blade.</p>
+                "
+                data-img="images/character_art/kaden_icelander_full.png">
+              <img src="images/character_art/Character_Heads/amos_black_head.png" alt="Amos" class="char-thumb"
+                data-name="Amos Black"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-magnivirigentis'>Magnivirigentis</div>
+                </div>
+                <p>A powerful Magnivirigentis, known for his unusual purple mana-imbued strength magic. Muscular and towering, he works for IT Industries, serves as a trainer, and leads the IT Agency Task Force.</p>
+                "
+                data-img="images/character_art/amos_black_military.png">
+              <img src="images/character_art/Character_Heads/lucy_terner_head.png" alt="Lucy" class="char-thumb"
+                data-name="Lucy Terner"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-elf'>Elf</div>
+                </div>
+                <p>An Elf Mystical Being and a key figure at IT Industries, serving as Head Secretary and lead of the IT Agency’s Intelligence Force. Skilled in Snow Magic, speed, and precision, she is a deadly assassin, close associate of Kaden Icelander, and the Mystical Legends group’s scout, known for her sharp mind, teasing personality, and strong work ethic.</p>
+                "
+                data-img="images/character_art/lucy_terner_full.png">
+              <img src="images/character_art/Character_Heads/kiara_katzol_head.png" alt="Kiara" class="char-thumb"
+                data-name="Kiara Katzol"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-felior'>Felior</div>
+                </div>
+                <p>A cheerful Felior demihuman at Regnum Academy with golden hair, eyes, and cat features, who wields fast and powerful Lightning Magic. Armed with a versatile Seal Ring, Gathering Sickle, and sharp reflexes, she serves as the Mystical Legends group’s backline attacker, known for her playful teasing, kindness, and confident pride in her identity. Part of the Black Rampart cohort.</p>
+                "
+                data-img="images/character_art/kiara_katzol_full.png">
+              <img src="images/character_art/Character_Heads/pyrus_bourn_head.png" alt="Pyrus" class="char-thumb"
+                data-name="Pyrus Bourn"
+                data-desc="
+                <div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-2'>
+                  <div class='species species-none'>Non-Mystical</div>
+                  <div class='species species-larvan'>Larvan</div>
+                </div>
+                <p>A cunning, power-hungry flame master and major antagonist who rules District 3 and seeks the Orb of Destruction to forcibly unify the Mystical Island under his rules. Transforming into a powerful living flame at Tier 5 by the orb, he is recognized for his fiery hair and eyes, extraordinary combat skills, and his inferno magic, said to be even hotter than regular fire.</p>
+                "
+                data-img="images/character_art/pyrus_bourn_full.png">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+        
+  <div id="floatingSearch">
+    <input type="text" id="searchInput" placeholder="Search for News...">
+  </div>
+
+
+<script src="js/include.js"></script>
+<script src="/js/home.js"></script>
+<script src="js/news.js"></script>
+
+<script>
+// Carousel Code Functionality
+document.addEventListener('DOMContentLoaded', () => {
+  const charList = document.getElementById('char-list');
+  const charThumbs = Array.from(document.querySelectorAll('.char-thumb'));
+  const charImg = document.getElementById('char-img');
+  const charName = document.getElementById('char-name');
+  const charDesc = document.getElementById('char-desc');
+
+  if (!charThumbs.length) return;
+
+  let currentIndex = charThumbs.findIndex(t => t.classList.contains('active'));
+  if (currentIndex === -1) currentIndex = 0;
+
+  // Fade helpers (same classes used earlier)
+  const fadeIn = () => {
+    charImg.classList.add('show');
+    charName.classList.add('show');
+    charDesc.classList.add('show');
+  };
+  const fadeOut = (cb) => {
+    charImg.classList.remove('show');
+    charName.classList.remove('show');
+    charDesc.classList.remove('show');
+    setTimeout(cb, 600);
+  };
+
+  const centerThumb = (thumb) => {
+    const offset = thumb.offsetLeft - (charList.offsetWidth / 2) + (thumb.offsetWidth / 2);
+    charList.scrollTo({ left: offset, behavior: 'smooth' });
+  };
+
+  const updateActive = (index) => {
+    fadeOut(() => {
+      const thumb = charThumbs[index];
+      charThumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+
+      // Use getAttribute to preserve raw HTML (dataset may normalize)
+      const name = thumb.getAttribute('data-name') || '';
+      const img = thumb.getAttribute('data-img') || '';
+      const descHtml = thumb.getAttribute('data-desc') || '';
+
+      charName.textContent = name;
+      charImg.src = img;
+      charDesc.innerHTML = descHtml; // <--- allows HTML inside the description
+
+      // Give browser a small pause before fading back in
+      requestAnimationFrame(() => {
+        setTimeout(() => fadeIn(), 10);
+      });
+    });
+  };
+
+  // click handler
+  charThumbs.forEach((thumb, i) => {
+    thumb.addEventListener('click', () => {
+      currentIndex = i;
+      updateActive(i);
+    });
+  });
+
+  // wheel scroll for horizontal track
+  charList.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    // On many trackpads, deltaY works nicely for horizontal scrolling
+    charList.scrollLeft += e.deltaY;
+  }, { passive: false });
+
+  // init
+  updateActive(currentIndex);
+});
+</script>
+
+
+
+<!-- Footer Section -->
+<div id="footer-placeholder"></div>
+
+</body>
+</html>

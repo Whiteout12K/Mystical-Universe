@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Special Skill: Ice Pillars</b></div>
+
+  <div style="padding-top:7px">Kaden creates a circle of four pillars of ice around him that shoot from the ground, dealing <b><span id="dmg1">250</span>%</b> of attack as <b class="water">[Water]</b> damage.</div>
+  <div style="padding-top:7px">Holding the skill will summon one pillar at a time that can be aimed towards a specific direction. The skill has four charges and all are consumed to summon remaining pillars when skill is tapped.</div>
+  <div style="padding-top:7px">Summoned pillars remain active for 15 seconds and act as destructible barriers. They remain in resonance with each other, dealing <b><span id="dmg2">70</span>%</b> of attack as <b class="water">[Water]</b> damage which is multiplied by the number of pillars present, up to 4.</div>
+  <div style="padding-top:7px">When destroyed by any character or opponent, they explode for AoE <b class="water">[Water]</b> <span class="empowered">empowered</span> damage equal to <b><span id="dmg3">330</span>%</b> of attack and inflict <b class="blind">[Blind]</b> and <b class="freeze">[Freeze]</b> on anyone who is not Kaden himself.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/blind.svg" alt="Blind Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="blind">[Blind]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Prevent target from attacking for 3 seconds.</div></div>
+  </div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/freeze.svg" alt="Freeze Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="freeze">[Freeze]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Stops action for 2 seconds.</div></div>
+  </div>
+
+  <div style="padding-top:7px">Cooldown: 16 seconds</div>
+  <div>Mana Cost: 120 MP (30 MP per pillar)</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [250, 70, 330];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

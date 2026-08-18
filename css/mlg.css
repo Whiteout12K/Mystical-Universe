@@ -1,0 +1,209 @@
+
+/* Mystical Legends Game Rarity Colors */
+.c { color: #494949; }
+.un { color: #6aa84f; }
+.r { color: #0000ff; }
+.sr { color: #9900ff; }
+.ssr { color: #ff9900; }
+.ur { color: #ff0000; }
+.lr { color: #d5a6bd; }
+
+/* Mystical Legends Game Elements */
+.light { color: #ea9999; }
+.dark { color: #674ea7; }
+.fire { color: #cc0000; }
+.water { color: #a4c2f4; }
+.wind { color: #bf9000; }
+.earth { color: #6aa84f; }
+.lightning { color: #494949; }
+.plant { color: #494949; }
+
+/* Mystical Legends Game Effect Types */
+
+/* Buffs */
+.buff { color: #969595ad; }
+.shield { color: #6fa8dc; }
+.enlightened { color: #ea9999; }
+.embrace-goddess { color: #ea9999; }
+.magni-mage { color: #ea9999; }
+.goddess-blessing { color: #ea9999; }
+.angel-touch { color: #ea9999; }
+.rapid-recovery { color: #b6d7a8; }
+.ice-prince { color: #3c78d8; }
+.shadow-miasma { color: #674ea7; }
+.flash { color: #f1c232; }
+.icengon { color: #2f0b94; }
+.invention { color: #999999; }
+.gamer { color: #e69138; }
+.tinkering { color: #999999; }
+.letm-cook { color: #e06666; }
+
+/* Debuffs */
+.debuff { color: #969595ad; }
+.knockback { color: #bf9000; }
+.blind { color: #45818e; }
+.burn { color: #fb4e2f; }
+.freeze { color: #bcb1fc; }
+.fatigue { color: #38761d; }
+.dazed { color: #bf9000; }
+.attack-down { color: #cc4125; }
+.crit-down { color: #666666; }
+
+/* Mystical Legends Faction */
+.mystical-legends { color: #ff0000; }
+
+/* Conditions */
+.empowered { color: #dd7e6b; }
+
+
+
+
+
+
+/* ================================
+    Character Grid Styles, game-hub.html
+================================ */
+
+/* front image overlay */
+.position-relative {
+  position: relative;
+}
+
+.overlay-image {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+}
+
+/* Overlay image styling */
+.overlay-image img {
+  width: 40%;
+  height: auto;
+}
+
+
+/* Character Grid Styles */
+.character-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+    gap:18px;
+}
+
+.character-card {
+    position: relative;
+    border-radius:8px;
+    padding:5px;
+    text-align:center;
+    cursor:pointer;
+    transition:transform .15s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    height:190px; /* Taller vertical rectangle */
+    opacity: 0.9;
+
+    overflow: hidden;
+    position: relative;
+}
+
+.character-card:hover{
+    transform:scale(1.05);
+}
+
+.character-card img.character-avatar{
+    width:110px;
+    height:140px;
+    object-fit:cover;
+    border-radius:2px;
+}
+
+.avatar {
+  position: absolute;
+
+  /* IMPORTANT: don't use object-fit at all */
+  width: auto;
+  height: 100%;
+
+  /* THIS is your zoom control */
+  transform: scale(2.2);
+
+  /* anchor center */
+  top: 90%;
+  left: 50%;
+  transform-origin: center;
+
+  /* center crop baseline */
+  translate: -50% -50%;
+
+  z-index: 1; /* Layer */
+}
+
+.character-name{
+    position:absolute;
+    bottom:-7px;
+    right:0px;
+
+    width:150px;
+    align-content: center;
+    height:60px;
+    font-size:1rem;
+    font-weight:400;
+    padding: 3px;
+
+    text-shadow: 0 4px 4px rgba(0, 0, 0, 0.654);
+    z-index: 2;
+}
+
+.character-event{
+    bottom:165px;
+    right:0px;
+
+    position:absolute;
+    align-content: center;
+    width:80px;
+    height:25px;
+    font-size:0.7rem;
+    font-weight:400;
+    padding: 3px;
+
+    z-index: 4;
+}
+
+/* Role icon */
+.character-role{
+    position:absolute;
+    bottom:35px;
+    right:2px;
+    width:60px;
+    height:60px;
+
+    z-index: 3;
+}
+
+.alter {
+    padding:3px;
+    background-color:#ec7b43;
+    border-radius:5px;
+    border-color:#ec7b43;
+    color: #ffdfcf;
+    text-shadow:none;
+}
+
+/* RARITY STYLES */
+.rarity-c{background:linear-gradient(145deg,#939292d8,#3e3e3ed2);}
+.rarity-r{background:linear-gradient(145deg,#2f80ed,#1c4aa3);}
+.rarity-sr{background:linear-gradient(145deg,#bf72e0da,#2f1342db);}
+.rarity-ssr{background:linear-gradient(145deg,#ffc273dc,#ff9838d1);}
+.rarity-ur{background:linear-gradient(145deg,#ff7373dc,#ff3838d1);}
+
+/* RARITY Overly Styles */
+.name-c{background:linear-gradient(180deg,#93929200,#6e6e6e);}
+.name-r{background:linear-gradient(180deg,#2f80ed00,#183d86);}
+.name-sr{background:linear-gradient(180deg,#bf72e000,#993ad8db);}
+.name-ssr{background:linear-gradient(180deg,#ffc27300,#fca429cb);}  
+.name-ur{background:linear-gradient(180deg,#ffc27300,#fc2929cb);}    
+
+
+
+

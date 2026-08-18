@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Basic Skill: Light Discharge</b></div>
+
+  <div style="padding-top:7px">Avery discharges light and bends it around him in a myriad of ways, dealing <b class="light">[Light]</b> damage.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 1</u>: Launches a beam of light, dealing damage equal to <b><span id="dmg1">6</span>%</b> of health. Applies <b class="blind">[Blind]</b> on hit opponents.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 2</u>: Slashes in two arcs in separate directions, dealing <b><span id="dmg2">9</span>%</b> of health as damage.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 3</u>: Charges up a ball of light and thrusts it at opponents, dealing <b><span id="dmg3">12</span>%</b> of health as damage and inflicting <b class="burn">[Burn]</b>. If opponent already has the debuff upon attacking, deal an immediate instance of <b class="burn">[Burn]</b> but with self’s crit stats added.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon"><img src="../../Effect-Icons/blind.svg" alt="Blind Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="blind">[Blind]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Prevent target from attacking for 3 seconds.</div></div>
+  </div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon"><img src="../../Effect-Icons/burn.svg" alt="Burn Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="burn">[Burn]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>:Deals continuous <b class="fire">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.</div></div>
+  </div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [6, 9, 12];
+
+      // Get level from URL: ?id=#
+      const params = new URLSearchParams(window.location.search);
+
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      // Update ONLY numbers
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+</html>

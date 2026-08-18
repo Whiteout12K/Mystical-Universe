@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Basic Skill: Light Sword</b></div>
+  <div style="padding-top:7px">Avery conjures a compressed light sword and does melee <b class="light">[Light]</b> attacks.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 1</u>: Slash in several quick arcs in front, dealing <b><span id="dmg1">85</span>%</b> of attack as damage.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 2</u>: Slash in a line ahead, dealing AoE damage equal to <b><span id="dmg2">130</span>%</b> of attack. Inflict <b class="knockback">[Knockback]</b> on hit opponents.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 3</u>: Slam into the ground, dealing AoE damage in a 1 meter radius equal to <b><span id="dmg3">170</span>%</b> of attack.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/knockback.svg" alt="Knockback Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="knockback">[Knockback]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Knocks opponents back 5 meters.</div></div>
+  </div>
+
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [85, 130, 170];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+
+</body>
+</html>

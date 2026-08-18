@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Basic Skill: Ice Manipulation</b></div>
+  <div style="padding-top:7px">Kaden unleashes a valley of ice that encircles and traps opponents, dealing <b class="water">[Water]</b> damage.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 1</u>: Hurls ice chunks at nearby opponents, dealing small AoE damage equal to <b><span id="dmg1">100</span>%</b> of attack as damage.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 2</u>: Summons spikes of ice to emerge from the ground around opponents, dealing AoE damage equal to <b><span id="dmg2">125</span>%</b> of attack and remaining on-field for a short time. Inflicts the <b class="freeze">[Freeze]</b> debuff on hit opponents.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 3</u>: Explodes the ice spikes, dealing <b><span id="dmg3">165</span>%</b> of attack as AoE <span class="empowered">empowered</span> damage.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/freeze.svg" alt="Freeze Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="freeze">[Freeze]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Stops action for 2 seconds.</div></div>
+  </div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [100, 125, 165];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+</html>

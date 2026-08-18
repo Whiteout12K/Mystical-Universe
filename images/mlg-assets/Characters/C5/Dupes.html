@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #FFEBEE;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .effect-icon {
+      flex-shrink: 0;
+    }
+
+    .effect-text {
+      flex: 1;
+    }
+
+    .body-text {
+      background-color: #63141462;
+      font-size: 9px;
+      padding-left: 1em;
+      padding-right: 1.5em;
+      padding-top: 4em;
+      padding-bottom: 4em;
+    }
+
+    .level-control {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .level-btn {
+      width: 28px;
+      height: 22px;
+      font-size: 12px;
+      background: none;
+      border: 1px solid #FFEBEE;
+      color: #FFEBEE;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .level-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ⭐ dimmed effect for unselected stars */
+    .dimmed {
+      opacity: 0.6;
+      filter: grayscale(30%) brightness(70%);
+    }
+
+    .star-level {
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+
+<body class="body-text">
+
+  <div style="padding-top:7px">Can obtain infinite stacks of <b style="color:#3c78d8">[Overwhelming Mana]</b> and each stack gained will heal self and allies for 5% of her max health. For every 5 stacks, increase crit rate and damage for self by +5% but increase mana consumption by +5%. When 50 stacks are gained, increase self’s damage of all skills by +50%.</div>
+  <div style="padding-top:7px">Gain a stack of <b style="color:#3c78d8">[Overwhelming Mana]</b> every 5 seconds (Unconditional). All effect conditions that depend on gaining a stack will trigger automatically when obtaining these passive stacks.</div>
+  <div style="padding-top:7px">Using the dash skill will enable her to enter into a water transformed state called Aquia Mode, negating damage completely and moving quickly. Stamina will be continuously consumed. She will take +50% more damage from an attack with <b style="color:#DFAB5E">[Knockback]</b>, ending the state.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon">
+      <img src="../../Effect-Icons/knockback.svg" alt="Knockback Icon" style="width:20px; height:20px" />
+    </div>
+    <div class="effect-text">
+      <b style="color:#DFAB5E">[Knockback]</b>
+      <div style="padding-top:3px"><span style="color:#969595ad">Debuff</span>: Knocks opponents back 5 meters.</div>
+    </div>
+  </div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon">
+      <img src="../../Effect-Icons/overwhelming-mana.svg" alt="Mana Icon" style="width:20px; height:20px" />
+    </div>
+    <div class="effect-text">
+      <b style="color:#3c78d8">[Overwhelming Mana]</b>
+      <div style="padding-top:3px"><span style="color:#969595ad">Buff</span>: Stackable charge of energy (Infinite Stacks).</div>
+    </div>
+  </div>
+
+  <div style="width: 100%;height: 1px;background-color:#FFEBEE;margin: 10px 0;"></div>
+
+  <!-- STAR LEVELS START -->
+  <div class="star-level" data-level="1">
+    <div class="effect-icon">
+      <img src="../../Stars/Star__1.svg" alt="Star 1" style="height:17px;padding-top:10px" />
+    </div>
+    <div>When max MP to less than 5%, gain the effect <b style="color:#8e7cc3">[Mana Recovery]</b>.</div>
+    <div style="padding-left:15px;padding-top:10px" class="icon-container">
+      <div class="effect-icon">
+        <img src="../../Effect-Icons/mana-recovery.svg" alt="Mana Recovery Icon" style="width:20px; height:20px" />
+      </div>
+      <div class="effect-text">
+        <b style="color:#8e7cc3">[Mana Recovery]</b>
+        <div style="padding-top:3px"><span style="color:#969595ad">Buff</span>: Stackable charge of energy (Infinite Stacks).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="star-level" data-level="2">
+    <div class="effect-icon">
+      <img src="../../Stars/Star__2.svg" alt="Star 2" style="height:17px;padding-top:10px" />
+    </div>
+    <div>When obtaining <b style="color:#3c78d8">[Overwhelming Mana]</b>, gain two instances instead of one. Gaining a stack increases her and allies’ MP regen by +1%, up to +50%. Effect scales proportionally to the number of stacks she has and is infinite so long as she has a stack.</div>
+  </div>
+
+  <div class="star-level" data-level="3">
+    <div class="effect-icon">
+      <img src="../../Stars/Star__3.svg" alt="Star 3" style="height:17px;padding-top:10px" />
+    </div>
+    <div>Increases the damage of special skills by +15%.</div>
+  </div>
+
+  <div class="star-level" data-level="4">
+    <div class="effect-icon">
+      <img src="../../Stars/Star__4.svg" alt="Star 4" style="height:17px;padding-top:10px" />
+    </div>
+    <div>River’s skill cooldown is permanently decreased by 3 seconds. The Special Skill: Water Ball consumes a single instance of <b style="color:#3c78d8">[Overwhelming Mana]</b> which increases the size of the AoE to a larger field range and self gains +10% damage increase. The rate continues to increase incrementally when the skill is used repeatedly in short succession and resets when ending repeated skill use and having mana depleted.</div>
+  </div>
+
+  <div class="star-level" data-level="5">
+    <div class="effect-icon">
+      <img src="../../Stars/Star__5.svg" alt="Star 5" style="height:17px;padding-top:10px" />
+    </div>
+    <div><b style="color:#3c78d8">[Overwhelming Mana]</b> gain enhances even further, up to three stacks are gained instead of one. Each stack will increase River’s basic skill damage by +2%. Whenever one is consumed, heal 2% of max health and recover 17 MP for self and allies.</div>
+  </div>
+
+  </div>
+  <!-- STAR LEVELS END -->
+
+  <script>
+    // Get ?id=NUMBER from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id")) || 0; // default 0
+
+    // Apply dimming logic
+    document.querySelectorAll(".star-level").forEach(star => {
+      const level = parseInt(star.dataset.level);
+      if (id === 0 || level > id) {
+        star.classList.add("dimmed");
+      }
+    });
+  </script>
+
+</body>
+
+
+
+</html>

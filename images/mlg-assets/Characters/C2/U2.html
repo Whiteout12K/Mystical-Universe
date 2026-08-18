@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Ultimate Skill: Absolute Zero</b></div>
+
+  <div style="padding-top:7px">Mustering the very limits of his ice magic, Kaden unleashes a storm of ice particles and erupts a large ice spike from the ground, dealing <b><span id="dmg1">870</span>%</b> of attack as <b class="water">[Water]</b> AoE damage.</div>
+  <div style="padding-top:7px">An ice rink will form after the attack that will continuously apply <b class="freeze">[Freeze]</b> to opponents when they are hit with <b class="water">[Water]</b> element attacks from any source, lasting 16 seconds.</div>
+  <div style="padding-top:7px">During the effect, all other elements in the party will decrease in effectiveness by -100%. <b class="water">[Water]</b> damage will, however, increase by +70%.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/freeze.svg" alt="Freeze Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="freeze">[Freeze]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Stops action for 2 seconds.</div></div>
+  </div>
+xwz
+  <div style="padding-top:7px">Energy Gauge: 100%</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [870];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

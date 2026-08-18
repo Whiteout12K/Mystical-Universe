@@ -1,0 +1,118 @@
+
+
+[
+    
+{ 
+"title":"Mystical Legends",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"When the world needs legends to appear, they will be there.",
+"file":"/images/mlg-assets/Music/ML-Theme.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Zenith Luces Theme",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"When Zenith Luces had to take a stand, he heard the light that was unwavering and a guide even in doubts of shadows.",
+"file":"/images/mlg-assets/Music/lt3.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Journey of the Sky House",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"Flying through clouds and the night, even the mysterious are concealed from the eye.",
+"file":"/images/mlg-assets/Music/jsh.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Pyrus Bourn's Theme",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"From his eyes, the world should go in flames and be reborn anew!",
+"file":"/images/mlg-assets/Music/pt1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Roman March",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"A folklore song of the mystical passed through the ages, but never stopping.",
+"file":"/images/mlg-assets/Music/rm1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"IT",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"A normal day in the workplace of IT...",
+"file":"/images/mlg-assets/Music/ita_bg1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Midnight Child - Dance",
+"artist":"Kaleb Calhoun",
+"album":"Original Track Collection",
+"description":"It was pitch black except for the moon and its light shining down on a girl.",
+"file":"/images/mlg-assets/Music/midc1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Midnight Child - Interlude",
+"artist":"Kenny Calhoun",
+"album":"Original Track Collection",
+"description":"The girl danced to the light of the moon in successive steps, charging a course.",
+"file":"/images/mlg-assets/Music/midc2.mp3",
+"cover":"/images/website/main-bg.png"
+}, 
+
+{  
+"title":"Fade",
+"artist":"Kaleb Calhoun",
+"album":"Original Track Collection",
+"description":"A change of a season to the next.",
+"file":"/images/mlg-assets/Music/fade1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{  
+"title":"Morning",
+"artist":"Kaleb Calhoun",
+"album":"Original Track Collection",
+"description":"A rise to a new day and back to the usual.",
+"file":"/images/mlg-assets/Music/morning1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+
+
+{  
+"title":"Nuntios",
+"artist":"Kenny Calhoun",
+"album":"Album 1",
+"description":"When the world is in need of messangers, they will deliver to save the world.",
+"file":"/images/mlg-assets/Music/nuntios1.mp3",
+"cover":"/images/website/main-bg.png"
+},
+
+{
+"title":"Obtainia",
+"artist":"Kenny Calhoun",
+"album":"Album 1",
+"description":"A choir singing, the very heavens defying sounds, all that comes down to the origin of light.",
+"file":"/images/mlg-assets/Music/tot.mp3",
+"cover":"/images/website/main-bg.png"
+}
+
+
+
+
+]

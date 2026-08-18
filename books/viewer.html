@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document Viewer</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #111;
+    overflow: hidden;
+    user-select: none;          /* Prevent text selection */
+}
+
+#viewer {
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    text-align: center;
+}
+
+canvas {
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+/* Optional watermark */
+#watermark {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    color: rgba(255,255,255,0.25);
+    font-family: Arial, sans-serif;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="watermark">Protected View</div>
+<div id="viewer"></div>
+
+<!-- PDF.js Library -->
+<script type="module" src="viewer.js"></script>
+
+<script>
+// Disable right click
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Disable common shortcuts (save, print, dev tools)
+document.addEventListener("keydown", e => {
+    if (
+        (e.ctrlKey && ["s","p","u"].includes(e.key.toLowerCase())) ||
+        e.key === "F12"
+    ) {
+        e.preventDefault();
+    }
+});
+</script>
+
+</body>
+</html>

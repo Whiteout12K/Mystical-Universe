@@ -1,0 +1,36 @@
+/* Mystical Legends Game Skill Display Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    color: #FFEBEE;
+    background-color: #63141462;
+    font-size: 9px;
+    padding: 4em 1em;
+    padding-right: 1.5em;
+}
+
+.icon-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.effect-icon {
+    flex-shrink: 0;
+    display:inline;
+}
+
+.effect-text {
+    flex: 1;
+}
+
+.level-display {
+    margin-top: 15px;
+    font-size: 8px;
+    color: #FFEBEE;
+}
+
+
+
+
+

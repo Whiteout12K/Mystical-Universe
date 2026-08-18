@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Basic Skill: Meteor Bash</b></div>
+
+  <div style="padding-top:7px">Ted sends heavy kicks of metal-enhanced moves against opponents, dealing <b class="earth">[Earth]</b> damage. The damage dealt becomes <b class="shield">[Shield]</b> for self equal to <b><span id="dmg1">15</span>%</b> of its value.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 1</u>: Thrusts several quick fists at the opponent, dealing <b><span id="dmg2">40</span>%</b> of defense as damage.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 2</u>: Launches spheres of metal towards opponents in a line in a short point range, dealing <b><span id="dmg3">65</span>%</b> of defense as damage.</div>
+  <div style="padding-left:15px;padding-top:7px"><u>Stage 3</u>: Slams a metal wall in front, dealing <b><span id="dmg4">80</span>%</b> of defense as <span class="empowered">empowered</span> damage.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/shield.svg" alt="Shield Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="shield">[Shield]</b><div style="padding-top:3px"><span class="buff">Buff</span>: Creates an overshield that absorbs damage equal to a certain amount of health.</div></div>
+  </div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [15, 40, 65, 80];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+      document.getElementById("dmg4").textContent = (baseDamage[3] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+</html>

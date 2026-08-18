@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Special Skill: Rods of Steel</b></div>
+
+  <div style="padding-top:7px">Launches a large beam of steel towards opponents, dealing <b class="earth">[Earth]</b> <span class="empowered">empowered</span> damage equal to <b><span id="dmg1">240</span>%</b> of defense. Hit opponents will gain the effect <b class="dazed">[Dazed]</b>.</div>
+  <div style="padding-top:7px">If <b class="invention">[Invention]</b> is active, several more beams (+3 more of them) will be shot out, dealing the same damage. Clear a stack of <b class="invention">[Invention]</b>.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/dazed.svg" alt="Dazed Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="dazed">[Dazed]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Become susceptible to critical hit damage for 2 seconds.</div></div>
+  </div>
+
+  <div style="padding-top:7px">Cooldown: 10 seconds</div>
+  <div>Mana Cost: 130 MP</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [240];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

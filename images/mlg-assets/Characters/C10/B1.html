@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #FFEBEE;
+      background-color: #63141462;
+      font-size: 9px;
+      padding: 4em 1em;
+      padding-right: 1.5em;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .effect-icon {
+      flex-shrink: 0;
+    }
+
+    .effect-text {
+      flex: 1;
+    }
+
+    .level-display {
+      margin-top: 15px;
+      font-size: 8px;
+      color: #FFEBEE;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Basic Skill: Feline Fury</b></div>
+
+  <div style="padding-top:7px">Kiara swipes attacks in close range, her quick swoops dealing normal damage. </div>
+  <div id="stage1" style="padding-left:15px;padding-top:7px"></div>
+  <div id="stage2" style="padding-left:15px;padding-top:7px"></div>
+  <div id="stage3" style="padding-left:15px;padding-top:7px"></div>
+
+  <div class="level-display" id="level"></div>
+
+  <script>
+    const maxLevel = 10;
+    const baseDamage = [90, 110, 150];
+
+    // Read level from ?id=#
+    const params = new URLSearchParams(window.location.search);
+    let level = parseInt(params.get("id")) || 1; // default = 1
+    level = Math.min(maxLevel, Math.max(1, level)); // clamp between 1 and max
+
+    function updateDamage() {
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      document.getElementById("stage1").innerHTML =
+        `<u>Stage 1</u>: Swipes two lightning claws forward, dealing <b>${(baseDamage[0] * multiplier).toFixed(1)}%</b> of attack as damage.`;
+
+      document.getElementById("stage2").innerHTML =
+        `<u>Stage 2</u>: Pounces upwards and crashes down, dealing small AoE damage equal to <b>${(baseDamage[1] * multiplier).toFixed(1)}%</b> of attack.`;
+
+      document.getElementById("stage3").innerHTML =
+        `<u>Stage 3</u>: Spins quickly with cat claws outstretched and clobbering opponents, ensnaring them in place and dealing AoE damage equal to <b>${(baseDamage[2] * multiplier).toFixed(1)}%</b> of attack.`;
+
+      document.getElementById("level").textContent = `< Skill Level: ${level} >`;
+    }
+
+    updateDamage();
+  </script>
+
+</body>
+
+</html>

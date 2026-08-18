@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Ultimate Skill: Metal Mode</b></div>
+
+  <div style="padding-top:7px">Ted will encase metal armor around himself to gain extra defense and outward fighting power, lasting for 16 seconds.</div>
+  <div style="padding-top:7px">Upon activation, Ted will gain +100% movement speed and +20% damage reduction.</div>
+
+  <div style="padding-top:7px"><b>Model A</b>: Charge forward and deal <b class="earth">[Earth]</b> <span class="empowered">super empowered</span> damage equal to <b><span id="dmg1">160</span>%</b> of defense to any opponent in his path. Any skills used in conjunction with this ultimate’s effect will deal <b>+<span id="dmg2">25</span>%</b> more damage.</div>
+  <div style="padding-top:7px"><b>Model B</b>: If off-field, the metal armor will dissipate and form into 2 hovering robotic turret drones that will blast energy pulses towards nearby opponents, dealing <b><span id="dmg3">140</span>%</b> of defense as <b class="earth">[Earth]</b> damage per blast.</div>
+
+  <div style="padding-top:7px">If two or more stacks of <b class="invention">[Invention]</b> are active, instead, gain +50% damage reduction, +150% movement speed, and <b>+<span id="dmg4">50</span>%</b> skill damage for Model A. Summon an extra drone for Model B. Clear all stacks of <b class="invention">[Invention]</b>.</div>
+
+  <div style="padding-top:7px">Energy Gauge: 100%</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [160, 25, 140, 50];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+      document.getElementById("dmg4").textContent = (baseDamage[3] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

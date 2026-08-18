@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #FFEBEE;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .effect-icon {
+      flex-shrink: 0;
+    }
+
+    .effect-text {
+      flex: 1;
+    }
+
+    .body-text {
+      background-color: #63141462;
+      font-size: 9px;
+      padding-left: 1em;
+      padding-right: 1.5em;
+      padding-top: 4em;
+      padding-bottom: 4em;
+    }
+
+    .level-control {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+    }
+
+    .level-btn {
+      width: 28px;
+      height: 22px;
+      font-size: 12px;
+      background: none;
+      border: 1px solid #FFEBEE;
+      color: #FFEBEE;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .level-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Technical Skill: Lightning Discharge</b></div>
+
+  <div style="padding-top:7px">Allies and self with <u>lightning</u> based attacks (stated in skill descriptions, but usually without special effects) will have their respective elements converted to <b style="color:#8e7cc3">[Lightning Element]</b> damage (applies to all skills that deal element damage). Each character whose element is converted will still inherently keep the former’s elements’ buffs, resistances and auras.</div>
+
+  <div style="padding-top:17px"><b style="color:#8e7cc3">[Lightning Element]</b>: A special elemental attack which shreds barriers, reducing hit opponent’s defense by -25% when lightning attack lands. The lighting attack will also apply a <b style="color:#e69138">[Charged]</b> counter on opponents which stack up to 5 times. This element can maintain its lightning element aura for a short time on inflicted opponents.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon">
+      <img src="../../Effect-Icons/charged.svg" alt="Charged Icon" style="width:20px; height:20px" />
+    </div>
+    <div class="effect-text">
+      <b style="color:#e69138">[Charged]</b>
+      <div style="padding-top:3px"><span style="color:#969595ad">Buff</span>: Does the following:</div>
+      <div style="padding-top:7px">> At five stacks, if having <b style="color:#8e7cc3">[Lightning Element]</b> aura and next damaged by <b style="color:#80a1da">[Water]</b> attacks, deals small AoE damage equal to 350% of the inflictor's attack to self which is considered <b style="color:#8e7cc3">[Lightning Element]</b> damage.</div>
+      <div style="padding-top:7px">> If having <b style="color:#80a1da">[Water]</b> aura and hit by <b style="color:#8e7cc3">[Lightning Element]</b> attack, a smaller single-hit damage is dealt to self equal to 100% of the inflictor's attack which is considered <b style="color:#8e7cc3">[Lightning Element]</b> damage.</div>
+      <div style="padding-top:7px">The damage is increased by +15% for each level of the skill used to deal damage. The damage dealt from this effect can crit, equal to the inflictor’s crit rate and damage.</div>
+      <div style="padding-top:7px">Damage is further also increased by +1% for each point of piercing of the inflictor.</div>
+    </div>
+  </div>
+
+</body>
+
+</html>

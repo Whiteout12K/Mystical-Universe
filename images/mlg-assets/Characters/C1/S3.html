@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body>
+
+  <div><b style="font-size:14px;">Special Skill: Light Compression</b></div>
+
+  <div style="padding-top:7px">Condensing light around him into any object, Avery gains newfound versatility. Hold down the skill button to cycle through weapons and letting go will select the specific weapon as the new active basic skill.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Basic Skill: Compressed Light Sword</u> - A denser weapon, increases basic skill damage by <b>+<span id="dmg1">30</span>%</b>, keeping original basic skill stages. Every other hit will be an <span class="empowered">empowered</span> attack.</div>
+  <div style="padding-left:15px;padding-top:5px"><u>Basic Skill: Compressed Barrier</u> - Creates a barrier of light in front, with health equal to <b><span id="dmg2">1000</span>%</b> of stat used by the basic skill (Cooldown: 15 seconds).</div>
+  <div style="padding-left:15px;padding-top:5px"><u>Basic Skill: Compressed Light Bow</u> - Creates a ranged damaging weapon; <b>+<span id="dmg3">50</span>%</b> more attack when hitting more than 10 meters, but +50% damage taken. Uses preset basic skill Stage 1 damage multiplier per projectile. Hold basic skill to charge up a powerful 3-arrow attack.</div>
+  <div style="padding-left:15px;padding-top:5px"><u>Basic Skill: Lighted Trebuchet</u> - Summons a trebuchet on spot that hurls projectiles on opponents, dealing <b>+<span id="dmg4">25</span>%</b> increased damage as ranged AoE. Uses preset basic skill Stage 1 damage multiplier. Basic skill will activate trebuchet.</div>
+  <div style="padding-left:15px;padding-top:5px"><u>Basic Skill: Default</u> - Resets and changes to preset basic skill.</div>
+
+  <div style="padding-top:7px">Cooldown: 1.5 seconds</div>
+  <div>Mana Cost: 30 MP</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [30, 1000, 50, 25];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      // Update ONLY numbers (not full text)
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = (baseDamage[2] * multiplier).toFixed(1);
+      document.getElementById("dmg4").textContent = (baseDamage[3] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+</html>

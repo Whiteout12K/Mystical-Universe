@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #FFEBEE;
+    }
+
+    .icon-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .effect-icon {
+      flex-shrink: 0;
+    }
+
+    .effect-text {
+      flex: 1;
+    }
+
+    .body-text {
+      background-color: #63141462;
+      font-size: 9px;
+      padding-left: 1em;
+      padding-right: 1.5em;
+      padding-top: 4em;
+      padding-bottom: 4em;
+    }
+
+    .level-display {
+      margin-top: 15px;
+      font-size: 8px;
+      color: #FFEBEE;
+    }
+  </style>
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Special Skill: Water Ball</b></div>
+
+  <div style="padding-top:7px">River forms a giant vortex of water, forming into a sphere, that she launches towards her enemies, dealing <b style="color:#80a1da">[Water]</b> damage.</div>
+
+  <div id="des1" style="padding-top:7px"></div>
+
+  <div style="padding-top:7px">Cooldown: 3 seconds</div>
+  <div>Mana Cost: 25 MP</div>
+
+  <div class="level-display" id="level"></div>
+
+  <script>
+    const maxLevel = 10;
+    const baseDamage = [200];
+
+    // Read level from ?id=# in URL
+    const params = new URLSearchParams(window.location.search);
+    let level = parseInt(params.get("id")) || 1; // default = 1
+    level = Math.min(maxLevel, Math.max(1, level)); // clamp between 1 and 10
+
+    function updateSkill() {
+      const multiplier = 1 + 0.25 * (level - 1);
+
+      document.getElementById("des1").innerHTML =
+        `The water ball implodes on opponents and deals <b>${(baseDamage[0] * multiplier).toFixed(1)}%</b> of attack as small AoE damage.`;
+
+      document.getElementById("level").textContent = `< Skill Level: ${level} >`;
+    }
+
+    updateSkill();
+  </script>
+
+</body>
+
+</html>

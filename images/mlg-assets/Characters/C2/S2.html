@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Special Skill: Arsenal of Ice</b></div>
+
+  <div style="padding-top:7px">Kaden will create various objects of ice to aid in his battle. Hold down skill to rotate between a list of items; then letting go will select the specified item.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Special Skill: Ice Beam</u> - A directable beam, with a medium range, that does continuous damage equal to <b><span id="dmg1">175</span>%</b> of attack as <b class="water">[Water]</b> damage per half-second for 4 seconds.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Special Skill: Ice Mass</u> - Kaden hurls a single boulder of ice that hits an opponent, dealing <b><span id="dmg2">600</span>%</b> of attack as <b class="water">[Water]</b> <span class="empowered">empowered</span> damage.</div>
+
+  <div style="padding-left:15px;padding-top:7px"><u>Special Skill: Javelins’ Dance</u> - Kaden summons a ring of <b><span id="dmg3">10</span></b> (scales by level, rounded up) javelins around him that he hurls to opponents, dealing AoE <b class="water">[Water]</b> damage equal to <b><span id="dmg4">160</span>%</b> of attack per javelin. When he is off-field, the javelins will be thrusted in 1 second intervals until no javelins are left.</div>
+
+  <div style="padding-top:7px">Cooldown: 12 seconds</div>
+  <div>Mana Cost: 120 MP</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [175, 600, 10, 160];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+      document.getElementById("dmg2").textContent = (baseDamage[1] * multiplier).toFixed(1);
+      document.getElementById("dmg3").textContent = Math.ceil(baseDamage[2] * multiplier);
+      document.getElementById("dmg4").textContent = (baseDamage[3] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

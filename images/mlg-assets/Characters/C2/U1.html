@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skill Info</title>
+  <link rel="stylesheet" href="../mlg-skill.css">
+  <link rel="stylesheet" href="../../../../css/mlg.css">
+</head>
+
+<body class="body-text">
+
+  <div><b style="font-size:14px;">Ultimate Skill: Limitless Ice Beam</b></div>
+
+  <div style="padding-top:7px">Kaden charges up a stronger ice beam, gaining high range, that he blasts in two directions from his hands, dealing continuous <b class="water">[Water]</b> damage per half-second equal to <b><span id="dmg1">240</span>%</b> of attack for 7 seconds.</div>
+  <div style="padding-top:7px">Hit opponents will gain the <b class="freeze">[Freeze]</b> debuff and any subsequent hits during this state will increase their damage taken by +100%. The hit opponents will also gain debuff immunity reduction of -30% for the duration of skill.</div>
+
+  <div style="padding-left:15px;padding-top:10px" class="icon-container">
+    <div class="effect-icon hidden"><img src="../../Effect-Icons/freeze.svg" alt="Freeze Icon" style="width:20px; height:20px" /></div>
+    <div class="effect-text"><b class="freeze">[Freeze]</b><div style="padding-top:3px"><span class="debuff">Debuff</span>: Stops action for 2 seconds.</div></div>
+  </div>
+
+  <div style="padding-top:7px">Energy Gauge: 100%</div>
+
+  <div class="level-display">
+    &lt; Skill Level: <span id="level">1</span> &gt;
+  </div>
+
+  <!-- JS Enhancement -->
+  <script>
+    (function () {
+      const maxLevel = 10;
+      const baseDamage = [240];
+
+      const params = new URLSearchParams(window.location.search);
+      let level = parseInt(params.get("id")) || 1;
+      level = Math.min(maxLevel, Math.max(1, level));
+
+      const multiplier = 1 + 0.10 * (level - 1);
+
+      document.getElementById("dmg1").textContent = (baseDamage[0] * multiplier).toFixed(1);
+
+      document.getElementById("level").textContent = level;
+    })();
+  </script>
+
+</body>
+
+</html>

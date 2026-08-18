@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The direct authors and creators of the Mystical Legends Book Series and Mystical Legends Game.">
+  <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures">
+  
+  <title>Mystical Legends Authors</title>
+  
+  <link rel="icon" href="../images/website/favicon.png" type="image/png">
+
+  <link href="../css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/home.css">
+  <link rel="stylesheet" href="../css/news.css">
+  <link rel="stylesheet" href="../css/mlg.css">
+  <script src="../js/bootstrap-bundle-min.js"></script>
+</head>
+
+<body>
+
+<!-- Navbar/Header -->
+<div id="subheader-placeholder"></div>
+<h2 style="color:rgb(19, 19, 19);padding:10px;">Mystical Legends</h2>
+
+
+<section class="article-section">
+
+  <!-- content -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <h1 class="mb-4">Authors</h1>
+
+        <!-- Article Text -->
+
+        <p>
+          <b style="font-size:25px">Kenny Calhoun</b> is a part-time creator and author of the Mystical Legends series, along with various other related and unrelated projects. His hobbies include sketching, animation, music composition, piano playing, fitness, watching animated shows, reading novels and comics, game development, and playing video games—many of which help inspire or contribute to his creative work. He lives with his family and is pursuing studies in technical and scientific fields, hoping to build a career in an advanced research or engineering environment. Although Mystical Legends began as a personal hobby, he hopes to gradually develop it into a larger multimedia brand extending beyond books, which is one reason he explores so many different creative disciplines.
+        </p>
+
+        <p>
+          <b style="font-size:25px">Kaleb Calhoun</b> is a contributor who assists with various creative projects when opportunities arise. His interests include computer technology, cybersecurity, violin playing, music composition, drawing, socializing, gaming, and watching animated shows. He also works part-time as a storyboard artist and occasionally helps with his brother's projects, particularly those outside the fantasy genre. While his primary goals lean toward a successful technical career, he remains interested in contributing to creative works whenever he can and enjoys supporting ongoing projects behind the scenes.
+        </p>
+
+
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+
+
+<script src="../js/include.js"></script>
+
+
+<script>
+  document.addEventListener('contextmenu', function (e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+    }
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Collect all data-img values
+  const preloadImages = [];
+  document.querySelectorAll('.char-thumb').forEach(thumb => {
+    const img = thumb.getAttribute('data-img');
+    if (img) preloadImages.push(img);
+  });
+
+  // Preload them
+  preloadImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
+});
+</script>
+
+
+
+
+
+<!-- Footer Section -->
+<div id="subfooter-placeholder"></div>
+
+
+</body>
+</html>
