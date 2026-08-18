@@ -1,25 +1,17 @@
 import { jsonResponse } from "../_utils.js";
 
-export async function onRequestPost(context) {
 
-    const { request, env } = context;
+/*
+ * Shared function that actually creates the user.
+ * Both GET and POST use this.
+ */
+async function createUser(env, username, password) {
 
-    const body =
-        await request.json();
-
-
-    const username =
-        String(
-            body.username || ""
-        ).trim();
+    username = String(username || "").trim();
+    password = String(password || "").trim();
 
 
-    const password =
-        String(
-            body.password || ""
-        ).trim();
-
-
+    // Username required
     if (!username) {
 
         return jsonResponse({
@@ -30,36 +22,45 @@ export async function onRequestPost(context) {
     }
 
 
+    // Username characters
     if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+
         return jsonResponse({
             success: false,
             error:
                 "Username may only contain letters, numbers, _ and -."
         }, 400);
+
     }
 
 
-    if (!/^\d{4}$/.test(password)) {
-        return jsonResponse({
-            success: false,
-            error:
-                "Password must be exactly 4 digits."
-        }, 400);
-    }
-
-
+    // Username length
     if (username.length > 32) {
+
         return jsonResponse({
             success: false,
             error:
                 "Username must be 32 characters or less."
         }, 400);
+
     }
 
 
-    // FIRST CHECK:
-    // Does this username already exist?
+    // Password must be exactly 4 digits
+    if (!/^\d{4}$/.test(password)) {
 
+        return jsonResponse({
+            success: false,
+            error:
+                "Password must be exactly 4 digits."
+        }, 400);
+
+    }
+
+
+    /*
+     * Check if username already exists.
+     */
     const existing =
         await env.DB
             .prepare(`
@@ -82,6 +83,9 @@ export async function onRequestPost(context) {
     }
 
 
+    /*
+     * Default save data for new users.
+     */
     const initialData = {
         coin: 0,
         level: 1,
@@ -93,6 +97,9 @@ export async function onRequestPost(context) {
     };
 
 
+    /*
+     * Create the user.
+     */
     try {
 
         await env.DB
@@ -108,9 +115,7 @@ export async function onRequestPost(context) {
             .bind(
                 username,
                 password,
-                JSON.stringify(
-                    initialData
-                )
+                JSON.stringify(initialData)
             )
             .run();
 
@@ -121,7 +126,6 @@ export async function onRequestPost(context) {
          * The UNIQUE constraint on username
          * provides a second layer of protection.
          */
-
         if (
             error.message
                 ?.toLowerCase()
@@ -139,6 +143,7 @@ export async function onRequestPost(context) {
 
         console.error(error);
 
+
         return jsonResponse({
             success: false,
             error:
@@ -148,9 +153,84 @@ export async function onRequestPost(context) {
     }
 
 
+    /*
+     * Successful creation.
+     */
     return jsonResponse({
+
         success: true,
+
+        message:
+            "User created successfully.",
+
         username,
+
         data: initialData
+
     });
+
+}
+
+
+/*
+ * EXISTING HTML FORM
+ *
+ * POST /api/create-user
+ */
+export async function onRequestPost(context) {
+
+    const { request, env } = context;
+
+    const body =
+        await request.json();
+
+
+    const username =
+        body.username;
+
+
+    const password =
+        body.password;
+
+
+    return createUser(
+        env,
+        username,
+        password
+    );
+
+}
+
+
+/*
+ * LINK CREATION
+ *
+ * GET /api/create-user?username=avery&password=1234
+ */
+export async function onRequestGet(context) {
+
+    const { request, env } = context;
+
+    const url =
+        new URL(request.url);
+
+
+    const username =
+        url.searchParams.get(
+            "username"
+        );
+
+
+    const password =
+        url.searchParams.get(
+            "password"
+        );
+
+
+    return createUser(
+        env,
+        username,
+        password
+    );
+
 }

@@ -42,7 +42,8 @@ wrangler d1 info mystical-data
 
 # Tests
 http://localhost:8788/view/avery - to view user
-
+http://localhost:8788/login
+http://localhost:8788/create-user
 
 
 > Remote Export to Official
