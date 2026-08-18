@@ -19,7 +19,6 @@ export async function onRequestPost(context) {
         }, 400);
     }
 
-    // Find the user using the username/password
     const user = await env.DB
         .prepare(`
             SELECT id, username
@@ -37,27 +36,6 @@ export async function onRequestPost(context) {
         }, 401);
     }
 
-    // Generate a unique session ID
-    const sessionId = crypto.randomUUID();
-
-    // Save the session in D1
-    await env.DB
-        .prepare(`
-            INSERT INTO sessions (
-                id,
-                user_id,
-                created_at
-            )
-            VALUES (?, ?, ?)
-        `)
-        .bind(
-            sessionId,
-            user.id,
-            Date.now()
-        )
-        .run();
-
-    // Give the browser a persistent authentication cookie
     return new Response(
         JSON.stringify({
             success: true,
@@ -68,11 +46,8 @@ export async function onRequestPost(context) {
                 "Content-Type": "application/json",
 
                 "Set-Cookie":
-                    `session_id=${encodeURIComponent(sessionId)}; ` +
-                    `Path=/; ` +
-                    `HttpOnly; ` +
-                    `Secure; ` +
-                    `SameSite=Lax`
+                    `username=${encodeURIComponent(user.username)}; ` +
+                    `Path=/; SameSite=Lax`
             }
         }
     );

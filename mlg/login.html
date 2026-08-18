@@ -12,253 +12,86 @@
 
 <body>
 
-    <h1 id="title">Login</h1>
+    <h1>Login</h1>
 
+    <form id="loginForm">
 
-    <!-- LOGIN SECTION -->
+        <input
+            id="username"
+            placeholder="Username"
+            required
+        >
 
-    <div id="loginSection">
+        <input
+            id="password"
+            placeholder="4 digit password"
+            maxlength="4"
+            inputmode="numeric"
+            type="password"
+            required
+        >
 
-        <form id="loginForm">
-
-            <input
-                id="username"
-                placeholder="Username"
-                required
-            >
-
-            <input
-                id="password"
-                placeholder="4 digit password"
-                maxlength="4"
-                inputmode="numeric"
-                type="password"
-                required
-            >
-
-            <button type="submit">
-                Login
-            </button>
-
-        </form>
-
-        <p id="message"></p>
-
-    </div>
-
-
-    <!-- LOGGED IN SECTION -->
-
-    <div
-        id="loggedInSection"
-        style="display: none;"
-    >
-
-        <p>
-            🟢 You are logged in as
-            <strong id="loggedInUsername"></strong>
-        </p>
-
-        <button id="logoutButton">
-            Log Out
+        <button type="submit">
+            Login
         </button>
 
-        <p id="logoutMessage"></p>
+    </form>
 
-    </div>
+    <p id="message"></p>
 
 
 <script>
 
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", async event => {
 
-// ------------------------------------
-// CHECK IF USER IS ALREADY LOGGED IN
-// ------------------------------------
+        event.preventDefault();
 
-async function checkLogin() {
+        const username =
+            document.getElementById("username").value;
 
-    try {
+        const password =
+            document.getElementById("password").value;
 
-        const response =
-            await fetch("/api/me");
+
+        const response = await fetch(
+            "/api/login",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    username,
+                    password
+                })
+            }
+        );
+
 
         const result =
             await response.json();
 
 
-        if (result.loggedIn) {
+        if (response.ok) {
 
-            // Hide login form
+            window.location.href =
+                "/dashboard";
+
+        } else {
+
             document.getElementById(
-                "loginSection"
-            ).style.display = "none";
-
-
-            // Show logged-in information
-            document.getElementById(
-                "loggedInSection"
-            ).style.display = "block";
-
-
-            // Show username
-            document.getElementById(
-                "loggedInUsername"
+                "message"
             ).textContent =
-                result.user.username;
-
-
-            // Change title
-            document.getElementById(
-                "title"
-            ).textContent =
-                "Account";
+                result.error;
 
         }
 
-    } catch (error) {
-
-        console.error(
-            "Could not check login status:",
-            error
-        );
-
-    }
-
-}
-
-
-// ------------------------------------
-// LOGIN
-// ------------------------------------
-
-document
-    .getElementById("loginForm")
-    .addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const username =
-                document
-                    .getElementById("username")
-                    .value;
-
-            const password =
-                document
-                    .getElementById("password")
-                    .value;
-
-
-            const response =
-                await fetch(
-                    "/api/login",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-                            username,
-                            password
-                        })
-                    }
-                );
-
-
-            const result =
-                await response.json();
-
-
-            if (response.ok) {
-
-                window.location.href =
-                    "/dashboard";
-
-            } else {
-
-                document.getElementById(
-                    "message"
-                ).textContent =
-                    result.error;
-
-            }
-
-        }
-    );
-
-
-// ------------------------------------
-// LOGOUT
-// ------------------------------------
-
-document
-    .getElementById("logoutButton")
-    .addEventListener(
-        "click",
-        async () => {
-
-            const response =
-                await fetch(
-                    "/api/logout",
-                    {
-                        method: "POST"
-                    }
-                );
-
-
-            const result =
-                await response.json();
-
-
-            if (response.ok) {
-
-                // Hide logged-in section
-                document.getElementById(
-                    "loggedInSection"
-                ).style.display = "none";
-
-
-                // Show login section
-                document.getElementById(
-                    "loginSection"
-                ).style.display = "block";
-
-
-                // Reset form
-                document.getElementById(
-                    "loginForm"
-                ).reset();
-
-
-                // Change title
-                document.getElementById(
-                    "title"
-                ).textContent =
-                    "Login";
-
-            } else {
-
-                document.getElementById(
-                    "logoutMessage"
-                ).textContent =
-                    "Unable to log out.";
-
-            }
-
-        }
-    );
-
-
-// ------------------------------------
-// RUN LOGIN CHECK
-// ------------------------------------
-
-checkLogin();
+    });
 
 </script>
 

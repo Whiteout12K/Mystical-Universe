@@ -1,6 +1,5 @@
 import { jsonResponse } from "../_utils.js";
 
-
 function getCookie(request, name) {
 
     const cookies =
@@ -12,7 +11,6 @@ function getCookie(request, name) {
             cookie.trim().split("=");
 
         if (key === name) {
-
             return decodeURIComponent(
                 value.join("=")
             );
@@ -25,18 +23,14 @@ function getCookie(request, name) {
 
 export async function onRequestGet(context) {
 
-    const { request, env } = context;
-
-    // Get the persistent session ID from the browser
-    const sessionId =
+    const username =
         getCookie(
-            request,
-            "session_id"
+            context.request,
+            "username"
         );
 
 
-    // No session cookie = not logged in
-    if (!sessionId) {
+    if (!username) {
 
         return jsonResponse({
             authenticated: false
@@ -45,23 +39,17 @@ export async function onRequestGet(context) {
     }
 
 
-    // Find the user associated with this session
     const user =
-        await env.DB
+        await context.env.DB
             .prepare(`
-                SELECT
-                    users.id,
-                    users.username
-                FROM sessions
-                JOIN users
-                    ON users.id = sessions.user_id
-                WHERE sessions.id = ?
+                SELECT id, username
+                FROM users
+                WHERE username = ?
             `)
-            .bind(sessionId)
+            .bind(username)
             .first();
 
 
-    // Session doesn't exist or is no longer valid
     if (!user) {
 
         return jsonResponse({
@@ -71,7 +59,6 @@ export async function onRequestGet(context) {
     }
 
 
-    // User is authenticated
     return jsonResponse({
         authenticated: true,
         username: user.username,
