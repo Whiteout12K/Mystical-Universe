@@ -54,6 +54,9 @@ wrangler d1 execute mystical-data --remote --file=./schema.sql
 # See Cloudflare users
 wrangler d1 execute mystical-data --remote --command="SELECT * FROM users;"
 
+# Delete all
+wrangler d1 execute mystical-data --remote --command="DELETE FROM users;"
+
 
 
 
