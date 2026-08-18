@@ -159,6 +159,52 @@
 
 
 <script src="js/include.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const loginNavLink = document.getElementById("loginNavLink");
+
+  if (!loginNavLink) {
+    return;
+  }
+
+  try {
+
+    const response = await fetch("/api/me", {
+      method: "GET",
+      credentials: "include"
+    });
+
+    if (!response.ok) {
+      return;
+    }
+
+    const result = await response.json();
+
+    if (result.authenticated && result.username) {
+
+      loginNavLink.textContent = result.username;
+
+      // Keep the username clickable, leading to the dashboard
+      loginNavLink.href = "/dashboard";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Could not determine login status:",
+      error
+    );
+
+  }
+
+});
+</script>
+
+
+
 <script src="/js/home.js"></script>
 <script src="js/news.js"></script>
 
