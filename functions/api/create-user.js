@@ -1,91 +1,65 @@
 import { jsonResponse } from "../_utils.js";
 
+const REGISTRATION_LIMIT = 3;
+const REGISTRATION_WINDOW = 15 * 60;
 
-/*
- * Shared function that actually creates the user.
- * Both GET and POST use this.
- */
-async function createUser(env, username, password) {
+async function checkRegistrationLimit(env, ip) {
+    const now = Math.floor(Date.now() / 1000);
+    const windowStart = now - REGISTRATION_WINDOW;
 
+    const row = await env.DB.prepare("SELECT window_start, account_count FROM registration_limits WHERE ip = ?").bind(ip).first();
+
+    if (!row) {
+        await env.DB.prepare("INSERT INTO registration_limits (ip, window_start, account_count) VALUES (?, ?, 1)").bind(ip, now).run();
+        return true;
+    }
+
+    if (row.window_start <= windowStart) {
+        await env.DB.prepare("UPDATE registration_limits SET window_start = ?, account_count = 1 WHERE ip = ?").bind(now, ip).run();
+        return true;
+    }
+
+    if (row.account_count >= REGISTRATION_LIMIT) {
+        return false;
+    }
+
+    await env.DB.prepare("UPDATE registration_limits SET account_count = account_count + 1 WHERE ip = ?").bind(ip).run();
+
+    return true;
+}
+
+async function createUser(env, username, password, ip) {
     username = String(username || "").trim();
     password = String(password || "").trim();
 
-
-    // Username required
     if (!username) {
-
-        return jsonResponse({
-            success: false,
-            error: "Username is required."
-        }, 400);
-
+        return jsonResponse({ success: false, error: "Username is required." }, 400);
     }
 
-
-    // Username characters
     if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
-
-        return jsonResponse({
-            success: false,
-            error:
-                "Username may only contain letters, numbers, _ and -."
-        }, 400);
-
+        return jsonResponse({ success: false, error: "Username may only contain letters, numbers, _ and -." }, 400);
     }
 
-
-    // Username length
     if (username.length > 32) {
-
-        return jsonResponse({
-            success: false,
-            error:
-                "Username must be 32 characters or less."
-        }, 400);
-
+        return jsonResponse({ success: false, error: "Username must be 32 characters or less." }, 400);
     }
 
-
-    // Password must be exactly 4 digits
     if (!/^\d{4}$/.test(password)) {
-
-        return jsonResponse({
-            success: false,
-            error:
-                "Password must be exactly 4 digits."
-        }, 400);
-
+        return jsonResponse({ success: false, error: "Password must be exactly 4 digits." }, 400);
     }
 
-
-    /*
-     * Check if username already exists.
-     */
-    const existing =
-        await env.DB
-            .prepare(`
-                SELECT id
-                FROM users
-                WHERE username = ?
-            `)
-            .bind(username)
-            .first();
-
+    const existing = await env.DB.prepare("SELECT id FROM users WHERE username = ?").bind(username).first();
 
     if (existing) {
-
-        return jsonResponse({
-            success: false,
-            error:
-                "That username already exists."
-        }, 409);
-
+        return jsonResponse({ success: false, error: "That username already exists." }, 409);
     }
 
+    const allowed = await checkRegistrationLimit(env, ip);
 
-    /*
-     * Default save data for new users.
-     */
+    if (!allowed) {
+        return jsonResponse({ success: false, error: "Too many accounts created. Please try again in 15 minutes." }, 429);
+    }
+
     const initialData = {
         coin: 0,
         level: 1,
@@ -96,141 +70,38 @@ async function createUser(env, username, password) {
         flags: {}
     };
 
-
-    /*
-     * Create the user.
-     */
     try {
-
-        await env.DB
-            .prepare(`
-                INSERT INTO users
-                (
-                    username,
-                    password,
-                    save_data
-                )
-                VALUES (?, ?, ?)
-            `)
-            .bind(
-                username,
-                password,
-                JSON.stringify(initialData)
-            )
-            .run();
-
-
+        await env.DB.prepare("INSERT INTO users (username, password, save_data) VALUES (?, ?, ?)").bind(username, password, JSON.stringify(initialData)).run();
     } catch (error) {
+        console.error("Create user error:", error);
 
-        /*
-         * The UNIQUE constraint on username
-         * provides a second layer of protection.
-         */
-        if (
-            error.message
-                ?.toLowerCase()
-                .includes("unique")
-        ) {
-
-            return jsonResponse({
-                success: false,
-                error:
-                    "That username already exists."
-            }, 409);
-
+        if (error.message?.toLowerCase().includes("unique")) {
+            return jsonResponse({ success: false, error: "That username already exists." }, 409);
         }
 
-
-        console.error(error);
-
-
-        return jsonResponse({
-            success: false,
-            error:
-                "Could not create user."
-        }, 500);
-
+        return jsonResponse({ success: false, error: "Could not create user." }, 500);
     }
 
-
-    /*
-     * Successful creation.
-     */
     return jsonResponse({
-
         success: true,
-
-        message:
-            "User created successfully.",
-
+        message: "User created successfully.",
         username,
-
         data: initialData
-
     });
-
 }
 
-
-/*
- * EXISTING HTML FORM
- *
- * POST /api/create-user
- */
 export async function onRequestPost(context) {
-
     const { request, env } = context;
 
-    const body =
-        await request.json();
+    let body;
 
+    try {
+        body = await request.json();
+    } catch {
+        return jsonResponse({ success: false, error: "Invalid request." }, 400);
+    }
 
-    const username =
-        body.username;
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
 
-
-    const password =
-        body.password;
-
-
-    return createUser(
-        env,
-        username,
-        password
-    );
-
-}
-
-
-/*
- * LINK CREATION
- *
- * GET /api/create-user?username=avery&password=1234
- */
-export async function onRequestGet(context) {
-
-    const { request, env } = context;
-
-    const url =
-        new URL(request.url);
-
-
-    const username =
-        url.searchParams.get(
-            "username"
-        );
-
-
-    const password =
-        url.searchParams.get(
-            "password"
-        );
-
-
-    return createUser(
-        env,
-        username,
-        password
-    );
-
+    return createUser(env, body.username, body.password, ip);
 }

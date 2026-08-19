@@ -1,24 +1,193 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
     <div class="container-fluid">
+
       <!-- logo button -->
       <a class="navbar-brand d-flex align-items-center" href="/">
         <img src="/images/website/logo.png" alt="Logo" class="logo-img">
       </a>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarNav">
+
         <!-- Left side nav -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="/books_main.html">Book Series</a></li>
           <li class="nav-item"><a class="nav-link" href="/game-hub.html">ML Game</a></li>
           <li class="nav-item"><a class="nav-link" href="/webpages/music.html">Music</a></li>
         </ul>
+
         <!-- Right side nav -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/#news">News</a></li>
-          <li class="nav-item"><a class="nav-link" id="loginNavLink" href="/mlg/login">Login</a></li>
+
+          <!-- Logged in -->
+          <li class="nav-item dropdown" id="userMenu" style="display: none;">
+            <a class="nav-link d-flex align-items-center gap-2" href="#" id="loginUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img id="profileImage" src="/images/website/torch_full.png" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+              <span id="usernameText">Username</span>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+              <li>
+                <a class="dropdown-item text-light" href="/">
+                  Account
+                </a>
+              </li>
+
+              <li>
+                <button class="dropdown-item text-light" id="logoutButton" type="button">
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Logged out -->
+          <li class="nav-item dropdown" id="loginMenu">
+            <a class="nav-link" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              Login
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-end p-3 login-dropdown">
+
+              <form id="navbarLoginForm">
+
+                <div class="mb-2">
+                  <input id="navbarUsername" class="form-control" type="text" placeholder="Username" autocomplete="username" required>
+                </div>
+
+                <div class="mb-2">
+                  <input id="navbarPassword" class="form-control" type="text" placeholder="4 digit password" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" autocomplete="current-password" required>
+                </div>
+
+                <p id="navbarLoginMessage" class="small text-danger mb-2 mt-1"></p>
+
+                <button class="btn login-submit w-100" type="submit">
+                  Login
+                </button>
+
+                <div class="text-center mt-2">
+                  <a href="/webpages/create-user.html" class="small text-light">
+                    New user?
+                  </a>
+                </div>
+
+              </form>
+
+            </div>
+          </li>
+
         </ul>
+
       </div>
     </div>
-  </nav>
+</nav>
+
+<style>
+#loginUser::after,
+#loginDropdown::after {
+    display: none !important;
+}
+
+.dropdown-menu {
+    background-color: #252525 !important;
+    border: 1px solid #3a3a3a;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #3a3a3a !important;
+    color: #fff !important;
+}
+
+.user-dropdown {
+    min-width: 160px;
+}
+
+.login-dropdown {
+    width: 260px;
+    max-width: calc(100vw - 30px);
+}
+
+#loginMenu .form-control {
+    background-color: #303030;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+#loginMenu .form-control::placeholder {
+    color: #aaa;
+}
+
+#loginMenu .form-control:focus {
+    background-color: #383838;
+    color: #fff;
+    border-color: #666;
+    box-shadow: none;
+}
+
+#navbarLoginMessage {
+    display: none;
+}
+
+#navbarLoginMessage.show {
+    display: block;
+}
+
+.login-submit {
+    background-color: #555;
+    border-color: #666;
+    color: #fff;
+}
+
+.login-submit:hover,
+.login-submit:focus {
+    background-color: #666;
+    border-color: #777;
+    color: #fff;
+}
+
+#loginMenu .dropdown-menu {
+    border: 1px solid #3a3a3a;
+}
+
+@media (max-width: 991.98px) {
+    #loginMenu,
+    #userMenu {
+        width: auto;
+    }
+
+    #loginMenu .login-dropdown {
+        position: static !important;
+        transform: none !important;
+        width: auto !important;
+        max-width: none;
+        margin-top: 0;
+        padding: 0 !important;
+        border: none !important;
+        border-radius: 0;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    #loginMenu .login-dropdown form {
+        padding: 10px 0;
+    }
+
+    #loginMenu .form-control {
+        width: 100%;
+    }
+
+    #userMenu .user-dropdown {
+        position: static !important;
+        transform: none !important;
+        width: auto;
+        margin-top: 0;
+        border: none;
+        background-color: transparent !important;
+        box-shadow: none;
+    }
+}
+</style>

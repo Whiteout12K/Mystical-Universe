@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Create User</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif;background:#111315;color:#f1f1f1}.register-card{width:100%;max-width:400px;padding:32px;background:#1b1e21;border:1px solid #2b2f33;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.35)}h1{margin:0 0 8px;text-align:center;font-size:28px}.subtitle{margin:0 0 28px;text-align:center;color:#9da3aa;font-size:14px}.form-group{margin-bottom:16px}label{display:block;margin-bottom:7px;font-size:14px;color:#c9cdd1}input{width:100%;padding:12px 14px;border:1px solid #34393e;border-radius:8px;background:#121416;color:#fff;font-size:15px;outline:none;transition:border-color .2s,box-shadow .2s}input:focus{border-color:#6c8cff;box-shadow:0 0 0 3px rgba(108,140,255,.15)}button{width:100%;margin-top:8px;padding:12px;border:0;border-radius:8px;background:#5865f2;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s,transform .1s}button:hover{background:#4752c4}button:active{transform:scale(.98)}button:disabled{opacity:.6;cursor:not-allowed}#message{min-height:0;margin:12px 0 0;text-align:center;font-size:14px}#message.success{color:#5fd38a}#message.error{color:#ff6b6b}.warning{margin-top:22px;padding:12px 14px;border:1px solid #594b2a;border-radius:8px;background:#211e17;color:#c9bd9d;font-size:12px;line-height:1.5;text-align:center}
+</style>
+</head>
+<body>
+
+<main class="register-card">
+<h1>Create User</h1>
+<p class="subtitle">Create your account to get started.</p>
+
+<form id="createForm">
+<div class="form-group">
+<label for="username">Username</label>
+<input type="text" id="username" placeholder="Enter a username" autocomplete="username" required>
+</div>
+
+<div class="form-group">
+<label for="password">4-Digit Password</label>
+<input type="text" id="password" placeholder="Enter 4 digits" maxlength="4" inputmode="numeric" autocomplete="off" required>
+</div>
+
+<div class="form-group">
+<label for="confirmPassword">Confirm 4-Digit Password</label>
+<input type="text" id="confirmPassword" placeholder="Enter the 4 digits again" maxlength="4" inputmode="numeric" autocomplete="off" required>
+</div>
+
+<button type="submit" id="createButton">Create User</button>
+</form>
+
+<p id="message"></p>
+
+<div class="warning">Once an account is created, it cannot be undone. Be sure to save your Username and Password somewhere safe.</div>
+</main>
+
+<script>
+const form=document.getElementById("createForm"),username=document.getElementById("username"),password=document.getElementById("password"),confirmPassword=document.getElementById("confirmPassword"),button=document.getElementById("createButton"),message=document.getElementById("message");
+
+form.addEventListener("submit",async e=>{
+e.preventDefault();
+message.textContent="";
+message.className="";
+button.disabled=true;
+button.textContent="Creating...";
+
+if(password.value!==confirmPassword.value){
+message.textContent="Passwords do not match.";
+message.className="error";
+button.disabled=false;
+button.textContent="Create User";
+return;
+}
+
+try{
+const response=await fetch("/api/create-user",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:username.value.trim(),password:password.value.trim()})});
+
+const text=await response.text();
+let result;
+
+try{
+result=JSON.parse(text);
+}catch{
+throw new Error("Server returned an invalid response.");
+}
+
+if(response.ok){
+message.textContent="User created successfully!";
+message.className="success";
+form.reset();
+}else{
+message.textContent=result.error||"Unable to create user.";
+message.className="error";
+}
+}catch(error){
+console.error(error);
+message.textContent="Something went wrong. Please try again.";
+message.className="error";
+}finally{
+button.disabled=false;
+button.textContent="Create User";
+}
+});
+</script>
+
+</body>
+</html>
