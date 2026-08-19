@@ -10,6 +10,9 @@ Main:
     mystical, but twice
 
 
+Shortcuts on VS Code:
+Ctrl + ` : Open Terminal
+
 
 > Wrangler Cloudflare D1 Database (mystical-data)
 
