@@ -69,12 +69,92 @@ async function createUser(env,username,password,deviceId){
     }
 
     const initialData={
-        coin:0,
-        level:1,
-        xp:0,
-        health:100,
-        mana:100,
-        items:[],
+        silver_coin:0, // Silver Coins, main currency
+        ar_level:1, // Adventure Rank Level
+        ar_xp:0, // Adventure Rank XP
+        energy:100, // Daily Energy
+
+        // Account Stuff
+        avatar:1, // Current Avatar
+        avatar_frame:1, // Current Avatar Frame
+        bg:1, // Current Background
+        settings:{
+            keyboard_input:true,
+            music_volume:0.5,
+            sfx_volume:0.5,
+            voice_volume:0.5,
+        },
+
+        season_pass_owned:1, // Current Season Pass Bought
+        season_pass_level:1, // Current Season Pass Level
+        season_pass_xp:0, // Current Season Pass XP
+
+        premium:{ // Premium Currencies
+            bronze_bits:0, // Bronze Bits
+            ruby_tablet:0, // Ruby Tablet
+            sapphire_tablet:0, // Sapphire Tablet
+            emerald_tablet:0, // Emerald Tablet
+            diamond_core:0, // Diamond Core
+
+            sr_star_lv_frag:0,
+            ssr_star_lv_frag:0,
+            ur_star_lv_frag:0,
+        },
+
+        mc_skill_tree_unlock:[], // Main character skill tree - 
+            // Each item contains a sub-list that pertains to one selection of abilities.
+            // Within that sublist, there are nodes that start at 0, unlock at 1, and upgrade by
+            // higher numbers, up to 10.
+
+        c_owned:[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], // Characters Owned
+            // Each item is in order of character ID, where 0 is not owned, and 1 is owned.
+        c_equipped_skills:[], // Characters' Equipped Skills
+            // Each item, in order of character ID, contains a sublist of length 6 for their 
+            // 1 Basic Skill, 2 Special Skills, 1 Ultimate Skill, and 2 Technical Skills.
+        c_skill1_owned:[], // Characters' Owned Basic Skills.
+            // Each item, in order of character ID, contains a sublist of all the Basic Skills
+            // they may own, where 0 is not owned, and 1 is owned.
+        c_skill2_owned:[], // Characters' Owned Special Skills.
+        c_skill3_owned:[], // Characters' Owned Ultimate Skills.
+        c_skill4_owned:[], // Characters' Owned Technical Skills.
+        c_costume_owned:[], // Characters' Owned Costumes.
+            // Each item, in order of character ID, contains a sublist of all the Costumes unlocked
+            // for that charcter, where 0 is not unlocked, and 1 is unlocked.
+        c_costume_equipped:[], // Characters' Equipped Costumes.
+            // Each item represents the current costume equipped by that ID character
+            // The costume # is the same as the order of costume in c_costume_owned.
+            // 0 is the default costume, 1 is the first costume, 2+, etc...
+
+        // Each inventory contains a sublist to hold item name, id, and data.
+        // When quantity is false, the item is unique and cannot be stacked. When quantity is a number, it can be stacked.
+        inventory1:[ // Weapons and Equipment
+            {id:1, name:"Basic Sword", type:"Weapon", quantity:false, rarity=1, star_level=0, level=1, xp_level=0, stat1="b+55", stat2="f+3"}, 
+            {id:1, name:"Fighter's Armor", type:"Accessory", quantity:false, rarity=1, star_level=0, level=1, xp_level=0, stat1="b+55", stat2="f+3"}
+        ], 
+        inventory2:[], // Artifacts
+        inventory3:[], // Materials
+        inventory4:[], // Consumables
+        inventory5:[], // Builds / Schematics
+        inventory6:[], // Gadgets
+        inventory7:[], // Special Items
+
+        c1:{}, // C1
+        c2:{}, // C2
+        c3:{}, // C3
+        c4:{}, // C4 is MC
+        c5:{}, // C5
+        c6:{}, // C6
+        c7:{}, // C7
+        c8:{}, // C8
+        c9:{}, // C9
+        c10:{}, // C10
+        c11:{}, // C11
+
+        achievements:{ // Achievements Unlocked
+            first_kill:0,
+            first_boss:0,
+        },
+
         flags:{}
     };
 
