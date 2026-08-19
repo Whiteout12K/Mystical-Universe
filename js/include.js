@@ -1,166 +1,82 @@
-function loadComponent(id, file) {
-  fetch(file)
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById(id).innerHTML = data;
+function loadComponent(id,file){fetch(file).then(res=>res.text()).then(data=>{document.getElementById(id).innerHTML=data;if(id==="header-placeholder"||id==="subheader-placeholder"||id==="sub4header-placeholder"){loadLoggedInUser();setupNavbarLogin();}}).catch(error=>console.error(`Unable to load ${file}:`,error));}
 
-      if (id === "header-placeholder" ||
-          id === "subheader-placeholder" ||
-          id === "sub4header-placeholder") {
-        loadLoggedInUser();
-        setupNavbarLogin();
-      }
-    });
+async function loadLoggedInUser(){
+const loginUser=document.getElementById("loginUser"),loginMenu=document.getElementById("loginMenu"),userMenu=document.getElementById("userMenu"),profileImage=document.getElementById("profileImage"),usernameText=document.getElementById("usernameText");
+if(!loginUser||!loginMenu||!userMenu)return;
+
+const setLoggedOut=()=>{
+loginMenu.style.display="";
+userMenu.style.display="none";
+if(profileImage)profileImage.style.display="none";
+};
+
+try{
+const response=await fetch("/api/me",{cache:"no-store"});
+if(!response.ok){setLoggedOut();return;}
+
+const data=await response.json();
+const user=data.user||data;
+
+if(data.authenticated&&user.username){
+if(usernameText)usernameText.textContent=user.username;
+loginMenu.style.display="none";
+userMenu.style.display="";
+if(profileImage)profileImage.style.display="";
+setupLogout();
+}else setLoggedOut();
+
+}catch(error){
+console.error("Unable to load logged in user:",error);
+setLoggedOut();
+}
 }
 
-async function loadLoggedInUser() {
-  const loginUser = document.getElementById("loginUser");
-  const loginMenu = document.getElementById("loginMenu");
-  const userMenu = document.getElementById("userMenu");
-  const profileImage = document.getElementById("profileImage");
-  const usernameText = document.getElementById("usernameText");
+function setupNavbarLogin(){
+const form=document.getElementById("navbarLoginForm"),dropdown=document.getElementById("loginDropdown"),message=document.getElementById("navbarLoginMessage");
+if(!form||!dropdown||!message)return;
 
-  if (!loginUser || !loginMenu || !userMenu) return;
+form.addEventListener("submit",async event=>{
+event.preventDefault();
 
-  try {
-    const response = await fetch("/api/me");
+const username=document.getElementById("navbarUsername")?.value.trim(),password=document.getElementById("navbarPassword")?.value;
+message.textContent="";
+message.classList.remove("show");
 
-    if (!response.ok) {
-      loginMenu.style.display = "";
-      userMenu.style.display = "none";
+try{
+const response=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username,password})});
+const result=await response.json();
 
-      if (profileImage) {
-        profileImage.style.display = "none";
-      }
+if(response.ok){window.location.reload();return;}
 
-      return;
-    }
+message.textContent=result.error||"Username or password is incorrect.";
+message.classList.add("show");
+bootstrap.Dropdown.getOrCreateInstance(dropdown).show();
 
-    const user = await response.json();
-
-    if (user.authenticated && user.username) {
-      usernameText.textContent = user.username;
-
-      loginMenu.style.display = "none";
-      userMenu.style.display = "";
-
-      if (profileImage) {
-        profileImage.style.display = "";
-      }
-
-      setupLogout();
-    } else {
-      loginMenu.style.display = "";
-      userMenu.style.display = "none";
-
-      if (profileImage) {
-        profileImage.style.display = "none";
-      }
-    }
-  } catch (error) {
-    console.error("Unable to load logged in user:", error);
-
-    loginMenu.style.display = "";
-    userMenu.style.display = "none";
-
-    if (profileImage) {
-      profileImage.style.display = "none";
-    }
-  }
+}catch(error){
+console.error("Login failed:",error);
+message.textContent="Unable to connect to login service.";
+message.classList.add("show");
+bootstrap.Dropdown.getOrCreateInstance(dropdown).show();
+}
+});
 }
 
-function setupNavbarLogin() {
-  const form = document.getElementById("navbarLoginForm");
-  const dropdown = document.getElementById("loginDropdown");
-  const message = document.getElementById("navbarLoginMessage");
+function setupLogout(){
+const logoutButton=document.getElementById("logoutButton");
+if(!logoutButton||logoutButton.dataset.logoutReady)return;
 
-  if (!form || !dropdown || !message) return;
+logoutButton.dataset.logoutReady="true";
 
-  form.addEventListener("submit", async event => {
-    event.preventDefault();
-
-    const username =
-      document.getElementById("navbarUsername").value.trim();
-
-    const password =
-      document.getElementById("navbarPassword").value;
-
-    message.textContent = "";
-    message.classList.remove("show");
-
-    try {
-      const response = await fetch(
-        "/api/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            username,
-            password
-          })
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok) {
-        window.location.reload();
-        return;
-      }
-
-      message.textContent =
-        result.error || "Username or password is incorrect.";
-
-      message.classList.add("show");
-
-      const dropdownInstance =
-        bootstrap.Dropdown.getOrCreateInstance(dropdown);
-
-      dropdownInstance.show();
-
-    } catch (error) {
-      console.error("Login failed:", error);
-
-      message.textContent =
-        "Unable to connect to login service.";
-
-      const dropdownInstance =
-        bootstrap.Dropdown.getOrCreateInstance(dropdown);
-
-      dropdownInstance.show();
-    }
-  });
+logoutButton.addEventListener("click",async()=>{
+try{await fetch("/api/logout",{method:"POST"});}
+catch(error){console.error("Logout failed:",error);}
+window.location.reload();
+});
 }
 
-function setupLogout() {
-  const logoutButton =
-    document.getElementById("logoutButton");
-
-  if (!logoutButton) return;
-
-  logoutButton.addEventListener("click", async () => {
-    try {
-      await fetch(
-        "/api/logout",
-        {
-          method: "POST"
-        }
-      );
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-
-    window.location.reload();
-  });
-}
-
-loadComponent("header-placeholder", "index/header.html");
-loadComponent("footer-placeholder", "index/footer.html");
-
-loadComponent("subheader-placeholder", "../index/header.html");
-loadComponent("subfooter-placeholder", "../index/footer.html");
-
-loadComponent("sub4header-placeholder", "../../../../index/header.html");
-loadComponent("sub4footer-placeholder", "../../../../index/footer.html");
+loadComponent("header-placeholder","index/header.html");
+loadComponent("footer-placeholder","index/footer.html");
+loadComponent("subheader-placeholder","../index/header.html");
+loadComponent("subfooter-placeholder","../index/footer.html");
+loadComponent("sub4header-placeholder","../../../../index/header.html");
+loadComponent("sub4footer-placeholder","../../../../index/footer.html");
