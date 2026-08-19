@@ -64,7 +64,7 @@ async function createUser(env,username,password,deviceId){
     if(!allowed){
         return jsonResponse({
             success:false,
-            error:"This device has created the maximum of 3 accounts. Please try again in 15 minutes."
+            error:"You have created a maximum of 3 accounts. Please try again in 15 minutes."
         },429);
     }
 
