@@ -121,18 +121,6 @@
   opacity: 0.65;
 }
 
-.player::before {
-  content: "✦";
-  top: 10px;
-  left: 13px;
-}
-
-.player::after {
-  content: "✦";
-  right: 13px;
-  bottom: 10px;
-}
-
 
 /* =========================================================
    ALBUM
