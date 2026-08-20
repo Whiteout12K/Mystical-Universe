@@ -45,6 +45,20 @@ export async function onRequest(context) {
         data = {};
     }
 
+    /*
+     * Sets a normal nested value.
+     *
+     * Example:
+     * setNestedValue(data, "premium.ruby_tablet", 10)
+     *
+     * Also supports array indexes:
+     *
+     * setNestedValue(data, "c_owned.0", 1)
+     *
+     * which changes:
+     *
+     * c_owned[0] = 1
+     */
     function setNestedValue(object, path, value) {
         const keys = path.split(".");
         let current = object;
@@ -53,11 +67,16 @@ export async function onRequest(context) {
             const key = keys[i];
 
             if (
-                typeof current[key] !== "object" ||
+                current[key] === undefined ||
                 current[key] === null ||
-                Array.isArray(current[key])
+                typeof current[key] !== "object"
             ) {
-                current[key] = {};
+                // If the next key is a number, create an array.
+                if (!isNaN(Number(keys[i + 1]))) {
+                    current[key] = [];
+                } else {
+                    current[key] = {};
+                }
             }
 
             current = current[key];
@@ -66,6 +85,11 @@ export async function onRequest(context) {
         current[keys[keys.length - 1]] = value;
     }
 
+    /*
+     * Gets a nested value.
+     *
+     * Supports both objects and arrays.
+     */
     function getNestedValue(object, path) {
         const keys = path.split(".");
         let current = object;
@@ -73,9 +97,13 @@ export async function onRequest(context) {
         for (const key of keys) {
             if (
                 current === null ||
-                typeof current !== "object" ||
-                !(key in current)
+                current === undefined ||
+                typeof current !== "object"
             ) {
+                return undefined;
+            }
+
+            if (!(key in current)) {
                 return undefined;
             }
 
@@ -85,11 +113,99 @@ export async function onRequest(context) {
         return current;
     }
 
-    for (const [key, value] of url.searchParams) {
-        if (key === "password") continue;
+    /*
+     * Converts the new URL syntax:
+     *
+     * c_owned_0
+     *
+     * into:
+     *
+     * c_owned.0
+     *
+     * This allows array indexes to be modified directly
+     * from URL parameters.
+     *
+     * Example:
+     *
+     * c_owned_0=1
+     *
+     * becomes:
+     *
+     * c_owned[0] = 1
+     *
+     * Nested example:
+     *
+     * c_skill1_owned_2_5=1
+     *
+     * becomes:
+     *
+     * c_skill1_owned[2][5] = 1
+     */
+    function convertArrayPath(key) {
+        const parts = key.split("_");
 
+        if (parts.length < 2) {
+            return key;
+        }
+
+        let splitIndex = parts.length;
+
+        /*
+         * Work backwards and identify numeric portions.
+         *
+         * c_owned_0
+         *            ^ numeric array index
+         *
+         * c_skill1_owned_2_5
+         *                    ^ numeric
+         *                  ^ numeric
+         */
+
+        while (
+            splitIndex > 1 &&
+            /^\d+$/.test(parts[splitIndex - 1])
+        ) {
+            splitIndex--;
+        }
+
+        if (splitIndex === parts.length) {
+            return key;
+        }
+
+        const base = parts.slice(0, splitIndex).join("_");
+        const indexes = parts.slice(splitIndex);
+
+        return base + "." + indexes.join(".");
+    }
+
+    /*
+     * Process every URL parameter.
+     */
+    for (const [key, value] of url.searchParams) {
+
+        // Password is authentication only.
+        if (key === "password") {
+            continue;
+        }
+
+        /*
+         * -----------------------------------------
+         * ADD VALUE
+         * -----------------------------------------
+         *
+         * Example:
+         *
+         * silver_coin_add=100
+         *
+         * premium.ruby_tablet_add=50
+         *
+         * c_owned_0_add=1
+         */
         if (key.endsWith("_add")) {
-            const actualPath = key.slice(0, -4);
+            const rawPath = key.slice(0, -4);
+
+            const actualPath = convertArrayPath(rawPath);
+
             const amount = Number(value);
 
             if (isNaN(amount)) {
@@ -98,12 +214,17 @@ export async function onRequest(context) {
                     error: `"${key}" must be a number.`
                 }), {
                     status: 400,
-                    headers: { "Content-Type": "application/json" }
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 });
             }
 
-            const existingValue = getNestedValue(data, actualPath);
-            const currentValue = Number(existingValue || 0);
+            const existingValue =
+                getNestedValue(data, actualPath);
+
+            const currentValue =
+                Number(existingValue ?? 0);
 
             if (isNaN(currentValue)) {
                 return new Response(JSON.stringify({
@@ -111,7 +232,9 @@ export async function onRequest(context) {
                     error: `"${actualPath}" is not a number.`
                 }), {
                     status: 400,
-                    headers: { "Content-Type": "application/json" }
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 });
             }
 
@@ -124,6 +247,26 @@ export async function onRequest(context) {
             continue;
         }
 
+        /*
+         * -----------------------------------------
+         * NORMAL VALUE / ARRAY VALUE
+         * -----------------------------------------
+         *
+         * Examples:
+         *
+         * silver_coin=100
+         *
+         * c_owned_0=1
+         *
+         * c_owned_3=0
+         *
+         * c_skill1_owned_2_5=1
+         *
+         * premium.ruby_tablet=100
+         */
+
+        const actualPath = convertArrayPath(key);
+
         let parsedValue;
 
         try {
@@ -132,9 +275,16 @@ export async function onRequest(context) {
             parsedValue = value;
         }
 
-        setNestedValue(data, key, parsedValue);
+        setNestedValue(
+            data,
+            actualPath,
+            parsedValue
+        );
     }
 
+    /*
+     * Save updated data.
+     */
     try {
         await context.env.DB.prepare(`
             UPDATE users
@@ -144,6 +294,7 @@ export async function onRequest(context) {
             JSON.stringify(data),
             user.id
         ).run();
+
     } catch (error) {
         console.error(error);
 
@@ -152,7 +303,9 @@ export async function onRequest(context) {
             error: "Could not save user data."
         }), {
             status: 500,
-            headers: { "Content-Type": "application/json" }
+            headers: {
+                "Content-Type": "application/json"
+            }
         });
     }
 
@@ -162,6 +315,8 @@ export async function onRequest(context) {
         data
     }, null, 2), {
         status: 200,
-        headers: { "Content-Type": "application/json" }
+        headers: {
+            "Content-Type": "application/json"
+        }
     });
 }

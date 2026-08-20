@@ -1,0 +1,523 @@
+{
+  "c1": {
+    "id": 1,
+    "name": "Avery Obtainia",
+    "profile_image": "/images/character_art/Character_Heads/avery_obtainia_head.png",
+    "splash_image": "/images/character_art/avery_obtainia_mlg_main2.png",
+    "affiliation": "",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": ["Light", "Water"],
+      "weapon_type": ["Sword"],
+      "role": ["Defense", "Healer"]
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c1/costumes/default.png"
+      }
+    }
+  },
+
+
+
+  "c2": {
+    "id": 2,
+    "name": "Character 2",
+    "profile_image": "/images/characters/c2/profile.png",
+    "splash_image": "/images/characters/c2/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c2/costumes/default.png"
+      }
+    }
+  },
+
+  "c3": {
+    "id": 3,
+    "name": "Character 3",
+    "profile_image": "/images/characters/c3/profile.png",
+    "splash_image": "/images/characters/c3/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c3/costumes/default.png"
+      }
+    }
+  },
+
+  "c4": {
+    "id": 4,
+    "name": "Character 4",
+    "profile_image": "/images/characters/c4/profile.png",
+    "splash_image": "/images/characters/c4/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c4/costumes/default.png"
+      }
+    }
+  },
+
+  "c5": {
+    "id": 5,
+    "name": "Character 5",
+    "profile_image": "/images/characters/c5/profile.png",
+    "splash_image": "/images/characters/c5/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c5/costumes/default.png"
+      }
+    }
+  },
+
+  "c6": {
+    "id": 6,
+    "name": "Character 6",
+    "profile_image": "/images/characters/c6/profile.png",
+    "splash_image": "/images/characters/c6/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c6/costumes/default.png"
+      }
+    }
+  },
+
+  "c7": {
+    "id": 7,
+    "name": "Character 7",
+    "profile_image": "/images/characters/c7/profile.png",
+    "splash_image": "/images/characters/c7/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c7/costumes/default.png"
+      }
+    }
+  },
+
+  "c8": {
+    "id": 8,
+    "name": "Character 8",
+    "profile_image": "/images/characters/c8/profile.png",
+    "splash_image": "/images/characters/c8/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c8/costumes/default.png"
+      }
+    }
+  },
+
+  "c9": {
+    "id": 9,
+    "name": "Character 9",
+    "profile_image": "/images/characters/c9/profile.png",
+    "splash_image": "/images/characters/c9/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c9/costumes/default.png"
+      }
+    }
+  },
+
+  "c10": {
+    "id": 10,
+    "name": "Character 10",
+    "profile_image": "/images/characters/c10/profile.png",
+    "splash_image": "/images/characters/c10/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c10/costumes/default.png"
+      }
+    }
+  },
+
+  "c11": {
+    "id": 11,
+    "name": "Character 11",
+    "profile_image": "/images/characters/c11/profile.png",
+    "splash_image": "/images/characters/c11/splash.png",
+    "affiliation": "Affiliation",
+    "description": "Character profile description.",
+
+    "base_stats": {
+      "health": 100,
+      "defence": 100,
+      "attack": 100,
+      "magic": 100,
+      "speed": 100,
+      "critical_rate": 5,
+      "critical_damage": 50
+    },
+
+    "growth_stats": {
+      "health": 10,
+      "defence": 10,
+      "attack": 10,
+      "magic": 10,
+      "speed": 10
+    },
+
+    "combat": {
+      "element": "None",
+      "weapon_type": "None",
+      "role": "None",
+      "range": "None"
+    },
+
+    "skills": {
+      "basic": [],
+      "special": [],
+      "ultimate": [],
+      "technical": []
+    },
+
+    "costumes": {
+      "default": {
+        "name": "Default",
+        "image": "/images/characters/c11/costumes/default.png"
+      }
+    }
+  }
+}

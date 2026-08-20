@@ -1,1301 +1,2521 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Profile</title>
-
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            margin: 0;
-
-            min-height: 100vh;
-
-            font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
-
-            background:
-                radial-gradient(
-                    circle at top left,
-                    #26345f 0%,
-                    #101522 40%,
-                    #080b12 100%
-                );
-
-            color: #f5f7ff;
-
-        }
-
-
-        .page {
-
-            width: min(
-                1100px,
-                calc(100% - 32px)
-            );
-
-            margin: 0 auto;
-
-            padding:
-                50px 0 80px;
-
-        }
-
-
-        /* ==============================
-           PROFILE HEADER
-           ============================== */
-
-        .profile {
-
-            position: relative;
-
-            overflow: hidden;
-
-            padding: 35px;
-
-            border-radius: 24px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,0.12),
-                    rgba(255,255,255,0.04)
-                );
-
-            border:
-                1px solid
-                rgba(255,255,255,0.12);
-
-            box-shadow:
-                0 25px 80px
-                rgba(0,0,0,0.35);
-
-            backdrop-filter:
-                blur(20px);
-
-        }
-
-
-        .profile::before {
-
-            content: "";
-
-            position: absolute;
-
-            width: 300px;
-
-            height: 300px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(100,130,255,0.2);
-
-            filter: blur(80px);
-
-            top: -150px;
-
-            right: -100px;
-
-        }
-
-
-        .profile-content {
-
-            position: relative;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 25px;
-
-        }
-
-
-        .avatar {
-
-            width: 100px;
-
-            height: 100px;
-
-            flex-shrink: 0;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            border-radius: 50%;
-
-            font-size: 42px;
-
-            font-weight: 700;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #6c7cff,
-                    #9d63ff
-                );
-
-            box-shadow:
-                0 10px 40px
-                rgba(108,124,255,0.35);
-
-        }
-
-
-        .username {
-
-            margin: 0;
-
-            font-size: clamp(
-                32px,
-                5vw,
-                52px
-            );
-
-            letter-spacing:
-                -1.5px;
-
-        }
-
-
-        .subtitle {
-
-            margin:
-                7px 0 0;
-
-            color:
-                rgba(255,255,255,0.6);
-
-            font-size: 15px;
-
-        }
-
-
-        /* ==============================
-           STATS
-           ============================== */
-
-        .stats {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(
-                        180px,
-                        1fr
-                    )
-                );
-
-            gap: 16px;
-
-            margin-top: 24px;
-
-        }
-
-
-        .stat {
-
-            padding: 22px;
-
-            border-radius: 18px;
-
-            background:
-                rgba(255,255,255,0.06);
-
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
-
-            transition:
-                transform 0.2s ease,
-                background 0.2s ease;
-
-        }
-
-
-        .stat:hover {
-
-            transform:
-                translateY(-3px);
-
-            background:
-                rgba(255,255,255,0.09);
-
-        }
-
-
-        .stat-label {
-
-            color:
-                rgba(255,255,255,0.55);
-
-            font-size: 13px;
-
-            text-transform:
-                uppercase;
-
-            letter-spacing:
-                1px;
-
-        }
-
-
-        .stat-value {
-
-            margin-top: 8px;
-
-            font-size: 30px;
-
-            font-weight: 700;
-
-        }
-
-
-        /* ==============================
-           SECTIONS
-           ============================== */
-
-        .section {
-
-            margin-top: 24px;
-
-            padding: 28px;
-
-            border-radius: 22px;
-
-            background:
-                rgba(255,255,255,0.055);
-
-            border:
-                1px solid
-                rgba(255,255,255,0.08);
-
-            box-shadow:
-                0 15px 50px
-                rgba(0,0,0,0.15);
-
-        }
-
-
-        .section-title {
-
-            margin:
-                0 0 20px;
-
-            font-size: 20px;
-
-        }
-
-
-        /* ==============================
-           PROGRESS BARS
-           ============================== */
-
-        .progress-container {
-
-            margin-bottom: 18px;
-
-        }
-
-
-        .progress-header {
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            margin-bottom: 7px;
-
-            font-size: 14px;
-
-        }
-
-
-        .progress-label {
-
-            color:
-                rgba(255,255,255,0.7);
-
-        }
-
-
-        .progress-value {
-
-            font-weight: 600;
-
-        }
-
-
-        .progress {
-
-            height: 10px;
-
-            overflow: hidden;
-
-            border-radius: 999px;
-
-            background:
-                rgba(255,255,255,0.08);
-
-        }
-
-
-        .progress-bar {
-
-            height: 100%;
-
-            border-radius: inherit;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #687cff,
-                    #a466ff
-                );
-
-            transition:
-                width 0.7s ease;
-
-        }
-
-
-        /* ==============================
-           ITEM GRID
-           ============================== */
-
-        .items {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(
-                        150px,
-                        1fr
-                    )
-                );
-
-            gap: 12px;
-
-        }
-
-
-        .item {
-
-            padding: 18px;
-
-            border-radius: 14px;
-
-            background:
-                rgba(255,255,255,0.055);
-
-            border:
-                1px solid
-                rgba(255,255,255,0.07);
-
-            text-align: center;
-
-        }
-
-
-        .item-icon {
-
-            font-size: 28px;
-
-            margin-bottom: 8px;
-
-        }
-
-
-        .item-name {
-
-            font-size: 14px;
-
-            color:
-                rgba(255,255,255,0.8);
-
-        }
-
-
-        /* ==============================
-           DETAILS
-           ============================== */
-
-        .details {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(
-                        200px,
-                        1fr
-                    )
-                );
-
-            gap: 12px;
-
-        }
-
-
-        .detail {
-
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            gap: 15px;
-
-            padding: 14px 16px;
-
-            border-radius: 12px;
-
-            background:
-                rgba(255,255,255,0.04);
-
-        }
-
-
-        .detail-key {
-
-            color:
-                rgba(255,255,255,0.55);
-
-        }
-
-
-        .detail-value {
-
-            font-weight: 600;
-
-            text-align: right;
-
-            word-break: break-word;
-
-        }
-
-
-        /* ==============================
-           LOADING / ERROR
-           ============================== */
-
-        .loading {
-
-            min-height: 100vh;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            color:
-                rgba(255,255,255,0.6);
-
-        }
-
-
-        .error {
-
-            text-align: center;
-
-            padding-top: 100px;
-
-        }
-
-
-        .error h1 {
-
-            font-size: 40px;
-
-        }
-
-
-        .error p {
-
-            color:
-                rgba(255,255,255,0.55);
-
-        }
-
-
-        /* ==============================
-           MOBILE
-           ============================== */
-
-        @media (
-            max-width: 600px
-        ) {
-
-            .page {
-
-                width:
-                    min(
-                        100% - 20px,
-                        1100px
-                    );
-
-                padding-top: 20px;
-
-            }
-
-
-            .profile {
-
-                padding: 25px;
-
-            }
-
-
-            .profile-content {
-
-                align-items:
-                    flex-start;
-
-            }
-
-
-            .avatar {
-
-                width: 70px;
-
-                height: 70px;
-
-                font-size: 28px;
-
-            }
-
-
-            .section {
-
-                padding: 20px;
-
-            }
-
-        }
-
-    </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Player Profile</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+ --red:#741b22;
+ --red2:#a52a32;
+ --gold:#d6aa45;
+ --gold2:#f0ca69;
+ --dark:#151416;
+ --panel:#211c1d;
+ --panel2:#2b2526;
+ --text:#f5ead2;
+ --muted:#a99e8e;
+ --border:rgba(214,170,69,.28);
+ --character-bg:#191718;
+ --character-panel:#2b2425;
+}
+
+body{
+ margin:0;
+ min-height:100vh;
+ font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+ color:var(--text);
+ background:
+  radial-gradient(circle at 50% -10%,#562027 0,#28191b 30%,#111112 75%,#0b0b0c 100%);
+ line-height:1.4;
+}
+
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ pointer-events:none;
+ opacity:.055;
+ background-image:
+  linear-gradient(45deg,#fff 1px,transparent 1px),
+  linear-gradient(-45deg,#fff 1px,transparent 1px);
+ background-size:80px 80px;
+}
+
+.page{
+ width:min(1150px,calc(100% - 28px));
+ margin:auto;
+ padding:28px 0 60px;
+}
+
+.profile{
+ position:relative;
+ overflow:hidden;
+ padding:28px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ background:linear-gradient(
+  135deg,
+  rgba(116,27,34,.8),
+  rgba(30,27,28,.96) 65%
+ );
+ box-shadow:0 18px 60px #0008;
+}
+
+.profile:after{
+ content:"";
+ position:absolute;
+ width:350px;
+ height:350px;
+ right:-140px;
+ top:-180px;
+ background:#b52d3525;
+ filter:blur(40px);
+ border-radius:50%;
+}
+
+.profile-content{
+ position:relative;
+ z-index:1;
+ display:flex;
+ align-items:center;
+ gap:20px;
+}
+
+.avatar-wrap{
+ width:108px;
+ height:108px;
+ position:relative;
+ flex:none;
+}
+
+.avatar{
+ width:100%;
+ height:100%;
+ display:grid;
+ place-items:center;
+ border-radius:50%;
+ font-size:42px;
+ font-weight:800;
+ color:var(--gold2);
+ background:linear-gradient(145deg,#922731,#3d171b);
+ border:3px solid var(--gold);
+ box-shadow:
+  0 0 0 4px #1a1515,
+  0 0 25px #c58f3740;
+}
+
+.username{
+ margin:0;
+ font-family:Georgia,serif;
+ font-size:clamp(30px,5vw,52px);
+ color:var(--gold2);
+ text-shadow:2px 2px 4px #000;
+ line-height:1;
+}
+
+.subtitle{
+ margin:8px 0 0;
+ color:var(--muted);
+ font-size:14px;
+}
+
+.rank{
+ display:inline-flex;
+ align-items:center;
+ gap:6px;
+ margin-top:10px;
+ padding:5px 10px;
+ border:1px solid var(--border);
+ background:#120f10;
+ border-radius:4px;
+ color:var(--gold2);
+ font-size:12px;
+ font-weight:700;
+}
+
+.rank-symbol,
+.section-symbol,
+.stat-symbol,
+.item-symbol,
+.achievement-symbol{
+ color:var(--gold2);
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
+ gap:10px;
+ margin-top:12px;
+}
+
+.stat{
+ padding:15px;
+ border:1px solid var(--border);
+ border-radius:6px;
+ background:linear-gradient(145deg,#292324,#1b1819);
+ box-shadow:inset 0 1px #ffffff08;
+ transition:.2s;
+}
+
+.stat:hover,
+.item:hover,
+.achievement:hover,
+.character-tab:hover{
+ border-color:#d6aa4570;
+ transform:translateY(-2px);
+}
+
+.stat-symbol{
+ font-size:22px;
+}
+
+.stat-label{
+ margin-top:4px;
+ color:var(--muted);
+ font-size:11px;
+ text-transform:uppercase;
+ letter-spacing:1px;
+}
+
+.stat-value{
+ margin-top:2px;
+ font-size:25px;
+ font-weight:800;
+ color:var(--text);
+}
+
+.section{
+ margin-top:12px;
+ padding:20px;
+ border:1px solid var(--border);
+ border-radius:7px;
+ background:linear-gradient(
+  145deg,
+  rgba(39,34,35,.96),
+  rgba(24,22,23,.96)
+ );
+ box-shadow:0 10px 35px #0004;
+}
+
+.section-title{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ margin:0 0 15px;
+ font:700 20px Georgia,serif;
+ color:var(--gold2);
+}
+
+.section-title:after{
+ content:"";
+ height:1px;
+ flex:1;
+ background:linear-gradient(90deg,var(--gold),transparent);
+}
+
+.progress-container{
+ margin:10px 0;
+}
+
+.progress-header{
+ display:flex;
+ justify-content:space-between;
+ font-size:13px;
+ margin-bottom:5px;
+}
+
+.progress-label{
+ color:#d8cbb5;
+}
+
+.progress-value{
+ color:var(--gold2);
+ font-weight:700;
+}
+
+.progress{
+ height:9px;
+ overflow:hidden;
+ background:#100f10;
+ border:1px solid #000;
+ border-radius:3px;
+}
+
+.progress-bar{
+ height:100%;
+ background:linear-gradient(90deg,#711d25,#d5a33d);
+ box-shadow:0 0 10px #a52a3266;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
+ gap:9px;
+}
+
+.item,
+.achievement{
+ padding:13px;
+ border:1px solid #ffffff10;
+ border-radius:5px;
+ background:#191718;
+ transition:.2s;
+}
+
+.item-symbol{
+ font-size:24px;
+ margin-bottom:5px;
+}
+
+.item-name{
+ font-size:13px;
+ font-weight:700;
+ color:#eadfc9;
+}
+
+.item-sub{
+ margin-top:3px;
+ color:var(--muted);
+ font-size:11px;
+}
+
+.details{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:7px;
+}
+
+.detail{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ padding:9px 11px;
+ background:#171516;
+ border:1px solid #ffffff08;
+ border-radius:4px;
+ font-size:12px;
+}
+
+.detail-key{
+ color:var(--muted);
+}
+
+.detail-value{
+ font-weight:700;
+ color:#e8dcc4;
+ text-align:right;
+ word-break:break-word;
+}
+
+.badge{
+ display:inline-block;
+ padding:3px 7px;
+ border-radius:3px;
+ background:#5d1720;
+ color:#f0c967;
+ font-size:10px;
+ font-weight:800;
+}
+
+.empty{
+ padding:14px;
+ text-align:center;
+ color:#766e64;
+ font-size:13px;
+ border:1px dashed #ffffff12;
+}
+
+.achievement{
+ display:flex;
+ align-items:center;
+ gap:12px;
+}
+
+.achievement-symbol{
+ font-size:24px;
+}
+
+.locked{
+ opacity:.4;
+ filter:grayscale(1);
+}
+
+/* =========================
+   CHARACTER COLLECTION
+   ========================= */
+
+.character-collection{
+ width:100%;
+}
+
+.character-list{
+ display:flex;
+ flex-wrap:wrap;
+ gap:10px;
+ width:100%;
+}
+
+/*
+ Character tabs occupy roughly 30% of the collection width.
+ The opened details panel is not part of this grid, so it always
+ gets its own full-width row underneath the tabs.
+*/
+.character-tab{
+ flex:0 0 calc(30% - 7px);
+ min-width:180px;
+ position:relative;
+ display:flex;
+ align-items:center;
+ gap:13px;
+ padding:11px;
+ border:1px solid var(--border);
+ border-radius:6px;
+ background:linear-gradient(
+  145deg,
+  var(--character-panel),
+  var(--character-bg)
+ );
+ cursor:pointer;
+ transition:
+  border-color .2s,
+  transform .2s,
+  background .2s;
+ overflow:hidden;
+}
+
+.character-tab.active{
+ border-color:var(--gold);
+ background:linear-gradient(
+  145deg,
+  #35282a,
+  #20191a
+ );
+ box-shadow:0 0 0 1px #d6aa4525;
+}
+
+.character-icon-wrap{
+ width:72px;
+ height:72px;
+ flex:none;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
+ border-radius:5px;
+
+ /*
+ Keep image area the exact same color as the character box.
+ This prevents a black rectangle from appearing around transparent
+ character images.
+ */
+ background:var(--character-bg);
+}
+
+.character-icon{
+ display:block;
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ background:transparent;
+}
+
+.character-tab-info{
+ min-width:0;
+}
+
+.character-id{
+ font-size:9px;
+ color:var(--gold);
+ letter-spacing:1px;
+ text-transform:uppercase;
+}
+
+.character-name{
+ margin-top:3px;
+ font:700 16px Georgia,serif;
+ color:var(--text);
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+.character-affiliation{
+ margin-top:3px;
+ color:var(--muted);
+ font-size:10px;
+ white-space:nowrap;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
+
+/*
+ The details panel is inserted directly after the clicked character
+ and then forced to span the entire character collection width.
+*/
+.character-details{
+ flex:0 0 100%;
+ width:100%;
+ min-width:0;
+ margin:0;
+ padding:18px;
+ border:1px solid var(--border);
+ border-radius:6px;
+ background:linear-gradient(
+  145deg,
+  var(--character-panel),
+  var(--character-bg)
+ );
+ overflow:hidden;
+ animation:characterOpen .2s ease-out;
+}
+
+@keyframes characterOpen{
+ from{
+  opacity:0;
+  transform:translateY(-5px);
+ }
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+}
+
+.character-details-top{
+ display:grid;
+ grid-template-columns:minmax(200px,34%) 1fr;
+ gap:20px;
+ align-items:start;
+}
+
+.character-splash-wrap{
+ width:100%;
+ min-height:300px;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ overflow:hidden;
+ border-radius:5px;
+
+ /* Same color as the actual character panel */
+ background:var(--character-bg);
+}
+
+.character-splash{
+ display:block;
+ width:100%;
+ max-width:100%;
+ max-height:520px;
+ object-fit:contain;
+ background:transparent;
+}
+
+/*
+ Character metadata and stats remain on the right.
+*/
+.character-info{
+ min-width:0;
+}
+
+.character-detail-name{
+ margin:0;
+ font:700 28px Georgia,serif;
+ color:var(--gold2);
+}
+
+.character-detail-affiliation{
+ margin-top:4px;
+ color:var(--muted);
+ font-size:12px;
+}
+
+.character-description{
+ margin-top:12px;
+ color:#d8cbb5;
+ font-size:12px;
+ line-height:1.6;
+}
+
+/*
+ Stats stay in rows together rather than becoming scattered.
+*/
+.character-stats{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:6px;
+ margin-top:15px;
+}
+
+.character-stat{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ padding:9px 11px;
+ border:1px solid #ffffff08;
+ border-radius:4px;
+ background:#171516;
+}
+
+.character-stat-name{
+ color:var(--muted);
+ font-size:11px;
+}
+
+.character-stat-value{
+ color:var(--text);
+ font-size:13px;
+ font-weight:800;
+ text-align:right;
+}
+
+/*
+ Equipped items are deliberately full-width below the main
+ character information so they don't get squeezed into the art.
+*/
+.equipped-section{
+ margin-top:18px;
+}
+
+.subsection-title{
+ margin-bottom:8px;
+ color:var(--gold);
+ font:700 14px Georgia,serif;
+}
+
+.equipped-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:7px;
+}
+
+.equipped-item{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ padding:9px 11px;
+ background:#171516;
+ border:1px solid #ffffff08;
+ border-radius:4px;
+}
+
+.equipped-slot{
+ color:var(--muted);
+ font-size:11px;
+}
+
+.equipped-name{
+ color:#e8dcc4;
+ font-size:12px;
+ font-weight:700;
+ text-align:right;
+ word-break:break-word;
+}
+
+/* ========================= */
+
+.inventory-group{
+ margin-top:15px;
+}
+
+.inventory-title{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ margin-bottom:7px;
+ color:var(--gold);
+ font:700 14px Georgia,serif;
+}
+
+.columns{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+ gap:12px;
+}
+
+.loading{
+ min-height:100vh;
+ display:grid;
+ place-items:center;
+ color:var(--muted);
+}
+
+.error{
+ text-align:center;
+ padding:100px 20px;
+}
+
+.error h1{
+ font:700 38px Georgia,serif;
+ color:var(--gold2);
+}
+
+.error p{
+ color:var(--muted);
+}
+
+@media(max-width:800px){
+ .character-tab{
+  flex-basis:calc(50% - 5px);
+ }
+
+ .character-details-top{
+  grid-template-columns:1fr;
+ }
+
+ .character-splash-wrap{
+  min-height:250px;
+ }
+
+ .character-splash{
+  max-height:450px;
+ }
+}
+
+@media(max-width:600px){
+ .page{
+  width:calc(100% - 16px);
+  padding-top:12px;
+ }
+
+ .profile{
+  padding:20px;
+ }
+
+ .avatar-wrap{
+  width:78px;
+  height:78px;
+ }
+
+ .avatar{
+  font-size:30px;
+ }
+
+ .section{
+  padding:15px;
+ }
+
+ .stats{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .stat-value{
+  font-size:21px;
+ }
+
+ .profile-content{
+  align-items:flex-start;
+ }
+
+ /*
+ On mobile every character tab becomes full width.
+ */
+ .character-tab{
+  flex-basis:100%;
+  min-width:0;
+ }
+
+ .character-details{
+  padding:12px;
+ }
+
+ .character-details-top{
+  grid-template-columns:1fr;
+ }
+
+ .character-splash-wrap{
+  min-height:220px;
+ }
+
+ .character-stats{
+  grid-template-columns:1fr;
+ }
+
+ .equipped-grid{
+  grid-template-columns:1fr;
+ }
+}
+</style>
 </head>
-
 
 <body>
 
-
 <div id="app">
+ <div class="loading">Loading profile...</div>
+</div>
 
-    <div class="loading">
+<script>
+/* ============================================================
+   PROFILE DATA
+   ============================================================ */
 
-        Loading profile...
+const pathParts=location.pathname.split("/").filter(Boolean);
+
+let username=pathParts[pathParts.length-1];
+
+const queryUsername=
+ new URLSearchParams(location.search).get("username");
+
+if(queryUsername){
+ username=queryUsername;
+}
+
+
+/* ============================================================
+   DISPLAY DEFINITIONS
+   ============================================================ */
+
+const inventoryNames={
+ inventory1:["◆","Weapons & Equipment"],
+ inventory2:["◇","Artifacts"],
+ inventory3:["▣","Materials"],
+ inventory4:["✧","Consumables"],
+ inventory5:["⌘","Builds & Schematics"],
+ inventory6:["⚙","Gadgets"],
+ inventory7:["◈","Special Items"]
+};
+
+const premiumNames={
+ diamond_core:["◈","Diamond Core"],
+ sr_star_lv_frag:["✦","SR Star Lv. Fragments"],
+ ssr_star_lv_frag:["✦","SSR Star Lv. Fragments"],
+ ur_star_lv_frag:["✦","UR Star Lv. Fragments"]
+};
+
+
+/* ============================================================
+   CHARACTER DATA
+   ============================================================ */
+
+let characterDatabase={};
+
+async function loadCharacterDatabase(){
+ try{
+  const response=await fetch(
+   "/images/mlg-assets/data-character.json",
+   {cache:"no-cache"}
+  );
+
+  if(!response.ok){
+   throw new Error(
+    "Character database returned HTTP "+response.status
+   );
+  }
+
+  characterDatabase=await response.json();
+
+  console.log("Character database loaded:",characterDatabase);
+
+ }catch(error){
+  console.error("Could not load data-character.json:",error);
+  characterDatabase={};
+ }
+}
+
+
+/* ============================================================
+   LOAD PROFILE
+   ============================================================ */
+
+async function loadProfile(){
+
+ try{
+
+  if(
+   !username ||
+   username==="view.html"
+  ){
+   return showError(
+    "No Player",
+    "No username was provided."
+   );
+  }
+
+  /*
+   The API response is expected to be:
+
+   {
+     username:"Avery",
+     data:{...}
+   }
+
+   The character data is NOT loaded from the character database.
+   The player's c1/c2/etc data always comes directly from the
+   player's API record.
+  */
+
+  const response=await fetch(
+   "/api/user/"+encodeURIComponent(username),
+   {cache:"no-cache"}
+  );
+
+  if(!response.ok){
+   return showError(
+    "Player Not Found",
+    "This profile does not exist."
+   );
+  }
+
+  const result=await response.json();
+
+  console.log("Player API response:",result);
+
+  const playerData=
+   result &&
+   result.data &&
+   typeof result.data==="object"
+    ? result.data
+    : {};
+
+  renderProfile(
+   result.username || username,
+   playerData
+  );
+
+ }catch(error){
+
+  console.error("Profile loading error:",error);
+
+  showError(
+   "Connection Error",
+   "Could not load this profile."
+  );
+ }
+}
+
+
+/* ============================================================
+   RENDER PROFILE
+   ============================================================ */
+
+function renderProfile(username,data){
+
+ const owned=
+  Array.isArray(data.c_owned)
+   ? data.c_owned.filter(Boolean).length
+   : 0;
+
+ const achievements=
+  Object.values(data.achievements||{})
+   .filter(Boolean)
+   .length;
+
+ const inventoryCount=
+  Object.keys(inventoryNames)
+   .reduce(
+    (total,key)=>
+     total+
+     (
+      Array.isArray(data[key])
+       ? data[key].length
+       : 0
+     ),
+    0
+   );
+
+ document.getElementById("app").innerHTML=`
+
+  <main class="page">
+
+   <section class="profile">
+
+    <div class="profile-content">
+
+     <div class="avatar-wrap">
+      <div class="avatar">
+       ${escapeHtml(
+        username.charAt(0).toUpperCase()
+       )}
+      </div>
+     </div>
+
+     <div>
+
+      <h1 class="username">
+       ${escapeHtml(username)}
+      </h1>
+
+      <p class="subtitle">
+       Mystical Legends Player Profile
+      </p>
+
+      <div class="rank">
+       <span class="rank-symbol">◆</span>
+       Adventure Rank
+       ${num(data.ar_level,1)}
+      </div>
+
+     </div>
 
     </div>
 
-</div>
+   </section>
 
 
-<script>
+   <section class="stats">
+
+    ${stat(
+     "◆",
+     "Silver Coins",
+     num(data.silver_coin)
+    )}
+
+    ${stat(
+     "✦",
+     "Adventure Rank",
+     num(data.ar_level,1)
+    )}
+
+    ${stat(
+     "ϟ",
+     "Energy",
+     num(data.energy)
+    )}
+
+    ${stat(
+     "♢",
+     "Characters",
+     owned
+    )}
+
+    ${stat(
+     "✦",
+     "Achievements",
+     achievements
+    )}
+
+    ${stat(
+     "▣",
+     "Inventory Items",
+     inventoryCount
+    )}
+
+    ${stat(
+     "▰",
+     "Season Pass Lv.",
+     num(data.season_pass_level,1)
+    )}
+
+   </section>
 
 
-/* ==========================================================
-   GET USERNAME FROM URL
-   ========================================================== */
+   ${createAdventure(data)}
 
-const pathParts =
-    window.location.pathname
-        .split("/")
-        .filter(Boolean);
+   ${createSeasonPass(data)}
+
+   ${createPremium(data)}
+
+   ${createCharacters(data)}
+
+   ${createAchievements(data)}
+
+   ${createSkillTree(data)}
+
+   ${createCharacterSystems(data)}
+
+   ${createFlags(data)}
+
+  </main>
+ `;
+}
 
 
-let username =
-    pathParts[
-        pathParts.length - 1
-    ];
+/* ============================================================
+   TOP STAT
+   ============================================================ */
+
+function stat(symbol,label,value){
+
+ return `
+  <div class="stat">
+
+   <div class="stat-symbol">
+    ${symbol}
+   </div>
+
+   <div class="stat-label">
+    ${label}
+   </div>
+
+   <div class="stat-value">
+    ${escapeHtml(value)}
+   </div>
+
+  </div>
+ `;
+}
 
 
-/*
- * If you're testing this as:
- *
- * /view.html?username=avery
- *
- * this also works.
+/* ============================================================
+   ADVENTURE
+   ============================================================ */
+
+function createAdventure(data){
+
+ const level=num(data.ar_level,1);
+
+ const xp=num(data.ar_xp);
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">◆</span>
+    Adventure Progress
+   </h2>
+
+   ${progress(
+    "Adventure Rank XP",
+    xp,
+    xpForRank(level)
+   )}
+
+   ${detailGrid({
+    "Adventure Rank":level,
+    "Current Energy":num(data.energy),
+    "Silver Coins":num(data.silver_coin)
+   })}
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   SEASON PASS
+   ============================================================ */
+
+function createSeasonPass(data){
+
+ const level=num(
+  data.season_pass_level,
+  1
+ );
+
+ const xp=num(
+  data.season_pass_xp
+ );
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">▰</span>
+    Season Pass
+   </h2>
+
+   <div class="details">
+
+    ${detail(
+     "Status",
+     data.season_pass_owned
+      ? "Owned"
+      : "Not Owned"
+    )}
+
+    ${detail(
+     "Level",
+     level
+    )}
+
+    ${detail(
+     "XP",
+     xp
+    )}
+
+   </div>
+
+   ${progress(
+    "Season Pass XP",
+    xp,
+    xpForRank(level)
+   )}
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   PREMIUM
+   ============================================================ */
+
+function createPremium(data){
+
+ const premium=data.premium||{};
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">◈</span>
+    Premium Treasury
+   </h2>
+
+   <div class="grid">
+
+    ${Object.entries(premiumNames)
+     .map(([key,info])=>`
+
+      <div class="item">
+
+       <div class="item-symbol">
+        ${info[0]}
+       </div>
+
+       <div class="item-name">
+        ${info[1]}
+       </div>
+
+       <div class="item-sub">
+        ${num(premium[key])} owned
+       </div>
+
+      </div>
+
+     `)
+     .join("")}
+
+   </div>
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   CHARACTERS
+   ============================================================ */
+
+function createCharacters(data){
+
+ const owned=
+  Array.isArray(data.c_owned)
+   ? data.c_owned
+   : [];
+
+ const characterTabs=[];
+
+ /*
+  c_owned is an indexed array.
+
+  [1,0,0,1,...]
+
+  means:
+
+  c1 = unlocked
+  c2 = locked
+  c3 = locked
+  c4 = unlocked
+
+  The player's actual c1/c4 data is then retrieved from:
+
+  data.c1
+  data.c4
+
+  Character presentation data is retrieved separately from:
+
+  data-character.json
+  */
+
+ owned.forEach((value,index)=>{
+
+  if(!value)return;
+
+  const characterId=index+1;
+
+  characterTabs.push(
+   createCharacterTab(
+    characterId,
+    data
+   )
+  );
+ });
+
+ if(!characterTabs.length){
+
+  return `
+   <section class="section character-collection">
+
+    <h2 class="section-title">
+     <span class="section-symbol">♢</span>
+     Character Collection
+    </h2>
+
+    <div class="empty">
+     No characters have been obtained yet.
+    </div>
+
+   </section>
+  `;
+ }
+
+ return `
+  <section class="section character-collection">
+
+   <h2 class="section-title">
+    <span class="section-symbol">♢</span>
+    Character Collection
+
+    <span class="badge">
+     ${characterTabs.length} OWNED
+    </span>
+   </h2>
+
+   <div
+    id="character-list"
+    class="character-list"
+   >
+
+    ${characterTabs.join("")}
+
+   </div>
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   CHARACTER TAB
+   ============================================================ */
+
+function createCharacterTab(id,data){
+
+ const playerCharacter=
+  data["c"+id] || {};
+
+ const characterInfo=
+  getCharacterInfo(id);
+
+ const name=
+  playerCharacter.name ||
+  characterInfo.name ||
+  "Character "+id;
+
+ const icon=
+  characterInfo.profile_image ||
+  characterInfo.icon ||
+  characterInfo.image ||
+  "";
+
+ const affiliation=
+  characterInfo.affiliation ||
+  "";
+
+ return `
+  <button
+   type="button"
+   class="character-tab"
+   data-character-id="${id}"
+   onclick="toggleCharacter(${id})"
+  >
+
+   <div class="character-icon-wrap">
+
+    ${
+     icon
+      ? `
+       <img
+        class="character-icon"
+        src="${escapeAttribute(icon)}"
+        alt="${escapeAttribute(name)}"
+        onerror="this.style.display='none'"
+       >
+      `
+      : `
+       <span class="item-symbol">♢</span>
+      `
+    }
+
+   </div>
+
+   <div class="character-tab-info">
+
+    <div class="character-id">
+     CHARACTER ${id}
+    </div>
+
+    <div class="character-name">
+     ${escapeHtml(name)}
+    </div>
+
+    ${
+     affiliation
+      ? `
+       <div class="character-affiliation">
+        ${escapeHtml(affiliation)}
+       </div>
+      `
+      : ""
+    }
+
+   </div>
+
+  </button>
+ `;
+}
+
+
+/* ============================================================
+   CHARACTER DROPDOWN
+   ============================================================ */
+
+function toggleCharacter(id){
+
+ const list=
+  document.getElementById(
+   "character-list"
+  );
+
+ if(!list)return;
+
+ const current=
+  list.querySelector(
+   ".character-details"
+  );
+
+ const clicked=
+  list.querySelector(
+   `[data-character-id="${id}"]`
+  );
+
+ /*
+  Clicking the currently open character closes it.
  */
-const queryUsername =
-    new URLSearchParams(
-        window.location.search
-    ).get("username");
+ if(
+  current &&
+  current.dataset.characterId===String(id)
+ ){
 
+  current.remove();
 
-if (queryUsername) {
+  if(clicked){
+   clicked.classList.remove("active");
+  }
 
-    username =
-        queryUsername;
+  return;
+ }
 
+ /*
+  Close any currently open character first.
+ */
+ if(current){
+  current.remove();
+ }
+
+ list
+  .querySelectorAll(".character-tab.active")
+  .forEach(tab=>{
+   tab.classList.remove("active");
+  });
+
+ /*
+  Build the new panel.
+ */
+ const panel=
+  createCharacterDetails(
+   id,
+   window.currentPlayerData
+  );
+
+ /*
+  Insert the panel immediately after the
+  character row containing the clicked tab.
+
+  Because the character list is flex-wrap based,
+  inserting it directly after the tab could otherwise
+  cause it to sit beside a character.
+
+  We instead append it and use CSS flex-basis:100%.
+  This guarantees that it occupies an entire row.
+ */
+ if(clicked){
+
+  const tabElements=
+   Array.from(
+    list.querySelectorAll(".character-tab")
+   );
+
+  const clickedIndex=
+   tabElements.indexOf(clicked);
+
+  /*
+   Find the last character in the same visual row.
+
+   Character widths are controlled by CSS, so we calculate
+   how many tabs fit per row.
+  */
+  const listWidth=list.clientWidth;
+
+  const tabWidth=
+   clicked.getBoundingClientRect().width;
+
+  const gap=10;
+
+  const perRow=
+   Math.max(
+    1,
+    Math.floor(
+     (listWidth+gap)/
+     (tabWidth+gap)
+    )
+   );
+
+  const rowEndIndex=
+   Math.min(
+    tabElements.length-1,
+    Math.floor(clickedIndex/perRow)*perRow+
+    perRow-1
+   );
+
+  const insertAfter=
+   tabElements[rowEndIndex];
+
+  insertAfter.insertAdjacentHTML(
+   "afterend",
+   panel
+  );
+
+  clicked.classList.add("active");
+ }
 }
 
 
-
-/* ==========================================================
-   LOAD PROFILE
-   ========================================================== */
-
-async function loadProfile() {
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/user/" +
-                encodeURIComponent(
-                    username
-                )
-            );
-
-
-        if (!response.ok) {
-
-            showError(
-                "User not found",
-                "This profile does not exist."
-            );
-
-            return;
-
-        }
-
-
-        const result =
-            await response.json();
-
-
-        renderProfile(
-            result.username,
-            result.data
-        );
-
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        showError(
-            "Something went wrong",
-            "Could not load this profile."
-        );
-
-    }
-
-}
-
-
-/* ==========================================================
-   RENDER PROFILE
-   ========================================================== */
-
-function renderProfile(
-    username,
-    data
-) {
-
-    const initial =
-        username
-            .charAt(0)
-            .toUpperCase();
-
-
-    document
-        .getElementById("app")
-        .innerHTML = `
-
-        <main class="page">
-
-
-            <!-- PROFILE HEADER -->
-
-            <section class="profile">
-
-                <div class="profile-content">
-
-                    <div class="avatar">
-
-                        ${escapeHtml(
-                            initial
-                        )}
-
-                    </div>
-
-
-                    <div>
-
-                        <h1 class="username">
-
-                            ${escapeHtml(
-                                username
-                            )}
-
-                        </h1>
-
-
-                        <p class="subtitle">
-
-                            Player Profile
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- MAIN STATS -->
-
-            <section class="stats">
-
-
-                ${createStat(
-                    "🪙",
-                    "Coins",
-                    data.coin ?? 0
-                )}
-
-
-                ${createStat(
-                    "⭐",
-                    "Level",
-                    data.level ?? 1
-                )}
-
-
-                ${createStat(
-                    "✨",
-                    "Experience",
-                    data.xp ?? 0
-                )}
-
-
-                ${createStat(
-                    "❤️",
-                    "Health",
-                    data.health ?? 0
-                )}
-
-
-                ${createStat(
-                    "💧",
-                    "Mana",
-                    data.mana ?? 0
-                )}
-
-
-            </section>
-
-
-            <!-- VITALS -->
-
-            <section class="section">
-
-                <h2 class="section-title">
-
-                    Character Status
-
-                </h2>
-
-
-                ${createProgress(
-                    "Health",
-                    data.health ?? 0,
-                    100
-                )}
-
-
-                ${createProgress(
-                    "Mana",
-                    data.mana ?? 0,
-                    100
-                )}
-
-
-            </section>
-
-
-            <!-- ITEMS -->
-
-            ${
-                Array.isArray(
-                    data.items
-                )
-                    ? createItems(
-                        data.items
-                    )
-                    : ""
-            }
-
-
-            <!-- OTHER DATA -->
-
-            ${createOtherData(
-                data
-            )}
-
-
-        </main>
-
-    `;
-
-}
-
-
-/* ==========================================================
-   STAT CARD
-   ========================================================== */
-
-function createStat(
-    icon,
-    label,
-    value
-) {
-
-    return `
-
-        <div class="stat">
-
-            <div
-                style="
-                    font-size:26px;
-                    margin-bottom:6px;
-                "
-            >
-
-                ${icon}
-
-            </div>
-
-
-            <div class="stat-label">
-
-                ${label}
-
-            </div>
-
-
-            <div class="stat-value">
-
-                ${escapeHtml(
-                    value
-                )}
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* ==========================================================
-   PROGRESS BAR
-   ========================================================== */
-
-function createProgress(
-    label,
-    value,
-    max
-) {
-
-    const percent =
-        Math.max(
-            0,
-            Math.min(
-                100,
-                (Number(value) /
-                    Number(max)) *
-                    100
-            )
-        );
-
-
-    return `
-
-        <div
-            class="progress-container"
+/* ============================================================
+   CHARACTER DETAIL PANEL
+   ============================================================ */
+
+function createCharacterDetails(id,data){
+
+ const playerCharacter=
+  data["c"+id] || {};
+
+ const characterInfo=
+  getCharacterInfo(id);
+
+ const name=
+  playerCharacter.name ||
+  characterInfo.name ||
+  "Character "+id;
+
+ const affiliation=
+  characterInfo.affiliation ||
+  "";
+
+ const splash=
+  characterInfo.full_splash ||
+  characterInfo.splash_image ||
+  characterInfo.splash ||
+  "";
+
+ const description=
+  characterInfo.description ||
+  characterInfo.profile ||
+  "";
+
+ const stats=
+  getCharacterStats(
+   characterInfo,
+   playerCharacter
+  );
+
+ const equipped=
+  playerCharacter.equip || {};
+
+ return `
+  <div
+   class="character-details"
+   data-character-id="${id}"
+  >
+
+   <div class="character-details-top">
+
+    <div class="character-splash-wrap">
+
+     ${
+      splash
+       ? `
+        <img
+         class="character-splash"
+         src="${escapeAttribute(splash)}"
+         alt="${escapeAttribute(name)}"
+         onerror="this.style.display='none'"
         >
+       `
+       : `
+        <span class="item-symbol">
+         ◈
+        </span>
+       `
+     }
 
-            <div
-                class="progress-header"
-            >
-
-                <span
-                    class="progress-label"
-                >
-
-                    ${escapeHtml(
-                        label
-                    )}
-
-                </span>
+    </div>
 
 
-                <span
-                    class="progress-value"
-                >
+    <div class="character-info">
 
-                    ${escapeHtml(
-                        value
-                    )}
-                    /
-                    ${escapeHtml(
-                        max
-                    )}
+     <h3 class="character-detail-name">
+      ${escapeHtml(name)}
+     </h3>
 
-                </span>
+     ${
+      affiliation
+       ? `
+        <div class="character-detail-affiliation">
+         ${escapeHtml(affiliation)}
+        </div>
+       `
+       : ""
+     }
 
-            </div>
+
+     ${
+      description
+       ? `
+        <div class="character-description">
+         ${escapeHtml(description)}
+        </div>
+       `
+       : ""
+     }
 
 
-            <div class="progress">
+     <div class="character-stats">
 
-                <div
-                    class="progress-bar"
-                    style="
-                        width:${percent}%;
-                    "
-                ></div>
+      ${Object.entries(stats)
+       .map(([key,value])=>`
 
-            </div>
+        <div class="character-stat">
+
+         <span class="character-stat-name">
+          ${escapeHtml(pretty(key))}
+         </span>
+
+         <span class="character-stat-value">
+          ${escapeHtml(value)}
+         </span>
 
         </div>
 
-    `;
+       `)
+       .join("")}
 
-}
+     </div>
 
+    </div>
 
-/* ==========================================================
-   ITEMS
-   ========================================================== */
-
-function createItems(
-    items
-) {
-
-    if (
-        items.length === 0
-    ) {
-
-        return "";
-
-    }
+   </div>
 
 
-    return `
-
-        <section class="section">
-
-            <h2 class="section-title">
-
-                Inventory
-
-            </h2>
-
-
-            <div class="items">
-
-                ${items
-                    .map(
-                        item => `
-
-                            <div
-                                class="item"
-                            >
-
-                                <div
-                                    class="item-icon"
-                                >
-                                    🎒
-                                </div>
-
-                                <div
-                                    class="item-name"
-                                >
-
-                                    ${escapeHtml(
-                                        item
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                        `
-                    )
-                    .join("")
-                }
-
-            </div>
-
-        </section>
-
-    `;
-
-}
-
-
-/* ==========================================================
-   OTHER JSON DATA
-   ========================================================== */
-
-function createOtherData(
+   ${createEquippedItems(
+    equipped,
     data
-) {
+   )}
 
-    const excluded = [
-        "coin",
-        "level",
-        "xp",
-        "health",
-        "mana",
-        "items"
-    ];
-
-
-    const keys =
-        Object.keys(data)
-            .filter(
-                key =>
-                    !excluded.includes(
-                        key
-                    )
-            );
-
-
-    if (
-        keys.length === 0
-    ) {
-
-        return "";
-
-    }
-
-
-    return `
-
-        <section class="section">
-
-            <h2 class="section-title">
-
-                Profile Details
-
-            </h2>
-
-
-            <div class="details">
-
-                ${keys
-                    .map(
-                        key => {
-
-                            const value =
-                                data[key];
-
-
-                            return `
-
-                                <div
-                                    class="detail"
-                                >
-
-                                    <span
-                                        class="detail-key"
-                                    >
-
-                                        ${escapeHtml(
-                                            key
-                                        )}
-
-                                    </span>
-
-
-                                    <span
-                                        class="detail-value"
-                                    >
-
-                                        ${escapeHtml(
-                                            formatValue(
-                                                value
-                                            )
-                                        )}
-
-                                    </span>
-
-                                </div>
-
-                            `;
-
-                        }
-                    )
-                    .join("")
-                }
-
-            </div>
-
-        </section>
-
-    `;
-
+  </div>
+ `;
 }
 
 
-/* ==========================================================
-   FORMAT VALUES
-   ========================================================== */
+/* ============================================================
+   CHARACTER STATS
+   ============================================================ */
 
-function formatValue(
-    value
-) {
+function getCharacterStats(
+ characterInfo,
+ playerCharacter
+){
 
-    if (
-        typeof value ===
-        "object"
-    ) {
+ const stats={};
 
-        return JSON.stringify(
-            value
-        );
+ /*
+  Player-owned stats take priority over
+  static base stats from data-character.json.
+ */
 
-    }
+ const preferredStats=[
+  "health",
+  "defense",
+  "attack",
+  "strength",
+  "magic",
+  "speed",
+  "agility",
+  "mana",
+  "critical_rate",
+  "critical_damage"
+ ];
 
+ preferredStats.forEach(key=>{
 
-    return String(value);
+  if(
+   playerCharacter[key] !== undefined
+  ){
 
+   stats[key]=
+    playerCharacter[key];
+
+  }else if(
+   characterInfo[key] !== undefined
+  ){
+
+   stats[key]=
+    characterInfo[key];
+
+  }
+
+ });
+
+ /*
+  Include any additional numeric/string stats
+  supplied by the character database that aren't
+  in the standard list.
+ */
+
+ Object.entries(characterInfo).forEach(
+  ([key,value])=>{
+
+   if(
+    key==="name" ||
+    key==="Id" ||
+    key==="id" ||
+    key==="affiliation" ||
+    key==="profile_image" ||
+    key==="icon" ||
+    key==="image" ||
+    key==="full_splash" ||
+    key==="splash" ||
+    key==="splash_image" ||
+    key==="description" ||
+    key==="profile" ||
+    key==="equip"
+   )return;
+
+   if(
+    stats[key]===undefined &&
+    (
+     typeof value==="number" ||
+     typeof value==="string"
+    )
+   ){
+
+    stats[key]=value;
+   }
+
+  }
+ );
+
+ /*
+  Include player stats that weren't in the
+  standard list.
+ */
+
+ Object.entries(playerCharacter).forEach(
+  ([key,value])=>{
+
+   if(
+    key==="name" ||
+    key==="Id" ||
+    key==="id" ||
+    key==="equip"
+   )return;
+
+   if(
+    stats[key]===undefined &&
+    (
+     typeof value==="number" ||
+     typeof value==="string"
+    )
+   ){
+
+    stats[key]=value;
+   }
+
+  }
+ );
+
+ return stats;
 }
 
 
-/* ==========================================================
-   ERROR
-   ========================================================== */
+/* ============================================================
+   EQUIPPED ITEMS
+   ============================================================ */
 
-function showError(
-    title,
-    message
-) {
+function createEquippedItems(equip,data){
 
-    document
-        .getElementById("app")
-        .innerHTML = `
+ const slots=[
+  ["weapon","Weapon"],
+  ["accessory","Accessory"],
+  ["artifact1","Artifact 1"],
+  ["artifact2","Artifact 2"],
+  ["artifact3","Artifact 3"],
+  ["artifact4","Artifact 4"]
+ ];
 
-        <div class="page">
+ return `
+  <div class="equipped-section">
 
-            <div class="error">
+   <div class="subsection-title">
+    Equipped Items
+   </div>
 
-                <h1>
+   <div class="equipped-grid">
 
-                    ${escapeHtml(
-                        title
-                    )}
+    ${slots.map(([key,label])=>{
 
-                </h1>
+     const value=equip[key];
 
-                <p>
+     const display=
+      getEquippedItemName(
+       value,
+       data
+      );
 
-                    ${escapeHtml(
-                        message
-                    )}
+     return `
+      <div class="equipped-item">
 
-                </p>
+       <span class="equipped-slot">
+        ${escapeHtml(label)}
+       </span>
 
-            </div>
+       <span class="equipped-name">
+        ${escapeHtml(display)}
+       </span>
 
+      </div>
+     `;
+
+    }).join("")}
+
+   </div>
+
+  </div>
+ `;
+}
+
+
+/* ============================================================
+   INVENTORY ITEM LOOKUP FOR EQUIPPED ITEMS
+   ============================================================ */
+
+function getEquippedItemName(value,data){
+
+ if(
+  value===undefined ||
+  value===null ||
+  value===""
+ ){
+
+  return "None";
+ }
+
+ /*
+  If the database eventually stores an item ID,
+  try to resolve that ID from the player's inventory.
+ */
+
+ const id=
+  typeof value==="object"
+   ? value.id
+   : Number(value);
+
+ if(
+  Number.isFinite(id)
+ ){
+
+  for(
+   const inventoryKey of Object.keys(
+    inventoryNames
+   )
+  ){
+
+   const items=
+    Array.isArray(data[inventoryKey])
+     ? data[inventoryKey]
+     : [];
+
+   const found=
+    items.find(
+     item=>
+      item &&
+      Number(item.id)===id
+    );
+
+   if(found){
+    return found.name || "Item "+id;
+   }
+  }
+
+  return "Item "+id;
+ }
+
+ /*
+  If the database stores the actual item name,
+  display it directly.
+ */
+
+ if(typeof value==="object"){
+  return value.name || "Equipped Item";
+ }
+
+ return String(value);
+}
+
+
+/* ============================================================
+   ACHIEVEMENTS
+   ============================================================ */
+
+function createAchievements(data){
+
+ const achievements=
+  data.achievements||{};
+
+ const entries=
+  Object.entries(achievements);
+
+ if(!entries.length)return"";
+
+ const unlocked=
+  entries.filter(
+   ([,value])=>value
+  ).length;
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">✦</span>
+    Achievements
+
+    <span class="badge">
+     ${unlocked}/${entries.length}
+    </span>
+
+   </h2>
+
+   <div class="grid">
+
+    ${entries.map(
+     ([key,value])=>`
+
+      <div class="
+       achievement
+       ${value?"":"locked"}
+      ">
+
+       <div class="achievement-symbol">
+        ${value?"✦":"◇"}
+       </div>
+
+       <div>
+
+        <div class="item-name">
+         ${escapeHtml(
+          pretty(key)
+         )}
         </div>
 
-    `;
+        <div class="item-sub">
+         ${value?"Unlocked":"Locked"}
+        </div>
 
+       </div>
+
+      </div>
+
+     `
+    ).join("")}
+
+   </div>
+
+  </section>
+ `;
 }
 
 
-/* ==========================================================
-   HTML ESCAPING
-   ========================================================== */
+/* ============================================================
+   SKILL TREE
+   ============================================================ */
 
-function escapeHtml(
-    value
-) {
+function createSkillTree(data){
 
-    return String(value)
+ const tree=
+  Array.isArray(
+   data.mc_skill_tree_unlock
+  )
+   ? data.mc_skill_tree_unlock
+   : [];
 
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
+ if(!tree.length)return"";
 
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
+ const unlocked=
+  countNumbers(tree);
 
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
+ return `
+  <section class="section">
 
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
+   <h2 class="section-title">
+    <span class="section-symbol">◇</span>
+    Main Character Skill Tree
+   </h2>
 
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
+   <div class="details">
 
+    ${detail(
+     "Nodes / Entries",
+     countNested(tree)
+    )}
+
+    ${detail(
+     "Unlocked Levels",
+     unlocked
+    )}
+
+   </div>
+
+   <div
+    class="grid"
+    style="margin-top:10px"
+   >
+
+    ${tree.map(
+     (group,i)=>`
+
+      <div class="item">
+
+       <div class="item-symbol">
+        ◇
+       </div>
+
+       <div class="item-name">
+        Ability Branch ${i+1}
+       </div>
+
+       <div class="item-sub">
+        ${countNumbers(group)}
+        unlocked levels
+       </div>
+
+      </div>
+
+     `
+    ).join("")}
+
+   </div>
+
+  </section>
+ `;
 }
 
 
-/* ==========================================================
-   START
-   ========================================================== */
+/* ============================================================
+   CHARACTER SYSTEMS
+   ============================================================ */
 
-loadProfile();
+function createCharacterSystems(data){
 
+ const equipped=
+  Array.isArray(data.c_equipped_skills)
+   ? data.c_equipped_skills
+   : [];
+
+ const skill1=
+  Array.isArray(data.c_skill1_owned)
+   ? data.c_skill1_owned
+   : [];
+
+ const skill2=
+  Array.isArray(data.c_skill2_owned)
+   ? data.c_skill2_owned
+   : [];
+
+ const skill3=
+  Array.isArray(data.c_skill3_owned)
+   ? data.c_skill3_owned
+   : [];
+
+ const skill4=
+  Array.isArray(data.c_skill4_owned)
+   ? data.c_skill4_owned
+   : [];
+
+ const costumes=
+  Array.isArray(data.c_costume_owned)
+   ? data.c_costume_owned
+   : [];
+
+ const equippedCostumes=
+  Array.isArray(data.c_costume_equipped)
+   ? data.c_costume_equipped
+   : [];
+
+ const values=[
+  countNested(equipped),
+  countNumbers(skill1),
+  countNumbers(skill2),
+  countNumbers(skill3),
+  countNumbers(skill4),
+  countNumbers(costumes)
+ ];
+
+ if(!values.some(Boolean)){
+  return "";
+ }
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">✦</span>
+    Character Progression
+   </h2>
+
+   <div class="details">
+
+    ${detail(
+     "Equipped Skills",
+     countNested(equipped)
+    )}
+
+    ${detail(
+     "Basic Skills Owned",
+     countNumbers(skill1)
+    )}
+
+    ${detail(
+     "Special Skills Owned",
+     countNumbers(skill2)
+    )}
+
+    ${detail(
+     "Ultimate Skills Owned",
+     countNumbers(skill3)
+    )}
+
+    ${detail(
+     "Technical Skills Owned",
+     countNumbers(skill4)
+    )}
+
+    ${detail(
+     "Costumes Owned",
+     countNumbers(costumes)
+    )}
+
+    ${detail(
+     "Equipped Costumes",
+     equippedCostumes.filter(
+      v=>v!=null
+     ).length
+    )}
+
+   </div>
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   FLAGS
+   ============================================================ */
+
+function createFlags(data){
+
+ const flags=data.flags||{};
+
+ const entries=
+  Object.entries(flags);
+
+ if(!entries.length)return"";
+
+ return `
+  <section class="section">
+
+   <h2 class="section-title">
+    <span class="section-symbol">◇</span>
+    Milestones & Flags
+   </h2>
+
+   <div class="details">
+
+    ${entries.map(
+     ([key,value])=>
+      detail(
+       pretty(key),
+       formatValue(value)
+      )
+    ).join("")}
+
+   </div>
+
+  </section>
+ `;
+}
+
+
+/* ============================================================
+   CHARACTER DATABASE LOOKUP
+   ============================================================ */
+
+function getCharacterInfo(id){
+
+ const key="c"+id;
+
+ /*
+  Supports:
+
+  {
+   "c1": {...},
+   "c2": {...}
+  }
+
+  which is the recommended format.
+ */
+
+ if(
+  characterDatabase &&
+  characterDatabase[key]
+ ){
+
+  return characterDatabase[key];
+ }
+
+ /*
+  Also supports:
+
+  {
+   "characters":{
+    "c1":{...}
+   }
+  }
+ */
+
+ if(
+  characterDatabase &&
+  characterDatabase.characters &&
+  characterDatabase.characters[key]
+ ){
+
+  return characterDatabase.characters[key];
+ }
+
+ /*
+  Also supports an array if the JSON was
+  structured as:
+
+  {
+   "characters":[
+    {...},
+    {...}
+   ]
+  }
+ */
+
+ if(
+  characterDatabase &&
+  Array.isArray(
+   characterDatabase.characters
+  )
+ ){
+
+  return characterDatabase.characters[id-1]||{};
+ }
+
+ return {};
+}
+
+
+/* ============================================================
+   GENERIC HELPERS
+   ============================================================ */
+
+function progress(label,value,max){
+
+ value=Number(value)||0;
+
+ max=Math.max(
+  Number(max)||1,
+  1
+ );
+
+ const pct=
+  Math.min(
+   100,
+   Math.max(
+    0,
+    value/max*100
+   )
+  );
+
+ return `
+  <div class="progress-container">
+
+   <div class="progress-header">
+
+    <span class="progress-label">
+     ${escapeHtml(label)}
+    </span>
+
+    <span class="progress-value">
+     ${num(value)} / ${num(max)}
+    </span>
+
+   </div>
+
+   <div class="progress">
+
+    <div
+     class="progress-bar"
+     style="width:${pct}%"
+    ></div>
+
+   </div>
+
+  </div>
+ `;
+}
+
+
+function detail(key,value){
+
+ return `
+  <div class="detail">
+
+   <span class="detail-key">
+    ${escapeHtml(key)}
+   </span>
+
+   <span class="detail-value">
+    ${escapeHtml(value)}
+   </span>
+
+  </div>
+ `;
+}
+
+
+function detailGrid(obj){
+
+ return `
+  <div class="details">
+
+   ${Object.entries(obj)
+    .map(
+     ([key,value])=>
+      detail(key,value)
+    )
+    .join("")}
+
+  </div>
+ `;
+}
+
+
+function xpForRank(level){
+
+ return Math.max(
+  100,
+  level*100
+ );
+}
+
+
+function countNumbers(value){
+
+ if(Array.isArray(value)){
+
+  return value.reduce(
+   (total,item)=>
+    total+
+    countNumbers(item),
+   0
+  );
+ }
+
+ return(
+  typeof value==="number" &&
+  value>0
+ )
+  ? value
+  : 0;
+}
+
+
+function countNested(value){
+
+ if(!Array.isArray(value)){
+  return 0;
+ }
+
+ return value.reduce(
+  (total,item)=>
+   total+
+   (
+    Array.isArray(item)
+     ? countNested(item)
+     : 1
+   ),
+  0
+ );
+}
+
+
+function pretty(value){
+
+ return String(value)
+  .replaceAll("_"," ")
+  .replace(/\b\w/g,c=>
+   c.toUpperCase()
+  );
+}
+
+
+function formatValue(value){
+
+ if(value===null){
+  return "None";
+ }
+
+ if(typeof value==="object"){
+  return JSON.stringify(value);
+ }
+
+ return String(value);
+}
+
+
+function num(value,fallback=0){
+
+ const n=Number(value);
+
+ return Number.isFinite(n)
+  ? n
+  : fallback;
+}
+
+
+function showError(title,message){
+
+ document.getElementById(
+  "app"
+ ).innerHTML=`
+
+  <div class="page">
+
+   <div class="error">
+
+    <h1>
+     ${escapeHtml(title)}
+    </h1>
+
+    <p>
+     ${escapeHtml(message)}
+    </p>
+
+   </div>
+
+  </div>
+
+ `;
+}
+
+
+function escapeHtml(value){
+
+ return String(value)
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;");
+}
+
+
+function escapeAttribute(value){
+
+ return escapeHtml(value);
+}
+
+
+/* ============================================================
+   STARTUP
+   ============================================================ */
+
+async function initialize(){
+
+ /*
+  Load both resources before rendering the profile.
+  This is important because c1/c4 ownership comes from
+  the player API while names/images/stats come from the
+  separate character database.
+ */
+
+ await loadCharacterDatabase();
+
+ /*
+  Keep the actual player object globally available to the
+  character dropdown functions.
+ */
+ try{
+
+  if(
+   !username ||
+   username==="view.html"
+  ){
+   return showError(
+    "No Player",
+    "No username was provided."
+   );
+  }
+
+  const response=await fetch(
+   "/api/user/"+encodeURIComponent(username),
+   {cache:"no-cache"}
+  );
+
+  if(!response.ok){
+   return showError(
+    "Player Not Found",
+    "This profile does not exist."
+   );
+  }
+
+  const result=await response.json();
+
+  window.currentPlayerData=
+   result &&
+   result.data &&
+   typeof result.data==="object"
+    ? result.data
+    : {};
+
+  renderProfile(
+   result.username || username,
+   window.currentPlayerData
+  );
+
+ }catch(error){
+
+  console.error(error);
+
+  showError(
+   "Connection Error",
+   "Could not load this profile."
+  );
+ }
+}
+
+initialize();
 </script>
 
-
 </body>
-
 </html>
