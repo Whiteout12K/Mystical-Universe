@@ -92,8 +92,8 @@ function createInitialData() {
 
         // Account Stuff
         avatar: 1, // Current Avatar
-        avatar_frame: 1, // Current Avatar Frame
-        bg: 1, // Current Background
+        avatar_frame: 1, // Current Avatar Frame, 1 = none
+        bg: 1, // Current Background, 1 = none
 
         settings: {
             keyboard_input: true,

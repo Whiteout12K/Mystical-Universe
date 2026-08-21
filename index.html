@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,16 +8,15 @@
   <meta name="keywords" content="Mystical Legends, Mystical, Legends, mystical universe, magical characters, angelor, elves, modern fantasy, mystical creatures, epic fantasy stories, supernatural powers">
   <title>Mystical Legends - Home</title>
   <link rel="icon" href="images/website/favicon.png" type="image/png">
-
   <link href="css/bootstrap-min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/home.css">
   <link rel="stylesheet" href="css/news.css">
-
+  <link rel="stylesheet" href="css/mlg.css">
   <script src="js/bootstrap-bundle-min.js"></script>
 </head>
 
-<body>
 
+<body>
   <script src="/js/session.js"></script>
 
   <!-- Navbar -->
@@ -29,14 +29,15 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-overlay"></div>
-
     <div class="hero-content">
-
       <div class="hero-kicker">THE MYSTICAL UNIVERSE...</div>
       <div class="hero-title-line"></div>
+
       <h1>Mystical Legends</h1>
 
-      <p class="hero-subtitle">Virtues rising by the fate against adversity.</p>
+      <p class="hero-subtitle">
+        Virtues rising by the fate against adversity.
+      </p>
 
       <div class="hero-bottom-decoration">
         <span></span>
@@ -52,42 +53,38 @@
 
   <!-- News -->
   <section class="news-section">
-
     <div class="section-heading">
       <h2>Latest News</h2>
     </div>
 
-    
     <div id="tagBar"></div>
     <div id="newsContainer"></div>
 
-    <button id="loadMoreBtn" class="fantasy-button">
-      Load More
-    </button>
+    <button id="loadMoreBtn" class="fantasy-button">Load More</button>
 
   </section>
-
 
 
   <!-- Characters -->
   <section id="characters" class="characters-section">
 
     <div class="container">
-
       <div class="section-heading">
+
         <span class="heading-decoration">✦</span>
         <h2>Meet the Characters</h2>
         <span class="heading-decoration">✦</span>
-      </div>
-      <div class="heading-line"></div>
 
+      </div>
+
+      <div class="heading-line"></div>
       <div class="row align-items-center character-display">
 
+
         <!-- Character Image -->
+
         <div class="col-lg-6 text-center mb-5 mb-lg-0">
-
           <div class="character-image-frame">
-
             <div class="frame-corner corner-top-left"></div>
             <div class="frame-corner corner-top-right"></div>
             <div class="frame-corner corner-bottom-left"></div>
@@ -97,64 +94,56 @@
 
               <img
                 id="char-img"
-                src="images/character_art/avery_obtainia_main.png"
+                src="images/character_art/avery_obtainia_cultivator.png"
                 alt="Avery Obtainia"
                 class="character-img show"
               >
 
             </div>
-
           </div>
+
+
+          <!-- Slideshow Toggle -->
+          <a href="#" id="slideshow-toggle" class="slideshow-toggle"> Press to STOP slideshow. </a>
 
         </div>
 
+
         <!-- Character Information -->
         <div class="col-lg-6 character-information">
-
           <div class="character-title">
-
             <span class="title-line"></span>
 
-            <h3 id="char-name" class="fade-text">
-              Avery Obtainia
-            </h3>
+            <h3 id="char-name" class="fade-text">Avery Obtainia</h3>
 
             <span class="title-line"></span>
-
           </div>
 
           <div id="char-desc" class="character-description fade-text">
-
             <div class="d-flex justify-content-center justify-content-lg-start gap-2 mb-3">
-
-              <div class="species species-angelor">
-                Angelor
-              </div>
-
-              <div class="species species-waterspirit">
-                Water Spirit
-              </div>
-
+              <div class="species species-angelor">Angelor</div>
+              <div class="species species-waterspirit">Water Spirit</div>
             </div>
-
-            <p>
-              
-            </p>
-
+            <p> </p>
           </div>
+
 
           <!-- Character Carousel -->
           <div class="character-carousel">
 
-            <div class="carousel-track" id="char-list">
+            <div class="carousel-track"id="char-list">
 
               <img
                 src="images/character_art/Character_Heads/avery_obtainia_head.png"
                 alt="Avery Obtainia"
                 class="char-thumb active"
                 data-name="Avery Obtainia"
+                data-images='[
+                  "images/character_art/avery_obtainia_cultivator.png",
+                  "images/character_art/avery_obtainia_magni.png",
+                  "images/character_art/avery_obtainia_winters_dance_winged.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-angelor'>Angelor</div><div class='species species-waterspirit'>Water Spirit</div></div><p>A gifted Angelor demihuman and Regnum Academy student who wields light magic and the Compression Regnum Spei, catching the eye of the Tempest Aquia cohort. With the Seal Ring, Rune of the Spellcaster, he conceals his wings and channels the power of a mysterious entity, with whom he shares a spiritual bond.</p>"
-                data-img="images/character_art/avery_obtainia_winged.png"
               >
 
               <img
@@ -162,8 +151,11 @@
                 alt="Teddric Tech"
                 class="char-thumb"
                 data-name="Teddric Tech"
+                data-images='[
+                  "images/character_art/teddric_tech_cultivator.png",
+                  "images/character_art/teddric_tech_magnet.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-metalor'>Metalor</div></div><p>A laid-back yet driven Metalor student at Regnum Academy who excels in metal manipulation and runecrafting. His mastery allows him to forge magical metals and invent gadgets like hoverboards, earning him a place in the Dai-Battalion cohort.</p>"
-                data-img="images/character_art/teddric_tech_full.png"
               >
 
               <img
@@ -171,8 +163,11 @@
                 alt="River Grant"
                 class="char-thumb"
                 data-name="River Grant"
+                data-images='[
+                  "images/character_art/river_grant_cultivator.png",
+                  "images/character_art/river_grant_civilian.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-naiad'>Naiad</div><div class='species species-vulpivor'>Vulpivor</div></div><p>A shy Naiad demihuman and student of Regnum Academy with powerful water magic and exceptional mana reserves. Despite her timid nature, she proves herself a skilled combatant and loyal companion to her friends, even earning a spot in the Black Rampart cohort.</p>"
-                data-img="images/character_art/river_grant_civilian.png"
               >
 
               <img
@@ -180,8 +175,12 @@
                 alt="Kaden Icelander"
                 class="char-thumb"
                 data-name="Kaden Icelander"
+                data-images='[
+                  "images/character_art/kaden_icelander_cultivator.png",
+                  "images/character_art/kaden_icelander_full.png",
+                  "images/character_art/kaden_dk.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-icelorian'>Icelorian</div></div><p>A brilliant Icelorian prodigy, wielding powerful ice magic, including the elusive Ice Travel. A technological genius and strategic leader, a founder of IT and the ITA, commands the Blue Legion cohort and wields the transformative Seal Ring, the Icelorian Blade.</p>"
-                data-img="images/character_art/kaden_icelander_full.png"
               >
 
               <img
@@ -189,8 +188,12 @@
                 alt="Amos Black"
                 class="char-thumb"
                 data-name="Amos Black"
+                data-images='[
+                  "images/character_art/amos_black_cultivator.png",
+                  "images/character_art/amos_black_military.png",
+                  "images/character_art/amos_black_suited.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-magnivirigentis'>Magnivirigentis</div></div><p>A powerful Magnivirigentis, known for his unusual purple mana-imbued strength magic. Muscular and towering, he works for IT Industries, serves as a trainer, and leads the IT Agency Task Force.</p>"
-                data-img="images/character_art/amos_black_military.png"
               >
 
               <img
@@ -198,8 +201,10 @@
                 alt="Lucy Terner"
                 class="char-thumb"
                 data-name="Lucy Terner"
+                data-images='[
+                  "images/character_art/lucy_terner_full.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-elf'>Elf</div></div><p>An Elf Mystical Being and a key figure at IT Industries, serving as Head Secretary and lead of the IT Agency’s Intelligence Force. Skilled in Snow Magic, speed, and precision, she is a deadly assassin, close associate of Kaden Icelander, and the Mystical Legends group's scout, known for her sharp mind, teasing personality, and strong work ethic.</p>"
-                data-img="images/character_art/lucy_terner_full.png"
               >
 
               <img
@@ -207,8 +212,12 @@
                 alt="Kiara Katzol"
                 class="char-thumb"
                 data-name="Kiara Katzol"
+                data-images='[
+                  "images/character_art/kiara_katzol_cultivator.png",
+                  "images/character_art/kiara_katzol_winters_dance.png",
+                  "images/character_art/kiara_god_of_death.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-felior'>Felior</div></div><p>A cheerful Felior demihuman at Regnum Academy with golden hair, eyes, and cat features, who wields fast and powerful Lightning Magic. Armed with a versatile Seal Ring, Gathering Sickle, and sharp reflexes, she serves as the Mystical Legends group's backline attacker, known for her playful teasing, kindness, and confident pride in her identity. Part of the Black Rampart cohort.</p>"
-                data-img="images/character_art/kiara_katzol_full.png"
               >
 
               <img
@@ -216,12 +225,14 @@
                 alt="Pyrus Bourn"
                 class="char-thumb"
                 data-name="Pyrus Bourn"
+                data-images='[
+                  "images/character_art/pyrus_bourn_full.png",
+                  "images/character_art/pyrus_bourn_combustion2.png"
+                ]'
                 data-desc="<div class='d-flex justify-content-center justify-content-lg-start gap-2 mb-3'><div class='species species-none'>Non-Mystical</div><div class='species species-larvan'>Larvan</div></div><p>A cunning, power-hungry flame master and major antagonist who rules District 3 and seeks the Orb of Destruction to forcibly unify the Mystical Island under his rules. Transforming into a powerful living flame at Tier 5 by the orb, he is recognized for his fiery hair and eyes, extraordinary combat skills, and his inferno magic, said to be even hotter than regular fire.</p>"
-                data-img="images/character_art/pyrus_bourn_full.png"
               >
 
             </div>
-
           </div>
 
           <p class="carousel-hint">
@@ -231,32 +242,30 @@
           </p>
 
         </div>
-
       </div>
-
     </div>
 
   </section>
 
+
   <!-- Floating Search -->
+
   <div id="floatingSearch">
-
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search for News..."
-    >
-
+    <input type="text" id="searchInput" placeholder="Search for News...">
   </div>
+
 
   <!-- Components -->
   <script src="js/include.js"></script>
   <script src="/js/home.js"></script>
   <script src="js/news.js"></script>
-  <script src="js/character-carousel.js"></script>
+  <script src="js/home2.js"></script>
+
 
   <!-- Footer -->
   <div id="footer-placeholder"></div>
 
+
 </body>
+
 </html>

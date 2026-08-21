@@ -1,0 +1,150 @@
+/* ================================
+    Character Grid Styles, game-hub.html
+================================ */
+
+/* front image overlay */
+.position-relative {
+  position: relative;
+}
+
+.overlay-image {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+}
+
+/* Overlay image styling */
+.overlay-image img {
+  width: 40%;
+  height: auto;
+}
+
+
+/* Character Grid Styles */
+.character-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px,1fr));
+    gap:18px;
+}
+
+.character-card {
+    position: relative;
+    border-radius:8px;
+    padding:5px;
+    text-align:center;
+    cursor:pointer;
+    transition:transform .15s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    height:190px; /* Taller vertical rectangle */
+    opacity: 0.9;
+
+    overflow: hidden;
+    position: relative;
+}
+
+.character-card:hover{
+    transform:scale(1.05);
+}
+
+.character-card img.character-avatar{
+    width:110px;
+    height:140px;
+    object-fit:cover;
+    border-radius:2px;
+}
+
+.avatar {
+  position: absolute;
+
+  /* IMPORTANT: don't use object-fit at all */
+  width: auto;
+  height: 100%;
+
+  /* THIS is your zoom control */
+  transform: scale(1.0);
+
+  /* anchor center */
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+
+  /* center crop baseline */
+  translate: -50% -50%;
+
+  z-index: 1; /* Layer */
+}
+
+.character-name{
+    position:absolute;
+    bottom:-7px;
+    right:0px;
+
+    width:100%;
+    align-content: center;
+    height:60px;
+    font-size:1rem;
+    font-weight:400;
+    padding: 3px;
+    padding-top: 10px;
+
+    text-shadow: 0 4px 4px rgba(37, 37, 37, 0.401);
+    z-index: 2;
+
+    font-family: arial, sans-serif;
+}
+
+.character-event{
+    bottom:165px;
+    right:0px;
+
+    position:absolute;
+    align-content: center;
+    width:80px;
+    height:25px;
+    font-size:0.7rem;
+    font-weight:400;
+    padding: 3px;
+
+    z-index: 4;
+}
+
+/* Role icon */
+.character-role{
+    position:absolute;
+    bottom:35px;
+    right:2px;
+    width:60px;
+    height:60px;
+
+    z-index: 3;
+}
+
+.alter {
+    padding:3px;
+    background-color:#ec7b43;
+    border-radius:5px;
+    border-color:#ec7b43;
+    color: #ffdfcf;
+    text-shadow:none;
+}
+
+/* RARITY STYLES */
+.rarity-c{background:linear-gradient(145deg,#939292d8,#3e3e3ed2);}
+.rarity-r{background:linear-gradient(145deg,#2f80ed,#1c4aa3);}
+.rarity-sr{background:linear-gradient(145deg,#bf72e0da,#2f1342db);}
+.rarity-ssr{background:linear-gradient(145deg,#ffc273dc,#ff9838d1);}
+.rarity-ur{background:linear-gradient(145deg,#ff7373dc,#ff3838d1);}
+
+/* RARITY Overly Styles */
+.name-c{background:linear-gradient(180deg,#6e6e6e00,#525151);}
+.name-r{background:linear-gradient(180deg,#183d8600,#263655);}
+.name-sr{background:linear-gradient(180deg,#993ad800,#4a2c5edb);}
+.name-ssr{background:linear-gradient(180deg,#fca42900,#5d472c);}  
+.name-ur{background:linear-gradient(180deg,#fc292900,#532323cb);}    
+
+
+
+

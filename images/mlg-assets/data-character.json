@@ -1,523 +1,299 @@
 {
   "c1": {
     "id": 1,
-    "name": "Avery Obtainia",
     "profile_image": "/images/character_art/Character_Heads/avery_obtainia_head.png",
+
     "splash_image": "/images/character_art/avery_obtainia_mlg_main2.png",
-    "affiliation": "",
-    "description": "Character profile description.",
+    "splash_color": "drop-shadow(0 0 18px rgba(255, 120, 120, 0.35))",
+    "button_color": "#a20b0b",
+
+    "name": "Avery Obtainia",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
+
+    "species": ["Angelor", "Water Spirit"],
+    "specialty": ["Support", "Crowd Controlling", "Defense", "Healing", "Single-Target Damage", "Resonator"],
+    "affinity": ["Light", "Water"],
+    "role": ["Defense", "Healer"],
+
+    "affiliation": ["Mystical Legends", "Tempest Aquia Cohort", "IT Agency", "Spirit Vessel", "Deity Contract"],
+    "attributes": ["Water Breathing", "Flight", "Charging"],
+
+    "skills": ["B1", "B2", "S1", "S2", "S3", "U1", "U2", "T1", "T2", "T3", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C1",
+
+    "costume_1": {
+        "id": "1",
+        "name": "Default",
+        "preview_path": "/images/mlg-animation/c1_idle.mp4"
+    },
+
+    "costume_2": {
+        "id": "2",
+        "name": "True Transformation",
+        "preview_path": "/images/mlg-assets/Characters/C1/costume/costume_2.png"
+    },
 
     "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
+        "health": 1050,
+        "attack": 50,
+        "defense": 112,
+        "mana": 1200,
+        "mana_regen": 5,
+        "stamina": 900,
+        "stamina_regen": 10,
+        "crit_rate": 10,
+        "crit_dmg": 25,
+        "speed": 105,
+        "piercing": 3,
+        "healing_rate": 2,
+        "luck": 12
     },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.12,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "healing_rate"
     },
 
-    "combat": {
-      "element": ["Light", "Water"],
-      "weapon_type": ["Sword"],
-      "role": ["Defense", "Healer"]
-    },
+    "weapon_type": ["Sword", "Catalyst"]
 
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c1/costumes/default.png"
-      }
-    }
   },
+
 
 
 
   "c2": {
     "id": 2,
-    "name": "Character 2",
-    "profile_image": "/images/characters/c2/profile.png",
-    "splash_image": "/images/characters/c2/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
+    "profile_image": "/images/character_art/Character_Heads/kaden_icelander_head.png",
+
+    "splash_image": "/images/character_art/kaden_icelander_cultivator.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(32, 133, 216, 0.35))",
+    "button_color": "#0b2992",
+
+    "name": "Kaden Icelander",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c2_role.svg",
+
+    "species": ["Icelorian"],
+    "specialty": ["AoE Damage", "Disrupter", "DPS", "Sub-DPS", "Defense Penetration", "Agility", "Summoning"],
+    "affinity": ["Water", "Dark"],
+    "role": ["Fighter"],
+
+    "affiliation": ["Mystical Legends", "Blue Legion Cohort", "IT Agency"],
+    "attributes": ["Charging"],
+
+    "skills": ["B1", "S1", "S2", "S3", "U1", "U2", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C2",
+
+    "costume_1": {
+        "id": "1",
+        "name": "Default",
+        "preview_path": "/images/mlg-assets/Characters/C2/costume/costume_1.png"
+    },
 
     "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
+        "health": 920,
+        "attack": 55,
+        "defense": 85,
+        "mana": 1100,
+        "mana_regen": 5,
+        "stamina": 1100,
+        "stamina_regen": 10,
+        "crit_rate": 10,
+        "crit_dmg": 30,
+        "speed": 115,
+        "piercing": 10,
+        "healing_rate": 0,
+        "luck": 10
     },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.04,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "crit_dmg"
     },
 
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
+    "weapon_type": ["Sword", "Gun"]
 
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c2/costumes/default.png"
-      }
-    }
   },
+
+
+
 
   "c3": {
     "id": 3,
-    "name": "Character 3",
-    "profile_image": "/images/characters/c3/profile.png",
-    "splash_image": "/images/characters/c3/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
+    "profile_image": "/images/character_art/Character_Heads/teddric_tech_head.png",   
+
+    "splash_image": "/images/character_art/teddric_tech_magnet.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(80, 168, 240, 0.378))",
+    "button_color": "#b6e4a7",
+
+    "name": "Teddric Tech",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c3_role.svg",
+
+    "species": ["Metalor"],
+    "specialty": ["Sub-DPS", "Defense", "Disrupter", "Single-Target Damage", "Summoning", "Support", "Agility", "Accuracy"],
+    "affinity": ["Earth"],
+    "role": ["Defense"],
+
+    "affiliation": ["Mystical Legends", "Dai-Battalion Cohort"],
+    "attributes": ["Charging", "Flight"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C3",
 
     "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
+        "health": 930,
+        "attack": 52,
+        "defense": 135,
+        "mana": 920,
+        "mana_regen": 7,
+        "stamina": 950,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 25,
+        "speed": 95,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 6
     },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.05,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "piercing"
     },
 
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
+    "weapon_type": ["Spear", "Gun", "Catalyst"]
 
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c3/costumes/default.png"
-      }
-    }
   },
+
+
+
 
   "c4": {
     "id": 4,
-    "name": "Character 4",
-    "profile_image": "/images/characters/c4/profile.png",
-    "splash_image": "/images/characters/c4/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
+    "profile_image": "",   
+
+    "splash_image": "",
+    "splash_color": "drop-shadow(0 0 18px rgba(80, 168, 240, 0.378))",
+    "button_color": "#b6e4a7",
+
+    "name": "Main Character",
+    "rarity": "C",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c4_role.svg",
+
+    "species": [],
+    "specialty": [],
+    "affinity": [],
+    "role": ["Agent"],
+
+    "affiliation": [],
+    "attributes": [],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C3",
 
     "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
+        "health": 930,
+        "attack": 52,
+        "defense": 135,
+        "mana": 920,
+        "mana_regen": 7,
+        "stamina": 950,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 25,
+        "speed": 95,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 6
     },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.05,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "piercing"
     },
 
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
+    "weapon_type": ["Sword", "Bow", "Spear", "Gun", "Catalyst"]
 
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c4/costumes/default.png"
-      }
-    }
   },
+
+
+
 
   "c5": {
     "id": 5,
-    "name": "Character 5",
-    "profile_image": "/images/characters/c5/profile.png",
-    "splash_image": "/images/characters/c5/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
+    "profile_image": "/images/character_art/Character_Heads/river_grant_head.png",   
+
+    "splash_image": "/images/character_art/river_grant_cultivator.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(80, 224, 240, 0.446))",
+    "button_color": "#8ae5ea",
+
+    "name": "River Grant",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c5_role.svg",
+
+    "species": ["Naiad", "Vulpivor"],
+    "specialty": ["AoE Damage", "Single-Target Damage", "Support", "Support", "Crowd Controlling", "Shredder", "Healing"],
+    "affinity": ["Earth"],
+    "role": ["Defense"],
+
+    "affiliation": ["Mystical Legends", "Mystic Cohort"],
+    "attributes": ["Water Breathing"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C5",
 
     "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
+        "health": 930,
+        "attack": 52,
+        "defense": 135,
+        "mana": 920,
+        "mana_regen": 7,
+        "stamina": 950,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 25,
+        "speed": 95,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 6
     },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.05,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "piercing"
     },
 
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
+    "weapon_type": ["Spear", "Gun", "Catalyst"]
 
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c5/costumes/default.png"
-      }
-    }
   },
 
-  "c6": {
-    "id": 6,
-    "name": "Character 6",
-    "profile_image": "/images/characters/c6/profile.png",
-    "splash_image": "/images/characters/c6/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
 
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
 
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
 
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
 
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
 
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c6/costumes/default.png"
-      }
-    }
-  },
+  "level_formula": ""
 
-  "c7": {
-    "id": 7,
-    "name": "Character 7",
-    "profile_image": "/images/characters/c7/profile.png",
-    "splash_image": "/images/characters/c7/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
-
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
-
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
-
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
-
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c7/costumes/default.png"
-      }
-    }
-  },
-
-  "c8": {
-    "id": 8,
-    "name": "Character 8",
-    "profile_image": "/images/characters/c8/profile.png",
-    "splash_image": "/images/characters/c8/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
-
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
-
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
-
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
-
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c8/costumes/default.png"
-      }
-    }
-  },
-
-  "c9": {
-    "id": 9,
-    "name": "Character 9",
-    "profile_image": "/images/characters/c9/profile.png",
-    "splash_image": "/images/characters/c9/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
-
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
-
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
-
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
-
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c9/costumes/default.png"
-      }
-    }
-  },
-
-  "c10": {
-    "id": 10,
-    "name": "Character 10",
-    "profile_image": "/images/characters/c10/profile.png",
-    "splash_image": "/images/characters/c10/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
-
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
-
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
-
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
-
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c10/costumes/default.png"
-      }
-    }
-  },
-
-  "c11": {
-    "id": 11,
-    "name": "Character 11",
-    "profile_image": "/images/characters/c11/profile.png",
-    "splash_image": "/images/characters/c11/splash.png",
-    "affiliation": "Affiliation",
-    "description": "Character profile description.",
-
-    "base_stats": {
-      "health": 100,
-      "defence": 100,
-      "attack": 100,
-      "magic": 100,
-      "speed": 100,
-      "critical_rate": 5,
-      "critical_damage": 50
-    },
-
-    "growth_stats": {
-      "health": 10,
-      "defence": 10,
-      "attack": 10,
-      "magic": 10,
-      "speed": 10
-    },
-
-    "combat": {
-      "element": "None",
-      "weapon_type": "None",
-      "role": "None",
-      "range": "None"
-    },
-
-    "skills": {
-      "basic": [],
-      "special": [],
-      "ultimate": [],
-      "technical": []
-    },
-
-    "costumes": {
-      "default": {
-        "name": "Default",
-        "image": "/images/characters/c11/costumes/default.png"
-      }
-    }
-  }
 }

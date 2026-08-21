@@ -1,2521 +1,1108 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Player Profile</title>
-
-<style>
-*{box-sizing:border-box}
-
-:root{
- --red:#741b22;
- --red2:#a52a32;
- --gold:#d6aa45;
- --gold2:#f0ca69;
- --dark:#151416;
- --panel:#211c1d;
- --panel2:#2b2526;
- --text:#f5ead2;
- --muted:#a99e8e;
- --border:rgba(214,170,69,.28);
- --character-bg:#191718;
- --character-panel:#2b2425;
-}
-
-body{
- margin:0;
- min-height:100vh;
- font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
- color:var(--text);
- background:
-  radial-gradient(circle at 50% -10%,#562027 0,#28191b 30%,#111112 75%,#0b0b0c 100%);
- line-height:1.4;
-}
-
-body:before{
- content:"";
- position:fixed;
- inset:0;
- pointer-events:none;
- opacity:.055;
- background-image:
-  linear-gradient(45deg,#fff 1px,transparent 1px),
-  linear-gradient(-45deg,#fff 1px,transparent 1px);
- background-size:80px 80px;
-}
-
-.page{
- width:min(1150px,calc(100% - 28px));
- margin:auto;
- padding:28px 0 60px;
-}
-
-.profile{
- position:relative;
- overflow:hidden;
- padding:28px;
- border:1px solid var(--border);
- border-radius:8px;
- background:linear-gradient(
-  135deg,
-  rgba(116,27,34,.8),
-  rgba(30,27,28,.96) 65%
- );
- box-shadow:0 18px 60px #0008;
-}
-
-.profile:after{
- content:"";
- position:absolute;
- width:350px;
- height:350px;
- right:-140px;
- top:-180px;
- background:#b52d3525;
- filter:blur(40px);
- border-radius:50%;
-}
-
-.profile-content{
- position:relative;
- z-index:1;
- display:flex;
- align-items:center;
- gap:20px;
-}
-
-.avatar-wrap{
- width:108px;
- height:108px;
- position:relative;
- flex:none;
-}
-
-.avatar{
- width:100%;
- height:100%;
- display:grid;
- place-items:center;
- border-radius:50%;
- font-size:42px;
- font-weight:800;
- color:var(--gold2);
- background:linear-gradient(145deg,#922731,#3d171b);
- border:3px solid var(--gold);
- box-shadow:
-  0 0 0 4px #1a1515,
-  0 0 25px #c58f3740;
-}
-
-.username{
- margin:0;
- font-family:Georgia,serif;
- font-size:clamp(30px,5vw,52px);
- color:var(--gold2);
- text-shadow:2px 2px 4px #000;
- line-height:1;
-}
-
-.subtitle{
- margin:8px 0 0;
- color:var(--muted);
- font-size:14px;
-}
-
-.rank{
- display:inline-flex;
- align-items:center;
- gap:6px;
- margin-top:10px;
- padding:5px 10px;
- border:1px solid var(--border);
- background:#120f10;
- border-radius:4px;
- color:var(--gold2);
- font-size:12px;
- font-weight:700;
-}
-
-.rank-symbol,
-.section-symbol,
-.stat-symbol,
-.item-symbol,
-.achievement-symbol{
- color:var(--gold2);
-}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(155px,1fr));
- gap:10px;
- margin-top:12px;
-}
-
-.stat{
- padding:15px;
- border:1px solid var(--border);
- border-radius:6px;
- background:linear-gradient(145deg,#292324,#1b1819);
- box-shadow:inset 0 1px #ffffff08;
- transition:.2s;
-}
-
-.stat:hover,
-.item:hover,
-.achievement:hover,
-.character-tab:hover{
- border-color:#d6aa4570;
- transform:translateY(-2px);
-}
-
-.stat-symbol{
- font-size:22px;
-}
-
-.stat-label{
- margin-top:4px;
- color:var(--muted);
- font-size:11px;
- text-transform:uppercase;
- letter-spacing:1px;
-}
-
-.stat-value{
- margin-top:2px;
- font-size:25px;
- font-weight:800;
- color:var(--text);
-}
-
-.section{
- margin-top:12px;
- padding:20px;
- border:1px solid var(--border);
- border-radius:7px;
- background:linear-gradient(
-  145deg,
-  rgba(39,34,35,.96),
-  rgba(24,22,23,.96)
- );
- box-shadow:0 10px 35px #0004;
-}
-
-.section-title{
- display:flex;
- align-items:center;
- gap:9px;
- margin:0 0 15px;
- font:700 20px Georgia,serif;
- color:var(--gold2);
-}
-
-.section-title:after{
- content:"";
- height:1px;
- flex:1;
- background:linear-gradient(90deg,var(--gold),transparent);
-}
-
-.progress-container{
- margin:10px 0;
-}
-
-.progress-header{
- display:flex;
- justify-content:space-between;
- font-size:13px;
- margin-bottom:5px;
-}
-
-.progress-label{
- color:#d8cbb5;
-}
-
-.progress-value{
- color:var(--gold2);
- font-weight:700;
-}
-
-.progress{
- height:9px;
- overflow:hidden;
- background:#100f10;
- border:1px solid #000;
- border-radius:3px;
-}
-
-.progress-bar{
- height:100%;
- background:linear-gradient(90deg,#711d25,#d5a33d);
- box-shadow:0 0 10px #a52a3266;
-}
-
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(145px,1fr));
- gap:9px;
-}
-
-.item,
-.achievement{
- padding:13px;
- border:1px solid #ffffff10;
- border-radius:5px;
- background:#191718;
- transition:.2s;
-}
-
-.item-symbol{
- font-size:24px;
- margin-bottom:5px;
-}
-
-.item-name{
- font-size:13px;
- font-weight:700;
- color:#eadfc9;
-}
-
-.item-sub{
- margin-top:3px;
- color:var(--muted);
- font-size:11px;
-}
-
-.details{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
- gap:7px;
-}
-
-.detail{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- padding:9px 11px;
- background:#171516;
- border:1px solid #ffffff08;
- border-radius:4px;
- font-size:12px;
-}
-
-.detail-key{
- color:var(--muted);
-}
-
-.detail-value{
- font-weight:700;
- color:#e8dcc4;
- text-align:right;
- word-break:break-word;
-}
-
-.badge{
- display:inline-block;
- padding:3px 7px;
- border-radius:3px;
- background:#5d1720;
- color:#f0c967;
- font-size:10px;
- font-weight:800;
-}
-
-.empty{
- padding:14px;
- text-align:center;
- color:#766e64;
- font-size:13px;
- border:1px dashed #ffffff12;
-}
-
-.achievement{
- display:flex;
- align-items:center;
- gap:12px;
-}
-
-.achievement-symbol{
- font-size:24px;
-}
-
-.locked{
- opacity:.4;
- filter:grayscale(1);
-}
-
-/* =========================
-   CHARACTER COLLECTION
-   ========================= */
-
-.character-collection{
- width:100%;
-}
-
-.character-list{
- display:flex;
- flex-wrap:wrap;
- gap:10px;
- width:100%;
-}
-
-/*
- Character tabs occupy roughly 30% of the collection width.
- The opened details panel is not part of this grid, so it always
- gets its own full-width row underneath the tabs.
-*/
-.character-tab{
- flex:0 0 calc(30% - 7px);
- min-width:180px;
- position:relative;
- display:flex;
- align-items:center;
- gap:13px;
- padding:11px;
- border:1px solid var(--border);
- border-radius:6px;
- background:linear-gradient(
-  145deg,
-  var(--character-panel),
-  var(--character-bg)
- );
- cursor:pointer;
- transition:
-  border-color .2s,
-  transform .2s,
-  background .2s;
- overflow:hidden;
-}
-
-.character-tab.active{
- border-color:var(--gold);
- background:linear-gradient(
-  145deg,
-  #35282a,
-  #20191a
- );
- box-shadow:0 0 0 1px #d6aa4525;
-}
-
-.character-icon-wrap{
- width:72px;
- height:72px;
- flex:none;
- display:flex;
- align-items:center;
- justify-content:center;
- overflow:hidden;
- border-radius:5px;
-
- /*
- Keep image area the exact same color as the character box.
- This prevents a black rectangle from appearing around transparent
- character images.
- */
- background:var(--character-bg);
-}
-
-.character-icon{
- display:block;
- width:100%;
- height:100%;
- object-fit:contain;
- background:transparent;
-}
-
-.character-tab-info{
- min-width:0;
-}
-
-.character-id{
- font-size:9px;
- color:var(--gold);
- letter-spacing:1px;
- text-transform:uppercase;
-}
-
-.character-name{
- margin-top:3px;
- font:700 16px Georgia,serif;
- color:var(--text);
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
-}
-
-.character-affiliation{
- margin-top:3px;
- color:var(--muted);
- font-size:10px;
- white-space:nowrap;
- overflow:hidden;
- text-overflow:ellipsis;
-}
-
-/*
- The details panel is inserted directly after the clicked character
- and then forced to span the entire character collection width.
-*/
-.character-details{
- flex:0 0 100%;
- width:100%;
- min-width:0;
- margin:0;
- padding:18px;
- border:1px solid var(--border);
- border-radius:6px;
- background:linear-gradient(
-  145deg,
-  var(--character-panel),
-  var(--character-bg)
- );
- overflow:hidden;
- animation:characterOpen .2s ease-out;
-}
-
-@keyframes characterOpen{
- from{
-  opacity:0;
-  transform:translateY(-5px);
- }
- to{
-  opacity:1;
-  transform:translateY(0);
- }
-}
-
-.character-details-top{
- display:grid;
- grid-template-columns:minmax(200px,34%) 1fr;
- gap:20px;
- align-items:start;
-}
-
-.character-splash-wrap{
- width:100%;
- min-height:300px;
- display:flex;
- justify-content:center;
- align-items:center;
- overflow:hidden;
- border-radius:5px;
-
- /* Same color as the actual character panel */
- background:var(--character-bg);
-}
-
-.character-splash{
- display:block;
- width:100%;
- max-width:100%;
- max-height:520px;
- object-fit:contain;
- background:transparent;
-}
-
-/*
- Character metadata and stats remain on the right.
-*/
-.character-info{
- min-width:0;
-}
-
-.character-detail-name{
- margin:0;
- font:700 28px Georgia,serif;
- color:var(--gold2);
-}
-
-.character-detail-affiliation{
- margin-top:4px;
- color:var(--muted);
- font-size:12px;
-}
-
-.character-description{
- margin-top:12px;
- color:#d8cbb5;
- font-size:12px;
- line-height:1.6;
-}
-
-/*
- Stats stay in rows together rather than becoming scattered.
-*/
-.character-stats{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:6px;
- margin-top:15px;
-}
-
-.character-stat{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- padding:9px 11px;
- border:1px solid #ffffff08;
- border-radius:4px;
- background:#171516;
-}
-
-.character-stat-name{
- color:var(--muted);
- font-size:11px;
-}
-
-.character-stat-value{
- color:var(--text);
- font-size:13px;
- font-weight:800;
- text-align:right;
-}
-
-/*
- Equipped items are deliberately full-width below the main
- character information so they don't get squeezed into the art.
-*/
-.equipped-section{
- margin-top:18px;
-}
-
-.subsection-title{
- margin-bottom:8px;
- color:var(--gold);
- font:700 14px Georgia,serif;
-}
-
-.equipped-grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:7px;
-}
-
-.equipped-item{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- padding:9px 11px;
- background:#171516;
- border:1px solid #ffffff08;
- border-radius:4px;
-}
-
-.equipped-slot{
- color:var(--muted);
- font-size:11px;
-}
-
-.equipped-name{
- color:#e8dcc4;
- font-size:12px;
- font-weight:700;
- text-align:right;
- word-break:break-word;
-}
-
-/* ========================= */
-
-.inventory-group{
- margin-top:15px;
-}
-
-.inventory-title{
- display:flex;
- align-items:center;
- gap:7px;
- margin-bottom:7px;
- color:var(--gold);
- font:700 14px Georgia,serif;
-}
-
-.columns{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
- gap:12px;
-}
-
-.loading{
- min-height:100vh;
- display:grid;
- place-items:center;
- color:var(--muted);
-}
-
-.error{
- text-align:center;
- padding:100px 20px;
-}
-
-.error h1{
- font:700 38px Georgia,serif;
- color:var(--gold2);
-}
-
-.error p{
- color:var(--muted);
-}
-
-@media(max-width:800px){
- .character-tab{
-  flex-basis:calc(50% - 5px);
- }
-
- .character-details-top{
-  grid-template-columns:1fr;
- }
-
- .character-splash-wrap{
-  min-height:250px;
- }
-
- .character-splash{
-  max-height:450px;
- }
-}
-
-@media(max-width:600px){
- .page{
-  width:calc(100% - 16px);
-  padding-top:12px;
- }
-
- .profile{
-  padding:20px;
- }
-
- .avatar-wrap{
-  width:78px;
-  height:78px;
- }
-
- .avatar{
-  font-size:30px;
- }
-
- .section{
-  padding:15px;
- }
-
- .stats{
-  grid-template-columns:repeat(2,1fr);
- }
-
- .stat-value{
-  font-size:21px;
- }
-
- .profile-content{
-  align-items:flex-start;
- }
-
- /*
- On mobile every character tab becomes full width.
- */
- .character-tab{
-  flex-basis:100%;
-  min-width:0;
- }
-
- .character-details{
-  padding:12px;
- }
-
- .character-details-top{
-  grid-template-columns:1fr;
- }
-
- .character-splash-wrap{
-  min-height:220px;
- }
-
- .character-stats{
-  grid-template-columns:1fr;
- }
-
- .equipped-grid{
-  grid-template-columns:1fr;
- }
-}
-</style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>Player Profile</title>
+ <link rel="stylesheet" href="/css/mlg.css">
+ <link rel="stylesheet" href="/css/mlg-c-viewer.css">
 </head>
-
 <body>
+ <div id="app">
+  <div class="loading">Loading profile...</div>
+ </div>
 
-<div id="app">
- <div class="loading">Loading profile...</div>
-</div>
+ <script>
+ const pathParts=location.pathname.split("/").filter(Boolean);
+ let username=new URLSearchParams(location.search).get("username")||
+  pathParts[pathParts.length-1];
 
-<script>
-/* ============================================================
-   PROFILE DATA
-   ============================================================ */
+ let characterDatabase={};
+ let accountStyleDatabase={};
+ let currentPlayerData={};
 
-const pathParts=location.pathname.split("/").filter(Boolean);
+ const premiumNames={
+  diamond_core:["◈","Diamond Core"],
+  sr_star_lv_frag:["✦","SR Star Lv. Fragments"],
+  ssr_star_lv_frag:["✦","SSR Star Lv. Fragments"],
+  ur_star_lv_frag:["✦","UR Star Lv. Fragments"]
+ };
 
-let username=pathParts[pathParts.length-1];
-
-const queryUsername=
- new URLSearchParams(location.search).get("username");
-
-if(queryUsername){
- username=queryUsername;
-}
-
-
-/* ============================================================
-   DISPLAY DEFINITIONS
-   ============================================================ */
-
-const inventoryNames={
- inventory1:["◆","Weapons & Equipment"],
- inventory2:["◇","Artifacts"],
- inventory3:["▣","Materials"],
- inventory4:["✧","Consumables"],
- inventory5:["⌘","Builds & Schematics"],
- inventory6:["⚙","Gadgets"],
- inventory7:["◈","Special Items"]
-};
-
-const premiumNames={
- diamond_core:["◈","Diamond Core"],
- sr_star_lv_frag:["✦","SR Star Lv. Fragments"],
- ssr_star_lv_frag:["✦","SSR Star Lv. Fragments"],
- ur_star_lv_frag:["✦","UR Star Lv. Fragments"]
-};
-
-
-/* ============================================================
-   CHARACTER DATA
-   ============================================================ */
-
-let characterDatabase={};
-
-async function loadCharacterDatabase(){
- try{
-  const response=await fetch(
-   "/images/mlg-assets/data-character.json",
-   {cache:"no-cache"}
-  );
-
-  if(!response.ok){
-   throw new Error(
-    "Character database returned HTTP "+response.status
+ async function loadCharacterDatabase(){
+  try{
+   const response=await fetch(
+    "/images/mlg-assets/data-character.json",
+    {cache:"no-cache"}
    );
-  }
 
-  characterDatabase=await response.json();
-
-  console.log("Character database loaded:",characterDatabase);
-
- }catch(error){
-  console.error("Could not load data-character.json:",error);
-  characterDatabase={};
- }
-}
-
-
-/* ============================================================
-   LOAD PROFILE
-   ============================================================ */
-
-async function loadProfile(){
-
- try{
-
-  if(
-   !username ||
-   username==="view.html"
-  ){
-   return showError(
-    "No Player",
-    "No username was provided."
-   );
-  }
-
-  /*
-   The API response is expected to be:
-
-   {
-     username:"Avery",
-     data:{...}
+   if(!response.ok){
+    throw new Error(`Character database HTTP ${response.status}`);
    }
 
-   The character data is NOT loaded from the character database.
-   The player's c1/c2/etc data always comes directly from the
-   player's API record.
-  */
+   characterDatabase=await response.json();
+  }catch(error){
+   console.error("Could not load data-character.json:",error);
+   characterDatabase={};
+  }
+ }
 
-  const response=await fetch(
-   "/api/user/"+encodeURIComponent(username),
-   {cache:"no-cache"}
-  );
+ async function loadAccountStyleDatabase(){
+  try{
+   const response=await fetch(
+    "/images/mlg-assets/account-style.json",
+    {cache:"no-cache"}
+   );
 
-  if(!response.ok){
-   return showError(
-    "Player Not Found",
-    "This profile does not exist."
+   if(!response.ok){
+    throw new Error(`Account style database HTTP ${response.status}`);
+   }
+
+   accountStyleDatabase=await response.json();
+  }catch(error){
+   console.error("Could not load account-style.json:",error);
+   accountStyleDatabase={};
+  }
+ }
+
+ function getCharacterInfo(id){
+  const key=`c${id}`;
+  const characters=characterDatabase.characters;
+
+  if(characterDatabase[key]) return characterDatabase[key];
+  if(characters?.[key]) return characters[key];
+  if(Array.isArray(characters)) return characters[id-1]||{};
+
+  return {};
+ }
+
+ function normalizeAssetPath(path){
+  if(path===undefined||path===null) return "";
+
+  const value=String(path).trim();
+
+  if(!value) return "";
+  if(/^(https?:|data:|blob:)/.test(value)) return value;
+
+  return value.startsWith("/")?value:`/${value}`;
+ }
+
+ function getAccountStyleAsset(sectionName,key){
+  const section=accountStyleDatabase?.[sectionName];
+
+  if(!section||typeof section!=="object") return "";
+  if(!Object.prototype.hasOwnProperty.call(section,key)) return "";
+
+  return normalizeAssetPath(section[key]);
+ }
+
+ function getAvatarImage(id){
+  return getAccountStyleAsset("avatar",`img_${id}`);
+ }
+
+ function getAvatarFrame(id){
+  return getAccountStyleAsset("avatar",`frame_${id}`);
+ }
+
+ function getBackgroundImage(id){
+  return getAccountStyleAsset("background",`img_${id}`);
+ }
+
+ async function loadProfile(){
+  try{
+   if(!username||username==="view.html"){
+    return showError("No Player","No username was provided.");
+   }
+
+   const response=await fetch(
+    `/api/user/${encodeURIComponent(username)}`,
+    {cache:"no-cache"}
+   );
+
+   if(!response.ok){
+    return showError(
+     "Player Not Found",
+     "This profile does not exist."
+    );
+   }
+
+   const result=await response.json();
+
+   currentPlayerData=
+    result?.data&&typeof result.data==="object"
+     ?result.data
+     :{};
+
+   renderProfile(
+    result?.username||username,
+    currentPlayerData
+   );
+  }catch(error){
+   console.error("Profile loading error:",error);
+   showError(
+    "Connection Error",
+    "Could not load this profile."
    );
   }
-
-  const result=await response.json();
-
-  console.log("Player API response:",result);
-
-  const playerData=
-   result &&
-   result.data &&
-   typeof result.data==="object"
-    ? result.data
-    : {};
-
-  renderProfile(
-   result.username || username,
-   playerData
-  );
-
- }catch(error){
-
-  console.error("Profile loading error:",error);
-
-  showError(
-   "Connection Error",
-   "Could not load this profile."
-  );
  }
-}
 
+ function renderProfile(username,data){
+  const owned=Array.isArray(data.c_owned)
+   ?data.c_owned.filter(Boolean).length
+   :0;
 
-/* ============================================================
-   RENDER PROFILE
-   ============================================================ */
+  const achievements=Object.values(data.achievements||{})
+   .filter(Boolean).length;
 
-function renderProfile(username,data){
+  const avatarId=num(data.avatar,1);
+  const avatarFrameId=num(data.avatar_frame,1);
+  const backgroundId=num(data.bg,1);
 
- const owned=
-  Array.isArray(data.c_owned)
-   ? data.c_owned.filter(Boolean).length
-   : 0;
+  const avatarImage=getAvatarImage(avatarId);
+  const avatarFrame=getAvatarFrame(avatarFrameId);
+  const backgroundImage=getBackgroundImage(backgroundId);
 
- const achievements=
-  Object.values(data.achievements||{})
-   .filter(Boolean)
-   .length;
+  const profileClass=backgroundImage
+   ?"profile profile-custom-background"
+   :"profile";
 
- const inventoryCount=
-  Object.keys(inventoryNames)
-   .reduce(
-    (total,key)=>
-     total+
-     (
-      Array.isArray(data[key])
-       ? data[key].length
-       : 0
-     ),
-    0
-   );
+  const profileStyle=backgroundImage
+   ?` style="background-image:url('${escapeAttribute(backgroundImage)}');"`
+   :"";
 
- document.getElementById("app").innerHTML=`
+  document.getElementById("app").innerHTML=`
+   <main class="page">
+    <section class="${profileClass}"${profileStyle}>
+     <div class="profile-content">
+      <div class="avatar-wrap">
+       <div class="avatar">
+        ${
+         avatarImage
+          ?`
+           <img
+            class="profile-avatar-image"
+            src="${escapeAttribute(avatarImage)}"
+            alt="${escapeAttribute(username)}"
+            onerror="handleAvatarError(this)"
+           >
+          `
+          :`
+           <span class="avatar-fallback-letter">
+            ${escapeHtml(username.charAt(0).toUpperCase())}
+           </span>
+          `
+        }
 
-  <main class="page">
+        ${
+         avatarFrame
+          ?`
+           <img
+            class="profile-avatar-frame"
+            src="${escapeAttribute(avatarFrame)}"
+            alt=""
+            aria-hidden="true"
+            onerror="this.style.display='none'"
+           >
+          `
+          :""
+        }
+       </div>
+      </div>
 
-   <section class="profile">
+      <div class="profile-heading">
+       <h1 class="username">${escapeHtml(username)}</h1>
 
-    <div class="profile-content">
+       <p class="subtitle">Mystical Legends Player Profile</p>
 
-     <div class="avatar-wrap">
-      <div class="avatar">
-       ${escapeHtml(
-        username.charAt(0).toUpperCase()
-       )}
+       <div class="rank">
+        <span class="rank-symbol">◆</span>
+        Adventure Rank ${num(data.ar_level,1)}
+       </div>
       </div>
      </div>
+    </section>
 
-     <div>
+    <section class="stats">
+     ${stat("◆","Silver Coins",num(data.silver_coin))}
+     ${stat("✦","Adventure Rank",num(data.ar_level,1))}
+     ${stat("ϟ","Energy",num(data.energy))}
+     ${stat("♢","Characters",owned)}
+     ${stat("✦","Achievements",achievements)}
+     ${stat("▰","Season Pass Lv.",num(data.season_pass_level,1))}
+    </section>
 
-      <h1 class="username">
-       ${escapeHtml(username)}
-      </h1>
+    ${createAdventure(data)}
+    ${createSeasonPass(data)}
+    ${createPremium(data)}
+    ${createCharacters(data)}
+    ${createAchievements(data)}
+    ${createSkillTree(data)}
+    ${createCharacterSystems(data)}
+    ${createFlags(data)}
+   </main>
+  `;
+ }
 
-      <p class="subtitle">
-       Mystical Legends Player Profile
-      </p>
+ function handleAvatarError(image){
+  const avatar=image.parentElement;
+  image.remove();
 
-      <div class="rank">
-       <span class="rank-symbol">◆</span>
-       Adventure Rank
-       ${num(data.ar_level,1)}
-      </div>
+  if(avatar&&!avatar.querySelector(".avatar-fallback-letter")){
+   const fallback=document.createElement("span");
+   fallback.className="avatar-fallback-letter";
+   fallback.textContent=username.charAt(0).toUpperCase();
+   avatar.prepend(fallback);
+  }
+ }
 
-     </div>
-
-    </div>
-
-   </section>
-
-
-   <section class="stats">
-
-    ${stat(
-     "◆",
-     "Silver Coins",
-     num(data.silver_coin)
-    )}
-
-    ${stat(
-     "✦",
-     "Adventure Rank",
-     num(data.ar_level,1)
-    )}
-
-    ${stat(
-     "ϟ",
-     "Energy",
-     num(data.energy)
-    )}
-
-    ${stat(
-     "♢",
-     "Characters",
-     owned
-    )}
-
-    ${stat(
-     "✦",
-     "Achievements",
-     achievements
-    )}
-
-    ${stat(
-     "▣",
-     "Inventory Items",
-     inventoryCount
-    )}
-
-    ${stat(
-     "▰",
-     "Season Pass Lv.",
-     num(data.season_pass_level,1)
-    )}
-
-   </section>
-
-
-   ${createAdventure(data)}
-
-   ${createSeasonPass(data)}
-
-   ${createPremium(data)}
-
-   ${createCharacters(data)}
-
-   ${createAchievements(data)}
-
-   ${createSkillTree(data)}
-
-   ${createCharacterSystems(data)}
-
-   ${createFlags(data)}
-
-  </main>
- `;
-}
-
-
-/* ============================================================
-   TOP STAT
-   ============================================================ */
-
-function stat(symbol,label,value){
-
- return `
-  <div class="stat">
-
-   <div class="stat-symbol">
-    ${symbol}
+ function stat(symbol,label,value){
+  return `
+   <div class="stat">
+    <div class="stat-symbol">${symbol}</div>
+    <div class="stat-label">${label}</div>
+    <div class="stat-value">${escapeHtml(value)}</div>
    </div>
+  `;
+ }
 
-   <div class="stat-label">
-    ${label}
-   </div>
-
-   <div class="stat-value">
-    ${escapeHtml(value)}
-   </div>
-
-  </div>
- `;
-}
-
-
-/* ============================================================
-   ADVENTURE
-   ============================================================ */
-
-function createAdventure(data){
-
- const level=num(data.ar_level,1);
-
- const xp=num(data.ar_xp);
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">◆</span>
-    Adventure Progress
-   </h2>
-
-   ${progress(
-    "Adventure Rank XP",
-    xp,
-    xpForRank(level)
-   )}
-
-   ${detailGrid({
-    "Adventure Rank":level,
-    "Current Energy":num(data.energy),
-    "Silver Coins":num(data.silver_coin)
-   })}
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   SEASON PASS
-   ============================================================ */
-
-function createSeasonPass(data){
-
- const level=num(
-  data.season_pass_level,
-  1
- );
-
- const xp=num(
-  data.season_pass_xp
- );
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">▰</span>
-    Season Pass
-   </h2>
-
-   <div class="details">
-
-    ${detail(
-     "Status",
-     data.season_pass_owned
-      ? "Owned"
-      : "Not Owned"
-    )}
-
-    ${detail(
-     "Level",
-     level
-    )}
-
-    ${detail(
-     "XP",
-     xp
-    )}
-
-   </div>
-
-   ${progress(
-    "Season Pass XP",
-    xp,
-    xpForRank(level)
-   )}
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   PREMIUM
-   ============================================================ */
-
-function createPremium(data){
-
- const premium=data.premium||{};
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">◈</span>
-    Premium Treasury
-   </h2>
-
-   <div class="grid">
-
-    ${Object.entries(premiumNames)
-     .map(([key,info])=>`
-
-      <div class="item">
-
-       <div class="item-symbol">
-        ${info[0]}
-       </div>
-
-       <div class="item-name">
-        ${info[1]}
-       </div>
-
-       <div class="item-sub">
-        ${num(premium[key])} owned
-       </div>
-
-      </div>
-
-     `)
-     .join("")}
-
-   </div>
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   CHARACTERS
-   ============================================================ */
-
-function createCharacters(data){
-
- const owned=
-  Array.isArray(data.c_owned)
-   ? data.c_owned
-   : [];
-
- const characterTabs=[];
-
- /*
-  c_owned is an indexed array.
-
-  [1,0,0,1,...]
-
-  means:
-
-  c1 = unlocked
-  c2 = locked
-  c3 = locked
-  c4 = unlocked
-
-  The player's actual c1/c4 data is then retrieved from:
-
-  data.c1
-  data.c4
-
-  Character presentation data is retrieved separately from:
-
-  data-character.json
-  */
-
- owned.forEach((value,index)=>{
-
-  if(!value)return;
-
-  const characterId=index+1;
-
-  characterTabs.push(
-   createCharacterTab(
-    characterId,
-    data
-   )
-  );
- });
-
- if(!characterTabs.length){
+ function createAdventure(data){
+  const level=num(data.ar_level,1);
+  const xp=num(data.ar_xp);
 
   return `
-   <section class="section character-collection">
-
+   <section class="section">
     <h2 class="section-title">
-     <span class="section-symbol">♢</span>
-     Character Collection
+     <span class="section-symbol">◆</span>
+     Adventure Progress
     </h2>
 
-    <div class="empty">
-     No characters have been obtained yet.
-    </div>
+    ${progress("Adventure Rank XP",xp,xpForRank(level))}
 
+    ${detailGrid({
+     "Adventure Rank":level,
+     "Current Energy":num(data.energy),
+     "Silver Coins":num(data.silver_coin)
+    })}
    </section>
   `;
  }
 
- return `
-  <section class="section character-collection">
+ function createSeasonPass(data){
+  const level=num(data.season_pass_level,1);
+  const xp=num(data.season_pass_xp);
 
-   <h2 class="section-title">
-    <span class="section-symbol">♢</span>
-    Character Collection
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">▰</span>
+     Season Pass
+    </h2>
 
-    <span class="badge">
-     ${characterTabs.length} OWNED
-    </span>
-   </h2>
-
-   <div
-    id="character-list"
-    class="character-list"
-   >
-
-    ${characterTabs.join("")}
-
-   </div>
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   CHARACTER TAB
-   ============================================================ */
-
-function createCharacterTab(id,data){
-
- const playerCharacter=
-  data["c"+id] || {};
-
- const characterInfo=
-  getCharacterInfo(id);
-
- const name=
-  playerCharacter.name ||
-  characterInfo.name ||
-  "Character "+id;
-
- const icon=
-  characterInfo.profile_image ||
-  characterInfo.icon ||
-  characterInfo.image ||
-  "";
-
- const affiliation=
-  characterInfo.affiliation ||
-  "";
-
- return `
-  <button
-   type="button"
-   class="character-tab"
-   data-character-id="${id}"
-   onclick="toggleCharacter(${id})"
-  >
-
-   <div class="character-icon-wrap">
-
-    ${
-     icon
-      ? `
-       <img
-        class="character-icon"
-        src="${escapeAttribute(icon)}"
-        alt="${escapeAttribute(name)}"
-        onerror="this.style.display='none'"
-       >
-      `
-      : `
-       <span class="item-symbol">♢</span>
-      `
-    }
-
-   </div>
-
-   <div class="character-tab-info">
-
-    <div class="character-id">
-     CHARACTER ${id}
+    <div class="details">
+     ${detail("Status",data.season_pass_owned?"Owned":"Not Owned")}
+     ${detail("Level",level)}
+     ${detail("XP",xp)}
     </div>
 
-    <div class="character-name">
-     ${escapeHtml(name)}
+    ${progress("Season Pass XP",xp,xpForRank(level))}
+   </section>
+  `;
+ }
+
+ function createPremium(data){
+  const premium=data.premium||{};
+
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">◈</span>
+     Premium Treasury
+    </h2>
+
+    <div class="grid">
+     ${Object.entries(premiumNames).map(([key,[symbol,name]])=>`
+      <div class="item">
+       <div class="item-symbol">${symbol}</div>
+       <div class="item-name">${name}</div>
+       <div class="item-sub">${num(premium[key])} owned</div>
+      </div>
+     `).join("")}
     </div>
+   </section>
+  `;
+ }
 
-    ${
-     affiliation
-      ? `
-       <div class="character-affiliation">
-        ${escapeHtml(affiliation)}
-       </div>
-      `
-      : ""
-    }
+ function createCharacters(data){
+  const owned=Array.isArray(data.c_owned)?data.c_owned:[];
+  const characters=owned
+   .map((value,index)=>value?createCharacterTab(index+1,data):"")
+   .filter(Boolean);
 
-   </div>
+  if(!characters.length){
+   return `
+    <section class="section character-collection">
+     <h2 class="section-title">
+      <span class="section-symbol">♢</span>
+      Character Collection
+     </h2>
 
-  </button>
- `;
-}
-
-
-/* ============================================================
-   CHARACTER DROPDOWN
-   ============================================================ */
-
-function toggleCharacter(id){
-
- const list=
-  document.getElementById(
-   "character-list"
-  );
-
- if(!list)return;
-
- const current=
-  list.querySelector(
-   ".character-details"
-  );
-
- const clicked=
-  list.querySelector(
-   `[data-character-id="${id}"]`
-  );
-
- /*
-  Clicking the currently open character closes it.
- */
- if(
-  current &&
-  current.dataset.characterId===String(id)
- ){
-
-  current.remove();
-
-  if(clicked){
-   clicked.classList.remove("active");
+     <div class="empty">No characters have been obtained yet.</div>
+    </section>
+   `;
   }
 
-  return;
+  return `
+   <section class="section character-collection">
+    <h2 class="section-title">
+     <span class="section-symbol">♢</span>
+     Character Collection
+     <span class="badge">${characters.length} OWNED</span>
+    </h2>
+
+    <div id="character-list" class="character-list">
+     ${characters.join("")}
+    </div>
+   </section>
+  `;
  }
 
- /*
-  Close any currently open character first.
- */
- if(current){
-  current.remove();
- }
+ function createCharacterTab(id,data){
+  const info=getCharacterInfo(id);
+  const player=data[`c${id}`]||{};
 
- list
-  .querySelectorAll(".character-tab.active")
-  .forEach(tab=>{
-   tab.classList.remove("active");
-  });
+  const name=info.name||player.name||`Character ${id}`;
+  const rarity=info.rarity||player.rarity||"";
+  const profileImage=info.profile_image||"";
+  const rarityImage=info.rarity_img||"";
 
- /*
-  Build the new panel.
- */
- const panel=
-  createCharacterDetails(
-   id,
-   window.currentPlayerData
-  );
-
- /*
-  Insert the panel immediately after the
-  character row containing the clicked tab.
-
-  Because the character list is flex-wrap based,
-  inserting it directly after the tab could otherwise
-  cause it to sit beside a character.
-
-  We instead append it and use CSS flex-basis:100%.
-  This guarantees that it occupies an entire row.
- */
- if(clicked){
-
-  const tabElements=
-   Array.from(
-    list.querySelectorAll(".character-tab")
-   );
-
-  const clickedIndex=
-   tabElements.indexOf(clicked);
-
-  /*
-   Find the last character in the same visual row.
-
-   Character widths are controlled by CSS, so we calculate
-   how many tabs fit per row.
-  */
-  const listWidth=list.clientWidth;
-
-  const tabWidth=
-   clicked.getBoundingClientRect().width;
-
-  const gap=10;
-
-  const perRow=
-   Math.max(
-    1,
-    Math.floor(
-     (listWidth+gap)/
-     (tabWidth+gap)
-    )
-   );
-
-  const rowEndIndex=
-   Math.min(
-    tabElements.length-1,
-    Math.floor(clickedIndex/perRow)*perRow+
-    perRow-1
-   );
-
-  const insertAfter=
-   tabElements[rowEndIndex];
-
-  insertAfter.insertAdjacentHTML(
-   "afterend",
-   panel
-  );
-
-  clicked.classList.add("active");
- }
-}
-
-
-/* ============================================================
-   CHARACTER DETAIL PANEL
-   ============================================================ */
-
-function createCharacterDetails(id,data){
-
- const playerCharacter=
-  data["c"+id] || {};
-
- const characterInfo=
-  getCharacterInfo(id);
-
- const name=
-  playerCharacter.name ||
-  characterInfo.name ||
-  "Character "+id;
-
- const affiliation=
-  characterInfo.affiliation ||
-  "";
-
- const splash=
-  characterInfo.full_splash ||
-  characterInfo.splash_image ||
-  characterInfo.splash ||
-  "";
-
- const description=
-  characterInfo.description ||
-  characterInfo.profile ||
-  "";
-
- const stats=
-  getCharacterStats(
-   characterInfo,
-   playerCharacter
-  );
-
- const equipped=
-  playerCharacter.equip || {};
-
- return `
-  <div
-   class="character-details"
-   data-character-id="${id}"
-  >
-
-   <div class="character-details-top">
-
-    <div class="character-splash-wrap">
-
+  return `
+   <button
+    type="button"
+    class="character-tab"
+    data-character-id="${id}"
+    onclick="toggleCharacter(${id})"
+   >
+    <div class="character-icon-wrap">
      ${
-      splash
-       ? `
+      profileImage
+       ?`
         <img
-         class="character-splash"
-         src="${escapeAttribute(splash)}"
+         class="character-icon"
+         src="${escapeAttribute(profileImage)}"
          alt="${escapeAttribute(name)}"
          onerror="this.style.display='none'"
         >
        `
-       : `
-        <span class="item-symbol">
-         ◈
-        </span>
+       :`
+        <span class="item-symbol">♢</span>
        `
      }
-
     </div>
 
-
-    <div class="character-info">
-
-     <h3 class="character-detail-name">
-      ${escapeHtml(name)}
-     </h3>
+    <div class="character-tab-info">
+     <div class="character-id">C${id}</div>
+     <div class="character-name">${escapeHtml(name)}</div>
 
      ${
-      affiliation
-       ? `
-        <div class="character-detail-affiliation">
-         ${escapeHtml(affiliation)}
+      rarity
+       ?`
+        <div class="character-rarity ${getRarityClass(rarity)}">
+         ${
+          rarityImage
+           ?`
+            <img
+             src="${escapeAttribute(rarityImage)}"
+             alt="${escapeAttribute(rarity)}"
+            >
+           `
+           :""
+         }
+         ${escapeHtml(rarity)}
         </div>
        `
-       : ""
+       :""
      }
+    </div>
+   </button>
+  `;
+ }
 
+ function toggleCharacter(id){
+  const list=document.getElementById("character-list");
+  if(!list) return;
 
-     ${
-      description
-       ? `
-        <div class="character-description">
-         ${escapeHtml(description)}
-        </div>
-       `
-       : ""
-     }
+  const existing=list.querySelector(".character-details");
+  const clicked=list.querySelector(`[data-character-id="${id}"]`);
 
+  if(existing?.dataset.characterId===String(id)){
+   existing.remove();
+   clicked?.classList.remove("active");
+   return;
+  }
 
-     <div class="character-stats">
+  existing?.remove();
 
-      ${Object.entries(stats)
-       .map(([key,value])=>`
+  list.querySelectorAll(".character-tab.active")
+   .forEach(tab=>tab.classList.remove("active"));
 
-        <div class="character-stat">
+  if(!clicked) return;
 
-         <span class="character-stat-name">
-          ${escapeHtml(pretty(key))}
-         </span>
+  const tabs=Array.from(list.querySelectorAll(".character-tab"));
+  const clickedIndex=tabs.indexOf(clicked);
+  let rowEnd=clicked;
 
-         <span class="character-stat-value">
-          ${escapeHtml(value)}
-         </span>
+  for(let i=clickedIndex+1;i<tabs.length;i++){
+   if(tabs[i].offsetTop!==clicked.offsetTop) break;
+   rowEnd=tabs[i];
+  }
 
-        </div>
+  rowEnd.insertAdjacentHTML(
+   "afterend",
+   createCharacterDetails(id,currentPlayerData)
+  );
 
-       `)
-       .join("")}
+  clicked.classList.add("active");
+ }
 
+ function createCharacterDetails(id,data){
+  const info=getCharacterInfo(id);
+  const player=data[`c${id}`]||{};
+
+  const name=info.name||player.name||`Character ${id}`;
+  const rarity=info.rarity||player.rarity||"";
+  const rarityImage=info.rarity_img||"";
+  const splash=info.splash_image||"";
+  const level=getCharacterLevel(player);
+  const stats=calculateCharacterStats(info,level);
+  const equipment=getCharacterEquipment(player);
+
+  const species=getValues(info.species,player.species);
+  const roles=getValues(info.role,player.role);
+  const affinities=getValues(info.affinity,player.affinity);
+
+  return `
+   <div class="character-details" data-character-id="${id}">
+    <div class="character-details-top">
+     <div class="character-splash-wrap">
+      ${
+       splash
+        ?`
+         <img
+          class="character-splash"
+          src="${escapeAttribute(splash)}"
+          alt="${escapeAttribute(name)}"
+          onerror="this.style.display='none'"
+         >
+        `
+        :`
+         <span class="item-symbol">◈</span>
+        `
+      }
      </div>
 
+     <div class="character-info">
+      <div class="character-detail-heading">
+       <h3 class="character-detail-name">${escapeHtml(name)}</h3>
+
+       ${
+        rarity
+         ?`
+          <div class="character-detail-rarity ${getRarityClass(rarity)}">
+           ${
+            rarityImage
+             ?`
+              <img
+               src="${escapeAttribute(rarityImage)}"
+               alt="${escapeAttribute(rarity)}"
+              >
+             `
+             :""
+           }
+           ${escapeHtml(rarity)}
+          </div>
+         `
+         :""
+       }
+      </div>
+
+      <div class="character-detail-level">
+       Level <strong>${level}</strong>
+      </div>
+
+      ${createCharacterMeta(species,roles,affinities)}
+      ${createCharacterStats(stats)}
+     </div>
     </div>
 
+    ${createEquipment(equipment)}
    </div>
+  `;
+ }
 
+ function createCharacterMeta(species,roles,affinities){
+  return `
+   <div class="character-meta-section">
+    ${
+     species.length
+      ?`
+       <div class="character-meta-block character-species-block">
+        <div class="character-meta-label">Species</div>
+        <div class="character-meta-values">
+         ${species.map(createSpeciesTag).join("")}
+        </div>
+       </div>
+      `
+      :""
+    }
 
-   ${createEquippedItems(
-    equipped,
-    data
-   )}
+    ${
+     roles.length
+      ?`
+       <div class="character-meta-block">
+        <div class="character-meta-label">Role</div>
+        <div class="character-meta-values character-role-values">
+         ${roles.map(value=>`
+          <span class="character-meta-value">
+           [${escapeHtml(value)}]
+          </span>
+         `).join("")}
+        </div>
+       </div>
+      `
+      :""
+    }
 
-  </div>
- `;
-}
-
-
-/* ============================================================
-   CHARACTER STATS
-   ============================================================ */
-
-function getCharacterStats(
- characterInfo,
- playerCharacter
-){
-
- const stats={};
-
- /*
-  Player-owned stats take priority over
-  static base stats from data-character.json.
- */
-
- const preferredStats=[
-  "health",
-  "defense",
-  "attack",
-  "strength",
-  "magic",
-  "speed",
-  "agility",
-  "mana",
-  "critical_rate",
-  "critical_damage"
- ];
-
- preferredStats.forEach(key=>{
-
-  if(
-   playerCharacter[key] !== undefined
-  ){
-
-   stats[key]=
-    playerCharacter[key];
-
-  }else if(
-   characterInfo[key] !== undefined
-  ){
-
-   stats[key]=
-    characterInfo[key];
-
-  }
-
- });
-
- /*
-  Include any additional numeric/string stats
-  supplied by the character database that aren't
-  in the standard list.
- */
-
- Object.entries(characterInfo).forEach(
-  ([key,value])=>{
-
-   if(
-    key==="name" ||
-    key==="Id" ||
-    key==="id" ||
-    key==="affiliation" ||
-    key==="profile_image" ||
-    key==="icon" ||
-    key==="image" ||
-    key==="full_splash" ||
-    key==="splash" ||
-    key==="splash_image" ||
-    key==="description" ||
-    key==="profile" ||
-    key==="equip"
-   )return;
-
-   if(
-    stats[key]===undefined &&
-    (
-     typeof value==="number" ||
-     typeof value==="string"
-    )
-   ){
-
-    stats[key]=value;
-   }
-
-  }
- );
-
- /*
-  Include player stats that weren't in the
-  standard list.
- */
-
- Object.entries(playerCharacter).forEach(
-  ([key,value])=>{
-
-   if(
-    key==="name" ||
-    key==="Id" ||
-    key==="id" ||
-    key==="equip"
-   )return;
-
-   if(
-    stats[key]===undefined &&
-    (
-     typeof value==="number" ||
-     typeof value==="string"
-    )
-   ){
-
-    stats[key]=value;
-   }
-
-  }
- );
-
- return stats;
-}
-
-
-/* ============================================================
-   EQUIPPED ITEMS
-   ============================================================ */
-
-function createEquippedItems(equip,data){
-
- const slots=[
-  ["weapon","Weapon"],
-  ["accessory","Accessory"],
-  ["artifact1","Artifact 1"],
-  ["artifact2","Artifact 2"],
-  ["artifact3","Artifact 3"],
-  ["artifact4","Artifact 4"]
- ];
-
- return `
-  <div class="equipped-section">
-
-   <div class="subsection-title">
-    Equipped Items
+    ${
+     affinities.length
+      ?`
+       <div class="character-meta-block">
+        <div class="character-meta-label">Affinity</div>
+        <div class="character-meta-values character-affinity-values">
+         ${affinities.map(createAffinityTag).join("")}
+        </div>
+       </div>
+      `
+      :""
+    }
    </div>
+  `;
+ }
 
-   <div class="equipped-grid">
+ function createSpeciesTag(value){
+  return `
+   <span class="species ${getSpeciesClass(value)}">
+    ${escapeHtml(value)}
+   </span>
+  `;
+ }
 
-    ${slots.map(([key,label])=>{
+ function createAffinityTag(value){
+  return `
+   <span class="character-affinity ${getElementClass(value)}">
+    [${escapeHtml(value)}]
+   </span>
+  `;
+ }
 
-     const value=equip[key];
+ function getValues(primary,secondary){
+  const source=Array.isArray(primary)
+   ?primary
+   :primary!==undefined&&primary!==null&&primary!==""
+    ?[primary]
+    :Array.isArray(secondary)
+     ?secondary
+     :secondary!==undefined&&secondary!==null&&secondary!==""
+      ?[secondary]
+      :[];
 
-     const display=
-      getEquippedItemName(
-       value,
-       data
-      );
+  return source
+   .flat(Infinity)
+   .filter(value=>value!==undefined&&value!==null&&String(value).trim())
+   .map(String)
+   .filter((value,index,array)=>array.indexOf(value)===index);
+ }
 
-     return `
-      <div class="equipped-item">
+ function getRarityClass(value){
+  const rarity=String(value).toLowerCase().replace(/[^a-z]/g,"");
 
-       <span class="equipped-slot">
-        ${escapeHtml(label)}
+  return ["c","un","r","sr","ssr","ur","lr"].includes(rarity)
+   ?rarity
+   :"";
+ }
+
+ function getElementClass(value){
+  const element=String(value)
+   .toLowerCase()
+   .replace(/[\s_-]+/g,"");
+
+  const map={
+   light:"light",
+   dark:"dark",
+   fire:"fire",
+   water:"water",
+   wind:"wind",
+   earth:"earth",
+   lightning:"lightning",
+   plant:"plant"
+  };
+
+  return map[element]||"";
+ }
+
+ function getSpeciesClass(value){
+  const species=String(value)
+   .toLowerCase()
+   .replace(/[\s_-]+/g,"");
+
+  const map={
+   none:"species-none",
+   angelor:"species-angelor",
+   metalor:"species-metalor",
+   naiad:"species-naiad",
+   waterspirit:"species-waterspirit",
+   icelorian:"species-icelorian",
+   gostlynger:"species-gostlynger",
+   herbovir:"species-herbovir",
+   magnivirigentis:"species-magnivirigentis",
+   elf:"species-elf",
+   larvan:"species-larvan",
+   felior:"species-felior",
+   vulpivor:"species-vulpivor"
+  };
+
+  return map[species]||"species-none";
+ }
+
+ function getCharacterLevel(player){
+  for(const value of [
+   player.level,
+   player.lv,
+   player.character_level,
+   player.char_level
+  ]){
+   const level=Number(value);
+
+   if(Number.isFinite(level)&&level>0){
+    return Math.floor(level);
+   }
+  }
+
+  return 1;
+ }
+
+ function calculateCharacterStats(info,level){
+  const baseStats=info.base_stats||{};
+  const formula=info.stat_change_by_level||{};
+  const mainStats=Array.isArray(formula.main_stat)
+   ?formula.main_stat
+   :[];
+
+  const uniqueStat=typeof formula.unique_stat==="string"
+   ?formula.unique_stat
+   :null;
+
+  const mainWeight=Number(formula.main_stat_weight)||0;
+  const uniqueWeight=Number(formula.unique_stat_weight)||0;
+
+  return Object.entries(baseStats)
+   .reduce((result,[key,baseValue])=>{
+    const base=Number(baseValue);
+
+    if(!Number.isFinite(base)) return result;
+
+    let current=base;
+
+    if(level>1){
+     const weight=mainStats.includes(key)
+      ?mainWeight
+      :uniqueStat===key
+       ?uniqueWeight
+       :0;
+
+     current=base+base*weight*(level-1);
+    }
+
+    result.push({key,base,current});
+    return result;
+   },[]);
+ }
+
+ function createCharacterStats(stats){
+  if(!stats.length){
+   return `
+    <div class="empty">No base stats defined.</div>
+   `;
+  }
+
+  return `
+   <div class="character-stats">
+    ${stats.map(stat=>`
+     <div class="character-stat">
+      <span class="character-stat-name">
+       ${escapeHtml(pretty(stat.key))}
+      </span>
+
+      <span class="character-stat-values">
+       <span class="character-stat-current">
+        ${formatStat(stat.current)}
        </span>
 
-       <span class="equipped-name">
-        ${escapeHtml(display)}
+       <span class="character-stat-base">
+        (${formatStat(stat.base)})
        </span>
-
-      </div>
-     `;
-
-    }).join("")}
-
+      </span>
+     </div>
+    `).join("")}
    </div>
-
-  </div>
- `;
-}
-
-
-/* ============================================================
-   INVENTORY ITEM LOOKUP FOR EQUIPPED ITEMS
-   ============================================================ */
-
-function getEquippedItemName(value,data){
-
- if(
-  value===undefined ||
-  value===null ||
-  value===""
- ){
-
-  return "None";
+  `;
  }
 
- /*
-  If the database eventually stores an item ID,
-  try to resolve that ID from the player's inventory.
- */
+ function getCharacterEquipment(player){
+  const source=
+   player.equip||
+   player.equipment||
+   player.equipped||
+   {};
 
- const id=
-  typeof value==="object"
-   ? value.id
-   : Number(value);
-
- if(
-  Number.isFinite(id)
- ){
-
-  for(
-   const inventoryKey of Object.keys(
-    inventoryNames
-   )
-  ){
-
-   const items=
-    Array.isArray(data[inventoryKey])
-     ? data[inventoryKey]
-     : [];
-
-   const found=
-    items.find(
-     item=>
-      item &&
-      Number(item.id)===id
-    );
-
-   if(found){
-    return found.name || "Item "+id;
-   }
-  }
-
-  return "Item "+id;
+  return {
+   weapon:source.weapon||source.equipped_weapon||null,
+   accessory:source.accessory||source.equipped_accessory||null,
+   artifacts:getArtifacts(source)
+  };
  }
 
- /*
-  If the database stores the actual item name,
-  display it directly.
- */
-
- if(typeof value==="object"){
-  return value.name || "Equipped Item";
+ function getArtifacts(source){
+  return Array.isArray(source.artifacts)
+   ?source.artifacts.slice(0,4)
+   :[
+    source.artifact1||null,
+    source.artifact2||null,
+    source.artifact3||null,
+    source.artifact4||null
+   ];
  }
 
- return String(value);
-}
+ function createEquipment(equipment){
+  const primarySlots=[
+   ["Weapon",equipment.weapon],
+   ["Accessory",equipment.accessory]
+  ];
 
+  const artifactSlots=equipment.artifacts.map(
+   (value,index)=>[`Artifact ${index+1}`,value]
+  );
 
-/* ============================================================
-   ACHIEVEMENTS
-   ============================================================ */
+  return `
+   <div class="equipped-section">
+    <div class="subsection-title">Equipped</div>
 
-function createAchievements(data){
+    <div class="equipped-primary-row">
+     ${primarySlots.map(([label,value])=>
+      createEquipmentItem(label,value)
+     ).join("")}
+    </div>
 
- const achievements=
-  data.achievements||{};
+    <div class="equipped-artifact-row">
+     ${artifactSlots.map(([label,value])=>
+      createEquipmentItem(label,value)
+     ).join("")}
+    </div>
+   </div>
+  `;
+ }
 
- const entries=
-  Object.entries(achievements);
+ function createEquipmentItem(label,value){
+  const equipped=getItemName(value);
+  const empty=equipped==="None Equipped";
 
- if(!entries.length)return"";
-
- const unlocked=
-  entries.filter(
-   ([,value])=>value
-  ).length;
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">✦</span>
-    Achievements
-
-    <span class="badge">
-     ${unlocked}/${entries.length}
+  return `
+   <div class="equipped-item">
+    <span class="equipped-slot">${escapeHtml(label)}</span>
+    <span class="equipped-name ${empty?"equipped-none":""}">
+     ${escapeHtml(equipped)}
     </span>
+   </div>
+  `;
+ }
 
-   </h2>
+ function getItemName(value){
+  if(value===undefined||value===null||value===""||value===false||value===0){
+   return "None Equipped";
+  }
 
-   <div class="grid">
+  if(typeof value==="object"){
+   return String(
+    value.name||
+    value.item_name||
+    value.id||
+    "Equipped Item"
+   );
+  }
 
-    ${entries.map(
-     ([key,value])=>`
+  return String(value);
+ }
 
-      <div class="
-       achievement
-       ${value?"":"locked"}
-      ">
+ function createAchievements(data){
+  const entries=Object.entries(data.achievements||{});
+  if(!entries.length) return "";
 
+  const unlocked=entries.filter(([,value])=>value).length;
+
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">✦</span>
+     Achievements
+     <span class="badge">${unlocked}/${entries.length}</span>
+    </h2>
+
+    <div class="grid">
+     ${entries.map(([key,value])=>`
+      <div class="achievement ${value?"":"locked"}">
        <div class="achievement-symbol">
         ${value?"✦":"◇"}
        </div>
 
        <div>
-
-        <div class="item-name">
-         ${escapeHtml(
-          pretty(key)
-         )}
-        </div>
-
-        <div class="item-sub">
-         ${value?"Unlocked":"Locked"}
-        </div>
-
+        <div class="item-name">${escapeHtml(pretty(key))}</div>
+        <div class="item-sub">${value?"Unlocked":"Locked"}</div>
        </div>
-
       </div>
+     `).join("")}
+    </div>
+   </section>
+  `;
+ }
 
-     `
-    ).join("")}
+ function createSkillTree(data){
+  const tree=Array.isArray(data.mc_skill_tree_unlock)
+   ?data.mc_skill_tree_unlock
+   :[];
 
-   </div>
+  if(!tree.length) return "";
 
-  </section>
- `;
-}
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">◇</span>
+     Main Character Skill Tree
+    </h2>
 
+    <div class="details">
+     ${detail("Nodes / Entries",countNested(tree))}
+     ${detail("Unlocked Levels",countNumbers(tree))}
+    </div>
 
-/* ============================================================
-   SKILL TREE
-   ============================================================ */
-
-function createSkillTree(data){
-
- const tree=
-  Array.isArray(
-   data.mc_skill_tree_unlock
-  )
-   ? data.mc_skill_tree_unlock
-   : [];
-
- if(!tree.length)return"";
-
- const unlocked=
-  countNumbers(tree);
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">◇</span>
-    Main Character Skill Tree
-   </h2>
-
-   <div class="details">
-
-    ${detail(
-     "Nodes / Entries",
-     countNested(tree)
-    )}
-
-    ${detail(
-     "Unlocked Levels",
-     unlocked
-    )}
-
-   </div>
-
-   <div
-    class="grid"
-    style="margin-top:10px"
-   >
-
-    ${tree.map(
-     (group,i)=>`
-
+    <div class="grid" style="margin-top:10px">
+     ${tree.map((group,i)=>`
       <div class="item">
-
-       <div class="item-symbol">
-        ◇
-       </div>
-
-       <div class="item-name">
-        Ability Branch ${i+1}
-       </div>
-
+       <div class="item-symbol">◇</div>
+       <div class="item-name">Ability Branch ${i+1}</div>
        <div class="item-sub">
-        ${countNumbers(group)}
-        unlocked levels
+        ${countNumbers(group)} unlocked levels
        </div>
-
       </div>
-
-     `
-    ).join("")}
-
-   </div>
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   CHARACTER SYSTEMS
-   ============================================================ */
-
-function createCharacterSystems(data){
-
- const equipped=
-  Array.isArray(data.c_equipped_skills)
-   ? data.c_equipped_skills
-   : [];
-
- const skill1=
-  Array.isArray(data.c_skill1_owned)
-   ? data.c_skill1_owned
-   : [];
-
- const skill2=
-  Array.isArray(data.c_skill2_owned)
-   ? data.c_skill2_owned
-   : [];
-
- const skill3=
-  Array.isArray(data.c_skill3_owned)
-   ? data.c_skill3_owned
-   : [];
-
- const skill4=
-  Array.isArray(data.c_skill4_owned)
-   ? data.c_skill4_owned
-   : [];
-
- const costumes=
-  Array.isArray(data.c_costume_owned)
-   ? data.c_costume_owned
-   : [];
-
- const equippedCostumes=
-  Array.isArray(data.c_costume_equipped)
-   ? data.c_costume_equipped
-   : [];
-
- const values=[
-  countNested(equipped),
-  countNumbers(skill1),
-  countNumbers(skill2),
-  countNumbers(skill3),
-  countNumbers(skill4),
-  countNumbers(costumes)
- ];
-
- if(!values.some(Boolean)){
-  return "";
+     `).join("")}
+    </div>
+   </section>
+  `;
  }
 
- return `
-  <section class="section">
+ function createCharacterSystems(data){
+  const arrays={
+   equipped:data.c_equipped_skills,
+   skill1:data.c_skill1_owned,
+   skill2:data.c_skill2_owned,
+   skill3:data.c_skill3_owned,
+   skill4:data.c_skill4_owned,
+   costumes:data.c_costume_owned
+  };
 
-   <h2 class="section-title">
-    <span class="section-symbol">✦</span>
-    Character Progression
-   </h2>
+  Object.keys(arrays).forEach(key=>{
+   arrays[key]=Array.isArray(arrays[key])?arrays[key]:[];
+  });
 
+  const equippedCostumes=Array.isArray(data.c_costume_equipped)
+   ?data.c_costume_equipped
+   :[];
+
+  const counts={
+   equipped:countNested(arrays.equipped),
+   skill1:countNumbers(arrays.skill1),
+   skill2:countNumbers(arrays.skill2),
+   skill3:countNumbers(arrays.skill3),
+   skill4:countNumbers(arrays.skill4),
+   costumes:countNumbers(arrays.costumes)
+  };
+
+  if(!Object.values(counts).some(Boolean)) return "";
+
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">✦</span>
+     Character Progression
+    </h2>
+
+    <div class="details">
+     ${detail("Equipped Skills",counts.equipped)}
+     ${detail("Basic Skills Owned",counts.skill1)}
+     ${detail("Special Skills Owned",counts.skill2)}
+     ${detail("Ultimate Skills Owned",counts.skill3)}
+     ${detail("Technical Skills Owned",counts.skill4)}
+     ${detail("Costumes Owned",counts.costumes)}
+     ${detail(
+      "Equipped Costumes",
+      equippedCostumes.filter(value=>value!=null).length
+     )}
+    </div>
+   </section>
+  `;
+ }
+
+ function createFlags(data){
+  const entries=Object.entries(data.flags||{});
+  if(!entries.length) return "";
+
+  return `
+   <section class="section">
+    <h2 class="section-title">
+     <span class="section-symbol">◇</span>
+     Milestones & Flags
+    </h2>
+
+    <div class="details">
+     ${entries.map(([key,value])=>
+      detail(pretty(key),formatValue(value))
+     ).join("")}
+    </div>
+   </section>
+  `;
+ }
+
+ function progress(label,value,max){
+  value=Number(value)||0;
+  max=Math.max(Number(max)||1,1);
+
+  const pct=Math.min(100,Math.max(0,value/max*100));
+
+  return `
+   <div class="progress-container">
+    <div class="progress-header">
+     <span class="progress-label">${escapeHtml(label)}</span>
+     <span class="progress-value">${num(value)} / ${num(max)}</span>
+    </div>
+
+    <div class="progress">
+     <div class="progress-bar" style="width:${pct}%"></div>
+    </div>
+   </div>
+  `;
+ }
+
+ function detail(key,value){
+  return `
+   <div class="detail">
+    <span class="detail-key">${escapeHtml(key)}</span>
+    <span class="detail-value">${escapeHtml(value)}</span>
+   </div>
+  `;
+ }
+
+ function detailGrid(obj){
+  return `
    <div class="details">
-
-    ${detail(
-     "Equipped Skills",
-     countNested(equipped)
-    )}
-
-    ${detail(
-     "Basic Skills Owned",
-     countNumbers(skill1)
-    )}
-
-    ${detail(
-     "Special Skills Owned",
-     countNumbers(skill2)
-    )}
-
-    ${detail(
-     "Ultimate Skills Owned",
-     countNumbers(skill3)
-    )}
-
-    ${detail(
-     "Technical Skills Owned",
-     countNumbers(skill4)
-    )}
-
-    ${detail(
-     "Costumes Owned",
-     countNumbers(costumes)
-    )}
-
-    ${detail(
-     "Equipped Costumes",
-     equippedCostumes.filter(
-      v=>v!=null
-     ).length
-    )}
-
-   </div>
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   FLAGS
-   ============================================================ */
-
-function createFlags(data){
-
- const flags=data.flags||{};
-
- const entries=
-  Object.entries(flags);
-
- if(!entries.length)return"";
-
- return `
-  <section class="section">
-
-   <h2 class="section-title">
-    <span class="section-symbol">◇</span>
-    Milestones & Flags
-   </h2>
-
-   <div class="details">
-
-    ${entries.map(
-     ([key,value])=>
-      detail(
-       pretty(key),
-       formatValue(value)
-      )
+    ${Object.entries(obj).map(([key,value])=>
+     detail(key,value)
     ).join("")}
-
    </div>
-
-  </section>
- `;
-}
-
-
-/* ============================================================
-   CHARACTER DATABASE LOOKUP
-   ============================================================ */
-
-function getCharacterInfo(id){
-
- const key="c"+id;
-
- /*
-  Supports:
-
-  {
-   "c1": {...},
-   "c2": {...}
-  }
-
-  which is the recommended format.
- */
-
- if(
-  characterDatabase &&
-  characterDatabase[key]
- ){
-
-  return characterDatabase[key];
+  `;
  }
 
- /*
-  Also supports:
-
-  {
-   "characters":{
-    "c1":{...}
-   }
-  }
- */
-
- if(
-  characterDatabase &&
-  characterDatabase.characters &&
-  characterDatabase.characters[key]
- ){
-
-  return characterDatabase.characters[key];
+ function xpForRank(level){
+  return Math.max(100,level*100);
  }
 
- /*
-  Also supports an array if the JSON was
-  structured as:
-
-  {
-   "characters":[
-    {...},
-    {...}
-   ]
+ function countNumbers(value){
+  if(Array.isArray(value)){
+   return value.reduce(
+    (total,item)=>total+countNumbers(item),
+    0
+   );
   }
- */
 
- if(
-  characterDatabase &&
-  Array.isArray(
-   characterDatabase.characters
-  )
- ){
-
-  return characterDatabase.characters[id-1]||{};
+  return typeof value==="number"&&value>0?value:0;
  }
 
- return {};
-}
-
-
-/* ============================================================
-   GENERIC HELPERS
-   ============================================================ */
-
-function progress(label,value,max){
-
- value=Number(value)||0;
-
- max=Math.max(
-  Number(max)||1,
-  1
- );
-
- const pct=
-  Math.min(
-   100,
-   Math.max(
-    0,
-    value/max*100
-   )
-  );
-
- return `
-  <div class="progress-container">
-
-   <div class="progress-header">
-
-    <span class="progress-label">
-     ${escapeHtml(label)}
-    </span>
-
-    <span class="progress-value">
-     ${num(value)} / ${num(max)}
-    </span>
-
-   </div>
-
-   <div class="progress">
-
-    <div
-     class="progress-bar"
-     style="width:${pct}%"
-    ></div>
-
-   </div>
-
-  </div>
- `;
-}
-
-
-function detail(key,value){
-
- return `
-  <div class="detail">
-
-   <span class="detail-key">
-    ${escapeHtml(key)}
-   </span>
-
-   <span class="detail-value">
-    ${escapeHtml(value)}
-   </span>
-
-  </div>
- `;
-}
-
-
-function detailGrid(obj){
-
- return `
-  <div class="details">
-
-   ${Object.entries(obj)
-    .map(
-     ([key,value])=>
-      detail(key,value)
-    )
-    .join("")}
-
-  </div>
- `;
-}
-
-
-function xpForRank(level){
-
- return Math.max(
-  100,
-  level*100
- );
-}
-
-
-function countNumbers(value){
-
- if(Array.isArray(value)){
+ function countNested(value){
+  if(!Array.isArray(value)) return 0;
 
   return value.reduce(
    (total,item)=>
-    total+
-    countNumbers(item),
+    total+(Array.isArray(item)?countNested(item):1),
    0
   );
  }
 
- return(
-  typeof value==="number" &&
-  value>0
- )
-  ? value
-  : 0;
-}
-
-
-function countNested(value){
-
- if(!Array.isArray(value)){
-  return 0;
+ function pretty(value){
+  return String(value)
+   .replaceAll("_"," ")
+   .replace(/\b\w/g,char=>char.toUpperCase());
  }
 
- return value.reduce(
-  (total,item)=>
-   total+
-   (
-    Array.isArray(item)
-     ? countNested(item)
-     : 1
-   ),
-  0
- );
-}
-
-
-function pretty(value){
-
- return String(value)
-  .replaceAll("_"," ")
-  .replace(/\b\w/g,c=>
-   c.toUpperCase()
-  );
-}
-
-
-function formatValue(value){
-
- if(value===null){
-  return "None";
+ function formatValue(value){
+  if(value===null) return "None";
+  if(typeof value==="object") return JSON.stringify(value);
+  return String(value);
  }
 
- if(typeof value==="object"){
-  return JSON.stringify(value);
+ function formatStat(value){
+  const number=Number(value);
+
+  if(!Number.isFinite(number)) return String(value);
+  if(Number.isInteger(number)) return number.toLocaleString();
+
+  return number.toLocaleString(undefined,{
+   maximumFractionDigits:2
+  });
  }
 
- return String(value);
-}
+ function num(value,fallback=0){
+  const number=Number(value);
+  return Number.isFinite(number)?number:fallback;
+ }
 
+ function escapeHtml(value){
+  return String(value)
+   .replaceAll("&","&amp;")
+   .replaceAll("<","&lt;")
+   .replaceAll(">","&gt;")
+   .replaceAll('"',"&quot;")
+   .replaceAll("'","&#039;");
+ }
 
-function num(value,fallback=0){
+ const escapeAttribute=escapeHtml;
 
- const n=Number(value);
-
- return Number.isFinite(n)
-  ? n
-  : fallback;
-}
-
-
-function showError(title,message){
-
- document.getElementById(
-  "app"
- ).innerHTML=`
-
-  <div class="page">
-
-   <div class="error">
-
-    <h1>
-     ${escapeHtml(title)}
-    </h1>
-
-    <p>
-     ${escapeHtml(message)}
-    </p>
-
+ function showError(title,message){
+  document.getElementById("app").innerHTML=`
+   <div class="page">
+    <div class="error">
+     <h1>${escapeHtml(title)}</h1>
+     <p>${escapeHtml(message)}</p>
+    </div>
    </div>
-
-  </div>
-
- `;
-}
-
-
-function escapeHtml(value){
-
- return String(value)
-  .replaceAll("&","&amp;")
-  .replaceAll("<","&lt;")
-  .replaceAll(">","&gt;")
-  .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;");
-}
-
-
-function escapeAttribute(value){
-
- return escapeHtml(value);
-}
-
-
-/* ============================================================
-   STARTUP
-   ============================================================ */
-
-async function initialize(){
-
- /*
-  Load both resources before rendering the profile.
-  This is important because c1/c4 ownership comes from
-  the player API while names/images/stats come from the
-  separate character database.
- */
-
- await loadCharacterDatabase();
-
- /*
-  Keep the actual player object globally available to the
-  character dropdown functions.
- */
- try{
-
-  if(
-   !username ||
-   username==="view.html"
-  ){
-   return showError(
-    "No Player",
-    "No username was provided."
-   );
-  }
-
-  const response=await fetch(
-   "/api/user/"+encodeURIComponent(username),
-   {cache:"no-cache"}
-  );
-
-  if(!response.ok){
-   return showError(
-    "Player Not Found",
-    "This profile does not exist."
-   );
-  }
-
-  const result=await response.json();
-
-  window.currentPlayerData=
-   result &&
-   result.data &&
-   typeof result.data==="object"
-    ? result.data
-    : {};
-
-  renderProfile(
-   result.username || username,
-   window.currentPlayerData
-  );
-
- }catch(error){
-
-  console.error(error);
-
-  showError(
-   "Connection Error",
-   "Could not load this profile."
-  );
+  `;
  }
-}
 
-initialize();
-</script>
+ async function initialize(){
+  await Promise.all([
+   loadCharacterDatabase(),
+   loadAccountStyleDatabase()
+  ]);
 
+  await loadProfile();
+ }
+
+ initialize();
+ </script>
 </body>
 </html>

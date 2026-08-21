@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MLG - Loading Character</title>
+  
+  <link rel="icon" href="/images/website/favicon.png" type="image/png">
+
+  <link href="/css/bootstrap-min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/news.css">
+  <link rel="stylesheet" href="/css/mlg.css">
+  <script src="/js/bootstrap-bundle-min.js"></script>
+
+<style>
+body {
+    background-color: #121212;
+}
+
+/* Splash Art */
+.splash-art {
+    width: 100%;
+    height: 600px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 12px;
+    filter: drop-shadow(0 0 18px rgba(255, 120, 120, 0.35));
+    display: block;
+}
+
+/* Role Icon */
+.role-icon {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* Skill Sidebar */
+.skill-sidebar {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 10px;
+}
+
+.skill-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 2px solid #666;
+    background-color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.skill-btn img {
+    width: 63px;
+    height: 63px;
+}
+
+.skill-btn.active {
+    border-color: #a20b0b;
+}
+
+.skill-divider {
+    width: 2px;
+    background-color: #444;
+    margin: 0 6px;
+}
+
+.skill-panel {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 16px;
+    min-height: 140px;
+}
+    
+.skill-content-override {
+  background-color: #0f0f0f;
+  color: #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+#skillPanel {
+  display: block;
+  width: 100%;
+}
+
+/* Listable Items */
+.character-list-item {
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 6px;
+}
+</style>
+
+
+<style>
+/* Character Styles Section */
+.character-style-row {
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.style-card {
+  flex: 0 0 auto;
+  width: 200px;
+  color:#e6e6e6;
+  background-color: #111;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.75rem;
+}
+
+.pixel-portrait {
+  width: 200px;    
+  height: 200px;  
+  margin: 0.75rem auto 0;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  object-fit: contain;
+}
+</style>
+
+
+</head>
+
+
+
+<body>
+
+<!-- Navbar/Header -->
+<div id="subheader-placeholder"></div>
+<h1 id="page-heading" style="color:rgb(19, 19, 19);padding:7px;">Mystical Legends Game - Loading Character</h1>
+
+
+<div class="container py-4">
+
+<!-- SECTION 1: PROFILE -->
+<section class="row g-4 align-items-center">
+
+  <!-- Splash Art -->
+  <div class="col-12 col-md-5">
+    <img id="character-splash" src="" class="splash-art" alt="Character Splash">
+  </div>
+
+  <!-- Basic Info -->
+  <div class="col-12 col-md-7" style="padding:30px">
+
+    <!-- Name -->
+    <h1 id="character-name" class="display-6">Loading Character</h1>
+
+    <!-- Rarity + Role -->
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <b id="character-rarity" class="ssr" style="font-size:1.5rem;">SSR</b>
+      <img id="character-role" src="" class="role-icon" alt="Character Role">
+    </div>
+
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="padding-right:8px;"><span style="opacity:0.8">Species</span>:</span>
+        <span id="character-species"></span>
+    </div>
+
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Specialty</span>:
+        <span id="character-specialty"></span>
+    </div>
+
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Affiliation</span>:
+        <span id="character-affiliation"></span>
+    </div>
+
+    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Attribute</span>:
+        <span id="character-attributes"></span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<h3>Skills</h3>
+<hr class="my-4">
+
+<!-- SECTION 2: SKILLS -->
+
+<section>
+<!-- Skill Icon Bar -->
+<div id="skillSidebar" class="skill-sidebar mb-3"></div>
+
+<!-- Skill Information Panel -->
+<div id="skillPanel" class="skill-panel">
+  <!-- External skill HTML loads here -->
+</div>
+
+</section>
+
+</div>
+
+
+<!-- Character Styles -->
+<section id="characterStylesSection" class="container my-4" style="display:none;">
+  <h5 class="mb-3">Character Styles</h5>
+  <div id="characterStyles" class="d-flex flex-nowrap gap-3 character-style-row"></div>
+</section>
+
+
+
+<script>
+let characterData = null;
+let skills = [];
+
+const FONT_SCALE = 1.3;
+const TRANSITION_DURATION = 300; // ms
+const HEIGHT_TRANSITION_DURATION = 300; // ms
+
+
+function getCharacterId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("char") || "c1";
+}
+
+
+function speciesClassName(species) {
+  return "species-" + species
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+}
+
+
+function createListItems(items, type = "normal") {
+  if (!Array.isArray(items)) {
+    return "";
+  }
+
+  return items.map(item => {
+
+    if (type === "species") {
+      return `<div class="species ${speciesClassName(item)} character-list-item">${item}</div>`;
+    }
+
+    return `<span class="character-list-item">${item}</span>`;
+
+  }).join("");
+}
+
+
+function getSkillCategory(skill) {
+
+  if (skill === "Dupes") {
+    return "Dupes";
+  }
+
+  if (skill.startsWith("B")) {
+    return "Basic";
+  }
+
+  if (skill.startsWith("S")) {
+    return "Special";
+  }
+
+  if (skill.startsWith("U")) {
+    return "Ultimate";
+  }
+
+  if (skill.startsWith("T")) {
+    return "Technical";
+  }
+
+  return "Other";
+}
+
+
+function getSkillIcon(skill, skillsPath) {
+
+  if (skill === "Dupes") {
+    return "/images/mlg-assets/Stars/dupe.svg";
+  }
+
+  return `${skillsPath}/skill_b/${skill.toLowerCase()}.svg`;
+}
+
+
+function getSkillFile(skill, skillsPath) {
+
+  if (skill === "Dupes") {
+    return `${skillsPath}/Dupes.html?id=15`;
+  }
+
+  return `${skillsPath}/${skill}.html`;
+}
+
+
+function createSkillButtons(character) {
+
+  const sidebar = document.getElementById("skillSidebar");
+
+  sidebar.innerHTML = "";
+
+  skills = character.skills || [];
+
+  if (!skills.length) {
+    sidebar.style.display = "none";
+    return;
+  }
+
+  sidebar.style.display = "flex";
+
+  let previousCategory = null;
+
+  skills.forEach((skill, index) => {
+
+    const category = getSkillCategory(skill);
+
+    if (previousCategory !== null && category !== previousCategory) {
+
+      const divider = document.createElement("div");
+      divider.className = "skill-divider";
+
+      sidebar.appendChild(divider);
+    }
+
+    const button = document.createElement("div");
+    button.className = "skill-btn";
+    
+    if (index === 0) {
+      button.classList.add("active");
+    }
+
+    button.onclick = () => showSkill(index);
+
+    const img = document.createElement("img");
+    img.src = getSkillIcon(skill, character.skills_path);
+    img.alt = skill;
+
+    button.appendChild(img);
+    sidebar.appendChild(button);
+
+    previousCategory = category;
+  });
+}
+
+
+function isVideoFile(path) {
+
+  return /\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
+}
+
+
+function createCostumePreview(costume) {
+
+  if (isVideoFile(costume.preview_path)) {
+
+    const video = document.createElement("video");
+
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.src = costume.preview_path;
+    video.className = "pixel-portrait";
+
+    return video;
+  }
+
+  const img = document.createElement("img");
+
+  img.src = costume.preview_path;
+  img.className = "card-img-top pixel-portrait";
+  img.alt = costume.name;
+
+  return img;
+}
+
+
+function loadCharacterStyles(character) {
+
+  const section = document.getElementById("characterStylesSection");
+  const stylesContainer = document.getElementById("characterStyles");
+
+  stylesContainer.innerHTML = "";
+
+  const costumes = Object.keys(character)
+    .filter(key => /^costume_\d+$/.test(key))
+    .sort((a, b) => {
+      return Number(a.split("_")[1]) - Number(b.split("_")[1]);
+    })
+    .map(key => character[key])
+    .filter(costume =>
+      costume &&
+      costume.preview_path
+    );
+
+  if (!costumes.length) {
+    section.style.display = "none";
+    return;
+  }
+
+  section.style.display = "block";
+
+  costumes.forEach(costume => {
+
+    const card = document.createElement("div");
+    card.className = "card text-center style-card";
+
+    const preview = createCostumePreview(costume);
+
+    card.appendChild(preview);
+
+    const body = document.createElement("div");
+    body.className = "card-body p-2";
+    body.textContent = costume.name || `Costume ${costume.id}`;
+
+    card.appendChild(body);
+
+    stylesContainer.appendChild(card);
+  });
+}
+
+
+function setupCharacter(characterId, character) {
+
+  characterData = character;
+
+  document.title = `MLG - ${character.name}`;
+
+  document.getElementById("page-heading").textContent =
+    `Mystical Legends Game - ${character.name}`;
+
+  const splash = document.getElementById("character-splash");
+
+  splash.src = character.splash_image;
+
+  splash.alt = `${character.name} Splash`;
+
+  if (character.splash_color) {
+    splash.style.filter = character.splash_color;
+  }
+
+  const root = document.documentElement;
+
+  if (character.button_color) {
+    root.style.setProperty(
+      "--character-button-color",
+      character.button_color
+    );
+  }
+
+  document.getElementById("character-name").textContent =
+    character.name;
+
+  document.getElementById("character-rarity").textContent =
+    character.rarity;
+
+  document.getElementById("character-rarity").className =
+    character.rarity.toLowerCase();
+
+  document.getElementById("character-role").src =
+    character.rarity_img;
+
+  document.getElementById("character-role").alt =
+    `${character.rarity} Role`;
+
+  document.getElementById("character-species").innerHTML =
+    createListItems(character.species, "species");
+
+  document.getElementById("character-specialty").innerHTML =
+    createListItems(character.specialty);
+
+  document.getElementById("character-affiliation").innerHTML =
+    createListItems(character.affiliation);
+
+  document.getElementById("character-attributes").innerHTML =
+    createListItems(character.attributes);
+
+  createSkillButtons(character);
+
+  loadCharacterStyles(character);
+
+  if (skills.length) {
+    showSkill(0);
+  }
+}
+
+
+async function loadCharacter() {
+
+  const characterId = getCharacterId();
+
+  try {
+
+    const response = await fetch(
+      "/images/mlg-assets/data-character.json"
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to load character data: ${response.status}`
+      );
+    }
+
+    const data = await response.json();
+
+    const character = data[characterId];
+
+    if (!character) {
+      throw new Error(
+        `Character "${characterId}" was not found in data-character.json`
+      );
+    }
+
+    setupCharacter(characterId, character);
+
+  } catch (error) {
+
+    console.error("Character loading error:", error);
+
+    document.getElementById("page-heading").textContent =
+      "Mystical Legends Game - Character Not Found";
+
+    document.getElementById("character-name").textContent =
+      "Character Not Found";
+
+    document.getElementById("skillSidebar").style.display = "none";
+
+    document.getElementById("characterStylesSection").style.display =
+      "none";
+  }
+}
+
+
+function showSkill(index) {
+
+  if (!skills[index] || !characterData) {
+    return;
+  }
+
+  const panel = document.getElementById("skillPanel");
+  const oldIframe = panel.querySelector("iframe");
+
+  // Lock panel height during fade
+  if (oldIframe) {
+    panel.style.height = oldIframe.offsetHeight + "px";
+    oldIframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
+    oldIframe.style.opacity = 0;
+  }
+
+  // Create new iframe
+  const iframe = document.createElement("iframe");
+
+  iframe.src = getSkillFile(
+    skills[index],
+    characterData.skills_path
+  );
+
+  iframe.style.width = "100%";
+  iframe.style.border = "0";
+  iframe.style.display = "block";
+  iframe.style.backgroundColor = "#0f0f0f";
+  iframe.style.color = "#e6e6e6";
+  iframe.style.opacity = 0;
+  iframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
+
+  iframe.onload = () => {
+
+    try {
+
+      const doc =
+        iframe.contentDocument ||
+        iframe.contentWindow.document;
+
+      // Inject dark theme and font scaling
+      const style = doc.createElement("style");
+
+      style.textContent = `
+        body {
+          background-color: #0f0f0f !important;
+          color: #e6e6e6 !important;
+          font-size: ${FONT_SCALE * 90}% !important;
+        }
+
+        body * {
+          font-size: inherit !important;
+          background-color: inherit !important;
+        }
+      `;
+
+      doc.head.appendChild(style);
+
+
+      // Resize iframe to fit content
+      function resizeIframe() {
+
+        iframe.style.height =
+          doc.body.scrollHeight + 20 + "px";
+
+      }
+
+      resizeIframe();
+
+
+      // Observe dynamic changes
+      const observer =
+        new MutationObserver(resizeIframe);
+
+      observer.observe(
+        doc.body,
+        {
+          childList: true,
+          subtree: true,
+          characterData: true
+        }
+      );
+
+
+      // Fade in new iframe
+      requestAnimationFrame(() => {
+        iframe.style.opacity = 1;
+      });
+
+
+      // Animate panel height to match new content
+      const newHeight =
+        doc.body.scrollHeight + 20;
+
+      panel.style.transition =
+        `height ${HEIGHT_TRANSITION_DURATION}ms`;
+
+      panel.style.height =
+        newHeight + "px";
+
+
+      // Remove old iframe after fade
+      if (oldIframe) {
+
+        setTimeout(() => {
+          oldIframe.remove();
+        }, TRANSITION_DURATION);
+
+      }
+
+
+      // Reset panel height after transition to auto
+      setTimeout(() => {
+
+        panel.style.height = "auto";
+
+      }, Math.max(
+        TRANSITION_DURATION,
+        HEIGHT_TRANSITION_DURATION
+      ));
+
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+  };
+
+
+  // Append new iframe
+  panel.appendChild(iframe);
+
+
+  // Highlight active button
+  document
+    .querySelectorAll(".skill-btn")
+    .forEach(b => b.classList.remove("active"));
+
+  const buttons =
+    document.querySelectorAll(".skill-btn");
+
+  if (buttons[index]) {
+    buttons[index].classList.add("active");
+  }
+}
+
+
+loadCharacter();
+</script>
+
+
+<style>
+:root {
+  --character-button-color: #a20b0b;
+}
+
+.skill-btn.active {
+  border-color: var(--character-button-color);
+}
+
+.skill-content-override {
+  background-color: #0f0f0f;
+  color: #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+.skill-content-override iframe {
+  display: block;
+}
+</style>
+
+
+<script src="/js/include.js"></script>
+
+<!-- Footer Section -->
+<div id="subfooter-placeholder"></div>
+
+</body>
+</html>
+
+

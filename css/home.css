@@ -618,89 +618,19 @@ a:hover {
   font-size: 0.6rem;
 }
 
-
-/* =========================================================
-   SPECIES TAGS
-   ========================================================= */
-
-.species {
+.slideshow-toggle {
   display: inline-block;
-  margin-bottom: 8px;
-  padding: 4px 9px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 0.78rem;
-  font-weight: bold;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  margin-top: 12px;
+  color: var(--ml-gold-dark);
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.species-none {
-  color: #fff;
-  background: #3a3131;
+.slideshow-toggle:hover,
+.slideshow-toggle:focus {
+  color: var(--ml-gold);
+  text-decoration: none;
 }
-
-.species-angelor {
-  color: #fff;
-  background: #a95f88;
-}
-
-.species-metalor {
-  color: #fff;
-  background: #5e5a5a;
-}
-
-.species-naiad {
-  color: #fff;
-  background: #4f8878;
-}
-
-.species-waterspirit {
-  color: #fff;
-  background: #60769d;
-}
-
-.species-icelorian {
-  color: #fff;
-  background: #0f477a;
-}
-
-.species-gostlynger {
-  color: #fff;
-  background: #320f57;
-}
-
-.species-herbovir {
-  color: #fff;
-  background: #4e9d4e;
-}
-
-.species-magnivirigentis {
-  color: #fff;
-  background: #a34430;
-}
-
-.species-elf {
-  color: #fff;
-  background: #174422;
-}
-
-.species-larvan {
-  color: #fff;
-  background: #a83a13;
-}
-
-.species-felior {
-  color: #fff;
-  background: #251b09;
-}
-
-.species-vulpivor {
-  color: #fff;
-  background: #7b4166;
-}
-
 
 /* =========================================================
    RESPONSIVE
@@ -1010,19 +940,6 @@ a:hover {
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.65),
     inset 0 0 20px rgba(201, 168, 76, 0.03);
-}
-
-
-/* Dropdown decorative top line */
-
-.mystical-navbar .dropdown-menu::before {
-  content: "✦";
-  display: block;
-  margin-bottom: 0.2rem;
-  color: var(--ml-gold);
-  font-size: 0.55rem;
-  text-align: center;
-  opacity: 0.75;
 }
 
 
@@ -1337,9 +1254,7 @@ a:hover {
 }
 
 
-/* =========================================================
-   FOOTER LINKS
-   ========================================================= */
+/* FOOTER LINKS */
 
 .footer-links {
   position: relative;
