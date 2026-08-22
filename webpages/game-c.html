@@ -361,14 +361,6 @@ hr.my-4{
     0 8px 25px rgba(0,0,0,.55),
     inset 0 1px 0 rgba(240,202,105,.08);
 
-  /*
-    IMPORTANT:
-    Do not use overflow:hidden here.
-    A mobile skill can temporarily be taller than
-    the current animated panel height. Allowing
-    overflow prevents the iframe contents from
-    being clipped during the transition.
-  */
   overflow:visible;
 
   transition:
@@ -615,7 +607,6 @@ let characterData=null;
 let skills=[];
 let activeSkillIndex=-1;
 let skillLoadToken=0;
-const preloadedSkills=new Set();
 
 const FONT_SCALE=1.3;
 const TRANSITION_DURATION=250;
@@ -641,7 +632,9 @@ function speciesClassName(species){
 }
 
 function createListItems(items,species=false){
-  if(!Array.isArray(items))return"";
+
+  if(!Array.isArray(items))
+    return"";
 
   return items.map(item=>species
     ?`<span class="species ${speciesClassName(item)} character-list-item">${item}</span>`
@@ -654,21 +647,34 @@ function createListItems(items,species=false){
 ========================================================= */
 
 function getSkillCategory(skill){
-  if(skill==="Dupes")return"Dupes";
-  if(skill.startsWith("B"))return"Basic";
-  if(skill.startsWith("S"))return"Special";
-  if(skill.startsWith("U"))return"Ultimate";
-  if(skill.startsWith("T"))return"Technical";
+
+  if(skill==="Dupes")
+    return"Dupes";
+
+  if(skill.startsWith("B"))
+    return"Basic";
+
+  if(skill.startsWith("S"))
+    return"Special";
+
+  if(skill.startsWith("U"))
+    return"Ultimate";
+
+  if(skill.startsWith("T"))
+    return"Technical";
+
   return"Other";
 }
 
 function getSkillIcon(skill,path){
+
   return skill==="Dupes"
     ?"/images/mlg-assets/Stars/dupe.svg"
     :`${path}/skill_b/${skill.toLowerCase()}.svg`;
 }
 
 function getSkillFile(skill,charId){
+
   const id=skill==="Dupes"?16:1;
 
   return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
@@ -688,7 +694,8 @@ function createSkillButtons(character){
     ?character.skills
     :[];
 
-  sidebar.style.display=skills.length?"flex":"none";
+  sidebar.style.display=
+    skills.length?"flex":"none";
 
   let previousCategory=null;
 
@@ -696,9 +703,15 @@ function createSkillButtons(character){
 
     const category=getSkillCategory(skill);
 
-    if(previousCategory!==null&&category!==previousCategory){
+    if(
+      previousCategory!==null &&
+      category!==previousCategory
+    ){
+
       const divider=document.createElement("div");
+
       divider.className="skill-divider";
+
       sidebar.appendChild(divider);
     }
 
@@ -708,7 +721,11 @@ function createSkillButtons(character){
       `skill-btn${index===0?" active":""}`;
 
     button.dataset.index=index;
-    button.addEventListener("click",()=>showSkill(index));
+
+    button.addEventListener(
+      "click",
+      ()=>showSkill(index)
+    );
 
     const image=document.createElement("img");
 
@@ -732,6 +749,7 @@ function setActiveButton(index){
 
   document.querySelectorAll(".skill-btn")
     .forEach((button,i)=>{
+
       button.classList.toggle(
         "active",
         i===index
@@ -740,7 +758,7 @@ function setActiveButton(index){
 }
 
 /* =========================================================
-   Skill iframe
+   Iframe creation
 ========================================================= */
 
 function createSkillIframe(url){
@@ -760,9 +778,14 @@ function createSkillIframe(url){
   let finished=false;
 
   const finish=()=>{
-    if(finished)return;
+
+    if(finished)
+      return;
+
     finished=true;
+
     clearTimeout(timeout);
+
     resolveLoad();
   };
 
@@ -772,18 +795,32 @@ function createSkillIframe(url){
     {once:true}
   );
 
+  /*
+    This timeout is only a safety net.
+
+    It prevents a broken iframe from permanently
+    blocking the page. It is NOT responsible for
+    determining the final height.
+  */
   const timeout=setTimeout(
     finish,
-    5000
+    8000
   );
 
   /*
-    Listener exists before navigation.
+    The load listener exists before navigation.
   */
   iframe.src=url;
 
-  return{iframe,loaded};
+  return{
+    iframe,
+    loaded
+  };
 }
+
+/* =========================================================
+   Iframe document preparation
+========================================================= */
 
 async function prepareIframe(iframe){
 
@@ -793,8 +830,13 @@ async function prepareIframe(iframe){
       iframe.contentDocument||
       iframe.contentWindow.document;
 
-    if(!doc)return;
+    if(!doc)
+      return;
 
+    /*
+      Apply the existing intended iframe typography.
+      No visible styling of the parent page is changed.
+    */
     const style=document.createElement("style");
 
     style.textContent=`
@@ -813,13 +855,22 @@ async function prepareIframe(iframe){
       }
     `;
 
-    doc.head?.appendChild(style);
+    if(doc.head)
+      doc.head.appendChild(style);
 
-    if(doc.fonts?.ready)
-      await doc.fonts.ready;
+    if(doc.fonts?.ready){
 
+      try{
+        await doc.fonts.ready;
+      }catch{}
+    }
+
+    /*
+      Wait for all images that are currently part
+      of the skill page.
+    */
     const images=[
-      ...doc.images||[]
+      ...(doc.images||[])
     ];
 
     await Promise.all(
@@ -846,17 +897,6 @@ async function prepareIframe(iframe){
       })
     );
 
-    /*
-      Two frames are important on mobile.
-      They allow the iframe to finish responsive
-      width calculations before height is measured.
-    */
-    await new Promise(resolve=>{
-      requestAnimationFrame(()=>{
-        requestAnimationFrame(resolve);
-      });
-    });
-
   }catch(error){
 
     console.error(
@@ -865,6 +905,10 @@ async function prepareIframe(iframe){
     );
   }
 }
+
+/* =========================================================
+   Height measurement
+========================================================= */
 
 function getIframeHeight(iframe){
 
@@ -880,7 +924,7 @@ function getIframeHeight(iframe){
     const body=doc.body;
     const html=doc.documentElement;
 
-    return Math.max(
+    const height=Math.max(
       body?.scrollHeight||0,
       body?.offsetHeight||0,
       body?.clientHeight||0,
@@ -888,11 +932,167 @@ function getIframeHeight(iframe){
       html?.offsetHeight||0,
       html?.clientHeight||0,
       MIN_SKILL_HEIGHT
-    )+20;
+    );
+
+    return height+20;
 
   }catch{
 
     return MIN_SKILL_HEIGHT;
+  }
+}
+
+/*
+  Mobile browsers can perform another responsive
+  layout pass after the iframe's load event.
+
+  Instead of trusting one measurement, this function
+  waits until the measured height becomes stable.
+
+  This is the key fix for the first-visit problem.
+*/
+async function waitForStableHeight(iframe){
+
+  let previous=-1;
+  let stableCount=0;
+  let height=MIN_SKILL_HEIGHT;
+
+  /*
+    Maximum stabilization time.
+
+    This is intentionally much shorter than the
+    old 5-second iframe timeout in normal operation,
+    while still allowing slower mobile devices
+    enough time to finish layout.
+  */
+  const deadline=performance.now()+1500;
+
+  while(performance.now()<deadline){
+
+    await new Promise(resolve=>{
+      requestAnimationFrame(resolve);
+    });
+
+    height=getIframeHeight(iframe);
+
+    if(
+      height===previous ||
+      Math.abs(height-previous)<=1
+    ){
+
+      stableCount++;
+
+    }else{
+
+      stableCount=0;
+    }
+
+    previous=height;
+
+    /*
+      Two consecutive identical measurements means
+      the responsive layout has settled.
+    */
+    if(stableCount>=2)
+      break;
+  }
+
+  /*
+    One final measurement after the stabilization
+    frames catches late layout changes.
+  */
+  await new Promise(resolve=>{
+    requestAnimationFrame(resolve);
+  });
+
+  height=getIframeHeight(iframe);
+
+  return Math.max(
+    height,
+    MIN_SKILL_HEIGHT
+  );
+}
+
+/* =========================================================
+   Dynamic iframe height observer
+========================================================= */
+
+function observeIframeHeight(iframe,panel,token){
+
+  try{
+
+    const doc=
+      iframe.contentDocument||
+      iframe.contentWindow.document;
+
+    if(!doc)
+      return null;
+
+    const body=doc.body;
+    const html=doc.documentElement;
+
+    if(!body&&!html)
+      return null;
+
+    let lastHeight=0;
+
+    const update=()=>{
+
+      if(token!==skillLoadToken)
+        return;
+
+      const newHeight=getIframeHeight(iframe);
+
+      if(
+        Math.abs(newHeight-lastHeight)<2
+      ){
+        return;
+      }
+
+      lastHeight=newHeight;
+
+      iframe.style.height=
+        `${newHeight}px`;
+
+      /*
+        If the panel is already in its natural state,
+        let its content determine its height.
+
+        During transitions, showSkill() controls it.
+      */
+      if(
+        panel.style.height==="auto" ||
+        !panel.style.height
+      ){
+
+        panel.style.height=
+          `${newHeight}px`;
+
+        requestAnimationFrame(()=>{
+          if(token===skillLoadToken)
+            panel.style.height="auto";
+        });
+      }
+    };
+
+    const observer=new ResizeObserver(update);
+
+    if(body)
+      observer.observe(body);
+
+    if(html)
+      observer.observe(html);
+
+    return observer;
+
+  }catch(error){
+
+    console.warn(
+      "ResizeObserver unavailable for skill iframe:",
+      error
+    );
+
+    return null;
   }
 }
 
@@ -902,13 +1102,17 @@ function getIframeHeight(iframe){
 
 async function showSkill(index){
 
-  if(!characterData||!skills[index])
+  if(
+    !characterData||
+    !skills[index]
+  ){
     return;
+  }
 
   const panel=$("skillPanel");
 
   /*
-    Do not reload the currently displayed skill.
+    Do nothing if this exact skill is already displayed.
   */
   if(
     index===activeSkillIndex &&
@@ -918,23 +1122,39 @@ async function showSkill(index){
   }
 
   const token=++skillLoadToken;
+
   const charId=getCharacterId();
   const skill=skills[index];
   const url=getSkillFile(skill,charId);
 
+  const isFirstSkill=
+    activeSkillIndex===-1;
+
   setActiveButton(index);
 
   /*
-    Capture current height before inserting the
-    replacement. This gives every transition the
-    same starting point.
+    Save the current height only when changing
+    between already-existing skills.
   */
   const currentHeight=Math.max(
     panel.getBoundingClientRect().height,
     MIN_SKILL_HEIGHT
   );
 
-  panel.style.height=`${currentHeight}px`;
+  /*
+    IMPORTANT:
+
+    On the FIRST load, don't force the panel into
+    an artificial starting height.
+
+    This prevents the user from seeing a small box
+    while the first iframe is still settling.
+  */
+  if(!isFirstSkill){
+
+    panel.style.height=
+      `${currentHeight}px`;
+  }
 
   const oldFrame=
     panel.querySelector(".skill-frame");
@@ -945,14 +1165,18 @@ async function showSkill(index){
   }=createSkillIframe(url);
 
   /*
-    Keep new iframe in normal flow so the panel
-    can never lose track of its actual contents.
+    First-load iframe is inserted normally.
+
+    For a skill change, temporarily position the new
+    iframe normally as well so its real height can be
+    measured correctly.
   */
   panel.appendChild(iframe);
 
   await loaded;
 
   if(token!==skillLoadToken){
+
     iframe.remove();
     return;
   }
@@ -960,123 +1184,133 @@ async function showSkill(index){
   await prepareIframe(iframe);
 
   if(token!==skillLoadToken){
+
     iframe.remove();
     return;
   }
 
-  const newHeight=getIframeHeight(iframe);
+  /*
+    This is the major difference from the old version.
 
-  iframe.style.height=`${newHeight}px`;
+    We don't immediately trust scrollHeight.
+
+    We wait for the iframe's responsive layout to
+    stabilize first.
+  */
+  const newHeight=
+    await waitForStableHeight(iframe);
+
+  if(token!==skillLoadToken){
+
+    iframe.remove();
+    return;
+  }
+
+  iframe.style.height=
+    `${newHeight}px`;
 
   /*
-    Force layout before beginning the transition.
+    -------------------------------------------------------
+    FIRST SKILL
+    -------------------------------------------------------
+
+    No height animation.
+
+    The browser gets the correct final height before
+    revealing the iframe.
   */
-  panel.offsetHeight;
+  if(isFirstSkill){
 
-  /*
-    Start the new skill.
-  */
-  requestAnimationFrame(()=>{
+    panel.style.height=
+      `${newHeight}px`;
 
-    if(token!==skillLoadToken)
-      return;
-
-    panel.style.height=`${newHeight}px`;
     iframe.style.opacity="1";
-  });
 
-  /*
-    Old iframe is removed only after the new iframe
-    has started appearing.
-  */
-  if(oldFrame&&oldFrame!==iframe){
+    /*
+      Allow the panel to return to natural sizing after
+      the first frame has been established.
+    */
+    requestAnimationFrame(()=>{
 
-    oldFrame.style.position="absolute";
-    oldFrame.style.left="0";
-    oldFrame.style.top="0";
-    oldFrame.style.width="100%";
-    oldFrame.style.height="100%";
-    oldFrame.style.opacity="0";
-    oldFrame.style.pointerEvents="none";
+      if(token!==skillLoadToken)
+        return;
 
+      panel.style.height="auto";
+    });
+
+  }else{
+
+    /*
+      -----------------------------------------------------
+      NORMAL SKILL SWITCH
+      -----------------------------------------------------
+
+      Preserve the existing visual transition.
+    */
+
+    panel.offsetHeight;
+
+    requestAnimationFrame(()=>{
+
+      if(token!==skillLoadToken)
+        return;
+
+      panel.style.height=
+        `${newHeight}px`;
+
+      iframe.style.opacity="1";
+    });
+
+    /*
+      Remove the old iframe after the new one has
+      started appearing.
+    */
+    if(
+      oldFrame &&
+      oldFrame!==iframe
+    ){
+
+      oldFrame.style.position="absolute";
+      oldFrame.style.left="0";
+      oldFrame.style.top="0";
+      oldFrame.style.width="100%";
+      oldFrame.style.height="100%";
+      oldFrame.style.opacity="0";
+      oldFrame.style.pointerEvents="none";
+
+      setTimeout(()=>{
+
+        if(oldFrame.isConnected)
+          oldFrame.remove();
+
+      },TRANSITION_DURATION);
+    }
+
+    /*
+      After the normal transition, let the content
+      determine its own natural height.
+    */
     setTimeout(()=>{
 
-      if(oldFrame.isConnected)
-        oldFrame.remove();
+      if(token!==skillLoadToken)
+        return;
 
-    },TRANSITION_DURATION);
+      panel.style.height="auto";
+
+    },TRANSITION_DURATION+30);
   }
 
   activeSkillIndex=index;
 
   /*
-    Return to natural height only after the animation.
-    The content remains visible because the panel does
-    not use overflow:hidden.
+    Keep watching the iframe because some skill pages
+    may change height after their initial rendering.
   */
-  setTimeout(()=>{
-
-    if(token!==skillLoadToken)
-      return;
-
-    panel.style.height="auto";
-
-  },TRANSITION_DURATION+30);
-
-  preloadSkills(index+1);
-}
-
-/* =========================================================
-   Preload
-========================================================= */
-
-function preloadSkills(startIndex=0){
-
-  if(!characterData||!skills.length)
-    return;
-
-  const charId=getCharacterId();
-
-  skills
-    .slice(startIndex,startIndex+2)
-    .forEach(skill=>{
-
-      const url=getSkillFile(skill,charId);
-
-      if(preloadedSkills.has(url))
-        return;
-
-      preloadedSkills.add(url);
-
-      const iframe=document.createElement("iframe");
-
-      iframe.src=url;
-
-      iframe.style.cssText=
-        "position:absolute;" +
-        "width:100vw;" +
-        "height:1px;" +
-        "border:0;" +
-        "opacity:0;" +
-        "visibility:hidden;" +
-        "pointer-events:none;" +
-        "left:-10000px;" +
-        "top:0;";
-
-      iframe.onload=()=>{
-        setTimeout(()=>{
-          if(iframe.isConnected)
-            iframe.remove();
-        },100);
-      };
-
-      iframe.onerror=()=>{
-        iframe.remove();
-        preloadedSkills.delete(url);
-      };
-
-      document.body.appendChild(iframe);
-    });
+  observeIframeHeight(
+    iframe,
+    panel,
+    token
+  );
 }
 
 /* =========================================================
@@ -1176,19 +1410,26 @@ function setupCharacter(character){
 
   characterData=character;
 
-  document.title=`MLG - ${character.name}`;
+  document.title=
+    `MLG - ${character.name}`;
 
   $("page-heading").textContent=" ";
 
-  const splash=$("character-splash");
+  const splash=
+    $("character-splash");
 
-  splash.src=character.splash_image;
-  splash.alt=`${character.name} Splash`;
+  splash.src=
+    character.splash_image;
+
+  splash.alt=
+    `${character.name} Splash`;
+
   splash.loading="eager";
   splash.decoding="async";
 
   if(character.splash_color)
-    splash.style.filter=character.splash_color;
+    splash.style.filter=
+      character.splash_color;
 
   if(character.button_color){
 
@@ -1201,52 +1442,66 @@ function setupCharacter(character){
   $("character-name").textContent=
     character.name;
 
-  const rarity=$("character-rarity");
+  const rarity=
+    $("character-rarity");
 
-  rarity.textContent=character.rarity;
+  rarity.textContent=
+    character.rarity;
+
   rarity.className=
     character.rarity.toLowerCase();
 
-  const role=$("character-role");
+  const role=
+    $("character-role");
 
-  role.src=character.rarity_img;
-  role.alt=`${character.rarity} Role`;
+  role.src=
+    character.rarity_img;
+
+  role.alt=
+    `${character.rarity} Role`;
+
   role.loading="eager";
 
   $("character-species").innerHTML=
-    createListItems(character.species,true);
+    createListItems(
+      character.species,
+      true
+    );
 
   $("character-specialty").innerHTML=
-    createListItems(character.specialty);
+    createListItems(
+      character.specialty
+    );
 
   $("character-affiliation").innerHTML=
-    createListItems(character.affiliation);
+    createListItems(
+      character.affiliation
+    );
 
   $("character-attributes").innerHTML=
-    createListItems(character.attributes);
+    createListItems(
+      character.attributes
+    );
 
   createSkillButtons(character);
   loadCharacterStyles(character);
 
   /*
-    CRITICAL INITIALIZATION:
-    
-    The first skill is initialized automatically after
-    the character DOM has been populated and after the
-    browser has performed layout.
-    
-    This means refresh/open behaves exactly like clicking
-    the first skill button.
+    -------------------------------------------------------
+    INITIAL SKILL
+    -------------------------------------------------------
+
+    No artificial double-requestAnimationFrame delay.
+
+    The skill is started immediately after the DOM
+    elements have been created.
+
+    showSkill() itself performs the important stabilization
+    work before revealing the iframe.
   */
   if(skills.length){
 
-    requestAnimationFrame(()=>{
-      requestAnimationFrame(()=>{
-        showSkill(0);
-      });
-    });
-
-    preloadSkills(1);
+    showSkill(0);
   }
 }
 
@@ -1262,7 +1517,9 @@ async function loadCharacter(){
 
     const response=await fetch(
       "/images/mlg-assets/data-character.json",
-      {cache:"default"}
+      {
+        cache:"default"
+      }
     );
 
     if(!response.ok){
@@ -1272,8 +1529,11 @@ async function loadCharacter(){
       );
     }
 
-    const data=await response.json();
-    const character=data[charId];
+    const data=
+      await response.json();
+
+    const character=
+      data[charId];
 
     if(!character){
 
@@ -1297,8 +1557,11 @@ async function loadCharacter(){
     $("character-name").textContent=
       "Character Not Found";
 
-    $("skillSidebar").style.display="none";
-    $("characterStylesSection").style.display="none";
+    $("skillSidebar").style.display=
+      "none";
+
+    $("characterStylesSection").style.display=
+      "none";
   }
 }
 
