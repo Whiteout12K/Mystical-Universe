@@ -251,7 +251,69 @@
     "type": "Unremovable Buff",
     "description": "A special shield that requires <span class=\"empowered\">empowered</span> attacks to break, otherwise all other incoming attacks are reduced by -75%. The shield is represented by a break bar above health and will persist until broken. If the bar is broken, the active character will be frozen for 8 seconds and will take +300% increased incoming damage during the duration.",
     "description_style": {"paddingTop": 3}
+  },
+
+
+  "overwhelming-mana": {
+    "name": "Overwhelming Mana",
+    "class": "overwhelming-mana",
+    "icon": "/images/mlg-assets/Effect-Icons/overwhelming-mana.svg",
+    "type": "Buff",
+    "description": "Stackable charge of energy (Infinite Stacks).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "slowness": {
+    "name": "Slowness",
+    "class": "slowness",
+    "icon": "/images/mlg-assets/Effect-Icons/slowness.svg",
+    "type": "Debuff",
+    "description": "Decreases target’s movement speed by -70% for 3 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "speed-up": {
+    "name": "Speed Up",
+    "class": "speed-up",
+    "icon": "/images/mlg-assets/Effect-Icons/speed-up.svg",
+    "type": "Buff",
+    "description": "Increases movement speed and attack speed by +25% for 3 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "mana-recovery": {
+    "name": "Mana Recovery",
+    "class": "mana-recovery",
+    "icon": "/images/mlg-assets/Effect-Icons/mana-recovery.svg",
+    "type": "Buff",
+    "description": "Increase MP regeneration by +150% for 5 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "magic-amplification": {
+    "name": "Magic Amplification",
+    "class": "magic-amplification",
+    "icon": "/images/mlg-assets/Effect-Icons/magic-amplification.svg",
+    "type": "Buff",
+    "description": "Increases energy gauge accumulation by +40% for 15 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "resistance": {
+    "name": "Resistance",
+    "class": "resistance",
+    "icon": "/images/mlg-assets/Effect-Icons/resistance.svg",
+    "type": "Buff",
+    "description": "When hit, decreases the attacker’s piercing by -50% on their attack.",
+    "description_style": {"paddingTop": 3}
   }
+
+
 
 
 

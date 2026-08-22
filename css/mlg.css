@@ -12,11 +12,11 @@
 .light { color: #ea9999; }
 .dark { color: #674ea7; }
 .fire { color: #cc0000; }
-.water { color: #a4c2f4; }
-.wind { color: #bf9000; }
+.water { color: #6ea3ff; }
+.wind { color: #d5a106; }
 .earth { color: #6aa84f; }
-.lightning { color: #494949; }
-.plant { color: #494949; }
+.lightning { color: #9173eb; }
+.plant { color: #06560e; }
 
 /* Mystical Legends Game Effect Types */
 
@@ -24,7 +24,7 @@
 .buff { color: #969595ad; }
 .shield { color: #6fa8dc; }
 .enlightened { color: #ea9999; }
-.embrace-goddess { color: #ea9999; }
+.embrace-goddess { color: #bf7171; }
 .magni-mage { color: #ea9999; }
 .goddess-blessing { color: #ea9999; }
 .angel-touch { color: #ea9999; }
@@ -37,6 +37,11 @@
 .gamer { color: #e69138; }
 .tinkering { color: #999999; }
 .letm-cook { color: #e06666; }
+.overwhelming-mana { color: #3c78d8 }
+.speed-up { color: #458cc7 }
+.mana-recovery { color: #8560b1 }
+.magic-amplification { color: #798de3 }
+.resistance { color: #2538c5 }
 
 /* Debuffs */
 .debuff { color: #969595ad; }
@@ -48,9 +53,11 @@
 .dazed { color: #bf9000; }
 .attack-down { color: #cc4125; }
 .crit-down { color: #666666; }
+.slowness { color: #c883f5 }
 
 /* Mystical Legends Faction */
 .mystical-legends { color: #ff0000; }
+.tempest-aquia { color: #466da8 }
 
 /* Conditions */
 .empowered { color: #dd7e6b; }

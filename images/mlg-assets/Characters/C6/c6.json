@@ -1,0 +1,185 @@
+{
+
+  "B1": {
+    "name": "Compression Water Discharge",
+    "type": "Basic Skill",
+    "description": "Atlas enforces his authority by bending the water around him, dealing <b class=\"water\">[Water]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Water compresses into droplets and are hurled towards opponents, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of defense as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "A spiral of water that pinpoints on nearby opponents and strangles them, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as damage and inflicting the <b class=\"slowness\">[Slowness]</b> effect.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Slams an orb of water on the ground in front, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as small AoE damage and inflicting <b class=\"dazed\">[Dazed]</b>.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:slowness}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:dazed}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 30,
+      "dmg2": 45,
+      "dmg3": 85
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Reflection Counter",
+    "type": "Special Skill",
+    "description": "Atlas counters incoming attacks by raising a compressed water wall, dealing the damage that an incoming attack would deal back at the opponents as <b class=\"water\">[Water]</b> damage. This wall will remain even when Atlas is off-field and stays for <b><span data-dmg=\"duration\"></span></b> seconds. AoE attacks will not be completely deflected.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "The repelled attack can crit, in fact, the crit chance and damage increases by <b>+<span data-dmg=\"crit\"></span>%</b> for every 100 MP depleted from max MP overall (not just from this skill).",
+        "style": {"paddingTop": 7}},
+      {"text": "Whoever the shield is not repelling an attack, every second, a refund of MP will be given to Atlas equal to <b><span data-dmg=\"mp_%\"></span></b>.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Cooldown: 15 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 200 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "duration": 5,
+      "crit": 5,
+      "mp_%": 100
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Counterstrike(+)",
+    "type": "Special Skill",
+    "description": "Throw quick, rapid magically imbued fist and compressed water projectile strikes, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of defense as <b class=\"water\">[Water]</b> damage per strike, up to 15 strikes when this skill button is held down.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "When this skill ends, Atlas’ Basic Skill is greatly enhanced by an aura of blue mana, increasing his attack speed by +50% and initial damage increase of <b>+<span data-dmg=\"dmg_increase\"></span>%</b>, consuming 15 MP per second and increasing damage increase by <b>+<span data-dmg=\"dmg_increase2\"></span>%</b> per second also. The enhancement ends when no MP remains or when another Special Skill is used (not including this Special Skill).",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Cooldown: 14 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 80 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 35,
+      "dmg_increase": 10,
+      "dmg_increase2": 3
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Sage Cloud Surfer",
+    "type": "Ultimate Skill",
+    "description": "Atlas forms a transfiguration circle called Elevator of Heaven and summons a floating sage circle where he stands superior to his opponents until his mana is completely drained or when this skill button is pressed again.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Whilst standing high, he gains +75% dodge chance and 100% increased movement speed. He loses -3% of max MP per second.",
+        "style": {"paddingTop": 7}},
+      {"text": "All attacks from skills he uses become ranged attacks that ignore 40% of the opponent’s defense.",
+        "style": {"paddingTop": 7}},
+      {"text": "When this mode ends, either through mana depletion or Ultimate Skill press, Atlas slams down onto the ground, sending a wave in all directions, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of defense as <b class=\"water\">[Water]</b> AoE damage.",
+        "style": {"paddingTop": 7}},
+      {"text": "If MP is less than 10% when this skill activates, instead, restore <b><span data-dmg=\"mp_%\"></span>%</b> of max MP back and gain the effect <b class=\"magic-amplification\">[Magic Amplification]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:magic-amplification}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 400,
+      "mp_%": 30
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "A Fox's Tale",
+    "type": "Technical Skill",
+    "description": "<u>Ability</u>: Plants a banner on the ground equal to 200% of defense which boosts all <b class=\"tempest-aquia\">Tempest Aquia</b> cohort members until it is destroyed.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "> +15% damage increase for each same cohort member in the party (max 3 stacks).",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "> Gain the <b class=\"resistance\">[Resistance]</b> effect.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "> Accumulate <b class=\"shield\">[Shield]</b> effect equal to 0.3% of Atlas’ defense every second.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "When this skill is used again, if the banner still remains, sacrifice it to gain +150 MP per second for Atlas for 10 seconds. This activation ability does not cost energy.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:resistance}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "<b>Resonance</b>: No additional effects.",
+        "style": {"paddingTop": 15}}
+    ]
+  },
+
+
+
+  "Dupes": {
+    "description": "Every time a Special Skill is used, recover 150 stamina points, and every time the Dash Skill is used, instantly recovers 50 MP.",
+    "additional": [
+        {"text": "Atlas gains +3% piercing for each percentage of damage increase from his skills or any buffs (any mentioned elemental damage increase does not apply towards the count).",
+        "style": {"paddingTop": 5}},
+
+        {"level": 1,
+        "text": "Incoming attacks are converted into <b class=\"shield\">[Shield]</b> equivalent to 25% of defense plus 10% of the incoming attack's damage value before the attack’s damage takes effect.",
+        "style": {"paddingTop": 5}},
+        {"text": "When Atlas dashes, his interruption resistance is increased and he will deal 40% of his defense as damage to nearby opponents as short range <b class=\"water\">[Water]</b> projectile needles that automatically hones in on them. Summons 3 at a time.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 2,
+        "text": "The Basic Skill permanently becomes +20% faster. Adds a fourth stage to the Basic Skill of the following:",
+        "style": {"paddingTop": 5}},
+        {"text": "<u>Stage 4</u>: Form a vortex of water to swish opponents vigorously, dealing 130% of defense as AoE <b class=\"water\">[Water]</b> damage and restoring 40 MP per opponent hit. Increase damage by an additional +40% for opponents inflicted with a debuff. The damage increases by +10% for each level of the equipped Basic Skill, not counted as damage increase.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+        {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%. This is considered a damage increase and will count for the piercing bonus.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 4,
+        "text": "When Atlas’ MP reaches below 15 points, automatically activate Special Skill: Reflection Counter even if it is not equipped. The skill will mimic the same level as the level of the owned skill itself.",
+        "style": {"paddingTop": 5}},
+        {"text": "When dashing, restore +30 more MP and summon an additional 6 water projectile needles. The needles become denser and will penetrate through multiple opponents before shattering.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 5,
+        "text": "Using two Special Skills in a brief moment will instantly charge the energy gauge by +20% and consume 130 MP. Also, the first Special Skill turns into Ultimate Skill: Black Hole Water Detonation which can be activated at any time if sufficient energy gauge is present.",
+        "style": {"paddingTop": 5}},
+        {"text": "<u>Ultimate Skill: Black Hole Water Detonation</u> - Atlas creates a vortex of compressed energy that sucks mana particles and then collapses in a wide AoE, dealing 450% of defense as <b class=\"water\">[Water]</b> damage and makes own buffs and debuffs applied stay for twice as long as its current duration remaining. Requires having 35% of energy gauge to activate. The skill’s damage increases by +10% per level of equipped Ultimate Skill, not counted as normal damage increase.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+
+    ]
+  }
+
+
+
+
+
+
+
+}

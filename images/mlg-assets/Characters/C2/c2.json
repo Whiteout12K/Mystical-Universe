@@ -45,15 +45,18 @@
       {"text": "{{effect:blind}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "{{effect:freeze}}",
-        "style": {"paddingLeft": 15, "paddingTop": 1}}
+        "style": {"paddingLeft": 15, "paddingTop": 1}},
+
+      {"text": "Cooldown: 16 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 120 MP (30 MP per pillar)",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 250,
       "dmg2": 70,
       "dmg3": 330
     },
-    "cooldown": "16 seconds",
-    "mana_cost": "120 MP (30 MP per pillar)",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -70,7 +73,12 @@
       {"text": "<u>Special Skill: Ice Mass</u> - Kaden hurls a single boulder of ice that hits an opponent, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"water\">[Water]</b> <span class=\"empowered\">empowered</span> damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"text": "<u>Special Skill: Javelins’ Dance</u> - Kaden summons a ring of <b><span data-dmg=\"javelin_count\"></span></b> (scales by level, rounded up) javelins around him that he hurls to opponents, dealing AoE <b class=\"water\">[Water]</b> damage equal to <b><span data-dmg=\"dmg3\">160</span>%</b> of attack per javelin. When he is off-field, the javelins will be thrusted in 1 second intervals until no javelins are left.",
-        "style": {"paddingLeft": 15, "paddingTop": 7}}
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "Cooldown: 12 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 120 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 175,
@@ -78,8 +86,6 @@
       "javelin_count": 10,
       "dmg3": 160
     },
-    "cooldown": "12 seconds",
-    "mana_cost": "120 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -94,14 +100,17 @@
       {"text": "For each cube imploded, he will gain a stack, up to three stacks, of the buff <b class=\"ice-prince\">[Ice Prince]</b>. After each cube implodes, they remain for 10 seconds on-field, dealing <b><span data-dmg=\"dmg2\">180</span>%</b> of attack as AoE <b class=\"water\">[Water]</b> damage per second.",
        "style": {"paddingTop": 7}},
       {"text": "{{effect:ice-prince}}",
-       "style": {"paddingLeft": 15, "paddingTop": 4}}
+       "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Cooldown: 15 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 110 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 350,
       "dmg2": 180
     },
-    "cooldown": "15 seconds",
-    "mana_cost": "110 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -116,12 +125,14 @@
       {"text": "Hit opponents will gain the <b class=\"freeze\">[Freeze]</b> debuff and any subsequent hits during this state will increase their damage taken by +100%. The hit opponents will also gain debuff immunity reduction of -30% for the duration of skill.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
-        "style": {"paddingLeft": 15, "paddingTop": 4}}
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 260
     },
-    "energy_gauge": "100%",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -138,12 +149,14 @@
       {"text": "During the effect, all other elements in the party will decrease in effectiveness by -100%. <b class=\"water\">[Water]</b> damage will, however, increase by +70%.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
-        "style": {"paddingLeft": 15, "paddingTop": 4}}
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 870
     },
-    "energy_gauge": "100%",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -162,11 +175,11 @@
       {"text": "{{effect:shadow-miasma}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "Energy Gauge: 8% per portal",
-        "style": {"paddingTop": 7}}
-    ],
+        "style": {"paddingTop": 15}},
 
-    "resonance": "<b>Resonance</b>: Other <b class=\"dark\">[Dark]</b> affinity characters in team who are Icelorian or Gostlynger can utilize this ability.",
-    "resonance_style": {"paddingTop": 15}
+      {"text": "<b>Resonance</b>: Other <b class=\"dark\">[Dark]</b> affinity characters in team who are Icelorian or Gostlynger can utilize this ability.",
+        "style": {"paddingTop": 15}}
+    ]
   },
 
 

@@ -57,8 +57,6 @@
       "dmg2": 9,
       "dmg3": 12
     },
-    "cooldown": "14 seconds",
-    "mana_cost": "120 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -72,18 +70,23 @@
     "additional": [
       {"text": "Hold skill to launch projectiles in aimed direction at succession, one at a time.",
         "style": {"paddingTop": 7}},
-      {"text": "If projectiles don’t find targets, they return and the active character gains <b><span data-dmg=\"dmg2\"></span></b> MP back for each sphere. If Avery is off-field, he also gets <b><span data-dmg=\"dmg3\"></span>%</b> of the MP as well.",
+      {"text": "If projectiles don’t find targets, they return and the active character gains <b><span data-dmg=\"dmg2\"></span></b> MP back for each sphere at the cost of 3% of Avery’s <b class=\"shield\">[Shield]</b> where each percentage is based on max health. If Avery is off-field, he also gets <b><span data-dmg=\"dmg3\"></span>%</b> of the MP as well.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:blind}}",
-        "style": {"paddingLeft": 15, "paddingTop": 4}}
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Cooldown: 14 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 120 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Hold Mana Cost: 15 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 212,
       "dmg2": 30,
       "dmg3": 50
     },
-    "cooldown": "14 seconds",
-    "mana_cost": "120 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -92,22 +95,43 @@
   "S2": {
     "name": "Mythical Healing",
     "type": "Special Skill",
-    "description": "Avery raises his hand and creates a circle of magic that lasts for 12 seconds and heals all allies for <b><span data-dmg=\"heal1\"></span>%</b> of his max health per second. Applies a <b class=\"shield\">[Shield]</b> to all allies equal to <b><span data-dmg=\"shield1\"></span>%</b> of max health a single time.",
+    "description": "Avery raises his hand and creates a circle of magic that lasts for 12 seconds and heals all allies for <b><span data-dmg=\"heal1\"></span>%</b> of his max health per second.",
     "description_style": {"paddingTop": 7},
     "additional": [
+      {"text": "Applies a <b class=\"shield\">[Shield]</b> to all allies equal to <b><span data-dmg=\"shield1\"></span>%</b> of max health a single time. For Avery, he instead gains <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield2\"></span>%</b> of his health every second while the field is active. This can also trigger when he is off-field.",
+        "style": {"paddingTop": 7}},
       {"text": "Deals <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"light\">[Light]</b> damage to all opponents within the circle per second. Reduce their movement speed by -25%. Each successful hit will fill self and allies’ energy gauge by <b>+<span data-dmg=\"energy1\"></span>%</b>.",
         "style": {"paddingTop": 7}},
+      {"text": "Hold skill to decrease the field’s size, increase its damage, and extend duration.",
+        "style": {"paddingTop": 7}},
       {"text": "{{effect:shield}}",
-        "style": {"paddingLeft": 15, "paddingTop": 10}}
+        "style": {"paddingLeft": 15, "paddingTop": 10}},
+
+      {"text": "Cooldown: 16 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Base Mana Cost: 210 MP",
+        "style": {"paddingTop": 2, "fontSize": 3}},
+
+      {"text": "> Hold Mana Cost Level 1: 200 MP",
+        "style": {"paddingTop": 2, "fontSize": 3}},
+      {"text": "-25% size, +25% damage, +5 seconds",
+        "style": {"paddingTop": 2, "paddingLeft": 15, "fontSize": 3}},
+      {"text": "> Hold Mana Cost Level 2: 260 MP",
+        "style": {"paddingTop": 2, "fontSize": 3}},
+      {"text": "-50% size, +50% damage, +10 seconds",
+        "style": {"paddingTop": 2, "paddingLeft": 15, "fontSize": 3}},
+      {"text": "> Hold Mana Cost Level 3 (Max): 315 MP",
+        "style": {"paddingTop": 2, "fontSize": 3}},
+      {"text": "-80% size, +100% damage, +20 seconds",
+        "style": {"paddingTop": 2, "paddingLeft": 15, "fontSize": 3}}
     ],
     "base_damage": {
       "heal1": 3,
       "shield1": 10,
+      "shield2": 2,
       "dmg1": 125,
       "energy1": 3
     },
-    "cooldown": "16 seconds",
-    "mana_cost": "210 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -116,24 +140,29 @@
   "S3": {
     "name": "Light Compression",
     "type": "Special Skill",
-    "description": "Condensing light around him into any object, Avery gains newfound versatility. Hold down the skill button to cycle through weapons and letting go will select the specific weapon as the new active basic skill.",
+    "description": "Condensing light around him into any object, Avery gains newfound versatility. Hold down the skill button to cycle through weapons and letting go will select the specific weapon as the new active Basic Skill.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Basic Skill: Compressed Light Sword",
-        "text": "A denser weapon, increases basic skill damage by <b>+<span data-dmg=\"dmg1\"></span>%</b>, keeping original basic skill stages. Every other hit will be an <span class=\"empowered\">empowered</span> attack.",
+        "text": "A denser weapon, increases Basic Skill damage by <b>+<span data-dmg=\"dmg1\"></span>%</b>, keeping original Basic Skill stages. Every other hit will be an <span class=\"empowered\">empowered</span> attack.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Basic Skill: Compressed Barrier",
-        "text": "Creates a barrier of light in front, with health equal to <b><span data-dmg=\"dmg2\"></span>%</b> of stat used by the basic skill (Cooldown: 15 seconds).",
+        "text": "Creates a barrier of light in front, with health equal to <b><span data-dmg=\"dmg2\"></span>%</b> of stat used by the Basic Skill (Cooldown: 15 seconds).",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Basic Skill: Compressed Light Bow",
-        "text": "Creates a ranged damaging weapon; <b>+<span data-dmg=\"dmg3\"></span>%</b> more attack when hitting more than 10 meters, but +50% damage taken. Uses preset basic skill Stage 1 damage multiplier per projectile. Hold basic skill to charge up a powerful 3-arrow attack.",
+        "text": "Creates a ranged damaging weapon; <b>+<span data-dmg=\"dmg3\"></span>%</b> more attack when hitting more than 10 meters, but +50% damage taken. Uses preset Basic Skill Stage 1 damage multiplier per projectile. Hold Basic Skill to charge up a powerful 3-arrow attack.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Basic Skill: Lighted Trebuchet",
-        "text": "Summons a trebuchet on spot that hurls projectiles on opponents, dealing <b>+<span data-dmg=\"dmg4\"></span>%</b> increased damage as ranged AoE. Uses preset basic skill Stage 1 damage multiplier. Basic skill will activate trebuchet.",
+        "text": "Summons a trebuchet on spot that hurls projectiles on opponents, dealing <b>+<span data-dmg=\"dmg4\"></span>%</b> increased damage as ranged AoE. Uses preset Basic Skill Stage 1 damage multiplier. Basic Skill will activate trebuchet.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Basic Skill: Default",
-        "text": "Resets and changes to preset basic skill.",
-        "style": {"paddingLeft": 15, "paddingTop": 7}}
+        "text": "Resets and changes to preset Basic Skill.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "Cooldown: 1.5 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 30 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 30,
@@ -141,8 +170,6 @@
       "dmg3": 50,
       "dmg4": 25
     },
-    "cooldown": "1.5 seconds",
-    "mana_cost": "30 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -159,12 +186,14 @@
       {"text": "{{effect:blind}}",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"text": "{{effect:enlightened}}",
-        "style": {"paddingLeft": 15, "paddingTop": 7}}
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 400
     },
-    "energy_gauge": "100%",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -176,29 +205,36 @@
     "description": "When the dire time comes, calls upon the aid of all <b class=\"mystical-legends\">Mystical Legends</b> allies to arrive at the forefront of the battle for a prolonged duration.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Each ally retains their stats and equipment if owned, otherwise won’t be called. They start with <b><span data-dmg=\"dmg1\"></span>%</b> of their base stats. When summoned, their special skills are on their respective cooldowns instead of immediately being usable.",
+      {"text": "Each ally retains their stats and equipment if owned, otherwise won’t be called. They start with <b><span data-dmg=\"dmg1\"></span>%</b> of their base stats. When summoned, their Special Skills are on their respective cooldowns instead of immediately being usable.",
         "style": {"paddingTop": 7}},
       {"text": "Besides Avery himself, each <b class=\"mystical-legends\">Mystical Legends</b> ally that joins will lock the use of a team member (in order of their party placement), but their Star Level passives and Technical Skill passives still function. At max 3 will be locked. There is no limit to the number of summoned allies that join.",
-        "style": {"paddingTop": 7}}
-    ],
-    "roster_title": "<b class=\"mystical-legends\">Mystical Legends</b>:",
-    "roster_title_style": {"paddingLeft": 15, "paddingTop": 7},
-    "roster": [
-      {"text": "Avery Obtainia (self)", "style": {"paddingLeft": 15}},
-      {"text": "Kaden Icelander", "style": {"paddingLeft": 15}},
-      {"text": "Teddric Tech", "style": {"paddingLeft": 15}},
-      {"text": "River Grant", "style": {"paddingLeft": 15}},
-      {"text": "Kiara Katzol", "style": {"paddingLeft": 15}},
-      {"text": "Lucy Terner", "style": {"paddingLeft": 15}},
-      {"text": "Amos Black", "style": {"paddingLeft": 15}}
-    ],
-    "additional_after_roster": [
-      {"text": "Skill can be used only once per battle. While out of combat, the skill can be used for free and the summoned allies will leave after a short duration.",
         "style": {"paddingTop": 7}},
+      
+      {"text": "<b class=\"mystical-legends\">Mystical Legends</b>:",
+        "style": {"paddingLeft": 15, "paddingTop": 10}},
+      {"text": "Avery Obtainia (self)",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "Kaden Icelander",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "Teddric Tech",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "River Grant",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "Kiara Katzol",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "Lucy Terner",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      {"text": "Amos Black",
+        "style": {"paddingLeft": 15, "paddingTop": 2}},
+      
+      {"text": "Skill can be used only once per battle. While out of combat, the skill can be used for free and the summoned allies will leave after a short duration.",
+        "style": {"paddingTop": 10}},
       {"text": "As long as this skill is equipped, the energy gauge for the team increases by half its usual speed.",
-        "style": {"paddingTop": 7}}
+        "style": {"paddingTop": 7}},
+      
+      {"text": "Energy Gauge: 100% of the team's energy gauge.",
+        "style": {"paddingTop": 15, "fontSize": 7}}
     ],
-    "energy_gauge": "100% of the team’s energy gauge.",
     "base_damage": {
       "dmg1": 40
     },
@@ -216,10 +252,11 @@
       {"text": "While in this state, he gains <b class=\"shield\">[Shield]</b> +50% more effectively and consumes a single percentage per second, increasing his and allies’ damage reduction by +35% until depletion. This functions even while off-field.",
         "style": {"paddingTop": 7}},
       {"text": "Speed is enhanced by +25%. Flight Mode will turn Avery into a stream of water instead called Aqua Mode; collision with opponents in this mode will deal 0.5% of health multiplied by each percentage of healing rate as <b class=\"water\">[Water]</b> damage every 0.3 seconds.",
-        "style": {"paddingTop": 7}}
-    ],
-    "resonance": "<b>Resonance</b>: Other characters that are Water Spirit or Naiad species can utilize this ability, including Aqua Mode. If the character has an element affinity other than <b class=\"water\">[Water]</b>, then their element is not overridden by this skill.",
-    "resonance_style": {"paddingTop": 15}
+        "style": {"paddingTop": 7}},
+      
+      {"text": "<b>Resonance</b>: Other characters that are Water Spirit or Naiad species can utilize this ability, including Aqua Mode. If the character has an element affinity other than <b class=\"water\">[Water]</b>, then their element is not overridden by this skill.",
+        "style": {"paddingTop": 15}}
+    ]
   },
 
   
@@ -251,10 +288,11 @@
       {"text": "Additional instances of the same special attack can occur, +1 more for every 4 points in any light meter, up to max +5 instances. Simultaneous effects can be activated but require different instances with their respective auras.",
         "style": {"paddingLeft": 15, "paddingTop": 9}},
       {"text": "The damage of the special element attack increases by +10% for each level of basic skill of inflictor.",
-        "style": {"paddingLeft": 15, "paddingTop": 7}}
-    ],
-    "resonance": "<b>Resonance</b>: If Avery is not in the team, the first <b class=\"light\">[Light]</b> affinity character in the team can activate the light meter with their Ultimate Skill.",
-    "resonance_style": {"paddingTop": 15}
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "<b>Resonance</b>: If Avery is not in the team, the first <b class=\"light\">[Light]</b> affinity character in the team can activate the light meter with their Ultimate Skill.",
+        "style": {"paddingTop": 15}}
+    ]
   },
 
 
@@ -290,10 +328,13 @@
       {"text": "<b>Auxiliary Passive</b>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting [Light] aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
         "style": {"paddingTop": 5}},
       {"text": "{{effect:magni-mage}}",
-        "style": {"paddingLeft": 15, "paddingTop": 5}}
-    ],
-    "energy_gauge": "100%",
-    "resonance": "<b>Resonance</b>: No additional effects."
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>Resonance</b>: No additional effects.",
+        "style": {"paddingTop": 15}}
+    ]
   },
 
 
@@ -334,11 +375,11 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 5,
-        "text": "After using stage 3 of the basic skill, convert the next basic skill attack into Basic Skill: Lotus Wildflare Beam. After using, reverts back to normal Basic Skill.",
+        "text": "After using stage 3 of the Basic Skill, convert the next Basic Skill attack into Basic Skill: Lotus Wildflare Beam. After using, reverts back to normal Basic Skill.",
         "style": {"paddingTop": 5}},
         {"text": "5% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summmons).",
         "style": {"paddingTop": 5}},
-        {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - Avery summons a concentration of light that blasts in a flower-like arch in front of him, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies. Special skill cooldowns for self are reduced by 3 seconds and instantly restore 50 MP for self and allies. Damage scales up by +10% for each level of the equipped basic skill.",
+        {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - Avery summons a concentration of light that blasts in a flower-like arch in front of him, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies. Special Skill cooldowns for self are reduced by 3 seconds and instantly restore 50 MP for self and allies. Damage scales up by +10% for each level of the equipped Basic Skill.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
 
     ]

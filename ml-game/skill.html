@@ -78,13 +78,24 @@ document.addEventListener("DOMContentLoaded",async()=>{
     let html=renderTitle(data);
 
     if(data.description)
-      html+=renderContent(data.description,effects,data.description_style||{paddingTop:7});
+      html+=renderContent(
+        data.description,
+        effects,
+        {
+          paddingTop:7,
+          ...(data.description_style||{})
+        }
+      );
 
     if(Array.isArray(data.stages))
       data.stages.forEach(stage=>{
         html+=renderContent({
           text:`<u>${stage.name}</u>: ${stage.text||""}`,
-          style:{paddingLeft:15,paddingTop:7,...(stage.style||{})}
+          style:{
+            paddingLeft:15,
+            paddingTop:7,
+            ...(stage.style||{})
+          }
         },effects);
       });
 
@@ -92,52 +103,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
       data.additional.forEach(item=>{
         html+=renderContent(item,effects,{paddingTop:7});
       });
-
-    if(data.roster_title)
-      html+=renderContent({
-        text:data.roster_title,
-        style:{paddingLeft:15,paddingTop:7,...(data.roster_title_style||{})}
-      },effects);
-
-    if(Array.isArray(data.roster))
-      data.roster.forEach(member=>{
-        html+=renderContent({
-          text:`> ${typeof member==="string"?member:member.text||""}`,
-          style:{
-            paddingLeft:15,
-            ...(typeof member==="object"?member.style||{}:{})
-          }
-        },effects);
-      });
-
-    if(Array.isArray(data.additional_after_roster))
-      data.additional_after_roster.forEach(item=>{
-        html+=renderContent(item,effects,{paddingTop:7});
-      });
-
-    if(data.cooldown)
-      html+=renderContent({
-        text:`Cooldown: ${data.cooldown}`,
-        style:{paddingTop:7}
-      },effects);
-
-    if(data.mana_cost)
-      html+=renderContent({
-        text:`Mana Cost: ${data.mana_cost}`,
-        style:{paddingTop:0}
-      },effects);
-
-    if(data.energy_gauge)
-      html+=renderContent({
-        text:`Energy Gauge: ${data.energy_gauge}`,
-        style:{paddingTop:7}
-      },effects);
-
-    if(data.resonance)
-      html+=renderContent({
-        text:data.resonance,
-        style:{paddingTop:15,...(data.resonance_style||{})}
-      },effects);
 
     document.getElementById("skill-content").innerHTML=html;
     updateDamageValues(data,level);
@@ -148,7 +113,14 @@ document.addEventListener("DOMContentLoaded",async()=>{
     let html="";
 
     if(data.description)
-      html+=renderContent(data.description,effects,data.description_style||{paddingTop:7});
+      html+=renderContent(
+        data.description,
+        effects,
+        {
+          paddingTop:7,
+          ...(data.description_style||{})
+        }
+      );
 
     if(Array.isArray(data.additional))
       html+=renderDupeAdditional(data.additional,level,effects);
@@ -212,7 +184,10 @@ document.addEventListener("DOMContentLoaded",async()=>{
     if(!text)return"";
 
     const style=typeof item==="object"
-      ?{...(item.style||{}),...getDirectStyle(item)}
+      ?{
+          ...(item.style||{}),
+          ...getDirectStyle(item)
+        }
       :{};
 
     return `
@@ -257,13 +232,16 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
   function getDirectStyle(item){
     const style={};
+
     [
       "paddingTop","paddingRight","paddingBottom","paddingLeft",
       "marginTop","marginRight","marginBottom","marginLeft",
       "textAlign","width","fontSize","lineHeight"
     ].forEach(field=>{
-      if(item[field]!==undefined)style[field]=item[field];
+      if(item[field]!==undefined)
+        style[field]=item[field];
     });
+
     return style;
   }
 
@@ -284,11 +262,25 @@ document.addEventListener("DOMContentLoaded",async()=>{
     };
 
     return Object.entries(properties)
-      .filter(([key])=>style[key]!==undefined)
+      .filter(([key])=>style[key]!==undefined&&style[key]!==null&&style[key]!=="")
       .map(([key,property])=>{
-        const value=typeof style[key]==="number"
-          ?`${style[key]}px`
-          :style[key];
+        let value=style[key];
+
+        if(key==="fontSize"){
+          value=typeof value==="number"
+            ?`${value}px`
+            :String(value);
+        }else if(
+          typeof value==="number" &&
+          [
+            "paddingTop","paddingRight","paddingBottom","paddingLeft",
+            "marginTop","marginRight","marginBottom","marginLeft",
+            "width","lineHeight"
+          ].includes(key)
+        ){
+          value=`${value}px`;
+        }
+
         return `${property}:${value}`;
       })
       .join(";");
@@ -323,7 +315,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
       description3
       description4
       ...
-      
+
       And corresponding styles:
       description_style
       description2_style

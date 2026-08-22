@@ -40,14 +40,17 @@
       {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice his defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:shield}}",
-        "style": {"paddingLeft": 15, "paddingTop": 4}}
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Cooldown: 16 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 85 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "shield": 200,
       "shield2": 150
     },
-    "cooldown": "16 seconds",
-    "mana_cost": "85 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -62,13 +65,16 @@
       {"text": "If <b class=\"invention\">[Invention]</b> is active, several more beams (+3 more of them) will be shot out, dealing the same damage. Clear a stack of <b class=\"invention\">[Invention]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:dazed}}",
-        "style": {"paddingLeft": 15, "paddingTop": 4}}
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+
+      {"text": "Cooldown: 10 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 130 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 240
     },
-    "cooldown": "10 seconds",
-    "mana_cost": "130 MP",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -87,7 +93,10 @@
       {"text": "<b>Model B</b>: If off-field, the metal armor will dissipate and form into 2 hovering robotic turret drones that will blast energy pulses towards nearby opponents, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage per blast.",
         "style": {"paddingTop": 7}},
       {"text": "If two or more stacks of <b class=\"invention\">[Invention]</b> are active, instead, gain +50% damage reduction, +150% movement speed, and <b>+<span data-dmg=\"dmg_increase2\">50</span>%</b> skill damage for Model A. Summon an extra drone for Model B. Clear all stacks of <b class=\"invention\">[Invention]</b>.",
-        "style": {"paddingTop": 7}}
+        "style": {"paddingTop": 7}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
     ],
     "base_damage": {
       "dmg1": 160,
@@ -95,7 +104,6 @@
       "dmg2": 140,
       "dmg_increase2": 50
     },
-    "energy_gauge": "100%",
     "max_level": 10,
     "level_multiplier": 0.1
   },
@@ -114,11 +122,11 @@
       {"text": "{{effect:tinkering}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "<u>Special Skill: Hoverboard</u> - Ted jumps onto a hoverboard, hovers in the air for a moment with short invulnerability, and crashes his way through his opponents, dealing 325% of attack and 225% of defense as <b class=\"fire\">[Fire]</b> and <b class=\"earth\">[Earth]</b> AoE damage. The damage scales by +10% for each level of the equipped Basic Skill.",
-        "style": {"paddingLeft": 20, "paddingTop": 12}}
-    ],
+        "style": {"paddingLeft": 20, "paddingTop": 12}},
 
-    "resonance": "<b>Resonance</b>: No additional effects. Exclusive to Ted.",
-    "resonance_style": {"paddingTop": 15}
+      {"text": "<b>Resonance</b>: No additional effects. Exclusive to Ted.",
+        "style": {"paddingTop": 15}}
+    ]
   },
 
 
