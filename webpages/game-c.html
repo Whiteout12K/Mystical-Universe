@@ -197,10 +197,6 @@ body{
   font:400 14px Arial,sans-serif!important;
 }
 
-/*
-  Keep individual species classes available.
-  The species text itself remains WHITE as requested.
-*/
 #character-species,
 #character-specialty,
 #character-affiliation,
@@ -217,7 +213,7 @@ body{
   font-family:Arial,sans-serif!important;
 }
 
-/* Species-specific classes remain available without changing text color */
+/* Species */
 .species{
   display:inline-block;
   padding:2px 7px;
@@ -226,35 +222,13 @@ body{
   font-family:Arial,sans-serif!important;
 }
 
-/* Preserve specific species classes */
-.species-angelor{
-  color:#fff!important;
-}
-
-.species-metalor{
-  color:#fff!important;
-}
-
-.species-naiad{
-  color:#fff!important;
-}
-
-.species-icelorian{
-  color:#fff!important;
-}
-
-.species-magnivirigentis{
-  color:#fff!important;
-}
-
-.species-elf{
-  color:#fff!important;
-}
-
-.species-felior{
-  color:#fff!important;
-}
-
+.species-angelor,
+.species-metalor,
+.species-naiad,
+.species-icelorian,
+.species-magnivirigentis,
+.species-elf,
+.species-felior,
 .species-demihuman{
   color:#fff!important;
 }
@@ -390,6 +364,9 @@ hr.my-4{
   box-shadow:
     0 8px 25px rgba(0,0,0,.55),
     inset 0 1px 0 rgba(240,202,105,.08);
+
+  /* The only animation performed by the panel. */
+  transition:height .22s ease;
 }
 
 .skill-panel:before{
@@ -413,6 +390,21 @@ hr.my-4{
   pointer-events:none;
   border-radius:12px;
   box-shadow:inset 0 0 30px rgba(116,27,34,.06);
+}
+
+/*
+  The iframe itself is not transitioned in height.
+  This prevents two competing height animations.
+*/
+.skill-frame{
+  display:block;
+  width:100%;
+  min-width:0;
+  height:140px;
+  border:0;
+  background:#0f0f0f;
+  opacity:0;
+  transition:opacity .16s ease;
 }
 
 /* Character styles */
@@ -476,6 +468,7 @@ hr.my-4{
 
 /* Mobile */
 @media(max-width:767px){
+
   .splash-art{
     height:420px;
   }
@@ -521,147 +514,298 @@ hr.my-4{
 <div class="container py-4">
 
 <section class="row g-4 align-items-center">
+
   <div class="col-12 col-md-5">
-    <img id="character-splash" src="" class="splash-art" alt="Character Splash">
+    <img
+      id="character-splash"
+      src=""
+      class="splash-art"
+      alt="Character Splash">
   </div>
 
-  <div id="character-info" class="col-12 col-md-7" style="padding:30px">
-    <h1 id="character-name" class="display-6">Loading Character</h1>
+  <div
+    id="character-info"
+    class="col-12 col-md-7"
+    style="padding:30px">
+
+    <h1 id="character-name" class="display-6">
+      Loading Character
+    </h1>
 
     <div class="d-flex align-items-center gap-3 mb-2">
-      <b id="character-rarity" class="ssr">SSR</b>
-      <img id="character-role" src="" class="role-icon" alt="Character Role">
+
+      <b id="character-rarity" class="ssr">
+        SSR
+      </b>
+
+      <img
+        id="character-role"
+        src=""
+        class="role-icon"
+        alt="Character Role">
+
     </div>
 
     <div class="character-info-row">
       <span class="character-info-label">Species</span>:
-      <span id="character-species" class="character-info-value"></span>
+      <span
+        id="character-species"
+        class="character-info-value"></span>
     </div>
 
     <div class="character-info-row">
       <span class="character-info-label">Specialty</span>:
-      <span id="character-specialty" class="character-info-value"></span>
+      <span
+        id="character-specialty"
+        class="character-info-value"></span>
     </div>
 
     <div class="character-info-row">
       <span class="character-info-label">Affiliation</span>:
-      <span id="character-affiliation" class="character-info-value"></span>
+      <span
+        id="character-affiliation"
+        class="character-info-value"></span>
     </div>
 
     <div class="character-info-row">
       <span class="character-info-label">Attribute</span>:
-      <span id="character-attributes" class="character-info-value"></span>
+      <span
+        id="character-attributes"
+        class="character-info-value"></span>
     </div>
+
   </div>
+
 </section>
 
 <h3>Skills</h3>
+
 <hr class="my-4">
 
 <section>
-  <div id="skillSidebar" class="skill-sidebar mb-3"></div>
-  <div id="skillPanel" class="skill-panel"></div>
+
+  <div
+    id="skillSidebar"
+    class="skill-sidebar mb-3">
+  </div>
+
+  <div
+    id="skillPanel"
+    class="skill-panel">
+  </div>
+
 </section>
 
 </div>
 
-<section id="characterStylesSection" class="container my-4" style="display:none">
-  <h5 class="mb-3">Character Styles</h5>
-  <div id="characterStyles" class="character-style-row"></div>
+<section
+  id="characterStylesSection"
+  class="container my-4"
+  style="display:none">
+
+  <h5 class="mb-3">
+    Character Styles
+  </h5>
+
+  <div
+    id="characterStyles"
+    class="character-style-row">
+  </div>
+
 </section>
 
 <script>
-let characterData=null,skills=[],skillCache=new Map(),skillLoadToken=0,activeSkillIndex=-1;
+
+let characterData=null;
+let skills=[];
+let preloadedSkills=new Set();
+let skillLoadToken=0;
+let activeSkillIndex=-1;
 
 const FONT_SCALE=1.3;
-const TRANSITION_DURATION=250;
-const HEIGHT_TRANSITION_DURATION=250;
+const TRANSITION_DURATION=220;
 const SKILL_VIEW_PATH="/ml-game/skill.html";
 
+/* -------------------------------------------------------
+   Character
+------------------------------------------------------- */
+
 function getCharacterId(){
-  return(new URLSearchParams(location.search).get("char")||"c1").toLowerCase();
+  return(
+    new URLSearchParams(location.search)
+      .get("char")||"c1"
+  ).toLowerCase();
 }
 
 function speciesClassName(species){
-  return"species-"+species.toLowerCase().replace(/[^a-z0-9]+/g,"");
+  return"species-"+species
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,"");
 }
 
 function createListItems(items,type="normal"){
-  if(!Array.isArray(items))return"";
 
-  return items.map(item=>type==="species"
-    ?`<span class="species ${speciesClassName(item)} character-list-item">${item}</span>`
-    :`<span class="character-list-item">${item}</span>`
-  ).join(", ");
+  if(!Array.isArray(items))
+    return"";
+
+  return items.map(item=>{
+
+    if(type==="species"){
+
+      return`
+        <span class="species ${speciesClassName(item)} character-list-item">
+          ${item}
+        </span>
+      `;
+
+    }
+
+    return`
+      <span class="character-list-item">
+        ${item}
+      </span>
+    `;
+
+  }).join(", ");
 }
 
+/* -------------------------------------------------------
+   Skills
+------------------------------------------------------- */
+
 function getSkillCategory(skill){
-  if(skill==="Dupes")return"Dupes";
-  if(skill.startsWith("B"))return"Basic";
-  if(skill.startsWith("S"))return"Special";
-  if(skill.startsWith("U"))return"Ultimate";
-  if(skill.startsWith("T"))return"Technical";
+
+  if(skill==="Dupes")
+    return"Dupes";
+
+  if(skill.startsWith("B"))
+    return"Basic";
+
+  if(skill.startsWith("S"))
+    return"Special";
+
+  if(skill.startsWith("U"))
+    return"Ultimate";
+
+  if(skill.startsWith("T"))
+    return"Technical";
+
   return"Other";
 }
 
 function getSkillIcon(skill,path){
+
   return skill==="Dupes"
     ?"/images/mlg-assets/Stars/dupe.svg"
     :`${path}/skill_b/${skill.toLowerCase()}.svg`;
 }
 
 function getSkillFile(skill,characterId){
+
   const id=skill==="Dupes"?16:1;
 
-  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(characterId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
+  return(
+    `${SKILL_VIEW_PATH}`+
+    `?char=${encodeURIComponent(characterId)}`+
+    `&skill=${encodeURIComponent(skill)}`+
+    `&id=${id}`
+  );
 }
 
+/* -------------------------------------------------------
+   Skill buttons
+------------------------------------------------------- */
+
 function createSkillButtons(character){
-  const sidebar=document.getElementById("skillSidebar");
+
+  const sidebar=
+    document.getElementById("skillSidebar");
+
   sidebar.innerHTML="";
-  skills=character.skills||[];
+
+  skills=Array.isArray(character.skills)
+    ?character.skills
+    :[];
 
   if(!skills.length){
+
     sidebar.style.display="none";
+
     return;
   }
 
   sidebar.style.display="flex";
+
   let previousCategory=null;
 
   skills.forEach((skill,index)=>{
+
     const category=getSkillCategory(skill);
 
-    if(previousCategory!==null&&category!==previousCategory){
-      const divider=document.createElement("div");
+    if(
+      previousCategory!==null &&
+      category!==previousCategory
+    ){
+
+      const divider=
+        document.createElement("div");
+
       divider.className="skill-divider";
+
       sidebar.appendChild(divider);
     }
 
-    const button=document.createElement("div");
-    button.className="skill-btn"+(index===0?" active":"");
-    button.dataset.index=index;
-    button.onclick=()=>showSkill(index);
+    const button=
+      document.createElement("div");
 
-    const img=document.createElement("img");
-    img.src=getSkillIcon(skill,character.skills_path);
+    button.className=
+      "skill-btn"+
+      (index===0?" active":"");
+
+    button.dataset.index=index;
+
+    button.addEventListener(
+      "click",
+      ()=>showSkill(index)
+    );
+
+    const img=
+      document.createElement("img");
+
+    img.src=
+      getSkillIcon(
+        skill,
+        character.skills_path
+      );
+
     img.alt=skill;
     img.loading="eager";
     img.decoding="async";
 
     button.appendChild(img);
+
     sidebar.appendChild(button);
+
     previousCategory=category;
   });
 }
 
+/* -------------------------------------------------------
+   Character styles
+------------------------------------------------------- */
+
 function isVideoFile(path){
-  return/\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
+
+  return/\.(mp4|webm|ogg|mov|m4v)$/i
+    .test(path);
 }
 
 function createCostumePreview(costume){
+
   if(isVideoFile(costume.preview_path)){
-    const video=document.createElement("video");
+
+    const video=
+      document.createElement("video");
 
     Object.assign(video,{
       autoplay:true,
@@ -675,10 +819,13 @@ function createCostumePreview(costume){
     return video;
   }
 
-  const img=document.createElement("img");
+  const img=
+    document.createElement("img");
 
   img.src=costume.preview_path;
-  img.className="card-img-top pixel-portrait";
+  img.className=
+    "card-img-top pixel-portrait";
+
   img.alt=costume.name;
   img.loading="lazy";
   img.decoding="async";
@@ -687,407 +834,766 @@ function createCostumePreview(costume){
 }
 
 function loadCharacterStyles(character){
-  const section=document.getElementById("characterStylesSection");
-  const container=document.getElementById("characterStyles");
+
+  const section=
+    document.getElementById(
+      "characterStylesSection"
+    );
+
+  const container=
+    document.getElementById(
+      "characterStyles"
+    );
 
   container.innerHTML="";
 
-  const costumes=Object.keys(character)
-    .filter(key=>/^costume_\d+$/.test(key))
-    .sort((a,b)=>Number(a.split("_")[1])-Number(b.split("_")[1]))
-    .map(key=>character[key])
-    .filter(costume=>costume&&costume.preview_path);
+  const costumes=
+    Object.keys(character)
+      .filter(key=>/^costume_\d+$/.test(key))
+      .sort(
+        (a,b)=>
+          Number(a.split("_")[1])-
+          Number(b.split("_")[1])
+      )
+      .map(key=>character[key])
+      .filter(
+        costume=>
+          costume&&
+          costume.preview_path
+      );
 
   if(!costumes.length){
+
     section.style.display="none";
+
     return;
   }
 
   section.style.display="block";
 
   costumes.forEach(costume=>{
-    const card=document.createElement("div");
 
-    card.className="card text-center style-card";
-    card.appendChild(createCostumePreview(costume));
+    const card=
+      document.createElement("div");
 
-    const body=document.createElement("div");
+    card.className=
+      "card text-center style-card";
+
+    card.appendChild(
+      createCostumePreview(costume)
+    );
+
+    const body=
+      document.createElement("div");
 
     body.className="card-body p-2";
-    body.textContent=costume.name||`Costume ${costume.id}`;
+
+    body.textContent=
+      costume.name||
+      `Costume ${costume.id}`;
 
     card.appendChild(body);
+
     container.appendChild(card);
   });
 }
 
-function setupCharacter(characterId,character){
-  characterData=character;
+/* -------------------------------------------------------
+   Iframe preparation
+------------------------------------------------------- */
 
-  document.title=`MLG - ${character.name}`;
-  document.getElementById("page-heading").textContent=
-    ` `;
+/*
+  IMPORTANT:
+  The iframe load listener is installed BEFORE src is
+  assigned. This fixes the initial-load/cache race.
+*/
+function createSkillIframe(url){
 
-  const splash=document.getElementById("character-splash");
+  const iframe=
+    document.createElement("iframe");
 
-  splash.src=character.splash_image;
-  splash.alt=`${character.name} Splash`;
-  splash.loading="eager";
-  splash.decoding="async";
+  iframe.className="skill-frame";
 
-  if(character.splash_color)
-    splash.style.filter=character.splash_color;
+  iframe.src="about:blank";
 
-  if(character.button_color)
-    document.documentElement.style.setProperty(
-      "--character-button-color",
-      character.button_color
-    );
+  iframe.setAttribute(
+    "title",
+    "Skill information"
+  );
 
-  document.getElementById("character-name").textContent=character.name;
+  /*
+    Install the load listener first.
+  */
+  const loaded=new Promise(resolve=>{
 
-  const rarity=document.getElementById("character-rarity");
-
-  rarity.textContent=character.rarity;
-
-  /* Preserve original rarity class styling. */
-  rarity.className=character.rarity.toLowerCase();
-
-  const role=document.getElementById("character-role");
-
-  role.src=character.rarity_img;
-  role.alt=`${character.rarity} Role`;
-  role.loading="eager";
-
-  document.getElementById("character-species").innerHTML=
-    createListItems(character.species,"species");
-
-  document.getElementById("character-specialty").innerHTML=
-    createListItems(character.specialty);
-
-  document.getElementById("character-affiliation").innerHTML=
-    createListItems(character.affiliation);
-
-  document.getElementById("character-attributes").innerHTML=
-    createListItems(character.attributes);
-
-  createSkillButtons(character);
-  loadCharacterStyles(character);
-
-  if(skills.length){
-    showSkill(0);
-    preloadSkills(1);
-  }
-}
-
-async function loadCharacter(){
-  const characterId=getCharacterId();
-
-  try{
-    const response=await fetch(
-      "/images/mlg-assets/data-character.json",
-      {cache:"default"}
-    );
-
-    if(!response.ok)
-      throw new Error(
-        `Failed to load character data: ${response.status}`
-      );
-
-    const data=await response.json();
-    const character=data[characterId];
-
-    if(!character)
-      throw new Error(
-        `Character "${characterId}" was not found in data-character.json`
-      );
-
-    setupCharacter(characterId,character);
-
-  }catch(error){
-    console.error("Character loading error:",error);
-
-    document.getElementById("page-heading").textContent=
-      "Mystical Legends Game - Character Not Found";
-
-    document.getElementById("character-name").textContent=
-      "Character Not Found";
-
-    document.getElementById("skillSidebar").style.display="none";
-    document.getElementById("characterStylesSection").style.display="none";
-  }
-}
-
-function preloadSkills(startIndex=0){
-  if(!characterData||!skills.length)return;
-
-  const characterId=getCharacterId();
-
-  skills.slice(startIndex,startIndex+2).forEach(skill=>{
-    const url=getSkillFile(skill,characterId);
-
-    if(skillCache.has(url))return;
-
-    const iframe=document.createElement("iframe");
-
-    iframe.src=url;
-
-    iframe.style.cssText=
-      "position:absolute;width:100vw;height:1px;border:0;opacity:0;pointer-events:none;visibility:hidden;left:-10000px;top:0";
-
-    iframe.onload=()=>skillCache.set(url,iframe);
-
-    iframe.onerror=()=>{
-      iframe.remove();
-      skillCache.delete(url);
-    };
-
-    document.body.appendChild(iframe);
-  });
-}
-
-function prepareIframe(iframe){
-  return new Promise(resolve=>{
     let finished=false;
 
-    const done=()=>{
+    const finish=()=>{
       if(finished)return;
+
       finished=true;
+
+      clearTimeout(timeout);
+
       resolve();
     };
 
-    const timeout=setTimeout(done,5000);
+    iframe.addEventListener(
+      "load",
+      finish,
+      {once:true}
+    );
 
-    const prepare=()=>{
-      clearTimeout(timeout);
-
-      try{
-        const doc=iframe.contentDocument||iframe.contentWindow.document;
-        const style=doc.createElement("style");
-
-        style.textContent=`
-          html,body{
-            background:#0f0f0f!important;
-            color:#e6e6e6!important;
-            overflow:hidden!important;
-            font-family:Arial,sans-serif!important;
-            font-size:${FONT_SCALE*90}%!important;
-          }
-          body *{
-            font-family:Arial,sans-serif!important;
-            font-size:inherit!important;
-          }
-        `;
-
-        doc.head.appendChild(style);
-
-        if(doc.fonts?.ready)
-          doc.fonts.ready.then(()=>{
-            requestAnimationFrame(()=>{
-              requestAnimationFrame(done);
-            });
-          });
-        else
-          requestAnimationFrame(()=>{
-            requestAnimationFrame(done);
-          });
-
-      }catch(error){
-        console.error("Skill iframe preparation error:",error);
-        done();
-      }
-    };
-
-    try{
-      const doc=iframe.contentDocument||iframe.contentWindow.document;
-
-      if(doc&&doc.readyState==="complete"){
-        prepare();
-        return;
-      }
-    }catch(error){}
-
-    iframe.addEventListener("load",prepare,{once:true});
+    const timeout=setTimeout(
+      finish,
+      5000
+    );
   });
+
+  /*
+    Only now navigate to the actual skill.
+  */
+  iframe.src=url;
+
+  return{
+    iframe,
+    loaded
+  };
 }
 
-function getIframeHeight(iframe){
-  try{
-    const doc=iframe.contentDocument||iframe.contentWindow.document;
+async function prepareIframe(iframe){
 
-    return Math.max(
-      doc.body?.scrollHeight||0,
-      doc.documentElement?.scrollHeight||0,
-      doc.body?.offsetHeight||0,
-      doc.documentElement?.offsetHeight||0,
-      140
-    )+20;
+  try{
+
+    const doc=
+      iframe.contentDocument||
+      iframe.contentWindow.document;
+
+    if(!doc)
+      return;
+
+    /*
+      Apply the skill-page styling once.
+    */
+    const style=
+      doc.createElement("style");
+
+    style.textContent=`
+      html,
+      body{
+        background:#0f0f0f!important;
+        color:#e6e6e6!important;
+        overflow:hidden!important;
+        font-family:Arial,sans-serif!important;
+        font-size:${FONT_SCALE*90}%!important;
+      }
+
+      body *{
+        font-family:Arial,sans-serif!important;
+        font-size:inherit!important;
+      }
+    `;
+
+    if(doc.head)
+      doc.head.appendChild(style);
+
+    /*
+      Wait for fonts.
+    */
+    if(doc.fonts?.ready)
+      await doc.fonts.ready;
+
+    /*
+      Wait for images that affect height.
+    */
+    const images=
+      Array.from(doc.images||[]);
+
+    if(images.length){
+
+      await Promise.all(
+
+        images.map(image=>{
+
+          if(image.complete)
+            return Promise.resolve();
+
+          return new Promise(resolve=>{
+
+            image.addEventListener(
+              "load",
+              resolve,
+              {once:true}
+            );
+
+            image.addEventListener(
+              "error",
+              resolve,
+              {once:true}
+            );
+
+          });
+
+        })
+
+      );
+    }
+
+    /*
+      Give the iframe one paint cycle to finish
+      responsive layout calculations.
+    */
+    await new Promise(resolve=>{
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(resolve);
+      });
+    });
 
   }catch(error){
+
+    console.error(
+      "Skill iframe preparation error:",
+      error
+    );
+  }
+}
+
+/* -------------------------------------------------------
+   Height calculation
+------------------------------------------------------- */
+
+function getIframeHeight(iframe){
+
+  try{
+
+    const doc=
+      iframe.contentDocument||
+      iframe.contentWindow.document;
+
+    if(!doc)
+      return 140;
+
+    const body=doc.body;
+    const html=doc.documentElement;
+
+    const height=Math.max(
+      body?.scrollHeight||0,
+      body?.offsetHeight||0,
+      body?.clientHeight||0,
+      html?.scrollHeight||0,
+      html?.offsetHeight||0,
+      html?.clientHeight||0,
+      120
+    );
+
+    return Math.ceil(height)+20;
+
+  }catch(error){
+
     return 140;
   }
 }
 
-function watchIframeHeight(iframe,panel){
-  try{
-    const doc=iframe.contentDocument||iframe.contentWindow.document;
-    let lastHeight=0,frame=null;
-
-    const resize=()=>{
-      const height=getIframeHeight(iframe);
-
-      if(height!==lastHeight){
-        lastHeight=height;
-        iframe.style.height=`${height}px`;
-
-        if(activeSkillIndex>=0)
-          panel.style.height=`${height}px`;
-      }
-    };
-
-    new MutationObserver(()=>{
-      if(frame)cancelAnimationFrame(frame);
-      frame=requestAnimationFrame(resize);
-    }).observe(doc.body,{
-      childList:true,
-      subtree:true,
-      characterData:true,
-      attributes:true
-    });
-
-    if(window.ResizeObserver)
-      new ResizeObserver(resize).observe(doc.body);
-
-    resize();
-
-  }catch(error){
-    console.error("Skill iframe resize error:",error);
-  }
-}
+/* -------------------------------------------------------
+   Skill display
+------------------------------------------------------- */
 
 async function showSkill(index){
-  if(!skills[index]||!characterData)return;
-  if(index===activeSkillIndex)return;
 
-  const token=++skillLoadToken;
-  const skill=skills[index];
-  const characterId=getCharacterId();
-  const panel=document.getElementById("skillPanel");
-  const oldIframe=panel.querySelector("iframe");
-  const url=getSkillFile(skill,characterId);
+  if(
+    !skills[index]||
+    !characterData
+  )
+    return;
 
-  document.querySelectorAll(".skill-btn")
-    .forEach(button=>button.classList.remove("active"));
-
-  const buttons=document.querySelectorAll(".skill-btn");
-
-  if(buttons[index])
-    buttons[index].classList.add("active");
-
-  activeSkillIndex=index;
-
-  let iframe=skillCache.get(url);
-
-  if(iframe){
-    iframe.remove();
-    skillCache.delete(url);
-
-    /*
-      The iframe was preloaded while hidden. Force it to use
-      the real skill URL again so its responsive layout is
-      recalculated at the actual mobile/desktop width.
-    */
-    iframe.src=url;
-  }else{
-    iframe=document.createElement("iframe");
-    iframe.src=url;
+  /*
+    Do NOT block the first skill.
+    Only block when the exact same skill is
+    already fully displayed.
+  */
+  if(
+    index===activeSkillIndex &&
+    document
+      .getElementById("skillPanel")
+      .querySelector("iframe")
+  ){
+    return;
   }
 
-  iframe.style.cssText=`
-    width:100%;
-    height:140px;
-    border:0;
-    display:block;
-    background:#0f0f0f;
-    color:#e6e6e6;
-    opacity:0;
-    transition:opacity ${TRANSITION_DURATION}ms ease;
-  `;
+  const token=
+    ++skillLoadToken;
 
-  const oldHeight=oldIframe
-    ?Math.max(oldIframe.offsetHeight,140)
-    :Math.max(panel.offsetHeight,140);
+  const skill=
+    skills[index];
 
-  panel.style.height=`${oldHeight}px`;
+  const characterId=
+    getCharacterId();
 
-  const loaded=prepareIframe(iframe);
+  const panel=
+    document.getElementById(
+      "skillPanel"
+    );
 
+  const oldIframe=
+    panel.querySelector("iframe");
+
+  const url=
+    getSkillFile(
+      skill,
+      characterId
+    );
+
+  /*
+    Highlight button immediately.
+  */
+  document
+    .querySelectorAll(".skill-btn")
+    .forEach(button=>{
+      button.classList.remove("active");
+    });
+
+  const buttons=
+    document.querySelectorAll(
+      ".skill-btn"
+    );
+
+  if(buttons[index])
+    buttons[index]
+      .classList.add("active");
+
+  /*
+    Capture the current natural panel height.
+    On the first load this will simply be the
+    panel's minimum height.
+  */
+  const oldHeight=Math.max(
+    panel.getBoundingClientRect().height,
+    140
+  );
+
+  /*
+    Explicitly lock the current height while
+    the replacement iframe loads.
+  */
+  panel.style.height=
+    `${oldHeight}px`;
+
+  /*
+    Create iframe with the load listener already
+    installed before navigation.
+  */
+  const{
+    iframe,
+    loaded
+  }=createSkillIframe(url);
+
+  /*
+    Insert the iframe while invisible.
+  */
   panel.appendChild(iframe);
 
+  /*
+    Wait for actual iframe load.
+  */
   await loaded;
 
   if(token!==skillLoadToken){
+
     iframe.remove();
+
     return;
   }
 
   /*
-    Wait for the iframe to perform its responsive mobile
-    layout before measuring it. This makes every skill use
-    the same expansion behavior as the first skill.
+    Now modify the iframe document.
   */
-  await new Promise(resolve=>{
-    requestAnimationFrame(()=>{
-      requestAnimationFrame(resolve);
-    });
-  });
+  await prepareIframe(iframe);
 
   if(token!==skillLoadToken){
+
     iframe.remove();
+
     return;
   }
 
-  const newHeight=getIframeHeight(iframe);
+  /*
+    Measure the iframe only after its responsive
+    layout is ready.
+  */
+  const newHeight=
+    getIframeHeight(iframe);
 
-  iframe.style.height=`${newHeight}px`;
+  iframe.style.height=
+    `${newHeight}px`;
 
-  watchIframeHeight(iframe,panel);
+  /*
+    Force the browser to register the locked
+    height before changing it.
+  */
+  panel.offsetHeight;
 
+  /*
+    This is the only panel height animation.
+  */
   requestAnimationFrame(()=>{
-    if(token===skillLoadToken)
-      iframe.style.opacity="1";
+
+    if(token!==skillLoadToken)
+      return;
+
+    panel.style.height=
+      `${newHeight}px`;
+
+    iframe.style.opacity="1";
   });
 
-  panel.style.transition=
-    `height ${HEIGHT_TRANSITION_DURATION}ms ease`;
+  /*
+    Remove the previous iframe after the new one
+    has started appearing.
+  */
+  if(
+    oldIframe&&
+    oldIframe!==iframe
+  ){
 
-  requestAnimationFrame(()=>{
-    if(token===skillLoadToken)
-      panel.style.height=`${newHeight}px`;
-  });
+    oldIframe.style.position=
+      "absolute";
 
-  if(oldIframe&&oldIframe!==iframe){
-    oldIframe.style.position="absolute";
     oldIframe.style.left="0";
     oldIframe.style.top="0";
+    oldIframe.style.width="100%";
+    oldIframe.style.height=
+      "100%";
+
     oldIframe.style.opacity="0";
-    oldIframe.style.pointerEvents="none";
+    oldIframe.style.pointerEvents=
+      "none";
 
     setTimeout(()=>{
+
       if(oldIframe.isConnected)
         oldIframe.remove();
-    },TRANSITION_DURATION+50);
+
+    },TRANSITION_DURATION);
   }
 
-  setTimeout(()=>{
-    if(token===skillLoadToken)
-      panel.style.height="auto";
-  },HEIGHT_TRANSITION_DURATION+30);
+  /*
+    Mark the skill active only after the new
+    iframe has successfully been prepared.
+    
+    This is particularly important on first load:
+    the first skill now goes through the exact
+    same completed state as every clicked skill.
+  */
+  activeSkillIndex=index;
 
+  /*
+    After the animation, remove the explicit height.
+    The panel becomes naturally flexible again.
+    
+    This is what prevents empty space below short
+    skills while still allowing tall skills to grow.
+  */
+  setTimeout(()=>{
+
+    if(token!==skillLoadToken)
+      return;
+
+    panel.style.height="auto";
+
+  },TRANSITION_DURATION+30);
+
+  /*
+    Preload the next skills after the current
+    skill is already displayed.
+  */
   preloadSkills(index+1);
 }
 
+/* -------------------------------------------------------
+   Skill preloading
+------------------------------------------------------- */
+
+function preloadSkills(startIndex=0){
+
+  if(
+    !characterData||
+    !skills.length
+  )
+    return;
+
+  const characterId=
+    getCharacterId();
+
+  skills
+    .slice(startIndex,startIndex+2)
+    .forEach(skill=>{
+
+      const url=
+        getSkillFile(
+          skill,
+          characterId
+        );
+
+      if(preloadedSkills.has(url))
+        return;
+
+      preloadedSkills.add(url);
+
+      /*
+        Preloading is intentionally kept completely
+        separate from the displayed iframe.
+      */
+      const iframe=
+        document.createElement("iframe");
+
+      iframe.src=url;
+
+      iframe.style.cssText=
+        "position:absolute;" +
+        "width:100vw;" +
+        "height:1px;" +
+        "border:0;" +
+        "opacity:0;" +
+        "pointer-events:none;" +
+        "visibility:hidden;" +
+        "left:-10000px;" +
+        "top:0;";
+
+      iframe.onload=()=>{
+
+        setTimeout(()=>{
+
+          if(iframe.isConnected)
+            iframe.remove();
+
+        },100);
+
+      };
+
+      iframe.onerror=()=>{
+
+        iframe.remove();
+
+        preloadedSkills.delete(url);
+      };
+
+      document.body.appendChild(iframe);
+    });
+}
+
+/* -------------------------------------------------------
+   Character setup
+------------------------------------------------------- */
+
+function setupCharacter(
+  characterId,
+  character
+){
+
+  characterData=character;
+
+  document.title=
+    `MLG - ${character.name}`;
+
+  document.getElementById(
+    "page-heading"
+  ).textContent=" ";
+
+  const splash=
+    document.getElementById(
+      "character-splash"
+    );
+
+  splash.src=
+    character.splash_image;
+
+  splash.alt=
+    `${character.name} Splash`;
+
+  splash.loading="eager";
+  splash.decoding="async";
+
+  if(character.splash_color)
+    splash.style.filter=
+      character.splash_color;
+
+  if(character.button_color){
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--character-button-color",
+        character.button_color
+      );
+  }
+
+  document.getElementById(
+    "character-name"
+  ).textContent=
+    character.name;
+
+  const rarity=
+    document.getElementById(
+      "character-rarity"
+    );
+
+  rarity.textContent=
+    character.rarity;
+
+  rarity.className=
+    character.rarity.toLowerCase();
+
+  const role=
+    document.getElementById(
+      "character-role"
+    );
+
+  role.src=
+    character.rarity_img;
+
+  role.alt=
+    `${character.rarity} Role`;
+
+  role.loading="eager";
+
+  document.getElementById(
+    "character-species"
+  ).innerHTML=
+    createListItems(
+      character.species,
+      "species"
+    );
+
+  document.getElementById(
+    "character-specialty"
+  ).innerHTML=
+    createListItems(
+      character.specialty
+    );
+
+  document.getElementById(
+    "character-affiliation"
+  ).innerHTML=
+    createListItems(
+      character.affiliation
+    );
+
+  document.getElementById(
+    "character-attributes"
+  ).innerHTML=
+    createListItems(
+      character.attributes
+    );
+
+  createSkillButtons(character);
+
+  loadCharacterStyles(character);
+
+  /*
+    IMPORTANT:
+    Wait until the browser has completed the current
+    layout before initializing the first skill.
+    
+    This makes the first iframe calculate itself at
+    the real mobile/desktop panel width.
+  */
+  if(skills.length){
+
+    requestAnimationFrame(()=>{
+
+      requestAnimationFrame(()=>{
+
+        showSkill(0);
+
+      });
+
+    });
+
+    /*
+      Preloading happens separately and does NOT
+      initialize the visible skill.
+    */
+    preloadSkills(1);
+  }
+}
+
+/* -------------------------------------------------------
+   Character loading
+------------------------------------------------------- */
+
+async function loadCharacter(){
+
+  const characterId=
+    getCharacterId();
+
+  try{
+
+    const response=
+      await fetch(
+        "/images/mlg-assets/data-character.json",
+        {
+          cache:"default"
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        `Failed to load character data: ${response.status}`
+      );
+    }
+
+    const data=
+      await response.json();
+
+    const character=
+      data[characterId];
+
+    if(!character){
+
+      throw new Error(
+        `Character "${characterId}" was not found in data-character.json`
+      );
+    }
+
+    setupCharacter(
+      characterId,
+      character
+    );
+
+  }catch(error){
+
+    console.error(
+      "Character loading error:",
+      error
+    );
+
+    document.getElementById(
+      "page-heading"
+    ).textContent=
+      "Mystical Legends Game - Character Not Found";
+
+    document.getElementById(
+      "character-name"
+    ).textContent=
+      "Character Not Found";
+
+    document.getElementById(
+      "skillSidebar"
+    ).style.display="none";
+
+    document.getElementById(
+      "characterStylesSection"
+    ).style.display="none";
+  }
+}
+
+/* -------------------------------------------------------
+   Start
+------------------------------------------------------- */
+
 loadCharacter();
+
 </script>
 
 <script src="/js/include.js"></script>
