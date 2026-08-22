@@ -611,7 +611,7 @@ function getSkillIcon(skill,path){
 }
 
 function getSkillFile(skill,characterId){
-  const id=skill==="Dupes"?5:1;
+  const id=skill==="Dupes"?16:1;
 
   return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(characterId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
 }
@@ -833,7 +833,7 @@ function preloadSkills(startIndex=0){
     iframe.src=url;
 
     iframe.style.cssText=
-      "position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none;visibility:hidden";
+      "position:absolute;width:100vw;height:1px;border:0;opacity:0;pointer-events:none;visibility:hidden;left:-10000px;top:0";
 
     iframe.onload=()=>skillCache.set(url,iframe);
 
@@ -858,7 +858,7 @@ function prepareIframe(iframe){
 
     const timeout=setTimeout(done,5000);
 
-    iframe.addEventListener("load",()=>{
+    const prepare=()=>{
       clearTimeout(timeout);
 
       try{
@@ -882,15 +882,32 @@ function prepareIframe(iframe){
         doc.head.appendChild(style);
 
         if(doc.fonts?.ready)
-          doc.fonts.ready.then(done);
+          doc.fonts.ready.then(()=>{
+            requestAnimationFrame(()=>{
+              requestAnimationFrame(done);
+            });
+          });
         else
-          requestAnimationFrame(done);
+          requestAnimationFrame(()=>{
+            requestAnimationFrame(done);
+          });
 
       }catch(error){
         console.error("Skill iframe preparation error:",error);
         done();
       }
-    },{once:true});
+    };
+
+    try{
+      const doc=iframe.contentDocument||iframe.contentWindow.document;
+
+      if(doc&&doc.readyState==="complete"){
+        prepare();
+        return;
+      }
+    }catch(error){}
+
+    iframe.addEventListener("load",prepare,{once:true});
   });
 }
 
@@ -901,6 +918,8 @@ function getIframeHeight(iframe){
     return Math.max(
       doc.body?.scrollHeight||0,
       doc.documentElement?.scrollHeight||0,
+      doc.body?.offsetHeight||0,
+      doc.documentElement?.offsetHeight||0,
       140
     )+20;
 
@@ -972,6 +991,13 @@ async function showSkill(index){
   if(iframe){
     iframe.remove();
     skillCache.delete(url);
+
+    /*
+      The iframe was preloaded while hidden. Force it to use
+      the real skill URL again so its responsive layout is
+      recalculated at the actual mobile/desktop width.
+    */
+    iframe.src=url;
   }else{
     iframe=document.createElement("iframe");
     iframe.src=url;
@@ -990,7 +1016,7 @@ async function showSkill(index){
 
   const oldHeight=oldIframe
     ?Math.max(oldIframe.offsetHeight,140)
-    :panel.offsetHeight;
+    :Math.max(panel.offsetHeight,140);
 
   panel.style.height=`${oldHeight}px`;
 
@@ -999,6 +1025,22 @@ async function showSkill(index){
   panel.appendChild(iframe);
 
   await loaded;
+
+  if(token!==skillLoadToken){
+    iframe.remove();
+    return;
+  }
+
+  /*
+    Wait for the iframe to perform its responsive mobile
+    layout before measuring it. This makes every skill use
+    the same expansion behavior as the first skill.
+  */
+  await new Promise(resolve=>{
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(resolve);
+    });
+  });
 
   if(token!==skillLoadToken){
     iframe.remove();
