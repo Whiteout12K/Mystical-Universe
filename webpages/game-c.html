@@ -28,10 +28,7 @@
   --skill-transition:.25s ease;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:Arial,sans-serif;
-}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
 
 html{
   min-height:100%;
@@ -263,9 +260,7 @@ hr.my-4{
   scrollbar-color:var(--fantasy-gold) rgba(255,255,255,.04);
 }
 
-.skill-sidebar::-webkit-scrollbar{
-  height:6px;
-}
+.skill-sidebar::-webkit-scrollbar{height:6px}
 
 .skill-sidebar::-webkit-scrollbar-track{
   background:rgba(255,255,255,.035);
@@ -273,11 +268,7 @@ hr.my-4{
 }
 
 .skill-sidebar::-webkit-scrollbar-thumb{
-  background:linear-gradient(
-    90deg,
-    var(--fantasy-red),
-    var(--fantasy-gold)
-  );
+  background:linear-gradient(90deg,var(--fantasy-red),var(--fantasy-gold));
   border-radius:10px;
 }
 
@@ -360,11 +351,8 @@ hr.my-4{
   box-shadow:
     0 8px 25px rgba(0,0,0,.55),
     inset 0 1px 0 rgba(240,202,105,.08);
-
   overflow:visible;
-
-  transition:
-    height var(--skill-transition);
+  transition:height var(--skill-transition);
 }
 
 .skill-panel:before{
@@ -398,7 +386,7 @@ hr.my-4{
   min-height:120px;
   border:0;
   background:#0f0f0f;
-  opacity:0;
+  opacity:1;
   transition:opacity var(--skill-transition);
 }
 
@@ -426,11 +414,7 @@ hr.my-4{
   color:var(--fantasy-text)!important;
   border:1px solid var(--fantasy-border);
   border-radius:.75rem;
-  background:linear-gradient(
-    145deg,
-    #242021,
-    #151314
-  );
+  background:linear-gradient(145deg,#242021,#151314);
   box-shadow:0 6px 18px rgba(0,0,0,.45);
   transition:
     transform .25s ease,
@@ -448,11 +432,7 @@ hr.my-4{
 
 .style-card .card-body{
   color:var(--fantasy-text)!important;
-  background:linear-gradient(
-    180deg,
-    rgba(116,27,34,.12),
-    transparent
-  );
+  background:linear-gradient(180deg,rgba(116,27,34,.12),transparent);
 }
 
 .pixel-portrait{
@@ -468,44 +448,14 @@ hr.my-4{
 /* Mobile */
 
 @media(max-width:767px){
-
-  .splash-art{
-    height:420px;
-  }
-
-  #character-info{
-    padding:20px!important;
-  }
-
-  #character-name{
-    font-size:1.8rem;
-  }
-
-  .skill-sidebar{
-    gap:10px;
-    padding-left:2px;
-    padding-right:2px;
-  }
-
-  .skill-btn{
-    width:62px;
-    height:62px;
-  }
-
-  .skill-btn img{
-    width:57px;
-    height:57px;
-  }
-
-  .skill-panel{
-    padding:10px;
-    min-height:120px;
-  }
-
-  #page-heading{
-    font-size:1rem;
-    letter-spacing:.05em;
-  }
+  .splash-art{height:420px}
+  #character-info{padding:20px!important}
+  #character-name{font-size:1.8rem}
+  .skill-sidebar{gap:10px;padding-left:2px;padding-right:2px}
+  .skill-btn{width:62px;height:62px}
+  .skill-btn img{width:57px;height:57px}
+  .skill-panel{padding:10px;min-height:120px}
+  #page-heading{font-size:1rem;letter-spacing:.05em}
 }
 </style>
 </head>
@@ -514,42 +464,20 @@ hr.my-4{
 
 <div id="subheader-placeholder"></div>
 
-<h1 id="page-heading">
-  Mystical Legends Game - Loading Character
-</h1>
+<h1 id="page-heading">Mystical Legends Game - Loading Character</h1>
 
 <div class="container py-4">
-
   <section class="row g-4 align-items-center">
-
     <div class="col-12 col-md-5">
-      <img
-        id="character-splash"
-        class="splash-art"
-        src=""
-        alt="Character Splash">
+      <img id="character-splash" class="splash-art" src="" alt="Character Splash">
     </div>
 
-    <div
-      id="character-info"
-      class="col-12 col-md-7">
-
-      <h1 id="character-name" class="display-6">
-        Loading Character
-      </h1>
+    <div id="character-info" class="col-12 col-md-7">
+      <h1 id="character-name" class="display-6">Loading Character</h1>
 
       <div class="d-flex align-items-center gap-3 mb-2">
-
-        <b id="character-rarity" class="ssr">
-          SSR
-        </b>
-
-        <img
-          id="character-role"
-          class="role-icon"
-          src=""
-          alt="Character Role">
-
+        <b id="character-rarity" class="ssr">SSR</b>
+        <img id="character-role" class="role-icon" src="" alt="Character Role">
       </div>
 
       <div class="character-info-row">
@@ -571,7 +499,6 @@ hr.my-4{
         <span class="character-info-label">Attribute</span>:
         <span id="character-attributes" class="character-info-value"></span>
       </div>
-
     </div>
   </section>
 
@@ -582,349 +509,177 @@ hr.my-4{
     <div id="skillSidebar" class="skill-sidebar mb-3"></div>
     <div id="skillPanel" class="skill-panel"></div>
   </section>
-
 </div>
 
-<section
-  id="characterStylesSection"
-  class="container my-4"
-  style="display:none">
-
+<section id="characterStylesSection" class="container my-4" style="display:none">
   <h5 class="mb-3">Character Styles</h5>
-
   <div id="characterStyles" class="character-style-row"></div>
-
 </section>
 
 <script>
 "use strict";
 
-/* =========================================================
-   State
-========================================================= */
-
-let characterData=null;
-let skills=[];
-let activeSkillIndex=-1;
-let skillLoadToken=0;
-
-const FONT_SCALE=1.3;
-const TRANSITION_DURATION=250;
-const MIN_SKILL_HEIGHT=120;
-const SKILL_VIEW_PATH="/ml-game/skill.html";
-
-/* =========================================================
-   Utilities
-========================================================= */
-
+let characterData=null,skills=[],activeSkillIndex=-1,skillLoadToken=0;
+const FONT_SCALE=1.3,TRANSITION_DURATION=250,MIN_SKILL_HEIGHT=120,SKILL_VIEW_PATH="/ml-game/skill.html";
 const $=id=>document.getElementById(id);
 
 function getCharacterId(){
-  return(
-    new URLSearchParams(location.search).get("char")||"c1"
-  ).toLowerCase();
+  return(new URLSearchParams(location.search).get("char")||"c1").toLowerCase();
 }
 
 function speciesClassName(species){
-  return"species-"+String(species)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g,"");
+  return"species-"+String(species).toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 
 function createListItems(items,species=false){
-
-  if(!Array.isArray(items))
-    return"";
-
+  if(!Array.isArray(items))return"";
   return items.map(item=>species
     ?`<span class="species ${speciesClassName(item)} character-list-item">${item}</span>`
     :`<span class="character-list-item">${item}</span>`
   ).join(", ");
 }
 
-/* =========================================================
-   Skills
-========================================================= */
-
 function getSkillCategory(skill){
-
-  if(skill==="Dupes")
-    return"Dupes";
-
-  if(skill.startsWith("B"))
-    return"Basic";
-
-  if(skill.startsWith("S"))
-    return"Special";
-
-  if(skill.startsWith("U"))
-    return"Ultimate";
-
-  if(skill.startsWith("T"))
-    return"Technical";
-
+  if(skill==="Dupes")return"Dupes";
+  if(skill.startsWith("B"))return"Basic";
+  if(skill.startsWith("S"))return"Special";
+  if(skill.startsWith("U"))return"Ultimate";
+  if(skill.startsWith("T"))return"Technical";
   return"Other";
 }
 
 function getSkillIcon(skill,path){
-
   return skill==="Dupes"
     ?"/images/mlg-assets/Stars/dupe.svg"
     :`${path}/skill_b/${skill.toLowerCase()}.svg`;
 }
 
 function getSkillFile(skill,charId){
-
   const id=skill==="Dupes"?16:1;
-
   return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
 }
 
-/* =========================================================
-   Skill buttons
-========================================================= */
-
 function createSkillButtons(character){
-
   const sidebar=$("skillSidebar");
-
   sidebar.innerHTML="";
-
-  skills=Array.isArray(character.skills)
-    ?character.skills
-    :[];
-
-  sidebar.style.display=
-    skills.length?"flex":"none";
+  skills=Array.isArray(character.skills)?character.skills:[];
+  sidebar.style.display=skills.length?"flex":"none";
 
   let previousCategory=null;
 
   skills.forEach((skill,index)=>{
-
     const category=getSkillCategory(skill);
 
-    if(
-      previousCategory!==null &&
-      category!==previousCategory
-    ){
-
+    if(previousCategory!==null&&category!==previousCategory){
       const divider=document.createElement("div");
-
       divider.className="skill-divider";
-
       sidebar.appendChild(divider);
     }
 
     const button=document.createElement("div");
-
-    button.className=
-      `skill-btn${index===0?" active":""}`;
-
+    button.className=`skill-btn${index===0?" active":""}`;
     button.dataset.index=index;
-
-    button.addEventListener(
-      "click",
-      ()=>showSkill(index)
-    );
+    button.addEventListener("click",()=>showSkill(index));
 
     const image=document.createElement("img");
-
-    image.src=getSkillIcon(
-      skill,
-      character.skills_path
-    );
-
+    image.src=getSkillIcon(skill,character.skills_path);
     image.alt=skill;
     image.loading="eager";
     image.decoding="async";
 
     button.appendChild(image);
     sidebar.appendChild(button);
-
     previousCategory=category;
   });
 }
 
 function setActiveButton(index){
-
-  document.querySelectorAll(".skill-btn")
-    .forEach((button,i)=>{
-
-      button.classList.toggle(
-        "active",
-        i===index
-      );
-    });
+  document.querySelectorAll(".skill-btn").forEach((button,i)=>{
+    button.classList.toggle("active",i===index);
+  });
 }
 
-/* =========================================================
-   Iframe creation
-========================================================= */
+/* ---------------------------------------------------------
+   Iframe
+--------------------------------------------------------- */
 
 function createSkillIframe(url){
-
   const iframe=document.createElement("iframe");
-
   iframe.className="skill-frame";
   iframe.title="Skill information";
-  iframe.src="about:blank";
 
-  let resolveLoad;
+  let resolveLoad,finished=false;
 
   const loaded=new Promise(resolve=>{
     resolveLoad=resolve;
   });
 
-  let finished=false;
-
   const finish=()=>{
-
-    if(finished)
-      return;
-
+    if(finished)return;
     finished=true;
-
     clearTimeout(timeout);
-
     resolveLoad();
   };
 
-  iframe.addEventListener(
-    "load",
-    finish,
-    {once:true}
-  );
+  iframe.addEventListener("load",finish,{once:true});
 
-  /*
-    This timeout is only a safety net.
+  const timeout=setTimeout(finish,8000);
 
-    It prevents a broken iframe from permanently
-    blocking the page. It is NOT responsible for
-    determining the final height.
-  */
-  const timeout=setTimeout(
-    finish,
-    8000
-  );
-
-  /*
-    The load listener exists before navigation.
-  */
   iframe.src=url;
 
-  return{
-    iframe,
-    loaded
-  };
+  return{iframe,loaded};
 }
 
-/* =========================================================
-   Iframe document preparation
-========================================================= */
-
 async function prepareIframe(iframe){
-
   try{
+    const doc=iframe.contentDocument||iframe.contentWindow.document;
+    if(!doc)return;
 
-    const doc=
-      iframe.contentDocument||
-      iframe.contentWindow.document;
-
-    if(!doc)
-      return;
-
-    /*
-      Apply the existing intended iframe typography.
-      No visible styling of the parent page is changed.
-    */
     const style=document.createElement("style");
 
     style.textContent=`
-      html,
-      body{
+      html,body{
         background:#0f0f0f!important;
         color:#e6e6e6!important;
         overflow:hidden!important;
         font-family:Arial,sans-serif!important;
         font-size:${FONT_SCALE*90}%!important;
       }
-
       body *{
         font-family:Arial,sans-serif!important;
         font-size:inherit!important;
       }
     `;
 
-    if(doc.head)
-      doc.head.appendChild(style);
+    if(doc.head)doc.head.appendChild(style);
 
     if(doc.fonts?.ready){
-
-      try{
-        await doc.fonts.ready;
-      }catch{}
+      try{await doc.fonts.ready}catch{}
     }
 
-    /*
-      Wait for all images that are currently part
-      of the skill page.
-    */
-    const images=[
-      ...(doc.images||[])
-    ];
+    const images=[...(doc.images||[])];
 
-    await Promise.all(
-      images.map(image=>{
+    await Promise.all(images.map(image=>{
+      if(image.complete)return Promise.resolve();
 
-        if(image.complete)
-          return Promise.resolve();
-
-        return new Promise(resolve=>{
-
-          image.addEventListener(
-            "load",
-            resolve,
-            {once:true}
-          );
-
-          image.addEventListener(
-            "error",
-            resolve,
-            {once:true}
-          );
-
-        });
-      })
-    );
-
+      return new Promise(resolve=>{
+        image.addEventListener("load",resolve,{once:true});
+        image.addEventListener("error",resolve,{once:true});
+      });
+    }));
   }catch(error){
-
-    console.error(
-      "Skill iframe preparation error:",
-      error
-    );
+    console.error("Skill iframe preparation error:",error);
   }
 }
 
-/* =========================================================
-   Height measurement
-========================================================= */
-
 function getIframeHeight(iframe){
-
   try{
+    const doc=iframe.contentDocument||iframe.contentWindow.document;
+    if(!doc)return MIN_SKILL_HEIGHT;
 
-    const doc=
-      iframe.contentDocument||
-      iframe.contentWindow.document;
+    const body=doc.body,html=doc.documentElement;
 
-    if(!doc)
-      return MIN_SKILL_HEIGHT;
-
-    const body=doc.body;
-    const html=doc.documentElement;
-
-    const height=Math.max(
+    return Math.max(
       body?.scrollHeight||0,
       body?.offsetHeight||0,
       body?.clientHeight||0,
@@ -932,251 +687,114 @@ function getIframeHeight(iframe){
       html?.offsetHeight||0,
       html?.clientHeight||0,
       MIN_SKILL_HEIGHT
-    );
-
-    return height+20;
-
+    )+20;
   }catch{
-
     return MIN_SKILL_HEIGHT;
   }
 }
 
 /*
-  Mobile browsers can perform another responsive
-  layout pass after the iframe's load event.
-
-  Instead of trusting one measurement, this function
-  waits until the measured height becomes stable.
-
-  This is the key fix for the first-visit problem.
+  Wait for the mobile iframe to finish responsive
+  layout before calculating its final height.
 */
 async function waitForStableHeight(iframe){
-
-  let previous=-1;
-  let stableCount=0;
-  let height=MIN_SKILL_HEIGHT;
-
-  /*
-    Maximum stabilization time.
-
-    This is intentionally much shorter than the
-    old 5-second iframe timeout in normal operation,
-    while still allowing slower mobile devices
-    enough time to finish layout.
-  */
+  let previous=-1,stable=0,height=MIN_SKILL_HEIGHT;
   const deadline=performance.now()+1500;
 
   while(performance.now()<deadline){
-
-    await new Promise(resolve=>{
-      requestAnimationFrame(resolve);
-    });
+    await new Promise(resolve=>requestAnimationFrame(resolve));
 
     height=getIframeHeight(iframe);
 
-    if(
-      height===previous ||
-      Math.abs(height-previous)<=1
-    ){
-
-      stableCount++;
-
-    }else{
-
-      stableCount=0;
-    }
+    if(Math.abs(height-previous)<=1)stable++;
+    else stable=0;
 
     previous=height;
 
-    /*
-      Two consecutive identical measurements means
-      the responsive layout has settled.
-    */
-    if(stableCount>=2)
-      break;
+    if(stable>=2)break;
   }
 
-  /*
-    One final measurement after the stabilization
-    frames catches late layout changes.
-  */
-  await new Promise(resolve=>{
-    requestAnimationFrame(resolve);
-  });
-
-  height=getIframeHeight(iframe);
-
-  return Math.max(
-    height,
-    MIN_SKILL_HEIGHT
-  );
+  await new Promise(resolve=>requestAnimationFrame(resolve));
+  return Math.max(getIframeHeight(iframe),MIN_SKILL_HEIGHT);
 }
 
-/* =========================================================
-   Dynamic iframe height observer
-========================================================= */
-
 function observeIframeHeight(iframe,panel,token){
-
   try{
+    const doc=iframe.contentDocument||iframe.contentWindow.document;
+    if(!doc)return null;
 
-    const doc=
-      iframe.contentDocument||
-      iframe.contentWindow.document;
-
-    if(!doc)
-      return null;
-
-    const body=doc.body;
-    const html=doc.documentElement;
-
-    if(!body&&!html)
-      return null;
+    const body=doc.body,html=doc.documentElement;
+    if(!body&&!html)return null;
 
     let lastHeight=0;
 
     const update=()=>{
+      if(token!==skillLoadToken)return;
 
-      if(token!==skillLoadToken)
-        return;
+      const height=getIframeHeight(iframe);
+      if(Math.abs(height-lastHeight)<2)return;
 
-      const newHeight=getIframeHeight(iframe);
+      lastHeight=height;
+      iframe.style.height=`${height}px`;
 
-      if(
-        Math.abs(newHeight-lastHeight)<2
-      ){
-        return;
-      }
-
-      lastHeight=newHeight;
-
-      iframe.style.height=
-        `${newHeight}px`;
-
-      /*
-        If the panel is already in its natural state,
-        let its content determine its height.
-
-        During transitions, showSkill() controls it.
-      */
-      if(
-        panel.style.height==="auto" ||
-        !panel.style.height
-      ){
-
-        panel.style.height=
-          `${newHeight}px`;
+      if(panel.style.height==="auto"||!panel.style.height){
+        panel.style.height=`${height}px`;
 
         requestAnimationFrame(()=>{
-          if(token===skillLoadToken)
-            panel.style.height="auto";
+          if(token===skillLoadToken)panel.style.height="auto";
         });
       }
     };
 
     const observer=new ResizeObserver(update);
-
-    if(body)
-      observer.observe(body);
-
-    if(html)
-      observer.observe(html);
+    if(body)observer.observe(body);
+    if(html)observer.observe(html);
 
     return observer;
-
   }catch(error){
-
-    console.warn(
-      "ResizeObserver unavailable for skill iframe:",
-      error
-    );
-
+    console.warn("Skill ResizeObserver unavailable:",error);
     return null;
   }
 }
 
-/* =========================================================
-   Show skill
-========================================================= */
+/* ---------------------------------------------------------
+   Skill display
+--------------------------------------------------------- */
 
 async function showSkill(index){
-
-  if(
-    !characterData||
-    !skills[index]
-  ){
-    return;
-  }
+  if(!characterData||!skills[index])return;
 
   const panel=$("skillPanel");
 
-  /*
-    Do nothing if this exact skill is already displayed.
-  */
-  if(
-    index===activeSkillIndex &&
-    panel.querySelector(".skill-frame")
-  ){
+  if(index===activeSkillIndex&&panel.querySelector(".skill-frame"))
     return;
-  }
 
   const token=++skillLoadToken;
-
   const charId=getCharacterId();
   const skill=skills[index];
   const url=getSkillFile(skill,charId);
-
-  const isFirstSkill=
-    activeSkillIndex===-1;
+  const firstSkill=activeSkillIndex===-1;
 
   setActiveButton(index);
 
-  /*
-    Save the current height only when changing
-    between already-existing skills.
-  */
-  const currentHeight=Math.max(
-    panel.getBoundingClientRect().height,
-    MIN_SKILL_HEIGHT
-  );
+  const oldFrame=panel.querySelector(".skill-frame");
 
-  /*
-    IMPORTANT:
-
-    On the FIRST load, don't force the panel into
-    an artificial starting height.
-
-    This prevents the user from seeing a small box
-    while the first iframe is still settling.
-  */
-  if(!isFirstSkill){
-
-    panel.style.height=
-      `${currentHeight}px`;
+  if(!firstSkill){
+    panel.style.height=`${Math.max(panel.getBoundingClientRect().height,MIN_SKILL_HEIGHT)}px`;
   }
 
-  const oldFrame=
-    panel.querySelector(".skill-frame");
-
-  const{
-    iframe,
-    loaded
-  }=createSkillIframe(url);
+  const{iframe,loaded}=createSkillIframe(url);
 
   /*
-    First-load iframe is inserted normally.
-
-    For a skill change, temporarily position the new
-    iframe normally as well so its real height can be
-    measured correctly.
+    First skill is visible immediately.
+    We no longer start it at opacity:0.
   */
+  iframe.style.opacity="1";
   panel.appendChild(iframe);
 
   await loaded;
 
   if(token!==skillLoadToken){
-
     iframe.remove();
     return;
   }
@@ -1184,92 +802,46 @@ async function showSkill(index){
   await prepareIframe(iframe);
 
   if(token!==skillLoadToken){
-
     iframe.remove();
     return;
   }
 
-  /*
-    This is the major difference from the old version.
-
-    We don't immediately trust scrollHeight.
-
-    We wait for the iframe's responsive layout to
-    stabilize first.
-  */
-  const newHeight=
-    await waitForStableHeight(iframe);
+  const height=await waitForStableHeight(iframe);
 
   if(token!==skillLoadToken){
-
     iframe.remove();
     return;
   }
 
-  iframe.style.height=
-    `${newHeight}px`;
+  iframe.style.height=`${height}px`;
 
-  /*
-    -------------------------------------------------------
-    FIRST SKILL
-    -------------------------------------------------------
-
-    No height animation.
-
-    The browser gets the correct final height before
-    revealing the iframe.
-  */
-  if(isFirstSkill){
-
-    panel.style.height=
-      `${newHeight}px`;
-
+  if(firstSkill){
+    /*
+      No opacity transition on the first skill.
+      It is simply made visible at its correct height.
+    */
+    panel.style.height=`${height}px`;
     iframe.style.opacity="1";
 
-    /*
-      Allow the panel to return to natural sizing after
-      the first frame has been established.
-    */
     requestAnimationFrame(()=>{
-
-      if(token!==skillLoadToken)
-        return;
-
-      panel.style.height="auto";
+      if(token===skillLoadToken)panel.style.height="auto";
     });
-
   }else{
-
     /*
-      -----------------------------------------------------
-      NORMAL SKILL SWITCH
-      -----------------------------------------------------
-
-      Preserve the existing visual transition.
+      Fade only applies to subsequent skill changes.
     */
+    iframe.style.opacity="0";
 
     panel.offsetHeight;
 
     requestAnimationFrame(()=>{
+      if(token!==skillLoadToken)return;
 
-      if(token!==skillLoadToken)
-        return;
-
-      panel.style.height=
-        `${newHeight}px`;
-
+      panel.style.height=`${height}px`;
       iframe.style.opacity="1";
     });
 
-    /*
-      Remove the old iframe after the new one has
-      started appearing.
-    */
-    if(
-      oldFrame &&
-      oldFrame!==iframe
-    ){
-
+    if(oldFrame&&oldFrame!==iframe){
       oldFrame.style.position="absolute";
       oldFrame.style.left="0";
       oldFrame.style.top="0";
@@ -1279,52 +851,30 @@ async function showSkill(index){
       oldFrame.style.pointerEvents="none";
 
       setTimeout(()=>{
-
-        if(oldFrame.isConnected)
-          oldFrame.remove();
-
+        if(oldFrame.isConnected)oldFrame.remove();
       },TRANSITION_DURATION);
     }
 
-    /*
-      After the normal transition, let the content
-      determine its own natural height.
-    */
     setTimeout(()=>{
-
-      if(token!==skillLoadToken)
-        return;
-
-      panel.style.height="auto";
-
+      if(token===skillLoadToken)panel.style.height="auto";
     },TRANSITION_DURATION+30);
   }
 
   activeSkillIndex=index;
 
-  /*
-    Keep watching the iframe because some skill pages
-    may change height after their initial rendering.
-  */
-  observeIframeHeight(
-    iframe,
-    panel,
-    token
-  );
+  observeIframeHeight(iframe,panel,token);
 }
 
-/* =========================================================
+/* ---------------------------------------------------------
    Character styles
-========================================================= */
+--------------------------------------------------------- */
 
 function isVideoFile(path){
   return/\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
 }
 
 function createCostumePreview(costume){
-
   if(isVideoFile(costume.preview_path)){
-
     const video=document.createElement("video");
 
     Object.assign(video,{
@@ -1351,7 +901,6 @@ function createCostumePreview(costume){
 }
 
 function loadCharacterStyles(character){
-
   const section=$("characterStylesSection");
   const container=$("characterStyles");
 
@@ -1359,19 +908,11 @@ function loadCharacterStyles(character){
 
   const costumes=Object.keys(character)
     .filter(key=>/^costume_\d+$/.test(key))
-    .sort(
-      (a,b)=>
-        Number(a.split("_")[1])-
-        Number(b.split("_")[1])
-    )
+    .sort((a,b)=>Number(a.split("_")[1])-Number(b.split("_")[1]))
     .map(key=>character[key])
-    .filter(
-      costume=>
-        costume&&costume.preview_path
-    );
+    .filter(costume=>costume&&costume.preview_path);
 
   if(!costumes.length){
-
     section.style.display="none";
     return;
   }
@@ -1379,201 +920,105 @@ function loadCharacterStyles(character){
   section.style.display="block";
 
   costumes.forEach(costume=>{
-
     const card=document.createElement("div");
-
-    card.className=
-      "card text-center style-card";
-
-    card.appendChild(
-      createCostumePreview(costume)
-    );
+    card.className="card text-center style-card";
+    card.appendChild(createCostumePreview(costume));
 
     const body=document.createElement("div");
-
     body.className="card-body p-2";
-
-    body.textContent=
-      costume.name||
-      `Costume ${costume.id}`;
+    body.textContent=costume.name||`Costume ${costume.id}`;
 
     card.appendChild(body);
     container.appendChild(card);
   });
 }
 
-/* =========================================================
-   Character setup
-========================================================= */
+/* ---------------------------------------------------------
+   Character
+--------------------------------------------------------- */
 
 function setupCharacter(character){
-
   characterData=character;
-
-  document.title=
-    `MLG - ${character.name}`;
-
+  document.title=`MLG - ${character.name}`;
   $("page-heading").textContent=" ";
 
-  const splash=
-    $("character-splash");
-
-  splash.src=
-    character.splash_image;
-
-  splash.alt=
-    `${character.name} Splash`;
-
+  const splash=$("character-splash");
+  splash.src=character.splash_image;
+  splash.alt=`${character.name} Splash`;
   splash.loading="eager";
   splash.decoding="async";
 
   if(character.splash_color)
-    splash.style.filter=
-      character.splash_color;
+    splash.style.filter=character.splash_color;
 
   if(character.button_color){
-
     document.documentElement.style.setProperty(
       "--character-button-color",
       character.button_color
     );
   }
 
-  $("character-name").textContent=
-    character.name;
+  $("character-name").textContent=character.name;
 
-  const rarity=
-    $("character-rarity");
+  const rarity=$("character-rarity");
+  rarity.textContent=character.rarity;
+  rarity.className=character.rarity.toLowerCase();
 
-  rarity.textContent=
-    character.rarity;
-
-  rarity.className=
-    character.rarity.toLowerCase();
-
-  const role=
-    $("character-role");
-
-  role.src=
-    character.rarity_img;
-
-  role.alt=
-    `${character.rarity} Role`;
-
+  const role=$("character-role");
+  role.src=character.rarity_img;
+  role.alt=`${character.rarity} Role`;
   role.loading="eager";
 
-  $("character-species").innerHTML=
-    createListItems(
-      character.species,
-      true
-    );
-
-  $("character-specialty").innerHTML=
-    createListItems(
-      character.specialty
-    );
-
-  $("character-affiliation").innerHTML=
-    createListItems(
-      character.affiliation
-    );
-
-  $("character-attributes").innerHTML=
-    createListItems(
-      character.attributes
-    );
+  $("character-species").innerHTML=createListItems(character.species,true);
+  $("character-specialty").innerHTML=createListItems(character.specialty);
+  $("character-affiliation").innerHTML=createListItems(character.affiliation);
+  $("character-attributes").innerHTML=createListItems(character.attributes);
 
   createSkillButtons(character);
   loadCharacterStyles(character);
 
-  /*
-    -------------------------------------------------------
-    INITIAL SKILL
-    -------------------------------------------------------
-
-    No artificial double-requestAnimationFrame delay.
-
-    The skill is started immediately after the DOM
-    elements have been created.
-
-    showSkill() itself performs the important stabilization
-    work before revealing the iframe.
-  */
-  if(skills.length){
-
-    showSkill(0);
-  }
+  if(skills.length)showSkill(0);
 }
 
-/* =========================================================
-   Load character data
-========================================================= */
+/* ---------------------------------------------------------
+   Load
+--------------------------------------------------------- */
 
 async function loadCharacter(){
-
   const charId=getCharacterId();
 
   try{
-
     const response=await fetch(
       "/images/mlg-assets/data-character.json",
-      {
-        cache:"default"
-      }
+      {cache:"default"}
     );
 
-    if(!response.ok){
+    if(!response.ok)
+      throw new Error(`Failed to load character data: ${response.status}`);
 
-      throw new Error(
-        `Failed to load character data: ${response.status}`
-      );
-    }
+    const data=await response.json();
+    const character=data[charId];
 
-    const data=
-      await response.json();
-
-    const character=
-      data[charId];
-
-    if(!character){
-
-      throw new Error(
-        `Character "${charId}" was not found in data-character.json`
-      );
-    }
+    if(!character)
+      throw new Error(`Character "${charId}" was not found in data-character.json`);
 
     setupCharacter(character);
-
   }catch(error){
-
-    console.error(
-      "Character loading error:",
-      error
-    );
+    console.error("Character loading error:",error);
 
     $("page-heading").textContent=
       "Mystical Legends Game - Character Not Found";
 
-    $("character-name").textContent=
-      "Character Not Found";
-
-    $("skillSidebar").style.display=
-      "none";
-
-    $("characterStylesSection").style.display=
-      "none";
+    $("character-name").textContent="Character Not Found";
+    $("skillSidebar").style.display="none";
+    $("characterStylesSection").style.display="none";
   }
 }
-
-/* =========================================================
-   Start
-========================================================= */
 
 loadCharacter();
 </script>
 
 <script src="/js/include.js"></script>
-
 <div id="subfooter-placeholder"></div>
 
 </body>
