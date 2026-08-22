@@ -15,6 +15,11 @@
  --character-panel:#2b2425;
 }
 
+.test-character-splash-and-button {
+   background-color: (0 0 18px rgba(137, 218, 248, 0.429));
+   color: #5ea4b3;
+}
+
 html {
   min-height:100%;
   background:#0b0b0c;

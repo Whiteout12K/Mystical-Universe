@@ -1,720 +1,1056 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>MLG - Loading Character</title>
-  
-  <link rel="icon" href="/images/website/favicon.png" type="image/png">
-
-  <link href="/css/bootstrap-min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/home.css">
-  <link rel="stylesheet" href="/css/news.css">
-  <link rel="stylesheet" href="/css/mlg.css">
-  <script src="/js/bootstrap-bundle-min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MLG - Loading Character</title>
+<link rel="icon" href="/images/website/favicon.png" type="image/png">
+<link href="/css/bootstrap-min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/news.css">
+<link rel="stylesheet" href="/css/mlg.css">
+<script src="/js/bootstrap-bundle-min.js"></script>
 
 <style>
-body {
-    background-color: #121212;
+:root{
+  --character-button-color:#a20b0b;
+  --fantasy-red:#741b22;
+  --fantasy-red2:#a52a32;
+  --fantasy-gold:#d6aa45;
+  --fantasy-gold2:#f0ca69;
+  --fantasy-dark:#111011;
+  --fantasy-panel:#1b1819;
+  --fantasy-panel2:#242021;
+  --fantasy-border:rgba(214,170,69,.32);
+  --fantasy-border-bright:rgba(240,202,105,.75);
+  --fantasy-text:#faf4e5;
 }
 
-/* Splash Art */
-.splash-art {
-    width: 100%;
-    height: 600px;
-    object-fit: contain;
-    object-position: center;
-    border-radius: 12px;
-    filter: drop-shadow(0 0 18px rgba(255, 120, 120, 0.35));
-    display: block;
+*{
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
 }
 
-/* Role Icon */
-.role-icon {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
+html{
+  min-height:100%;
+  background-color:#000 !important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(116,27,34,.24),transparent 38%),
+    linear-gradient(180deg,#0d0c0d 0%,#171415 50%,#0d0c0d 100%);
 }
 
-/* Skill Sidebar */
-.skill-sidebar {
-    display: flex;
-    overflow-x: auto;
-    gap: 12px;
-    padding-bottom: 10px;
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--fantasy-text);
+  font-family:Arial,sans-serif;
+  background-color:#000 !important;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(116,27,34,.18),transparent 36%),
+    radial-gradient(circle at 50% 100%,rgba(214,170,69,.05),transparent 30%),
+    linear-gradient(180deg,#0d0c0d 0%,#171415 55%,#0d0c0d 100%);
 }
 
-.skill-btn {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    border: 2px solid #666;
-    background-color: #1f1f1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
+/* Page heading */
+#page-heading{
+  margin:0;
+  padding:14px 18px!important;
+  color:var(--fantasy-gold2)!important;
+  font:700 1.35rem Arial,sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-shadow:0 2px 8px #000;
+  border-bottom:1px solid rgba(214,170,69,.18);
+  background:
+    linear-gradient(90deg,
+      rgba(116,27,34,.32),
+      rgba(20,18,19,.92) 35%,
+      rgba(20,18,19,.92) 65%,
+      rgba(116,27,34,.32));
+  box-shadow:0 3px 15px rgba(0,0,0,.35);
 }
 
-.skill-btn img {
-    width: 63px;
-    height: 63px;
+.container.py-4{
+  padding-top:32px!important;
+  padding-bottom:32px!important;
 }
 
-.skill-btn.active {
-    border-color: #a20b0b;
+/* Character splash */
+.splash-art{
+  display:block;
+  width:100%;
+  height:600px;
+  object-fit:contain;
+  object-position:center;
+  filter:
+    drop-shadow(0 0 18px rgba(255,120,120,.25))
+    drop-shadow(0 0 45px rgba(116,27,34,.22));
+  transition:filter .35s ease,transform .35s ease;
 }
 
-.skill-divider {
-    width: 2px;
-    background-color: #444;
-    margin: 0 6px;
+.splash-art:hover{
+  filter:
+    drop-shadow(0 0 20px rgba(240,202,105,.2))
+    drop-shadow(0 0 50px rgba(116,27,34,.35));
+  transform:scale(1.01);
 }
 
-.skill-panel {
-    background-color: #1a1a1a;
-    border-radius: 12px;
-    padding: 16px;
-    min-height: 140px;
-}
-    
-.skill-content-override {
-  background-color: #0f0f0f;
-  color: #e6e6e6;
-  border-radius: 10px;
-  padding: 12px;
-}
-
-#skillPanel {
-  display: block;
-  width: 100%;
+/* Character information */
+#character-info{
+  color:var(--fantasy-text);
+  font-family:Arial,sans-serif;
+  padding:30px;
+  border:1px solid rgba(214,170,69,.18);
+  border-radius:14px;
+  background:
+    linear-gradient(145deg,
+      rgba(38,32,33,.78),
+      rgba(17,15,16,.78));
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(240,202,105,.06);
 }
 
-/* Listable Items */
-.character-list-item {
-  display: inline-block;
-  margin-right: 8px;
-  margin-bottom: 6px;
+#character-name{
+  margin-bottom:18px;
+  color:var(--fantasy-text);
+  font:700 2rem Arial,sans-serif;
+  letter-spacing:.02em;
+  text-shadow:0 2px 10px #000;
+}
+
+#character-name:after{
+  content:"";
+  display:block;
+  width:90px;
+  height:2px;
+  margin-top:12px;
+  background:linear-gradient(90deg,var(--fantasy-gold),transparent);
+  box-shadow:0 0 8px rgba(240,202,105,.25);
+}
+
+.role-icon{
+  width:60px;
+  height:60px;
+  object-fit:contain;
+  filter:drop-shadow(0 0 7px rgba(240,202,105,.3));
+}
+
+/* Rarity */
+#character-rarity{
+  display:inline-block;
+  font:700 1.5rem Arial,sans-serif;
+  letter-spacing:.12em;
+  text-shadow:0 2px 7px #000;
+}
+
+#character-rarity.ssr{
+  color:#f0ca69!important;
+  text-shadow:
+    0 0 5px rgba(240,202,105,.75),
+    0 0 14px rgba(240,202,105,.4),
+    0 2px 7px #000;
+}
+
+#character-rarity.sr{
+  color:#cbb3e8!important;
+  text-shadow:
+    0 0 5px rgba(203,179,232,.65),
+    0 0 13px rgba(203,179,232,.3),
+    0 2px 7px #000;
+}
+
+#character-rarity.r{
+  color:#9bb8d0!important;
+  text-shadow:
+    0 0 5px rgba(155,184,208,.55),
+    0 0 12px rgba(155,184,208,.25),
+    0 2px 7px #000;
+}
+
+/* Character information rows */
+.character-info-row{
+  padding:9px 12px!important;
+  margin-bottom:2px;
+  color:var(--fantasy-text)!important;
+  font-family:Arial,sans-serif!important;
+  border-bottom:1px solid rgba(214,170,69,.09);
+  border-radius:5px;
+  background:rgba(255,255,255,.018);
+  transition:background .2s ease,border-color .2s ease;
+}
+
+.character-info-row:hover{
+  background:rgba(116,27,34,.1);
+  border-color:rgba(214,170,69,.2);
+}
+
+.character-info-label{
+  color:var(--fantasy-gold)!important;
+  font:700 14px Arial,sans-serif!important;
+  letter-spacing:.03em;
+}
+
+.character-info-value,
+.character-list-item{
+  color:var(--fantasy-text)!important;
+  font:400 14px Arial,sans-serif!important;
+}
+
+/*
+  Keep individual species classes available.
+  The species text itself remains WHITE as requested.
+*/
+#character-species,
+#character-specialty,
+#character-affiliation,
+#character-attributes{
+  color:var(--fantasy-text)!important;
+  font-family:Arial,sans-serif!important;
+}
+
+#character-species .character-list-item,
+#character-specialty .character-list-item,
+#character-affiliation .character-list-item,
+#character-attributes .character-list-item{
+  color:var(--fantasy-text)!important;
+  font-family:Arial,sans-serif!important;
+}
+
+/* Species-specific classes remain available without changing text color */
+.species{
+  display:inline-block;
+  padding:2px 7px;
+  border-radius:4px;
+  color:#fff!important;
+  font-family:Arial,sans-serif!important;
+}
+
+/* Preserve specific species classes */
+.species-angelor{
+  color:#fff!important;
+}
+
+.species-metalor{
+  color:#fff!important;
+}
+
+.species-naiad{
+  color:#fff!important;
+}
+
+.species-icelorian{
+  color:#fff!important;
+}
+
+.species-magnivirigentis{
+  color:#fff!important;
+}
+
+.species-elf{
+  color:#fff!important;
+}
+
+.species-felior{
+  color:#fff!important;
+}
+
+.species-demihuman{
+  color:#fff!important;
+}
+
+/* Section headings */
+h3{
+  position:relative;
+  margin-top:28px;
+  margin-bottom:0;
+  color:var(--fantasy-gold2);
+  font:700 1.1rem Arial,sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-shadow:0 2px 7px #000;
+}
+
+hr.my-4{
+  height:1px;
+  margin-top:12px!important;
+  margin-bottom:18px!important;
+  opacity:1;
+  border:0;
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(214,170,69,.5),
+      rgba(240,202,105,.9),
+      rgba(214,170,69,.5),
+      transparent);
+  box-shadow:0 0 7px rgba(214,170,69,.12);
+}
+
+/* Skill sidebar */
+.skill-sidebar{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  padding:7px 5px 15px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--fantasy-gold) rgba(255,255,255,.04);
+}
+
+.skill-sidebar::-webkit-scrollbar{
+  height:6px;
+}
+
+.skill-sidebar::-webkit-scrollbar-track{
+  background:rgba(255,255,255,.035);
+  border-radius:10px;
+}
+
+.skill-sidebar::-webkit-scrollbar-thumb{
+  background:linear-gradient(90deg,var(--fantasy-red),var(--fantasy-gold));
+  border-radius:10px;
+}
+
+/* Skill buttons */
+.skill-btn{
+  position:relative;
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:center;
+  width:68px;
+  height:68px;
+  padding:2px;
+  cursor:pointer;
+  border:2px solid rgba(214,170,69,.3);
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      #302a2b 0%,
+      #211d1e 52%,
+      #111011 100%);
+  box-shadow:
+    0 3px 10px rgba(0,0,0,.45),
+    inset 0 0 0 1px rgba(255,255,255,.025);
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.skill-btn:hover{
+  transform:translateY(-3px) scale(1.04);
+  border-color:var(--fantasy-gold);
+  box-shadow:
+    0 6px 15px rgba(0,0,0,.55),
+    0 0 14px rgba(214,170,69,.18);
+}
+
+.skill-btn.active{
+  border-color:var(--character-button-color);
+  box-shadow:
+    0 0 0 1px rgba(240,202,105,.25),
+    0 0 18px rgba(116,27,34,.55),
+    inset 0 0 12px rgba(116,27,34,.35);
+  transform:translateY(-2px);
+}
+
+.skill-btn img{
+  width:63px;
+  height:63px;
+  object-fit:contain;
+  border-radius:50%;
+}
+
+/* Skill category divider */
+.skill-divider{
+  width:1px;
+  height:48px;
+  flex-shrink:0;
+  margin:auto 5px;
+  background:
+    linear-gradient(180deg,
+      transparent,
+      rgba(214,170,69,.5),
+      transparent);
+}
+
+/* Skill panel */
+.skill-panel{
+  position:relative;
+  min-height:140px;
+  padding:17px;
+  overflow:hidden;
+  border:1px solid var(--fantasy-border);
+  border-radius:12px;
+  background:
+    linear-gradient(145deg,
+      rgba(38,32,33,.98),
+      rgba(20,18,19,.98));
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(240,202,105,.08);
+}
+
+.skill-panel:before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:8%;
+  right:8%;
+  height:1px;
+  background:
+    linear-gradient(90deg,
+      transparent,
+      rgba(240,202,105,.7),
+      transparent);
+}
+
+.skill-panel:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:12px;
+  box-shadow:inset 0 0 30px rgba(116,27,34,.06);
+}
+
+/* Character styles */
+.character-style-row{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:12px;
+  overflow-x:auto;
+  padding:5px 4px 14px;
+}
+
+#characterStylesSection h5{
+  color:var(--fantasy-gold2);
+  font:700 1rem Arial,sans-serif;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+
+.style-card{
+  flex:0 0 auto;
+  width:200px;
+  overflow:hidden;
+  color:var(--fantasy-text)!important;
+  border:1px solid var(--fantasy-border);
+  border-radius:.75rem;
+  background:
+    linear-gradient(145deg,#242021,#151314);
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.style-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--fantasy-border-bright);
+  box-shadow:
+    0 10px 24px rgba(0,0,0,.55),
+    0 0 15px rgba(214,170,69,.08);
+}
+
+.style-card .card-body{
+  color:var(--fantasy-text)!important;
+  font-family:Arial,sans-serif!important;
+  background:
+    linear-gradient(180deg,
+      rgba(116,27,34,.12),
+      transparent);
+}
+
+.pixel-portrait{
+  display:block;
+  width:200px;
+  height:200px;
+  margin:.75rem auto 0;
+  object-fit:contain;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
+}
+
+/* Mobile */
+@media(max-width:767px){
+  .splash-art{
+    height:420px;
+  }
+
+  #character-info{
+    padding:20px!important;
+  }
+
+  #character-name{
+    font-size:1.8rem;
+  }
+
+  .skill-btn{
+    width:62px;
+    height:62px;
+  }
+
+  .skill-btn img{
+    width:57px;
+    height:57px;
+  }
+
+  .skill-panel{
+    padding:10px;
+  }
+
+  #page-heading{
+    font-size:1rem;
+    letter-spacing:.05em;
+  }
 }
 </style>
-
-
-<style>
-/* Character Styles Section */
-.character-style-row {
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-}
-
-.style-card {
-  flex: 0 0 auto;
-  width: 200px;
-  color:#e6e6e6;
-  background-color: #111;
-  border: 1px solid #2a2a2a;
-  border-radius: 0.75rem;
-}
-
-.pixel-portrait {
-  width: 200px;    
-  height: 200px;  
-  margin: 0.75rem auto 0;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  object-fit: contain;
-}
-</style>
-
-
 </head>
-
-
 
 <body>
 
-<!-- Navbar/Header -->
 <div id="subheader-placeholder"></div>
-<h1 id="page-heading" style="color:rgb(19, 19, 19);padding:7px;">Mystical Legends Game - Loading Character</h1>
 
+<h1 id="page-heading">
+  Mystical Legends Game - Loading Character
+</h1>
 
 <div class="container py-4">
 
-<!-- SECTION 1: PROFILE -->
 <section class="row g-4 align-items-center">
-
-  <!-- Splash Art -->
   <div class="col-12 col-md-5">
     <img id="character-splash" src="" class="splash-art" alt="Character Splash">
   </div>
 
-  <!-- Basic Info -->
-  <div class="col-12 col-md-7" style="padding:30px">
-
-    <!-- Name -->
+  <div id="character-info" class="col-12 col-md-7" style="padding:30px">
     <h1 id="character-name" class="display-6">Loading Character</h1>
 
-    <!-- Rarity + Role -->
     <div class="d-flex align-items-center gap-3 mb-2">
-      <b id="character-rarity" class="ssr" style="font-size:1.5rem;">SSR</b>
+      <b id="character-rarity" class="ssr">SSR</b>
       <img id="character-role" src="" class="role-icon" alt="Character Role">
     </div>
 
-    <div style="font-size: 1rem;padding-bottom:8px;"><span style="padding-right:8px;"><span style="opacity:0.8">Species</span>:</span>
-        <span id="character-species"></span>
+    <div class="character-info-row">
+      <span class="character-info-label">Species</span>:
+      <span id="character-species" class="character-info-value"></span>
     </div>
 
-    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Specialty</span>:
-        <span id="character-specialty"></span>
+    <div class="character-info-row">
+      <span class="character-info-label">Specialty</span>:
+      <span id="character-specialty" class="character-info-value"></span>
     </div>
 
-    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Affiliation</span>:
-        <span id="character-affiliation"></span>
+    <div class="character-info-row">
+      <span class="character-info-label">Affiliation</span>:
+      <span id="character-affiliation" class="character-info-value"></span>
     </div>
 
-    <div style="font-size: 1rem;padding-bottom:8px;"><span style="opacity:0.8">Attribute</span>:
-        <span id="character-attributes"></span>
+    <div class="character-info-row">
+      <span class="character-info-label">Attribute</span>:
+      <span id="character-attributes" class="character-info-value"></span>
     </div>
-
   </div>
-
 </section>
-
 
 <h3>Skills</h3>
 <hr class="my-4">
 
-<!-- SECTION 2: SKILLS -->
-
 <section>
-<!-- Skill Icon Bar -->
-<div id="skillSidebar" class="skill-sidebar mb-3"></div>
-
-<!-- Skill Information Panel -->
-<div id="skillPanel" class="skill-panel">
-  <!-- External skill HTML loads here -->
-</div>
-
+  <div id="skillSidebar" class="skill-sidebar mb-3"></div>
+  <div id="skillPanel" class="skill-panel"></div>
 </section>
 
 </div>
 
-
-<!-- Character Styles -->
-<section id="characterStylesSection" class="container my-4" style="display:none;">
+<section id="characterStylesSection" class="container my-4" style="display:none">
   <h5 class="mb-3">Character Styles</h5>
-  <div id="characterStyles" class="d-flex flex-nowrap gap-3 character-style-row"></div>
+  <div id="characterStyles" class="character-style-row"></div>
 </section>
-
-
 
 <script>
-let characterData = null;
-let skills = [];
+let characterData=null,skills=[],skillCache=new Map(),skillLoadToken=0,activeSkillIndex=-1;
 
-const FONT_SCALE = 1.3;
-const TRANSITION_DURATION = 300; // ms
-const HEIGHT_TRANSITION_DURATION = 300; // ms
+const FONT_SCALE=1.3;
+const TRANSITION_DURATION=250;
+const HEIGHT_TRANSITION_DURATION=250;
+const SKILL_VIEW_PATH="/ml-game/skill.html";
 
-
-function getCharacterId() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("char") || "c1";
+function getCharacterId(){
+  return(new URLSearchParams(location.search).get("char")||"c1").toLowerCase();
 }
 
-
-function speciesClassName(species) {
-  return "species-" + species
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "");
+function speciesClassName(species){
+  return"species-"+species.toLowerCase().replace(/[^a-z0-9]+/g,"");
 }
 
+function createListItems(items,type="normal"){
+  if(!Array.isArray(items))return"";
 
-function createListItems(items, type = "normal") {
-  if (!Array.isArray(items)) {
-    return "";
-  }
-
-  return items.map(item => {
-
-    if (type === "species") {
-      return `<div class="species ${speciesClassName(item)} character-list-item">${item}</div>`;
-    }
-
-    return `<span class="character-list-item">${item}</span>`;
-
-  }).join("");
+  return items.map(item=>type==="species"
+    ?`<span class="species ${speciesClassName(item)} character-list-item">${item}</span>`
+    :`<span class="character-list-item">${item}</span>`
+  ).join(", ");
 }
 
-
-function getSkillCategory(skill) {
-
-  if (skill === "Dupes") {
-    return "Dupes";
-  }
-
-  if (skill.startsWith("B")) {
-    return "Basic";
-  }
-
-  if (skill.startsWith("S")) {
-    return "Special";
-  }
-
-  if (skill.startsWith("U")) {
-    return "Ultimate";
-  }
-
-  if (skill.startsWith("T")) {
-    return "Technical";
-  }
-
-  return "Other";
+function getSkillCategory(skill){
+  if(skill==="Dupes")return"Dupes";
+  if(skill.startsWith("B"))return"Basic";
+  if(skill.startsWith("S"))return"Special";
+  if(skill.startsWith("U"))return"Ultimate";
+  if(skill.startsWith("T"))return"Technical";
+  return"Other";
 }
 
-
-function getSkillIcon(skill, skillsPath) {
-
-  if (skill === "Dupes") {
-    return "/images/mlg-assets/Stars/dupe.svg";
-  }
-
-  return `${skillsPath}/skill_b/${skill.toLowerCase()}.svg`;
+function getSkillIcon(skill,path){
+  return skill==="Dupes"
+    ?"/images/mlg-assets/Stars/dupe.svg"
+    :`${path}/skill_b/${skill.toLowerCase()}.svg`;
 }
 
+function getSkillFile(skill,characterId){
+  const id=skill==="Dupes"?5:1;
 
-function getSkillFile(skill, skillsPath) {
-
-  if (skill === "Dupes") {
-    return `${skillsPath}/Dupes.html?id=15`;
-  }
-
-  return `${skillsPath}/${skill}.html`;
+  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(characterId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
 }
 
+function createSkillButtons(character){
+  const sidebar=document.getElementById("skillSidebar");
+  sidebar.innerHTML="";
+  skills=character.skills||[];
 
-function createSkillButtons(character) {
-
-  const sidebar = document.getElementById("skillSidebar");
-
-  sidebar.innerHTML = "";
-
-  skills = character.skills || [];
-
-  if (!skills.length) {
-    sidebar.style.display = "none";
+  if(!skills.length){
+    sidebar.style.display="none";
     return;
   }
 
-  sidebar.style.display = "flex";
+  sidebar.style.display="flex";
+  let previousCategory=null;
 
-  let previousCategory = null;
+  skills.forEach((skill,index)=>{
+    const category=getSkillCategory(skill);
 
-  skills.forEach((skill, index) => {
-
-    const category = getSkillCategory(skill);
-
-    if (previousCategory !== null && category !== previousCategory) {
-
-      const divider = document.createElement("div");
-      divider.className = "skill-divider";
-
+    if(previousCategory!==null&&category!==previousCategory){
+      const divider=document.createElement("div");
+      divider.className="skill-divider";
       sidebar.appendChild(divider);
     }
 
-    const button = document.createElement("div");
-    button.className = "skill-btn";
-    
-    if (index === 0) {
-      button.classList.add("active");
-    }
+    const button=document.createElement("div");
+    button.className="skill-btn"+(index===0?" active":"");
+    button.dataset.index=index;
+    button.onclick=()=>showSkill(index);
 
-    button.onclick = () => showSkill(index);
-
-    const img = document.createElement("img");
-    img.src = getSkillIcon(skill, character.skills_path);
-    img.alt = skill;
+    const img=document.createElement("img");
+    img.src=getSkillIcon(skill,character.skills_path);
+    img.alt=skill;
+    img.loading="eager";
+    img.decoding="async";
 
     button.appendChild(img);
     sidebar.appendChild(button);
-
-    previousCategory = category;
+    previousCategory=category;
   });
 }
 
-
-function isVideoFile(path) {
-
-  return /\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
+function isVideoFile(path){
+  return/\.(mp4|webm|ogg|mov|m4v)$/i.test(path);
 }
 
+function createCostumePreview(costume){
+  if(isVideoFile(costume.preview_path)){
+    const video=document.createElement("video");
 
-function createCostumePreview(costume) {
-
-  if (isVideoFile(costume.preview_path)) {
-
-    const video = document.createElement("video");
-
-    video.autoplay = true;
-    video.loop = true;
-    video.muted = true;
-    video.playsInline = true;
-    video.src = costume.preview_path;
-    video.className = "pixel-portrait";
+    Object.assign(video,{
+      autoplay:true,
+      loop:true,
+      muted:true,
+      playsInline:true,
+      src:costume.preview_path,
+      className:"pixel-portrait"
+    });
 
     return video;
   }
 
-  const img = document.createElement("img");
+  const img=document.createElement("img");
 
-  img.src = costume.preview_path;
-  img.className = "card-img-top pixel-portrait";
-  img.alt = costume.name;
+  img.src=costume.preview_path;
+  img.className="card-img-top pixel-portrait";
+  img.alt=costume.name;
+  img.loading="lazy";
+  img.decoding="async";
 
   return img;
 }
 
+function loadCharacterStyles(character){
+  const section=document.getElementById("characterStylesSection");
+  const container=document.getElementById("characterStyles");
 
-function loadCharacterStyles(character) {
+  container.innerHTML="";
 
-  const section = document.getElementById("characterStylesSection");
-  const stylesContainer = document.getElementById("characterStyles");
+  const costumes=Object.keys(character)
+    .filter(key=>/^costume_\d+$/.test(key))
+    .sort((a,b)=>Number(a.split("_")[1])-Number(b.split("_")[1]))
+    .map(key=>character[key])
+    .filter(costume=>costume&&costume.preview_path);
 
-  stylesContainer.innerHTML = "";
-
-  const costumes = Object.keys(character)
-    .filter(key => /^costume_\d+$/.test(key))
-    .sort((a, b) => {
-      return Number(a.split("_")[1]) - Number(b.split("_")[1]);
-    })
-    .map(key => character[key])
-    .filter(costume =>
-      costume &&
-      costume.preview_path
-    );
-
-  if (!costumes.length) {
-    section.style.display = "none";
+  if(!costumes.length){
+    section.style.display="none";
     return;
   }
 
-  section.style.display = "block";
+  section.style.display="block";
 
-  costumes.forEach(costume => {
+  costumes.forEach(costume=>{
+    const card=document.createElement("div");
 
-    const card = document.createElement("div");
-    card.className = "card text-center style-card";
+    card.className="card text-center style-card";
+    card.appendChild(createCostumePreview(costume));
 
-    const preview = createCostumePreview(costume);
+    const body=document.createElement("div");
 
-    card.appendChild(preview);
-
-    const body = document.createElement("div");
-    body.className = "card-body p-2";
-    body.textContent = costume.name || `Costume ${costume.id}`;
+    body.className="card-body p-2";
+    body.textContent=costume.name||`Costume ${costume.id}`;
 
     card.appendChild(body);
-
-    stylesContainer.appendChild(card);
+    container.appendChild(card);
   });
 }
 
+function setupCharacter(characterId,character){
+  characterData=character;
 
-function setupCharacter(characterId, character) {
+  document.title=`MLG - ${character.name}`;
+  document.getElementById("page-heading").textContent=
+    ` `;
 
-  characterData = character;
+  const splash=document.getElementById("character-splash");
 
-  document.title = `MLG - ${character.name}`;
+  splash.src=character.splash_image;
+  splash.alt=`${character.name} Splash`;
+  splash.loading="eager";
+  splash.decoding="async";
 
-  document.getElementById("page-heading").textContent =
-    `Mystical Legends Game - ${character.name}`;
+  if(character.splash_color)
+    splash.style.filter=character.splash_color;
 
-  const splash = document.getElementById("character-splash");
-
-  splash.src = character.splash_image;
-
-  splash.alt = `${character.name} Splash`;
-
-  if (character.splash_color) {
-    splash.style.filter = character.splash_color;
-  }
-
-  const root = document.documentElement;
-
-  if (character.button_color) {
-    root.style.setProperty(
+  if(character.button_color)
+    document.documentElement.style.setProperty(
       "--character-button-color",
       character.button_color
     );
-  }
 
-  document.getElementById("character-name").textContent =
-    character.name;
+  document.getElementById("character-name").textContent=character.name;
 
-  document.getElementById("character-rarity").textContent =
-    character.rarity;
+  const rarity=document.getElementById("character-rarity");
 
-  document.getElementById("character-rarity").className =
-    character.rarity.toLowerCase();
+  rarity.textContent=character.rarity;
 
-  document.getElementById("character-role").src =
-    character.rarity_img;
+  /* Preserve original rarity class styling. */
+  rarity.className=character.rarity.toLowerCase();
 
-  document.getElementById("character-role").alt =
-    `${character.rarity} Role`;
+  const role=document.getElementById("character-role");
 
-  document.getElementById("character-species").innerHTML =
-    createListItems(character.species, "species");
+  role.src=character.rarity_img;
+  role.alt=`${character.rarity} Role`;
+  role.loading="eager";
 
-  document.getElementById("character-specialty").innerHTML =
+  document.getElementById("character-species").innerHTML=
+    createListItems(character.species,"species");
+
+  document.getElementById("character-specialty").innerHTML=
     createListItems(character.specialty);
 
-  document.getElementById("character-affiliation").innerHTML =
+  document.getElementById("character-affiliation").innerHTML=
     createListItems(character.affiliation);
 
-  document.getElementById("character-attributes").innerHTML =
+  document.getElementById("character-attributes").innerHTML=
     createListItems(character.attributes);
 
   createSkillButtons(character);
-
   loadCharacterStyles(character);
 
-  if (skills.length) {
+  if(skills.length){
     showSkill(0);
+    preloadSkills(1);
   }
 }
 
+async function loadCharacter(){
+  const characterId=getCharacterId();
 
-async function loadCharacter() {
-
-  const characterId = getCharacterId();
-
-  try {
-
-    const response = await fetch(
-      "/images/mlg-assets/data-character.json"
+  try{
+    const response=await fetch(
+      "/images/mlg-assets/data-character.json",
+      {cache:"default"}
     );
 
-    if (!response.ok) {
+    if(!response.ok)
       throw new Error(
         `Failed to load character data: ${response.status}`
       );
-    }
 
-    const data = await response.json();
+    const data=await response.json();
+    const character=data[characterId];
 
-    const character = data[characterId];
-
-    if (!character) {
+    if(!character)
       throw new Error(
         `Character "${characterId}" was not found in data-character.json`
       );
-    }
 
-    setupCharacter(characterId, character);
+    setupCharacter(characterId,character);
 
-  } catch (error) {
+  }catch(error){
+    console.error("Character loading error:",error);
 
-    console.error("Character loading error:", error);
-
-    document.getElementById("page-heading").textContent =
+    document.getElementById("page-heading").textContent=
       "Mystical Legends Game - Character Not Found";
 
-    document.getElementById("character-name").textContent =
+    document.getElementById("character-name").textContent=
       "Character Not Found";
 
-    document.getElementById("skillSidebar").style.display = "none";
-
-    document.getElementById("characterStylesSection").style.display =
-      "none";
+    document.getElementById("skillSidebar").style.display="none";
+    document.getElementById("characterStylesSection").style.display="none";
   }
 }
 
+function preloadSkills(startIndex=0){
+  if(!characterData||!skills.length)return;
 
-function showSkill(index) {
+  const characterId=getCharacterId();
 
-  if (!skills[index] || !characterData) {
+  skills.slice(startIndex,startIndex+2).forEach(skill=>{
+    const url=getSkillFile(skill,characterId);
+
+    if(skillCache.has(url))return;
+
+    const iframe=document.createElement("iframe");
+
+    iframe.src=url;
+
+    iframe.style.cssText=
+      "position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none;visibility:hidden";
+
+    iframe.onload=()=>skillCache.set(url,iframe);
+
+    iframe.onerror=()=>{
+      iframe.remove();
+      skillCache.delete(url);
+    };
+
+    document.body.appendChild(iframe);
+  });
+}
+
+function prepareIframe(iframe){
+  return new Promise(resolve=>{
+    let finished=false;
+
+    const done=()=>{
+      if(finished)return;
+      finished=true;
+      resolve();
+    };
+
+    const timeout=setTimeout(done,5000);
+
+    iframe.addEventListener("load",()=>{
+      clearTimeout(timeout);
+
+      try{
+        const doc=iframe.contentDocument||iframe.contentWindow.document;
+        const style=doc.createElement("style");
+
+        style.textContent=`
+          html,body{
+            background:#0f0f0f!important;
+            color:#e6e6e6!important;
+            overflow:hidden!important;
+            font-family:Arial,sans-serif!important;
+            font-size:${FONT_SCALE*90}%!important;
+          }
+          body *{
+            font-family:Arial,sans-serif!important;
+            font-size:inherit!important;
+          }
+        `;
+
+        doc.head.appendChild(style);
+
+        if(doc.fonts?.ready)
+          doc.fonts.ready.then(done);
+        else
+          requestAnimationFrame(done);
+
+      }catch(error){
+        console.error("Skill iframe preparation error:",error);
+        done();
+      }
+    },{once:true});
+  });
+}
+
+function getIframeHeight(iframe){
+  try{
+    const doc=iframe.contentDocument||iframe.contentWindow.document;
+
+    return Math.max(
+      doc.body?.scrollHeight||0,
+      doc.documentElement?.scrollHeight||0,
+      140
+    )+20;
+
+  }catch(error){
+    return 140;
+  }
+}
+
+function watchIframeHeight(iframe,panel){
+  try{
+    const doc=iframe.contentDocument||iframe.contentWindow.document;
+    let lastHeight=0,frame=null;
+
+    const resize=()=>{
+      const height=getIframeHeight(iframe);
+
+      if(height!==lastHeight){
+        lastHeight=height;
+        iframe.style.height=`${height}px`;
+
+        if(activeSkillIndex>=0)
+          panel.style.height=`${height}px`;
+      }
+    };
+
+    new MutationObserver(()=>{
+      if(frame)cancelAnimationFrame(frame);
+      frame=requestAnimationFrame(resize);
+    }).observe(doc.body,{
+      childList:true,
+      subtree:true,
+      characterData:true,
+      attributes:true
+    });
+
+    if(window.ResizeObserver)
+      new ResizeObserver(resize).observe(doc.body);
+
+    resize();
+
+  }catch(error){
+    console.error("Skill iframe resize error:",error);
+  }
+}
+
+async function showSkill(index){
+  if(!skills[index]||!characterData)return;
+  if(index===activeSkillIndex)return;
+
+  const token=++skillLoadToken;
+  const skill=skills[index];
+  const characterId=getCharacterId();
+  const panel=document.getElementById("skillPanel");
+  const oldIframe=panel.querySelector("iframe");
+  const url=getSkillFile(skill,characterId);
+
+  document.querySelectorAll(".skill-btn")
+    .forEach(button=>button.classList.remove("active"));
+
+  const buttons=document.querySelectorAll(".skill-btn");
+
+  if(buttons[index])
+    buttons[index].classList.add("active");
+
+  activeSkillIndex=index;
+
+  let iframe=skillCache.get(url);
+
+  if(iframe){
+    iframe.remove();
+    skillCache.delete(url);
+  }else{
+    iframe=document.createElement("iframe");
+    iframe.src=url;
+  }
+
+  iframe.style.cssText=`
+    width:100%;
+    height:140px;
+    border:0;
+    display:block;
+    background:#0f0f0f;
+    color:#e6e6e6;
+    opacity:0;
+    transition:opacity ${TRANSITION_DURATION}ms ease;
+  `;
+
+  const oldHeight=oldIframe
+    ?Math.max(oldIframe.offsetHeight,140)
+    :panel.offsetHeight;
+
+  panel.style.height=`${oldHeight}px`;
+
+  const loaded=prepareIframe(iframe);
+
+  panel.appendChild(iframe);
+
+  await loaded;
+
+  if(token!==skillLoadToken){
+    iframe.remove();
     return;
   }
 
-  const panel = document.getElementById("skillPanel");
-  const oldIframe = panel.querySelector("iframe");
+  const newHeight=getIframeHeight(iframe);
 
-  // Lock panel height during fade
-  if (oldIframe) {
-    panel.style.height = oldIframe.offsetHeight + "px";
-    oldIframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
-    oldIframe.style.opacity = 0;
+  iframe.style.height=`${newHeight}px`;
+
+  watchIframeHeight(iframe,panel);
+
+  requestAnimationFrame(()=>{
+    if(token===skillLoadToken)
+      iframe.style.opacity="1";
+  });
+
+  panel.style.transition=
+    `height ${HEIGHT_TRANSITION_DURATION}ms ease`;
+
+  requestAnimationFrame(()=>{
+    if(token===skillLoadToken)
+      panel.style.height=`${newHeight}px`;
+  });
+
+  if(oldIframe&&oldIframe!==iframe){
+    oldIframe.style.position="absolute";
+    oldIframe.style.left="0";
+    oldIframe.style.top="0";
+    oldIframe.style.opacity="0";
+    oldIframe.style.pointerEvents="none";
+
+    setTimeout(()=>{
+      if(oldIframe.isConnected)
+        oldIframe.remove();
+    },TRANSITION_DURATION+50);
   }
 
-  // Create new iframe
-  const iframe = document.createElement("iframe");
+  setTimeout(()=>{
+    if(token===skillLoadToken)
+      panel.style.height="auto";
+  },HEIGHT_TRANSITION_DURATION+30);
 
-  iframe.src = getSkillFile(
-    skills[index],
-    characterData.skills_path
-  );
-
-  iframe.style.width = "100%";
-  iframe.style.border = "0";
-  iframe.style.display = "block";
-  iframe.style.backgroundColor = "#0f0f0f";
-  iframe.style.color = "#e6e6e6";
-  iframe.style.opacity = 0;
-  iframe.style.transition = `opacity ${TRANSITION_DURATION}ms`;
-
-  iframe.onload = () => {
-
-    try {
-
-      const doc =
-        iframe.contentDocument ||
-        iframe.contentWindow.document;
-
-      // Inject dark theme and font scaling
-      const style = doc.createElement("style");
-
-      style.textContent = `
-        body {
-          background-color: #0f0f0f !important;
-          color: #e6e6e6 !important;
-          font-size: ${FONT_SCALE * 90}% !important;
-        }
-
-        body * {
-          font-size: inherit !important;
-          background-color: inherit !important;
-        }
-      `;
-
-      doc.head.appendChild(style);
-
-
-      // Resize iframe to fit content
-      function resizeIframe() {
-
-        iframe.style.height =
-          doc.body.scrollHeight + 20 + "px";
-
-      }
-
-      resizeIframe();
-
-
-      // Observe dynamic changes
-      const observer =
-        new MutationObserver(resizeIframe);
-
-      observer.observe(
-        doc.body,
-        {
-          childList: true,
-          subtree: true,
-          characterData: true
-        }
-      );
-
-
-      // Fade in new iframe
-      requestAnimationFrame(() => {
-        iframe.style.opacity = 1;
-      });
-
-
-      // Animate panel height to match new content
-      const newHeight =
-        doc.body.scrollHeight + 20;
-
-      panel.style.transition =
-        `height ${HEIGHT_TRANSITION_DURATION}ms`;
-
-      panel.style.height =
-        newHeight + "px";
-
-
-      // Remove old iframe after fade
-      if (oldIframe) {
-
-        setTimeout(() => {
-          oldIframe.remove();
-        }, TRANSITION_DURATION);
-
-      }
-
-
-      // Reset panel height after transition to auto
-      setTimeout(() => {
-
-        panel.style.height = "auto";
-
-      }, Math.max(
-        TRANSITION_DURATION,
-        HEIGHT_TRANSITION_DURATION
-      ));
-
-
-    } catch (err) {
-
-      console.error(err);
-
-    }
-
-  };
-
-
-  // Append new iframe
-  panel.appendChild(iframe);
-
-
-  // Highlight active button
-  document
-    .querySelectorAll(".skill-btn")
-    .forEach(b => b.classList.remove("active"));
-
-  const buttons =
-    document.querySelectorAll(".skill-btn");
-
-  if (buttons[index]) {
-    buttons[index].classList.add("active");
-  }
+  preloadSkills(index+1);
 }
-
 
 loadCharacter();
 </script>
 
-
-<style>
-:root {
-  --character-button-color: #a20b0b;
-}
-
-.skill-btn.active {
-  border-color: var(--character-button-color);
-}
-
-.skill-content-override {
-  background-color: #0f0f0f;
-  color: #e6e6e6;
-  border-radius: 10px;
-  padding: 12px;
-  overflow: hidden;
-  transition: height 0.3s ease;
-}
-
-.skill-content-override iframe {
-  display: block;
-}
-</style>
-
-
 <script src="/js/include.js"></script>
 
-<!-- Footer Section -->
 <div id="subfooter-placeholder"></div>
 
 </body>
 </html>
-
-

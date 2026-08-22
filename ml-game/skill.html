@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skill Info</title>
+<link rel="stylesheet" href="/ml-game/css/mlg-skill.css">
+<link rel="stylesheet" href="/css/mlg.css">
+
+<style>
+.dupe-level{padding-top:10px}
+.dupe-level.dimmed{opacity:.6;filter:grayscale(30%) brightness(70%)}
+.dupe-star{display:block;height:27px}
+.dupe-star img{height:17px;padding-top:10px}
+.dupe-text,.dupe-line{display:block}
+</style>
+</head>
+
+<body>
+
+<div id="skill-content"></div>
+<div id="effects"></div>
+
+<div id="level-display" class="level-display">
+&lt; Skill Level: <span id="level">1</span> &gt;
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",async()=>{
+  const CHAR_PATH="/images/mlg-assets/Characters/";
+  const EFFECT_PATH="/images/mlg-assets/data-effects.json";
+  const params=new URLSearchParams(location.search);
+
+  const character=(params.get("char")||params.get("character")||"c1").toLowerCase();
+  const skillParam=params.get("skill")||"B1";
+  const skill=skillParam.toLowerCase()==="dupes"?"Dupes":skillParam.toUpperCase();
+  const isTechnical=/^T\d+$/i.test(skill);
+  const isDupe=skill==="Dupes";
+
+  let level=parseInt(params.get("id"),10);
+  level=Number.isFinite(level)?level:(isDupe?5:1);
+
+  try{
+    const [charResponse,effectResponse]=await Promise.all([
+      fetch(`${CHAR_PATH}${character.toUpperCase()}/${character}.json`),
+      fetch(EFFECT_PATH)
+    ]);
+
+    if(!charResponse.ok)throw new Error(`Unable to load ${character}.json`);
+    if(!effectResponse.ok)throw new Error("Unable to load data-effects.json");
+
+    const charData=await charResponse.json();
+    const effects=await effectResponse.json();
+    const data=charData?.[skill];
+
+    if(!data)throw new Error(`"${skill}" was not found in ${character}.json.`);
+
+    if(isTechnical||isDupe)
+      document.getElementById("level-display").style.display="none";
+
+    if(isDupe){
+      level=Math.min(5,Math.max(1,level));
+      renderDupe(data,level,effects);
+      return;
+    }
+
+    const maxLevel=data.max_level||10;
+    level=Math.min(maxLevel,Math.max(1,level));
+    renderSkill(data,level,effects);
+
+  }catch(error){
+    console.error(error);
+    document.getElementById("skill-content").innerHTML=
+      "<div>Unable to load skill information.</div>";
+  }
+
+  function renderSkill(data,level,effects){
+    let html=renderTitle(data);
+
+    if(data.description)
+      html+=renderContent(data.description,effects,data.description_style||{paddingTop:7});
+
+    if(Array.isArray(data.stages))
+      data.stages.forEach(stage=>{
+        html+=renderContent({
+          text:`<u>${stage.name}</u>: ${stage.text||""}`,
+          style:{paddingLeft:15,paddingTop:7,...(stage.style||{})}
+        },effects);
+      });
+
+    if(Array.isArray(data.additional))
+      data.additional.forEach(item=>{
+        html+=renderContent(item,effects,{paddingTop:7});
+      });
+
+    if(data.roster_title)
+      html+=renderContent({
+        text:data.roster_title,
+        style:{paddingLeft:15,paddingTop:7,...(data.roster_title_style||{})}
+      },effects);
+
+    if(Array.isArray(data.roster))
+      data.roster.forEach(member=>{
+        html+=renderContent({
+          text:`> ${typeof member==="string"?member:member.text||""}`,
+          style:{
+            paddingLeft:15,
+            ...(typeof member==="object"?member.style||{}:{})
+          }
+        },effects);
+      });
+
+    if(Array.isArray(data.additional_after_roster))
+      data.additional_after_roster.forEach(item=>{
+        html+=renderContent(item,effects,{paddingTop:7});
+      });
+
+    if(data.cooldown)
+      html+=renderContent({
+        text:`Cooldown: ${data.cooldown}`,
+        style:{paddingTop:7}
+      },effects);
+
+    if(data.mana_cost)
+      html+=renderContent({
+        text:`Mana Cost: ${data.mana_cost}`,
+        style:{paddingTop:0}
+      },effects);
+
+    if(data.energy_gauge)
+      html+=renderContent({
+        text:`Energy Gauge: ${data.energy_gauge}`,
+        style:{paddingTop:7}
+      },effects);
+
+    if(data.resonance)
+      html+=renderContent({
+        text:data.resonance,
+        style:{paddingTop:15,...(data.resonance_style||{})}
+      },effects);
+
+    document.getElementById("skill-content").innerHTML=html;
+    updateDamageValues(data,level);
+    document.getElementById("level").textContent=level;
+  }
+
+  function renderDupe(data,level,effects){
+    let html="";
+
+    if(data.description)
+      html+=renderContent(data.description,effects,data.description_style||{paddingTop:7});
+
+    if(Array.isArray(data.additional))
+      html+=renderDupeAdditional(data.additional,level,effects);
+
+    document.getElementById("skill-content").innerHTML=html;
+    updateDamageValues(data,level);
+  }
+
+  function renderDupeAdditional(items,selectedLevel,effects){
+    let html="",currentLevel=null,currentGroup=null;
+
+    items.forEach(item=>{
+      if(!item)return;
+
+      const hasLevel=typeof item==="object"&&Number.isFinite(Number(item.level));
+
+      if(hasLevel){
+        const itemLevel=Number(item.level);
+        if(itemLevel<1||itemLevel>5)return;
+
+        if(currentGroup&&currentLevel!==itemLevel){
+          html+=renderDupeGroup(currentGroup,currentLevel,selectedLevel,effects);
+          currentGroup=[];
+        }
+
+        if(!currentGroup)currentGroup=[];
+        currentLevel=itemLevel;
+        currentGroup.push(item);
+      }else if(currentGroup){
+        currentGroup.push(item);
+      }else{
+        html+=renderContent(item,effects,{paddingTop:7});
+      }
+    });
+
+    if(currentGroup?.length)
+      html+=renderDupeGroup(currentGroup,currentLevel,selectedLevel,effects);
+
+    return html;
+  }
+
+  function renderDupeGroup(items,starLevel,selectedLevel,effects){
+    const dimmed=starLevel>selectedLevel?" dimmed":"";
+
+    return `
+      <div class="dupe-level${dimmed}">
+        <div class="dupe-star">
+          <img src="/images/mlg-assets/Stars/Star__${starLevel}.svg" alt="Star ${starLevel}">
+        </div>
+        <div class="dupe-text">
+          ${items.map(item=>renderDupeLine(item,effects)).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDupeLine(item,effects){
+    if(!item)return"";
+
+    const text=typeof item==="string"?item:item.text||item.description||"";
+    if(!text)return"";
+
+    const style=typeof item==="object"
+      ?{...(item.style||{}),...getDirectStyle(item)}
+      :{};
+
+    return `
+      <div class="dupe-line" style="${buildStyle(style)}">
+        ${renderEmbeddedContent(text,effects)}
+      </div>
+    `;
+  }
+
+  function renderTitle(data){
+    return `
+      <div>
+        <b style="font-size:14px">
+          ${data.type||"Skill"}: ${data.name||""}
+        </b>
+      </div>
+    `;
+  }
+
+  function renderContent(item,effects,defaults={}){
+    if(!item)return"";
+
+    const content=typeof item==="string"
+      ?{text:item,style:{}}
+      :item;
+
+    const text=content.text||content.description||"";
+    if(!text)return"";
+
+    const style={
+      ...defaults,
+      ...(content.style||{}),
+      ...getDirectStyle(content)
+    };
+
+    return `
+      <div style="${buildStyle(style)}">
+        ${renderEmbeddedContent(text,effects)}
+      </div>
+    `;
+  }
+
+  function getDirectStyle(item){
+    const style={};
+    [
+      "paddingTop","paddingRight","paddingBottom","paddingLeft",
+      "marginTop","marginRight","marginBottom","marginLeft",
+      "textAlign","width","fontSize","lineHeight"
+    ].forEach(field=>{
+      if(item[field]!==undefined)style[field]=item[field];
+    });
+    return style;
+  }
+
+  function buildStyle(style={}){
+    const properties={
+      paddingTop:"padding-top",
+      paddingRight:"padding-right",
+      paddingBottom:"padding-bottom",
+      paddingLeft:"padding-left",
+      marginTop:"margin-top",
+      marginRight:"margin-right",
+      marginBottom:"margin-bottom",
+      marginLeft:"margin-left",
+      textAlign:"text-align",
+      width:"width",
+      fontSize:"font-size",
+      lineHeight:"line-height"
+    };
+
+    return Object.entries(properties)
+      .filter(([key])=>style[key]!==undefined)
+      .map(([key,property])=>{
+        const value=typeof style[key]==="number"
+          ?`${style[key]}px`
+          :style[key];
+        return `${property}:${value}`;
+      })
+      .join(";");
+  }
+
+  function renderEmbeddedContent(text,effects){
+    if(!text)return"";
+
+    return text.replace(
+      /\{\{effect:([^}]+)\}\}/g,
+      (_,id)=>renderEffect(id.trim(),effects)
+    );
+  }
+
+  function renderEffect(effectId,effects){
+    const effect=effects?.[effectId];
+
+    if(!effect){
+      console.warn(`Effect "${effectId}" was not found in data-effects.json.`);
+      return"";
+    }
+
+    const type=String(effect.type||"").toLowerCase();
+    const typeClass=type==="buff"?"buff":"debuff";
+
+    let descriptions="";
+
+    /*
+      Supports:
+      description
+      description2
+      description3
+      description4
+      ...
+      
+      And corresponding styles:
+      description_style
+      description2_style
+      description3_style
+      description4_style
+      ...
+    */
+    Object.keys(effect)
+      .filter(key=>/^description\d*$/.test(key))
+      .sort((a,b)=>{
+        const getNum=key=>key==="description"?1:parseInt(key.replace("description",""),10);
+        return getNum(a)-getNum(b);
+      })
+      .forEach((key,index)=>{
+        const text=effect[key];
+        if(!text)return;
+
+        const styleKey=`${key}_style`;
+        let style=effect[styleKey]||{};
+
+        if(key==="description2"&&!Object.keys(style).length)
+          style=effect.descrption2_style||style;
+
+        descriptions+=`
+          <div style="${buildStyle(style)}">
+            ${index===0?`
+              <span class="${typeClass}">
+                ${effect.type||""}
+              </span>:
+            `:""}
+            ${renderEmbeddedContent(text,effects)}
+          </div>
+        `;
+      });
+
+    return `
+      <div class="icon-container" style="padding-left:15px;padding-top:10px">
+        <div class="effect-icon hidden">
+          <img
+            src="${effect.icon||""}"
+            alt="${effect.name||effectId} Icon"
+            style="width:20px;height:20px"
+          >
+        </div>
+
+        <div class="effect-text">
+          <b class="${effect.class||""}">
+            [${effect.name||effectId}]
+          </b>
+
+          ${descriptions}
+        </div>
+      </div>
+    `;
+  }
+
+  function updateDamageValues(data,level){
+    const multiplier=
+      1+(data.level_multiplier||0.1)*(level-1);
+
+    document.querySelectorAll("[data-dmg]").forEach(element=>{
+      const damageId=element.dataset.dmg;
+      const baseDamage=data.base_damage?.[damageId];
+
+      if(baseDamage===undefined)return;
+
+      element.textContent=
+        (baseDamage*multiplier).toFixed(1);
+    });
+  }
+});
+</script>
+
+</body>
+</html>

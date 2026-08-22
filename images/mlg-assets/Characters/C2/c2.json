@@ -1,0 +1,229 @@
+{
+
+  "B1": {
+    "name": "Ice Manipulation",
+    "type": "Basic Skill",
+    "description": "Kaden unleashes a valley of ice that encircles and traps opponents, dealing <b class=\"water\">[Water]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Hurls ice chunks at nearby opponents, dealing small AoE damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Summons spikes of ice to emerge from the ground around opponents, dealing AoE damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack and remaining on-field for a short time. Inflicts the <b class=\"freeze\">[Freeze]</b> debuff on hit opponents.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Explodes the ice spikes, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as AoE <span class=\"empowered\">empowered</span> damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 100,
+      "dmg2": 125,
+      "dmg3": 165
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Ice Pillars",
+    "type": "Special Skill",
+    "description": "Kaden creates a circle of four pillars of ice around him that shoot from the ground, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"water\">[Water]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Holding the skill will summon one pillar at a time that can be aimed towards a specific direction. The skill has four charges and all are consumed to summon remaining pillars when skill is tapped.",
+        "style": {"paddingTop": 7}},
+      {"text": "Summoned pillars remain active for 15 seconds and act as destructible barriers. They remain in resonance with each other, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"water\">[Water]</b> damage which is multiplied by the number of pillars present, up to 4.",
+        "style": {"paddingTop": 7}},
+      {"text": "When destroyed by any character or opponent, they explode for AoE <b class=\"water\">[Water]</b> <span class=\"empowered\">empowered</span> damage equal to <b><span data-dmg=\"dmg3\"></span>%</b> of attack and inflict <b class=\"blind\">[Blind]</b> and <b class=\"freeze\">[Freeze]</b> on anyone who is not Kaden himself.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:blind}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 1}}
+    ],
+    "base_damage": {
+      "dmg1": 250,
+      "dmg2": 70,
+      "dmg3": 330
+    },
+    "cooldown": "16 seconds",
+    "mana_cost": "120 MP (30 MP per pillar)",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Arsenal of Ice",
+    "type": "Special Skill",
+    "description": "Kaden will create various objects of ice to aid in his battle. Hold down skill to rotate between a list of items; then letting go will select the specified item.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "<u>Special Skill: Ice Beam</u> - A directable beam, with a medium range, that does continuous damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"water\">[Water]</b> damage per half-second for 4 seconds.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "<u>Special Skill: Ice Mass</u> - Kaden hurls a single boulder of ice that hits an opponent, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"water\">[Water]</b> <span class=\"empowered\">empowered</span> damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "<u>Special Skill: Javelins’ Dance</u> - Kaden summons a ring of <b><span data-dmg=\"javelin_count\"></span></b> (scales by level, rounded up) javelins around him that he hurls to opponents, dealing AoE <b class=\"water\">[Water]</b> damage equal to <b><span data-dmg=\"dmg3\">160</span>%</b> of attack per javelin. When he is off-field, the javelins will be thrusted in 1 second intervals until no javelins are left.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 175,
+      "dmg2": 600,
+      "javelin_count": 10,
+      "dmg3": 160
+    },
+    "cooldown": "12 seconds",
+    "mana_cost": "120 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S3": {
+    "name": "Cubic Trinity",
+    "type": "Special Skill",
+    "description": "Kaden summons three cubes that swirl around him, lasting a brief time, and will implode upon contact with an opponent, dealing <b><span data-dmg=\"dmg1\">350</span>%</b> of attack as AoE <b class=\"water\">[Water]</b><span class=\"empowered\">empowered</span> damage. The cubes can remain even when Kaden is off-field.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "For each cube imploded, he will gain a stack, up to three stacks, of the buff <b class=\"ice-prince\">[Ice Prince]</b>. After each cube implodes, they remain for 10 seconds on-field, dealing <b><span data-dmg=\"dmg2\">180</span>%</b> of attack as AoE <b class=\"water\">[Water]</b> damage per second.",
+       "style": {"paddingTop": 7}},
+      {"text": "{{effect:ice-prince}}",
+       "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "dmg1": 350,
+      "dmg2": 180
+    },
+    "cooldown": "15 seconds",
+    "mana_cost": "110 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Limitless Ice Beam",
+    "type": "Ultimate Skill",
+    "description": "Kaden charges up a stronger ice beam, gaining high range, that he blasts in two directions from his hands, dealing continuous <b class=\"water\">[Water]</b> damage per half-second equal to <b><span data-dmg=\"dmg1\">240</span>%</b> of attack for 7 seconds.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Hit opponents will gain the <b class=\"freeze\">[Freeze]</b> debuff and any subsequent hits during this state will increase their damage taken by +100%. The hit opponents will also gain debuff immunity reduction of -30% for the duration of skill.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "dmg1": 260
+    },
+    "energy_gauge": "100%",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U2": {
+    "name": "Absolute Zero",
+    "type": "Ultimate Skill",
+    "description": "Mustering the very limits of his ice magic, Kaden unleashes a storm of ice particles and erupts a large ice spike from the ground, dealing <b><span data-dmg=\"dmg1\">870</span>%</b> of attack as <b class=\"water\">[Water]</b> AoE damage.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "An ice rink will form after the attack that will continuously apply <b class=\"freeze\">[Freeze]</b> to opponents when they are hit with <b class=\"water\">[Water]</b> element attacks from any source, lasting 16 seconds.",
+        "style": {"paddingTop": 7}},
+      {"text": "During the effect, all other elements in the party will decrease in effectiveness by -100%. <b class=\"water\">[Water]</b> damage will, however, increase by +70%.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "dmg1": 870
+    },
+    "energy_gauge": "100%",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Ice Travel",
+    "type": "Technical Skill",
+    "description": "Kaden will phase through the shadow realm with the creation of two ice portals. This mechanic works by synchronizing two portals, each placed separately by using this skill a total of two times. Portals will remain indefinitely while in a combat session. Use skill again after placing two portals to reset and remove them.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "The two portals will allow any character to travel between them rapidly. Upon a successful warp, the character gains the buff <b class=\"shadow-miasma\">[Shadow Miasma]</b>. Standing within the portal after warping will maintain the effect.",
+        "style": {"paddingTop": 7}},
+      {"text": "If Kaden gains the effect, his Special Skill attacks will also do <b class=\"dark\">[Dark]</b> damage during its duration.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:shadow-miasma}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "Energy Gauge: 8% per portal",
+        "style": {"paddingTop": 7}}
+    ],
+
+    "resonance": "<b>Resonance</b>: Other <b class=\"dark\">[Dark]</b> affinity characters in team who are Icelorian or Gostlynger can utilize this ability.",
+    "resonance_style": {"paddingTop": 15}
+  },
+
+
+
+  "Dupes": {
+    "description": "Kaden will gain a <b class=\"shield\">[Shield]</b> equal to 350% of his defense whenever his health reaches at or below 50% (Cooldown: 30 seconds). He will also accumulate stacks of <b class=\"flash\">[Flash]</b> upon successful basic skill attack hits with a cooldown of 1 second.",
+    "additional": [
+        {"text": "He gains resonance within a party of more than 3 different affinities (dual affinity characters count both). Resonance will improve his and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.",
+        "style": {"paddingTop": 7}},
+        {"text": "<u>Ice Fowler</u>: While not in combat, Kaden, when dashing, will create a trail of ice behind him as he surfs on an ice field. This state increases his movement speed by +40% and reduces stamina consumption by -50%. His movement across water is not reduced.",
+        "style": {"paddingTop": 7}},
+        {"text": "The secrets of District 1 are revealed when he is present. As a genius, puzzles will reveal a hint as the prodigy sees solutions effortlessly.",
+        "style": {"paddingTop": 7}},
+        {"text": "<u>Alter Exclusive Rule</u>: Ion Mustard (Alter)’s Star Levels (except base) are deactivated while as Kaden Icelander.",
+        "style": {"paddingTop": 7}},
+        {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:flash}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 1,
+        "text": "The <b class=\"freeze\">[Freeze]</b> effect can be stacked for the duration of attacks that add it. For each stack, Kaden’s damage will increase by +5%.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 2,
+        "text": "The <b class=\"flash\">[Flash]</b> effect can be applied to allies also but at half the speed, along with gaining continuous stacks of <b class=\"fatigue\">[Fatigue]</b> on self for every stack gained on self.",
+        "style": {"paddingTop": 5}},
+        {"text": "The Technical Skill: Ice Travel will apply effect even if Kaden stands within 10 meters of any portal. The range of <b class=\"shadow-miasma\">[Shadow Miasma]</b> will also increase by +100%.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:fatigue}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 4,
+        "text": "Kaden will gain an awakened state upon reaching 30 stacks of <b class=\"fatigue\">[Fatigue]</b> in which his eye reveals a special power, gaining the buff <b class=\"icengon\">[Icengon]</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:icengon}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 5,
+        "text": "Whenever this character gains <b class=\"fatigue\">[Fatigue]</b>, gain 1% of health as mana for self and heal allies for that percentage of health. Deal an additional +5% more damage on opponents for each stack of <b class=\"freeze\">[Freeze]</b> applied.",
+        "style": {"paddingTop": 5}},
+        {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each basic skill stage, therefore increasing the rate of accumulation without a cooldown.",
+        "style": {"paddingTop": 5}}
+
+    ]
+  }
+
+
+
+
+
+
+
+}

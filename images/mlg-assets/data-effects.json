@@ -1,0 +1,261 @@
+{
+
+  "knockback": {
+    "name": "Knockback",
+    "class": "knockback",
+    "icon": "/images/mlg-assets/Effect-Icons/knockback.svg",
+    "type": "Debuff",
+    "description": "Knocks opponents back 5 meters.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "burn": {
+    "name": "Burn",
+    "class": "burn",
+    "icon": "/images/mlg-assets/Effect-Icons/burn.svg",
+    "type": "Debuff",
+    "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "blind": {
+    "name": "Blind",
+    "class": "blind",
+    "icon": "/images/mlg-assets/Effect-Icons/blind.svg",
+    "type": "Debuff",
+    "description": "Prevent target from attacking for 3 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "shield": {
+    "name": "Shield",
+    "class": "shield",
+    "icon": "/images/mlg-assets/Effect-Icons/shield.svg",
+    "type": "Buff",
+    "description": "Creates an overshield that absorbs damage equal to a certain amount of health.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "enlightened": {
+    "name": "Enlightened",
+    "class": "enlightened",
+    "icon": "/images/mlg-assets/Effect-Icons/enlightened.svg",
+    "type": "Buff",
+    "description": "Increases attack by +15% and receives +15% damage reduction for 20 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "embrace-goddess": {
+    "name": "Embrace of the Goddess",
+    "class": "embrace-goddess",
+    "icon": "/images/mlg-assets/Effect-Icons/angel-touch.svg",
+    "type": "Buff",
+    "description": "The character will revive with 20% of max health when defeated and this effect will be removed (Use Cooldown: 120 seconds for each character; Duration: 5 seconds, but +1 second per point present in any light meter)",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "magni-mage": {
+    "name": "The Magni Mage",
+    "class": "magni-mage",
+    "icon": "/images/mlg-assets/Effect-Icons/magni-mage.svg",
+    "type": "Buff",
+    "description": "Gain +150% mana regen and +50% special skill cooldown for 30 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "goddess-blessing": {
+    "name": "Goddess' Blessing",
+    "class": "goddess-blessing",
+    "icon": "/images/mlg-assets/Effect-Icons/goddess-blessing.svg",
+    "type": "Buff",
+    "description": "At five stacks, heal for 5% of Avery’s max health. Remove debuffs and resets stacks.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "angel-touch": {
+    "name": "Angel's Touch",
+    "class": "angel-touch",
+    "icon": "/images/mlg-assets/Effect-Icons/angel-touch.svg",
+    "type": "Buff",
+    "description": "Increase crit rate and damage by +1% per stack (Duration: 25 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "rapid-recovery": {
+    "name": "Rapid Recovery",
+    "class": "rapid-recovery",
+    "icon": "/images/mlg-assets/Effect-Icons/rapid-recovery.svg",
+    "type": "Buff",
+    "description": "Slowly regenerate 2.5% of max health every second for 30 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "freeze": {
+    "name": "Freeze",
+    "class": "freeze",
+    "icon": "/images/mlg-assets/Effect-Icons/freeze.svg",
+    "type": "Debuff",
+    "description": "Stops action for 2 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "ice-prince": {
+    "name": "Ice Prince",
+    "class": "ice-prince",
+    "icon": "/images/mlg-assets/Effect-Icons/ice-prince.svg",
+    "type": "Buff",
+    "description": "Gain a percentage of critical hit rate and crit damage increase equal to each point, up to 2% of max defense (Stackable, Duration: 15 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+
+  "shadow-miasma": {
+    "name": "Shadow Miasma",
+    "class": "shadow-miasma",
+    "icon": "/images/mlg-assets/Effect-Icons/shadow-miasma.svg",
+    "type": "Buff",
+    "description": "Increases <b class=\"dark\">[Dark]</b> damage by +25%, increases movement speed by +100%, and +30% chance to dodge incoming attacks that would deal damage (Duration: 4 seconds).",
+    "description_style": {"paddingTop": 3},
+    "description2": "The effect will also slow opponents within 10 meters by -15% and applied element auras by self last +100% longer.",
+    "descrption2_style": {"paddingTop": 7}
+  },
+
+
+  "flash": {
+    "name": "Flash",
+    "class": "flash",
+    "icon": "/images/mlg-assets/Effect-Icons/flash.svg",
+    "type": "Buff",
+    "description": "Increases attack and piercing by +1% per stack (Infinite Stacks).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "fatigue": {
+    "name": "Fatigue",
+    "class": "fatigue",
+    "icon": "/images/mlg-assets/Effect-Icons/fatigue.svg",
+    "type": "Debuff",
+    "description": "Decreases movement speed and max stamina by -1% per stack (Infinite Stacks).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "icengon": {
+    "name": "Icengon",
+    "class": "icengon",
+    "icon": "/images/mlg-assets/Effect-Icons/icengon.svg",
+    "type": "Buff",
+    "description": "All special skill cooldown will decrease by -50%, mana regen will increase by +150%, and energy gauge accumulation increases by +25%. This effect lasts for the duration of <b class=\"fatigue\">[Fatigue]</b> present, losing a stack every second and cannot gain stacks during the buff.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "dazed": {
+    "name": "Dazed",
+    "class": "dazed",
+    "icon": "/images/mlg-assets/Effect-Icons/dazed.svg",
+    "type": "Debuff",
+    "description": "Become susceptible to critical hit damage for 2 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "gamer": {
+    "name": "Gamer",
+    "class": "gamer",
+    "icon": "/images/mlg-assets/Effect-Icons/gamer.svg",
+    "type": "Buff",
+    "description": "Increases defense by +30% for 15 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "tinkering": {
+    "name": "Tinkering",
+    "class": "tinkering",
+    "icon": "/images/mlg-assets/Effect-Icons/tinkering.svg",
+    "type": "Buff",
+    "description": "Crit rate increases by +25% for 15 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "letm-cook": {
+    "name": "Let'm Cook",
+    "class": "letm-cook",
+    "icon": "/images/mlg-assets/Effect-Icons/letm-cook.svg",
+    "type": "Buff",
+    "description": "Upon reaching increments of 10 stacks (10, 20, etc…), Ted will gain the <b class=\"invention\">[Invention]</b> effect (Infinite Stacks).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "invention": {
+    "name": "Invention",
+    "class": "invention",
+    "icon": "/images/mlg-assets/Effect-Icons/invention.svg",
+    "type": "Buff",
+    "description": "A specific action may occur with this effect (Infinite Stacks). Reduce movement speed by -20% per stack while this effect is active. Any gained <b class=\"shield\">[Shield]</b> will give damage reduction of +30% while the effect is active.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "attack-down1": {
+    "name": "Attack Down I",
+    "class": "attack-down",
+    "icon": "/images/mlg-assets/Effect-Icons/attack-down1.svg",
+    "type": "Debuff",
+    "description": "Reduces attack by -15% (Duration: 10 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+  "attack-down2": {
+    "name": "Attack Down II",
+    "class": "attack-down",
+    "icon": "/images/mlg-assets/Effect-Icons/attack-down2.svg",
+    "type": "Debuff",
+    "description": "Reduces attack by -30% (Duration: 10 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+  "attack-down3": {
+    "name": "Attack Down III",
+    "class": "attack-down",
+    "icon": "/images/mlg-assets/Effect-Icons/attack-down3.svg",
+    "type": "Debuff",
+    "description": "Reduces attack by -45% (Duration: 10 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "crit-down1": {
+    "name": "Crit Down I",
+    "class": "crit-down",
+    "icon": "/images/mlg-assets/Effect-Icons/crit-down1.svg",
+    "type": "Debuff",
+    "description": "Reduces crit rate by -10% (Duration: 10 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+  "crit-down2": {
+    "name": "Crit Down II",
+    "class": "crit-down",
+    "icon": "/images/mlg-assets/Effect-Icons/crit-down2.svg",
+    "type": "Debuff",
+    "description": "Reduces crit rate by -20% (Duration: 10 seconds).",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "super-shield": {
+    "name": "Super Shield",
+    "class": "shield",
+    "icon": "/images/mlg-assets/Effect-Icons/super-shield.svg",
+    "type": "Unremovable Buff",
+    "description": "A special shield that requires <span class=\"empowered\">empowered</span> attacks to break, otherwise all other incoming attacks are reduced by -75%. The shield is represented by a break bar above health and will persist until broken. If the bar is broken, the active character will be frozen for 8 seconds and will take +300% increased incoming damage during the duration.",
+    "description_style": {"paddingTop": 3}
+  }
+
+
+
+
+
+
+}

@@ -1,0 +1,179 @@
+{
+
+  "B1": {
+    "name": "Meteor Bash",
+    "type": "Basic Skill",
+    "description": "Ted sends heavy kicks of metal-enhanced moves against opponents, dealing <b class=\"earth\">[Earth]</b> damage. The damage dealt becomes <b class=\"shield\">[Shield]</b> for self equal to <b><span data-dmg=\"shield\"></span>%</b> of its value.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Thrusts several quick fists at the opponent, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of defense as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Launches spheres of metal towards opponents in a line in a short point range, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Slams a metal wall in front, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as <span class=\"empowered\">empowered</span> damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "shield": 15,
+      "dmg1": 40,
+      "dmg2": 65,
+      "dmg3": 80
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Metal Barrier",
+    "type": "Special Skill",
+    "description": "Ted creates a large destructible metal barrier in front of him equal to his entire defense for its toughness to shield off incoming attacks in one direction. He then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice his defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "shield": 200,
+      "shield2": 150
+    },
+    "cooldown": "16 seconds",
+    "mana_cost": "85 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Rods of Steel",
+    "type": "Special Skill",
+    "description": "Launches a large beam of steel towards opponents, dealing <b class=\"earth\">[Earth]</b> <span class=\"empowered\">empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense. Hit opponents will gain the effect <b class\"dazed\">[Dazed]</b>.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "If <b class=\"invention\">[Invention]</b> is active, several more beams (+3 more of them) will be shot out, dealing the same damage. Clear a stack of <b class=\"invention\">[Invention]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:dazed}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "dmg1": 240
+    },
+    "cooldown": "10 seconds",
+    "mana_cost": "130 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Metal Mode",
+    "type": "Ultimate Skill",
+    "description": "Ted will encase metal armor around himself to gain extra defense and outward fighting power, lasting for 16 seconds.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Upon activation, Ted will gain +100% movement speed and +20% damage reduction.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>Model A</b>: Charge forward and deal <b class=\"earth\">[Earth]</b> <span class=\"empowered\">super empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense to any opponent in his path. Any skills used in conjunction with this Ultimate’s effect will deal <b>+<span data-dmg=\"dmg_increase\"></span>%</b> more damage.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>Model B</b>: If off-field, the metal armor will dissipate and form into 2 hovering robotic turret drones that will blast energy pulses towards nearby opponents, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage per blast.",
+        "style": {"paddingTop": 7}},
+      {"text": "If two or more stacks of <b class=\"invention\">[Invention]</b> are active, instead, gain +50% damage reduction, +150% movement speed, and <b>+<span data-dmg=\"dmg_increase2\">50</span>%</b> skill damage for Model A. Summon an extra drone for Model B. Clear all stacks of <b class=\"invention\">[Invention]</b>.",
+        "style": {"paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 160,
+      "dmg_increase": 25,
+      "dmg2": 140,
+      "dmg_increase2": 50
+    },
+    "energy_gauge": "100%",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Ultimate Arsenal",
+    "type": "Technical Skill",
+    "description": "<u>Ability</u>: Upon using this skill, various effects will activate upon having varying stacks of <b class=\"invention\">[Invention]</b>:",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "1 stack, gain the effect <b class=\"gamer\">[Gamer]</b>. 2 stacks, gain the effect <b class=\"tinkering\">[Tinkering]</b>. 3+ stacks, turn into Special Skill: Hoverboard which may be used anytime. Stacks do not get consumed when counting and using this skill.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:gamer}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "{{effect:tinkering}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "<u>Special Skill: Hoverboard</u> - Ted jumps onto a hoverboard, hovers in the air for a moment with short invulnerability, and crashes his way through his opponents, dealing 325% of attack and 225% of defense as <b class=\"fire\">[Fire]</b> and <b class=\"earth\">[Earth]</b> AoE damage. The damage scales by +10% for each level of the equipped Basic Skill.",
+        "style": {"paddingLeft": 20, "paddingTop": 12}}
+    ],
+
+    "resonance": "<b>Resonance</b>: No additional effects. Exclusive to Ted.",
+    "resonance_style": {"paddingTop": 15}
+  },
+
+
+
+  "Dupes": {
+    "description": "For every opponent hit, Ted will gain a stack of <b class=\"letm-cook\">[Let'm Cook]</b> which lasts indefinitely. He inflicts <b class=\"attack-down\">[Attack Down I]</b> on nearby opponents every 5 stacks gained.",
+    "additional": [
+        {"text": "{{effect:letm-cook}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:invention}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:attack-down1}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 1,
+        "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25%.",
+        "style": {"paddingTop": 5}},
+        {"text": "Ted’s Technical Skill effects will also be applied to the party for the same duration.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 2,
+        "text": "Gain a <b class=\"shield\">[Super Shield]</b> for self equal to 150% of defense after using any Special Skills, the effect is shared amongst the party. Whenever the Dash Skill is used, gain a stack of <b class=\"letm-cook\">[Let'm Cook]</b> (Cooldown: 2 seconds).",
+        "style": {"paddingTop": 5}},
+        {"text": "The inflicted debuff <b class=\"attack-down\">[Attack Down I]</b> is enhanced to <b class=\"attack-down\">[Attack Down III]</b> and an additional debuff <b class=\"crit-down\">[Crit Down II]</b> is inflicted.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:super-shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:attack-down3}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:crit-down2}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 4,
+        "text": "Charge energy gauge by +10% per stack of <b class=\"invention\">[Invention]</b> gained. When Ultimate Skill: Metal Mode is used, each stack of <b class=\"invention\">[Invention]</b> present before being cleared will increase Ted’s overall damage by an additional +30% per stack for the duration of the Ultimate.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 5,
+        "text": "Rapidly consuming all Dash Skills will automatically give Ted the effect <b class=\"gamer\">[Gamer]</b> and <b class=\"tinkering\">[Tinkering]</b>. These effects are considered effects from a Technical Skill. Whenever either of these effects end, Ted’s Special Skill cooldowns will reset and he gains 2 stacks of <b class=\"invention\">[Invention]</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:gamer}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:tinkering}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+
+    ]
+  }
+
+
+
+
+
+
+
+}

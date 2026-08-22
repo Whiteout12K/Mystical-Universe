@@ -261,19 +261,19 @@
     "skills_path": "/images/mlg-assets/Characters/C5",
 
     "base_stats": {
-        "health": 930,
-        "attack": 52,
-        "defense": 135,
-        "mana": 920,
-        "mana_regen": 7,
+        "health": 1000,
+        "attack": 60,
+        "defense": 100,
+        "mana": 1200,
+        "mana_regen": 8,
         "stamina": 950,
         "stamina_regen": 10,
-        "crit_rate": 15,
-        "crit_dmg": 25,
-        "speed": 95,
-        "piercing": 5,
+        "crit_rate": 10,
+        "crit_dmg": 20,
+        "speed": 100,
+        "piercing": 0,
         "healing_rate": 0,
-        "luck": 6
+        "luck": 7
     },
 
     "stat_change_by_level": {
@@ -285,7 +285,282 @@
       "unique_stat": "piercing"
     },
 
-    "weapon_type": ["Spear", "Gun", "Catalyst"]
+    "weapon_type": ["Catalyst"]
+
+  },
+
+
+
+
+  "c6": {
+    "id": 6,
+    "profile_image": "/images/character_art/Character_Heads/atlas_aquia_head.png",   
+
+    "splash_image": "/images/character_art/atlas_aquia_full.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(80, 168, 240, 0.378))",
+    "button_color": "#618cfa",
+
+    "name": "Atlas Aquia",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c6_role.svg",
+
+    "species": ["Water Spirit"],
+    "specialty": ["DPS", "Defense Penetration", "Accuracy", "Agility", "Debuffer", "AoE Damage"],
+    "affinity": ["Water"],
+    "role": ["Fighter", "Defense"],
+
+    "affiliation": ["Tempest Aquia Cohort", "Captain"],
+    "attributes": ["Water Breathing", "Flight"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C6",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 53,
+        "defense": 107,
+        "mana": 1500,
+        "mana_regen": 10,
+        "stamina": 800,
+        "stamina_regen": 15,
+        "crit_rate": 15,
+        "crit_dmg": 30,
+        "speed": 105,
+        "piercing": 12,
+        "healing_rate": 0,
+        "luck": 7
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.03,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "piercing"
+    },
+
+    "weapon_type": ["Catalyst", "Spear"]
+
+  },
+
+
+
+
+  "c7": {
+    "id": 7,
+    "profile_image": "/images/character_art/Character_Heads/pyrus_bourn_head.png",   
+
+    "splash_image": "/images/character_art/pyrus_bourn_combustion1.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(240, 160, 80, 0.429))",
+    "button_color": "#fa6161",
+
+    "name": "Pyrus Bourn",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c7_role.svg",
+
+    "species": ["Non-Mystical", "Larvan"],
+    "specialty": ["DPS", "Agility", "Single-Target Damage", "AoE Damage", "Accuracy", "Enforcer"],
+    "affinity": ["Fire"],
+    "role": ["Fighter"],
+
+    "affiliation": ["Villain", "District 3"],
+    "attributes": ["Flight", "Charging"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C7",
+
+    "base_stats": {
+        "health": 823,
+        "attack": 53,
+        "defense": 93,
+        "mana": 0,
+        "mana_regen": 6,
+        "stamina": 1300,
+        "stamina_regen": 13,
+        "crit_rate": 13,
+        "crit_dmg": 33,
+        "speed": 123,
+        "piercing": 3,
+        "healing_rate": 0,
+        "luck": 13
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.05,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "crit_rate"
+    },
+
+    "weapon_type": ["Sword", "Catalyst", "Gun"]
+
+  },
+
+
+
+
+  "c8": {
+    "id": 8,
+    "profile_image": "/images/character_art/Character_Heads/charlotte_levy_head.png",   
+
+    "splash_image": "/images/character_art/charlotte_levy_full.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(149, 51, 79, 0.429))",
+    "button_color": "#fa61f7",
+
+    "name": "Charlotte Levy",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c8_role.svg",
+
+    "species": ["Gostlynger"],
+    "specialty": ["DPS", "Sub-DPS", "Single-Target Damage", "Disrupter", "Debuffing", "Enforcer", "Support"],
+    "affinity": ["Fire", "Dark"],
+    "role": ["Fighter"],
+
+    "affiliation": ["Blue Legion Cohort", "Captain"],
+    "attributes": [],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C8",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 55,
+        "defense": 90,
+        "mana": 1000,
+        "mana_regen": 7,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 5,
+        "crit_dmg": 45,
+        "speed": 120,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 4
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.03,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "crit_dmg"
+    },
+
+    "weapon_type": ["Spear", "Bow"]
+
+  },
+
+
+
+
+  "c9": {
+    "id": 9,
+    "profile_image": "/images/character_art/Character_Heads/carla_storm_head.png",   
+
+    "splash_image": "/images/character_art/carla_storm_full.png",
+    "splash_color": "(0 0 18px rgba(137, 218, 248, 0.429))",
+    "button_color": "#5ea4b3",
+
+    "name": "Carla Storm",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c9_role.svg",
+
+    "species": ["Elf"],
+    "specialty": ["Healing", "Support", "Disrupter", "Enforcer", "Crowd Controlling"],
+    "affinity": ["Wind"],
+    "role": ["Healer"],
+
+    "affiliation": ["Black Rampart Cohort", "Captain"],
+    "attributes": [],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C9",
+
+    "base_stats": {
+        "health": 1090,
+        "attack": 45,
+        "defense": 105,
+        "mana": 990,
+        "mana_regen": 6,
+        "stamina": 900,
+        "stamina_regen": 9,
+        "crit_rate": 8,
+        "crit_dmg": 20,
+        "speed": 95,
+        "piercing": 3,
+        "healing_rate": 2,
+        "luck": 6
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.07,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "healing_rate"
+    },
+
+    "weapon_type": ["Catalyst"]
+
+  },
+
+
+
+
+  "c10": {
+    "id": 10,
+    "profile_image": "/images/character_art/Character_Heads/kiara_katzol_head.png",   
+
+    "splash_image": "/images/character_art/kiara_katzol_cultivator.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(181, 79, 215, 0.429))",
+    "button_color": "#89e5f7",
+
+    "name": "Kiara Katzol",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c10_role.svg",
+
+    "species": ["Felior"],
+    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonater"],
+    "affinity": ["Wind"],
+    "role": ["Fighter"],
+
+    "affiliation": ["Black Rampart Cohort", "Mystical Legends", "Deity Contract", "District 10"],
+    "attributes": ["Charging"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C10",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Spear", "Bow"]
 
   },
 

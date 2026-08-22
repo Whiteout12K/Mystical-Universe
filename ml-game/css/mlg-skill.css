@@ -2,8 +2,8 @@
 
 body {
     font-family: Arial, sans-serif;
-    color: #FFEBEE;
-    background-color: #63141462;
+    color: #f9f9f9;
+    background-color: #1e1e1eed;
     font-size: 9px;
     padding: 4em 1em;
     padding-right: 1.5em;
@@ -27,7 +27,7 @@ body {
 .level-display {
     margin-top: 15px;
     font-size: 8px;
-    color: #FFEBEE;
+    color: #ffffff;
 }
 
 

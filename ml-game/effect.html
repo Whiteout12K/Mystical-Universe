@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Effect Info</title>
+<link rel="stylesheet" href="/ml-game/css/mlg-skill.css">
+<link rel="stylesheet" href="/css/mlg.css">
+
+<style>
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    padding:0;
+  }
+
+  #effect-content{
+    width:100%;
+  }
+
+  .effect{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:10px 15px;
+  }
+
+  .effect-icon{
+    flex:0 0 auto;
+    width:20px;
+    height:20px;
+  }
+
+  .effect-icon img{
+    display:block;
+    width:20px;
+    height:20px;
+  }
+
+  .effect-info{
+    min-width:0;
+    font-size:14px;
+    line-height:1.35;
+  }
+
+  .effect-title{
+    font-size:14px;
+    line-height:1.35;
+    margin:0;
+  }
+
+  .effect-description{
+    font-size:14px;
+    line-height:1.35;
+    margin-top:3px;
+  }
+
+  .error{
+    padding:15px;
+    font-size:14px;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="effect-content"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded",async()=>{
+  const EFFECT_PATH="/images/mlg-assets/data-effects.json";
+  const params=new URLSearchParams(location.search);
+  const effectId=(params.get("effect")||"").trim().toLowerCase();
+  const container=document.getElementById("effect-content");
+
+  if(!effectId){
+    container.innerHTML='<div class="error">No effect specified.</div>';
+    return;
+  }
+
+  try{
+    const response=await fetch(EFFECT_PATH);
+
+    if(!response.ok)
+      throw new Error("Unable to load data-effects.json");
+
+    const effects=await response.json();
+    const effect=effects?.[effectId];
+
+    if(!effect)
+      throw new Error(`Effect "${effectId}" was not found.`);
+
+    renderEffect(effect);
+
+  }catch(error){
+    console.error(error);
+
+    container.innerHTML=
+      '<div class="error">Unable to load effect information.</div>';
+  }
+
+  function renderEffect(effect){
+    const effectClass=effect.class||effectId;
+    const type=String(effect.type||"").toLowerCase();
+    const typeClass=type==="buff"?"buff":"debuff";
+
+    const descriptions=Object.keys(effect)
+      .filter(key=>/^description\d*$/.test(key))
+      .sort((a,b)=>descriptionNumber(a)-descriptionNumber(b))
+      .map((key,index)=>{
+        const text=effect[key];
+
+        if(!text)return"";
+
+        const styleKey=`${key}_style`;
+        let style=effect[styleKey]||{};
+
+        if(
+          key==="description2"&&
+          !Object.keys(style).length&&
+          effect.descrption2_style
+        ){
+          style=effect.descrption2_style;
+        }
+
+        return `
+          <div
+            class="effect-description"
+            style="${buildStyle(style)}"
+          >
+            ${index===0?`
+              <span class="${typeClass}">
+                ${escapeHTML(effect.type||"")}
+              </span>:
+            `:""}
+            ${text}
+          </div>
+        `;
+      })
+      .join("");
+
+    container.innerHTML=`
+      <div class="effect">
+        <div class="effect-icon">
+          <img
+            src="${effect.icon||""}"
+            alt="${escapeHTML(effect.name||effectId)} Icon"
+          >
+        </div>
+
+        <div class="effect-info">
+          <div class="effect-title">
+            <b class="${escapeHTML(effectClass)}">
+              [${escapeHTML(effect.name||effectId)}]
+            </b>
+          </div>
+
+          ${descriptions}
+        </div>
+      </div>
+    `;
+  }
+
+  function descriptionNumber(key){
+    return key==="description"
+      ?1
+      :parseInt(key.replace("description",""),10)||1;
+  }
+
+  function buildStyle(style={}){
+    const properties={
+      paddingTop:"padding-top",
+      paddingRight:"padding-right",
+      paddingBottom:"padding-bottom",
+      paddingLeft:"padding-left",
+      marginTop:"margin-top",
+      marginRight:"margin-right",
+      marginBottom:"margin-bottom",
+      marginLeft:"margin-left",
+      textAlign:"text-align",
+      width:"width",
+      fontSize:"font-size",
+      lineHeight:"line-height"
+    };
+
+    return Object.entries(properties)
+      .filter(([key])=>style[key]!==undefined)
+      .map(([key,property])=>{
+        const value=
+          typeof style[key]==="number"
+            ?`${style[key]}px`
+            :style[key];
+
+        return `${property}:${value}`;
+      })
+      .join(";");
+  }
+
+  function escapeHTML(value){
+    return String(value)
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+{
+
+  "B1": {
+    "name": "Light Sword",
+    "type": "Basic Skill",
+    "description": "Avery conjures a compressed light sword and does melee <b class=\"light\">[Light]</b> attacks.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Slash in several quick arcs in front, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Slash in a line ahead, dealing AoE damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack. Inflict <b class=\"knockback\">[Knockback]</b> on hit opponents.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Slam into the ground, dealing AoE damage in a 1 meter radius equal to <b><span data-dmg=\"dmg3\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:knockback}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 85,
+      "dmg2": 130,
+      "dmg3": 170
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "B2": {
+    "name": "Light Discharge",
+    "type": "Basic Skill",
+    "description": "Avery discharges light and bends it around him in a myriad of ways, dealing <b class=\"light\">[Light]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Launches a beam of light, dealing damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of health. Applies <b class=\"blind\">[Blind]</b> on hit opponents.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Slashes in two arcs in separate directions, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of health as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Charges up a ball of light and thrusts it at opponents, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of health as damage and inflicting <b class=\"burn\">[Burn]</b>. If opponent already has the debuff upon attacking, deal an immediate instance of <b class=\"burn\">[Burn]</b> but with self’s crit stats added.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:blind}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:burn}}",
+        "style": {"paddingLeft": 15, "paddingTop": 3}}
+    ],
+    "base_damage": {
+      "dmg1": 6,
+      "dmg2": 9,
+      "dmg3": 12
+    },
+    "cooldown": "14 seconds",
+    "mana_cost": "120 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Light Searching Spheres",
+    "type": "Special Skill",
+    "description": "Avery shoots 10 light orbs that follow and implode on contact with enemies dealing <b><span data-dmg=\"dmg1\"></span>%</b> of his attack as <b class=\"light\">[Light]</b> AoE ranged damage in a 1 meter radius, applying <b class=\"blind\">[Blind]</b>. Projectiles will hone in on closest opponents.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Hold skill to launch projectiles in aimed direction at succession, one at a time.",
+        "style": {"paddingTop": 7}},
+      {"text": "If projectiles don’t find targets, they return and the active character gains <b><span data-dmg=\"dmg2\"></span></b> MP back for each sphere. If Avery is off-field, he also gets <b><span data-dmg=\"dmg3\"></span>%</b> of the MP as well.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:blind}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}}
+    ],
+    "base_damage": {
+      "dmg1": 212,
+      "dmg2": 30,
+      "dmg3": 50
+    },
+    "cooldown": "14 seconds",
+    "mana_cost": "120 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Mythical Healing",
+    "type": "Special Skill",
+    "description": "Avery raises his hand and creates a circle of magic that lasts for 12 seconds and heals all allies for <b><span data-dmg=\"heal1\"></span>%</b> of his max health per second. Applies a <b class=\"shield\">[Shield]</b> to all allies equal to <b><span data-dmg=\"shield1\"></span>%</b> of max health a single time.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Deals <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"light\">[Light]</b> damage to all opponents within the circle per second. Reduce their movement speed by -25%. Each successful hit will fill self and allies’ energy gauge by <b>+<span data-dmg=\"energy1\"></span>%</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 10}}
+    ],
+    "base_damage": {
+      "heal1": 3,
+      "shield1": 10,
+      "dmg1": 125,
+      "energy1": 3
+    },
+    "cooldown": "16 seconds",
+    "mana_cost": "210 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S3": {
+    "name": "Light Compression",
+    "type": "Special Skill",
+    "description": "Condensing light around him into any object, Avery gains newfound versatility. Hold down the skill button to cycle through weapons and letting go will select the specific weapon as the new active basic skill.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Basic Skill: Compressed Light Sword",
+        "text": "A denser weapon, increases basic skill damage by <b>+<span data-dmg=\"dmg1\"></span>%</b>, keeping original basic skill stages. Every other hit will be an <span class=\"empowered\">empowered</span> attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Basic Skill: Compressed Barrier",
+        "text": "Creates a barrier of light in front, with health equal to <b><span data-dmg=\"dmg2\"></span>%</b> of stat used by the basic skill (Cooldown: 15 seconds).",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Basic Skill: Compressed Light Bow",
+        "text": "Creates a ranged damaging weapon; <b>+<span data-dmg=\"dmg3\"></span>%</b> more attack when hitting more than 10 meters, but +50% damage taken. Uses preset basic skill Stage 1 damage multiplier per projectile. Hold basic skill to charge up a powerful 3-arrow attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Basic Skill: Lighted Trebuchet",
+        "text": "Summons a trebuchet on spot that hurls projectiles on opponents, dealing <b>+<span data-dmg=\"dmg4\"></span>%</b> increased damage as ranged AoE. Uses preset basic skill Stage 1 damage multiplier. Basic skill will activate trebuchet.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Basic Skill: Default",
+        "text": "Resets and changes to preset basic skill.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 30,
+      "dmg2": 1000,
+      "dmg3": 50,
+      "dmg4": 25
+    },
+    "cooldown": "1.5 seconds",
+    "mana_cost": "30 MP",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Limitless Light Beam",
+    "type": "Ultimate Skill",
+    "description": "Avery’s body begins to glow with immense light. He shoots a beam of laser that can be directed towards opponents for a short duration dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"light\">[Light]</b> ranged damage per second. The rate increases to per half-second when hitting a single target.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Hit opponents receive the <b class=\"blind\">[Blind]</b> effect. Upon activation, allies and self receive the buff <b class=\"enlightened\">[Enlightened]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:blind}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "{{effect:enlightened}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 400
+    },
+    "energy_gauge": "100%",
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U2": {
+    "name": "Mystical Legends, Unite!",
+    "type": "Ultimate Skill",
+    "description": "When the dire time comes, calls upon the aid of all <b class=\"mystical-legends\">Mystical Legends</b> allies to arrive at the forefront of the battle for a prolonged duration.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Each ally retains their stats and equipment if owned, otherwise won’t be called. They start with <b><span data-dmg=\"dmg1\"></span>%</b> of their base stats. When summoned, their special skills are on their respective cooldowns instead of immediately being usable.",
+        "style": {"paddingTop": 7}},
+      {"text": "Besides Avery himself, each <b class=\"mystical-legends\">Mystical Legends</b> ally that joins will lock the use of a team member (in order of their party placement), but their Star Level passives and Technical Skill passives still function. At max 3 will be locked. There is no limit to the number of summoned allies that join.",
+        "style": {"paddingTop": 7}}
+    ],
+    "roster_title": "<b class=\"mystical-legends\">Mystical Legends</b>:",
+    "roster_title_style": {"paddingLeft": 15, "paddingTop": 7},
+    "roster": [
+      {"text": "Avery Obtainia (self)", "style": {"paddingLeft": 15}},
+      {"text": "Kaden Icelander", "style": {"paddingLeft": 15}},
+      {"text": "Teddric Tech", "style": {"paddingLeft": 15}},
+      {"text": "River Grant", "style": {"paddingLeft": 15}},
+      {"text": "Kiara Katzol", "style": {"paddingLeft": 15}},
+      {"text": "Lucy Terner", "style": {"paddingLeft": 15}},
+      {"text": "Amos Black", "style": {"paddingLeft": 15}}
+    ],
+    "additional_after_roster": [
+      {"text": "Skill can be used only once per battle. While out of combat, the skill can be used for free and the summoned allies will leave after a short duration.",
+        "style": {"paddingTop": 7}},
+      {"text": "As long as this skill is equipped, the energy gauge for the team increases by half its usual speed.",
+        "style": {"paddingTop": 7}}
+    ],
+    "energy_gauge": "100% of the team’s energy gauge.",
+    "base_damage": {
+      "dmg1": 40
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Transformation",
+    "type": "Technical Skill",
+    "description": "<u>Ability</u>: Avery lets magic pour out and changes parts of his body into water, gaining an aquatic state. By doing so, his skills will become <b class=\"water\">[Water]</b> elemental attacks until this technical skill is used again.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "While in this state, he gains <b class=\"shield\">[Shield]</b> +50% more effectively and consumes a single percentage per second, increasing his and allies’ damage reduction by +35% until depletion. This functions even while off-field.",
+        "style": {"paddingTop": 7}},
+      {"text": "Speed is enhanced by +25%. Flight Mode will turn Avery into a stream of water instead called Aqua Mode; collision with opponents in this mode will deal 0.5% of health multiplied by each percentage of healing rate as <b class=\"water\">[Water]</b> damage every 0.3 seconds.",
+        "style": {"paddingTop": 7}}
+    ],
+    "resonance": "<b>Resonance</b>: Other characters that are Water Spirit or Naiad species can utilize this ability, including Aqua Mode. If the character has an element affinity other than <b class=\"water\">[Water]</b>, then their element is not overridden by this skill.",
+    "resonance_style": {"paddingTop": 15}
+  },
+
+  
+  "T2": {
+    "name": "Enlightened Mode",
+    "type": "Technical Skill",
+    "description": "Avery enters enlightened mode after using an Ultimate Skill, where he gains a special light meter which accumulates specific element points, lasting for 25 seconds and resetting whenever the Ultimate Skill is used again. Each new element aura applied to opponents will fill the light meter by 1, up to a max of 20, if the light meter is active.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "When a <b class=\"light\">[Light]</b> element attack from an ally or self hits an opponent with an elemental aura (applied by a contributor, either self or ally), the attack will become a special discharge called <b class=\"light\">[True Light Element]</b>. This occurs only once per every 2 points gained.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b class=\"light\">[True Light Element]</b>: A special element attack that deals additional damage based on the aura element, equal to 5% of the inflictor’s health in a small AoE. The attack can crit based on the crit stats of the inflictor.",
+        "style": {"paddingTop": 15}},
+      {"text": "The following are the immediate obtainable effects gained for inflictor and contributor based on the type of element aura in the discharge, lasting the duration of light meter:",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "> <b class=\"fire\">[Fire]</b>: Damage of skills increases by +10% for 5 seconds. Gain an additional +5% damage increase for each point in the light meter.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "> <b class=\"wind\">[Wind]</b>: Attack speed of Basic Skills increases by +3% per point on any light meter. The AoE of attacks, even on single target ones, increases by +50% while the meter is active.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "> <b class=\"earth\">[Earth]</b>: Defense increases by +2% per point on any light meter. Debuffs applied on opponents have their duration increased by +0.5 seconds per point on any light meter.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "> <b class=\"water\">[Water]</b>: Health and defense increases by +25% for 5 seconds. Gain the effect <b class=\"embrace-goddess\">[Embrace of the Goddess]</b>.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+
+      {"text": "{{effect:embrace-goddess}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+      {"text": "Additional instances of the same special attack can occur, +1 more for every 4 points in any light meter, up to max +5 instances. Simultaneous effects can be activated but require different instances with their respective auras.",
+        "style": {"paddingLeft": 15, "paddingTop": 9}},
+      {"text": "The damage of the special element attack increases by +10% for each level of basic skill of inflictor.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "resonance": "<b>Resonance</b>: If Avery is not in the team, the first <b class=\"light\">[Light]</b> affinity character in the team can activate the light meter with their Ultimate Skill.",
+    "resonance_style": {"paddingTop": 15}
+  },
+
+
+  "T3": {
+    "name": "Goddess' Spirit Release",
+    "type": "Technical Skill",
+    "description": "<u>Ability</u>: The damage of the special element attack increases by +10% for each level of basic skill of inflictor.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "The damage of Lynnhera’s skills scales up by +10% for each level of Avery’s equipping Basic Skill level. She utilizes the following skills:",
+        "style": {"paddingTop": 7}},
+            {"text": "<u>Basic Skill: Spell Pulse</u> - Lynnhera shoots a rainbow vibrating bullet that deals 120% of attack as damage and inflicts a random debuff. Can continuously charge the shot for increasing scaling, +12% per second, but must remain idle.",
+            "style": {"paddingLeft": 15, "paddingTop": 9}},
+
+            {"text": "<u>Special Skill - Bridge of Fortitude</u> - Lynnhera summons a bridge, with 1.2% of health multiplied by each percentage of healing rate, that only herself and allies can stand on, elevating them and shielding them from damage until its destruction. When standing on the bridge, self and allies gain +25% mana regen.",
+            "style": {"paddingLeft": 15, "paddingTop": 5}},
+            {"text": "Cooldown: 25 seconds",
+            "style": {"paddingLeft": 15, "paddingTop": 3, "fontSize": 8}},
+            {"text": "Mana Cost: 35 seconds",
+            "style": {"paddingLeft": 15, "paddingTop": 3, "fontSize": 8}},
+
+            {"text": "<u>Special Skill: Black Hole</u> - Lynnhera forms a black vacuum, lasting 5 seconds, that sucks opponents together, dealing continuous damage equal to 200% of attack per second.",
+            "style": {"paddingLeft": 15, "paddingTop": 6}},
+            {"text": "Cooldown: 15 seconds",
+            "style": {"paddingLeft": 15, "paddingTop": 3, "fontSize": 8}},
+            {"text": "Mana Cost: 25 seconds",
+            "style": {"paddingLeft": 15, "paddingTop": 3, "fontSize": 8}},
+
+      {"text": "Lynnhera’s damage will always be an elemental advantage over her opponents (indicated in pink numbers). An additional ability will allow Avery and her to switch as the active user which can be controlled. In so doing, the other will remain on field as an ally.",
+        "style": {"paddingTop": 7}},
+      {"text": "Using this skill again while the goddess is active will sacrifice her for Avery to gain the buff <b class=\"magni-mage\">[The Magni Mage]</b>. If she is defeated in the current battle, she will grant the buff permanently to Avery and cannot be re-summoned. If Avery is defeated, she will disappear as well.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>Auxiliary Passive</b>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting [Light] aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
+        "style": {"paddingTop": 5}},
+      {"text": "{{effect:magni-mage}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "energy_gauge": "100%",
+    "resonance": "<b>Resonance</b>: No additional effects."
+  },
+
+
+
+
+  "Dupes": {
+    "description": "Every third melee hit will grant all allies and self 1 instance of <b class=\"goddess-blessing\">[Goddess’ Blessing]</b>. Upon reaching five stacks, the effect will activate.",
+    "additional": [
+        {"text": "Upon dashing, pressing any Special Skill will allow Avery to enter Flight Mode, gradually losing stamina, which will greatly enhance his speed by +25%, height and damage reduction by +50%, and increased ranged damage by +10%, until stamina is empty or when Dash Skill is used again. Remaining idle does not consume stamina.",
+        "style": {"paddingTop": 7}},
+        {"text": "<b>Guiding Light</b>: At nighttime or in a dark environment, Avery will emit a glow around him to light the surroundings for visibility. He also reveals hidden treasures.",
+        "style": {"paddingTop": 7}},
+        {"text": "<u>Alter Exclusive Rule</u>: Caela Obtainia (Alter)’s Star Levels (except base) are deactivated while as Avery Obtainia.",
+        "style": {"paddingTop": 7}},
+        {"text": "{{effect:goddess-blessing}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 1,
+        "text": "Gain <b class=\"shield\">[Shield]</b> equal to 0.5% of total health, but multiplied by each percentage of healing rate, for self and allies when using any special skill.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 2,
+        "text": "When attacking, after inflicting <b class=\"blind\">[Blind]</b> on any opponent, gain 1 stack of <b class=\"angel-touch\">[Angel's Touch]</b> up to a max of 25 for self and all allies.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:angel-touch}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 4,
+        "text": "When an ally drops below 20% health, swap health points with that ally and gain the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b>; this ability can only be triggered when Avery’s health is greater than the ally’s (Cooldown: 120 seconds).",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:rapid-recovery}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 5,
+        "text": "After using stage 3 of the basic skill, convert the next basic skill attack into Basic Skill: Lotus Wildflare Beam. After using, reverts back to normal Basic Skill.",
+        "style": {"paddingTop": 5}},
+        {"text": "5% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summmons).",
+        "style": {"paddingTop": 5}},
+        {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - Avery summons a concentration of light that blasts in a flower-like arch in front of him, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies. Special skill cooldowns for self are reduced by 3 seconds and instantly restore 50 MP for self and allies. Damage scales up by +10% for each level of the equipped basic skill.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+
+    ]
+  }
+
+
+
+
+
+
+
+}
