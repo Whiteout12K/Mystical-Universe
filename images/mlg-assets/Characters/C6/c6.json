@@ -112,7 +112,7 @@
 
 
   "T1": {
-    "name": "A Fox's Tale",
+    "name": "Tempest Aquia",
     "type": "Technical Skill",
     "description": "<u>Ability</u>: Plants a banner on the ground equal to 200% of defense which boosts all <b class=\"tempest-aquia\">Tempest Aquia</b> cohort members until it is destroyed.",
     "description_style": {"paddingTop": 7},
