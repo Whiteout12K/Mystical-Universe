@@ -124,7 +124,7 @@ function createInitialData() {
         // higher numbers, up to 10.
 
         c_owned: [
-            0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0
+            1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0
         ], // Characters Owned
         // Each item is in order of character ID, where 0 is not owned, and 1 is owned.
 
@@ -156,15 +156,13 @@ function createInitialData() {
         inventory1: [ // Weapons and Equipment
             {
                 id: 1,
-                name: "Basic Sword",
+                name: "Gladius Lucis",
                 type: "Weapon",
                 quantity: false,
-                rarity: 1,
+                rarity: 5,
                 star_level: 0,
                 level: 1,
-                xp_level: 0,
-                stat1: "b+55",
-                stat2: "f+3"
+                xp_level: 0
             },
             {
                 id: 1,
@@ -174,9 +172,7 @@ function createInitialData() {
                 rarity: 1,
                 star_level: 0,
                 level: 1,
-                xp_level: 0,
-                stat1: "b+55",
-                stat2: "f+3"
+                xp_level: 0
             }
         ],
 
@@ -187,10 +183,95 @@ function createInitialData() {
         inventory6: [], // Gadgets
         inventory7: [], // Special Items
 
-        c1: {}, // C1
-        c2: {}, // C2
+        c1: { // C1
+            Id:1,
+            name:"Avery",
+            rarity: 5,
+            level: 5,
+            xp: 0,
+            equip: {
+                weapon: [
+                    {
+                    id: 1,
+                    name: "Gladius Lucis",
+                    type: "Weapon",
+                    quantity: false,
+                    rarity: 5,
+                    star_level: 0,
+                    level: 15,
+                    xp_level: 0
+                    },
+                ],
+                accessory: [],
+                artifact1: [
+                    {
+                    id: 1,
+                    piece_num: 1,
+                    name: "Artifact Headpiece",
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "2",
+
+                    sub_3: "health",
+                    sub_3_value: "8",
+                    sub_3_type: "%",
+                    sub_3_rolls: "0",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "0"
+
+                    },
+                ],
+                artifact2: [],
+                artifact3: [],
+                artifact4: []
+            }
+        }, 
+        c2: { // C2
+            Id:2,
+            name:"Kaden Icelander",
+            rarity: 5,
+            level: 10,
+            xp: 0,
+            equip: {
+                weapon: [],
+                accessory: [],
+                artifact1: [],
+                artifact2: [],
+                artifact3: [],
+                artifact4: []
+            }
+        }, 
         c3: {}, // C3
-        c4: {}, // C4 is MC
+        c4: { // C4 is MC
+            Id:4,
+            name:"Main Character",
+            rarity: 1,
+            level: 5,
+            xp: 0,
+            equip: {
+                weapon: [],
+                accessory: [],
+                artifact1: [],
+                artifact2: [],
+                artifact3: [],
+                artifact4: []
+            }
+        }, 
         c5: {}, // C5
         c6: {}, // C6
         c7: {}, // C7
@@ -200,8 +281,9 @@ function createInitialData() {
         c11: {}, // C11
 
         achievements: { // Achievements Unlocked
-            first_kill: 0,
-            first_boss: 0
+            "First Enemy Kill": 0,
+            "First Boss Killed": 0,
+            "First Domain Entered": 0
         },
 
         flags: {}

@@ -8,6 +8,25 @@
 .ur { color: #ff0000; }
 .lr { color: #d5a6bd; }
 
+/* RARITY STYLES */
+.rarity-c{background:linear-gradient(145deg,#939292d8,#3e3e3ed2);}
+.rarity-r{background:linear-gradient(145deg,#2f80ed,#1c4aa3);}
+.rarity-sr{background:linear-gradient(145deg,#bf72e0da,#2f1342db);}
+.rarity-ssr{background:linear-gradient(145deg,#ffc273dc,#ff9838d1);}
+.rarity-ur{background:linear-gradient(145deg,#ff7373dc,#ff3838d1);}
+
+/* RARITY Overly Styles */
+.name-c{background:linear-gradient(180deg,#6e6e6e00,#525151);}
+.name-r{background:linear-gradient(180deg,#183d8600,#263655);}
+.name-sr{background:linear-gradient(180deg,#993ad800,#4a2c5edb);}
+.name-ssr{background:linear-gradient(180deg,#fca42900,#5d472c);}  
+.name-ur{background:linear-gradient(180deg,#fc292900,#532323cb);}    
+
+
+
+
+
+
 /* Mystical Legends Game Elements */
 .light { color: #ea9999; }
 .dark { color: #674ea7; }
@@ -61,6 +80,12 @@
 
 /* Conditions */
 .empowered { color: #dd7e6b; }
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,81 @@
+{
+
+
+    "w1": {
+        "id": 1,
+        "name": "Gladius Lucis",
+        "type": "Weapon",
+        "weapon_type": "Sword",
+
+        "weapon_img": "/images/character_art/avery_obtainia_gladius_lucis.png",
+
+        "additional": [
+            {"text": "<b>Weapon Skill: Divine Swords’ Raine</b>",
+            "style": {}},
+            {"text": "Summons 5 swirling blades of light that follow the active character for 12 seconds. The swords will deal <b><span data-dmg=\"dmg1\"></span>%</b> of attack and <b><span data-dmg=\"dmg2\"></span>%</b> of health of the equipping character as <b class=\"light\">[Light]</b> damage per hit and heal the active character for <b><span data-dmg=\"heal\"></span>%</b> of their max health per hit.",
+            "style": {"paddingTop": 7}},
+            {"text": "At any time during this skill, using the equipping character’s Special Skill will consume a single sword to increase <b class=\"light\">[Light]</b> elemental damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for self, lasting 5 seconds. This is stackable, up to 3 times.",
+            "style": {"paddingTop": 7}},
+            {"text": "Cooldown: 15 seconds",
+            "style": {"paddingTop": 15, "fontSize": 7}},
+            {"text": "Energy Gauge: 20%",
+            "style": {"paddingTop": 2, "fontSize": 7}},
+
+            {"text": "<b>Passive</b>",
+            "style": {"paddingTop": 20}},
+            {"text": "Increases health and attack by <b>+<span data-dmg=\"stat1\"></span>%</b>. Whenever the equipping character’s <b class=\"shield\">[Shield]</b> breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b><span data-dmg=\"heal\"></span>%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).",
+            "style": {"paddingTop": 7}},
+            {"text": "Every point on the light meter will increase the party’s all elemental damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for the meter’s duration, capped at <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>.",
+            "style": {"paddingTop": 7}}
+        ],
+
+        "weapon_skill_scale": {
+            "dmg1": 270,
+            "dmg2": 4,
+            "heal": 3,
+            "dmg_increase": 15
+        },
+        "max_level": 10,
+        "skill_level_multiplier": 0.1,
+
+        "passive_skill_scale": {
+            "stat1": 30,
+            "heal": 150,
+            "dmg_increase": 3,
+            "dmg_increase2": 30
+        },
+        "max_passive_level": 16,
+        "passive_level_multiplier": 0.1,
+
+        "quantity": false,
+        "rarity": "SSR",
+        "star_level": 0,
+        "level": 100,
+        "xp_level": 0,
+        "stat_change_by_level": {
+            "main_stat_formula": "base_stat * (weight * (level - 1))",
+            "main_stat_weight": 0.08,
+
+            "main_1": "attack",
+            "main_1_value": 55,
+
+            "main_2": "crit_rate",
+            "main_2_value": 4
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

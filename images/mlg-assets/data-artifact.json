@@ -1,0 +1,47 @@
+{
+
+    "o1": {
+        "artifact_id": 1,
+        "piece_num": 1,
+        "name": "Mistywood Armor",
+        "type": "Artifact",
+        "artifact_img": "",
+
+        "additional": [
+            {"text": "<b>Passive</b>",
+            "style": {"paddingTop": 20}}
+        ],
+
+        "quantity": false,
+        "rarity": "SSR",
+        "level": 20,
+        "xp_level": 0,
+        "stat_change_by_level": {
+            "main_stat_formula": "main * (weight * (level - 1))",
+            "sub_stat_formula": "sub * (sub_rolls + 1)",
+            "main_stat_weight": 0.08,
+
+            "main": "health",
+            "main_value": 3,
+            "main_type": "%"
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+}

@@ -1,1108 +1,877 @@
 <!doctype html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width,initial-scale=1">
- <title>Player Profile</title>
- <link rel="stylesheet" href="/css/mlg.css">
- <link rel="stylesheet" href="/css/mlg-c-viewer.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Player Profile</title>
+<link rel="stylesheet" href="/css/mlg.css">
+<link rel="stylesheet" href="/css/mlg-c-viewer.css">
 </head>
 <body>
- <div id="app">
-  <div class="loading">Loading profile...</div>
+<div id="app"><div class="loading">Loading profile...</div></div>
+
+<script>
+const pathParts=location.pathname.split("/").filter(Boolean);
+let username=new URLSearchParams(location.search).get("username")||pathParts[pathParts.length-1];
+let characterDatabase={},accountStyleDatabase={},weaponDatabase={},accessoryDatabase={},artifactDatabase={},currentPlayerData={};
+const premiumNames={diamond_core:"Diamond Core",sr_star_lv_frag:"SR Star Lv. Fragments",ssr_star_lv_frag:"SSR Star Lv. Fragments",ur_star_lv_frag:"UR Star Lv. Fragments"};
+
+async function loadJSON(path,key){
+ try{let r=await fetch(path,{cache:"no-cache"});if(!r.ok)throw Error(`${key} HTTP ${r.status}`);return await r.json()}
+ catch(e){console.error(`Could not load ${key}:`,e);return{}}
+}
+async function loadCharacterDatabase(){characterDatabase=await loadJSON("/images/mlg-assets/data-character.json","data-character.json")}
+async function loadAccountStyleDatabase(){accountStyleDatabase=await loadJSON("/images/mlg-assets/account-style.json","account-style.json")}
+async function loadWeaponDatabase(){weaponDatabase=await loadJSON("/images/mlg-assets/data-weapon.json","data-weapon.json")}
+async function loadAccessoryDatabase(){accessoryDatabase=await loadJSON("/images/mlg-assets/data-accessory.json","data-accessory.json")}
+async function loadArtifactDatabase(){artifactDatabase=await loadJSON("/images/mlg-assets/data-artifact.json","data-artifact.json")}
+
+function getCharacterInfo(id){
+ const k=`c${id}`,c=characterDatabase.characters;
+ if(characterDatabase[k])return characterDatabase[k];
+ if(c?.[k])return c[k];
+ if(Array.isArray(c))return c[id-1]||{};
+ return{}
+}
+function getDatabaseItem(db,id,prefix){
+ const k=`${prefix}${id}`;
+ if(db?.[k])return db[k];
+ if(Array.isArray(db))return db.find(x=>Number(x?.id??x?.artifact_id)===Number(id))||{};
+ if(db?.items?.[k])return db.items[k];
+ return{}
+}
+function normalizeAssetPath(path){
+ if(path==null)return"";
+ let v=String(path).trim();
+ if(!v)return"";
+ if(/^(https?:|data:|blob:)/.test(v))return v;
+ return(v.replace("/images/character_art/","/images/character-art/")).startsWith("/")?v:`/${v}`
+}
+function getAccountStyleAsset(section,key){
+ const s=accountStyleDatabase?.[section];
+ return s&&typeof s==="object"&&Object.prototype.hasOwnProperty.call(s,key)?normalizeAssetPath(s[key]):""
+}
+function getAvatarImage(id){return getAccountStyleAsset("avatar",`img_${id}`)}
+function getAvatarFrame(id){return getAccountStyleAsset("avatar",`frame_${id}`)}
+function getBackgroundImage(id){return getAccountStyleAsset("background",`img_${id}`)}
+
+async function loadProfile(){
+ try{
+  if(!username||username==="view.html")return showError("No Player","No username was provided.");
+  const r=await fetch(`/api/user/${encodeURIComponent(username)}`,{cache:"no-cache"});
+  if(!r.ok)return showError("Player Not Found","This profile does not exist.");
+  const result=await r.json();
+  currentPlayerData=result?.data&&typeof result.data==="object"?result.data:{};
+  renderProfile(result?.username||username,currentPlayerData)
+ }catch(e){console.error("Profile loading error:",e);showError("Connection Error","Could not load this profile.")}
+}
+
+function renderProfile(username,data){
+ const owned=Array.isArray(data.c_owned)?data.c_owned.filter(Boolean).length:0;
+ const achievements=Object.values(data.achievements||{}).filter(Boolean).length;
+ const avatarId=num(data.avatar,1),avatarFrameId=num(data.avatar_frame,1),backgroundId=num(data.bg,1);
+ const avatarImage=getAvatarImage(avatarId),avatarFrame=getAvatarFrame(avatarFrameId),backgroundImage=getBackgroundImage(backgroundId);
+ const cls=backgroundImage?"profile profile-custom-background":"profile";
+ const style=backgroundImage?` style="background-image:url('${escapeAttribute(backgroundImage)}');"`:"";
+ document.getElementById("app").innerHTML=`
+ <main class="page">
+  <section class="${cls}"${style}><div class="profile-content">
+   <div class="avatar-wrap"><div class="avatar">
+    ${avatarImage?`<img class="profile-avatar-image" src="${escapeAttribute(avatarImage)}" alt="${escapeAttribute(username)}" onerror="handleAvatarError(this)">`:`<span class="avatar-fallback-letter">${escapeHtml(username.charAt(0).toUpperCase())}</span>`}
+    ${avatarFrame?`<img class="profile-avatar-frame" src="${escapeAttribute(avatarFrame)}" alt="" aria-hidden="true" onerror="this.style.display='none'">`:""}
+   </div></div>
+   <div class="profile-heading"><h1 class="username">${escapeHtml(username)}</h1><p class="subtitle">Mystical Legends Player Profile</p><div class="rank">Adventure Rank ${num(data.ar_level,1)}</div></div>
+  </div></section>
+  <section class="stats">
+   ${stat("Silver Coins",num(data.silver_coin))}${stat("Adventure Rank",num(data.ar_level,1))}${stat("Energy",num(data.energy))}${stat("Characters",owned)}${stat("Achievements",achievements)}${stat("Season Pass Lv.",num(data.season_pass_level,1))}
+  </section>
+  ${createAdventure(data)}${createSeasonPass(data)}${createPremium(data)}${createCharacters(data)}${createAchievements(data)}${createSkillTree(data)}${createCharacterSystems(data)}${createFlags(data)}
+ </main>`
+}
+
+function handleAvatarError(img){
+ const a=img.parentElement;img.remove();
+ if(a&&!a.querySelector(".avatar-fallback-letter")){
+  const f=document.createElement("span");f.className="avatar-fallback-letter";f.textContent=username.charAt(0).toUpperCase();a.prepend(f)
+ }
+}
+function stat(label,value){return`<div class="stat"><div class="stat-label">${label}</div><div class="stat-value">${escapeHtml(value)}</div></div>`}
+
+function createAdventure(data){
+ const l=num(data.ar_level,1),x=num(data.ar_xp);
+ return`<section class="section"><h2 class="section-title">Adventure Progress</h2>${progress("Adventure Rank XP",x,xpForRank(l))}${detailGrid({"Adventure Rank":l,"Current Energy":num(data.energy),"Silver Coins":num(data.silver_coin)})}</section>`
+}
+function createSeasonPass(data){
+ const l=num(data.season_pass_level,1),x=num(data.season_pass_xp);
+ return`<section class="section"><h2 class="section-title">Season Pass</h2><div class="details">${detail("Status",data.season_pass_owned?"Owned":"Not Owned")}${detail("Level",l)}${detail("XP",x)}</div>${progress("Season Pass XP",x,xpForRank(l))}</section>`
+}
+function createPremium(data){
+ const p=data.premium||{};
+ return`<section class="section"><h2 class="section-title">Premium Treasury</h2><div class="grid">${Object.entries(premiumNames).map(([k,n])=>`<div class="item"><div class="item-name">${n}</div><div class="item-sub">${num(p[k])} owned</div></div>`).join("")}</div></section>`
+}
+
+function createCharacters(data){
+ const owned=Array.isArray(data.c_owned)?data.c_owned:[];
+ const chars=owned.map((v,i)=>v?createCharacterTab(i+1,data):"").filter(Boolean);
+ if(!chars.length)return`<section class="section character-collection"><h2 class="section-title">Character Collection</h2><div class="empty">No characters have been obtained yet.</div></section>`;
+ return`<section class="section character-collection"><h2 class="section-title">Character Collection <span class="badge">${chars.length} OWNED</span></h2><div id="character-list" class="character-list">${chars.join("")}</div></section>`
+}
+
+function createCharacterTab(id,data){
+ const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=i.rarity||p.rarity||"",img=i.profile_image||"",ri=i.rarity_img||"";
+ return`<button type="button" class="character-tab" data-character-id="${id}" onclick="toggleCharacter(${id})">
+ <div class="character-icon-wrap">${img?`<img class="character-icon" src="${escapeAttribute(img)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
+ <div class="character-tab-info"><div class="character-id">C${id}</div><div class="character-name">${escapeHtml(name)}</div>
+ ${rarity?`<div class="character-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(rarity)}">`:""}${escapeHtml(rarity)}</div>`:""}
+ </div></button>`
+}
+
+function toggleCharacter(id){
+ const list=document.getElementById("character-list");if(!list)return;
+ const existing=list.querySelector(".character-details"),clicked=list.querySelector(`[data-character-id="${id}"]`);
+ if(existing?.dataset.characterId===String(id)){existing.remove();clicked?.classList.remove("active");return}
+ existing?.remove();
+ list.querySelectorAll(".character-tab.active").forEach(x=>x.classList.remove("active"));
+ if(!clicked)return;
+ const tabs=Array.from(list.querySelectorAll(".character-tab")),idx=tabs.indexOf(clicked);
+ let rowEnd=clicked;
+ for(let i=idx+1;i<tabs.length;i++){if(tabs[i].offsetTop!==clicked.offsetTop)break;rowEnd=tabs[i]}
+ rowEnd.insertAdjacentHTML("afterend",createCharacterDetails(id,currentPlayerData));
+ clicked.classList.add("active")
+}
+
+function createCharacterDetails(id,data){
+ const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=i.rarity||p.rarity||"",ri=i.rarity_img||"",splash=i.splash_image||"",level=getCharacterLevel(p),stats=calculateCharacterStats(i,level),equipment=getCharacterEquipment(p),species=getValues(i.species,p.species),roles=getValues(i.role,p.role),affinities=getValues(i.affinity,p.affinity);
+ return`<div class="character-details" data-character-id="${id}">
+ <div class="character-details-top">
+  <div class="character-splash-wrap">${splash?`<img class="character-splash" src="${escapeAttribute(splash)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
+  <div class="character-info">
+   <div class="character-detail-heading"><h3 class="character-detail-name">${escapeHtml(name)}</h3>
+   ${rarity?`<div class="character-detail-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(rarity)}">`:""}${escapeHtml(rarity)}</div>`:""}</div>
+   <div class="character-detail-level">Level <strong>${level}</strong></div>
+   ${createCharacterMeta(species,roles,affinities)}${createCharacterStats(stats,equipment)}
+  </div>
+ </div>${createEquipment(equipment)}</div>`
+}
+
+function createCharacterMeta(species,roles,affinities){
+ return`<div class="character-meta-section">
+ ${species.length?`<div class="character-meta-block character-species-block"><div class="character-meta-label">Species</div><div class="character-meta-values">${createCharacterListItems(species,"species")}</div></div>`:""}
+ ${roles.length?`<div class="character-meta-block"><div class="character-meta-label">Role</div><div class="character-meta-values character-role-values">${createCharacterListItems(roles,"role")}</div></div>`:""}
+ ${affinities.length?`<div class="character-meta-block"><div class="character-meta-label">Affinity</div><div class="character-meta-values character-affinity-values">${createCharacterListItems(affinities,"affinity")}</div></div>`:""}
+ </div>`
+}
+
+function speciesClassName(species){
+ return"species-"+String(species).toLowerCase().replace(/[^a-z0-9]+/g,"")
+}
+
+function elementClassName(element){
+ return"element-"+String(element).toLowerCase().replace(/[^a-z0-9]+/g,"")
+}
+
+function affinityClassName(affinity){
+ return String(affinity).toLowerCase().replace(/[^a-z0-9]+/g,"")
+}
+
+function createCharacterListItems(items,type="normal"){
+ if(!Array.isArray(items))return"";
+ return items.map(item=>{
+  if(type==="species")return`<span class="species ${speciesClassName(item)} character-list-item">${escapeHtml(item)}</span>`;
+  if(type==="affinity")return`<b class="affinity ${affinityClassName(item)} character-list-item">${escapeHtml(item)}</b>`;
+  if(type==="element")return`<span class="element ${elementClassName(item)} character-list-item">${escapeHtml(item)}</span>`;
+  return`<span class="character-list-item">${escapeHtml(item)}</span>`
+ }).join(" ")
+}
+
+function getValues(a,b){
+ const s=Array.isArray(a)?a:a!==undefined&&a!==null&&a!==""?[a]:Array.isArray(b)?b:b!==undefined&&b!==null&&b!==""?[b]:[];
+ return s.flat(Infinity).filter(v=>v!==undefined&&v!==null&&String(v).trim()).map(String).filter((v,i,a)=>a.indexOf(v)===i)
+}
+function getRarityClass(v){
+ const n=Number(v);
+ if(Number.isFinite(n))return{1:"c",2:"un",3:"r",4:"sr",5:"ssr",6:"ur",7:"lr"}[n]||"";
+ const r=String(v).toLowerCase().replace(/[^a-z]/g,"");
+ return["c","un","r","sr","ssr","ur","lr"].includes(r)?r:""
+}
+function getRarityName(v){
+ const n=Number(v);
+ if(Number.isFinite(n))return{1:"C",2:"UN",3:"R",4:"SR",5:"SSR",6:"UR",7:"LR"}[n]||String(v);
+ return String(v||"")
+}
+function getRarityBoxClass(v){const r=getRarityClass(v);return r?`rarity-${r}`:""}
+
+function getCharacterLevel(p){
+ for(const v of[p.level,p.lv,p.character_level,p.char_level]){
+  const l=Number(v);if(Number.isFinite(l)&&l>0)return Math.floor(l)
+ }
+ return 1
+}
+function calculateCharacterStats(info,level){
+ const b=info.base_stats||{},f=info.stat_change_by_level||{},m=Array.isArray(f.main_stat)?f.main_stat:[],u=typeof f.unique_stat==="string"?f.unique_stat:null,mw=Number(f.main_stat_weight)||0,uw=Number(f.unique_stat_weight)||0;
+ return Object.entries(b).reduce((r,[key,val])=>{
+  const base=Number(val);if(!Number.isFinite(base))return r;
+  const weight=m.includes(key)?mw:u===key?uw:0;
+  r.push({key,base,current:level>1?base+base*weight*(level-1):base});return r
+ },[])
+}
+
+/* ============================================================
+   CHARACTER STAT + EQUIPMENT CALCULATION
+   ============================================================ */
+
+function normalizeStatKey(name){
+ return String(name||"").toLowerCase().trim().replace(/\s+/g,"_").replace(/-/g,"_")
+}
+
+function isPercentStat(type,name){
+ const t=String(type||"").trim();
+ if(t==="%")return true;
+ if(t==="+")return false;
+ const key=normalizeStatKey(name);
+ return["crit_rate","crit_dmg","healing_rate"].includes(key)
+}
+
+function getEquipmentStatEntries(info,level,artifact=false,p=null){
+ const r=[];
+ if(!info)return r;
+
+ if(artifact){
+  const f=info.stat_change_by_level||{};
+
+  const mainName=p?.main??f.main;
+  const mainBase=Number(p?.main_value??f.main_value);
+  const mainType=p?.main_type??f.main_type??"";
+
+  if(mainName&&Number.isFinite(mainBase)){
+   const w=Number(f.main_stat_weight)||0;
+   r.push({
+    name:mainName,
+    base:mainBase,
+    value:level>1?mainBase+mainBase*w*(level-1):mainBase,
+    type:mainType,
+    source:"artifact"
+   })
+  }
+
+  if(p){
+   for(let i=1;i<=4;i++){
+    const name=p[`sub_${i}`],base=Number(p[`sub_${i}_value`]);
+    if(!name||!Number.isFinite(base))continue;
+    const rolls=Math.max(0,Number(p[`sub_${i}_rolls`])||0);
+    r.push({
+     name,
+     base,
+     value:base*(rolls+1),
+     type:p[`sub_${i}_type`]||"+",
+     source:"artifact"
+    })
+   }
+  }
+
+  return r
+ }
+
+ const f=info.stat_change_by_level||{},w=Number(f.main_stat_weight)||0;
+
+ for(let i=1;i<=2;i++){
+  const name=f[`main_${i}`],base=Number(f[`main_${i}_value`]);
+  if(!name||!Number.isFinite(base))continue;
+
+  r.push({
+   name,
+   base,
+   value:level>1?base+base*w*(level-1):base,
+   type:"+",
+   source:"equipment"
+  })
+ }
+
+ return r
+}
+
+function collectCharacterEquipmentStats(equipment){
+ const additive={},artifactAdditive={},artifactPercent={};
+
+ function add(map,name,value){
+  const key=normalizeStatKey(name);
+  if(!key||!Number.isFinite(Number(value)))return;
+  map[key]=(map[key]||0)+Number(value)
+ }
+
+ for(const type of["weapon","accessory"]){
+  const item=equipment[type];
+  if(!item)continue;
+
+  const id=item.id;
+  const db=type==="weapon"?weaponDatabase:accessoryDatabase;
+  const prefix=type==="weapon"?"w":"a";
+  const info=getDatabaseItem(db,id,prefix);
+  const level=num(item.level,info.level||1);
+
+  getEquipmentStatEntries(info,level,false).forEach(s=>{
+   add(additive,s.name,s.value)
+  })
+ }
+
+ for(const item of equipment.artifacts||[]){
+  if(!item)continue;
+
+  const id=item.id;
+  const info=getDatabaseItem(artifactDatabase,id,"o");
+  const level=num(item.level,info.level||1);
+
+  getEquipmentStatEntries(info,level,true,item).forEach(s=>{
+   if(isPercentStat(s.type,s.name)){
+    add(artifactPercent,s.name,s.value)
+   }else{
+    add(artifactAdditive,s.name,s.value)
+   }
+  })
+ }
+
+ return{additive,artifactAdditive,artifactPercent}
+}
+
+function calculateCharacterFinalStats(stats,equipment){
+ const equipmentStats=collectCharacterEquipmentStats(equipment);
+ const finalStats={};
+ const baseStats={};
+ const mainEquipmentStats={};
+ const artifactStats={};
+
+ stats.forEach(s=>{
+  const key=normalizeStatKey(s.key);
+  const base=Number(s.current)||0;
+  const equipmentAdd=Number(equipmentStats.additive[key])||0;
+  const artifactAdd=Number(equipmentStats.artifactAdditive[key])||0;
+  const artifactPercent=Number(equipmentStats.artifactPercent[key])||0;
+
+  const additiveTotal=base+equipmentAdd+artifactAdd;
+  const final=additiveTotal*(1+artifactPercent/100);
+
+  baseStats[key]=base;
+  mainEquipmentStats[key]=equipmentAdd;
+
+  artifactStats[key]=
+   artifactAdd+
+   (additiveTotal*(artifactPercent/100));
+
+  finalStats[key]=final
+ })
+
+ return{baseStats,mainEquipmentStats,artifactStats,finalStats,equipmentStats}
+}
+
+/* ============================================================
+   CHARACTER STAT LABELS
+   ============================================================ */
+
+function getCharacterStatDisplayName(name){
+ const key=normalizeStatKey(name);
+
+ if(key==="mana_regen"||key==="mana_regeneration"||key==="mp_regen"||key==="mp_regeneration"){
+  return"Mana Regen (MP/s)"
+ }
+
+ if(key==="stamina_regen"||key==="stamina_regeneration"||key==="stamina_recovery"){
+  return"Stamina Regen (p/s)"
+ }
+
+ return pretty(name)
+}
+
+function createCharacterStats(stats,equipment){
+ if(!stats.length)return`<div class="empty">No base stats defined.</div>`;
+
+ const calculated=calculateCharacterFinalStats(stats,equipment);
+
+ return`<div class="character-stats-heading">
+  <span class="character-stats-heading-title">Stats</span>
+  <div class="character-stats-heading-legend">
+   <span class="character-stats-legend-total">Total</span>
+   <span class="character-stats-legend-equipment">Main Equipment</span>
+   <span class="character-stats-legend-artifact">Artifact</span>
+   <span class="character-stats-legend-base">Base</span>
+  </div>
  </div>
+ <div class="character-stats">${stats.map(s=>{
+  const key=normalizeStatKey(s.key);
+  const total=calculated.finalStats[key]??s.current;
+  const equipmentValue=calculated.mainEquipmentStats[key]||0;
+  const artifactValue=calculated.artifactStats[key]||0;
+  const base=calculated.baseStats[key]??s.base;
 
- <script>
- const pathParts=location.pathname.split("/").filter(Boolean);
- let username=new URLSearchParams(location.search).get("username")||
-  pathParts[pathParts.length-1];
+  return`
+ <div class="character-stat">
+  <span class="character-stat-name">${escapeHtml(getCharacterStatDisplayName(s.key))}</span>
+  <span class="character-stat-values">
+   <span class="character-stat-current">${formatCharacterStat(s.key,total)}</span>
+   <span class="character-stat-equipment">${equipmentValue?`+${formatStat(equipmentValue)}${formatCharacterStatSuffix(s.key)}`:""}</span>
+   <span class="character-stat-artifact">${artifactValue?`+${formatStat(artifactValue)}${formatCharacterStatSuffix(s.key)}`:""}</span>
+   <span class="character-stat-base">(${formatCharacterStat(s.key,base)})</span>
+  </span>
+ </div>`
+ }).join("")}</div>`
+}
 
- let characterDatabase={};
- let accountStyleDatabase={};
- let currentPlayerData={};
+function hasArtifactPercentForStat(key,equipmentStats){
+ return Number(equipmentStats?.artifactPercent?.[key]||0)!==0
+}
 
- const premiumNames={
-  diamond_core:["◈","Diamond Core"],
-  sr_star_lv_frag:["✦","SR Star Lv. Fragments"],
-  ssr_star_lv_frag:["✦","SSR Star Lv. Fragments"],
-  ur_star_lv_frag:["✦","UR Star Lv. Fragments"]
- };
+function formatCharacterStatSuffix(name){
+ const key=normalizeStatKey(name);
+ const percent=["crit_rate","crit_dmg","healing_rate"].includes(key);
+ return percent?"%":""
+}
 
- async function loadCharacterDatabase(){
-  try{
-   const response=await fetch(
-    "/images/mlg-assets/data-character.json",
-    {cache:"no-cache"}
-   );
+function formatCharacterStat(name,value){
+ return`${formatStat(value)}${formatCharacterStatSuffix(name)}`
+}
 
-   if(!response.ok){
-    throw new Error(`Character database HTTP ${response.status}`);
-   }
+/* ============================================================
+   EQUIPMENT
+   ============================================================ */
 
-   characterDatabase=await response.json();
-  }catch(error){
-   console.error("Could not load data-character.json:",error);
-   characterDatabase={};
-  }
+function getCharacterEquipment(p){
+ const s=p.equip||p.equipment||p.equipped||{};
+ return{
+  weapon:getEquipmentArray(s.weapon),
+  accessory:getEquipmentArray(s.accessory),
+  artifacts:[
+   getEquipmentArray(s.artifact1),
+   getEquipmentArray(s.artifact2),
+   getEquipmentArray(s.artifact3),
+   getEquipmentArray(s.artifact4)
+  ]
  }
+}
+function getEquipmentArray(v){
+ if(Array.isArray(v))return v[0]||null;
+ return v&&typeof v==="object"?v:null
+}
 
- async function loadAccountStyleDatabase(){
-  try{
-   const response=await fetch(
-    "/images/mlg-assets/account-style.json",
-    {cache:"no-cache"}
-   );
+function createEquipment(e){
+ return`<div class="equipped-section"><div class="subsection-title">Equipped</div>
+ <div class="equipped-primary-row">${createEquipmentItem(e.weapon,"weapon")}${createEquipmentItem(e.accessory,"accessory")}</div>
+ <div class="equipped-artifact-row">${e.artifacts.map(v=>createEquipmentItem(v,"artifact")).join("")}</div></div>`
+}
+function createEquipmentItem(v,type){
+ if(!v)return`<div class="equipped-item equipped-empty"><span class="equipped-name equipped-none">None Equipped</span></div>`;
+ if(type==="weapon")return createWeaponItem(v);
+ if(type==="accessory")return createAccessoryItem(v);
+ return createArtifactItem(v)
+}
 
-   if(!response.ok){
-    throw new Error(`Account style database HTTP ${response.status}`);
-   }
+/* ============================================================
+   WEAPON
+   ============================================================ */
+function createWeaponItem(p){
+ const id=p.id,i=getDatabaseItem(weaponDatabase,id,"w"),name=i.name||p.name||"Unknown Weapon",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),image=normalizeAssetPath(i.weapon_img||p.weapon_img||""),stats=calculateEquipmentMainStats(i,level);
+ return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}">
+ <div class="equipment-card">
+  <div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div>
+  <div class="equipment-info">
+   <div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Weapon</span></div>
+   <div class="equipment-name">${escapeHtml(name)}</div>
+   <div class="equipment-level">Level <span>${level}</span></div>
+   ${createEquipmentMainStats(stats)}
+  </div>
+ </div>
+ </div>`
+}
 
-   accountStyleDatabase=await response.json();
-  }catch(error){
-   console.error("Could not load account-style.json:",error);
-   accountStyleDatabase={};
-  }
+/* ============================================================
+   ACCESSORY
+   ============================================================ */
+function createAccessoryItem(p){
+ const id=p.id,i=getDatabaseItem(accessoryDatabase,id,"a"),name=i.name||p.name||"Unknown Accessory",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),image=normalizeAssetPath(i.accessory_img||p.accessory_img||""),stats=calculateEquipmentMainStats(i,level);
+ return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}">
+ <div class="equipment-card">
+  <div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div>
+  <div class="equipment-info">
+   <div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Accessory</span></div>
+   <div class="equipment-name">${escapeHtml(name)}</div>
+   <div class="equipment-level">Level <span>${level}</span></div>
+   ${createEquipmentMainStats(stats)}
+  </div>
+ </div>
+ </div>`
+}
+
+/* ============================================================
+   ARTIFACT
+   ============================================================ */
+function createArtifactItem(p){
+ const id=p.id,i=getDatabaseItem(artifactDatabase,id,"o"),name=i.name||p.name||"Unknown Artifact",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),pieceNum=num(p.piece_num,i.piece_num||1),image=normalizeAssetPath(i.artifact_img||p.artifact_img||""),mainStat=calculateArtifactMainStat(i,p,level),subStats=calculateArtifactSubStats(i,p),pieceName=getArtifactPieceName(pieceNum);
+ return`<div class="equipped-item equipped-display artifact-display ${getRarityBoxClass(rarity)}">
+ <div class="artifact-heading">
+  <div class="artifact-image-wrap">${image?`<img class="artifact-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div>
+  <div class="artifact-heading-info">
+   <div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Artifact</span></div>
+   <div class="artifact-name">${escapeHtml(name)}</div>
+   <div class="equipment-level">Level <span>${level}</span></div>
+  </div>
+ </div>
+ <div class="artifact-piece">${escapeHtml(pieceName)}</div>
+ ${mainStat?`<div class="artifact-main-stat"><span class="artifact-stat-label">Main Stat</span><span class="artifact-stat-value"><span class="artifact-stat-name">${escapeHtml(pretty(mainStat.name))}</span>: ${formatGearStat(mainStat.name,mainStat.value,mainStat.type)}</span></div>`:""}
+ ${subStats.length?`<div class="artifact-sub-stats">${subStats.map(s=>`<div class="artifact-sub-stat"><span>${escapeHtml(pretty(s.name))}</span><strong>${formatGearStat(s.name,s.value,s.type)}</strong></div>`).join("")}</div>`:""}
+ </div>`
+}
+
+function handleEquipmentImageError(img){
+ img.style.display="none";const w=img.parentElement;
+ if(w&&!w.querySelector(".item-symbol")){const f=document.createElement("span");f.className="item-symbol";w.appendChild(f)}
+}
+function calculateEquipmentMainStats(info,level){
+ const f=info?.stat_change_by_level||{},w=Number(f.main_stat_weight)||0,r=[];
+ for(let i=1;i<=2;i++){
+  const name=f[`main_${i}`],base=Number(f[`main_${i}_value`]);
+  if(!name||!Number.isFinite(base))continue;
+  r.push({name,base,value:level>1?base+base*w*(level-1):base,type:f[`main_${i}_type`]||""})
  }
-
- function getCharacterInfo(id){
-  const key=`c${id}`;
-  const characters=characterDatabase.characters;
-
-  if(characterDatabase[key]) return characterDatabase[key];
-  if(characters?.[key]) return characters[key];
-  if(Array.isArray(characters)) return characters[id-1]||{};
-
-  return {};
+ return r
+}
+function createEquipmentMainStats(stats){
+ if(!stats.length)return"";
+ return`<div class="equipment-main-stats">${stats.map(s=>`<div class="equipment-main-stat"><span class="equipment-stat-name">${escapeHtml(pretty(s.name))}</span><span class="equipment-stat-value">: ${formatGearStat(s.name,s.value,s.type)}</span></div>`).join("")}</div>`
+}
+function calculateArtifactMainStat(info,p,level){
+ const f=info?.stat_change_by_level||{},name=p.main||f.main,base=Number(p.main_value??f.main_value),type=p.main_type??f.main_type??"";
+ if(!name||!Number.isFinite(base))return null;
+ const w=Number(f.main_stat_weight)||0;
+ return{name,base,value:level>1?base+base*w*(level-1):base,type}
+}
+function calculateArtifactSubStats(info,p){
+ const r=[];
+ for(let i=1;i<=4;i++){
+  const name=p[`sub_${i}`],base=Number(p[`sub_${i}_value`]);
+  if(!name||!Number.isFinite(base))continue;
+  const rolls=Math.max(0,Number(p[`sub_${i}_rolls`])||0);
+  r.push({name,value:base*(rolls+1),base,rolls,type:p[`sub_${i}_type`]||""})
  }
+ return r
+}
+function getArtifactPieceName(n){return{1:"Headgear",2:"Chestplate",3:"Leggings",4:"Boots"}[Number(n)]||`Piece ${n}`}
+function formatGearStat(name,value,type=""){
+ const n=formatStat(value),s=String(name||"").toLowerCase(),percent=["crit_rate","crit_dmg","healing_rate"].includes(s)||String(type).trim()==="%";
+ return`+${n}${percent?"%":""}`
+}
 
- function normalizeAssetPath(path){
-  if(path===undefined||path===null) return "";
+function createAchievements(data){
+ const e=Object.entries(data.achievements||{});if(!e.length)return"";
+ const u=e.filter(([,v])=>v).length;
+ return`<section class="section"><h2 class="section-title">Achievements <span class="badge">${u}/${e.length}</span></h2><div class="grid">${e.map(([k,v])=>`<div class="achievement ${v?"":"locked"}"><div class="achievement-symbol"></div><div><div class="item-name">${escapeHtml(pretty(k))}</div><div class="item-sub">${v?"Unlocked":"Locked"}</div></div></div>`).join("")}</div></section>`
+}
+function createSkillTree(data){
+ const tree=Array.isArray(data.mc_skill_tree_unlock)?data.mc_skill_tree_unlock:[];if(!tree.length)return"";
+ return`<section class="section"><h2 class="section-title">Main Character Skill Tree</h2><div class="details">${detail("Nodes / Entries",countNested(tree))}${detail("Unlocked Levels",countNumbers(tree))}</div><div class="grid" style="margin-top:10px">${tree.map((g,i)=>`<div class="item"><div class="item-symbol"></div><div class="item-name">Ability Branch ${i+1}</div><div class="item-sub">${countNumbers(g)} unlocked levels</div></div>`).join("")}</div></section>`
+}
+function createCharacterSystems(data){
+ const a={equipped:data.c_equipped_skills,skill1:data.c_skill1_owned,skill2:data.c_skill2_owned,skill3:data.c_skill3_owned,skill4:data.c_skill4_owned,costumes:data.c_costume_owned};
+ Object.keys(a).forEach(k=>a[k]=Array.isArray(a[k])?a[k]:[]);
+ const ec=Array.isArray(data.c_costume_equipped)?data.c_costume_equipped:[];
+ const c={equipped:countNested(a.equipped),skill1:countNumbers(a.skill1),skill2:countNumbers(a.skill2),skill3:countNumbers(a.skill3),skill4:countNumbers(a.skill4),costumes:countNumbers(a.costumes)};
+ if(!Object.values(c).some(Boolean))return"";
+ return`<section class="section"><h2 class="section-title">Character Progression</h2><div class="details">${detail("Equipped Skills",c.equipped)}${detail("Basic Skills Owned",c.skill1)}${detail("Special Skills Owned",c.skill2)}${detail("Ultimate Skills Owned",c.skill3)}${detail("Technical Skills Owned",c.skill4)}${detail("Costumes Owned",c.costumes)}${detail("Equipped Costumes",ec.filter(v=>v!=null).length)}</div></section>`
+}
+function createFlags(data){
+ const e=Object.entries(data.flags||{});if(!e.length)return"";
+ return`<section class="section"><h2 class="section-title">Milestones & Flags</h2><div class="details">${e.map(([k,v])=>detail(pretty(k),formatValue(v))).join("")}</div></section>`
+}
 
-  const value=String(path).trim();
+function progress(label,value,max){
+ value=Number(value)||0;max=Math.max(Number(max)||1,1);
+ const pct=Math.min(100,Math.max(0,value/max*100));
+ return`<div class="progress-container"><div class="progress-header"><span class="progress-label">${escapeHtml(label)}</span><span class="progress-value">${num(value)} / ${num(max)}</span></div><div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div></div>`
+}
+function detail(k,v){return`<div class="detail"><span class="detail-key">${escapeHtml(k)}</span><span class="detail-value">${escapeHtml(v)}</span></div>`}
+function detailGrid(o){return`<div class="details">${Object.entries(o).map(([k,v])=>detail(k,v)).join("")}</div>`}
+function xpForRank(l){return Math.max(100,l*100)}
+function countNumbers(v){
+ if(Array.isArray(v))return v.reduce((t,x)=>t+countNumbers(x),0);
+ return typeof v==="number"&&v>0?v:0
+}
+function countNested(v){
+ if(!Array.isArray(v))return 0;
+ return v.reduce((t,x)=>t+(Array.isArray(x)?countNested(x):1),0)
+}
+function pretty(v){return String(v).replaceAll("_"," ").replace(/\b\w/g,c=>c.toUpperCase())}
+function formatValue(v){if(v===null)return"None";if(typeof v==="object")return JSON.stringify(v);return String(v)}
+function formatStat(v){
+ const n=Number(v);if(!Number.isFinite(n))return String(v);
+ if(Number.isInteger(n))return n.toLocaleString();
+ return n.toLocaleString(undefined,{maximumFractionDigits:2})
+}
+function num(v,f=0){const n=Number(v);return Number.isFinite(n)?n:f}
+function escapeHtml(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+const escapeAttribute=escapeHtml;
+function showError(t,m){document.getElementById("app").innerHTML=`<div class="page"><div class="error"><h1>${escapeHtml(t)}</h1><p>${escapeHtml(m)}</p></div></div>`}
 
-  if(!value) return "";
-  if(/^(https?:|data:|blob:)/.test(value)) return value;
+Promise.all([loadCharacterDatabase(),loadAccountStyleDatabase(),loadWeaponDatabase(),loadAccessoryDatabase(),loadArtifactDatabase()]).then(loadProfile);
+</script>
 
-  return value.startsWith("/")?value:`/${value}`;
+<style>
+/* ============================================================
+   GLOBAL FONT
+   Arial is applied to the entire HTML display.
+   ============================================================ */
+html,body,#app,.page{
+ font-family:Arial,sans-serif;
+}
+
+/* Keep form/control elements consistent with the page font */
+button,input,textarea,select{
+ font-family:Arial,sans-serif;
+}
+
+.character-icon,.character-splash{mix-blend-mode:screen;background:transparent}
+.character-icon-wrap,.character-splash-wrap{background:transparent}
+
+/* ============================================================
+   CHARACTER LIST ITEMS
+   Re-added classes used by the main MLG character pages.
+   ============================================================ */
+.character-list-item{
+ display:inline-block;
+ margin-right:3px
+}
+
+.character-meta-values .species,
+.character-meta-values .affinity,
+.character-meta-values .element,
+.character-meta-values .character-list-item{
+ display:inline-block
+}
+
+/* ============================================================
+   AFFINITY / ELEMENT CLASSES
+   These preserve the class hooks used by mlg.css so the
+   existing MLG affinity and element styling applies correctly.
+   ============================================================ */
+.affinity,
+.element{
+ display:inline-block;
+}
+
+.character-affinity-values .affinity,
+.character-meta-values .element{
+ display:inline-block;
+}
+
+/* ============================================================
+   EQUIPMENT
+   ============================================================ */
+.equipped-display{
+ position:relative;overflow:hidden;height:100px;min-height:100px;padding:7px;
+ border-color:#ffffff18;background:#191718
+}
+.equipped-display.rarity-c{background:linear-gradient(145deg,#484848,#202020)}
+.equipped-display.rarity-un{background:linear-gradient(145deg,#365b30,#172218)}
+.equipped-display.rarity-r{background:linear-gradient(145deg,#365f9b,#182743)}
+.equipped-display.rarity-sr{background:linear-gradient(145deg,#75459a,#27182f)}
+.equipped-display.rarity-ssr{background:linear-gradient(145deg,#9a6428,#342415)}
+.equipped-display.rarity-ur{background:linear-gradient(145deg,#963838,#351919)}
+.equipped-display.rarity-lr{background:linear-gradient(145deg,#80566c,#30252b)}
+
+.equipment-card{display:flex;align-items:center;gap:9px;min-width:0;height:100%}
+.equipment-image-wrap{
+ width:82px;height:82px;min-width:82px;flex:0 0 82px;
+ display:flex;align-items:center;justify-content:center;overflow:hidden;
+ border-radius:5px;background:transparent
+}
+.equipment-image{
+ display:block;width:82px;height:82px;object-fit:contain;
+ object-position:center;background:transparent;mix-blend-mode:screen
+}
+.equipment-info{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;overflow:hidden}
+
+/* RARITY + EQUIPMENT TYPE */
+.equipment-rarity-line{
+ display:flex;align-items:center;gap:6px;margin-bottom:2px;
+ line-height:1;text-transform:uppercase
+}
+.equipment-rarity{
+ width:max-content;font-size:9px;font-weight:900;
+ letter-spacing:.07em
+}
+
+/*
+   EQUIPMENT TYPE LABELS
+   These are intentionally lighter than their corresponding
+   rarity colors so WEAPON / ACCESSORY / ARTIFACT are visually
+   distinct from C / UN / R / SR / SSR / UR / LR.
+*/
+.equipment-type{
+ font-size:8px;font-weight:800;letter-spacing:.05em;
+ text-transform:uppercase
+}
+
+/* rarity */
+.equipment-rarity.c{color:#eeeeee}
+.equipment-rarity.un{color:#7fba68}
+.equipment-rarity.r{color:#78aaff}
+.equipment-rarity.sr{color:#c878ed}
+.equipment-rarity.ssr{color:#ffb52f}
+.equipment-rarity.ur{color:#ff5b5b}
+.equipment-rarity.lr{color:#dc78aa}
+
+/* lighter rarity-specific equipment type colors */
+.equipment-type.c{color:#ffffff}
+.equipment-type.un{color:#b5e6a0}
+.equipment-type.r{color:#b9d2ff}
+.equipment-type.sr{color:#e3b1fa}
+.equipment-type.ssr{color:#ffe0a0}
+.equipment-type.ur{color:#ffb0b0}
+.equipment-type.lr{color:#f0b5d0}
+
+/*
+   ACTUAL EQUIPMENT TITLES
+   Arial as requested, while the rest of the HTML also uses Arial.
+*/
+.equipment-name{
+ overflow:hidden;color:#fff;font:800 15px Arial,sans-serif;
+ line-height:1.2;text-overflow:ellipsis;white-space:nowrap;
+ text-shadow:none
+}
+.equipment-level{
+ margin-top:3px;color:#d1d1d1;font-size:11px;font-weight:700
+}
+.equipment-level span{color:#c7c7c7;font-weight:700}
+
+.equipment-main-stats{
+ display:flex;flex-direction:column;gap:2px;margin-top:5px
+}
+.equipment-main-stat{
+ color:#d0d0d0;font-size:10px;font-weight:700;line-height:1.25
+}
+.equipment-stat-name{color:#d0d0d0}
+.equipment-stat-value{color:#bdbdbd}
+.equipment-star{display:none}
+.equipped-empty{min-height:100px;height:100px}
+.equipped-none{color:#aaa}
+
+/* ============================================================
+   CHARACTER STAT BREAKDOWN
+   ============================================================ */
+.character-stats-heading{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:12px;margin-top:12px;margin-bottom:5px;
+ padding-bottom:5px;border-bottom:1px solid #ffffff18
+}
+.character-stats-heading-title{
+ color:#fff;font-size:11px;font-weight:900;
+ text-transform:uppercase;letter-spacing:.07em
+}
+.character-stats-heading-legend{
+ display:flex;align-items:center;justify-content:flex-end;
+ flex-wrap:wrap;gap:9px;font-size:8px;font-weight:800
+}
+.character-stats-legend-total{color:#fff}
+.character-stats-legend-equipment{color:#f0ca69}
+.character-stats-legend-artifact{color:#ff8f8f}
+.character-stats-legend-base{color:#8e8e8e}
+
+.character-stat-values{
+ display:flex;align-items:center;justify-content:flex-end;
+ gap:7px;min-width:0;white-space:nowrap
+}
+.character-stat-current{color:#fff;font-weight:900}
+.character-stat-equipment{color:#f0ca69;font-size:9px;font-weight:800}
+.character-stat-artifact{color:#ff8f8f;font-size:9px;font-weight:800}
+.character-stat-base{color:#8e8e8e;font-size:9px;font-weight:700}
+
+.character-stat-name{
+ min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+
+.character-stats{
+ display:flex;flex-direction:column;gap:4px
+}
+.character-stat{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;min-width:0
+}
+
+/* ARTIFACTS */
+.equipped-artifact-row{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;width:100%;margin-top:10px
+}
+.equipped-artifact-row>.equipped-item{min-width:0;width:100%}
+.artifact-display{min-height:190px;height:auto}
+.artifact-heading{display:flex;align-items:center;gap:8px;min-width:0}
+.artifact-image-wrap{
+ width:48px;height:48px;min-width:48px;flex:0 0 48px;
+ display:flex;align-items:center;justify-content:center;overflow:hidden;
+ border-radius:4px;background:transparent
+}
+.artifact-image{
+ display:block;width:48px;height:48px;object-fit:contain;
+ object-position:center;background:transparent;mix-blend-mode:screen
+}
+.artifact-heading-info{min-width:0;flex:1}
+
+/* Actual artifact title also uses Arial */
+.artifact-name{
+ overflow:hidden;color:#fff;font:800 14px Arial,sans-serif;
+ line-height:1.2;text-overflow:ellipsis;white-space:nowrap;
+ text-shadow:none
+}
+.artifact-piece{
+ margin-top:8px;padding:4px 6px;
+ border-top:1px solid #ffffff28;border-bottom:1px solid #ffffff18;
+ color:#d0d0d0;font-size:10px;font-weight:800;letter-spacing:.05em;
+ text-transform:uppercase
+}
+.artifact-main-stat{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;
+ margin-top:7px;padding:6px 7px;border-radius:4px;
+ background:#00000025;font-size:10px
+}
+.artifact-stat-label{color:#d0d0d0;font-size:9px;font-weight:800;text-transform:uppercase}
+.artifact-stat-value{color:#bdbdbd;font-weight:800;text-align:right}
+.artifact-stat-name{color:#d0d0d0}
+.artifact-sub-stats{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:4px;margin-top:5px
+}
+.artifact-sub-stat{
+ display:flex;justify-content:space-between;align-items:center;gap:5px;
+ min-width:0;padding:5px 6px;border-radius:3px;
+ background:#00000020;color:#d0d0d0;font-size:9px
+}
+.artifact-sub-stat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#d0d0d0}
+.artifact-sub-stat strong{flex:none;color:#bdbdbd;font-size:9px}
+
+@media(max-width:800px){
+ .artifact-display{min-height:190px}
+ .equipped-artifact-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+ .equipped-display{
+  height:88px;min-height:88px;padding:6px
  }
+ .equipment-card{gap:7px}
+ .equipment-image-wrap{width:70px;height:70px;min-width:70px;flex-basis:70px}
+ .equipment-image{width:70px;height:70px}
+ .equipment-name{font-size:13px}
+ .equipment-level{font-size:10px}
+ .equipment-main-stats{margin-top:4px;gap:1px}
+ .equipment-main-stat{font-size:9px}
+ .equipped-empty{height:88px;min-height:88px}
+ .artifact-image-wrap{width:44px;height:44px;min-width:44px;flex-basis:44px}
+ .artifact-image{width:44px;height:44px}
+ .artifact-name{font-size:13px}
+ .equipped-artifact-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 
- function getAccountStyleAsset(sectionName,key){
-  const section=accountStyleDatabase?.[sectionName];
-
-  if(!section||typeof section!=="object") return "";
-  if(!Object.prototype.hasOwnProperty.call(section,key)) return "";
-
-  return normalizeAssetPath(section[key]);
+ .character-stats-heading{
+  align-items:flex-start;flex-direction:column;gap:5px
  }
-
- function getAvatarImage(id){
-  return getAccountStyleAsset("avatar",`img_${id}`);
+ .character-stats-heading-legend{
+  justify-content:flex-start;gap:8px
  }
-
- function getAvatarFrame(id){
-  return getAccountStyleAsset("avatar",`frame_${id}`);
- }
-
- function getBackgroundImage(id){
-  return getAccountStyleAsset("background",`img_${id}`);
- }
-
- async function loadProfile(){
-  try{
-   if(!username||username==="view.html"){
-    return showError("No Player","No username was provided.");
-   }
-
-   const response=await fetch(
-    `/api/user/${encodeURIComponent(username)}`,
-    {cache:"no-cache"}
-   );
-
-   if(!response.ok){
-    return showError(
-     "Player Not Found",
-     "This profile does not exist."
-    );
-   }
-
-   const result=await response.json();
-
-   currentPlayerData=
-    result?.data&&typeof result.data==="object"
-     ?result.data
-     :{};
-
-   renderProfile(
-    result?.username||username,
-    currentPlayerData
-   );
-  }catch(error){
-   console.error("Profile loading error:",error);
-   showError(
-    "Connection Error",
-    "Could not load this profile."
-   );
-  }
- }
-
- function renderProfile(username,data){
-  const owned=Array.isArray(data.c_owned)
-   ?data.c_owned.filter(Boolean).length
-   :0;
-
-  const achievements=Object.values(data.achievements||{})
-   .filter(Boolean).length;
-
-  const avatarId=num(data.avatar,1);
-  const avatarFrameId=num(data.avatar_frame,1);
-  const backgroundId=num(data.bg,1);
-
-  const avatarImage=getAvatarImage(avatarId);
-  const avatarFrame=getAvatarFrame(avatarFrameId);
-  const backgroundImage=getBackgroundImage(backgroundId);
-
-  const profileClass=backgroundImage
-   ?"profile profile-custom-background"
-   :"profile";
-
-  const profileStyle=backgroundImage
-   ?` style="background-image:url('${escapeAttribute(backgroundImage)}');"`
-   :"";
-
-  document.getElementById("app").innerHTML=`
-   <main class="page">
-    <section class="${profileClass}"${profileStyle}>
-     <div class="profile-content">
-      <div class="avatar-wrap">
-       <div class="avatar">
-        ${
-         avatarImage
-          ?`
-           <img
-            class="profile-avatar-image"
-            src="${escapeAttribute(avatarImage)}"
-            alt="${escapeAttribute(username)}"
-            onerror="handleAvatarError(this)"
-           >
-          `
-          :`
-           <span class="avatar-fallback-letter">
-            ${escapeHtml(username.charAt(0).toUpperCase())}
-           </span>
-          `
-        }
-
-        ${
-         avatarFrame
-          ?`
-           <img
-            class="profile-avatar-frame"
-            src="${escapeAttribute(avatarFrame)}"
-            alt=""
-            aria-hidden="true"
-            onerror="this.style.display='none'"
-           >
-          `
-          :""
-        }
-       </div>
-      </div>
-
-      <div class="profile-heading">
-       <h1 class="username">${escapeHtml(username)}</h1>
-
-       <p class="subtitle">Mystical Legends Player Profile</p>
-
-       <div class="rank">
-        <span class="rank-symbol">◆</span>
-        Adventure Rank ${num(data.ar_level,1)}
-       </div>
-      </div>
-     </div>
-    </section>
-
-    <section class="stats">
-     ${stat("◆","Silver Coins",num(data.silver_coin))}
-     ${stat("✦","Adventure Rank",num(data.ar_level,1))}
-     ${stat("ϟ","Energy",num(data.energy))}
-     ${stat("♢","Characters",owned)}
-     ${stat("✦","Achievements",achievements)}
-     ${stat("▰","Season Pass Lv.",num(data.season_pass_level,1))}
-    </section>
-
-    ${createAdventure(data)}
-    ${createSeasonPass(data)}
-    ${createPremium(data)}
-    ${createCharacters(data)}
-    ${createAchievements(data)}
-    ${createSkillTree(data)}
-    ${createCharacterSystems(data)}
-    ${createFlags(data)}
-   </main>
-  `;
- }
-
- function handleAvatarError(image){
-  const avatar=image.parentElement;
-  image.remove();
-
-  if(avatar&&!avatar.querySelector(".avatar-fallback-letter")){
-   const fallback=document.createElement("span");
-   fallback.className="avatar-fallback-letter";
-   fallback.textContent=username.charAt(0).toUpperCase();
-   avatar.prepend(fallback);
-  }
- }
-
- function stat(symbol,label,value){
-  return `
-   <div class="stat">
-    <div class="stat-symbol">${symbol}</div>
-    <div class="stat-label">${label}</div>
-    <div class="stat-value">${escapeHtml(value)}</div>
-   </div>
-  `;
- }
-
- function createAdventure(data){
-  const level=num(data.ar_level,1);
-  const xp=num(data.ar_xp);
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">◆</span>
-     Adventure Progress
-    </h2>
-
-    ${progress("Adventure Rank XP",xp,xpForRank(level))}
-
-    ${detailGrid({
-     "Adventure Rank":level,
-     "Current Energy":num(data.energy),
-     "Silver Coins":num(data.silver_coin)
-    })}
-   </section>
-  `;
- }
-
- function createSeasonPass(data){
-  const level=num(data.season_pass_level,1);
-  const xp=num(data.season_pass_xp);
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">▰</span>
-     Season Pass
-    </h2>
-
-    <div class="details">
-     ${detail("Status",data.season_pass_owned?"Owned":"Not Owned")}
-     ${detail("Level",level)}
-     ${detail("XP",xp)}
-    </div>
-
-    ${progress("Season Pass XP",xp,xpForRank(level))}
-   </section>
-  `;
- }
-
- function createPremium(data){
-  const premium=data.premium||{};
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">◈</span>
-     Premium Treasury
-    </h2>
-
-    <div class="grid">
-     ${Object.entries(premiumNames).map(([key,[symbol,name]])=>`
-      <div class="item">
-       <div class="item-symbol">${symbol}</div>
-       <div class="item-name">${name}</div>
-       <div class="item-sub">${num(premium[key])} owned</div>
-      </div>
-     `).join("")}
-    </div>
-   </section>
-  `;
- }
-
- function createCharacters(data){
-  const owned=Array.isArray(data.c_owned)?data.c_owned:[];
-  const characters=owned
-   .map((value,index)=>value?createCharacterTab(index+1,data):"")
-   .filter(Boolean);
-
-  if(!characters.length){
-   return `
-    <section class="section character-collection">
-     <h2 class="section-title">
-      <span class="section-symbol">♢</span>
-      Character Collection
-     </h2>
-
-     <div class="empty">No characters have been obtained yet.</div>
-    </section>
-   `;
-  }
-
-  return `
-   <section class="section character-collection">
-    <h2 class="section-title">
-     <span class="section-symbol">♢</span>
-     Character Collection
-     <span class="badge">${characters.length} OWNED</span>
-    </h2>
-
-    <div id="character-list" class="character-list">
-     ${characters.join("")}
-    </div>
-   </section>
-  `;
- }
-
- function createCharacterTab(id,data){
-  const info=getCharacterInfo(id);
-  const player=data[`c${id}`]||{};
-
-  const name=info.name||player.name||`Character ${id}`;
-  const rarity=info.rarity||player.rarity||"";
-  const profileImage=info.profile_image||"";
-  const rarityImage=info.rarity_img||"";
-
-  return `
-   <button
-    type="button"
-    class="character-tab"
-    data-character-id="${id}"
-    onclick="toggleCharacter(${id})"
-   >
-    <div class="character-icon-wrap">
-     ${
-      profileImage
-       ?`
-        <img
-         class="character-icon"
-         src="${escapeAttribute(profileImage)}"
-         alt="${escapeAttribute(name)}"
-         onerror="this.style.display='none'"
-        >
-       `
-       :`
-        <span class="item-symbol">♢</span>
-       `
-     }
-    </div>
-
-    <div class="character-tab-info">
-     <div class="character-id">C${id}</div>
-     <div class="character-name">${escapeHtml(name)}</div>
-
-     ${
-      rarity
-       ?`
-        <div class="character-rarity ${getRarityClass(rarity)}">
-         ${
-          rarityImage
-           ?`
-            <img
-             src="${escapeAttribute(rarityImage)}"
-             alt="${escapeAttribute(rarity)}"
-            >
-           `
-           :""
-         }
-         ${escapeHtml(rarity)}
-        </div>
-       `
-       :""
-     }
-    </div>
-   </button>
-  `;
- }
-
- function toggleCharacter(id){
-  const list=document.getElementById("character-list");
-  if(!list) return;
-
-  const existing=list.querySelector(".character-details");
-  const clicked=list.querySelector(`[data-character-id="${id}"]`);
-
-  if(existing?.dataset.characterId===String(id)){
-   existing.remove();
-   clicked?.classList.remove("active");
-   return;
-  }
-
-  existing?.remove();
-
-  list.querySelectorAll(".character-tab.active")
-   .forEach(tab=>tab.classList.remove("active"));
-
-  if(!clicked) return;
-
-  const tabs=Array.from(list.querySelectorAll(".character-tab"));
-  const clickedIndex=tabs.indexOf(clicked);
-  let rowEnd=clicked;
-
-  for(let i=clickedIndex+1;i<tabs.length;i++){
-   if(tabs[i].offsetTop!==clicked.offsetTop) break;
-   rowEnd=tabs[i];
-  }
-
-  rowEnd.insertAdjacentHTML(
-   "afterend",
-   createCharacterDetails(id,currentPlayerData)
-  );
-
-  clicked.classList.add("active");
- }
-
- function createCharacterDetails(id,data){
-  const info=getCharacterInfo(id);
-  const player=data[`c${id}`]||{};
-
-  const name=info.name||player.name||`Character ${id}`;
-  const rarity=info.rarity||player.rarity||"";
-  const rarityImage=info.rarity_img||"";
-  const splash=info.splash_image||"";
-  const level=getCharacterLevel(player);
-  const stats=calculateCharacterStats(info,level);
-  const equipment=getCharacterEquipment(player);
-
-  const species=getValues(info.species,player.species);
-  const roles=getValues(info.role,player.role);
-  const affinities=getValues(info.affinity,player.affinity);
-
-  return `
-   <div class="character-details" data-character-id="${id}">
-    <div class="character-details-top">
-     <div class="character-splash-wrap">
-      ${
-       splash
-        ?`
-         <img
-          class="character-splash"
-          src="${escapeAttribute(splash)}"
-          alt="${escapeAttribute(name)}"
-          onerror="this.style.display='none'"
-         >
-        `
-        :`
-         <span class="item-symbol">◈</span>
-        `
-      }
-     </div>
-
-     <div class="character-info">
-      <div class="character-detail-heading">
-       <h3 class="character-detail-name">${escapeHtml(name)}</h3>
-
-       ${
-        rarity
-         ?`
-          <div class="character-detail-rarity ${getRarityClass(rarity)}">
-           ${
-            rarityImage
-             ?`
-              <img
-               src="${escapeAttribute(rarityImage)}"
-               alt="${escapeAttribute(rarity)}"
-              >
-             `
-             :""
-           }
-           ${escapeHtml(rarity)}
-          </div>
-         `
-         :""
-       }
-      </div>
-
-      <div class="character-detail-level">
-       Level <strong>${level}</strong>
-      </div>
-
-      ${createCharacterMeta(species,roles,affinities)}
-      ${createCharacterStats(stats)}
-     </div>
-    </div>
-
-    ${createEquipment(equipment)}
-   </div>
-  `;
- }
-
- function createCharacterMeta(species,roles,affinities){
-  return `
-   <div class="character-meta-section">
-    ${
-     species.length
-      ?`
-       <div class="character-meta-block character-species-block">
-        <div class="character-meta-label">Species</div>
-        <div class="character-meta-values">
-         ${species.map(createSpeciesTag).join("")}
-        </div>
-       </div>
-      `
-      :""
-    }
-
-    ${
-     roles.length
-      ?`
-       <div class="character-meta-block">
-        <div class="character-meta-label">Role</div>
-        <div class="character-meta-values character-role-values">
-         ${roles.map(value=>`
-          <span class="character-meta-value">
-           [${escapeHtml(value)}]
-          </span>
-         `).join("")}
-        </div>
-       </div>
-      `
-      :""
-    }
-
-    ${
-     affinities.length
-      ?`
-       <div class="character-meta-block">
-        <div class="character-meta-label">Affinity</div>
-        <div class="character-meta-values character-affinity-values">
-         ${affinities.map(createAffinityTag).join("")}
-        </div>
-       </div>
-      `
-      :""
-    }
-   </div>
-  `;
- }
-
- function createSpeciesTag(value){
-  return `
-   <span class="species ${getSpeciesClass(value)}">
-    ${escapeHtml(value)}
-   </span>
-  `;
- }
-
- function createAffinityTag(value){
-  return `
-   <span class="character-affinity ${getElementClass(value)}">
-    [${escapeHtml(value)}]
-   </span>
-  `;
- }
-
- function getValues(primary,secondary){
-  const source=Array.isArray(primary)
-   ?primary
-   :primary!==undefined&&primary!==null&&primary!==""
-    ?[primary]
-    :Array.isArray(secondary)
-     ?secondary
-     :secondary!==undefined&&secondary!==null&&secondary!==""
-      ?[secondary]
-      :[];
-
-  return source
-   .flat(Infinity)
-   .filter(value=>value!==undefined&&value!==null&&String(value).trim())
-   .map(String)
-   .filter((value,index,array)=>array.indexOf(value)===index);
- }
-
- function getRarityClass(value){
-  const rarity=String(value).toLowerCase().replace(/[^a-z]/g,"");
-
-  return ["c","un","r","sr","ssr","ur","lr"].includes(rarity)
-   ?rarity
-   :"";
- }
-
- function getElementClass(value){
-  const element=String(value)
-   .toLowerCase()
-   .replace(/[\s_-]+/g,"");
-
-  const map={
-   light:"light",
-   dark:"dark",
-   fire:"fire",
-   water:"water",
-   wind:"wind",
-   earth:"earth",
-   lightning:"lightning",
-   plant:"plant"
-  };
-
-  return map[element]||"";
- }
-
- function getSpeciesClass(value){
-  const species=String(value)
-   .toLowerCase()
-   .replace(/[\s_-]+/g,"");
-
-  const map={
-   none:"species-none",
-   angelor:"species-angelor",
-   metalor:"species-metalor",
-   naiad:"species-naiad",
-   waterspirit:"species-waterspirit",
-   icelorian:"species-icelorian",
-   gostlynger:"species-gostlynger",
-   herbovir:"species-herbovir",
-   magnivirigentis:"species-magnivirigentis",
-   elf:"species-elf",
-   larvan:"species-larvan",
-   felior:"species-felior",
-   vulpivor:"species-vulpivor"
-  };
-
-  return map[species]||"species-none";
- }
-
- function getCharacterLevel(player){
-  for(const value of [
-   player.level,
-   player.lv,
-   player.character_level,
-   player.char_level
-  ]){
-   const level=Number(value);
-
-   if(Number.isFinite(level)&&level>0){
-    return Math.floor(level);
-   }
-  }
-
-  return 1;
- }
-
- function calculateCharacterStats(info,level){
-  const baseStats=info.base_stats||{};
-  const formula=info.stat_change_by_level||{};
-  const mainStats=Array.isArray(formula.main_stat)
-   ?formula.main_stat
-   :[];
-
-  const uniqueStat=typeof formula.unique_stat==="string"
-   ?formula.unique_stat
-   :null;
-
-  const mainWeight=Number(formula.main_stat_weight)||0;
-  const uniqueWeight=Number(formula.unique_stat_weight)||0;
-
-  return Object.entries(baseStats)
-   .reduce((result,[key,baseValue])=>{
-    const base=Number(baseValue);
-
-    if(!Number.isFinite(base)) return result;
-
-    let current=base;
-
-    if(level>1){
-     const weight=mainStats.includes(key)
-      ?mainWeight
-      :uniqueStat===key
-       ?uniqueWeight
-       :0;
-
-     current=base+base*weight*(level-1);
-    }
-
-    result.push({key,base,current});
-    return result;
-   },[]);
- }
-
- function createCharacterStats(stats){
-  if(!stats.length){
-   return `
-    <div class="empty">No base stats defined.</div>
-   `;
-  }
-
-  return `
-   <div class="character-stats">
-    ${stats.map(stat=>`
-     <div class="character-stat">
-      <span class="character-stat-name">
-       ${escapeHtml(pretty(stat.key))}
-      </span>
-
-      <span class="character-stat-values">
-       <span class="character-stat-current">
-        ${formatStat(stat.current)}
-       </span>
-
-       <span class="character-stat-base">
-        (${formatStat(stat.base)})
-       </span>
-      </span>
-     </div>
-    `).join("")}
-   </div>
-  `;
- }
-
- function getCharacterEquipment(player){
-  const source=
-   player.equip||
-   player.equipment||
-   player.equipped||
-   {};
-
-  return {
-   weapon:source.weapon||source.equipped_weapon||null,
-   accessory:source.accessory||source.equipped_accessory||null,
-   artifacts:getArtifacts(source)
-  };
- }
-
- function getArtifacts(source){
-  return Array.isArray(source.artifacts)
-   ?source.artifacts.slice(0,4)
-   :[
-    source.artifact1||null,
-    source.artifact2||null,
-    source.artifact3||null,
-    source.artifact4||null
-   ];
- }
-
- function createEquipment(equipment){
-  const primarySlots=[
-   ["Weapon",equipment.weapon],
-   ["Accessory",equipment.accessory]
-  ];
-
-  const artifactSlots=equipment.artifacts.map(
-   (value,index)=>[`Artifact ${index+1}`,value]
-  );
-
-  return `
-   <div class="equipped-section">
-    <div class="subsection-title">Equipped</div>
-
-    <div class="equipped-primary-row">
-     ${primarySlots.map(([label,value])=>
-      createEquipmentItem(label,value)
-     ).join("")}
-    </div>
-
-    <div class="equipped-artifact-row">
-     ${artifactSlots.map(([label,value])=>
-      createEquipmentItem(label,value)
-     ).join("")}
-    </div>
-   </div>
-  `;
- }
-
- function createEquipmentItem(label,value){
-  const equipped=getItemName(value);
-  const empty=equipped==="None Equipped";
-
-  return `
-   <div class="equipped-item">
-    <span class="equipped-slot">${escapeHtml(label)}</span>
-    <span class="equipped-name ${empty?"equipped-none":""}">
-     ${escapeHtml(equipped)}
-    </span>
-   </div>
-  `;
- }
-
- function getItemName(value){
-  if(value===undefined||value===null||value===""||value===false||value===0){
-   return "None Equipped";
-  }
-
-  if(typeof value==="object"){
-   return String(
-    value.name||
-    value.item_name||
-    value.id||
-    "Equipped Item"
-   );
-  }
-
-  return String(value);
- }
-
- function createAchievements(data){
-  const entries=Object.entries(data.achievements||{});
-  if(!entries.length) return "";
-
-  const unlocked=entries.filter(([,value])=>value).length;
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">✦</span>
-     Achievements
-     <span class="badge">${unlocked}/${entries.length}</span>
-    </h2>
-
-    <div class="grid">
-     ${entries.map(([key,value])=>`
-      <div class="achievement ${value?"":"locked"}">
-       <div class="achievement-symbol">
-        ${value?"✦":"◇"}
-       </div>
-
-       <div>
-        <div class="item-name">${escapeHtml(pretty(key))}</div>
-        <div class="item-sub">${value?"Unlocked":"Locked"}</div>
-       </div>
-      </div>
-     `).join("")}
-    </div>
-   </section>
-  `;
- }
-
- function createSkillTree(data){
-  const tree=Array.isArray(data.mc_skill_tree_unlock)
-   ?data.mc_skill_tree_unlock
-   :[];
-
-  if(!tree.length) return "";
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">◇</span>
-     Main Character Skill Tree
-    </h2>
-
-    <div class="details">
-     ${detail("Nodes / Entries",countNested(tree))}
-     ${detail("Unlocked Levels",countNumbers(tree))}
-    </div>
-
-    <div class="grid" style="margin-top:10px">
-     ${tree.map((group,i)=>`
-      <div class="item">
-       <div class="item-symbol">◇</div>
-       <div class="item-name">Ability Branch ${i+1}</div>
-       <div class="item-sub">
-        ${countNumbers(group)} unlocked levels
-       </div>
-      </div>
-     `).join("")}
-    </div>
-   </section>
-  `;
- }
-
- function createCharacterSystems(data){
-  const arrays={
-   equipped:data.c_equipped_skills,
-   skill1:data.c_skill1_owned,
-   skill2:data.c_skill2_owned,
-   skill3:data.c_skill3_owned,
-   skill4:data.c_skill4_owned,
-   costumes:data.c_costume_owned
-  };
-
-  Object.keys(arrays).forEach(key=>{
-   arrays[key]=Array.isArray(arrays[key])?arrays[key]:[];
-  });
-
-  const equippedCostumes=Array.isArray(data.c_costume_equipped)
-   ?data.c_costume_equipped
-   :[];
-
-  const counts={
-   equipped:countNested(arrays.equipped),
-   skill1:countNumbers(arrays.skill1),
-   skill2:countNumbers(arrays.skill2),
-   skill3:countNumbers(arrays.skill3),
-   skill4:countNumbers(arrays.skill4),
-   costumes:countNumbers(arrays.costumes)
-  };
-
-  if(!Object.values(counts).some(Boolean)) return "";
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">✦</span>
-     Character Progression
-    </h2>
-
-    <div class="details">
-     ${detail("Equipped Skills",counts.equipped)}
-     ${detail("Basic Skills Owned",counts.skill1)}
-     ${detail("Special Skills Owned",counts.skill2)}
-     ${detail("Ultimate Skills Owned",counts.skill3)}
-     ${detail("Technical Skills Owned",counts.skill4)}
-     ${detail("Costumes Owned",counts.costumes)}
-     ${detail(
-      "Equipped Costumes",
-      equippedCostumes.filter(value=>value!=null).length
-     )}
-    </div>
-   </section>
-  `;
- }
-
- function createFlags(data){
-  const entries=Object.entries(data.flags||{});
-  if(!entries.length) return "";
-
-  return `
-   <section class="section">
-    <h2 class="section-title">
-     <span class="section-symbol">◇</span>
-     Milestones & Flags
-    </h2>
-
-    <div class="details">
-     ${entries.map(([key,value])=>
-      detail(pretty(key),formatValue(value))
-     ).join("")}
-    </div>
-   </section>
-  `;
- }
-
- function progress(label,value,max){
-  value=Number(value)||0;
-  max=Math.max(Number(max)||1,1);
-
-  const pct=Math.min(100,Math.max(0,value/max*100));
-
-  return `
-   <div class="progress-container">
-    <div class="progress-header">
-     <span class="progress-label">${escapeHtml(label)}</span>
-     <span class="progress-value">${num(value)} / ${num(max)}</span>
-    </div>
-
-    <div class="progress">
-     <div class="progress-bar" style="width:${pct}%"></div>
-    </div>
-   </div>
-  `;
- }
-
- function detail(key,value){
-  return `
-   <div class="detail">
-    <span class="detail-key">${escapeHtml(key)}</span>
-    <span class="detail-value">${escapeHtml(value)}</span>
-   </div>
-  `;
- }
-
- function detailGrid(obj){
-  return `
-   <div class="details">
-    ${Object.entries(obj).map(([key,value])=>
-     detail(key,value)
-    ).join("")}
-   </div>
-  `;
- }
-
- function xpForRank(level){
-  return Math.max(100,level*100);
- }
-
- function countNumbers(value){
-  if(Array.isArray(value)){
-   return value.reduce(
-    (total,item)=>total+countNumbers(item),
-    0
-   );
-  }
-
-  return typeof value==="number"&&value>0?value:0;
- }
-
- function countNested(value){
-  if(!Array.isArray(value)) return 0;
-
-  return value.reduce(
-   (total,item)=>
-    total+(Array.isArray(item)?countNested(item):1),
-   0
-  );
- }
-
- function pretty(value){
-  return String(value)
-   .replaceAll("_"," ")
-   .replace(/\b\w/g,char=>char.toUpperCase());
- }
-
- function formatValue(value){
-  if(value===null) return "None";
-  if(typeof value==="object") return JSON.stringify(value);
-  return String(value);
- }
-
- function formatStat(value){
-  const number=Number(value);
-
-  if(!Number.isFinite(number)) return String(value);
-  if(Number.isInteger(number)) return number.toLocaleString();
-
-  return number.toLocaleString(undefined,{
-   maximumFractionDigits:2
-  });
- }
-
- function num(value,fallback=0){
-  const number=Number(value);
-  return Number.isFinite(number)?number:fallback;
- }
-
- function escapeHtml(value){
-  return String(value)
-   .replaceAll("&","&amp;")
-   .replaceAll("<","&lt;")
-   .replaceAll(">","&gt;")
-   .replaceAll('"',"&quot;")
-   .replaceAll("'","&#039;");
- }
-
- const escapeAttribute=escapeHtml;
-
- function showError(title,message){
-  document.getElementById("app").innerHTML=`
-   <div class="page">
-    <div class="error">
-     <h1>${escapeHtml(title)}</h1>
-     <p>${escapeHtml(message)}</p>
-    </div>
-   </div>
-  `;
- }
-
- async function initialize(){
-  await Promise.all([
-   loadCharacterDatabase(),
-   loadAccountStyleDatabase()
-  ]);
-
-  await loadProfile();
- }
-
- initialize();
- </script>
+}
+</style>
 </body>
 </html>

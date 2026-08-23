@@ -114,7 +114,7 @@
     "stat_change_by_level": {
       "main_stat_formula": "base_stat * (weight * (level - 1))",
       "main_stat_weight": 0.08,
-      "unique_stat_weight": 0.04,
+      "unique_stat_weight": 0.03,
 
       "main_stat": ["health", "defense", "attack"],
       "unique_stat": "crit_dmg"
