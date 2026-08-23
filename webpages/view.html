@@ -793,13 +793,37 @@ button,input,textarea,select{
  gap:10px;min-width:0
 }
 
-/* ARTIFACTS */
+/* ============================================================
+   ARTIFACTS
+   ============================================================ */
+
+/*
+   Artifact cards are intentionally independent from the
+   fixed-height weapon/accessory cards.
+
+   height:auto means the artifact grows with its contents.
+   min-height provides the normal visual card size without
+   forcing the card to shrink when the viewport becomes narrow.
+   align-self:start prevents grid stretching from affecting
+   the artifact's natural height.
+*/
 .equipped-artifact-row{
  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
- gap:10px;width:100%;margin-top:10px
+ gap:10px;width:100%;margin-top:10px;
+ align-items:start
 }
-.equipped-artifact-row>.equipped-item{min-width:0;width:100%}
-.artifact-display{min-height:190px;height:auto}
+
+.equipped-artifact-row>.equipped-item{
+ min-width:0;width:100%;
+}
+
+.artifact-display{
+ height:auto !important;
+ min-height:190px;
+ align-self:start;
+ overflow:hidden
+}
+
 .artifact-heading{display:flex;align-items:center;gap:8px;min-width:0}
 .artifact-image-wrap{
  width:48px;height:48px;min-width:48px;flex:0 0 48px;
@@ -845,13 +869,21 @@ button,input,textarea,select{
 .artifact-sub-stat strong{flex:none;color:#bdbdbd;font-size:9px}
 
 @media(max-width:800px){
- .artifact-display{min-height:190px}
- .equipped-artifact-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .artifact-display{
+  height:auto !important;
+  min-height:190px;
+ }
+ .equipped-artifact-row{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  align-items:start
+ }
 }
+
 @media(max-width:600px){
  .equipped-display{
   height:88px;min-height:88px;padding:6px
  }
+
  .equipment-card{gap:7px}
  .equipment-image-wrap{width:70px;height:70px;min-width:70px;flex-basis:70px}
  .equipment-image{width:70px;height:70px}
@@ -860,10 +892,50 @@ button,input,textarea,select{
  .equipment-main-stats{margin-top:4px;gap:1px}
  .equipment-main-stat{font-size:9px}
  .equipped-empty{height:88px;min-height:88px}
- .artifact-image-wrap{width:44px;height:44px;min-width:44px;flex-basis:44px}
- .artifact-image{width:44px;height:44px}
+
+ /*
+    IMPORTANT:
+    Artifact cards must override the generic mobile
+    .equipped-display height rule above.
+    Their height is now determined by their contents.
+ */
+ .artifact-display{
+  height:auto !important;
+  min-height:190px;
+  max-height:none;
+  align-self:start;
+  overflow:hidden;
+ }
+
+ .artifact-heading{
+  min-width:0;
+ }
+
+ .artifact-image-wrap{
+  width:44px;height:44px;min-width:44px;flex-basis:44px
+ }
+
+ .artifact-image{
+  width:44px;height:44px
+ }
+
  .artifact-name{font-size:13px}
- .equipped-artifact-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+
+ /*
+    One artifact per row on mobile.
+    This also prevents the artifact cards from being
+    compressed into narrow two-column cards.
+ */
+ .equipped-artifact-row{
+  grid-template-columns:minmax(0,1fr);
+  gap:7px;
+  align-items:start;
+ }
+
+ .equipped-artifact-row>.equipped-item{
+  width:100%;
+  min-width:0;
+ }
 
  .character-stats-heading{
   align-items:flex-start;flex-direction:column;gap:5px
