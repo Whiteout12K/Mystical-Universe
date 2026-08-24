@@ -108,7 +108,9 @@
         "speed": 115,
         "piercing": 10,
         "healing_rate": 0,
-        "luck": 10
+        "luck": 10,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -163,7 +165,9 @@
         "speed": 95,
         "piercing": 5,
         "healing_rate": 0,
-        "luck": 6
+        "luck": 6,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -218,7 +222,9 @@
         "speed": 95,
         "piercing": 5,
         "healing_rate": 0,
-        "luck": 6
+        "luck": 6,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -273,7 +279,9 @@
         "speed": 100,
         "piercing": 0,
         "healing_rate": 0,
-        "luck": 7
+        "luck": 7,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -328,7 +336,9 @@
         "speed": 105,
         "piercing": 12,
         "healing_rate": 0,
-        "luck": 7
+        "luck": 7,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -383,7 +393,9 @@
         "speed": 123,
         "piercing": 3,
         "healing_rate": 0,
-        "luck": 13
+        "luck": 13,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -438,7 +450,9 @@
         "speed": 120,
         "piercing": 5,
         "healing_rate": 0,
-        "luck": 4
+        "luck": 4,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -493,7 +507,9 @@
         "speed": 95,
         "piercing": 3,
         "healing_rate": 2,
-        "luck": 6
+        "luck": 6,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {
@@ -548,7 +564,9 @@
         "speed": 115,
         "piercing": 5,
         "healing_rate": 0,
-        "luck": 9
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
     },
 
     "stat_change_by_level": {

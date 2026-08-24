@@ -83,6 +83,9 @@ function createDeviceId() {
     return crypto.randomUUID();
 }
 
+
+
+
 function createInitialData() {
     return {
         silver_coin: 0, // Silver Coins, main currency
@@ -187,7 +190,7 @@ function createInitialData() {
             Id:1,
             name:"Avery",
             rarity: 5,
-            level: 5,
+            level: 100,
             xp: 0,
             equip: {
                 weapon: [
@@ -198,21 +201,70 @@ function createInitialData() {
                     quantity: false,
                     rarity: 5,
                     star_level: 0,
-                    level: 15,
+                    level: 100,
                     xp_level: 0
                     },
                 ],
-                accessory: [],
-                artifact1: [
+                accessory: [
                     {
                     id: 1,
+                    name: "Rune of the Spellcaster",
+                    type: "Accessory",
+                    quantity: false,
+                    rarity: 5,
+                    star_level: 0,
+                    level: 100,
+                    xp_level: 0
+                    },
+                ],
+                artifact1: [
+                    {
+                    id: 3,
                     piece_num: 1,
-                    name: "Artifact Headpiece",
                     type: "Artifact",
                     quantity: false,
                     rarity: 5,
                     level: 20,
                     xp_level: 0,
+
+                    main: "health",
+                    main_value: 3,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "0",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "4",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "0"
+                    },
+                ],
+                artifact2: [
+                    {
+                    id: 3,
+                    piece_num: 2,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "defense",
+                    main_value: 3,
+                    main_type: "%",
 
                     sub_1: "crit_rate",
                     sub_1_value: "5",
@@ -224,36 +276,260 @@ function createInitialData() {
                     sub_2_type: "+",
                     sub_2_rolls: "2",
 
-                    sub_3: "health",
-                    sub_3_value: "8",
-                    sub_3_type: "%",
-                    sub_3_rolls: "0",
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
 
                     sub_4: "attack",
                     sub_4_value: "5",
                     sub_4_type: "%",
                     sub_4_rolls: "0"
-
                     },
                 ],
-                artifact2: [],
-                artifact3: [],
-                artifact4: []
+                artifact3: [
+                    {
+                    id: 3,
+                    piece_num: 3,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "attack",
+                    main_value: 2.5,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "2",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
+
+                    sub_4: "health",
+                    sub_4_value: "6",
+                    sub_4_type: "%",
+                    sub_4_rolls: "0"
+                    },
+                ],
+                artifact4: [
+                    {
+                    id: 3,
+                    piece_num: 4,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "crit_dmg",
+                    main_value: 3.5,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "health",
+                    sub_2_value: "6",
+                    sub_2_type: "%",
+                    sub_2_rolls: "2",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "0"
+                    },
+                ]
             }
         }, 
         c2: { // C2
             Id:2,
             name:"Kaden Icelander",
             rarity: 5,
-            level: 10,
+            level: 100,
             xp: 0,
             equip: {
-                weapon: [],
-                accessory: [],
-                artifact1: [],
-                artifact2: [],
-                artifact3: [],
-                artifact4: []
+                weapon: [
+                    {
+                    id: 2,
+                    name: "Icelorian Blade",
+                    type: "Weapon",
+                    quantity: false,
+                    rarity: 5,
+                    star_level: 0,
+                    level: 100,
+                    xp_level: 0
+                    },
+                ],
+                accessory: [
+                    {
+                    id: 2,
+                    name: "Water Spirit Rune",
+                    type: "Accessory",
+                    quantity: false,
+                    rarity: 5,
+                    star_level: 0,
+                    level: 100,
+                    xp_level: 0
+                    },
+                ],
+                artifact1: [
+                    {
+                    id: 4,
+                    piece_num: 1,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "mana",
+                    main_value: 3,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "2",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "0",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "1"
+                    },
+                ],
+                artifact2: [
+                    {
+                    id: 4,
+                    piece_num: 2,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "piercing",
+                    main_value: 1.5,
+                    main_type: "+",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "2",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "0"
+                    },
+                ],
+                artifact3: [
+                    {
+                    id: 4,
+                    piece_num: 3,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "attack",
+                    main_value: 2.5,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "2",
+
+                    sub_2: "crit_dmg",
+                    sub_2_value: "8",
+                    sub_2_type: "+",
+                    sub_2_rolls: "2",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "1",
+
+                    sub_4: "cooldown_red",
+                    sub_4_value: "3",
+                    sub_4_type: "+",
+                    sub_4_rolls: "0"
+                    },
+                ],
+                artifact4: [
+                    {
+                    id: 4,
+                    piece_num: 4,
+                    type: "Artifact",
+                    quantity: false,
+                    rarity: 5,
+                    level: 20,
+                    xp_level: 0,
+
+                    main: "crit_dmg",
+                    main_value: 3.5,
+                    main_type: "%",
+
+                    sub_1: "crit_rate",
+                    sub_1_value: "5",
+                    sub_1_type: "+",
+                    sub_1_rolls: "3",
+
+                    sub_2: "piercing",
+                    sub_2_value: "3",
+                    sub_2_type: "+",
+                    sub_2_rolls: "1",
+
+                    sub_3: "gauge_gain",
+                    sub_3_value: "4",
+                    sub_3_type: "+",
+                    sub_3_rolls: "0",
+
+                    sub_4: "attack",
+                    sub_4_value: "5",
+                    sub_4_type: "%",
+                    sub_4_rolls: "1"
+                    },
+                ]
             }
         }, 
         c3: {}, // C3
@@ -289,6 +565,9 @@ function createInitialData() {
         flags: {}
     };
 }
+
+
+
 
 async function createUser(env, username, password, deviceId) {
     username = String(username ?? "").trim();

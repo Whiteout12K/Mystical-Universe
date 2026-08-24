@@ -118,11 +118,11 @@ function createCharacters(data){
 }
 
 function createCharacterTab(id,data){
- const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=i.rarity||p.rarity||"",img=i.profile_image||"",ri=i.rarity_img||"";
+ const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=p.rarity??"",img=i.profile_image||"",ri=i.rarity_img||"";
  return`<button type="button" class="character-tab" data-character-id="${id}" onclick="toggleCharacter(${id})">
  <div class="character-icon-wrap">${img?`<img class="character-icon" src="${escapeAttribute(img)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
  <div class="character-tab-info"><div class="character-id">C${id}</div><div class="character-name">${escapeHtml(name)}</div>
- ${rarity?`<div class="character-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(rarity)}">`:""}${escapeHtml(rarity)}</div>`:""}
+ ${rarity!==""?`<div class="character-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}
  </div></button>`
 }
 
@@ -141,13 +141,13 @@ function toggleCharacter(id){
 }
 
 function createCharacterDetails(id,data){
- const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=i.rarity||p.rarity||"",ri=i.rarity_img||"",splash=i.splash_image||"",level=getCharacterLevel(p),stats=calculateCharacterStats(i,level),equipment=getCharacterEquipment(p),species=getValues(i.species,p.species),roles=getValues(i.role,p.role),affinities=getValues(i.affinity,p.affinity);
+ const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=p.rarity??"",ri=i.rarity_img||"",splash=i.splash_image||"",level=getCharacterLevel(p),stats=calculateCharacterStats(i,level),equipment=getCharacterEquipment(p),species=getValues(i.species,p.species),roles=getValues(i.role,p.role),affinities=getValues(i.affinity,p.affinity);
  return`<div class="character-details" data-character-id="${id}">
  <div class="character-details-top">
   <div class="character-splash-wrap">${splash?`<img class="character-splash" src="${escapeAttribute(splash)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
   <div class="character-info">
    <div class="character-detail-heading"><h3 class="character-detail-name">${escapeHtml(name)}</h3>
-   ${rarity?`<div class="character-detail-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(rarity)}">`:""}${escapeHtml(rarity)}</div>`:""}</div>
+   ${rarity!==""?`<div class="character-detail-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}</div>
    <div class="character-detail-level">Level <strong>${level}</strong></div>
    ${createCharacterMeta(species,roles,affinities)}${createCharacterStats(stats,equipment)}
   </div>
@@ -226,10 +226,35 @@ function normalizeStatKey(name){
 
 function isPercentStat(type,name){
  const t=String(type||"").trim();
+ const key=normalizeStatKey(name);
+
+ /*
+    gauge_gain and cooldown_red are percentage stats, but they
+    are additive percentage stats. They must NOT multiply the
+    character's existing value like a percentage modifier.
+
+    Example:
+    Base Energy Gauge Gain = 10%
+    Artifact = +5% Gauge Gain
+
+    Result = 15%, not 10.5%.
+ */
+ if(key==="gauge_gain"||key==="cooldown_red")return false;
+
  if(t==="%")return true;
  if(t==="+")return false;
- const key=normalizeStatKey(name);
+
  return["crit_rate","crit_dmg","healing_rate"].includes(key)
+}
+
+function isDirectPercentStat(name){
+ const key=normalizeStatKey(name);
+ return["gauge_gain","cooldown_red"].includes(key)
+}
+
+function isAdditionalStat(name){
+ const key=normalizeStatKey(name);
+ return["gauge_gain","cooldown_red"].includes(key)
 }
 
 function getEquipmentStatEntries(info,level,artifact=false,p=null){
@@ -258,12 +283,13 @@ function getEquipmentStatEntries(info,level,artifact=false,p=null){
    for(let i=1;i<=4;i++){
     const name=p[`sub_${i}`],base=Number(p[`sub_${i}_value`]);
     if(!name||!Number.isFinite(base))continue;
-    const rolls=Math.max(0,Number(p[`sub_${i}_rolls`])||0);
+    const rolls=Math.min(5,Math.max(0,Number(p[`sub_${i}_rolls`])||0));
     r.push({
      name,
      base,
      value:base*(rolls+1),
      type:p[`sub_${i}_type`]||"+",
+     rolls,
      source:"artifact"
     })
    }
@@ -322,7 +348,17 @@ function collectCharacterEquipmentStats(equipment){
   const level=num(item.level,info.level||1);
 
   getEquipmentStatEntries(info,level,true,item).forEach(s=>{
-   if(isPercentStat(s.type,s.name)){
+   /*
+      gauge_gain and cooldown_red are direct percentage
+      additions. Keep them in artifactAdditive so they are
+      displayed correctly in the character stat breakdown.
+
+      Other percentage stats retain the existing percentage
+      calculation behavior.
+   */
+   if(isDirectPercentStat(s.name)){
+    add(artifactAdditive,s.name,s.value)
+   }else if(isPercentStat(s.type,s.name)){
     add(artifactPercent,s.name,s.value)
    }else{
     add(artifactAdditive,s.name,s.value)
@@ -360,6 +396,32 @@ function calculateCharacterFinalStats(stats,equipment){
   finalStats[key]=final
  })
 
+ /*
+    Additional stats such as gauge_gain and cooldown_red may
+    exist only on artifacts and not inside base_stats.
+
+    Add them to the final stat collection so they can still
+    appear in the Additional Stats section for every character.
+ */
+ const additionalKeys=["gauge_gain","cooldown_red"];
+
+ additionalKeys.forEach(key=>{
+  if(Object.prototype.hasOwnProperty.call(finalStats,key))return;
+
+  const base=Number(baseStats[key]||0);
+  const equipmentAdd=Number(equipmentStats.additive[key]||0);
+  const artifactAdd=Number(equipmentStats.artifactAdditive[key]||0);
+  const artifactPercent=Number(equipmentStats.artifactPercent[key]||0);
+
+  const additiveTotal=base+equipmentAdd+artifactAdd;
+  const final=additiveTotal*(1+artifactPercent/100);
+
+  baseStats[key]=base;
+  mainEquipmentStats[key]=equipmentAdd;
+  artifactStats[key]=artifactAdd+(additiveTotal*(artifactPercent/100));
+  finalStats[key]=final
+ })
+
  return{baseStats,mainEquipmentStats,artifactStats,finalStats,equipmentStats}
 }
 
@@ -378,11 +440,73 @@ function getCharacterStatDisplayName(name){
   return"Stamina Regen (p/s)"
  }
 
+ if(key==="gauge_gain"){
+  return"EG Gain"
+ }
+
+ if(key==="cooldown_red"){
+  return"CD Red"
+ }
+
  return pretty(name)
 }
 
+function formatCharacterStatSuffix(name){
+ const key=normalizeStatKey(name);
+ const percent=["crit_rate","crit_dmg","healing_rate","gauge_gain","cooldown_red"].includes(key);
+ return percent?"%":""
+}
+
+function formatCharacterStat(name,value){
+ return`${formatStat(value)}${formatCharacterStatSuffix(name)}`
+}
+
+function createAdditionalStats(stats,equipment,calculated){
+ const additionalKeys=["gauge_gain","cooldown_red"];
+
+ return`<div class="character-additional-stats">
+  <button type="button" class="character-additional-stats-button" onclick="toggleAdditionalStats(this)">
+   <span>Additional Stats</span><span class="character-additional-stats-arrow">+</span>
+  </button>
+  <div class="character-additional-stats-content">
+   ${additionalKeys.map(key=>{
+    const baseStat=stats.find(s=>normalizeStatKey(s.key)===key);
+    const base=baseStat?Number(baseStat.current)||0:Number(calculated?.baseStats?.[key]||0);
+    const equipmentAdd=Number(calculated?.mainEquipmentStats?.[key]||0);
+    const artifactAdd=Number(calculated?.artifactStats?.[key]||0);
+    const total=Number(calculated?.finalStats?.[key]||0);
+
+    return`<div class="character-stat">
+     <span class="character-stat-name">${escapeHtml(getCharacterStatDisplayName(key))}</span>
+     <span class="character-stat-values">
+      <span class="character-stat-current">${formatCharacterStat(key,total)}</span>
+      <span class="character-stat-equipment">${equipmentAdd?`+${formatStat(equipmentAdd)}%`:""}</span>
+      <span class="character-stat-artifact">${artifactAdd?`+${formatStat(artifactAdd)}%`:""}</span>
+      <span class="character-stat-base">(${formatCharacterStat(key,base)})</span>
+     </span>
+    </div>`
+   }).join("")}
+  </div>
+ </div>`
+}
+
+function toggleAdditionalStats(button){
+ const box=button.parentElement;
+ if(!box)return;
+ box.classList.toggle("open");
+ const arrow=button.querySelector(".character-additional-stats-arrow");
+ if(arrow)arrow.textContent=box.classList.contains("open")?"−":"+"
+}
+
+/* ============================================================
+   CHARACTER STATS
+   ============================================================ */
+
 function createCharacterStats(stats,equipment){
- if(!stats.length)return`<div class="empty">No base stats defined.</div>`;
+ if(!stats.length){
+  const emptyCalculated=calculateCharacterFinalStats([],equipment);
+  return`<div class="empty">No base stats defined.</div>${createAdditionalStats(stats,equipment,emptyCalculated)}`
+ }
 
  const calculated=calculateCharacterFinalStats(stats,equipment);
 
@@ -412,21 +536,11 @@ function createCharacterStats(stats,equipment){
    <span class="character-stat-base">(${formatCharacterStat(s.key,base)})</span>
   </span>
  </div>`
- }).join("")}</div>`
+ }).join("")}</div>${createAdditionalStats(stats,equipment,calculated)}`
 }
 
 function hasArtifactPercentForStat(key,equipmentStats){
  return Number(equipmentStats?.artifactPercent?.[key]||0)!==0
-}
-
-function formatCharacterStatSuffix(name){
- const key=normalizeStatKey(name);
- const percent=["crit_rate","crit_dmg","healing_rate"].includes(key);
- return percent?"%":""
-}
-
-function formatCharacterStat(name,value){
- return`${formatStat(value)}${formatCharacterStatSuffix(name)}`
 }
 
 /* ============================================================
@@ -502,21 +616,36 @@ function createAccessoryItem(p){
 /* ============================================================
    ARTIFACT
    ============================================================ */
+function getArtifactPieceData(info,p,pieceNum){
+ const n=Number(pieceNum)||1;
+ const nameKey=`piece_num_${n}_name`;
+ const imageKey=`piece_num_${n}_img`;
+ return{
+  name:info?.[nameKey]||p?.[nameKey]||"",
+  image:normalizeAssetPath(info?.[imageKey]||p?.[imageKey]||"")
+ }
+}
+
 function createArtifactItem(p){
- const id=p.id,i=getDatabaseItem(artifactDatabase,id,"o"),name=i.name||p.name||"Unknown Artifact",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),pieceNum=num(p.piece_num,i.piece_num||1),image=normalizeAssetPath(i.artifact_img||p.artifact_img||""),mainStat=calculateArtifactMainStat(i,p,level),subStats=calculateArtifactSubStats(i,p),pieceName=getArtifactPieceName(pieceNum);
+ const id=p.id,i=getDatabaseItem(artifactDatabase,id,"o"),name=i.name||p.name||"Unknown Artifact",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),pieceNum=num(p.piece_num,1),pieceData=getArtifactPieceData(i,p,pieceNum),image=pieceData.image,mainStat=calculateArtifactMainStat(i,p,level),subStats=calculateArtifactSubStats(i,p),pieceType=getArtifactPieceName(pieceNum),artifactDisplayName=pieceData.name?`${pieceType}: ${pieceData.name}`:pieceType;
  return`<div class="equipped-item equipped-display artifact-display ${getRarityBoxClass(rarity)}">
  <div class="artifact-heading">
-  <div class="artifact-image-wrap">${image?`<img class="artifact-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div>
+  <div class="artifact-image-wrap">${image?`<img class="artifact-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(artifactDisplayName)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div>
   <div class="artifact-heading-info">
    <div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Artifact</span></div>
    <div class="artifact-name">${escapeHtml(name)}</div>
-   <div class="equipment-level">Level <span>${level}</span></div>
+   <div class="artifact-level">Level <span>${level}</span></div>
   </div>
  </div>
- <div class="artifact-piece">${escapeHtml(pieceName)}</div>
- ${mainStat?`<div class="artifact-main-stat"><span class="artifact-stat-label">Main Stat</span><span class="artifact-stat-value"><span class="artifact-stat-name">${escapeHtml(pretty(mainStat.name))}</span>: ${formatGearStat(mainStat.name,mainStat.value,mainStat.type)}</span></div>`:""}
- ${subStats.length?`<div class="artifact-sub-stats">${subStats.map(s=>`<div class="artifact-sub-stat"><span>${escapeHtml(pretty(s.name))}</span><strong>${formatGearStat(s.name,s.value,s.type)}</strong></div>`).join("")}</div>`:""}
+ <div class="artifact-piece"><strong>${escapeHtml(artifactDisplayName)}</strong></div>
+ ${mainStat?`<div class="artifact-main-stat"><span class="artifact-stat-label">Main Stat</span><span class="artifact-stat-value"><span class="artifact-stat-name">${escapeHtml(getCharacterStatDisplayName(mainStat.name))}</span>: ${formatGearStat(mainStat.name,mainStat.value,mainStat.type)}</span></div>`:""}
+ ${subStats.length?`<div class="artifact-sub-stats">${subStats.map(s=>`<div class="artifact-sub-stat"><span>${escapeHtml(getCharacterStatDisplayName(s.name))}${createRollDots(s.rolls)}</span><strong>${formatGearStat(s.name,s.value,s.type)}</strong></div>`).join("")}</div>`:""}
  </div>`
+}
+
+function createRollDots(rolls){
+ const n=Math.min(5,Math.max(0,Number(rolls)||0));
+ return n?` <span class="artifact-roll-dots" aria-label="${n} rolls">${"• ".repeat(n).trim()}</span>`:""
 }
 
 function handleEquipmentImageError(img){
@@ -547,14 +676,14 @@ function calculateArtifactSubStats(info,p){
  for(let i=1;i<=4;i++){
   const name=p[`sub_${i}`],base=Number(p[`sub_${i}_value`]);
   if(!name||!Number.isFinite(base))continue;
-  const rolls=Math.max(0,Number(p[`sub_${i}_rolls`])||0);
+  const rolls=Math.min(5,Math.max(0,Number(p[`sub_${i}_rolls`])||0));
   r.push({name,value:base*(rolls+1),base,rolls,type:p[`sub_${i}_type`]||""})
  }
  return r
 }
 function getArtifactPieceName(n){return{1:"Headgear",2:"Chestplate",3:"Leggings",4:"Boots"}[Number(n)]||`Piece ${n}`}
 function formatGearStat(name,value,type=""){
- const n=formatStat(value),s=String(name||"").toLowerCase(),percent=["crit_rate","crit_dmg","healing_rate"].includes(s)||String(type).trim()==="%";
+ const n=formatStat(value),s=normalizeStatKey(name),percent=["crit_rate","crit_dmg","healing_rate","gauge_gain","cooldown_red"].includes(s)||String(type).trim()==="%" ;
  return`+${n}${percent?"%":""}`
 }
 
@@ -734,10 +863,20 @@ button,input,textarea,select{
  line-height:1.2;text-overflow:ellipsis;white-space:nowrap;
  text-shadow:none
 }
-.equipment-level{
+
+/*
+   EQUIPMENT LEVEL
+   Artifact level now intentionally uses the exact same
+   styling as Weapon / Accessory level.
+*/
+.equipment-level,
+.artifact-level{
  margin-top:3px;color:#d1d1d1;font-size:11px;font-weight:700
 }
-.equipment-level span{color:#c7c7c7;font-weight:700}
+.equipment-level span,
+.artifact-level span{
+ color:#c7c7c7;font-weight:700
+}
 
 .equipment-main-stats{
  display:flex;flex-direction:column;gap:2px;margin-top:5px
@@ -794,36 +933,39 @@ button,input,textarea,select{
 }
 
 /* ============================================================
-   ARTIFACTS
+   ADDITIONAL STATS
    ============================================================ */
+.character-additional-stats{
+ margin-top:5px;width:100%
+}
+.character-additional-stats-button{
+ width:100%;display:flex;align-items:center;justify-content:space-between;
+ gap:8px;padding:5px 7px;border:1px solid #ffffff18;border-radius:4px;
+ background:#00000020;color:#d0d0d0;font-size:9px;font-weight:800;
+ text-transform:uppercase;letter-spacing:.05em;cursor:pointer
+}
+.character-additional-stats-button:hover{
+ background:#ffffff0d
+}
+.character-additional-stats-arrow{
+ color:#f0ca69;font-size:13px;line-height:1;font-weight:900
+}
+.character-additional-stats-content{
+ display:none;flex-direction:column;gap:4px;
+ margin-top:5px;padding:5px 7px;border-radius:4px;
+ background:#00000018;border:1px solid #ffffff10
+}
+.character-additional-stats.open .character-additional-stats-content{
+ display:flex
+}
 
-/*
-   Artifact cards are intentionally independent from the
-   fixed-height weapon/accessory cards.
-
-   height:auto means the artifact grows with its contents.
-   min-height provides the normal visual card size without
-   forcing the card to shrink when the viewport becomes narrow.
-   align-self:start prevents grid stretching from affecting
-   the artifact's natural height.
-*/
+/* ARTIFACTS */
 .equipped-artifact-row{
  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
- gap:10px;width:100%;margin-top:10px;
- align-items:start
+ gap:10px;width:100%;margin-top:10px
 }
-
-.equipped-artifact-row>.equipped-item{
- min-width:0;width:100%;
-}
-
-.artifact-display{
- height:auto !important;
- min-height:190px;
- align-self:start;
- overflow:hidden
-}
-
+.equipped-artifact-row>.equipped-item{min-width:0;width:100%}
+.artifact-display{min-height:190px;height:auto}
 .artifact-heading{display:flex;align-items:center;gap:8px;min-width:0}
 .artifact-image-wrap{
  width:48px;height:48px;min-width:48px;flex:0 0 48px;
@@ -842,12 +984,21 @@ button,input,textarea,select{
  line-height:1.2;text-overflow:ellipsis;white-space:nowrap;
  text-shadow:none
 }
+
+/*
+   ARTIFACT PIECE NAME
+   The individual piece name is intentionally bold.
+*/
 .artifact-piece{
  margin-top:8px;padding:4px 6px;
  border-top:1px solid #ffffff28;border-bottom:1px solid #ffffff18;
  color:#d0d0d0;font-size:10px;font-weight:800;letter-spacing:.05em;
  text-transform:uppercase
 }
+.artifact-piece strong{
+ font-weight:900;color:#fff
+}
+
 .artifact-main-stat{
  display:flex;align-items:center;justify-content:space-between;gap:8px;
  margin-top:7px;padding:6px 7px;border-radius:4px;
@@ -867,75 +1018,40 @@ button,input,textarea,select{
 }
 .artifact-sub-stat span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#d0d0d0}
 .artifact-sub-stat strong{flex:none;color:#bdbdbd;font-size:9px}
-
-@media(max-width:800px){
- .artifact-display{
-  height:auto !important;
-  min-height:190px;
- }
- .equipped-artifact-row{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  align-items:start
- }
+.artifact-roll-dots{
+ color:#f0ca69;font-size:8px;letter-spacing:1px;
+ margin-left:4px;white-space:nowrap
 }
 
+@media(max-width:800px){
+ .artifact-display{min-height:190px}
+ .equipped-artifact-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
 @media(max-width:600px){
  .equipped-display{
   height:88px;min-height:88px;padding:6px
  }
-
  .equipment-card{gap:7px}
  .equipment-image-wrap{width:70px;height:70px;min-width:70px;flex-basis:70px}
  .equipment-image{width:70px;height:70px}
  .equipment-name{font-size:13px}
- .equipment-level{font-size:10px}
+ .equipment-level,
+ .artifact-level{font-size:10px}
  .equipment-main-stats{margin-top:4px;gap:1px}
  .equipment-main-stat{font-size:9px}
  .equipped-empty{height:88px;min-height:88px}
-
- /*
-    IMPORTANT:
-    Artifact cards must override the generic mobile
-    .equipped-display height rule above.
-    Their height is now determined by their contents.
- */
- .artifact-display{
-  height:auto !important;
-  min-height:190px;
-  max-height:none;
-  align-self:start;
-  overflow:hidden;
- }
-
- .artifact-heading{
-  min-width:0;
- }
-
- .artifact-image-wrap{
-  width:44px;height:44px;min-width:44px;flex-basis:44px
- }
-
- .artifact-image{
-  width:44px;height:44px
- }
-
+ .artifact-image-wrap{width:44px;height:44px;min-width:44px;flex-basis:44px}
+ .artifact-image{width:44px;height:44px}
  .artifact-name{font-size:13px}
-
- /*
-    One artifact per row on mobile.
-    This also prevents the artifact cards from being
-    compressed into narrow two-column cards.
- */
- .equipped-artifact-row{
-  grid-template-columns:minmax(0,1fr);
-  gap:7px;
-  align-items:start;
+ .equipped-artifact-row{grid-template-columns:1fr;gap:7px}
+ .artifact-display{
+  height:auto;min-height:190px;
+  flex:none;align-self:stretch
  }
-
- .equipped-artifact-row>.equipped-item{
-  width:100%;
-  min-width:0;
- }
+ .artifact-heading{flex:none}
+ .artifact-piece{white-space:normal}
+ .artifact-main-stat{flex-wrap:wrap}
+ .artifact-sub-stats{grid-template-columns:1fr}
 
  .character-stats-heading{
   align-items:flex-start;flex-direction:column;gap:5px

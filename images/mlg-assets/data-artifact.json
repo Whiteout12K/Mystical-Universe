@@ -2,16 +2,20 @@
 
     "o1": {
         "artifact_id": 1,
-        "piece_num": 1,
         "name": "Mistywood Armor",
         "type": "Artifact",
-        "artifact_img": "",
-
+        "piece_num_1_name": "",
+        "piece_num_1_img": "",
+        "piece_num_2_name": "",
+        "piece_num_2_img": "",
+        "piece_num_3_name": "",
+        "piece_num_3_img": "",
+        "piece_num_4_name": "",
+        "piece_num_4_img": "",
         "additional": [
             {"text": "<b>Passive</b>",
             "style": {"paddingTop": 20}}
         ],
-
         "quantity": false,
         "rarity": "SSR",
         "level": 20,
@@ -19,25 +23,66 @@
         "stat_change_by_level": {
             "main_stat_formula": "main * (weight * (level - 1))",
             "sub_stat_formula": "sub * (sub_rolls + 1)",
-            "main_stat_weight": 0.08,
+            "main_stat_weight": 1
+        }
+    },
 
-            "main": "health",
-            "main_value": 3,
-            "main_type": "%"
+
+
+    "o3": {
+        "artifact_id": 3,
+        "name": "The Angel's Gown",
+        "type": "Artifact",
+        "piece_num_1_name": "Crown of Divinity",
+        "piece_num_1_img": "",
+        "piece_num_2_name": "Serenity Cloak",
+        "piece_num_2_img": "",
+        "piece_num_3_name": "Enlightened Dress",
+        "piece_num_3_img": "",
+        "piece_num_4_name": "A Spirit's Descent",
+        "piece_num_4_img": "",
+        "additional": [
+            {"text": "<b>Passive</b>",
+            "style": {"paddingTop": 20}}
+        ],
+        "quantity": false,
+        "rarity": "SSR",
+        "level": 20,
+        "xp_level": 0,
+        "stat_change_by_level": {
+            "main_stat_formula": "main * (weight * (level - 1))",
+            "sub_stat_formula": "sub * (sub_rolls + 1)",
+            "main_stat_weight": 1
+        }
+    },
+
+
+    "o4": {
+        "artifact_id": 4,
+        "name": "ITA Suit",
+        "type": "Artifact",
+        "piece_num_1_name": "Sunglasses",
+        "piece_num_1_img": "",
+        "piece_num_2_name": "Jacket, Tie, and Vest",
+        "piece_num_2_img": "",
+        "piece_num_3_name": "Suit Pants",
+        "piece_num_3_img": "",
+        "piece_num_4_name": "Slicky Slides",
+        "piece_num_4_img": "",
+        "additional": [
+            {"text": "<b>Passive</b>",
+            "style": {"paddingTop": 20}}
+        ],
+        "quantity": false,
+        "rarity": "SSR",
+        "level": 20,
+        "xp_level": 0,
+        "stat_change_by_level": {
+            "main_stat_formula": "main * (weight * (level - 1))",
+            "sub_stat_formula": "sub * (sub_rolls + 1)",
+            "main_stat_weight": 1
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     

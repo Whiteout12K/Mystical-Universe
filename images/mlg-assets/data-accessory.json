@@ -1,6 +1,5 @@
 {
 
-
     "a1": {
         "id": 1,
         "name": "Rune of the Spellcaster",
@@ -32,7 +31,7 @@
         "xp_level": 0,
         "stat_change_by_level": {
             "main_stat_formula": "base_stat * (weight * (level - 1))",
-            "main_stat_weight": 0.08,
+            "main_stat_weight": 0.07,
 
             "main_1": "health",
             "main_1_value": 185,
@@ -40,15 +39,64 @@
             "main_2": "healing_rate",
             "main_2_value": 4
         }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    "a2": {
+        "id": 2,
+        "name": "Water Spirit Stone",
+        "type": "Accessory",
+
+        "accessory_img": "",
+
+        "additional": [
+            {"text": "<b>Passive</b>",
+            "style": {"paddingTop": 20}},
+            {"text": "Increases health and attack by <b>+<span data-dmg=\"stat1\"></span>%</b>. Whenever the equipping character’s <b class=\"shield\">[Shield]</b> breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b><span data-dmg=\"heal\"></span>%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).",
+            "style": {"paddingTop": 7}},
+            {"text": "Every point on the light meter will increase the party’s all elemental damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for the meter’s duration, capped at <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>.",
+            "style": {"paddingTop": 7}}
+        ],
+        "passive_skill_scale": {
+            "stat1": 30,
+            "heal": 150,
+            "dmg_increase": 3,
+            "dmg_increase2": 30
+        },
+        "max_passive_level": 16,
+        "passive_level_multiplier": 0.1,
+
+        "quantity": false,
+        "rarity": "SSR",
+        "star_level": 0,
+        "level": 100,
+        "xp_level": 0,
+        "stat_change_by_level": {
+            "main_stat_formula": "base_stat * (weight * (level - 1))",
+            "main_stat_weight": 0.07,
+
+            "main_1": "defense",
+            "main_1_value": 135,
+
+            "main_2": "mana",
+            "main_2_value": 60
+        }
     }
-
-
-
-
-
-
-
-
 
 
 
