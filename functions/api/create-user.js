@@ -334,7 +334,7 @@ function createInitialData() {
 
                     main: "crit_dmg",
                     main_value: 3.5,
-                    main_type: "%",
+                    main_type: "+",
 
                     sub_1: "crit_rate",
                     sub_1_value: "5",
@@ -507,7 +507,7 @@ function createInitialData() {
 
                     main: "crit_dmg",
                     main_value: 3.5,
-                    main_type: "%",
+                    main_type: "+",
 
                     sub_1: "crit_rate",
                     sub_1_value: "5",
