@@ -96,7 +96,7 @@
     },
 
     "base_stats": {
-        "health": 920,
+        "health": 1100,
         "attack": 55,
         "defense": 85,
         "mana": 1100,
@@ -210,30 +210,30 @@
     "skills_path": "/images/mlg-assets/Characters/C3",
 
     "base_stats": {
-        "health": 930,
-        "attack": 52,
-        "defense": 135,
-        "mana": 920,
-        "mana_regen": 7,
-        "stamina": 950,
+        "health": 965,
+        "attack": 45,
+        "defense": 115,
+        "mana": 0,
+        "mana_regen": 6,
+        "stamina": 1000,
         "stamina_regen": 10,
-        "crit_rate": 15,
-        "crit_dmg": 25,
-        "speed": 95,
-        "piercing": 5,
+        "crit_rate": 10,
+        "crit_dmg": 30,
+        "speed": 90,
+        "piercing": 2,
         "healing_rate": 0,
-        "luck": 6,
-        "gauge_gain": 0,
+        "luck": 15,
+        "gauge_gain": 10,
         "cooldown_red": 0
     },
 
     "stat_change_by_level": {
       "main_stat_formula": "base_stat * (weight * (level - 1))",
       "main_stat_weight": 0.08,
-      "unique_stat_weight": 0.05,
+      "unique_stat_weight": 0.02,
 
       "main_stat": ["health", "defense", "attack"],
-      "unique_stat": "piercing"
+      "unique_stat": "gauge_gain"
     },
 
     "weapon_type": ["Sword", "Bow", "Spear", "Gun", "Catalyst"]
