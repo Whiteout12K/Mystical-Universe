@@ -1,56 +1,77 @@
+// <----- Canvas Blocks ----->
+
+canvasColor("#686565");
+canvasCostume("images/sample_canvas.png", 2); // Sets the canvas costume. Parameter: costume_path
+
+// <----- Sprite Blocks ----->
+
+createSprite("Knight");
+
+spriteCostume("Knight","images/sample_sprite.png",1);
 
 
-createSprite("Player1");
-createSprite("Enemy1");
-createSprite("Enemy2");
+// <----- Motion Blocks ----->
 
-canvasColor("#000000");
+moveTo("Knight",0,0);
 
-setVar("root_path","/images/mlg-assets/Characters/C1/costume");
 
-spriteCostume("Player1", join(getVar("root_path"), "/costume_2.png"), 1);
-spriteCostume("Enemy1","/images/mlg-assets/Characters/C1/costume/costume_2.png",0.75);
-spriteCostume("Enemy2","/images/mlg-assets/Characters/C1/costume/costume_2.png",0.75);
+// <----- Variable Blocks ----->
 
-moveTo("Player1",0,0);
-moveTo("Enemy1",150,0);
-moveTo("Enemy2",-150,0);
+let danceStep=0;
 
-ENGINE.scripts.push(
-    repeat(100,
-        repeat(30,
-            moveBy("Player1",0,5),
-            wait(0.05)
-        ),
-        repeat(30,
-            moveBy("Player1",0,-5),
-            wait(0.05)
-        )
-    )
-);
+
+// <----- Control Blocks ----->
 
 ENGINE.scripts.push(
-    repeat(100,
-        repeat(30,
-            moveBy("Enemy1",4,0),
-            wait(0.05)
-        ),
-        repeat(30,
-            moveBy("Enemy1",-4,0),
-            wait(0.05)
-        )
-    )
-);
 
-ENGINE.scripts.push(
     repeat(100,
-        repeat(20,
-            moveBy("Enemy2",4,0),
-            wait(0.08)
-        ),
-        repeat(20,
-            moveBy("Enemy2",-4,0),
-            wait(0.08)
-        )
+
+        // Move right
+        moveBy("Knight",3,0),
+        wait(0.08),
+
+        moveBy("Knight",3,0),
+        wait(0.08),
+
+        moveBy("Knight",3,0),
+        wait(0.08),
+
+        // Dance upward
+        moveBy("Knight",0,-8),
+        wait(0.08),
+
+        moveBy("Knight",0,8),
+        wait(0.08),
+
+        moveBy("Knight",0,-8),
+        wait(0.08),
+
+        moveBy("Knight",0,8),
+        wait(0.08),
+
+        // Move left
+        moveBy("Knight",-3,0),
+        wait(0.08),
+
+        moveBy("Knight",-3,0),
+        wait(0.08),
+
+        moveBy("Knight",-3,0),
+        wait(0.08),
+
+        // Dance again
+        moveBy("Knight",0,-8),
+        wait(0.08),
+
+        moveBy("Knight",0,8),
+        wait(0.08),
+
+        moveBy("Knight",0,-8),
+        wait(0.08),
+
+        moveBy("Knight",0,8),
+        wait(0.08)
+
     )
+
 );

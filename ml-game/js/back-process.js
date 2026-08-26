@@ -1,4 +1,3 @@
-// Backend code for each code block.
 
 const ENGINE={
     width:640,height:360,centerX:0,centerY:0,viewWidth:640,viewHeight:360,unitScale:1,
@@ -11,9 +10,28 @@ const canvas=document.getElementById("game-canvas");
 const ctx=canvas.getContext("2d",{alpha:false});
 ctx.imageSmoothingEnabled=false;
 
+document.documentElement.style.touchAction="none";
+document.body.style.touchAction="none";
+canvas.style.touchAction="none";
+canvas.style.userSelect="none";
+canvas.style.webkitUserSelect="none";
+canvas.style.webkitTouchCallout="none";
+
+["gesturestart","gesturechange","gestureend"].forEach(event=>{
+    document.addEventListener(event,e=>e.preventDefault(),{passive:false});
+});
+
+document.addEventListener("wheel",e=>{
+    if(e.ctrlKey)e.preventDefault();
+},{passive:false});
+
+document.addEventListener("touchmove",e=>{
+    if(e.touches.length>1)e.preventDefault();
+},{passive:false});
+
 class Sprite{
     constructor(name){
-        Object.assign(this,{name,x:0,y:0,visible:true,costume:null,image:null,scale:1,width:160,height:160,loaded:false,opacity:1,rotation:0,layer:0,variables:{},velocityX:0,velocityY:0});
+        Object.assign(this,{name,x:0,y:0,visible:true,costume:null,image:null,scale:1,width:160,height:160,loaded:false,opacity:1,rotation:0,layer:0,variables:{},velocityX:0,velocityY:0,edgeLock:null});
     }
 
     setCostume(path,scale=1){
@@ -25,6 +43,7 @@ class Sprite{
             this.loaded=true;
             this.width=160*this.scale;
             this.height=this.width*(this.image.naturalHeight/this.image.naturalWidth);
+            updateEdgeSprite(this);
         };
         this.image.onerror=()=>{
             this.loaded=false;
@@ -45,101 +64,6 @@ class Sprite{
     }
 }
 
-function createSprite(name){
-    if(!name)return null;
-    return ENGINE.sprites[name]||(ENGINE.sprites[name]=new Sprite(name));
-}
-
-function setVar(name,value){
-    name=String(resolveValue(name));
-    ENGINE.variables[name]=resolveValue(value);
-    return ENGINE.variables[name];
-}
-
-function getVar(name){
-    return{type:"variable",name:String(resolveValue(name))};
-}
-
-function join(...values){
-    return{type:"join",values};
-}
-
-function canvasColor(color){
-    color=resolveValue(color);
-    if(typeof color==="string"){
-        ENGINE.background=color;
-        ENGINE.backgroundImage=null;
-        ENGINE.backgroundLoaded=false;
-    }
-}
-
-function canvasCostume(path,scale=1){
-    path=resolveValue(path);
-    scale=Number(resolveValue(scale))||1;
-    if(!path)return;
-    const image=new Image();
-    ENGINE.backgroundImage=image;
-    ENGINE.backgroundScale=scale;
-    ENGINE.backgroundLoaded=false;
-    image.onload=()=>ENGINE.backgroundLoaded=true;
-    image.onerror=()=>{
-        ENGINE.backgroundLoaded=false;
-        console.warn("Could not load background costume:",path);
-    };
-    image.src=path;
-}
-
-function spriteCostume(name,path,scale=1){
-    name=resolveValue(name);
-    path=resolveValue(path);
-    scale=Number(resolveValue(scale))||1;
-    const sprite=ENGINE.sprites[name];
-    if(sprite)sprite.setCostume(path,scale);
-}
-
-function moveTo(name,x,y){
-    name=resolveValue(name);
-    x=Number(resolveValue(x))||0;
-    y=Number(resolveValue(y))||0;
-    const sprite=ENGINE.sprites[name];
-    if(!sprite)return;
-    sprite.x=x;
-    sprite.y=y;
-}
-
-function moveBy(name,x,y){
-    return{type:"move",name:resolveValue(name),x:resolveValue(x),y:resolveValue(y)};
-}
-
-function moveToEdge(name,horizontalEdge,x,verticalEdge,y){
-    name=resolveValue(name);
-    horizontalEdge=String(resolveValue(horizontalEdge)).toLowerCase();
-    verticalEdge=String(resolveValue(verticalEdge)).toLowerCase();
-    x=Number(resolveValue(x))||0;
-    y=Number(resolveValue(y))||0;
-
-    const sprite=ENGINE.sprites[name];
-    if(!sprite)return;
-
-    sprite.x=horizontalEdge==="left"?ENGINE.camera.x-ENGINE.viewWidth/2+x:horizontalEdge==="right"?ENGINE.camera.x+ENGINE.viewWidth/2-x:ENGINE.camera.x+x;
-    sprite.y=verticalEdge==="top"?ENGINE.camera.y-ENGINE.viewHeight/2+y:verticalEdge==="bottom"?ENGINE.camera.y+ENGINE.viewHeight/2-y:ENGINE.camera.y+y;
-}
-
-function setCostume(name,path,scale){
-    name=resolveValue(name);
-    path=resolveValue(path);
-    const sprite=ENGINE.sprites[name];
-    if(sprite)sprite.setCostume(path,scale===undefined?sprite.scale:Number(resolveValue(scale))||1);
-}
-
-function wait(time){
-    return{type:"wait",time:Math.max(0,Number(resolveValue(time))||0)};
-}
-
-function repeat(times,...blocks){
-    return{type:"repeat",times:Math.max(0,Math.floor(Number(resolveValue(times))||0)),blocks};
-}
-
 function resolveValue(value){
     if(value===null||value===undefined)return"";
 
@@ -152,15 +76,60 @@ function resolveValue(value){
     return value;
 }
 
+function updateEdgeSprite(sprite){
+    if(!sprite||!sprite.edgeLock)return;
+
+    const lock=sprite.edgeLock;
+    const halfWidth=sprite.width/2;
+    const halfHeight=sprite.height/2;
+
+    const left=ENGINE.camera.x-ENGINE.viewWidth/2;
+    const right=ENGINE.camera.x+ENGINE.viewWidth/2;
+    const top=ENGINE.camera.y-ENGINE.viewHeight/2;
+    const bottom=ENGINE.camera.y+ENGINE.viewHeight/2;
+
+    if(lock.horizontal==="left")
+        sprite.x=left+lock.horizontalDistance+halfWidth;
+    else if(lock.horizontal==="right")
+        sprite.x=right-lock.horizontalDistance-halfWidth;
+
+    if(lock.vertical==="top")
+        sprite.y=top+lock.verticalDistance+halfHeight;
+    else if(lock.vertical==="bottom")
+        sprite.y=bottom-lock.verticalDistance-halfHeight;
+
+    const minX=left+halfWidth;
+    const maxX=right-halfWidth;
+    const minY=top+halfHeight;
+    const maxY=bottom-halfHeight;
+
+    if(minX<=maxX)
+        sprite.x=Math.max(minX,Math.min(maxX,sprite.x));
+    else
+        sprite.x=ENGINE.camera.x;
+
+    if(minY<=maxY)
+        sprite.y=Math.max(minY,Math.min(maxY,sprite.y));
+    else
+        sprite.y=ENGINE.camera.y;
+}
+
+function updateEdgeSprites(){
+    Object.values(ENGINE.sprites).forEach(updateEdgeSprite);
+}
+
 async function executeBlock(block){
     if(!block||!ENGINE.running)return;
 
     if(block.type==="move"){
         const sprite=ENGINE.sprites[resolveValue(block.name)];
+
         if(sprite){
+            sprite.edgeLock=null;
             sprite.x+=Number(resolveValue(block.x))||0;
             sprite.y+=Number(resolveValue(block.y))||0;
         }
+
         return;
     }
 
@@ -208,6 +177,7 @@ function resizeGame(){
     ENGINE.height=ENGINE.viewHeight;
 
     ctx.imageSmoothingEnabled=false;
+    updateEdgeSprites();
 }
 
 function drawBackground(){
@@ -229,7 +199,11 @@ function drawBackground(){
 function render(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     drawBackground();
-    Object.values(ENGINE.sprites).sort((a,b)=>a.layer-b.layer).forEach(sprite=>sprite.draw());
+    updateEdgeSprites();
+
+    Object.values(ENGINE.sprites)
+        .sort((a,b)=>a.layer-b.layer)
+        .forEach(sprite=>sprite.draw());
 }
 
 function gameLoop(timestamp){

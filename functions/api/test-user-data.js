@@ -448,7 +448,7 @@ function createInitialData() {
         c4: { // C2
             Id:4,
             name:"Main Character",
-            rarity: 5,
+            rarity: 1,
             level: 100,
             xp: 0,
             equip: {
