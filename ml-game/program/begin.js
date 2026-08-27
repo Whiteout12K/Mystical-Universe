@@ -16,10 +16,8 @@ whenBroadcast("MovePosition",
     )
 );
 
-whenBroadcast("MovePosition",
+whenBroadcast("ColorChange",
     forever(
-        moveTo("Knight", mouseX(), mouseY()),
-
         ifBlock( and( lThan(abs(spriteX("Knight")), 30), lThan(abs(spriteY("Knight")), 30) ),
             spriteEffect("Knight", "color", 25),
         )
@@ -31,6 +29,7 @@ whenBroadcast("End",
 );
 
 broadcast("MovePosition");
+broadcast("ColorChange");
 
 facing("Knight", "up");
 
