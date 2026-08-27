@@ -169,8 +169,6 @@ class Sprite{
         if(!this.visible||!this.loaded)
             return;
 
-        ctx.save();
-
         const effects=this.effects||{};
 
         const brightness=Math.max(
@@ -197,13 +195,25 @@ class Sprite{
             )
         );
 
-        ctx.globalAlpha=
-            this.opacity*
-            (1-ghost/100);
+        const opacity=Math.max(
+            0,
+            Math.min(
+                1,
+                Number(this.opacity)
+            )
+        );
 
-        ctx.imageSmoothingEnabled=false;
+        const drawWidth=
+            this.width*
+            ENGINE.unitScale;
+
+        const drawHeight=
+            this.height*
+            ENGINE.unitScale;
 
         /*
+            Effects are rendered identically on every device.
+
             World coordinates:
             +X = right
             +Y = up
@@ -212,15 +222,55 @@ class Sprite{
             +X = right
             +Y = down
 
-            Therefore world Y is inverted only
-            when converted to screen coordinates.
+            Y is inverted only during world-to-screen
+            conversion.
         */
 
+        const screenX=
+            (this.x-ENGINE.camera.x)*
+            ENGINE.unitScale+
+            canvas.width/2;
+
+        const screenY=
+            -(this.y-ENGINE.camera.y)*
+            ENGINE.unitScale+
+            canvas.height/2;
+
+        /*
+            Use an offscreen canvas whenever effects are active.
+
+            This keeps the effect pipeline independent from
+            browser/device-specific canvas behavior.
+        */
+
+        if(
+            brightness>0||
+            ghost>0||
+            color>0
+        ){
+            drawSpriteWithEffects(
+                this,
+                screenX,
+                screenY,
+                drawWidth,
+                drawHeight,
+                brightness,
+                ghost,
+                color,
+                opacity
+            );
+
+            return;
+        }
+
+        ctx.save();
+
+        ctx.globalAlpha=opacity;
+        ctx.imageSmoothingEnabled=false;
+
         ctx.translate(
-            (this.x-ENGINE.camera.x)*ENGINE.unitScale+
-            canvas.width/2,
-            -(this.y-ENGINE.camera.y)*ENGINE.unitScale+
-            canvas.height/2
+            screenX,
+            screenY
         );
 
         ctx.rotate(
@@ -232,32 +282,300 @@ class Sprite{
             this.flipY
         );
 
-        const filters=[];
-
-        if(brightness>0)
-            filters.push(
-                `brightness(${100+brightness}%)`
-            );
-
-        if(color>0&&color<100)
-            filters.push(
-                `hue-rotate(${color*3.6}deg)`
-            );
-
-        ctx.filter=filters.length
-            ?filters.join(" ")
-            :"none";
-
         ctx.drawImage(
             this.image,
-            -this.width*ENGINE.unitScale/2,
-            -this.height*ENGINE.unitScale/2,
-            this.width*ENGINE.unitScale,
-            this.height*ENGINE.unitScale
+            -drawWidth/2,
+            -drawHeight/2,
+            drawWidth,
+            drawHeight
         );
 
         ctx.restore();
     }
+}
+
+
+function drawSpriteWithEffects(
+    sprite,
+    screenX,
+    screenY,
+    drawWidth,
+    drawHeight,
+    brightness,
+    ghost,
+    color,
+    opacity
+){
+    const width=Math.max(
+        1,
+        Math.ceil(drawWidth)
+    );
+
+    const height=Math.max(
+        1,
+        Math.ceil(drawHeight)
+    );
+
+    if(
+        !sprite._effectCanvas||
+        sprite._effectCanvas.width!==width||
+        sprite._effectCanvas.height!==height
+    ){
+        sprite._effectCanvas=
+            document.createElement("canvas");
+
+        sprite._effectCanvas.width=width;
+        sprite._effectCanvas.height=height;
+
+        sprite._effectContext=
+            sprite._effectCanvas.getContext(
+                "2d",
+                {willReadFrequently:false}
+            );
+    }
+
+    const effectCanvas=sprite._effectCanvas;
+    const effectCtx=sprite._effectContext;
+
+    effectCtx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+    effectCtx.save();
+
+    effectCtx.imageSmoothingEnabled=false;
+
+    effectCtx.drawImage(
+        sprite.image,
+        0,
+        0,
+        width,
+        height
+    );
+
+    effectCtx.restore();
+
+    /*
+        Pixel processing is used for the effects so the same
+        behavior is available regardless of desktop/mobile
+        filter implementation.
+    */
+
+    if(
+        brightness>0||
+        color>0
+    ){
+        const imageData=
+            effectCtx.getImageData(
+                0,
+                0,
+                width,
+                height
+            );
+
+        const data=imageData.data;
+
+        const brightnessFactor=
+            1+
+            brightness/100;
+
+        const hue=color*3.6;
+
+        for(
+            let i=0;
+            i<data.length;
+            i+=4
+        ){
+            if(data[i+3]===0)
+                continue;
+
+            let r=data[i];
+            let g=data[i+1];
+            let b=data[i+2];
+
+            if(brightness>0){
+                r=Math.min(
+                    255,
+                    r*brightnessFactor
+                );
+
+                g=Math.min(
+                    255,
+                    g*brightnessFactor
+                );
+
+                b=Math.min(
+                    255,
+                    b*brightnessFactor
+                );
+            }
+
+            if(color>0){
+                const hsv=rgbToHsv(
+                    r,
+                    g,
+                    b
+                );
+
+                hsv.h=
+                    (hsv.h+hue)%360;
+
+                const rgb=hsvToRgb(
+                    hsv.h,
+                    hsv.s,
+                    hsv.v
+                );
+
+                r=rgb.r;
+                g=rgb.g;
+                b=rgb.b;
+            }
+
+            data[i]=r;
+            data[i+1]=g;
+            data[i+2]=b;
+        }
+
+        effectCtx.putImageData(
+            imageData,
+            0,
+            0
+        );
+    }
+
+    ctx.save();
+
+    ctx.globalAlpha=
+        opacity*
+        (1-ghost/100);
+
+    ctx.imageSmoothingEnabled=false;
+
+    ctx.translate(
+        screenX,
+        screenY
+    );
+
+    ctx.rotate(
+        sprite.rotation*Math.PI/180
+    );
+
+    ctx.scale(
+        sprite.flipX,
+        sprite.flipY
+    );
+
+    ctx.drawImage(
+        effectCanvas,
+        -drawWidth/2,
+        -drawHeight/2,
+        drawWidth,
+        drawHeight
+    );
+
+    ctx.restore();
+}
+
+
+function rgbToHsv(r,g,b){
+    r/=255;
+    g/=255;
+    b/=255;
+
+    const max=Math.max(r,g,b);
+    const min=Math.min(r,g,b);
+
+    const d=max-min;
+
+    let h=0;
+
+    if(d!==0){
+        if(max===r){
+            h=
+                60*
+                (
+                    (
+                        (g-b)/d
+                    )%6
+                );
+        }else if(max===g){
+            h=
+                60*
+                (
+                    (b-r)/d+
+                    2
+                );
+        }else{
+            h=
+                60*
+                (
+                    (r-g)/d+
+                    4
+                );
+        }
+    }
+
+    if(h<0)
+        h+=360;
+
+    const s=
+        max===0
+            ?0
+            :d/max;
+
+    return{
+        h,
+        s,
+        v:max
+    };
+}
+
+
+function hsvToRgb(h,s,v){
+    const c=v*s;
+    const x=
+        c*
+        (
+            1-
+            Math.abs(
+                (h/60)%2-1
+            )
+        );
+
+    const m=v-c;
+
+    let r=0;
+    let g=0;
+    let b=0;
+
+    if(h<60){
+        r=c;
+        g=x;
+    }else if(h<120){
+        r=x;
+        g=c;
+    }else if(h<180){
+        g=c;
+        b=x;
+    }else if(h<240){
+        g=x;
+        b=c;
+    }else if(h<300){
+        r=x;
+        b=c;
+    }else{
+        r=c;
+        b=x;
+    }
+
+    return{
+        r:(r+m)*255,
+        g:(g+m)*255,
+        b:(b+m)*255
+    };
 }
 
 
@@ -477,14 +795,6 @@ function updateEdgeSprite(sprite){
     const right=
         ENGINE.camera.x+
         ENGINE.viewWidth/2;
-
-    /*
-        World coordinates use +Y upward.
-
-        Therefore:
-        top    = camera.y + viewHeight/2
-        bottom = camera.y - viewHeight/2
-    */
 
     const top=
         ENGINE.camera.y+
@@ -913,9 +1223,7 @@ function resizeGame(){
         window.innerHeight
     );
 
-    const mobile=width<700;
-
-    ENGINE.mobile=mobile;
+    ENGINE.mobile=width<700;
 
     canvas.width=Math.ceil(width);
     canvas.height=Math.ceil(height);
@@ -923,30 +1231,26 @@ function resizeGame(){
     canvas.style.width=width+"px";
     canvas.style.height=height+"px";
 
-    if(mobile){
-        ENGINE.viewHeight=360;
-        ENGINE.viewWidth=
-            ENGINE.viewHeight*
-            (width/height);
+    /*
+        The same coordinate scaling system is used on
+        desktop and mobile.
 
-        ENGINE.unitScale=
-            height/
-            ENGINE.viewHeight;
-    }else{
-        ENGINE.unitScale=
-            Math.min(
-                width/640,
-                height/360
-            );
+        There is no separate sprite/rendering path.
+    */
 
-        ENGINE.viewWidth=
-            width/
-            ENGINE.unitScale;
+    ENGINE.unitScale=
+        Math.min(
+            width/640,
+            height/360
+        );
 
-        ENGINE.viewHeight=
-            height/
-            ENGINE.unitScale;
-    }
+    ENGINE.viewWidth=
+        width/
+        ENGINE.unitScale;
+
+    ENGINE.viewHeight=
+        height/
+        ENGINE.unitScale;
 
     ENGINE.centerX=
         ENGINE.viewWidth/2;
