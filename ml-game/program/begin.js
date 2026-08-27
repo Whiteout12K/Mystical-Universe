@@ -20,6 +20,7 @@ whenBroadcast("ColorChange",
     forever(
         ifBlock( and( lThan(abs(spriteX("Knight")), 30), lThan(abs(spriteY("Knight")), 30) ),
             spriteEffect("Knight", "color", 25),
+            spriteCostume("Knight","images/sample_sprite.png", 2),
         )
     )
 );
