@@ -3,7 +3,21 @@
 
 canvasColor("#686565"); // Sets the canvas color if no image. Parameter: color_hex
 
-canvasCostume("images/sample_canvas.png", 2); // Sets the canvas costume. Parameter: costume_path
+canvasCostume("images/sample_canvas.png", 2); // Sets the canvas costume. Parameter: costume_path. Can be blank for no image.
+
+canvasSize(2); // Sets scale without modifying costume of canvas.
+
+canvasChangeSize(0.1); // Cahgnes the canvas' scale by value, can both be negative or positive to shrink or grow size.
+
+canvasEffect("brightness", 0); // Changes the canvas' effect, where 0 is none and 100 is 100% effect.
+//  Effect List: 
+//    brightness: changes sprite costume brightness, from 0-100%, where max is bright white.
+//    ghost: changes the sprite's opacity, from 0-100%.
+//    color: changes the sprite's color, from 0-100. 0 is default, and 100 is also default. In between, the sprite goes through the color spectrum.
+//           This basically changes the hue of the colors.
+
+costumeOfCanvas(); // Returns the current costume path of canvas.
+sizeOfCanvas(); // Returns the current canvas size.
 
 
 // <----- Sprite Blocks ----->
@@ -13,7 +27,7 @@ createSprite("Player1"); // Creates a sprite. Parameter: sprite_name
 spriteCostume("Player1", "images/sample_sprite.png", 1); // Sets the sprite's costume. The image scale sets the image width, where 1 = 160 canvas pixels.
 //   Parameter: sprite_name, costume_path, scale
 
-spriteSize("Player1", 1); // Sets scale without modifying costume.
+spriteSetSize("Player1", 1); // Sets scale without modifying costume.
 
 spriteChangeSize("Player1", 0.1); // Changes sprite scale by value, can be both negative or positive to shrink or grow size.
 
@@ -32,8 +46,8 @@ spriteLayer("Player1", 1); // Moves the sprite to layer. Parameter: sprite_name,
 goFront("Player1"); // Moves to front layer
 goBack("Player1"); // Moves to back layer
 
-spriteCostume("Player1"); // Returns the current costume path of sprite.
-spriteSize("Player1"); // Returns the current sprite size.
+costumeOfSprite("Player1"); // Returns the current costume path of sprite.
+sizeOfSprite("Player1"); // Returns the current sprite size.
 
 deleteSprite("Player1"); // Completely removes sprite.
 

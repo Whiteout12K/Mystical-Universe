@@ -35,7 +35,7 @@ registerBlock("spriteCostume",async block=>{
 });
 
 
-registerBlock("spriteSize",async block=>{
+registerBlock("spriteSetSize",async block=>{
     const sprite=ENGINE.sprites[
         resolveValue(block.name)
     ];
@@ -109,6 +109,24 @@ registerBlock("spriteEffect",async block=>{
     }else if(effect==="color"){
         sprite.effects.color=value;
     }
+});
+
+
+registerReporter("costumeOfSprite",value=>{
+    const sprite=ENGINE.sprites[
+        resolveValue(value.name)
+    ];
+
+    return sprite?.costume??"";
+});
+
+
+registerReporter("sizeOfSprite",value=>{
+    const sprite=ENGINE.sprites[
+        resolveValue(value.name)
+    ];
+
+    return sprite?.scale??0;
 });
 
 
@@ -219,17 +237,7 @@ function recordSpriteBlock(type,data){
 
 function spriteCostume(name,path,scale=1){
     if(arguments.length===1){
-        return{
-            type:"operator",
-            operator:"spriteCostume",
-            evaluate:()=>{
-                const sprite=ENGINE.sprites[
-                    resolveValue(name)
-                ];
-
-                return sprite?.costume??"";
-            }
-        };
+        return costumeOfSprite(name);
     }
 
     return recordSpriteBlock(
@@ -243,23 +251,13 @@ function spriteCostume(name,path,scale=1){
 }
 
 
-function spriteSize(name,scale){
+function spriteSetSize(name,scale){
     if(arguments.length===1){
-        return{
-            type:"operator",
-            operator:"spriteSize",
-            evaluate:()=>{
-                const sprite=ENGINE.sprites[
-                    resolveValue(name)
-                ];
-
-                return sprite?.scale??0;
-            }
-        };
+        return sizeOfSprite(name);
     }
 
     return recordSpriteBlock(
-        "spriteSize",
+        "spriteSetSize",
         {
             name,
             scale
@@ -286,6 +284,26 @@ function spriteEffect(name,effect,value){
             name,
             effect,
             value
+        }
+    );
+}
+
+
+function costumeOfSprite(name){
+    return createReporter(
+        "costumeOfSprite",
+        {
+            name
+        }
+    );
+}
+
+
+function sizeOfSprite(name){
+    return createReporter(
+        "sizeOfSprite",
+        {
+            name
         }
     );
 }

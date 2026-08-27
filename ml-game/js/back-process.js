@@ -3,6 +3,12 @@
 const ENGINE={
     width:640,height:360,centerX:0,centerY:0,viewWidth:640,viewHeight:360,unitScale:1,
     background:"#000000",backgroundImage:null,backgroundLoaded:false,backgroundScale:1,
+    backgroundCostume:"",
+    backgroundEffects:{
+        brightness:0,
+        ghost:0,
+        color:0
+    },
     sprites:{},variables:{},running:true,lastTime:0,deltaTime:0,camera:{x:0,y:0},
     scripts:[],program:[],broadcasts:{},blocks:{},mobile:false,buildingBlock:false,
     _blockId:0
@@ -339,6 +345,221 @@ function applySpriteEffects(sprite){
 }
 
 
+function createCanvasEffectCanvas(){
+    if(!ENGINE.backgroundEffectCanvas)
+        ENGINE.backgroundEffectCanvas=
+            document.createElement("canvas");
+
+    return ENGINE.backgroundEffectCanvas;
+}
+
+
+function applyCanvasEffects(){
+    const image=ENGINE.backgroundImage;
+
+    if(!image||!image.naturalWidth)
+        return null;
+
+    const effects=
+        ENGINE.backgroundEffects||{};
+
+    const brightness=clamp(
+        Number(effects.brightness)||0,
+        0,
+        100
+    );
+
+    const color=clamp(
+        Number(effects.color)||0,
+        0,
+        100
+    );
+
+    const ghost=clamp(
+        Number(effects.ghost)||0,
+        0,
+        100
+    );
+
+    if(
+        brightness===0&&
+        color===0
+    ){
+        ENGINE.backgroundEffectCacheKey=null;
+
+        return{
+            source:image,
+            ghost
+        };
+    }
+
+    const width=Math.max(
+        1,
+        Math.ceil(image.naturalWidth)
+    );
+
+    const height=Math.max(
+        1,
+        Math.ceil(image.naturalHeight)
+    );
+
+    const effectCanvas=
+        createCanvasEffectCanvas();
+
+    if(
+        effectCanvas.width!==width||
+        effectCanvas.height!==height
+    ){
+        effectCanvas.width=width;
+        effectCanvas.height=height;
+        ENGINE.backgroundEffectCacheKey=null;
+    }
+
+    const key=[
+        ENGINE.backgroundCostume,
+        width,
+        height,
+        brightness,
+        color
+    ].join("|");
+
+    if(
+        ENGINE.backgroundEffectCacheKey!==key
+    ){
+        const effectCtx=
+            effectCanvas.getContext(
+                "2d",
+                {willReadFrequently:true}
+            );
+
+        effectCtx.clearRect(
+            0,
+            0,
+            width,
+            height
+        );
+
+        effectCtx.imageSmoothingEnabled=false;
+
+        effectCtx.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
+
+        let imageData;
+
+        try{
+            imageData=effectCtx.getImageData(
+                0,
+                0,
+                width,
+                height
+            );
+        }catch(error){
+            console.warn(
+                "Unable to process canvas effects:",
+                error
+            );
+
+            ENGINE.backgroundEffectCacheKey=null;
+
+            return{
+                source:image,
+                ghost
+            };
+        }
+
+        const data=imageData.data;
+
+        const brightnessMultiplier=
+            1+brightness/100;
+
+        const hueShift=
+            color/100;
+
+        for(
+            let i=0;
+            i<data.length;
+            i+=4
+        ){
+            if(data[i+3]===0)
+                continue;
+
+            let r=data[i];
+            let g=data[i+1];
+            let b=data[i+2];
+
+            if(brightness>0){
+                r=clamp(
+                    Math.round(
+                        r*brightnessMultiplier
+                    ),
+                    0,
+                    255
+                );
+
+                g=clamp(
+                    Math.round(
+                        g*brightnessMultiplier
+                    ),
+                    0,
+                    255
+                );
+
+                b=clamp(
+                    Math.round(
+                        b*brightnessMultiplier
+                    ),
+                    0,
+                    255
+                );
+            }
+
+            if(color>0){
+                const hsl=rgbToHsl(
+                    r,
+                    g,
+                    b
+                );
+
+                hsl[0]=
+                    (hsl[0]+hueShift)%1;
+
+                const rgb=hslToRgb(
+                    hsl[0],
+                    hsl[1],
+                    hsl[2]
+                );
+
+                r=rgb[0];
+                g=rgb[1];
+                b=rgb[2];
+            }
+
+            data[i]=r;
+            data[i+1]=g;
+            data[i+2]=b;
+        }
+
+        effectCtx.putImageData(
+            imageData,
+            0,
+            0
+        );
+
+        ENGINE.backgroundEffectCacheKey=key;
+    }
+
+    return{
+        source:effectCanvas,
+        ghost
+    };
+}
+
+
 class Sprite{
     constructor(name){
         Object.assign(this,{
@@ -497,19 +718,6 @@ class Sprite{
 
         ctx.imageSmoothingEnabled=false;
 
-        /*
-            World coordinates:
-            +X = right
-            +Y = up
-
-            Canvas coordinates:
-            +X = right
-            +Y = down
-
-            World Y is inverted only when
-            converting to screen coordinates.
-        */
-
         ctx.translate(
             (this.x-ENGINE.camera.x)*ENGINE.unitScale+
             canvas.width/2,
@@ -620,19 +828,6 @@ function createReporter(type,data={}){
     );
 }
 
-
-/*
-    PROGRAM RECORDING SYSTEM
-
-    Every command created by main.js is placed into
-    ENGINE.program.
-
-    Containers later absorb their child blocks and remove
-    them from the top-level program.
-
-    This means nested commands are data only until their
-    parent executes them.
-*/
 
 ENGINE.recordBlock=function(block){
     if(
@@ -1131,11 +1326,6 @@ registerBlock(
 
 /*
     TOP-LEVEL PROGRAM EXECUTION
-
-    Only ENGINE.program is executed here.
-
-    Child blocks have already been absorbed by their
-    containers and therefore cannot accidentally run.
 */
 
 async function executeProgram(){
@@ -1171,6 +1361,12 @@ function startStandaloneBlock(block){
     return block;
 }
 
+
+/*
+    CANVAS RESIZING
+
+    This section is intentionally unchanged.
+*/
 
 function resizeGame(){
     const width=Math.max(
@@ -1246,7 +1442,9 @@ function drawBackground(){
 
         const width=
             640*
-            ENGINE.backgroundScale;
+            (Number(
+                ENGINE.backgroundScale
+            )||1);
 
         const height=
             width*
@@ -1265,17 +1463,35 @@ function drawBackground(){
             height*
             ENGINE.unitScale/2;
 
-        ctx.imageSmoothingEnabled=false;
+        const effect=
+            applyCanvasEffects();
 
-        ctx.drawImage(
-            image,
-            x,
-            y,
-            width*
-            ENGINE.unitScale,
-            height*
-            ENGINE.unitScale
-        );
+        ctx.save();
+
+        if(effect){
+            ctx.globalAlpha=
+                1-
+                clamp(
+                    Number(effect.ghost)||0,
+                    0,
+                    100
+                )/100;
+
+            ctx.imageSmoothingEnabled=false;
+
+            ctx.drawImage(
+                effect.source,
+                x,
+                y,
+                width*
+                ENGINE.unitScale,
+                height*
+                ENGINE.unitScale
+            );
+        }
+
+        ctx.restore();
+
     }else{
         ctx.fillStyle=
             ENGINE.background;
@@ -1335,11 +1551,6 @@ window.addEventListener(
     "load",
     ()=>{
         resizeGame();
-
-        /*
-            All external command files have now loaded.
-            Execute the completed sequential program once.
-        */
 
         runScripts();
 

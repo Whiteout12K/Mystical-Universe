@@ -23,6 +23,9 @@ whenBroadcast("ColorChange",
             spriteCostume("Knight","images/sample_sprite.png", 2),
             spriteEffect("Knight", "ghost", 50),
             spriteEffect("Knight", "brightness", 50),
+            ifBlock( equal(costumeOfSprite("Knight"), "images/sample_sprite.png"),
+                facing("Knight", "down"),
+            ),
         )
     )
 );
@@ -35,6 +38,8 @@ broadcast("MovePosition");
 broadcast("ColorChange");
 
 facing("Knight", "up");
+canvasEffect("color", 50);
+
 
 
 
