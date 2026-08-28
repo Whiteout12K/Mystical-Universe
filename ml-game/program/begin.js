@@ -30,7 +30,7 @@ whenBroadcast("ColorChange",
     )
 );
 
-makeSound("MLTheme", "/images/mlg-assets/Music/ML-Theme.mp3");
+makeSound("MLTheme", "https://mysticallegends.org/images/mlg-assets/Music/ML-Theme.mp3");
 setVolume("MLTheme", 100);
 setPitch("MLTheme", 25);
 setPan("MLTheme", 0);

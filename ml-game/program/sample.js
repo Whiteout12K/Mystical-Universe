@@ -83,8 +83,9 @@ add(1, 2); // example, to get 3
 sub(5, 4); // example, to get 1
 mult(2, 2); // example, to get 4
 div(10, 2); // example, to get 5
-mod(5, 2); // example, to get 1
-round(0.6); // example, to get 1
+mod(5, 2); // example, to get 1, remainder
+round(0.6); // example, to get 1, round
+abs(-3); // example, to get 3, absolute value
 randomNum(1, 10); // to get a random number between 1 and 10
 
 // These are boolean conditions which can compare values. Can support variables as well.
