@@ -44,6 +44,6 @@ broadcast("MovePosition");
 broadcast("ColorChange");
 
 facing("Knight", "up");
-canvasEffect("color", 5);
+canvasEffect("color", 10);
 
-
+uiBox("Test",mouseX(),mouseY(),100,100,"#0000007a");
