@@ -118,6 +118,11 @@ changeVarBy("var1", -3); // Removes number_value
 
 getVar("Var1"); // Gets the value of variable. Parameter: variable_name.
 
+makeSpriteVar("Player1", "health"); // Set private variables to sprites.
+setSpriteVar("Player1", "health", 1);
+changeSpriteVarBy("Player1", "health", 3); 
+getSpriteVar("Player1", "health"); 
+
 
 // <----- Sensing Blocks ----->
 
@@ -201,13 +206,34 @@ whenBroadcast("Start Menu",
 
 // <----- Function Blocks ----->
 
-testFunc(getVar("Var1")); // Declare a function
+// Parameters in function blocks will not work as they are not variable blocks. 
+// All variables are inherently global, but you can set one private variable's value by another private variable easily using blocks.
+testFunc(); // Declare a function
 
 // Function body, takes the value parameter in function and assigns to variables in order.
-function testFunc(var1){
+function testFunc(){
     //field;
 }; 
 
 
+// <----- Sound Blocks -----> // Must intereact with screen to begin any sound on a project start.
 
+makeSound("Sound", "sound/play.mp3"); // Creates and store sound by name and its path.
 
+playSound("Sound"); // Begins to play sound from its name.
+
+stopAllSound(); // Turns off all active sounds.
+
+stopSound("Sound"); // Turns off a particular sound.
+
+setPitch("Sound", 5); // Sets the pitch of a sound, from -100 to 100.
+
+changePitch("Sound", 1); // Changes the pitch by an amount, either positive or negative.
+
+setPan("Sound", 0); // Sets the pan left/right of sound, from -100 to 100.
+
+setVolume("Sound", 100); // Sets the sound's volume, where 100 is the sound's regular volume and 0 is no sound.
+
+changeVolume("Sound", 1); // Changes sound's volume by an amount, either positive or negative.
+
+volumeOfSound("Sound"); // Returns the volume of a particular sound.

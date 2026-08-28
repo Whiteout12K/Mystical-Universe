@@ -30,6 +30,12 @@ whenBroadcast("ColorChange",
     )
 );
 
+makeSound("MLTheme", "/images/mlg-assets/Music/ML-Theme.mp3");
+setVolume("MLTheme", 100);
+setPitch("MLTheme", 25);
+setPan("MLTheme", 0);
+playSound("MLTheme");
+
 whenBroadcast("End",
     deleteSprite("Knight"),
 );
@@ -38,8 +44,6 @@ broadcast("MovePosition");
 broadcast("ColorChange");
 
 facing("Knight", "up");
-canvasEffect("color", 50);
-
-
+canvasEffect("color", 5);
 
 

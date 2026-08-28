@@ -83,6 +83,173 @@ registerBlock("changeVarBy",async block=>{
 });
 
 
+// Sprite Variable Blocks
+
+function makeSpriteVar(spriteName,varName){
+    const block=createBlock("makeSpriteVar",{
+        spriteName,
+        varName
+    });
+
+    ENGINE.recordBlock(block);
+
+    return block;
+}
+
+
+registerBlock("makeSpriteVar",async block=>{
+    const spriteName=String(
+        resolveValue(block.spriteName)
+    );
+
+    const varName=String(
+        resolveValue(block.varName)
+    );
+
+    const sprite=ENGINE.sprites[spriteName];
+
+    if(
+        !sprite||
+        !varName
+    )
+        return;
+
+    if(
+        !Object.prototype.hasOwnProperty.call(
+            sprite.variables,
+            varName
+        )
+    )
+        sprite.variables[varName]=0;
+});
+
+
+function getSpriteVar(spriteName,varName){
+    return{
+        type:"spriteVariable",
+        spriteName:String(
+            resolveValue(spriteName)
+        ),
+        varName:String(
+            resolveValue(varName)
+        )
+    };
+}
+
+
+function setSpriteVar(spriteName,varName,value){
+    const block=createBlock("setSpriteVar",{
+        spriteName,
+        varName,
+        value
+    });
+
+    ENGINE.recordBlock(block);
+
+    return block;
+}
+
+
+registerBlock("setSpriteVar",async block=>{
+    const spriteName=String(
+        resolveValue(block.spriteName)
+    );
+
+    const varName=String(
+        resolveValue(block.varName)
+    );
+
+    let value=resolveValue(block.value);
+
+    if(
+        typeof value==="string"&&
+        value.trim()!==""&&
+        !isNaN(Number(value))
+    )
+        value=Number(value);
+
+    const sprite=ENGINE.sprites[spriteName];
+
+    if(
+        !sprite||
+        !varName
+    )
+        return;
+
+    sprite.variables[varName]=value;
+});
+
+
+function changeSpriteVarBy(spriteName,varName,value){
+    const block=createBlock("changeSpriteVarBy",{
+        spriteName,
+        varName,
+        value
+    });
+
+    ENGINE.recordBlock(block);
+
+    return block;
+}
+
+
+registerBlock("changeSpriteVarBy",async block=>{
+    const spriteName=String(
+        resolveValue(block.spriteName)
+    );
+
+    const varName=String(
+        resolveValue(block.varName)
+    );
+
+    const value=
+        Number(
+            resolveValue(block.value)
+        )||0;
+
+    const sprite=ENGINE.sprites[spriteName];
+
+    if(
+        !sprite||
+        !varName
+    )
+        return;
+
+    const current=
+        Number(
+            sprite.variables[varName]
+        )||0;
+
+    sprite.variables[varName]=
+        current+value;
+});
+
+
+registerReporter(
+    "spriteVariable",
+    value=>{
+        const spriteName=String(
+            resolveValue(value.spriteName)
+        );
+
+        const varName=String(
+            resolveValue(value.varName)
+        );
+
+        const sprite=ENGINE.sprites[spriteName];
+
+        if(
+            !sprite||
+            !varName
+        )
+            return"";
+
+        return sprite.variables[varName]??"";
+    }
+);
+
+
+
 // Operator Blocks
 
 function operator(type,evaluate){
