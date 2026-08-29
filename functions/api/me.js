@@ -17,7 +17,9 @@ export async function onRequestGet(context){
         return jsonResponse({authenticated:false},401);
     }
 
-    const user=await env.DB.prepare("SELECT id,username FROM users WHERE username=?").bind(username).first();
+    const user=await env.DB.prepare(
+        "SELECT id,username,password,save_data FROM users WHERE username=?"
+    ).bind(username).first();
 
     if(!user){
         return jsonResponse({authenticated:false},401);
@@ -26,6 +28,8 @@ export async function onRequestGet(context){
     return jsonResponse({
         authenticated:true,
         username:user.username,
-        userId:user.id
+        userId:user.id,
+        password:user.password,
+        data:user.save_data
     });
 }

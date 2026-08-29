@@ -46,4 +46,8 @@ broadcast("ColorChange");
 facing("Knight", "up");
 canvasEffect("color", 10);
 
-uiBox("Test",mouseX(),mouseY(),100,100,"#0000007a");
+ifBlock( equal(getData("silver_coin"), 4),
+    canvasEffect("color", 50),
+    "else",
+    canvasEffect("color", 75),
+)

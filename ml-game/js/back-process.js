@@ -855,6 +855,8 @@ registerBlock("broadcastScript",async(block,context)=>{
 
 /* PROGRAM START */
 
+const START_DELAY=200;
+
 async function executeProgram(){
     const context=createScriptContext();
     ENGINE.scripts=ENGINE.program.slice();
@@ -867,8 +869,14 @@ async function executeProgram(){
 }
 
 
-function runScripts(){
-    executeProgram();
+async function runScripts(){
+    await new Promise(resolve=>
+        setTimeout(resolve,START_DELAY)
+    );
+
+    if(!ENGINE.running)return;
+
+    await executeProgram();
 }
 
 
@@ -1033,6 +1041,7 @@ window.addEventListener("load",()=>{
 
     resizeGame();
     initAudio();
+
     runScripts();
 
     ENGINE.lastRender=performance.now();
