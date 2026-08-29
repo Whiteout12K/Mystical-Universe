@@ -46,8 +46,9 @@ broadcast("ColorChange");
 facing("Knight", "up");
 canvasEffect("color", 10);
 
-ifBlock( equal(getData("silver_coin"), 4),
+loadPlayerData();
+ifBlock( equal(getData("silver_coin"), 0),
     canvasEffect("color", 50),
     "else",
-    canvasEffect("color", 75),
+    canvasEffect("color", 20),
 )
