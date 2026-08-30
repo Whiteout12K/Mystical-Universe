@@ -1,4 +1,3 @@
-
 // Motion Blocks
 
 registerBlock("moveTo",async block=>{
@@ -38,8 +37,13 @@ function setupEdgeLock(
 ){
     if(!sprite)return;
 
-    horizontalEdge=String(horizontalEdge??"").toLowerCase();
-    verticalEdge=String(verticalEdge??"").toLowerCase();
+    horizontalEdge=String(
+        horizontalEdge??""
+    ).toLowerCase();
+
+    verticalEdge=String(
+        verticalEdge??""
+    ).toLowerCase();
 
     sprite.edgeLock={
         horizontal:horizontalEdge,
@@ -53,6 +57,17 @@ function setupEdgeLock(
             Number(verticalDistance)||0
         )
     };
+
+    /*
+     * A vertical-only "top" edge is centered
+     * on the world's X=0 position.
+     */
+    if(
+        verticalEdge==="top"&&
+        !horizontalEdge
+    ){
+        sprite.x=0;
+    }
 
     updateEdgeSprite(sprite);
 }

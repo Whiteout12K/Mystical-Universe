@@ -31,7 +31,6 @@ whenBroadcast("Main Menu",
     createSprite("Line"),
     spriteCostume("Line", "images/menu/BG1-4.svg", 1),
     moveTo("Line", 0, 0),
-
 );
 
 
@@ -65,6 +64,6 @@ whenBroadcast("MM-Line",
 
 
 
-
+loadPlayerData();
 
 broadcast("Main Menu");
