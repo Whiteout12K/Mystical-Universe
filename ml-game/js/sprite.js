@@ -1,14 +1,30 @@
 // Sprite Blocks
 
 function createSprite(name){
-    name=resolveValue(name);
+    return recordSpriteBlock(
+        "createSprite",
+        {
+            name
+        }
+    );
+}
+
+
+registerBlock("createSprite",async block=>{
+    const name=String(
+        resolveValue(block.name)
+    );
 
     if(!name)
         return null;
 
-    return ENGINE.sprites[name]||
-        (ENGINE.sprites[name]=new Sprite(name));
-}
+    if(!ENGINE.sprites[name]){
+        ENGINE.sprites[name]=new Sprite(name);
+        ENGINE.spriteOrderDirty=true;
+    }
+
+    return ENGINE.sprites[name];
+});
 
 
 registerBlock("spriteCostume",async block=>{
@@ -166,6 +182,7 @@ registerBlock("spriteLayer",async block=>{
         layer=0;
 
     sprite.layer=layer;
+    ENGINE.spriteOrderDirty=true;
 });
 
 
@@ -188,6 +205,7 @@ registerBlock("goFront",async block=>{
     );
 
     sprite.layer=highest+1;
+    ENGINE.spriteOrderDirty=true;
 });
 
 
@@ -210,16 +228,30 @@ registerBlock("goBack",async block=>{
     );
 
     sprite.layer=lowest-1;
+    ENGINE.spriteOrderDirty=true;
 });
 
 
 registerBlock("deleteSprite",async block=>{
-    const name=resolveValue(block.name);
+    const name=String(
+        resolveValue(block.name)
+    );
 
     if(!name)
         return;
 
+    const sprite=ENGINE.sprites[name];
+
+    if(!sprite)
+        return;
+
     delete ENGINE.sprites[name];
+
+    ENGINE.spriteOrder=ENGINE.spriteOrder.filter(
+        item=>item!==sprite
+    );
+
+    ENGINE.spriteOrderDirty=true;
 });
 
 

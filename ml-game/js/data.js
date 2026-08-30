@@ -11,6 +11,9 @@ let PLAYER={
 
 
 // Internal Player Data Loader
+// Uses the function/api/me path of Cloudflare's D1 Database.
+// To set one up, simply follow the instructions online.
+// Create your own working table with parameters: username, password, save_data.
 
 async function _loadPlayerData(){
     if(PLAYER.loading)return PLAYER.loading;
@@ -147,13 +150,24 @@ registerReporter("getData",block=>{
         key===null||
         key===""
     )
-        return PLAYER.data;
+        return formatDataResult(PLAYER.data);
 
     const value=getNestedData(
         PLAYER.data,
         String(key).trim()
     );
 
+    if(value===undefined||value===null)
+        return 0;
+
+    return formatDataResult(value);
+});
+
+
+// Convert returned data into a value that can safely
+// be displayed by the engine.
+
+function formatDataResult(value){
     if(value===undefined||value===null)
         return 0;
 
@@ -166,9 +180,23 @@ registerReporter("getData",block=>{
     if(typeof value==="boolean")
         return value;
 
-    return value;
-});
+    if(typeof value==="object"){
+        try{
+            return JSON.stringify(value);
+        }catch(error){
+            console.error(
+                "Unable to format data value:",
+                error
+            );
+            return 0;
+        }
+    }
 
+    return String(value);
+}
+
+
+// Parse Player Data
 
 function parsePlayerData(data){
     if(data===null||data===undefined)
@@ -191,11 +219,71 @@ function parsePlayerData(data){
 }
 
 
+// Parse a value supplied to updateData.
+
+function parseDataValue(value){
+    if(value===undefined)
+        return null;
+
+    if(value===null)
+        return null;
+
+    if(typeof value==="number")
+        return Number.isFinite(value)?value:0;
+
+    if(typeof value==="boolean")
+        return value;
+
+    if(typeof value==="object"){
+        try{
+            return JSON.parse(JSON.stringify(value));
+        }catch(error){
+            console.error(
+                "Unable to serialize data value:",
+                error
+            );
+            return null;
+        }
+    }
+
+    if(typeof value==="string"){
+        const text=value.trim();
+
+        // Only attempt JSON parsing when the string
+        // looks like an object or array.
+        if(
+            (text.startsWith("{")&&text.endsWith("}"))||
+            (text.startsWith("[")&&text.endsWith("]"))
+        ){
+            try{
+                return JSON.parse(text);
+            }catch{
+                // Keep it as a normal string if invalid JSON.
+            }
+        }
+
+        return value;
+    }
+
+    return String(value);
+}
+
+
+// Get Nested Data
+
 function getNestedData(data,path){
-    if(!data||typeof data!=="object")
+    if(
+        data===null||
+        data===undefined||
+        typeof data!=="object"
+    )
         return undefined;
 
     const parts=parseDataPath(path);
+
+    if(!parts.length)
+        return data;
+
     let value=data;
 
     for(const part of parts){
@@ -229,6 +317,17 @@ function getNestedData(data,path){
 }
 
 
+// Parse Data Path
+//
+// Supports:
+//
+// inventory1
+// inventory1[0]
+// inventory1[0].name
+// c1.equip.weapon[0].name
+// settings["music_volume"]
+// settings['music_volume']
+
 function parseDataPath(path){
     return String(path)
         .replace(
@@ -241,10 +340,13 @@ function parseDataPath(path){
 }
 
 
+// Set Nested Data
+
 function setNestedData(data,path,value){
     const parts=parseDataPath(path);
 
-    if(!parts.length)return;
+    if(!parts.length)
+        return;
 
     let current=data;
 
@@ -302,31 +404,7 @@ registerBlock("updateData",async block=>{
     }
 
     const value=resolveValue(block.value);
-    let parsedValue=value;
-
-    if(typeof value==="number"){
-        parsedValue=Number.isFinite(value)
-            ?value
-            :0;
-    }else if(value===undefined){
-        parsedValue=null;
-    }else if(
-        value!==null&&
-        typeof value!=="string"&&
-        typeof value!=="boolean"
-    ){
-        try{
-            parsedValue=JSON.parse(
-                JSON.stringify(value)
-            );
-        }catch(error){
-            console.error(
-                "Unable to serialize data value:",
-                error
-            );
-            return false;
-        }
-    }
+    const parsedValue=parseDataValue(value);
 
     const params=new URLSearchParams();
 
@@ -374,20 +452,144 @@ registerBlock("updateData",async block=>{
             result.data&&
             typeof result.data==="object"&&
             !Array.isArray(result.data)
-        )
+        ){
             PLAYER.data=result.data;
-        else
+        }else{
             setNestedData(
                 PLAYER.data,
                 path,
                 parsedValue
             );
+        }
 
         return true;
 
     }catch(error){
         console.error(
             "Unable to update player data:",
+            error
+        );
+        return false;
+    }
+});
+
+
+registerBlock("changeDataBy",async block=>{
+    if(!PLAYER.loaded){
+        console.error(
+            "Unable to change data: loadPlayerData must run first."
+        );
+        return false;
+    }
+
+    if(!PLAYER.loggedIn||!PLAYER.username){
+        console.error(
+            "Unable to change data: player is not logged in."
+        );
+        return false;
+    }
+
+    if(!PLAYER.password){
+        console.error(
+            "Unable to change data: no password was provided by /api/me."
+        );
+        return false;
+    }
+
+    const path=String(
+        resolveValue(block.data)
+    ).trim();
+
+    if(!path){
+        console.error(
+            "Unable to change data: data name is required."
+        );
+        return false;
+    }
+
+    const amount=Number(
+        resolveValue(block.amount)
+    );
+
+    if(!Number.isFinite(amount)){
+        console.error(
+            "Unable to change data: amount must be a number."
+        );
+        return false;
+    }
+
+    const current=getNestedData(
+        PLAYER.data,
+        path
+    );
+
+    const currentValue=Number(current);
+
+    const oldValue=
+        Number.isFinite(currentValue)
+            ?currentValue
+            :0;
+
+    const newValue=oldValue+amount;
+
+    const params=new URLSearchParams();
+
+    params.set(
+        "password",
+        PLAYER.password
+    );
+
+    params.set(
+        path,
+        String(newValue)
+    );
+
+    try{
+        const response=await fetch(
+            `/edit/${encodeURIComponent(PLAYER.username)}?${params}`,
+            {
+                method:"GET",
+                cache:"no-store"
+            }
+        );
+
+        let result={};
+
+        try{
+            result=await response.json();
+        }catch{}
+
+        if(
+            !response.ok||
+            result.success===false
+        ){
+            console.error(
+                "Unable to change player data:",
+                result?.error||
+                `HTTP ${response.status}`
+            );
+            return false;
+        }
+
+        if(
+            result.data&&
+            typeof result.data==="object"&&
+            !Array.isArray(result.data)
+        ){
+            PLAYER.data=result.data;
+        }else{
+            setNestedData(
+                PLAYER.data,
+                path,
+                newValue
+            );
+        }
+
+        return true;
+
+    }catch(error){
+        console.error(
+            "Unable to change player data:",
             error
         );
         return false;
@@ -448,9 +650,19 @@ function updateData(data,value){
 }
 
 
+function changeDataBy(data,amount){
+    return createDataBlock(
+        "changeDataBy",
+        {
+            data,
+            amount
+        }
+    );
+}
+
+
 function refreshPlayerData(){
     return createDataBlock(
         "loadPlayerData"
     );
 }
-

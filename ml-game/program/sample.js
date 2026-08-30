@@ -63,6 +63,10 @@ moveToEdge("Player1", "left", 30, "top", 30); // Moves to a flex coordinate, alw
 
 moveTo("Player1", 0, 0); // Moves a sprite to coordinate. Parameter: sprite_name, x, y
 
+moveBy("Player1", 3, 3); // Moves a sprite by the x and y value.
+
+isMobile(); // Returns if view is mobile, then true, else false.
+
 moveToSprite("Player1", "Enemy1"); // Moves first sprite to second sprite immediatly.
 
 facing("Player1", "left"); // Changes and flips sprite facing direction. Left, right, up, and down.
@@ -86,6 +90,8 @@ div(10, 2); // example, to get 5
 mod(5, 2); // example, to get 1, remainder
 round(0.6); // example, to get 1, round
 abs(-3); // example, to get 3, absolute value
+sin(30); 
+cos(30); 
 randomNum(1, 10); // to get a random number between 1 and 10
 
 // These are boolean conditions which can compare values. Can support variables as well.
@@ -123,6 +129,8 @@ makeSpriteVar("Player1", "health"); // Set private variables to sprites.
 setSpriteVar("Player1", "health", 1);
 changeSpriteVarBy("Player1", "health", 3); 
 getSpriteVar("Player1", "health"); 
+
+deleteVar("var1")/ // Deletes a variable.
 
 
 // <----- Sensing Blocks ----->
@@ -238,3 +246,20 @@ setVolume("Sound", 100); // Sets the sound's volume, where 100 is the sound's re
 changeVolume("Sound", 1); // Changes sound's volume by an amount, either positive or negative.
 
 volumeOfSound("Sound"); // Returns the volume of a particular sound.
+
+
+
+
+
+// Others
+
+// <----- Data Blocks ----->
+
+getUsername(); // Returns signed in username.
+
+getLoggedIn(); // Returns whether a user is signed in.
+
+getData("silver_coin"); // Gets value in dictionary.
+
+updateData("silver_coin", 100); // Updates value in dictionary.
+

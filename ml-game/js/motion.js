@@ -1,3 +1,4 @@
+
 // Motion Blocks
 
 registerBlock("moveTo",async block=>{
@@ -14,6 +15,7 @@ registerBlock("moveTo",async block=>{
     sprite.y=y;
 });
 
+
 registerBlock("move",async block=>{
     const sprite=ENGINE.sprites[
         resolveValue(block.name)
@@ -26,15 +28,45 @@ registerBlock("move",async block=>{
     sprite.y+=Number(resolveValue(block.y))||0;
 });
 
+
+function setupEdgeLock(
+    sprite,
+    horizontalEdge,
+    horizontalDistance,
+    verticalEdge,
+    verticalDistance
+){
+    if(!sprite)return;
+
+    horizontalEdge=String(horizontalEdge??"").toLowerCase();
+    verticalEdge=String(verticalEdge??"").toLowerCase();
+
+    sprite.edgeLock={
+        horizontal:horizontalEdge,
+        horizontalDistance:Math.max(
+            0,
+            Number(horizontalDistance)||0
+        ),
+        vertical:verticalEdge,
+        verticalDistance:Math.max(
+            0,
+            Number(verticalDistance)||0
+        )
+    };
+
+    updateEdgeSprite(sprite);
+}
+
+
 registerBlock("moveToEdge",async block=>{
     const name=resolveValue(block.name);
 
     const horizontalEdge=String(
-        resolveValue(block.horizontalEdge)
+        resolveValue(block.horizontalEdge)??""
     ).toLowerCase();
 
     const verticalEdge=String(
-        resolveValue(block.verticalEdge)
+        resolveValue(block.verticalEdge)??""
     ).toLowerCase();
 
     const x=Math.max(
@@ -51,16 +83,17 @@ registerBlock("moveToEdge",async block=>{
 
     if(!sprite)return;
 
-    sprite.edgeLock={
-        horizontal:horizontalEdge,
-        horizontalDistance:x,
-        vertical:verticalEdge,
-        verticalDistance:y
-    };
-
-    updateEdgeSprite(sprite);
+    setupEdgeLock(
+        sprite,
+        horizontalEdge,
+        x,
+        verticalEdge,
+        y
+    );
 });
 
+
+/* REPORTERS */
 
 registerReporter("spriteX",value=>{
     const sprite=ENGINE.sprites[
@@ -70,6 +103,7 @@ registerReporter("spriteX",value=>{
     return sprite?.x??0;
 });
 
+
 registerReporter("spriteY",value=>{
     const sprite=ENGINE.sprites[
         resolveValue(value.name)
@@ -78,12 +112,18 @@ registerReporter("spriteY",value=>{
     return sprite?.y??0;
 });
 
+
 registerReporter("spriteDirection",value=>{
     const sprite=ENGINE.sprites[
         resolveValue(value.name)
     ];
 
     return sprite?.rotation??0;
+});
+
+
+registerReporter("isMobile",()=>{
+    return ENGINE.mobile===true;
 });
 
 
@@ -102,6 +142,7 @@ registerBlock("moveToSprite",async block=>{
     sprite.x=target.x;
     sprite.y=target.y;
 });
+
 
 registerBlock("facing",async block=>{
     const sprite=ENGINE.sprites[
@@ -124,6 +165,7 @@ registerBlock("facing",async block=>{
     }
 });
 
+
 registerBlock("direction",async block=>{
     const sprite=ENGINE.sprites[
         resolveValue(block.name)
@@ -141,6 +183,7 @@ registerBlock("direction",async block=>{
     sprite.rotation=
         ((value%360)+360)%360;
 });
+
 
 registerBlock("turn",async block=>{
     const sprite=ENGINE.sprites[
@@ -385,6 +428,13 @@ function spriteDirection(name){
     return createReporter(
         "spriteDirection",
         {name}
+    );
+}
+
+
+function isMobile(){
+    return createReporter(
+        "isMobile"
     );
 }
 

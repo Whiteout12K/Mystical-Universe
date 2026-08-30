@@ -6,25 +6,51 @@ function createControlBlock(type,data={}){
     return block;
 }
 
+
 function wait(time){
-    return createControlBlock("wait",{time});
+    return createControlBlock(
+        "wait",
+        {time}
+    );
 }
+
 
 function waitUntil(condition){
-    return createControlBlock("waitUntil",{condition});
+    return createControlBlock(
+        "waitUntil",
+        {condition}
+    );
 }
+
 
 function repeat(times,...blocks){
-    const block=createControlBlock("repeat",{times,blocks});
+    const block=createControlBlock(
+        "repeat",
+        {
+            times,
+            blocks
+        }
+    );
+
     ENGINE.absorbBlocks(blocks);
+
     return block;
 }
 
+
 function forever(...blocks){
-    const block=createControlBlock("forever",{blocks});
+    const block=createControlBlock(
+        "forever",
+        {
+            blocks
+        }
+    );
+
     ENGINE.absorbBlocks(blocks);
+
     return block;
 }
+
 
 function ifBlock(condition,...blocks){
     const split=blocks.indexOf("else");
@@ -55,6 +81,7 @@ function ifBlock(condition,...blocks){
     return block;
 }
 
+
 function repeatUntil(condition,...blocks){
     const block=createControlBlock(
         "repeatUntil",
@@ -65,8 +92,10 @@ function repeatUntil(condition,...blocks){
     );
 
     ENGINE.absorbBlocks(blocks);
+
     return block;
 }
+
 
 function whileBlock(condition,...blocks){
     if(typeof condition==="string"){
@@ -87,33 +116,50 @@ function whileBlock(condition,...blocks){
     );
 
     ENGINE.absorbBlocks(blocks);
+
     return block;
 }
 
+
 function endScript(){
-    return createControlBlock("endScript");
+    return createControlBlock(
+        "endScript"
+    );
 }
+
 
 
 // Event Blocks
 
 function broadcast(message){
-    const block=createControlBlock(
+    return createControlBlock(
         "broadcast",
-        {message}
+        {
+            message
+        }
     );
-
-    return block;
 }
+
 
 function broadcastAndWait(message){
     return createControlBlock(
         "broadcastWait",
-        {message}
+        {
+            message
+        }
     );
 }
 
+
 function whenBroadcast(message,...blocks){
+    const block=createBlock(
+        "broadcastScript",
+        {
+            message,
+            blocks
+        }
+    );
+
     const value=resolveValue(message);
 
     const script=registerBroadcast(
@@ -121,18 +167,11 @@ function whenBroadcast(message,...blocks){
         blocks
     );
 
-    const block=createBlock(
-        "broadcastScript",
-        {
-            message,
-            blocks,
-            script
-        }
-    );
+    block.script=script;
 
     ENGINE.absorbBlocks(blocks);
-
     ENGINE.removeTopLevelBlock(block);
 
     return block;
 }
+
