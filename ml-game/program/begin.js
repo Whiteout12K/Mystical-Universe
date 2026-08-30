@@ -27,7 +27,6 @@ whenBroadcast("Main Menu",
 );
 
 whenBroadcast("Main Menu",
-    wait(0.5),
     makeVar("Counter"), setVar("Counter", 0),
     repeat(10,
         changeVarBy("Counter", 1),
@@ -41,7 +40,6 @@ whenBroadcast("Main Menu",
     ),
     moveBy(join("Line", getVar("Counter")), mult(getVar("Counter"), 1), mult(getVar("Counter"), 1)),
 );
-
 
 
 whenBroadcast("MM-Line",

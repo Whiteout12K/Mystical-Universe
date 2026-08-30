@@ -1,523 +1,206 @@
-// Motion Blocks
+/* MOTION BLOCKS */
+
+const motionSprite=n=>ENGINE.sprites[resolveValue(n)];
+const motionNum=(v,d=0)=>Number.isFinite(v=Number(resolveValue(v)))?v:d;
+const normDeg=v=>((v%360)+360)%360;
+const recordMotionBlock=(type,data)=>ENGINE.recordBlock(createBlock(type,data));
 
 registerBlock("moveTo",async block=>{
-    const name=resolveValue(block.name);
-    const x=Number(resolveValue(block.x))||0;
-    const y=Number(resolveValue(block.y))||0;
-
-    const sprite=ENGINE.sprites[name];
-
-    if(!sprite)return;
-
-    sprite.edgeLock=null;
-    sprite.x=x;
-    sprite.y=y;
+    const s=motionSprite(block.name);
+    if(!s)return;
+    s.edgeLock=null;
+    s.x=motionNum(block.x);
+    s.y=motionNum(block.y);
 });
-
 
 registerBlock("move",async block=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
-
-    if(!sprite)return;
-
-    sprite.edgeLock=null;
-    sprite.x+=Number(resolveValue(block.x))||0;
-    sprite.y+=Number(resolveValue(block.y))||0;
+    const s=motionSprite(block.name);
+    if(!s)return;
+    s.edgeLock=null;
+    s.x+=motionNum(block.x);
+    s.y+=motionNum(block.y);
 });
 
+function setupEdgeLock(s,horizontal,hDistance,vertical,vDistance){
+    if(!s)return;
 
-function setupEdgeLock(
-    sprite,
-    horizontalEdge,
-    horizontalDistance,
-    verticalEdge,
-    verticalDistance
-){
-    if(!sprite)return;
+    horizontal=String(horizontal??"").toLowerCase();
+    vertical=String(vertical??"").toLowerCase();
 
-    horizontalEdge=String(
-        horizontalEdge??""
-    ).toLowerCase();
-
-    verticalEdge=String(
-        verticalEdge??""
-    ).toLowerCase();
-
-    sprite.edgeLock={
-        horizontal:horizontalEdge,
-        horizontalDistance:Math.max(
-            0,
-            Number(horizontalDistance)||0
-        ),
-        vertical:verticalEdge,
-        verticalDistance:Math.max(
-            0,
-            Number(verticalDistance)||0
-        )
+    s.edgeLock={
+        horizontal,
+        horizontalDistance:Math.max(0,Number(hDistance)||0),
+        vertical,
+        verticalDistance:Math.max(0,Number(vDistance)||0)
     };
 
-    /*
-     * A vertical-only "top" edge is centered
-     * on the world's X=0 position.
-     */
-    if(
-        verticalEdge==="top"&&
-        !horizontalEdge
-    ){
-        sprite.x=0;
-    }
-
-    updateEdgeSprite(sprite);
+    if(vertical==="top"&&!horizontal)s.x=0;
+    updateEdgeSprite(s);
 }
 
-
 registerBlock("moveToEdge",async block=>{
-    const name=resolveValue(block.name);
-
-    const horizontalEdge=String(
-        resolveValue(block.horizontalEdge)??""
-    ).toLowerCase();
-
-    const verticalEdge=String(
-        resolveValue(block.verticalEdge)??""
-    ).toLowerCase();
-
-    const x=Math.max(
-        0,
-        Number(resolveValue(block.x))||0
-    );
-
-    const y=Math.max(
-        0,
-        Number(resolveValue(block.y))||0
-    );
-
-    const sprite=ENGINE.sprites[name];
-
-    if(!sprite)return;
+    const s=motionSprite(block.name);
+    if(!s)return;
 
     setupEdgeLock(
-        sprite,
-        horizontalEdge,
-        x,
-        verticalEdge,
-        y
+        s,
+        String(resolveValue(block.horizontalEdge)??"").toLowerCase(),
+        Math.max(0,motionNum(block.x)),
+        String(resolveValue(block.verticalEdge)??"").toLowerCase(),
+        Math.max(0,motionNum(block.y))
     );
 });
 
 
 /* REPORTERS */
 
-registerReporter("spriteX",value=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(value.name)
-    ];
-
-    return sprite?.x??0;
-});
-
-
-registerReporter("spriteY",value=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(value.name)
-    ];
-
-    return sprite?.y??0;
-});
-
-
-registerReporter("spriteDirection",value=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(value.name)
-    ];
-
-    return sprite?.rotation??0;
-});
-
-
-registerReporter("isMobile",()=>{
-    return ENGINE.mobile===true;
-});
+registerReporter("spriteX",v=>motionSprite(v.name)?.x??0);
+registerReporter("spriteY",v=>motionSprite(v.name)?.y??0);
+registerReporter("spriteDirection",v=>motionSprite(v.name)?.rotation??0);
+registerReporter("isMobile",()=>ENGINE.mobile===true);
 
 
 registerBlock("moveToSprite",async block=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
-
-    const target=ENGINE.sprites[
-        resolveValue(block.target)
-    ];
-
-    if(!sprite||!target)return;
-
-    sprite.edgeLock=null;
-    sprite.x=target.x;
-    sprite.y=target.y;
+    const s=motionSprite(block.name),t=motionSprite(block.target);
+    if(!s||!t)return;
+    s.edgeLock=null;
+    s.x=t.x;
+    s.y=t.y;
 });
-
 
 registerBlock("facing",async block=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
+    const s=motionSprite(block.name);
+    if(!s)return;
 
-    if(!sprite)return;
+    s.flipX=s.flipY=1;
 
-    const facing=String(
-        resolveValue(block.facing)
-    ).toLowerCase();
-
-    sprite.flipX=1;
-    sprite.flipY=1;
-
-    if(facing==="left"){
-        sprite.flipX=-1;
-    }else if(facing==="down"){
-        sprite.flipY=-1;
+    switch(String(resolveValue(block.facing)).toLowerCase()){
+        case"left":s.flipX=-1;break;
+        case"down":s.flipY=-1;break;
     }
 });
-
 
 registerBlock("direction",async block=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
-
-    if(!sprite)return;
-
-    let value=Number(
-        resolveValue(block.direction)
-    );
-
-    if(!Number.isFinite(value))
-        value=0;
-
-    sprite.rotation=
-        ((value%360)+360)%360;
+    const s=motionSprite(block.name);
+    if(s)s.rotation=normDeg(motionNum(block.direction));
 });
-
 
 registerBlock("turn",async block=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
-
-    if(!sprite)return;
-
-    let amount=Number(
-        resolveValue(block.amount)
-    );
-
-    if(!Number.isFinite(amount))
-        amount=0;
-
-    sprite.rotation=
-        ((sprite.rotation+amount)%360+360)%360;
+    const s=motionSprite(block.name);
+    if(s)s.rotation=normDeg(s.rotation+motionNum(block.amount));
 });
 
+
+/* GLIDE */
+
+async function glideSprite(s,x,y,time,context){
+    if(!s)return;
+
+    x=Number(resolveValue(x));
+    y=Number(resolveValue(y));
+    time=Number(resolveValue(time));
+
+    if(!Number.isFinite(x)||!Number.isFinite(y))return;
+    if(!Number.isFinite(time)||time<0)time=0;
+
+    s.edgeLock=null;
+
+    if(!time){
+        s.x=x;
+        s.y=y;
+        return;
+    }
+
+    const sx=s.x,sy=s.y,start=performance.now(),duration=time*1000;
+
+    await new Promise(resolve=>{
+        const animate=now=>{
+            if(!ENGINE.running||context.ended)return resolve();
+
+            const p=Math.min(1,(now-start)/duration);
+            s.x=sx+(x-sx)*p;
+            s.y=sy+(y-sy)*p;
+
+            if(p>=1)return resolve();
+            requestAnimationFrame(animate);
+        };
+
+        requestAnimationFrame(animate);
+    });
+}
 
 registerBlock("glideTo",async(block,context)=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
-
-    if(!sprite)return;
-
-    const targetX=Number(
-        resolveValue(block.x)
-    );
-
-    const targetY=Number(
-        resolveValue(block.y)
-    );
-
-    let time=Number(
-        resolveValue(block.time)
-    );
-
-    if(
-        !Number.isFinite(targetX)||
-        !Number.isFinite(targetY)
-    )
-        return;
-
-    if(!Number.isFinite(time)||time<0)
-        time=0;
-
-    sprite.edgeLock=null;
-
-    if(time===0){
-        sprite.x=targetX;
-        sprite.y=targetY;
-        return;
-    }
-
-    const startX=sprite.x;
-    const startY=sprite.y;
-    const startTime=performance.now();
-    const duration=time*1000;
-
-    await new Promise(resolve=>{
-        function animate(now){
-            if(
-                !ENGINE.running||
-                context.ended
-            ){
-                resolve();
-                return;
-            }
-
-            const progress=Math.min(
-                1,
-                (now-startTime)/duration
-            );
-
-            sprite.x=
-                startX+
-                (targetX-startX)*progress;
-
-            sprite.y=
-                startY+
-                (targetY-startY)*progress;
-
-            if(progress>=1){
-                sprite.x=targetX;
-                sprite.y=targetY;
-                resolve();
-                return;
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        requestAnimationFrame(animate);
-    });
+    const s=motionSprite(block.name);
+    if(s)await glideSprite(s,block.x,block.y,block.time,context);
 });
-
 
 registerBlock("glideToSprite",async(block,context)=>{
-    const sprite=ENGINE.sprites[
-        resolveValue(block.name)
-    ];
+    const s=motionSprite(block.name),t=motionSprite(block.target);
+    if(!s||!t)return;
 
-    const target=ENGINE.sprites[
-        resolveValue(block.target)
-    ];
-
-    if(!sprite||!target)return;
-
-    let time=Number(
-        resolveValue(block.time)
+    await glideSprite(
+        s,
+        t.x,
+        t.y,
+        block.time,
+        context
     );
-
-    if(!Number.isFinite(time)||time<0)
-        time=0;
-
-    sprite.edgeLock=null;
-
-    const targetX=target.x;
-    const targetY=target.y;
-
-    if(time===0){
-        sprite.x=targetX;
-        sprite.y=targetY;
-        return;
-    }
-
-    const startX=sprite.x;
-    const startY=sprite.y;
-    const startTime=performance.now();
-    const duration=time*1000;
-
-    await new Promise(resolve=>{
-        function animate(now){
-            if(
-                !ENGINE.running||
-                context.ended
-            ){
-                resolve();
-                return;
-            }
-
-            const progress=Math.min(
-                1,
-                (now-startTime)/duration
-            );
-
-            sprite.x=
-                startX+
-                (targetX-startX)*progress;
-
-            sprite.y=
-                startY+
-                (targetY-startY)*progress;
-
-            if(progress>=1){
-                sprite.x=targetX;
-                sprite.y=targetY;
-                resolve();
-                return;
-            }
-
-            requestAnimationFrame(animate);
-        }
-
-        requestAnimationFrame(animate);
-    });
 });
 
 
-function recordMotionBlock(type,data){
-    const block=createBlock(type,data);
-
-    ENGINE.recordBlock(block);
-
-    return block;
-}
-
+/* MOTION API */
 
 function moveTo(name,x,y){
-    return recordMotionBlock(
-        "moveTo",
-        {
-            name,
-            x,
-            y
-        }
-    );
+    return recordMotionBlock("moveTo",{name,x,y});
 }
-
 
 function moveBy(name,x,y){
-    return recordMotionBlock(
-        "move",
-        {
-            name,
-            x,
-            y
-        }
-    );
+    return recordMotionBlock("move",{name,x,y});
 }
 
-
-function moveToEdge(
-    name,
-    horizontalEdge,
-    x,
-    verticalEdge,
-    y
-){
+function moveToEdge(name,horizontalEdge,x,verticalEdge,y){
     return recordMotionBlock(
         "moveToEdge",
-        {
-            name,
-            horizontalEdge,
-            x,
-            verticalEdge,
-            y
-        }
+        {name,horizontalEdge,x,verticalEdge,y}
     );
 }
-
 
 function spriteX(name){
-    return createReporter(
-        "spriteX",
-        {name}
-    );
+    return createReporter("spriteX",{name});
 }
-
 
 function spriteY(name){
-    return createReporter(
-        "spriteY",
-        {name}
-    );
+    return createReporter("spriteY",{name});
 }
-
 
 function spriteDirection(name){
-    return createReporter(
-        "spriteDirection",
-        {name}
-    );
+    return createReporter("spriteDirection",{name});
 }
-
 
 function isMobile(){
-    return createReporter(
-        "isMobile"
-    );
+    return createReporter("isMobile");
 }
-
 
 function moveToSprite(name,target){
-    return recordMotionBlock(
-        "moveToSprite",
-        {
-            name,
-            target
-        }
-    );
+    return recordMotionBlock("moveToSprite",{name,target});
 }
-
 
 function facing(name,value){
-    return recordMotionBlock(
-        "facing",
-        {
-            name,
-            facing:value
-        }
-    );
+    return recordMotionBlock("facing",{name,facing:value});
 }
-
 
 function direction(name,value){
-    return recordMotionBlock(
-        "direction",
-        {
-            name,
-            direction:value
-        }
-    );
+    return recordMotionBlock("direction",{name,direction:value});
 }
-
 
 function turn(name,amount){
-    return recordMotionBlock(
-        "turn",
-        {
-            name,
-            amount
-        }
-    );
+    return recordMotionBlock("turn",{name,amount});
 }
-
 
 function glideTo(name,x,y,time){
-    return recordMotionBlock(
-        "glideTo",
-        {
-            name,
-            x,
-            y,
-            time
-        }
-    );
+    return recordMotionBlock("glideTo",{name,x,y,time});
 }
 
-
 function glideToSprite(name,target,time){
-    return recordMotionBlock(
-        "glideToSprite",
-        {
-            name,
-            target,
-            time
-        }
-    );
+    return recordMotionBlock("glideToSprite",{name,target,time});
 }

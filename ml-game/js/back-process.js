@@ -12,233 +12,139 @@ const ENGINE={
     resizeCanvas:null,resizeFrame:null,cloneId:0
 };
 
-const canvas=document.getElementById("game-canvas");
-const ctx=canvas.getContext("2d",{alpha:false});
-
+const canvas=document.getElementById("game-canvas"),ctx=canvas.getContext("2d",{alpha:false});
 ctx.imageSmoothingEnabled=true;
 ctx.imageSmoothingQuality="high";
 
-document.documentElement.style.touchAction=
-document.body.style.touchAction=
-canvas.style.touchAction="none";
+document.documentElement.style.touchAction=document.body.style.touchAction=canvas.style.touchAction="none";
+document.documentElement.style.userSelect=document.body.style.userSelect=canvas.style.userSelect="none";
 
-document.documentElement.style.userSelect=
-document.body.style.userSelect=
-canvas.style.userSelect="none";
+const prevent=e=>e.preventDefault();
+["gesturestart","gesturechange","gestureend"].forEach(e=>
+    document.addEventListener(e,prevent,{passive:false})
+);
+document.addEventListener("wheel",e=>{if(e.ctrlKey)prevent(e)},{passive:false});
+document.addEventListener("touchmove",e=>{if(e.touches.length>1)prevent(e)},{passive:false});
 
-["gesturestart","gesturechange","gestureend"].forEach(event=>{
-    document.addEventListener(event,e=>e.preventDefault(),{passive:false});
-});
-
-document.addEventListener("wheel",e=>{
-    if(e.ctrlKey)e.preventDefault();
-},{passive:false});
-
-document.addEventListener("touchmove",e=>{
-    if(e.touches.length>1)e.preventDefault();
-},{passive:false});
-
-
-function clamp(value,min,max){
-    return Math.max(min,Math.min(max,value));
-}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+const frame=()=>delay(0);
 
 
 /* VALUES / BLOCKS */
 
-function resolveValue(value,context=null){
-    if(value===null||value===undefined)
-        return"";
+function resolveValue(v,c=null){
+    if(v==null)return"";
+    if(typeof v!=="object")return v;
 
-    if(typeof value==="object"){
-        if(value.type==="variable")
-            return ENGINE.variables[
-                String(resolveValue(value.name,context))
-            ]??"";
+    switch(v.type){
+        case"variable":
+            return ENGINE.variables[String(resolveValue(v.name,c))]??"";
 
-        if(value.type==="privateVariable"){
-            if(!context)return"";
+        case"privateVariable":
+            return c?.privateVariables?.[String(resolveValue(v.name,c))]??"";
 
-            const name=String(
-                resolveValue(value.name,context)
-            );
-
-            return context.privateVariables?.[name]??"";
+        case"spriteVariable":{
+            const s=ENGINE.sprites[resolveSpriteName(v.spriteName,c)];
+            return s?.variables?.[String(resolveValue(v.varName,c))]??"";
         }
 
-        if(value.type==="spriteVariable"){
-            const sprite=ENGINE.sprites[
-                resolveSpriteName(
-                    value.spriteName,
-                    context
-                )
-            ];
-
-            const name=String(
-                resolveValue(value.varName,context)
-            );
-
-            return sprite?.variables?.[name]??"";
+        case"cloneVariable":{
+            const clone=c?.clone;
+            return clone?.isClone
+                ?clone.variables?.[String(resolveValue(v.varName,c))]??""
+                :"";
         }
 
-        if(value.type==="cloneVariable"){
-            const clone=context?.clone;
+        case"join":
+            return(v.values||[]).map(x=>resolveValue(x,c)).join("");
 
-            if(!clone||!clone.isClone)
-                return"";
+        case"value":
+            return resolveValue(v.value,c);
 
-            const name=String(
-                resolveValue(value.varName,context)
-            );
-
-            return clone.variables?.[name]??"";
-        }
-
-        if(value.type==="join")
-            return(value.values||[])
-                .map(item=>resolveValue(item,context))
-                .join("");
-
-        if(value.type==="value")
-            return resolveValue(
-                value.value,
-                context
-            );
-
-        if(value.type==="operator"){
-            const block=ENGINE.blocks[value.operator];
-
-            if(block?.reporter)
-                return block.reporter(
-                    value,
-                    context
-                );
-
-            if(typeof value.evaluate==="function")
-                return value.evaluate(context);
-
-            return"";
+        case"operator":{
+            const b=ENGINE.blocks[v.operator];
+            return b?.reporter
+                ?b.reporter(v,c)
+                :typeof v.evaluate==="function"
+                    ?v.evaluate(c)
+                    :"";
         }
     }
 
-    return value;
+    return v;
 }
 
-
-function resolveSpriteName(name,context=null){
-    const value=resolveValue(name,context);
-
-    if(
-        String(value).trim().toLowerCase()==="self"&&
-        context?.clone?.isClone
-    )
-        return context.clone.name;
-
-    return value;
+function resolveSpriteName(name,c=null){
+    const v=resolveValue(name,c);
+    return c?.clone?.isClone&&String(v).trim().toLowerCase()==="self"
+        ?c.clone.name:v;
 }
 
-
-function getContextSprite(name,context=null){
-    const resolved=resolveSpriteName(
-        name,
-        context
-    );
-
-    return ENGINE.sprites[resolved];
+function getContextSprite(name,c=null){
+    return ENGINE.sprites[resolveSpriteName(name,c)];
 }
-
 
 function registerBlock(type,handler,options={}){
-    if(!type)return;
-
-    ENGINE.blocks[type]={
+    if(type)ENGINE.blocks[type]={
         execute:typeof handler==="function"?handler:null,
         reporter:typeof options.reporter==="function"?options.reporter:null
     };
 }
 
-
-function registerReporter(type,evaluate){
-    registerBlock(type,null,{reporter:evaluate});
-}
-
+const registerReporter=(type,fn)=>registerBlock(type,null,{reporter:fn});
 
 function createBlock(type,data={}){
-    return{
-        type,
-        _id:++ENGINE._blockId,
-        _handled:false,
-        ...data
-    };
+    return{type,_id:++ENGINE._blockId,_handled:false,...data};
 }
 
-
-function createReporter(type,data={}){
-    return{
-        type:"operator",
-        operator:type,
-        ...data
-    };
-}
+const createReporter=(type,data={})=>({type:"operator",operator:type,...data});
 
 
 /* PROGRAM */
 
-ENGINE.recordBlock=block=>{
-    if(block&&typeof block==="object"&&!ENGINE.program.includes(block))
-        ENGINE.program.push(block);
-
-    return block;
+ENGINE.recordBlock=b=>{
+    if(b&&typeof b==="object"&&!ENGINE.program.includes(b))ENGINE.program.push(b);
+    return b;
 };
 
-ENGINE.removeTopLevelBlock=block=>{
-    const index=ENGINE.program.indexOf(block);
-
-    if(index!==-1)
-        ENGINE.program.splice(index,1);
+ENGINE.removeTopLevelBlock=b=>{
+    const i=ENGINE.program.indexOf(b);
+    if(i>=0)ENGINE.program.splice(i,1);
 };
 
-ENGINE.absorbBlocks=blocks=>{
-    if(Array.isArray(blocks))
-        blocks.forEach(ENGINE.absorbBlock);
+ENGINE.absorbBlocks=bs=>{
+    if(Array.isArray(bs))bs.forEach(ENGINE.absorbBlock);
 };
 
-ENGINE.absorbBlock=block=>{
-    if(!block||typeof block!=="object")return;
-
-    ENGINE.removeTopLevelBlock(block);
-    absorbNested(block);
+ENGINE.absorbBlock=b=>{
+    if(!b||typeof b!=="object")return;
+    ENGINE.removeTopLevelBlock(b);
+    absorbNested(b);
 };
 
-function absorbNested(block){
-    if(!block||typeof block!=="object")return;
-
-    Object.values(block).forEach(value=>{
-        if(Array.isArray(value)){
-            value.forEach(child=>{
-                if(child?.type){
-                    ENGINE.removeTopLevelBlock(child);
-                    absorbNested(child);
+function absorbNested(b){
+    if(!b||typeof b!=="object")return;
+    for(const v of Object.values(b))
+        if(Array.isArray(v))
+            for(const x of v)
+                if(x?.type){
+                    ENGINE.removeTopLevelBlock(x);
+                    absorbNested(x);
                 }
-            });
-        }else if(value?.type){
-            ENGINE.removeTopLevelBlock(value);
-            absorbNested(value);
+        else if(v?.type){
+            ENGINE.removeTopLevelBlock(v);
+            absorbNested(v);
         }
-    });
 }
 
-function markBlockTreeHandled(block){
-    if(!block||typeof block!=="object")return;
-
-    block._handled=true;
-
-    Object.values(block).forEach(value=>{
-        if(Array.isArray(value))
-            value.forEach(markBlockTreeHandled);
-        else if(value?.type)
-            markBlockTreeHandled(value);
-    });
+function markBlockTreeHandled(b){
+    if(!b||typeof b!=="object")return;
+    b._handled=true;
+    for(const v of Object.values(b))
+        Array.isArray(v)
+            ?v.forEach(markBlockTreeHandled)
+            :v?.type&&markBlockTreeHandled(v);
 }
 
 
@@ -247,240 +153,146 @@ function markBlockTreeHandled(block){
 function initAudio(){
     if(ENGINE.audioContext)return ENGINE.audioContext;
 
-    const AudioContextClass=
-        window.AudioContext||window.webkitAudioContext;
-
-    if(!AudioContextClass)return null;
+    const C=window.AudioContext||window.webkitAudioContext;
+    if(!C)return null;
 
     try{
-        ENGINE.audioContext=new AudioContextClass();
-        ENGINE.audioUnlocked=
-            ENGINE.audioContext.state==="running";
-
-        ENGINE.masterGain=
-            ENGINE.audioContext.createGain();
-
-        ENGINE.masterGain.gain.value=1;
-        ENGINE.masterGain.connect(
-            ENGINE.audioContext.destination
-        );
-
-        return ENGINE.audioContext;
-    }catch(error){
-        console.warn("Could not initialize audio:",error);
+        const ac=ENGINE.audioContext=new C();
+        ENGINE.audioUnlocked=ac.state==="running";
+        ENGINE.masterGain=ac.createGain();
+        ENGINE.masterGain.connect(ac.destination);
+        return ac;
+    }catch(e){
+        console.warn("Could not initialize audio:",e);
         return null;
     }
 }
 
 async function unlockAudio(){
-    const audioContext=initAudio();
-
-    if(!audioContext)return;
+    const ac=initAudio();
+    if(!ac)return;
 
     try{
-        if(audioContext.state!=="running")
-            await audioContext.resume();
-
-        ENGINE.audioUnlocked=
-            audioContext.state==="running";
-
-        if(ENGINE.audioUnlocked)
-            flushPendingSounds();
-    }catch(error){
-        console.warn("Could not unlock audio:",error);
+        if(ac.state!=="running")await ac.resume();
+        ENGINE.audioUnlocked=ac.state==="running";
+        if(ENGINE.audioUnlocked)flushPendingSounds();
+    }catch(e){
+        console.warn("Could not unlock audio:",e);
     }
 }
 
 function flushPendingSounds(){
-    if(!ENGINE.audioPending.length)return;
-
-    const pending=ENGINE.audioPending.splice(0);
-
-    for(const item of pending)
-        playSoundInternal(item.sound);
+    const p=ENGINE.audioPending.splice(0);
+    p.forEach(x=>playSoundInternal(x.sound));
 }
 
-["pointerdown","touchstart","mousedown","keydown"].forEach(event=>{
-    document.addEventListener(event,unlockAudio,{passive:true});
-});
+["pointerdown","touchstart","mousedown","keydown"].forEach(e=>
+    document.addEventListener(e,unlockAudio,{passive:true})
+);
 
 async function loadSoundBuffer(sound){
-    const audioContext=ENGINE.audioContext;
-
-    if(!audioContext||!sound?.path)
-        return null;
-
-    if(sound.buffer&&sound.bufferPath===sound.path)
-        return sound.buffer;
+    const ac=ENGINE.audioContext;
+    if(!ac||!sound?.path)return null;
+    if(sound.buffer&&sound.bufferPath===sound.path)return sound.buffer;
 
     try{
-        const response=await fetch(sound.path);
-
-        if(!response.ok)
-            throw new Error(`HTTP ${response.status}`);
-
-        const data=await response.arrayBuffer();
-        const buffer=await audioContext.decodeAudioData(data);
-
-        sound.buffer=buffer;
+        const r=await fetch(sound.path);
+        if(!r.ok)throw Error(`HTTP ${r.status}`);
+        sound.buffer=await ac.decodeAudioData(await r.arrayBuffer());
         sound.bufferPath=sound.path;
-
-        return buffer;
-    }catch(error){
-        console.warn(
-            "Could not load sound:",
-            sound.name,
-            sound.path,
-            error
-        );
-
+        return sound.buffer;
+    }catch(e){
+        console.warn("Could not load sound:",sound.name,sound.path,e);
         return null;
     }
 }
 
 function removeSoundInstance(sound,instance){
-    const index=sound.instances.indexOf(instance);
+    const i=sound.instances.indexOf(instance);
+    if(i>=0)sound.instances.splice(i,1);
+}
 
-    if(index!==-1)
-        sound.instances.splice(index,1);
+function disconnectSound(instance){
+    try{
+        instance.source.disconnect();
+        instance.gain.disconnect();
+        instance.panner.disconnect();
+    }catch{}
 }
 
 async function playSoundInternal(sound){
-    const audioContext=initAudio();
+    const ac=initAudio();
+    if(!ac)return;
 
-    if(!audioContext)return;
-
-    if(audioContext.state!=="running"){
+    if(ac.state!=="running"){
         ENGINE.audioPending.push({sound});
         return;
     }
 
     const buffer=await loadSoundBuffer(sound);
+    if(!buffer||!ENGINE.running)return;
 
-    if(!buffer||!ENGINE.running)
-        return;
-
-    const source=audioContext.createBufferSource();
-    const gain=audioContext.createGain();
-    const panner=audioContext.createStereoPanner();
+    const source=ac.createBufferSource(),gain=ac.createGain(),panner=ac.createStereoPanner();
 
     source.buffer=buffer;
-
-    source.detune.value=
-        clamp(Number(sound.pitch)||0,-100,100)*12;
-
-    source.playbackRate.value=
-        Math.max(0,Number(sound.speed)||100)/100;
-
-    gain.gain.value=
-        clamp(Number(sound.volume)||0,0,100)/100;
-
-    panner.pan.value=
-        clamp(Number(sound.pan)||0,-100,100)/100;
+    source.detune.value=clamp(Number(sound.pitch)||0,-100,100)*12;
+    source.playbackRate.value=Math.max(0,Number(sound.speed)||100)/100;
+    gain.gain.value=clamp(Number(sound.volume)||0,0,100)/100;
+    panner.pan.value=clamp(Number(sound.pan)||0,-100,100)/100;
 
     source.connect(gain);
     gain.connect(panner);
     panner.connect(ENGINE.masterGain);
 
-    const instance={
-        source,gain,panner,stopped:false
-    };
-
+    const instance={source,gain,panner,stopped:false};
     sound.instances.push(instance);
 
     const cleanup=()=>{
         if(instance.stopped)return;
-
         instance.stopped=true;
         removeSoundInstance(sound,instance);
-
-        try{
-            source.disconnect();
-            gain.disconnect();
-            panner.disconnect();
-        }catch(error){}
+        disconnectSound(instance);
     };
 
     source.onended=cleanup;
 
     try{
-        source.start(0);
-    }catch(error){
+        source.start();
+    }catch(e){
         cleanup();
-
-        console.warn(
-            "Could not play sound:",
-            sound.name,
-            error
-        );
+        console.warn("Could not play sound:",sound.name,e);
     }
 }
 
 function stopSoundInstance(instance){
     if(!instance||instance.stopped)return;
-
     instance.stopped=true;
-
-    try{
-        instance.source.stop(0);
-    }catch(error){}
-
-    try{
-        instance.source.disconnect();
-        instance.gain.disconnect();
-        instance.panner.disconnect();
-    }catch(error){}
+    try{instance.source.stop()}catch{}
+    disconnectSound(instance);
 }
 
 
 /* COLOR / EFFECTS */
 
 function rgbToHsl(r,g,b){
-    r/=255;
-    g/=255;
-    b/=255;
-
-    const max=Math.max(r,g,b);
-    const min=Math.min(r,g,b);
-    const l=(max+min)/2;
-
+    r/=255;g/=255;b/=255;
+    const max=Math.max(r,g,b),min=Math.min(r,g,b),l=(max+min)/2;
     if(max===min)return[0,0,l];
 
-    const d=max-min;
-    const s=l>0.5?
-        d/(2-max-min):
-        d/(max+min);
-
-    let h;
-
-    switch(max){
-        case r:h=(g-b)/d+(g<b?6:0);break;
-        case g:h=(b-r)/d+2;break;
-        default:h=(r-g)/d+4;
-    }
-
+    const d=max-min,s=l>.5?d/(2-max-min):d/(max+min);
+    let h=max===r?(g-b)/d+(g<b?6:0):max===g?(b-r)/d+2:(r-g)/d+4;
     return[h/6,s,l];
 }
 
 function hueToRgb(p,q,t){
-    if(t<0)t+=1;
-    if(t>1)t-=1;
-    if(t<1/6)return p+(q-p)*6*t;
-    if(t<1/2)return q;
-    if(t<2/3)return p+(q-p)*(2/3-t)*6;
-    return p;
+    if(t<0)t++;
+    if(t>1)t--;
+    return t<1/6?p+(q-p)*6*t:t<1/2?q:t<2/3?p+(q-p)*(2/3-t)*6:p;
 }
 
 function hslToRgb(h,s,l){
-    if(s===0)
-        return[l*255,l*255,l*255];
-
-    const q=l<0.5?
-        l*(1+s):
-        l+s-l*s;
-
-    const p=2*l-q;
-
+    if(!s)return[l*255,l*255,l*255];
+    const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;
     return[
         Math.round(hueToRgb(p,q,h+1/3)*255),
         Math.round(hueToRgb(p,q,h)*255),
@@ -488,195 +300,101 @@ function hslToRgb(h,s,l){
     ];
 }
 
-function applyImageEffects(
-    image,
-    effects,
-    cacheCanvas,
-    cacheKeyGetter,
-    cacheKeySetter,
-    key
-){
+function applyImageEffects(image,effects,cache,getKey,setKey,key){
     if(!image?.naturalWidth)return null;
 
-    const brightness=
-        clamp(Number(effects.brightness)||0,0,100);
+    const br=clamp(Number(effects.brightness)||0,0,100);
+    const color=clamp(Number(effects.color)||0,0,100);
+    const ghost=clamp(Number(effects.ghost)||0,0,100);
 
-    const color=
-        clamp(Number(effects.color)||0,0,100);
+    if(!br&&!color)return{source:image,ghost};
 
-    const ghost=
-        clamp(Number(effects.ghost)||0,0,100);
+    const w=Math.max(1,Math.ceil(image.naturalWidth));
+    const h=Math.max(1,Math.ceil(image.naturalHeight));
 
-    if(brightness===0&&color===0)
+    if(cache.width!==w||cache.height!==h){
+        cache.width=w;
+        cache.height=h;
+        setKey(null);
+    }
+
+    const cacheKey=`${key}|${w}|${h}|${br}|${color}`;
+    if(getKey()===cacheKey)return{source:cache,ghost};
+
+    const c=cache.getContext("2d",{willReadFrequently:true});
+    c.clearRect(0,0,w,h);
+    c.drawImage(image,0,0,w,h);
+
+    let img;
+
+    try{
+        img=c.getImageData(0,0,w,h);
+    }catch{
+        setKey(null);
         return{source:image,ghost};
-
-    const width=Math.max(
-        1,
-        Math.ceil(image.naturalWidth)
-    );
-
-    const height=Math.max(
-        1,
-        Math.ceil(image.naturalHeight)
-    );
-
-    if(
-        cacheCanvas.width!==width||
-        cacheCanvas.height!==height
-    ){
-        cacheCanvas.width=width;
-        cacheCanvas.height=height;
-        cacheKeySetter(null);
     }
 
-    const cacheKey=
-        `${key}|${width}|${height}|${brightness}|${color}`;
+    const d=img.data,m=1+br/100,hs=color/100;
 
-    if(cacheKeyGetter()!==cacheKey){
-        const effectCtx=
-            cacheCanvas.getContext(
-                "2d",
-                {willReadFrequently:true}
-            );
+    for(let i=0;i<d.length;i+=4){
+        if(!d[i+3])continue;
 
-        effectCtx.clearRect(0,0,width,height);
+        let r=d[i],g=d[i+1],b=d[i+2];
 
-        effectCtx.drawImage(
-            image,
-            0,0,width,height
-        );
-
-        let imageData;
-
-        try{
-            imageData=
-                effectCtx.getImageData(
-                    0,0,width,height
-                );
-        }catch(error){
-            cacheKeySetter(null);
-            return{source:image,ghost};
+        if(br){
+            r=clamp(Math.round(r*m),0,255);
+            g=clamp(Math.round(g*m),0,255);
+            b=clamp(Math.round(b*m),0,255);
         }
 
-        const data=imageData.data;
-        const brightnessMultiplier=1+brightness/100;
-        const hueShift=color/100;
-
-        for(let i=0;i<data.length;i+=4){
-            if(data[i+3]===0)continue;
-
-            let r=data[i];
-            let g=data[i+1];
-            let b=data[i+2];
-
-            if(brightness>0){
-                r=clamp(
-                    Math.round(r*brightnessMultiplier),
-                    0,255
-                );
-
-                g=clamp(
-                    Math.round(g*brightnessMultiplier),
-                    0,255
-                );
-
-                b=clamp(
-                    Math.round(b*brightnessMultiplier),
-                    0,255
-                );
-            }
-
-            if(color>0){
-                const hsl=rgbToHsl(r,g,b);
-
-                const rgb=hslToRgb(
-                    (hsl[0]+hueShift)%1,
-                    hsl[1],
-                    hsl[2]
-                );
-
-                r=rgb[0];
-                g=rgb[1];
-                b=rgb[2];
-            }
-
-            data[i]=r;
-            data[i+1]=g;
-            data[i+2]=b;
+        if(color){
+            const hsl=rgbToHsl(r,g,b);
+            [r,g,b]=hslToRgb((hsl[0]+hs)%1,hsl[1],hsl[2]);
         }
 
-        effectCtx.putImageData(imageData,0,0);
-        cacheKeySetter(cacheKey);
+        d[i]=r;
+        d[i+1]=g;
+        d[i+2]=b;
     }
 
-    return{
-        source:cacheCanvas,
-        ghost
-    };
+    c.putImageData(img,0,0);
+    setKey(cacheKey);
+    return{source:cache,ghost};
 }
 
 function createEffectCanvas(sprite){
-    if(!sprite.effectCanvas)
-        sprite.effectCanvas=
-            document.createElement("canvas");
+    const c=sprite.effectCanvas||=document.createElement("canvas");
+    const w=Math.max(1,Math.ceil(sprite.width)),h=Math.max(1,Math.ceil(sprite.height));
 
-    const width=Math.max(
-        1,
-        Math.ceil(sprite.width)
-    );
-
-    const height=Math.max(
-        1,
-        Math.ceil(sprite.height)
-    );
-
-    if(
-        sprite.effectCanvas.width!==width||
-        sprite.effectCanvas.height!==height
-    ){
-        sprite.effectCanvas.width=width;
-        sprite.effectCanvas.height=height;
+    if(c.width!==w||c.height!==h){
+        c.width=w;
+        c.height=h;
         sprite.effectCacheKey=null;
     }
 
-    return sprite.effectCanvas;
+    return c;
 }
 
 function applySpriteEffects(sprite){
-    const canvas=createEffectCanvas(sprite);
-
+    const c=createEffectCanvas(sprite);
     return applyImageEffects(
-        sprite.image,
-        sprite.effects||{},
-        canvas,
+        sprite.image,sprite.effects||{},c,
         ()=>sprite.effectCacheKey,
-        value=>sprite.effectCacheKey=value,
+        v=>sprite.effectCacheKey=v,
         `${sprite.costume}|${sprite.width}|${sprite.height}`
     );
 }
 
-function createCanvasEffectCanvas(){
-    if(!ENGINE.backgroundEffectCanvas)
-        ENGINE.backgroundEffectCanvas=
-            document.createElement("canvas");
-
-    return ENGINE.backgroundEffectCanvas;
-}
-
 function applyCanvasEffects(){
     const image=ENGINE.backgroundImage;
+    if(!image?.naturalWidth)return null;
 
-    if(!image?.naturalWidth)
-        return null;
-
-    const canvas=createCanvasEffectCanvas();
+    const c=ENGINE.backgroundEffectCanvas||=document.createElement("canvas");
 
     return applyImageEffects(
-        image,
-        ENGINE.backgroundEffects||{},
-        canvas,
+        image,ENGINE.backgroundEffects||{},c,
         ()=>ENGINE.backgroundEffectCacheKey,
-        value=>ENGINE.backgroundEffectCacheKey=value,
+        v=>ENGINE.backgroundEffectCacheKey=v,
         ENGINE.backgroundCostume
     );
 }
@@ -687,50 +405,21 @@ function applyCanvasEffects(){
 class Sprite{
     constructor(name,clone=false){
         Object.assign(this,{
-            name,
-            x:0,y:0,
-            visible:true,
-            costume:null,
-            image:null,
-            scale:1,
-            width:160,
-            height:160,
-            loaded:false,
-            opacity:1,
-            rotation:0,
-            flipX:1,
-            flipY:1,
-            effects:{
-                brightness:0,
-                ghost:0,
-                color:0
-            },
-            layer:0,
-            variables:{},
-            privateVariables:Object.create(null),
-            velocityX:0,
-            velocityY:0,
-            edgeLock:null,
-            imageCache:{},
-            costumeCacheOrder:[],
-            effectCanvas:null,
-            effectCacheKey:null,
-            touchable:true,
-            isClone:clone,
-            cloneName:clone?name:"",
-            cloneId:clone?++ENGINE.cloneId:0,
-            cloneOf:clone?name:null,
-            cloneContext:null,
-            deleted:false
+            name,x:0,y:0,visible:true,costume:null,image:null,scale:1,width:160,height:160,
+            loaded:false,opacity:1,rotation:0,flipX:1,flipY:1,
+            effects:{brightness:0,ghost:0,color:0},layer:0,variables:{},
+            privateVariables:Object.create(null),velocityX:0,velocityY:0,edgeLock:null,
+            imageCache:{},costumeCacheOrder:[],effectCanvas:null,effectCacheKey:null,
+            touchable:true,isClone:clone,cloneName:clone?name:"",
+            cloneId:clone?++ENGINE.cloneId:0,cloneOf:clone?name:null,
+            cloneContext:null,deleted:false
         });
     }
 
     setCostume(path,scale=1){
         path=String(path??"");
         scale=Number(scale);
-
-        if(!Number.isFinite(scale)||scale<=0)
-            scale=1;
+        if(!Number.isFinite(scale)||scale<=0)scale=1;
 
         if(!path){
             this.costume="";
@@ -748,29 +437,21 @@ class Sprite{
 
         if(cached){
             this.image=cached;
-            this.loaded=
-                cached.complete&&
-                cached.naturalWidth>0;
-
+            this.loaded=cached.complete&&cached.naturalWidth>0;
             if(this.loaded){
                 this.updateSize();
                 updateEdgeSprite(this);
             }
-
             return;
         }
 
         const image=new Image();
-
         this.imageCache[path]=image;
         this.costumeCacheOrder.push(path);
 
         if(this.costumeCacheOrder.length>4){
-            const oldPath=
-                this.costumeCacheOrder.shift();
-
-            if(oldPath!==path)
-                delete this.imageCache[oldPath];
+            const old=this.costumeCacheOrder.shift();
+            if(old!==path)delete this.imageCache[old];
         }
 
         this.image=image;
@@ -789,10 +470,7 @@ class Sprite{
 
         image.onerror=()=>{
             if(this.imageCache[path]===image)
-                console.warn(
-                    "Could not load costume:",
-                    path
-                );
+                console.warn("Could not load costume:",path);
         };
 
         image.src=path;
@@ -800,79 +478,42 @@ class Sprite{
 
     updateSize(){
         if(!this.image?.naturalWidth)return;
-
         this.width=160*this.scale;
-
-        this.height=
-            this.width*
-            (
-                this.image.naturalHeight/
-                this.image.naturalWidth
-            );
-
+        this.height=this.width*this.image.naturalHeight/this.image.naturalWidth;
         this.effectCacheKey=null;
     }
 
     setScale(scale){
         scale=Number(scale);
-
-        if(!Number.isFinite(scale)||scale<=0)
-            scale=1;
-
+        if(!Number.isFinite(scale)||scale<=0)scale=1;
         this.scale=scale;
         this.updateSize();
         updateEdgeSprite(this);
     }
 
     draw(){
-        if(!this.visible||!this.loaded)
-            return;
+        if(!this.visible||!this.loaded)return;
 
         const effect=applySpriteEffects(this);
-
         if(!effect)return;
 
-        ctx.globalAlpha=
-            clamp(
-                Number(this.opacity)||0,
-                0,1
-            )*
-            (1-effect.ghost/100);
-
+        const s=ENGINE.unitScale;
+        ctx.globalAlpha=clamp(Number(this.opacity)||0,0,1)*(1-effect.ghost/100);
         ctx.save();
 
         ctx.translate(
-            (this.x-ENGINE.camera.x)*
-                ENGINE.unitScale+
-                canvas.width/2,
-
-            -(this.y-ENGINE.camera.y)*
-                ENGINE.unitScale+
-                canvas.height/2
+            (this.x-ENGINE.camera.x)*s+canvas.width/2,
+            -(this.y-ENGINE.camera.y)*s+canvas.height/2
         );
 
-        ctx.rotate(
-            this.rotation*Math.PI/180
-        );
-
-        ctx.scale(
-            this.flipX,
-            this.flipY
-        );
-
+        ctx.rotate(this.rotation*Math.PI/180);
+        ctx.scale(this.flipX,this.flipY);
         ctx.drawImage(
             effect.source,
-            -this.width*
-                ENGINE.unitScale/2,
-
-            -this.height*
-                ENGINE.unitScale/2,
-
-            this.width*
-                ENGINE.unitScale,
-
-            this.height*
-                ENGINE.unitScale
+            -this.width*s/2,
+            -this.height*s/2,
+            this.width*s,
+            this.height*s
         );
 
         ctx.restore();
@@ -886,70 +527,26 @@ function updateEdgeSprite(sprite){
     if(!sprite?.edgeLock)return;
 
     const lock=sprite.edgeLock;
+    if(lock.mobile&&!ENGINE.mobile)return;
 
-    if(lock.mobile&&!ENGINE.mobile)
-        return;
+    const hw=sprite.width/2,hh=sprite.height/2,{x:cx,y:cy}=ENGINE.camera;
+    const vw=ENGINE.viewWidth/2,vh=ENGINE.viewHeight/2;
+    const left=cx-vw,right=cx+vw,bottom=cy-vh,top=cy+vh;
 
-    const halfWidth=sprite.width/2;
-    const halfHeight=sprite.height/2;
+    if(lock.horizontal==="left")sprite.x=left+lock.horizontalDistance+hw;
+    else if(lock.horizontal==="right")sprite.x=right-lock.horizontalDistance-hw;
 
-    const left=
-        ENGINE.camera.x-
-        ENGINE.viewWidth/2;
+    if(lock.vertical==="top")sprite.y=top-lock.verticalDistance-hh;
+    else if(lock.vertical==="bottom")sprite.y=bottom+lock.verticalDistance+hh;
 
-    const right=
-        ENGINE.camera.x+
-        ENGINE.viewWidth/2;
+    const minX=left+hw,maxX=right-hw,minY=bottom+hh,maxY=top-hh;
 
-    const top=
-        ENGINE.camera.y+
-        ENGINE.viewHeight/2;
-
-    const bottom=
-        ENGINE.camera.y-
-        ENGINE.viewHeight/2;
-
-    if(lock.horizontal==="left")
-        sprite.x=
-            left+
-            lock.horizontalDistance+
-            halfWidth;
-    else if(lock.horizontal==="right")
-        sprite.x=
-            right-
-            lock.horizontalDistance-
-            halfWidth;
-
-    if(lock.vertical==="top")
-        sprite.y=
-            top-
-            lock.verticalDistance-
-            halfHeight;
-    else if(lock.vertical==="bottom")
-        sprite.y=
-            bottom+
-            lock.verticalDistance+
-            halfHeight;
-
-    const minX=left+halfWidth;
-    const maxX=right-halfWidth;
-    const minY=bottom+halfHeight;
-    const maxY=top-halfHeight;
-
-    sprite.x=
-        minX<=maxX?
-        Math.max(minX,Math.min(maxX,sprite.x)):
-        ENGINE.camera.x;
-
-    sprite.y=
-        minY<=maxY?
-        Math.max(minY,Math.min(maxY,sprite.y)):
-        ENGINE.camera.y;
+    sprite.x=minX<=maxX?clamp(sprite.x,minX,maxX):cx;
+    sprite.y=minY<=maxY?clamp(sprite.y,minY,maxY):cy;
 }
 
 function updateEdgeSprites(){
-    Object.values(ENGINE.sprites)
-        .forEach(updateEdgeSprite);
+    Object.values(ENGINE.sprites).forEach(updateEdgeSprite);
 }
 
 
@@ -959,272 +556,120 @@ function createScriptContext(clone=null){
     return{
         ended:false,
         clone:clone||null,
-        privateVariables:
-            clone?.privateVariables||
-            Object.create(null)
+        privateVariables:clone?.privateVariables||Object.create(null)
     };
 }
 
 function registerBroadcast(message,blocks){
-    const key=String(resolveValue(message));
-
-    if(!ENGINE.broadcasts[key])
-        ENGINE.broadcasts[key]=[];
-
-    const script={
+    const key=String(resolveValue(message)),script={
         blocks:Array.isArray(blocks)?blocks:[],
         registered:true
     };
 
+    ENGINE.broadcasts[key]??=[];
     ENGINE.absorbBlocks(script.blocks);
-
     ENGINE.broadcasts[key].push(script);
-
     return script;
 }
 
 function broadcastMessage(message){
-    const listeners=
-        ENGINE.broadcasts[
-            String(resolveValue(message))
-        ];
-
+    const listeners=ENGINE.broadcasts[String(resolveValue(message))];
     if(!listeners?.length)return;
 
-    for(const listener of listeners){
-        const context=createScriptContext();
-
+    for(const {blocks} of listeners)
         Promise.resolve()
-            .then(()=>
-                executeBlocks(
-                    listener.blocks,
-                    context
-                )
-            )
-            .catch(error=>
-                console.error(
-                    "Broadcast script error:",
-                    error
-                )
-            );
-    }
+            .then(()=>executeBlocks(blocks,createScriptContext()))
+            .catch(e=>console.error("Broadcast script error:",e));
 }
 
 async function broadcastAndWaitMessage(message){
-    const listeners=
-        ENGINE.broadcasts[
-            String(resolveValue(message))
-        ];
-
-    if(!listeners?.length)return;
-
-    await Promise.all(
-        listeners.map(listener=>
-            executeBlocks(
-                listener.blocks,
-                createScriptContext()
+    const listeners=ENGINE.broadcasts[String(resolveValue(message))];
+    if(listeners?.length)
+        await Promise.all(
+            listeners.map(({blocks})=>
+                executeBlocks(blocks,createScriptContext())
             )
-        )
-    );
+        );
 }
 
 
 /* EXECUTION */
 
 async function executeBlock(block,context){
-    if(
-        !block||
-        typeof block!=="object"||
-        !ENGINE.running||
-        context.ended
-    )
-        return;
+    if(!block||typeof block!=="object"||!ENGINE.running||context.ended)return;
 
     if(block.type==="endScript"){
         context.ended=true;
         return;
     }
 
-    const registered=
-        ENGINE.blocks[block.type];
-
-    if(registered?.execute)
-        await registered.execute(
-            block,
-            context
-        );
+    const handler=ENGINE.blocks[block.type]?.execute;
+    if(handler)await handler(block,context);
 }
 
 async function executeBlocks(blocks,context){
     if(!Array.isArray(blocks))return;
 
     for(const block of blocks){
-        if(
-            !ENGINE.running||
-            context.ended
-        )
-            break;
-
-        await executeBlock(
-            block,
-            context
-        );
+        if(!ENGINE.running||context.ended)break;
+        await executeBlock(block,context);
     }
 }
 
 
 /* CONTROL */
 
-registerBlock("repeat",async(block,context)=>{
-    const times=Math.max(
-        0,
-        Math.floor(
-            Number(
-                resolveValue(
-                    block.times,
-                    context
-                )
-            )||0
-        )
-    );
-
-    for(
-        let i=0;
-        i<times&&ENGINE.running&&!context.ended;
-        i++
-    )
-        await executeBlocks(
-            block.blocks,
-            context
-        );
+registerBlock("repeat",async(b,c)=>{
+    const n=Math.max(0,Math.floor(Number(resolveValue(b.times,c))||0));
+    for(let i=0;i<n&&ENGINE.running&&!c.ended;i++)
+        await executeBlocks(b.blocks,c);
 });
 
-registerBlock("forever",async(block,context)=>{
-    while(
-        ENGINE.running&&
-        !context.ended
-    ){
-        await executeBlocks(
-            block.blocks,
-            context
-        );
-
-        await new Promise(
-            resolve=>setTimeout(resolve,0)
-        );
+registerBlock("forever",async(b,c)=>{
+    while(ENGINE.running&&!c.ended){
+        await executeBlocks(b.blocks,c);
+        await frame();
     }
 });
 
-registerBlock("if",async(block,context)=>{
-    await executeBlocks(
-        resolveValue(
-            block.condition,
-            context
-        )?
-            block.thenBlocks:
-            block.elseBlocks,
-        context
-    );
+registerBlock("if",async(b,c)=>{
+    await executeBlocks(resolveValue(b.condition,c)?b.thenBlocks:b.elseBlocks,c);
 });
 
-registerBlock("repeatUntil",async(block,context)=>{
-    while(
-        ENGINE.running&&
-        !context.ended&&
-        !resolveValue(
-            block.condition,
-            context
-        )
-    ){
-        await executeBlocks(
-            block.blocks,
-            context
-        );
-
-        await new Promise(
-            resolve=>setTimeout(resolve,0)
-        );
+async function conditionalLoop(b,c,test,yieldFn){
+    while(ENGINE.running&&!c.ended&&test(b,c)){
+        await executeBlocks(b.blocks,c);
+        await yieldFn();
     }
-});
+}
 
-registerBlock("while",async(block,context)=>{
-    while(
-        ENGINE.running&&
-        !context.ended&&
-        resolveValue(
-            block.condition,
-            context
-        )
-    ){
-        await executeBlocks(
-            block.blocks,
-            context
-        );
+registerBlock("repeatUntil",(b,c)=>
+    conditionalLoop(b,c,(b,c)=>!resolveValue(b.condition,c),frame)
+);
 
-        await new Promise(
-            resolve=>setTimeout(resolve,0)
-        );
-    }
-});
+registerBlock("while",(b,c)=>
+    conditionalLoop(b,c,(b,c)=>!!resolveValue(b.condition,c),frame)
+);
 
-registerBlock("wait",async(block,context)=>{
-    const seconds=Math.max(
-        0,
-        Number(
-            resolveValue(
-                block.time,
-                context
-            )
-        )||0
-    );
+registerBlock("wait",async(b,c)=>
+    delay(Math.max(0,Number(resolveValue(b.time,c))||0)*1000)
+);
 
-    await new Promise(
-        resolve=>
-            setTimeout(
-                resolve,
-                seconds*1000
-            )
-    );
-});
+registerBlock("waitUntil",(b,c)=>
+    conditionalLoop(b,c,(b,c)=>!resolveValue(b.condition,c),()=>delay(16))
+);
 
-registerBlock("waitUntil",async(block,context)=>{
-    while(
-        ENGINE.running&&
-        !context.ended&&
-        !resolveValue(
-            block.condition,
-            context
-        )
-    )
-        await new Promise(
-            resolve=>setTimeout(resolve,16)
-        );
-});
+registerBlock("broadcast",(b,c)=>
+    broadcastMessage(resolveValue(b.message,c))
+);
 
-registerBlock("broadcast",async(block,context)=>{
-    broadcastMessage(
-        resolveValue(
-            block.message,
-            context
-        )
-    );
-});
+registerBlock("broadcastWait",(b,c)=>
+    broadcastAndWaitMessage(resolveValue(b.message,c))
+);
 
-registerBlock("broadcastWait",async(block,context)=>{
-    await broadcastAndWaitMessage(
-        resolveValue(
-            block.message,
-            context
-        )
-    );
-});
-
-registerBlock("broadcastScript",async(block,context)=>{
-    await executeBlocks(
-        block.blocks,
-        context
-    );
-});
+registerBlock("broadcastScript",(b,c)=>
+    executeBlocks(b.blocks,c)
+);
 
 
 /* PROGRAM */
@@ -1232,95 +677,46 @@ registerBlock("broadcastScript",async(block,context)=>{
 const START_DELAY=200;
 
 async function executeProgram(){
-    const context=createScriptContext();
-
-    ENGINE.scripts=
-        ENGINE.program.slice();
+    const c=createScriptContext();
+    ENGINE.scripts=ENGINE.program.slice();
 
     try{
-        await executeBlocks(
-            ENGINE.program,
-            context
-        );
-    }catch(error){
-        console.error(
-            "Main program error:",
-            error
-        );
+        await executeBlocks(ENGINE.program,c);
+    }catch(e){
+        console.error("Main program error:",e);
     }
 }
 
 async function runScripts(){
-    await new Promise(
-        resolve=>setTimeout(
-            resolve,
-            START_DELAY
-        )
-    );
-
-    if(!ENGINE.running)return;
-
-    await executeProgram();
+    await delay(START_DELAY);
+    if(ENGINE.running)await executeProgram();
 }
 
 
 /* CANVAS */
 
 function getViewHeight(width){
-    const transitionStart=1000;
-    const transitionEnd=500;
-
-    const progress=clamp(
-        (transitionStart-width)/
-        (transitionStart-transitionEnd),
-        0,1
-    );
-
-    return 360-(360*0.15*progress);
+    return 360-54*clamp((1000-width)/500,0,1);
 }
 
 function resizeGame(){
-    const width=Math.max(
-        1,
-        window.innerWidth
-    );
+    const w=Math.max(1,window.innerWidth),h=Math.max(1,window.innerHeight);
+    ENGINE.mobile=w<700;
 
-    const height=Math.max(
-        1,
-        window.innerHeight
-    );
+    const pw=Math.ceil(w),ph=Math.ceil(h);
 
-    ENGINE.mobile=width<700;
+    canvas.style.width=w+"px";
+    canvas.style.height=h+"px";
 
-    const pixelWidth=Math.ceil(width);
-    const pixelHeight=Math.ceil(height);
-
-    canvas.style.width=width+"px";
-    canvas.style.height=height+"px";
-
-    if(
-        canvas.width!==pixelWidth||
-        canvas.height!==pixelHeight
-    ){
-        canvas.width=pixelWidth;
-        canvas.height=pixelHeight;
-
-        ctx.imageSmoothingEnabled=true;
-        ctx.imageSmoothingQuality="high";
+    if(canvas.width!==pw||canvas.height!==ph){
+        canvas.width=pw;
+        canvas.height=ph;
     }
 
-    ENGINE.viewHeight=
-        getViewHeight(width);
-
-    ENGINE.unitScale=
-        height/ENGINE.viewHeight;
-
-    ENGINE.viewWidth=
-        width/ENGINE.unitScale;
-
-    ENGINE.centerX=0;
-    ENGINE.centerY=0;
-
+    ENGINE.viewHeight=getViewHeight(w);
+    ENGINE.unitScale=h/ENGINE.viewHeight;
+    ENGINE.viewWidth=w/ENGINE.unitScale;
+    ENGINE.centerX=ENGINE.centerY=0;
     ENGINE.width=ENGINE.viewWidth;
     ENGINE.height=ENGINE.viewHeight;
 
@@ -1330,95 +726,55 @@ function resizeGame(){
 function requestResize(){
     if(ENGINE.resizeFrame)return;
 
-    ENGINE.resizeFrame=
-        requestAnimationFrame(()=>{
-            ENGINE.resizeFrame=null;
-            resizeGame();
-        });
+    ENGINE.resizeFrame=requestAnimationFrame(()=>{
+        ENGINE.resizeFrame=null;
+        resizeGame();
+    });
 }
 
 function drawBackground(){
-    if(
-        !ENGINE.backgroundLoaded||
-        !ENGINE.backgroundImage
-    ){
+    const image=ENGINE.backgroundImage;
+
+    if(!ENGINE.backgroundLoaded||!image){
         ctx.fillStyle=ENGINE.background;
-
-        ctx.fillRect(
-            0,0,
-            canvas.width,
-            canvas.height
-        );
-
+        ctx.fillRect(0,0,canvas.width,canvas.height);
         return;
     }
 
-    const image=ENGINE.backgroundImage;
-
-    const width=
-        640*
-        (Number(ENGINE.backgroundScale)||1);
-
-    const height=
-        width*
-        (
-            image.naturalHeight/
-            image.naturalWidth
-        );
-
-    const x=
-        canvas.width/2-
-        width*ENGINE.unitScale/2;
-
-    const y=
-        canvas.height/2-
-        height*ENGINE.unitScale/2;
-
+    const unit=ENGINE.unitScale;
+    const width=640*(Number(ENGINE.backgroundScale)||1);
+    const height=width*image.naturalHeight/image.naturalWidth;
     const effect=applyCanvasEffects();
 
     if(!effect)return;
 
-    ctx.globalAlpha=
-        1-effect.ghost/100;
-
+    ctx.globalAlpha=1-effect.ghost/100;
     ctx.drawImage(
         effect.source,
-        x,y,
-        width*ENGINE.unitScale,
-        height*ENGINE.unitScale
+        canvas.width/2-width*unit/2,
+        canvas.height/2-height*unit/2,
+        width*unit,
+        height*unit
     );
 }
 
 function updateSpriteOrder(){
     if(!ENGINE.spriteOrderDirty)return;
 
-    ENGINE.spriteOrder=
-        Object.values(ENGINE.sprites);
-
-    ENGINE.spriteOrder.sort(
-        (a,b)=>a.layer-b.layer
-    );
-
+    ENGINE.spriteOrder=Object.values(ENGINE.sprites);
+    ENGINE.spriteOrder.sort((a,b)=>a.layer-b.layer);
     ENGINE.spriteOrderDirty=false;
 }
 
 function render(){
-    ctx.clearRect(
-        0,0,
-        canvas.width,
-        canvas.height
-    );
-
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.globalAlpha=1;
 
     drawBackground();
     updateEdgeSprites();
     updateSpriteOrder();
 
-    const sprites=ENGINE.spriteOrder;
-
-    for(let i=0;i<sprites.length;i++)
-        sprites[i].draw();
+    ENGINE.spriteOrder.forEach(sprite=>sprite.draw());
 
     ctx.globalAlpha=1;
 }
@@ -1426,22 +782,14 @@ function render(){
 function gameLoop(timestamp){
     if(!ENGINE.running)return;
 
-    if(!ENGINE.lastTime)
-        ENGINE.lastTime=timestamp;
+    if(!ENGINE.lastTime)ENGINE.lastTime=timestamp;
 
-    const elapsed=
-        timestamp-ENGINE.lastRender;
+    const elapsed=timestamp-ENGINE.lastRender;
 
     if(elapsed>=ENGINE.frameInterval){
-        ENGINE.deltaTime=
-            (timestamp-ENGINE.lastTime)/1000;
-
+        ENGINE.deltaTime=(timestamp-ENGINE.lastTime)/1000;
         ENGINE.lastTime=timestamp;
-
-        ENGINE.lastRender=
-            timestamp-
-            (elapsed%ENGINE.frameInterval);
-
+        ENGINE.lastRender=timestamp-elapsed%ENGINE.frameInterval;
         render();
     }
 
@@ -1451,45 +799,25 @@ function gameLoop(timestamp){
 
 /* EVENTS */
 
-window.addEventListener(
-    "resize",
-    requestResize
-);
+window.addEventListener("resize",requestResize);
 
-window.addEventListener(
-    "load",
-    ()=>{
-        ENGINE.resizeCanvas=
-            document.createElement("canvas");
-
-        resizeGame();
-        initAudio();
-        runScripts();
-
-        ENGINE.lastRender=
-            performance.now();
-
-        requestAnimationFrame(gameLoop);
-    }
-);
+window.addEventListener("load",()=>{
+    ENGINE.resizeCanvas=document.createElement("canvas");
+    resizeGame();
+    initAudio();
+    runScripts();
+    ENGINE.lastRender=performance.now();
+    requestAnimationFrame(gameLoop);
+});
 
 
 /* PUBLIC API */
 
 window.MLGame={
-    ENGINE,
-    canvas,
-    ctx,
+    ENGINE,canvas,ctx,
     broadcast:broadcastMessage,
     broadcastAndWait:broadcastAndWaitMessage,
-    registerBlock,
-    registerReporter,
-    createBlock,
-    createReporter,
-    executeBlock,
-    executeBlocks,
-    createScriptContext,
-    resolveValue,
-    resolveSpriteName,
-    getContextSprite
+    registerBlock,registerReporter,createBlock,createReporter,
+    executeBlock,executeBlocks,createScriptContext,
+    resolveValue,resolveSpriteName,getContextSprite
 };

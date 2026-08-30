@@ -1,688 +1,197 @@
 // Variable Blocks
 
-function makeVar(name){
-    const block=createBlock("makeVar",{
-        name
-    });
-
+const hasOwn=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+const numValue=(v,c)=>Number(resolveValue(v,c));
+const normalizeValue=(v,c)=>{
+    v=resolveValue(v,c);
+    return typeof v==="string"&&v.trim()!==""&&!isNaN(Number(v))
+        ?Number(v):v;
+};
+const recordVarBlock=(type,data)=>{
+    const block=createBlock(type,data);
     ENGINE.recordBlock(block);
-
     return block;
-}
+};
+const spriteBy=(name,c)=>ENGINE.sprites[resolveValue(name,c)];
+const cloneBy=c=>c?.clone?.isClone?c.clone:null;
 
-registerBlock("makeVar",async block=>{
-    const name=String(resolveValue(block.name));
-
-    if(
-        name&&
-        !Object.prototype.hasOwnProperty.call(
-            ENGINE.variables,
-            name
-        )
-    )
-        ENGINE.variables[name]=0;
+function makeVar(name){return recordVarBlock("makeVar",{name});}
+registerBlock("makeVar",async b=>{
+    const n=String(resolveValue(b.name));
+    if(n&&!hasOwn(ENGINE.variables,n))ENGINE.variables[n]=0;
 });
 
-
-function setVar(name,value){
-    const block=createBlock("setVar",{
-        name,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
-}
-
-registerBlock("setVar",async block=>{
-    const name=String(resolveValue(block.name));
-    let value=resolveValue(block.value);
-
-    if(
-        typeof value==="string"&&
-        value.trim()!==""&&
-        !isNaN(Number(value))
-    )
-        value=Number(value);
-
-    if(name)
-        ENGINE.variables[name]=value;
+function setVar(name,value){return recordVarBlock("setVar",{name,value});}
+registerBlock("setVar",async b=>{
+    const n=String(resolveValue(b.name));
+    if(n)ENGINE.variables[n]=normalizeValue(b.value);
 });
 
-
-function deleteVar(name){
-    const block=createBlock("deleteVar",{
-        name
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
-}
-
-registerBlock("deleteVar",async block=>{
-    const name=String(resolveValue(block.name));
-
-    if(name)
-        delete ENGINE.variables[name];
+function deleteVar(name){return recordVarBlock("deleteVar",{name});}
+registerBlock("deleteVar",async b=>{
+    const n=String(resolveValue(b.name));
+    if(n)delete ENGINE.variables[n];
 });
-
 
 function getVar(name){
-    return{
-        type:"variable",
-        name:String(resolveValue(name))
-    };
+    return{type:"variable",name:String(resolveValue(name))};
 }
-
 
 function changeVarBy(name,value){
-    const block=createBlock("changeVarBy",{
-        name,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("changeVarBy",{name,value});
 }
-
-registerBlock("changeVarBy",async block=>{
-    const name=String(resolveValue(block.name));
-    const value=
-        Number(resolveValue(block.value))||0;
-
-    const current=
-        Number(ENGINE.variables[name])||0;
-
-    if(name)
-        ENGINE.variables[name]=current+value;
+registerBlock("changeVarBy",async b=>{
+    const n=String(resolveValue(b.name));
+    if(n)ENGINE.variables[n]=(Number(ENGINE.variables[n])||0)+(numValue(b.value)||0);
 });
 
 
-// Sprite Variable Blocks
+/* Sprite Variable Blocks */
 
 function makeSpriteVar(spriteName,varName){
-    const block=createBlock("makeSpriteVar",{
-        spriteName,
-        varName
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("makeSpriteVar",{spriteName,varName});
 }
-
-
-registerBlock("makeSpriteVar",async block=>{
-    const spriteName=String(
-        resolveValue(block.spriteName)
-    );
-
-    const varName=String(
-        resolveValue(block.varName)
-    );
-
-    const sprite=ENGINE.sprites[spriteName];
-
-    if(
-        !sprite||
-        !varName
-    )
-        return;
-
-    if(
-        !Object.prototype.hasOwnProperty.call(
-            sprite.variables,
-            varName
-        )
-    )
-        sprite.variables[varName]=0;
+registerBlock("makeSpriteVar",async b=>{
+    const s=spriteBy(b.spriteName),n=String(resolveValue(b.varName));
+    if(s&&n&&!hasOwn(s.variables,n))s.variables[n]=0;
 });
-
 
 function getSpriteVar(spriteName,varName){
-    return{
-        type:"spriteVariable",
-        spriteName:String(
-            resolveValue(spriteName)
-        ),
-        varName:String(
-            resolveValue(varName)
-        )
-    };
+    return{type:"spriteVariable",spriteName:String(resolveValue(spriteName)),varName:String(resolveValue(varName))};
 }
-
 
 function setSpriteVar(spriteName,varName,value){
-    const block=createBlock("setSpriteVar",{
-        spriteName,
-        varName,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("setSpriteVar",{spriteName,varName,value});
 }
-
-
-registerBlock("setSpriteVar",async block=>{
-    const spriteName=String(
-        resolveValue(block.spriteName)
-    );
-
-    const varName=String(
-        resolveValue(block.varName)
-    );
-
-    let value=resolveValue(block.value);
-
-    if(
-        typeof value==="string"&&
-        value.trim()!==""&&
-        !isNaN(Number(value))
-    )
-        value=Number(value);
-
-    const sprite=ENGINE.sprites[spriteName];
-
-    if(
-        !sprite||
-        !varName
-    )
-        return;
-
-    sprite.variables[varName]=value;
+registerBlock("setSpriteVar",async b=>{
+    const s=spriteBy(b.spriteName),n=String(resolveValue(b.varName));
+    if(s&&n)s.variables[n]=normalizeValue(b.value);
 });
-
 
 function changeSpriteVarBy(spriteName,varName,value){
-    const block=createBlock("changeSpriteVarBy",{
-        spriteName,
-        varName,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("changeSpriteVarBy",{spriteName,varName,value});
 }
+registerBlock("changeSpriteVarBy",async b=>{
+    const s=spriteBy(b.spriteName),n=String(resolveValue(b.varName));
+    if(s&&n)s.variables[n]=(Number(s.variables[n])||0)+(numValue(b.value)||0);
+});
 
-
-registerBlock("changeSpriteVarBy",async block=>{
-    const spriteName=String(
-        resolveValue(block.spriteName)
-    );
-
-    const varName=String(
-        resolveValue(block.varName)
-    );
-
-    const value=
-        Number(
-            resolveValue(block.value)
-        )||0;
-
-    const sprite=ENGINE.sprites[spriteName];
-
-    if(
-        !sprite||
-        !varName
-    )
-        return;
-
-    const current=
-        Number(
-            sprite.variables[varName]
-        )||0;
-
-    sprite.variables[varName]=
-        current+value;
+registerReporter("spriteVariable",(b,c)=>{
+    const s=spriteBy(b.spriteName,c),n=String(resolveValue(b.varName,c));
+    return s&&n?s.variables[n]??"":"";
 });
 
 
-registerReporter(
-    "spriteVariable",
-    (value,context)=>{
-        const spriteName=String(
-            resolveValue(
-                value.spriteName,
-                context
-            )
-        );
-
-        const varName=String(
-            resolveValue(
-                value.varName,
-                context
-            )
-        );
-
-        const sprite=ENGINE.sprites[spriteName];
-
-        if(
-            !sprite||
-            !varName
-        )
-            return"";
-
-        return sprite.variables[varName]??"";
-    }
-);
-
-
-// Clone Variable Blocks
+/* Clone Variable Blocks */
 
 function makeCloneVar(varName){
-    const block=createBlock("makeCloneVar",{
-        varName
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("makeCloneVar",{varName});
 }
-
-
-registerBlock("makeCloneVar",async(block,context)=>{
-    const varName=String(
-        resolveValue(
-            block.varName,
-            context
-        )
-    );
-
-    const clone=context?.clone;
-
-    if(
-        !clone||
-        !clone.isClone||
-        !varName
-    )
-        return;
-
-    if(
-        !Object.prototype.hasOwnProperty.call(
-            clone.variables,
-            varName
-        )
-    )
-        clone.variables[varName]=0;
+registerBlock("makeCloneVar",async(b,c)=>{
+    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
+    if(clone&&n&&!hasOwn(clone.variables,n))clone.variables[n]=0;
 });
 
-
-function getCloneVar(varName){
-    return{
-        type:"cloneVariable",
-        varName
-    };
-}
-
+function getCloneVar(varName){return{type:"cloneVariable",varName};}
 
 function setCloneVar(varName,value){
-    const block=createBlock("setCloneVar",{
-        varName,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("setCloneVar",{varName,value});
 }
-
-
-registerBlock("setCloneVar",async(block,context)=>{
-    const varName=String(
-        resolveValue(
-            block.varName,
-            context
-        )
-    );
-
-    let value=resolveValue(
-        block.value,
-        context
-    );
-
-    if(
-        typeof value==="string"&&
-        value.trim()!==""&&
-        !isNaN(Number(value))
-    )
-        value=Number(value);
-
-    const clone=context?.clone;
-
-    if(
-        !clone||
-        !clone.isClone||
-        !varName
-    )
-        return;
-
-    clone.variables[varName]=value;
+registerBlock("setCloneVar",async(b,c)=>{
+    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
+    if(clone&&n)clone.variables[n]=normalizeValue(b.value,c);
 });
-
 
 function changeCloneVarBy(varName,value){
-    const block=createBlock("changeCloneVarBy",{
-        varName,
-        value
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("changeCloneVarBy",{varName,value});
 }
-
-
-registerBlock("changeCloneVarBy",async(block,context)=>{
-    const varName=String(
-        resolveValue(
-            block.varName,
-            context
-        )
-    );
-
-    const value=
-        Number(
-            resolveValue(
-                block.value,
-                context
-            )
-        )||0;
-
-    const clone=context?.clone;
-
-    if(
-        !clone||
-        !clone.isClone||
-        !varName
-    )
-        return;
-
-    const current=
-        Number(
-            clone.variables[varName]
-        )||0;
-
-    clone.variables[varName]=
-        current+value;
+registerBlock("changeCloneVarBy",async(b,c)=>{
+    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
+    if(clone&&n)clone.variables[n]=(Number(clone.variables[n])||0)+(numValue(b.value,c)||0);
 });
-
 
 function deleteCloneVar(varName){
-    const block=createBlock("deleteCloneVar",{
-        varName
-    });
-
-    ENGINE.recordBlock(block);
-
-    return block;
+    return recordVarBlock("deleteCloneVar",{varName});
 }
-
-
-registerBlock("deleteCloneVar",async(block,context)=>{
-    const varName=String(
-        resolveValue(
-            block.varName,
-            context
-        )
-    );
-
-    const clone=context?.clone;
-
-    if(
-        !clone||
-        !clone.isClone||
-        !varName
-    )
-        return;
-
-    delete clone.variables[varName];
+registerBlock("deleteCloneVar",async(b,c)=>{
+    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
+    if(clone&&n)delete clone.variables[n];
 });
 
+registerReporter("cloneVariable",(b,c)=>{
+    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
+    return clone&&n?clone.variables[n]??"":"";
+});
 
-registerReporter(
-    "cloneVariable",
-    (value,context)=>{
-        const varName=String(
-            resolveValue(
-                value.varName,
-                context
-            )
-        );
+function getCloneName(){return{type:"cloneName"};}
+function getCloneId(){return{type:"cloneId"};}
 
-        const clone=context?.clone;
-
-        if(
-            !clone||
-            !clone.isClone||
-            !varName
-        )
-            return"";
-
-        return clone.variables[varName]??"";
-    }
-);
+registerReporter("cloneName",(b,c)=>c?.clone?.cloneName??"");
+registerReporter("cloneId",(b,c)=>c?.clone?.cloneId??"");
 
 
-function getCloneName(){
-    return{
-        type:"cloneName"
-    };
-}
+/* Operator Blocks */
 
+function operator(type,evaluate){return{type:"operator",operator:type,evaluate};}
+const opNum=(a,c)=>Number(resolveValue(a,c));
+const binaryNum=(type,fn)=>
+    (a,b)=>operator(type,c=>fn(opNum(a,c),opNum(b,c)));
 
-function getCloneId(){
-    return{
-        type:"cloneId"
-    };
-}
+const add=binaryNum("add",(a,b)=>a+b);
+const sub=binaryNum("sub",(a,b)=>a-b);
+const mult=binaryNum("mult",(a,b)=>a*b);
+const div=binaryNum("div",(a,b)=>a/b);
+const mod=binaryNum("mod",(a,b)=>a%b);
 
-
-registerReporter(
-    "cloneName",
-    (value,context)=>
-        context?.clone?.cloneName??""
-);
-
-
-registerReporter(
-    "cloneId",
-    (value,context)=>
-        context?.clone?.cloneId??""
-);
-
-
-
-// Operator Blocks
-
-function operator(type,evaluate){
-    return{
-        type:"operator",
-        operator:type,
-        evaluate
-    };
-}
-
-function add(value,value2){
-    return operator("add",context=>{
-        return Number(resolveValue(value,context))+
-            Number(resolveValue(value2,context));
-    });
-}
-
-function sub(value,value2){
-    return operator("sub",context=>{
-        return Number(resolveValue(value,context))-
-            Number(resolveValue(value2,context));
-    });
-}
-
-function mult(value,value2){
-    return operator("mult",context=>{
-        return Number(resolveValue(value,context))*
-            Number(resolveValue(value2,context));
-    });
-}
-
-function div(value,value2){
-    return operator("div",context=>{
-        return Number(resolveValue(value,context))/
-            Number(resolveValue(value2,context));
-    });
-}
-
-function mod(value,value2){
-    return operator("mod",context=>{
-        return Number(resolveValue(value,context))%
-            Number(resolveValue(value2,context));
-    });
-}
-
-function round(value){
-    return operator("round",context=>{
-        return Math.round(
-            Number(resolveValue(value,context))
-        );
-    });
-}
-
-function abs(value){
-    return operator("abs",context=>{
-        return Math.abs(
-            Number(resolveValue(value,context))
-        );
-    });
-}
-
-function cos(value){
-    return operator("cos",context=>{
-        return Math.cos(
-            Number(resolveValue(value,context))*
-            Math.PI/180
-        );
-    });
-}
-
-function sin(value){
-    return operator("sin",context=>{
-        return Math.sin(
-            Number(resolveValue(value,context))*
-            Math.PI/180
-        );
-    });
-}
+function round(value){return operator("round",c=>Math.round(opNum(value,c)));}
+function abs(value){return operator("abs",c=>Math.abs(opNum(value,c)));}
+function cos(value){return operator("cos",c=>Math.cos(opNum(value,c)*Math.PI/180));}
+function sin(value){return operator("sin",c=>Math.sin(opNum(value,c)*Math.PI/180));}
 
 function randomNum(start_range,end_range){
-    return operator("randomNum",context=>{
-        const start=
-            Number(resolveValue(start_range,context));
-
-        const end=
-            Number(resolveValue(end_range,context));
-
-        return Math.round(
-            (Math.random()*(end-start)+start)*10
-        )/10;
+    return operator("randomNum",c=>{
+        const a=opNum(start_range,c),b=opNum(end_range,c);
+        return Math.round((Math.random()*(b-a)+a)*10)/10;
     });
 }
 
-function gThan(value,value1){
-    return operator("gThan",context=>{
-        return Number(resolveValue(value,context))>
-            Number(resolveValue(value1,context));
-    });
-}
+const compare=(type,fn)=>
+    (a,b)=>operator(type,c=>fn(opNum(a,c),opNum(b,c)));
 
-function lThan(value,value1){
-    return operator("lThan",context=>{
-        return Number(resolveValue(value,context))<
-            Number(resolveValue(value1,context));
-    });
-}
-
-function gEqThan(value,value1){
-    return operator("gEqThan",context=>{
-        return Number(resolveValue(value,context))>=
-            Number(resolveValue(value1,context));
-    });
-}
-
-function lEqThan(value,value1){
-    return operator("lEqThan",context=>{
-        return Number(resolveValue(value,context))<=
-            Number(resolveValue(value1,context));
-    });
-}
+const gThan=compare("gThan",(a,b)=>a>b);
+const lThan=compare("lThan",(a,b)=>a<b);
+const gEqThan=compare("gEqThan",(a,b)=>a>=b);
+const lEqThan=compare("lEqThan",(a,b)=>a<=b);
 
 function equal(value,value2){
-    return operator("equal",context=>{
-        return resolveValue(value,context)===
-            resolveValue(value2,context);
-    });
+    return operator("equal",c=>resolveValue(value,c)===resolveValue(value2,c));
 }
 
-function and(value,value2){
-    return operator("and",context=>{
-        return Boolean(resolveValue(value,context))&&
-            Boolean(resolveValue(value2,context));
-    });
-}
+const boolBinary=(type,fn)=>
+    (a,b)=>operator(type,c=>fn(Boolean(resolveValue(a,c)),Boolean(resolveValue(b,c))));
 
-function or(value,value2){
-    return operator("or",context=>{
-        return Boolean(resolveValue(value,context))||
-            Boolean(resolveValue(value2,context));
-    });
-}
+const and=boolBinary("and",(a,b)=>a&&b);
+const or=boolBinary("or",(a,b)=>a||b);
 
 function not(value){
-    return operator("not",context=>{
-        return !Boolean(resolveValue(value,context));
-    });
+    return operator("not",c=>!Boolean(resolveValue(value,c)));
 }
 
 function join(value,value2){
-    return operator("join",context=>{
-        return String(resolveValue(value,context))+
-            String(resolveValue(value2,context));
-    });
+    return operator("join",c=>String(resolveValue(value,c))+String(resolveValue(value2,c)));
 }
 
 function letter(num,value){
-    return operator("letter",context=>{
-        const index=
-            Math.floor(
-                Number(resolveValue(num,context))
-            )-1;
-
-        const text=
-            String(resolveValue(value,context));
-
-        return index>=0&&index<text.length
-            ?text[index]
-            :"";
+    return operator("letter",c=>{
+        const i=Math.floor(opNum(num,c))-1,t=String(resolveValue(value,c));
+        return i>=0&&i<t.length?t[i]:"";
     });
 }
 
 function length(value){
-    return operator("length",context=>{
-        return String(
-            resolveValue(value,context)
-        ).length;
-    });
+    return operator("length",c=>String(resolveValue(value,c)).length);
 }
 
 function contain(val,value){
-    return operator("contain",context=>{
-        return String(
-            resolveValue(value,context)
-        ).includes(
-            String(resolveValue(val,context))
-        );
-    });
+    return operator("contain",c=>String(resolveValue(value,c)).includes(String(resolveValue(val,c))));
 }
