@@ -27,41 +27,36 @@ whenBroadcast("Main Menu",
 );
 
 whenBroadcast("Main Menu",
-    makeVar("Counter"), setVar("Counter", 0),
-    repeat(10,
-        changeVarBy("Counter", 1),
-        createSprite(join("Line", getVar("Counter"))),
-        spriteCostume(join("Line", getVar("Counter")), "images/menu/BG1-4.svg", 1),
-        goBack(join("Line", getVar("Counter"))),
-        moveTo(join("Line", getVar("Counter")), -200, mult(round(randomNum(-25, 3)), 10)),
-        spriteSetSize(join("Line", getVar("Counter")), randomNum(0.3, 0.5)),
-        moveBy(join("Line", getVar("Counter")), mult(getVar("Counter"), 25), mult(getVar("Counter"), 25)),
-        direction(join("Line", getVar("Counter")), 335),
+    forever(
+        createSprite("Line"),
+        spriteCostume("Line", "images/menu/BG1-4.svg", 1),
+        moveTo("Line", -400, -400),
+        makeClone("Line"),
+        wait(0.12),
     ),
-    moveBy(join("Line", getVar("Counter")), mult(getVar("Counter"), 1), mult(getVar("Counter"), 1)),
 );
 
-
-whenBroadcast("MM-Line",
+whenClone("Line",
+    moveTo("Line", -300, mult(round(randomNum(-35, 3)), 10)),
+    goBack("Line"),
     spriteSetSize("Line", randomNum(0.3, 0.5)),
     ifBlock( gEqThan(spriteY("Line"), -200),
-        spriteEffect("Line", "color", div(add(spriteY("Line"), 170), 12)),
-        spriteEffect("Line", "brightness", div(add(spriteY("Line"), 170), 12)),
+        spriteEffect("Line", "brightness", mult(div(abs(spriteY("Line")), 100), 15)),
         "else",
         ifBlock( lEqThan(spriteY("Line"), -200 ),
-            spriteEffect("Line", "color", div(add(spriteY("Line"), 170), 17)),
+            spriteEffect("Line", "brightness", mult(div(abs(spriteY("Line")), -100), 15)),
         ),
     ),
     direction("Line", 335),
-    repeat(150,
-        moveBy("Line", mult(12, cos(20)), mult(12, sin(20))),
+    repeat(80,
+        moveBy("Line", mult(17, cos(20)), mult(17, sin(20))),
         ifBlock( gThan(spriteX("Line"), 280),
-            deleteSprite("Line"),
+            deleteClone("Line"),
         ),
-        wait(0.04),
+        wait(0.02),
     ),
-    deleteSprite("Line"),
-);
+    deleteClone("Line"),
+)
 
 
 

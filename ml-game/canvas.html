@@ -47,17 +47,21 @@ body{display:block;background:#000}
 <script src="js/sound.js"></script>
 <script src="js/motion.js"></script>
 <script src="js/operator.js"></script>
+<script src="js/clone.js"></script>
 
 <!-- Main scripts start here in order. -->
 
 <script src="program/begin.js"></script>
 
 <script>
+// Can be hidden with comments if no need. Panel disappears when all items are hidden.
+// This is a great use for testing variables.
 const DEBUG_VARIABLES=[
     {name:"mouseX",value:()=> mouseX()},
     {name:"mouseY",value:()=> mouseY()},
     {name:"Username",value:()=> getUsername()},
     {name:"Silver Coins",value:()=> getData("silver_coin")},
+    //{name:"Sprites",value:()=> getSprites()},
 ];
 
 const variableMonitor=document.getElementById("variable-monitor");

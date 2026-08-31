@@ -1,4 +1,4 @@
- // Control Blocks
+// Control Blocks
 
 const createControlBlock=(type,data={})=>{
     const b=createBlock(type,data);
@@ -12,8 +12,13 @@ const control=(type,data,absorb=true)=>{
     return b;
 };
 
-function wait(time){return createControlBlock("wait",{time});}
-function waitUntil(condition){return createControlBlock("waitUntil",{condition});}
+function wait(time){
+    return createControlBlock("wait",{time});
+}
+
+function waitUntil(condition){
+    return createControlBlock("waitUntil",{condition});
+}
 
 function repeat(times,...blocks){
     return control("repeat",{times,blocks});
@@ -43,10 +48,12 @@ function whileBlock(condition,...blocks){
     return control("while",{condition,blocks});
 }
 
-function endScript(){return createControlBlock("endScript");}
+function endScript(){
+    return createControlBlock("endScript");
+}
 
 
-// Event Blocks
+/* EVENT BLOCKS */
 
 function broadcast(message){
     return createControlBlock("broadcast",{message});

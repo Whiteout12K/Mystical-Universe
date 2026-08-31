@@ -1,101 +1,134 @@
 /* SPRITE BLOCKS */
 
-const sprite=(name)=>ENGINE.sprites[resolveValue(name)];
-const num=(v,d=0)=>Number.isFinite(v=Number(resolveValue(v)))?v:d;
+const sprite=(name,c=null)=>getContextSprite(name,c);
+
+const num=(v,d=0,c=null)=>{
+    v=Number(resolveValue(v,c));
+    return Number.isFinite(v)?v:d;
+};
+
 const recordSpriteBlock=(type,data)=>ENGINE.recordBlock(createBlock(type,data));
 
 function createSprite(name){
     return recordSpriteBlock("createSprite",{name});
 }
 
-registerBlock("createSprite",async block=>{
-    const name=String(resolveValue(block.name));
+registerBlock("createSprite",async(block,c)=>{
+    const name=String(resolveValue(block.name,c));
     if(!name)return null;
-    return ENGINE.sprites[name]||=new Sprite(name),
-        ENGINE.spriteOrderDirty=true,
-        ENGINE.sprites[name];
+
+    if(ENGINE.sprites[name])return ENGINE.sprites[name];
+
+    const s=new Sprite(name);
+    ENGINE.sprites[name]=s;
+    ENGINE.spriteOrderDirty=true;
+    return s;
 });
 
-registerBlock("spriteCostume",async block=>{
-    const s=sprite(block.name);
+registerBlock("spriteCostume",async(block,c)=>{
+    const s=sprite(block.name,c);
     if(!s)return;
-    const path=resolveValue(block.path),scale=num(block.scale);
+
+    const path=resolveValue(block.path,c);
+    const scale=num(block.scale,1,c);
+
     s.setCostume(path,scale);
     s.visible=!!path;
     s.touchable=!!path;
-});
-
-registerBlock("spriteSetSize",async block=>{
-    const s=sprite(block.name);
-    if(s)s.setScale(Math.max(0.01,num(block.scale,1)));
-});
-
-registerBlock("spriteChangeSize",async block=>{
-    const s=sprite(block.name);
-    if(s)s.setScale(Math.max(0.01,s.scale+num(block.amount)));
-});
-
-registerBlock("spriteEffect",async block=>{
-    const s=sprite(block.name);
-    if(!s)return;
-
-    const effect=String(resolveValue(block.effect)).toLowerCase();
-    if(effect==="brightness"||effect==="ghost"||effect==="color")
-        s.effects[effect]=Math.max(0,Math.min(100,num(block.value)));
-});
-
-registerReporter("costumeOfSprite",value=>sprite(value.name)?.costume??"");
-registerReporter("sizeOfSprite",value=>sprite(value.name)?.scale??0);
-
-registerBlock("spriteShow",async block=>{
-    const s=sprite(block.name);
-    if(s)s.visible=true;
-});
-
-registerBlock("spriteHide",async block=>{
-    const s=sprite(block.name);
-    if(s)s.visible=false;
-});
-
-registerBlock("spriteLayer",async block=>{
-    const s=sprite(block.name);
-    if(!s)return;
-    s.layer=num(block.layer);
     ENGINE.spriteOrderDirty=true;
 });
 
-registerBlock("goFront",async block=>{
-    const s=sprite(block.name);
+registerBlock("spriteSetSize",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(s)s.setScale(Math.max(0.01,num(block.scale,1,c)));
+});
+
+registerBlock("spriteChangeSize",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(s)s.setScale(Math.max(0.01,s.scale+num(block.amount,0,c)));
+});
+
+registerBlock("spriteEffect",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(!s)return;
+
+    const effect=String(resolveValue(block.effect,c)).toLowerCase();
+
+    if(effect==="brightness")
+        s.effects.brightness=Math.max(-100,Math.min(100,num(block.value,0,c)));
+
+    else if(effect==="ghost"||effect==="color")
+        s.effects[effect]=Math.max(0,Math.min(100,num(block.value,0,c)));
+});
+
+registerReporter("costumeOfSprite",(value,c)=>
+    sprite(value.name,c)?.costume??""
+);
+
+registerReporter("sizeOfSprite",(value,c)=>
+    sprite(value.name,c)?.scale??0
+);
+
+registerBlock("spriteShow",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(s){
+        s.visible=true;
+        ENGINE.spriteOrderDirty=true;
+    }
+});
+
+registerBlock("spriteHide",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(s){
+        s.visible=false;
+        ENGINE.spriteOrderDirty=true;
+    }
+});
+
+registerBlock("spriteLayer",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(!s)return;
+
+    s.layer=num(block.layer,0,c);
+    ENGINE.spriteOrderDirty=true;
+});
+
+registerBlock("goFront",async(block,c)=>{
+    const s=sprite(block.name,c);
     if(!s)return;
 
     s.layer=Math.max(
-        ...Object.values(ENGINE.sprites).map(x=>x.layer),
+        ...getAllSprites().map(x=>x.layer),
         0
     )+1;
 
     ENGINE.spriteOrderDirty=true;
 });
 
-registerBlock("goBack",async block=>{
-    const s=sprite(block.name);
+registerBlock("goBack",async(block,c)=>{
+    const s=sprite(block.name,c);
     if(!s)return;
 
     s.layer=Math.min(
-        ...Object.values(ENGINE.sprites).map(x=>x.layer),
+        ...getAllSprites().map(x=>x.layer),
         0
     )-1;
 
     ENGINE.spriteOrderDirty=true;
 });
 
-registerBlock("deleteSprite",async block=>{
-    const name=String(resolveValue(block.name));
+registerBlock("deleteSprite",async(block,c)=>{
+    const name=String(resolveValue(block.name,c));
     if(!name)return;
 
     const s=ENGINE.sprites[name];
     if(!s)return;
 
     delete ENGINE.sprites[name];
+
+    s.deleted=true;
+    s.visible=false;
+
     ENGINE.spriteOrder=ENGINE.spriteOrder.filter(x=>x!==s);
     ENGINE.spriteOrderDirty=true;
 });
@@ -158,3 +191,4 @@ function goBack(name){
 function deleteSprite(name){
     return createSpriteBlock("deleteSprite",{name});
 }
+

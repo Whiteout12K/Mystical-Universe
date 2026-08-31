@@ -1,93 +1,89 @@
 /* MOTION BLOCKS */
 
-const motionSprite=n=>ENGINE.sprites[resolveValue(n)];
-const motionNum=(v,d=0)=>Number.isFinite(v=Number(resolveValue(v)))?v:d;
+const motionSprite=(n,c=null)=>getContextSprite(n,c);
+const motionNum=(v,d=0,c=null)=>{
+    v=Number(resolveValue(v,c));
+    return Number.isFinite(v)?v:d;
+};
 const normDeg=v=>((v%360)+360)%360;
 const recordMotionBlock=(type,data)=>ENGINE.recordBlock(createBlock(type,data));
 
-registerBlock("moveTo",async block=>{
-    const s=motionSprite(block.name);
+registerBlock("moveTo",async(block,c)=>{
+    const s=motionSprite(block.name,c);
     if(!s)return;
     s.edgeLock=null;
-    s.x=motionNum(block.x);
-    s.y=motionNum(block.y);
+    s.x=motionNum(block.x,0,c);
+    s.y=motionNum(block.y,0,c);
 });
 
-registerBlock("move",async block=>{
-    const s=motionSprite(block.name);
+registerBlock("move",async(block,c)=>{
+    const s=motionSprite(block.name,c);
     if(!s)return;
     s.edgeLock=null;
-    s.x+=motionNum(block.x);
-    s.y+=motionNum(block.y);
+    s.x+=motionNum(block.x,0,c);
+    s.y+=motionNum(block.y,0,c);
 });
 
 function setupEdgeLock(s,horizontal,hDistance,vertical,vDistance){
     if(!s)return;
-
     horizontal=String(horizontal??"").toLowerCase();
     vertical=String(vertical??"").toLowerCase();
-
     s.edgeLock={
         horizontal,
         horizontalDistance:Math.max(0,Number(hDistance)||0),
         vertical,
         verticalDistance:Math.max(0,Number(vDistance)||0)
     };
-
     if(vertical==="top"&&!horizontal)s.x=0;
     updateEdgeSprite(s);
 }
 
-registerBlock("moveToEdge",async block=>{
-    const s=motionSprite(block.name);
+registerBlock("moveToEdge",async(block,c)=>{
+    const s=motionSprite(block.name,c);
     if(!s)return;
-
     setupEdgeLock(
         s,
-        String(resolveValue(block.horizontalEdge)??"").toLowerCase(),
-        Math.max(0,motionNum(block.x)),
-        String(resolveValue(block.verticalEdge)??"").toLowerCase(),
-        Math.max(0,motionNum(block.y))
+        String(resolveValue(block.horizontalEdge,c)??"").toLowerCase(),
+        Math.max(0,motionNum(block.x,0,c)),
+        String(resolveValue(block.verticalEdge,c)??"").toLowerCase(),
+        Math.max(0,motionNum(block.y,0,c))
     );
 });
 
 
 /* REPORTERS */
 
-registerReporter("spriteX",v=>motionSprite(v.name)?.x??0);
-registerReporter("spriteY",v=>motionSprite(v.name)?.y??0);
-registerReporter("spriteDirection",v=>motionSprite(v.name)?.rotation??0);
+registerReporter("spriteX",(v,c)=>motionSprite(v.name,c)?.x??0);
+registerReporter("spriteY",(v,c)=>motionSprite(v.name,c)?.y??0);
+registerReporter("spriteDirection",(v,c)=>motionSprite(v.name,c)?.rotation??0);
 registerReporter("isMobile",()=>ENGINE.mobile===true);
 
-
-registerBlock("moveToSprite",async block=>{
-    const s=motionSprite(block.name),t=motionSprite(block.target);
+registerBlock("moveToSprite",async(block,c)=>{
+    const s=motionSprite(block.name,c),t=motionSprite(block.target,c);
     if(!s||!t)return;
     s.edgeLock=null;
     s.x=t.x;
     s.y=t.y;
 });
 
-registerBlock("facing",async block=>{
-    const s=motionSprite(block.name);
+registerBlock("facing",async(block,c)=>{
+    const s=motionSprite(block.name,c);
     if(!s)return;
-
     s.flipX=s.flipY=1;
-
-    switch(String(resolveValue(block.facing)).toLowerCase()){
+    switch(String(resolveValue(block.facing,c)).toLowerCase()){
         case"left":s.flipX=-1;break;
         case"down":s.flipY=-1;break;
     }
 });
 
-registerBlock("direction",async block=>{
-    const s=motionSprite(block.name);
-    if(s)s.rotation=normDeg(motionNum(block.direction));
+registerBlock("direction",async(block,c)=>{
+    const s=motionSprite(block.name,c);
+    if(s)s.rotation=normDeg(motionNum(block.direction,0,c));
 });
 
-registerBlock("turn",async block=>{
-    const s=motionSprite(block.name);
-    if(s)s.rotation=normDeg(s.rotation+motionNum(block.amount));
+registerBlock("turn",async(block,c)=>{
+    const s=motionSprite(block.name,c);
+    if(s)s.rotation=normDeg(s.rotation+motionNum(block.amount,0,c));
 });
 
 
@@ -96,9 +92,9 @@ registerBlock("turn",async block=>{
 async function glideSprite(s,x,y,time,context){
     if(!s)return;
 
-    x=Number(resolveValue(x));
-    y=Number(resolveValue(y));
-    time=Number(resolveValue(time));
+    x=Number(resolveValue(x,context));
+    y=Number(resolveValue(y,context));
+    time=Number(resolveValue(time,context));
 
     if(!Number.isFinite(x)||!Number.isFinite(y))return;
     if(!Number.isFinite(time)||time<0)time=0;
@@ -124,27 +120,19 @@ async function glideSprite(s,x,y,time,context){
             if(p>=1)return resolve();
             requestAnimationFrame(animate);
         };
-
         requestAnimationFrame(animate);
     });
 }
 
-registerBlock("glideTo",async(block,context)=>{
-    const s=motionSprite(block.name);
-    if(s)await glideSprite(s,block.x,block.y,block.time,context);
+registerBlock("glideTo",async(block,c)=>{
+    const s=motionSprite(block.name,c);
+    if(s)await glideSprite(s,block.x,block.y,block.time,c);
 });
 
-registerBlock("glideToSprite",async(block,context)=>{
-    const s=motionSprite(block.name),t=motionSprite(block.target);
+registerBlock("glideToSprite",async(block,c)=>{
+    const s=motionSprite(block.name,c),t=motionSprite(block.target,c);
     if(!s||!t)return;
-
-    await glideSprite(
-        s,
-        t.x,
-        t.y,
-        block.time,
-        context
-    );
+    await glideSprite(s,t.x,t.y,block.time,c);
 });
 
 
@@ -159,10 +147,7 @@ function moveBy(name,x,y){
 }
 
 function moveToEdge(name,horizontalEdge,x,verticalEdge,y){
-    return recordMotionBlock(
-        "moveToEdge",
-        {name,horizontalEdge,x,verticalEdge,y}
-    );
+    return recordMotionBlock("moveToEdge",{name,horizontalEdge,x,verticalEdge,y});
 }
 
 function spriteX(name){
