@@ -46,16 +46,23 @@ function sensingValue(type,evaluate){
 }
 
 
+function sensingSprite(name,c=null){
+    return getContextSprite(name,c);
+}
+
+
 function touchingMouse(sprite){
     return sensingValue(
         "touchingMouse",
-        ()=>{
+        c=>{
             const target=
-                ENGINE.sprites[
-                    resolveValue(sprite)
-                ];
+                sensingSprite(sprite,c);
 
-            if(!target||!target.loaded)
+            if(
+                !target||
+                target.deleted||
+                !target.loaded
+            )
                 return false;
 
             const mouse=getCanvasPoint();
@@ -80,20 +87,18 @@ function touchingMouse(sprite){
 function touchingSprite(sprite,sprite2){
     return sensingValue(
         "touchingSprite",
-        ()=>{
+        c=>{
             const a=
-                ENGINE.sprites[
-                    resolveValue(sprite)
-                ];
+                sensingSprite(sprite,c);
 
             const b=
-                ENGINE.sprites[
-                    resolveValue(sprite2)
-                ];
+                sensingSprite(sprite2,c);
 
             if(
                 !a||
                 !b||
+                a.deleted||
+                b.deleted||
                 !a.loaded||
                 !b.loaded
             )
@@ -113,19 +118,18 @@ function touchingSprite(sprite,sprite2){
 function touchingColor(sprite,color_hex){
     return sensingValue(
         "touchingColor",
-        ()=>{
+        c=>{
             const targetSprite=
-                ENGINE.sprites[
-                    resolveValue(sprite)
-                ];
+                sensingSprite(sprite,c);
 
             const color=
                 String(
-                    resolveValue(color_hex)
+                    resolveValue(color_hex,c)
                 ).toLowerCase();
 
             if(
                 !targetSprite||
+                targetSprite.deleted||
                 !targetSprite.loaded
             )
                 return false;
@@ -232,13 +236,11 @@ function parseColor(color){
 function distanceMouse(sprite){
     return sensingValue(
         "distanceMouse",
-        ()=>{
+        c=>{
             const targetSprite=
-                ENGINE.sprites[
-                    resolveValue(sprite)
-                ];
+                sensingSprite(sprite,c);
 
-            if(!targetSprite)
+            if(!targetSprite||targetSprite.deleted)
                 return 0;
 
             const mouse=getCanvasPoint();
@@ -255,18 +257,19 @@ function distanceMouse(sprite){
 function distanceSprite(sprite,sprite2){
     return sensingValue(
         "distanceSprite",
-        ()=>{
+        c=>{
             const a=
-                ENGINE.sprites[
-                    resolveValue(sprite)
-                ];
+                sensingSprite(sprite,c);
 
             const b=
-                ENGINE.sprites[
-                    resolveValue(sprite2)
-                ];
+                sensingSprite(sprite2,c);
 
-            if(!a||!b)
+            if(
+                !a||
+                !b||
+                a.deleted||
+                b.deleted
+            )
                 return 0;
 
             return Math.hypot(
@@ -281,10 +284,10 @@ function distanceSprite(sprite,sprite2){
 function keyPressed(key){
     return sensingValue(
         "keyPressed",
-        ()=>{
+        c=>{
             let value=
                 String(
-                    resolveValue(key)
+                    resolveValue(key,c)
                 ).toLowerCase();
 
             const keyMap={

@@ -213,16 +213,20 @@ whenBroadcast("Start Menu",
 );
 
 
-// <----- Function Blocks ----->
+// <----- Clone Blocks ----->
 
-// Parameters in function blocks will not work as they are not variable blocks. 
-// All variables are inherently global, but you can set one private variable's value by another private variable easily using blocks.
-testFunc(); // Declare a function
+makeClone("Player1"); // Creates 1 one of the sprite and inherits all of the sprite's current attributes.
 
-// Function body, takes the value parameter in function and assigns to variables in order.
-function testFunc(){
+// Creates a broadcast instance where clones will run code on creation.
+whenClone("Player1", 
     //field;
-}; 
+)
+
+deleteClone("Player1"); // When used inside whenClone(), it deletes that clone.
+
+getCloneName(); // When used inside whenClone(), it gets the clone's own name.
+
+getCloneId(); // When used inside whenClone(), it gets the clone's own id.
 
 
 // <----- Sound Blocks -----> // Must intereact with screen to begin any sound on a project start.
