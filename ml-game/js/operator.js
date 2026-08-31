@@ -102,55 +102,6 @@ registerReporter("spriteVariable",(b,c)=>{
 });
 
 
-/* Clone Variable Blocks */
-
-function makeCloneVar(varName){
-    return recordVarBlock("makeCloneVar",{varName});
-}
-
-registerBlock("makeCloneVar",async(b,c)=>{
-    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
-    if(clone&&n&&!hasOwn(clone.variables,n))clone.variables[n]=0;
-});
-
-function getCloneVar(varName){
-    return{type:"cloneVariable",varName};
-}
-
-function setCloneVar(varName,value){
-    return recordVarBlock("setCloneVar",{varName,value});
-}
-
-registerBlock("setCloneVar",async(b,c)=>{
-    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
-    if(clone&&n)clone.variables[n]=normalizeValue(b.value,c);
-});
-
-function changeCloneVarBy(varName,value){
-    return recordVarBlock("changeCloneVarBy",{varName,value});
-}
-
-registerBlock("changeCloneVarBy",async(b,c)=>{
-    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
-    if(clone&&n)
-        clone.variables[n]=(Number(clone.variables[n])||0)+(numValue(b.value,c)||0);
-});
-
-function deleteCloneVar(varName){
-    return recordVarBlock("deleteCloneVar",{varName});
-}
-
-registerBlock("deleteCloneVar",async(b,c)=>{
-    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
-    if(clone&&n)delete clone.variables[n];
-});
-
-registerReporter("cloneVariable",(b,c)=>{
-    const clone=cloneBy(c),n=String(resolveValue(b.varName,c));
-    return clone&&n?clone.variables[n]??"":"";
-});
-
-
 /* Operator Blocks */
 
 function operator(type,evaluate){

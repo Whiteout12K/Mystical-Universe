@@ -29,7 +29,7 @@ function copySpriteState(source,clone){
     clone.edgeLock=source.edgeLock?{...source.edgeLock}:null;
     clone.costume=source.costume||"";
     clone.variables={...source.variables};
-    clone.privateVariables=Object.create(null);
+    clone.privateVariables={...source.privateVariables};
     clone.cloneOf=source.isClone?source.cloneOf:source.name;
     clone.cloneName=source.isClone?source.cloneName:source.name;
 
