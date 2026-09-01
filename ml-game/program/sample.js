@@ -169,11 +169,9 @@ wait(1); // Wait for a certain amount of time. Parameter: number is in seconds a
 
 // Repeats a certain amount of times. Parameter: repeat_number.
 //   Can place additioanl code inside or more repeat. Nested repeat does not need ENGINE.scripts.push()
-ENGINE.scripts.push(
-    repeat(100,
-        //field,
-    )
-);
+repeat(100,
+    //field,
+)
 
 // Conditional if block that checks of if a conditonal is true and then executes.
 //  Also can use "else" which is optional to run if conditonal is false.
@@ -259,7 +257,7 @@ volumeOfSound("Sound"); // Returns the volume of a particular sound.
 
 // <----- Data Blocks ----->
 
-
+loadPlayerData();
 
 getUsername(); // Returns signed in username.
 

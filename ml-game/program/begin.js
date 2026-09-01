@@ -13,13 +13,15 @@ whenBroadcast("Main Menu",
     moveTo("Heroes", 75, 0),
     moveToEdge("Logo", "left", 40, "top", 30),
 
-    ifBlock( equal(isMobile(), true),
+    ifBlock(isMobile(),
         moveToEdge("Logo", "", 0, "top", 30),
         deleteSprite("Heroes"),
     ),
 
     makeSound("mlt", "/images/mlg-assets/Music/ML-Theme.mp3"),
+    setPitch("mlt", 5),
     playSound("mlt"),
+    
     forever(
         glideTo("Heroes", 80, 5, 0.4),
         glideTo("Heroes", 70, -5, 0.4),
@@ -73,5 +75,4 @@ whenClone("Line",
 
 
 loadPlayerData();
-
 broadcast("Main Menu");
