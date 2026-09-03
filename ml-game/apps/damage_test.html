@@ -11,69 +11,69 @@
 <script src="/js/bootstrap-bundle-min.js"></script>
 <title>MLG — Damage Tester</title>
 <style>
-*{box-sizing:border-box}
-:root{--red:#741b22;--red2:#a52a32;--gold:#d6aa45;--gold2:#f0ca69;--dark:#151416;--panel:#211c1d;--panel2:#2b2526;--text:#f5ead2;--muted:#a99e8e;--border:rgba(214,170,69,.28)}
-html{min-height:100%;background:radial-gradient(circle at top,#332629 0,#171416 48%,#0d0c0d 100%);background-attachment:fixed;background-color:#0d0c0d}
-body{margin:0;min-height:100vh;background:transparent;color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:28px 16px}
-.wrap{width:min(1050px,100%);margin:auto}
-h1{margin:0;font-size:28px;letter-spacing:.5px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.panel{background:rgba(33,28,29,.94);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 12px 35px #0005}
-.panel h2{font-size:16px;margin:0 0 14px;color:var(--gold2)}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
-input,select,button{width:100%;border:1px solid #4a3c3b;background:#151315;color:var(--text);border-radius:8px;padding:10px;font:inherit;outline:none}
-input:focus,select:focus{border-color:var(--gold)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.base-damage{display:grid;grid-template-columns:1fr 125px 42px;gap:8px;margin-bottom:8px;align-items:end}
-.base-damage button,.buff button{padding:9px 0}
-.buff{display:grid;grid-template-columns:1fr 105px 42px;gap:8px;margin-bottom:8px;align-items:end}
-button{cursor:pointer;background:linear-gradient(#8e252d,#64171d);border-color:#a84a50;font-weight:700}
-button:hover{filter:brightness(1.12)}
-button.alt{background:#302829;border-color:#665454}
-.results{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:2px}
-.result{background:#151315;border:1px solid #403536;border-radius:10px;padding:14px;min-width:0}
-.result span{display:block;color:var(--muted);font-size:12px}
-.result strong{display:block;font-size:22px;margin-top:4px;color:var(--gold2);overflow-wrap:anywhere}
-.big{grid-column:1/-1;text-align:center;padding:26px 20px;margin:2px 0;background:linear-gradient(145deg,#2d2021,#171315);border:1px solid rgba(214,170,69,.34);box-shadow:0 8px 20px #0004}
-.big span{font-size:13px}
-.big strong{font-size:38px;line-height:1.15;margin-top:7px}
-.damage-result{grid-column:1/-1}
-.total-toggle{width:100%;margin-top:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;text-align:left;background:#151315;border:1px solid #403536;border-radius:10px;color:var(--gold2)}
-.total-toggle:hover{background:#211c1d}
-.total-toggle span{font-size:13px}
-.total-toggle .arrow{font-size:13px;transition:transform .2s}
-.total-toggle.open .arrow{transform:rotate(180deg)}
-.total-stats{display:none;background:#151315;border:1px solid #403536;border-top:0;border-radius:0 0 10px 10px;padding:12px;margin-top:-5px}
-.total-stats.open{display:block}
-.total-stat-list{display:grid;grid-template-columns:1fr 1fr;gap:7px 18px}
-.total-stat{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 10px;background:#211c1d;border:1px solid #383031;border-radius:8px}
-.total-stat span{color:var(--muted);font-size:12px}
-.total-stat strong{color:var(--text);font-size:13px;text-align:right}
-.note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
-.status{font-size:11px;color:var(--muted);margin:-6px 0 12px;min-height:16px}
-.status.loaded{color:#8fd18f}
-.status.error{color:#e58d8d}
-.base-total{background:#151315;border:1px solid #403536;border-radius:10px;padding:11px 12px;margin:10px 0 12px;display:flex;justify-content:space-between;align-items:center}
-.base-total span{font-size:12px;color:var(--muted)}
-.base-total strong{font-size:18px;color:var(--gold2)}
+.damage-page{box-sizing:border-box}
+.damage-page *{box-sizing:border-box}
+.damage-page{--gold:#d6aa45;--gold2:#f0ca69;--dark:#151416;--panel:#211c1d;--panel2:#2b2526;--text:#f5ead2;--muted:#a99e8e;--border:rgba(214,170,69,.28)}
+.damage-page .wrap{width:min(1050px,100%);margin:auto}
+.damage-page h1{margin:0;font-size:28px;letter-spacing:.5px}
+.damage-page .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.damage-page .panel{background:rgba(33,28,29,.94);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 12px 35px #0005}
+.damage-page .panel h2{font-size:16px;margin:0 0 14px;color:var(--gold2)}
+.damage-page .stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.damage-page label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px}
+.damage-page input,.damage-page select,.damage-page button{width:100%;border:1px solid #4a3c3b;background:#151315;color:var(--text);border-radius:8px;padding:10px;font:inherit;outline:none}
+.damage-page input:focus,.damage-page select:focus{border-color:var(--gold)}
+.damage-page .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.damage-page .base-damage{display:grid;grid-template-columns:1fr 125px 42px;gap:8px;margin-bottom:8px;align-items:end}
+.damage-page .base-damage button,.damage-page .buff button{padding:9px 0}
+.damage-page .buff{display:grid;grid-template-columns:1fr 105px 42px;gap:8px;margin-bottom:8px;align-items:end}
+.damage-page button:hover{filter:brightness(1.12)}
+.damage-page button.alt{background:#302829;border-color:#665454}
+.damage-page .results{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:2px}
+.damage-page .result{background:#151315;border:1px solid #403536;border-radius:10px;padding:14px;min-width:0}
+.damage-page .result span{display:block;color:var(--muted);font-size:12px}
+.damage-page .result strong{display:block;font-size:22px;margin-top:4px;color:var(--gold2);overflow-wrap:anywhere}
+.damage-page .big{grid-column:1/-1;text-align:center;padding:26px 20px;margin:2px 0;background:linear-gradient(145deg,#2d2021,#171315);border:1px solid rgba(214,170,69,.34);box-shadow:0 8px 20px #0004}
+.damage-page .big span{font-size:13px}
+.damage-page .big strong{font-size:38px;line-height:1.15;margin-top:7px}
+.damage-page .damage-result{grid-column:1/-1}
+.damage-page .total-toggle{width:100%;margin-top:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;text-align:left;background:#151315;border:1px solid #403536;border-radius:10px;color:var(--gold2)}
+.damage-page .total-toggle:hover{background:#211c1d}
+.damage-page .total-toggle span{font-size:13px}
+.damage-page .total-toggle .arrow{font-size:13px;transition:transform .2s}
+.damage-page .total-toggle.open .arrow{transform:rotate(180deg)}
+.damage-page .total-stats{display:none;background:#151315;border:1px solid #403536;border-top:0;border-radius:0 0 10px 10px;padding:12px;margin-top:-5px}
+.damage-page .total-stats.open{display:block}
+.damage-page .total-stat-list{display:grid;grid-template-columns:1fr 1fr;gap:7px 18px}
+.damage-page .total-stat{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 10px;background:#211c1d;border:1px solid #383031;border-radius:8px}
+.damage-page .total-stat span{color:var(--muted);font-size:12px}
+.damage-page .total-stat strong{color:var(--text);font-size:13px;text-align:right}
+.damage-page .note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px}
+.damage-page .status{font-size:11px;color:var(--muted);margin:-6px 0 12px;min-height:16px}
+.damage-page .status.loaded{color:#8fd18f}
+.damage-page .status.error{color:#e58d8d}
+.damage-page .base-total{background:#151315;border:1px solid #403536;border-radius:10px;padding:11px 12px;margin:10px 0 12px;display:flex;justify-content:space-between;align-items:center}
+.damage-page .base-total span{font-size:12px;color:var(--muted)}
+.damage-page .base-total strong{font-size:18px;color:var(--gold2)}
 @media(max-width:720px){
- .grid{grid-template-columns:1fr}
- .stats,.results{grid-template-columns:1fr 1fr}
- .total-stat-list{grid-template-columns:1fr}
+ .damage-page .grid{grid-template-columns:1fr}
+ .damage-page .stats,.damage-page .results{grid-template-columns:1fr 1fr}
+ .damage-page .total-stat-list{grid-template-columns:1fr}
 }
 @media(max-width:430px){
- .stats,.results{grid-template-columns:1fr}
- .row{grid-template-columns:1fr}
- .base-damage{grid-template-columns:1fr 105px 42px}
+ .damage-page .stats,.damage-page .results{grid-template-columns:1fr}
+ .damage-page .row{grid-template-columns:1fr}
+ .damage-page .base-damage{grid-template-columns:1fr 105px 42px}
 }
 </style>
 </head>
 <body>
 
 <div id="homeheader-placeholder"></div>
+
+<div class="damage-page">
 <div class="wrap">
-<br><br><br>
+<br><br><br><br>
 
 <h1><center>Mystical Legends Game — Damage Tester</center></h1>
 <p> </p>
@@ -212,6 +212,7 @@ For example, +20% Crit Rate on 75% gives 95%, while +20% Attack on 2000 gives 24
 </p>
 </section>
 
+</div>
 </div>
 </div>
 
