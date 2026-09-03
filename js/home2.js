@@ -6,41 +6,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const charDesc = document.getElementById("char-desc");
   const slideshowToggle = document.getElementById("slideshow-toggle");
 
-  if (
-    !charList ||
-    !charThumbs.length ||
-    !charImg ||
-    !charName ||
-    !charDesc
-  ) {
-    return;
-  }
+  if (!charList || !charThumbs.length || !charImg || !charName || !charDesc) return;
 
   /*
    * SETTINGS
    */
   const ROTATION_TIME = 3500;
   const FADE_TIME = 450;
-  const CHARACTER_FADE_TIME = 600;
-
 
   /*
    * STATE
    */
   let currentIndex = 0;
-
   let activeThumb = null;
-
   let rotationTimer = null;
-
   let rotationIndex = 0;
-
   let imageList = [];
-
   let imageGeneration = 0;
-
   let slideshowRunning = true;
-
 
   /*
    * ---------------------------------------------------------
@@ -49,20 +32,18 @@ document.addEventListener("DOMContentLoaded", () => {
    */
 
   const fadeIn = () => {
-    charImg.classList.add("show");
-    charName.classList.add("show");
-    charDesc.classList.add("show");
+    requestAnimationFrame(() => {
+      charImg.classList.add("show");
+      charName.classList.add("show");
+      charDesc.classList.add("show");
+    });
   };
 
-
-  const fadeOut = callback => {
+  const fadeOut = () => {
     charImg.classList.remove("show");
     charName.classList.remove("show");
     charDesc.classList.remove("show");
-
-    setTimeout(callback, CHARACTER_FADE_TIME);
   };
-
 
   /*
    * ---------------------------------------------------------
@@ -84,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-
   /*
    * ---------------------------------------------------------
    * GET COSTUME IMAGES
@@ -95,16 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!thumb) return [];
 
     try {
-      const images = JSON.parse(
-        thumb.dataset.images || "[]"
-      );
+      const images = JSON.parse(thumb.dataset.images || "[]");
 
-      if (!Array.isArray(images)) {
-        return [];
-      }
+      if (!Array.isArray(images)) return [];
 
       return images.filter(Boolean);
-
     } catch (error) {
       console.warn(
         "Invalid data-images for character:",
@@ -115,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return [];
     }
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -130,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   /*
    * ---------------------------------------------------------
    * UPDATE SLIDESHOW BUTTON
@@ -140,13 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateSlideshowButton() {
     if (!slideshowToggle) return;
 
-    if (slideshowRunning) {
-      slideshowToggle.textContent = "Press to STOP slideshow.";
-    } else {
-      slideshowToggle.textContent = "Press to start slideshow.";
-    }
+    slideshowToggle.textContent = slideshowRunning
+      ? "Press to STOP slideshow."
+      : "Press to start slideshow.";
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -161,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   /*
    * ---------------------------------------------------------
    * SHOW A COSTUME IMAGE
@@ -169,23 +138,17 @@ document.addEventListener("DOMContentLoaded", () => {
    */
 
   function showImage(src, generation) {
-    if (!src || generation !== imageGeneration) {
-      return;
-    }
+    if (!src || generation !== imageGeneration) return;
 
     const nextImage = new Image();
 
     nextImage.onload = () => {
-      if (generation !== imageGeneration) {
-        return;
-      }
+      if (generation !== imageGeneration) return;
 
       charImg.classList.remove("show");
 
       setTimeout(() => {
-        if (generation !== imageGeneration) {
-          return;
-        }
+        if (generation !== imageGeneration) return;
 
         charImg.src = src;
 
@@ -194,9 +157,9 @@ document.addEventListener("DOMContentLoaded", () => {
           charImg.alt;
 
         requestAnimationFrame(() => {
+          if (generation !== imageGeneration) return;
           charImg.classList.add("show");
         });
-
       }, FADE_TIME);
     };
 
@@ -209,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     nextImage.src = src;
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -229,34 +191,32 @@ document.addEventListener("DOMContentLoaded", () => {
     /*
      * Fall back to data-img if data-images is empty.
      */
-    if (
-      !imageList.length &&
-      thumb.dataset.img
-    ) {
+    if (!imageList.length && thumb.dataset.img) {
       imageList = [thumb.dataset.img];
     }
 
+    /*
+     * Always start the selected character
+     * at their first costume.
+     */
     rotationIndex = 0;
 
+    /*
+     * Invalidate all previous image transitions.
+     */
     imageGeneration++;
 
     const generation = imageGeneration;
 
     /*
-     * Always begin the selected character
-     * with their first costume image.
+     * Immediately reset the image when requested.
      */
-    if (
-      resetImage &&
-      imageList.length
-    ) {
+    if (resetImage && imageList.length) {
       charImg.src = imageList[0];
 
       charImg.alt =
         thumb.dataset.name ||
         charImg.alt;
-
-      charImg.classList.add("show");
     }
 
     /*
@@ -270,30 +230,21 @@ document.addEventListener("DOMContentLoaded", () => {
     updateSlideshowButton();
 
     /*
-     * If slideshow is currently disabled,
-     * do not create a timer.
+     * Do not start a timer if slideshow is disabled.
      */
-    if (!slideshowRunning) {
-      return;
-    }
+    if (!slideshowRunning) return;
 
     /*
-     * A character with only one image
-     * does not need a slideshow.
+     * One image means no slideshow is needed.
      */
-    if (imageList.length < 2) {
-      return;
-    }
+    if (imageList.length < 2) return;
 
+    /*
+     * Start a completely fresh cycle.
+     */
     rotationTimer = setInterval(() => {
-
-      if (generation !== imageGeneration) {
-        return;
-      }
-
-      if (!slideshowRunning) {
-        return;
-      }
+      if (generation !== imageGeneration) return;
+      if (!slideshowRunning) return;
 
       rotationIndex =
         (rotationIndex + 1) %
@@ -303,10 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
         imageList[rotationIndex],
         generation
       );
-
     }, ROTATION_TIME);
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -317,104 +266,115 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateActive(index, animate = true) {
     const thumb = charThumbs[index];
 
-    if (!thumb) {
-      return;
-    }
+    if (!thumb) return;
 
     currentIndex = index;
 
-    if (!animate) {
-      charThumbs.forEach(item => {
-        item.classList.remove("active");
-      });
-
-      thumb.classList.add("active");
-
-      const name =
-        thumb.getAttribute("data-name") || "";
-
-      const image =
-        thumb.getAttribute("data-img") || "";
-
-      const description =
-        thumb.getAttribute("data-desc") || "";
-
-      charName.textContent = name;
-
-      /*
-       * Use the first image immediately.
-       */
-      const images = getImages(thumb);
-
-      charImg.src =
-        images[0] ||
-        image;
-
-      charImg.alt = name;
-
-      charDesc.innerHTML = description;
-
-      centerThumb(thumb);
-
-      charImg.classList.add("show");
-      charName.classList.add("show");
-      charDesc.classList.add("show");
-
-      prepareCharacter(thumb, true);
-
-      return;
-    }
-
+    /*
+     * Immediately invalidate anything belonging
+     * to the previous character.
+     */
+    imageGeneration++;
+    stopRotation();
 
     /*
-     * Animated character change.
+     * Update active thumbnail.
      */
-    fadeOut(() => {
+    charThumbs.forEach(item => {
+      item.classList.remove("active");
+    });
 
-      charThumbs.forEach(item => {
-        item.classList.remove("active");
-      });
+    thumb.classList.add("active");
 
-      thumb.classList.add("active");
+    /*
+     * Get character information.
+     */
+    const name =
+      thumb.getAttribute("data-name") || "";
 
-      const name =
-        thumb.getAttribute("data-name") || "";
+    const image =
+      thumb.getAttribute("data-img") || "";
 
-      const image =
-        thumb.getAttribute("data-img") || "";
+    const description =
+      thumb.getAttribute("data-desc") || "";
 
-      const description =
-        thumb.getAttribute("data-desc") || "";
+    const images =
+      getImages(thumb);
 
-      charName.textContent = name;
+    const firstImage =
+      images[0] ||
+      image;
 
-      charDesc.innerHTML = description;
+    /*
+     * -------------------------------------------------------
+     * PREPARE NEW CHARACTER IMMEDIATELY
+     * -------------------------------------------------------
+     */
 
-      /*
-       * First image of the new character.
-       */
-      const images = getImages(thumb);
+    activeThumb = thumb;
 
-      charImg.src =
-        images[0] ||
-        image;
+    imageList = images.length
+      ? images
+      : image
+        ? [image]
+        : [];
 
-      charImg.alt = name;
+    rotationIndex = 0;
 
-      centerThumb(thumb);
+    /*
+     * Update text immediately.
+     */
+    charName.textContent = name;
+    charDesc.innerHTML = description;
 
-      /*
-       * Prepare the slideshow.
-       */
-      prepareCharacter(thumb, true);
+    /*
+     * Set the new image immediately.
+     *
+     * This prevents the previous character from
+     * remaining visible during the fade.
+     */
+    charImg.src = firstImage;
+    charImg.alt = name;
+
+    /*
+     * Center selected character.
+     */
+    centerThumb(thumb);
+
+    /*
+     * -------------------------------------------------------
+     * FADE NEW CHARACTER IN
+     * -------------------------------------------------------
+     *
+     * The old character is replaced immediately.
+     * The new character starts hidden and fades in.
+     */
+    if (animate) {
+      fadeOut();
 
       requestAnimationFrame(() => {
-        setTimeout(fadeIn, 10);
+        /*
+         * Force the browser to recognize the hidden state
+         * before showing the new character.
+         */
+        requestAnimationFrame(() => {
+          charImg.classList.add("show");
+          charName.classList.add("show");
+          charDesc.classList.add("show");
+        });
       });
+    } else {
+      fadeIn();
+    }
 
-    });
+    /*
+     * Start the new character's slideshow cycle.
+     *
+     * resetImage is false because the image was already
+     * changed above.
+     */
+    prepareCharacter(thumb, false);
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -423,12 +383,10 @@ document.addEventListener("DOMContentLoaded", () => {
    */
 
   charThumbs.forEach((thumb, index) => {
-
     thumb.addEventListener("click", () => {
 
       /*
-       * If this character is already selected,
-       * don't restart the character transition.
+       * Do nothing if already selected.
        */
       if (
         index === currentIndex &&
@@ -437,12 +395,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      /*
+       * Immediately switch and fade in the new character.
+       */
       updateActive(index, true);
-
     });
-
   });
-
 
   /*
    * ---------------------------------------------------------
@@ -451,42 +409,35 @@ document.addEventListener("DOMContentLoaded", () => {
    */
 
   if (slideshowToggle) {
-
     slideshowToggle.addEventListener("click", event => {
-
       event.preventDefault();
 
       slideshowRunning =
         !slideshowRunning;
 
-
       if (!slideshowRunning) {
-
         /*
          * STOP
          */
         stopRotation();
 
       } else {
-
         /*
          * START
          *
-         * Resume from the current costume
-         * instead of jumping back to costume #1.
+         * Resume from the current costume instead
+         * of jumping back to costume #1.
          */
         if (
           activeThumb &&
           imageList.length > 1
         ) {
-
           const generation =
             imageGeneration;
 
           stopRotation();
 
           rotationTimer = setInterval(() => {
-
             if (
               generation !== imageGeneration ||
               !slideshowRunning
@@ -502,19 +453,13 @@ document.addEventListener("DOMContentLoaded", () => {
               imageList[rotationIndex],
               generation
             );
-
           }, ROTATION_TIME);
-
         }
-
       }
 
       updateSlideshowButton();
-
     });
-
   }
-
 
   /*
    * ---------------------------------------------------------
@@ -525,35 +470,25 @@ document.addEventListener("DOMContentLoaded", () => {
   charList.addEventListener(
     "wheel",
     event => {
-
       if (
         Math.abs(event.deltaY) >
         Math.abs(event.deltaX)
       ) {
-
         event.preventDefault();
 
         charList.scrollLeft +=
           event.deltaY;
-
       }
-
     },
     {
       passive: false
     }
   );
 
-
   /*
    * ---------------------------------------------------------
    * ALWAYS START WITH FIRST CHARACTER
    * ---------------------------------------------------------
-   *
-   * This intentionally ignores whichever character
-   * might have "active" in the HTML.
-   *
-   * Every page refresh begins with character #1.
    */
 
   charThumbs.forEach(item => {
@@ -566,7 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
     charThumbs[0];
 
   if (firstCharacter) {
-
     firstCharacter.classList.add("active");
 
     const firstName =
@@ -609,7 +543,6 @@ document.addEventListener("DOMContentLoaded", () => {
     charDesc.classList.add("show");
   }
 
-
   /*
    * ---------------------------------------------------------
    * INITIAL BUTTON STATE
@@ -617,7 +550,6 @@ document.addEventListener("DOMContentLoaded", () => {
    */
 
   updateSlideshowButton();
-
 
   /*
    * ---------------------------------------------------------
@@ -631,5 +563,4 @@ document.addEventListener("DOMContentLoaded", () => {
       stopRotation();
     }
   );
-
 });
