@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Character Stats</title>
+<link rel="stylesheet" href="/css/mlg.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#151416;color:#f5ead2;font-family:Arial,sans-serif}
+body{background:radial-gradient(circle at top,#302426 0,#151416 55%,#0d0c0d 100%)}
+#app{min-height:100vh;padding:25px}
+.stats-page{max-width:760px;margin:auto}
+.loading,.error{padding:30px;text-align:center;background:#211c1d;border:1px solid #ffffff18;border-radius:8px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}
+.title{margin:0;color:#fff;font-size:25px}
+.subtitle{margin:4px 0 0;color:#a99e8e;font-size:12px}
+.level{color:#f0ca69;font-size:12px;font-weight:800}
+.panel{background:#211c1d;border:1px solid #ffffff18;border-radius:8px;overflow:hidden}
+.panel-title{padding:10px 13px;border-bottom:1px solid #ffffff18;color:#fff;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.stats{display:flex;flex-direction:column}
+.stat{display:grid;grid-template-columns:minmax(130px,1fr) auto;align-items:center;gap:12px;padding:8px 13px;border-bottom:1px solid #ffffff0d}
+.stat:last-child{border-bottom:0}
+.stat-name{color:#d0d0d0;font-size:12px;font-weight:700}
+.stat-values{display:flex;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap}
+.stat-total{color:#fff;font-size:13px;font-weight:900}
+.stat-equipment{color:#f0ca69;font-size:10px;font-weight:800}
+.stat-artifact{color:#ff8f8f;font-size:10px;font-weight:800}
+.stat-base{color:#8e8e8e;font-size:10px;font-weight:700}
+.legend{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;padding:8px 13px;background:#00000018;border-bottom:1px solid #ffffff10;font-size:9px;font-weight:800}
+.legend span:nth-child(1){color:#fff}
+.legend span:nth-child(2){color:#f0ca69}
+.legend span:nth-child(3){color:#ff8f8f}
+.legend span:nth-child(4){color:#8e8e8e}
+@media(max-width:600px){
+ #app{padding:12px}
+ .title{font-size:21px}
+ .stat{grid-template-columns:1fr;gap:4px}
+ .stat-values{justify-content:flex-start}
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Loading character stats...</div></div>
+
+<script type="module">
+import{run}from"/ml-game/apps/c-stat/c-stat.js";
+run();
+</script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MLG Damage Test</title>
+
+<link rel="icon" href="/images/website/favicon.png" type="image/png">
+<link href="/css/bootstrap-min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/news.css">
+<link rel="stylesheet" href="/css/mlg.css">
+<script src="/js/bootstrap-bundle-min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{--gold:#d6aa45;--gold2:#f0ca69;--text:#f5ead2;--muted:#a99e8e;--red:#741b22;--dark:#151416}
+html{min-height:100%;background:#0d0c0d}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a3028 0,#21191a 32%,#151416 65%,#0d0c0d 100%);background-attachment:fixed;color:var(--text);font-family:Arial,sans-serif}
+.damage-test{width:min(1080px,94%);margin:30px auto 65px}
+.damage-test-header{position:relative;text-align:center;padding:25px 20px 22px;margin-bottom:20px;background:linear-gradient(145deg,#302223ee,#171416f2);border:1px solid #d6aa4550;border-radius:16px;box-shadow:0 12px 35px #0009,inset 0 1px #ffffff0c;overflow:hidden}
+.damage-test-header:before{content:"";position:absolute;left:8%;right:8%;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#d6aa4580,transparent)}
+.damage-test-header h1{margin:0;color:var(--gold2);font-size:34px;letter-spacing:.04em;text-shadow:0 2px 12px #000,0 0 20px #d6aa4525}
+.damage-test-header p{margin:6px 0 20px;color:var(--muted);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.damage-test-button{display:block;width:min(600px,100%);margin:auto;padding:13px 18px;text-align:center;text-decoration:none;color:#fff1cf;font-size:15px;font-weight:900;letter-spacing:.04em;background:linear-gradient(145deg,#76232a,#3b1216);border:1px solid #b8863a;border-radius:9px;box-shadow:0 5px 18px #0008,inset 0 1px #ffffff12;transition:.2s}
+.damage-test-button:hover{color:#fff;text-decoration:none;transform:translateY(-2px);filter:brightness(1.15);box-shadow:0 8px 22px #0009,0 0 14px #d6aa4530}
+.character-section{position:relative;padding:20px;background:linear-gradient(145deg,#251e1fef,#151416f5);border:1px solid #d6aa4535;border-radius:16px;box-shadow:0 12px 35px #0008}
+.character-heading{margin:0 0 18px;text-align:center;color:var(--gold2);font-size:18px;letter-spacing:.04em}
+.character-heading:after{content:"";display:block;width:90px;height:1px;margin:8px auto 0;background:linear-gradient(90deg,transparent,#d6aa4580,transparent)}
+.character-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:13px}
+.character-card{--rarity:#7e7e7e;--rarity2:#292929;--glow:#494949;position:relative;height:240px;display:block;overflow:hidden;color:var(--text);text-decoration:none;background:radial-gradient(circle at 50% 32%,color-mix(in srgb,var(--rarity) 25%,#151416),#151416 70%);border:1px solid color-mix(in srgb,var(--rarity) 62%,#ffffff 3%);border-radius:12px;box-shadow:0 7px 18px #0009,0 0 12px color-mix(in srgb,var(--glow) 14%,transparent);transition:.25s}
+.character-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--rarity) 13%,transparent),transparent 38%,transparent 58%,#0b0a0be8 100%);z-index:1;pointer-events:none}
+.character-card:after{content:"";position:absolute;left:8%;right:8%;bottom:51px;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--rarity) 70%,transparent),transparent);opacity:.6;z-index:4}
+.character-card:hover{color:#fff;text-decoration:none;transform:translateY(-5px) scale(1.01);border-color:var(--rarity);box-shadow:0 13px 30px #000b,0 0 24px color-mix(in srgb,var(--glow) 38%,transparent)}
+.character-art{position:absolute;inset:0 0 48px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.character-art:before{content:"";position:absolute;width:75%;height:75%;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 68%);opacity:.12;filter:blur(16px)}
+.character-image{position:relative;z-index:2;width:175px;height:175px;object-fit:contain;object-position:center;filter:drop-shadow(0 8px 10px #000c);transition:.28s}
+.character-card:hover .character-image{transform:scale(1.06);filter:drop-shadow(0 9px 13px #000d) drop-shadow(0 0 9px color-mix(in srgb,var(--glow) 28%,transparent))}
+.character-info{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:12px 12px 13px;text-align:center;background:linear-gradient(180deg,transparent,#111012c9 30%,#111012f5 100%)}
+.character-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fcf2d4a6;font-size:15px;font-weight:900;text-shadow:0 2px 7px #000;transition:.2s}
+.character-card:hover .character-name{color:var(--rarity)}
+.rarity-label{position:absolute;top:11px;right:12px;z-index:6;color:var(--rarity);font-size:10px;font-weight:900;letter-spacing:.16em;text-shadow:0 2px 6px #000,0 0 8px color-mix(in srgb,var(--glow) 45%,transparent)}
+.c{--rarity:#7e7e7e;--rarity2:#292929;--glow:#494949}
+.un{--rarity:#6aa84f;--rarity2:#24351f;--glow:#6aa84f}
+.r{--rarity:#0000ff;--rarity2:#161d45;--glow:#0000ff}
+.sr{--rarity:#9900ff;--rarity2:#35174a;--glow:#9900ff}
+.ssr{--rarity:#ff9900;--rarity2:#493017;--glow:#ff9900}
+.ur{--rarity:#ff0000;--rarity2:#491717;--glow:#ff0000}
+.lr{--rarity:#d5a6bd;--rarity2:#40313a;--glow:#d5a6bd}
+.loading,.error{text-align:center;padding:45px 20px;color:var(--muted)}
+.error{color:#e58d8d}
+@media(max-width:600px){
+ .damage-test{width:92%;margin:18px auto 45px}
+ .damage-test-header{padding:21px 14px 18px}
+ .damage-test-header h1{font-size:28px}
+ .character-section{padding:13px}
+ .character-heading{font-size:16px;margin-bottom:14px}
+ .character-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .character-card{height:210px}
+ .character-image{width:145px;height:145px}
+ .character-name{font-size:13px}
+ .rarity-label{top:8px;right:9px;font-size:8px}
+}
+@media(max-width:380px){
+ .character-grid{grid-template-columns:1fr}
+ .character-card{height:225px}
+ .character-image{width:160px;height:160px}
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="homeheader-placeholder"></div>
+<br><br><br>
+<div id="app">
+ <main class="damage-test">
+  <header class="damage-test-header">
+   <h1>Damage Test</h1>
+   <p>Choose a character to begin testing</p>
+   <a class="damage-test-button" href="/ml-game/apps/damage_test.html">Enter Damage Test</a>
+  </header>
+  <section class="character-section">
+   <h2 class="character-heading">Your Characters</h2>
+   <div class="loading">Loading characters...</div>
+  </section>
+ </main>
+</div>
+
+<script>
+let characterDatabase={};
+
+async function loadJSON(path){
+ const r=await fetch(path,{cache:"no-cache"});
+ if(!r.ok)throw Error(`HTTP ${r.status}`);
+ return r.json()
+}
+
+function getCharacterInfo(id){
+ const key=`c${id}`,c=characterDatabase.characters;
+ if(characterDatabase[key])return characterDatabase[key];
+ if(c?.[key])return c[key];
+ if(Array.isArray(c))return c[id-1]||{};
+ return{}
+}
+
+function asset(path){
+ if(!path)return"";
+ let v=String(path).trim();
+ if(!v)return"";
+ if(/^(https?:|data:|blob:)/.test(v))return v;
+ return v.startsWith("/")?v:`/${v}`
+}
+
+function esc(v){
+ return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")
+}
+
+function rarityClass(rarity){
+ const r=String(rarity||"c").toLowerCase().replace(/[^a-z]/g,"");
+ return["c","un","r","sr","ssr","ur","lr"].includes(r)?r:"c"
+}
+
+function rarityName(r){
+ return({c:"C",un:"UN",r:"R",sr:"SR",ssr:"SSR",ur:"UR",lr:"LR"})[r]||"C"
+}
+
+function renderLoggedOut(){
+ document.querySelector(".character-section").innerHTML=`
+  <h2 class="character-heading">Your Characters</h2>
+  <div class="loading">Sign in to view your characters.</div>`
+}
+
+async function load(){
+ try{
+  const me=await fetch("/api/me",{cache:"no-cache"});
+  if(!me.ok){
+   renderLoggedOut();
+   return
+  }
+
+  const meData=await me.json();
+  const username=(meData?.username||meData?.user?.username||"").trim();
+  if(!username){
+   renderLoggedOut();
+   return
+  }
+
+  const[userRes,db]=await Promise.all([
+   fetch(`/api/user/${encodeURIComponent(username)}`,{cache:"no-cache"}),
+   loadJSON("/images/mlg-assets/data-character.json")
+  ]);
+
+  if(!userRes.ok)throw Error("Could not load player data");
+
+  characterDatabase=db;
+
+  const result=await userRes.json();
+  const data=result?.data||{};
+  const owned=Array.isArray(data.c_owned)?data.c_owned:[];
+
+  const chars=owned.map((v,i)=>{
+   if(!v)return"";
+
+   const id=i+1,info=getCharacterInfo(id);
+   const name=info.name||`Character ${id}`;
+   const image=asset(info.profile_image||info.head_image||info.image||"");
+   const rarity=rarityClass(info.rarity);
+
+   return`
+    <a class="character-card ${rarity}" href="/ml-game/apps/damage_test.html?username=${encodeURIComponent(username)}&c=c${id}">
+     <span class="rarity-label">${rarityName(rarity)}</span>
+     <div class="character-art">
+      ${image?`<img class="character-image" src="${esc(image)}" alt="${esc(name)}" loading="lazy">`:""}
+     </div>
+     <div class="character-info">
+      <div class="character-name">${esc(name)}</div>
+     </div>
+    </a>`
+  }).filter(Boolean);
+
+  document.querySelector(".character-section").innerHTML=`
+   <h2 class="character-heading">Your Characters</h2>
+   ${chars.length?`<div class="character-grid">${chars.join("")}</div>`:`<div class="loading">No owned characters found.</div>`}`
+ }catch(e){
+  console.error(e);
+  document.querySelector(".character-section").innerHTML=`
+   <h2 class="character-heading">Your Characters</h2>
+   <div class="error">Unable to load your characters.</div>`
+ }
+}
+
+load();
+</script>
+
+<script src="/js/include.js"></script>
+
+<div id="homefooter-placeholder"></div>
+
+</body>
+</html>

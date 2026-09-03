@@ -1,4 +1,4 @@
-function loadComponent(id,file){fetch(file).then(res=>res.text()).then(data=>{document.getElementById(id).innerHTML=data;if(id==="header-placeholder"||id==="subheader-placeholder"||id==="sub4header-placeholder"){loadLoggedInUser();setupNavbarLogin();}}).catch(error=>console.error(`Unable to load ${file}:`,error));}
+function loadComponent(id,file){fetch(file).then(res=>res.text()).then(data=>{document.getElementById(id).innerHTML=data;if(id==="header-placeholder"||id==="subheader-placeholder"||id==="sub4header-placeholder"||id==="homeheader-placeholder"){loadLoggedInUser();setupNavbarLogin();}}).catch(error=>console.error(`Unable to load ${file}:`,error));}
 
 async function loadLoggedInUser(){
 const loginUser=document.getElementById("loginUser"),loginMenu=document.getElementById("loginMenu"),userMenu=document.getElementById("userMenu"),profileImage=document.getElementById("profileImage"),usernameText=document.getElementById("usernameText"),mlGameProfile=document.getElementById("mlGameProfile");
@@ -21,7 +21,7 @@ if(data.authenticated&&user.username){
 if(usernameText)usernameText.textContent=user.username;
 
 if(mlGameProfile){
-mlGameProfile.href="/webpages/view.html?username="+encodeURIComponent(user.username);
+mlGameProfile.href="/ml-game/apps/view.html?username="+encodeURIComponent(user.username);
 }
 
 loginMenu.style.display="none";
@@ -85,3 +85,6 @@ loadComponent("subheader-placeholder","../index/header.html");
 loadComponent("subfooter-placeholder","../index/footer.html");
 loadComponent("sub4header-placeholder","../../../../index/header.html");
 loadComponent("sub4footer-placeholder","../../../../index/footer.html");
+
+loadComponent("homeheader-placeholder","/index/header.html");
+loadComponent("homefooter-placeholder","/index/footer.html");

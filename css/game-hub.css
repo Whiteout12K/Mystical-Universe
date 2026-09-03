@@ -148,3 +148,137 @@
 
 
 
+
+/* Tools Section */
+
+.mlg-tools-section{
+    padding:70px 40px;
+    height:auto;
+    min-height:0;
+}
+
+.mlg-tools-header{
+    color:rgb(255,232,189);
+    align-content:center;
+    text-align:center;
+    width:100%;
+}
+
+.mlg-tools-header h2{
+    margin:0;
+    text-shadow:0 2px 8px #000;
+}
+
+.mlg-tools-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+    max-width:1000px;
+    margin:auto;
+    height:auto;
+}
+
+.mlg-tool-card{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    min-height:120px;
+    padding:20px 24px;
+    color:#f5ead2;
+    text-decoration:none;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 15% 50%,rgba(214,170,69,.12),transparent 35%),
+        linear-gradient(145deg,#302426,#181516);
+    border:1px solid rgba(214,170,69,.38);
+    border-radius:14px;
+    box-shadow:0 10px 28px #0007,inset 0 0 25px rgba(214,170,69,.035);
+    transition:.25s ease;
+}
+
+.mlg-tool-card:before{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border:1px solid rgba(214,170,69,.12);
+    border-radius:10px;
+    pointer-events:none;
+}
+
+.mlg-tool-card:hover{
+    color:#fff1cf;
+    text-decoration:none;
+    transform:translateY(-3px);
+    border-color:rgba(240,202,105,.8);
+    box-shadow:0 15px 35px #0009,0 0 20px rgba(214,170,69,.1);
+}
+
+.mlg-tool-icon{
+    flex:0 0 60px;
+    width:60px;
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#f0ca69;
+    font-size:32px;
+    background:linear-gradient(145deg,#4a292c,#21191a);
+    border:1px solid rgba(214,170,69,.5);
+    border-radius:12px;
+    box-shadow:inset 0 0 15px #0007,0 4px 12px #0006;
+    text-shadow:0 0 10px rgba(240,202,105,.35);
+}
+
+.mlg-tool-content{
+    flex:1;
+    min-width:0;
+}
+
+.mlg-tool-content h3{
+    margin:0 0 5px;
+    color:#f0ca69;
+    font-size:19px;
+    font-weight:700;
+    letter-spacing:.4px;
+}
+
+.mlg-tool-content p{
+    margin:0;
+    color:#b9aa96;
+    font-size:13px;
+    line-height:1.45;
+}
+
+@media(max-width:720px){
+    .mlg-tools-grid{
+        grid-template-columns:1fr;
+    }
+
+    .mlg-tools-section{
+        padding:25px 20px;
+    }
+}
+
+@media(max-width:430px){
+    .mlg-tool-card{
+        min-height:105px;
+        padding:18px;
+        gap:13px;
+    }
+
+    .mlg-tool-icon{
+        flex-basis:52px;
+        width:52px;
+        height:52px;
+        font-size:28px;
+    }
+
+    .mlg-tool-content h3{
+        font-size:17px;
+    }
+
+    .mlg-tool-content p{
+        font-size:12px;
+    }
+}
