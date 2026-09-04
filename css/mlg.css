@@ -28,6 +28,7 @@
 
 
 /* Mystical Legends Game Elements */
+.normal { color: #5d5d5d; }
 .light { color: #ea9999; }
 .dark { color: #674ea7; }
 .fire { color: #cc0000; }
@@ -61,6 +62,9 @@
 .mana-recovery { color: #8560b1 }
 .magic-amplification { color: #798de3 }
 .resistance { color: #2538c5 }
+.indestructible { color: #999999 }
+.inferno { color: #cc0000; }
+.bandage { color: #38761d; }
 
 /* Debuffs */
 .debuff { color: #969595ad; }
@@ -73,6 +77,8 @@
 .attack-down { color: #cc4125; }
 .crit-down { color: #666666; }
 .slowness { color: #c883f5 }
+.weakened { color: #6c6860; }
+.electrocute { color: #8e7cc3; }
 
 /* Mystical Legends Faction */
 .mystical-legends { color: #ff0000; }

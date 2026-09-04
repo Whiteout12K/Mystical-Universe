@@ -1,0 +1,187 @@
+{
+
+  "B1": {
+    "name": "Sword Play",
+    "type": "Basic Skill",
+    "description": "Pyrus Bourn shows the sheer skill of the greatest swordsman to exist, dealing <b class=\"normal\">normal</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Slash in several quick arcs in front, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Lunges as a piercing thrust, increasing piercing by <b>+<span data-dmg=\"piercing\"></span>%</b> for this stage and dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Create an illusion of two swords striking on either side, each dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as damage and applying <b class=\"dazed\">[Dazed]</b> on hit opponents. The duration of effect extends by 3 seconds when dealing elemental damage. Each level of this Basic Skill will increase the duration by an additional 1 second(s).",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:dazed}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 83,
+      "dmg2": 103,
+      "dmg3": 153,
+      "piercing": 500
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Fire Increaser",
+    "type": "Special Skill",
+    "description": "Pyrus Bourn takes his customized Fire Increaser and releases the built-up chemicals as fire, dealing AoE <b class=\"fire\">[Fire]</b> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "This attack can be used by paying stamina when Pyrus has no base MP.",
+        "style": {"paddingTop": 7}},
+      {"text": "When the <b class=\"inferno\">[Inferno]</b> effect is active, AoE damage becomes massive and deals +100% more damage.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Cooldown: 10 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 133 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Stamina Cost: 50 p",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 280
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Meteor Shower",
+    "type": "Special Skill",
+    "description": "Light the sky with sparkling fire lights, showering down upon the battlefield in a large randomized AoE, dealing massive <b class=\"normal\">[Normal]</b> and <b class=\"fire\">[Fire]</b> AoE damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack per hit.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "When holding skill, consume a portion of mana to deal the same damage but shoot a single fireball as ranged damage.",
+        "style": {"paddingTop": 7}},
+      {"text": "After gaining <b class=\"inferno\">[Inferno]</b> for the first time, instead, Pyrus will sacrifice all of his health, reducing to 1 health and gaining <b class=\"indestructible\">[Indestructible]</b>, and change Ultimate Skill slot to Ultimate Skill: Hellflame Meteor which has a single use.",
+        "style": {"paddingTop": 7}},
+      {"text": "<u>Ultimate Skill: Hellflame Meteor</u> - Mustering mana, a ginormous meteor of gigantic proportions is summed and hurled towards the field directly before Pyrus, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> large AoE damage plus the value of <b class=\"shield\">[Shield]</b> on self added to base damage. This Skill requires a filled meter of “Fighting Spirit” to additionally activate. Every hit from attacks by the team (on-field or off-field) contributes to filling the meter.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "{{effect:indestructible}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+      {"text": "Cooldown: 13 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 170 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Hold Mana Cost: 40 MP per fireball",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Ultimate Skill Energy Gauge: 100%",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Ultimate Skill Fighting Spirit: 50 points",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 345,
+      "dmg2": 1300
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Limitless Nova Beam",
+    "type": "Ultimate Skill",
+    "description": "Stand there in intimidation, almost burning the atmosphere, dealing <b class=\"fire\">[Fire]</b> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack in a small AoE in front.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "When the <b class=\"inferno\">[Inferno]</b> effect is active, launch a condensed inferno fire beam from the chest to opponents, increasing AoE, dealing <b>+<span data-dmg=\"dmg_increase\"></span>%</b> additional damage. The attack lingers for 3 seconds and deals damage in intervals of 1 second. Deals damage in 0.5 second intervals if against a single opponent.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 350,
+      "dmg_increase": 150
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Flame Reincarnation",
+    "type": "Technical Skill",
+    "description": "<u>Ability</u>: Even weaknesses can be overcome by sheer unwavering will. Pyrus Bourn reduces the opponent’s attack potency.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Pyrus slashes with a deadly blow, dealing <b class=\"normal\">normal</b> damage equal to 330% of attack that ignores all of the opponent's defense, inflicting <b class=\"weakened\">[Weakened]</b>. The damage increases by the value of <b class=\"shield\">[Shield]</b> on Pyrus, added to base damage. Skill’s damage will increase by +10% for each level of equipped Basic Skill.",
+        "style": {"paddingTop": 7}},
+      {"text": "A certain power lies dormant.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:weakened}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "Energy Gauge: 30%",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+
+      {"text": "<b>Resonance</b>: Any character can utilize this ability but the damage stays as <b class=\"normal\">normal</b> damage and the additional damage increase is still based on the character’s <b class=\"shield\">[Shield]</b>. ",
+        "style": {"paddingTop": 15}}
+    ]
+  },
+
+
+
+  "Dupes": {
+    "description": "When health reaches below 30%, permanently gain the <b class=\"inferno\">[Inferno]</b> effect which cannot be removed and a <b class=\"shield\">[Shield]</b> equal to 33% of defense stat.",
+    "additional": [
+        {"text": "Atlas gains +3% piercing for each percentage of damage increase from his skills or any buffs (any mentioned elemental damage increase does not apply towards the count).",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:inferno}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:burn}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 1,
+        "text": "When using the Dash Skill during the <b class=\"inferno\">[Inferno]</b> state, additionally leave a wide trail of flames behind distance traveled, lasting the duration of the battle, that will deal continuous <b class=\"fire\">[Fire]</b> damage equal to 100% of self’s attack per second (can crit) and decrease opponent movement speed by -25%.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 2,
+        "text": "After obtaining base MP stat from the <b class=\"inferno\">[Inferno]</b> effect, regain 3 MP for each successful Basic Skill stage hit. The trail of flames from dashing will now be considered Basic Skill damage and become larger.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 5}},
+
+        {"level": 4,
+        "text": "The Technical Skill: Flame Reincarnation will automatically bring Pyrus’ health down to 30% and activate the <b class=\"inferno\">[Inferno]</b> and <b class=\"bandage\">[Bandage]</b> effects.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:bandage}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+        {"level": 5,
+        "text": "The <b class=\"burn\">[Burn]</b> effect will be enhanced to <b class=\"burn\">[Burn II]</b>. It cannot be removed using regular debuff clearing effects. Skills deal +130% more damage on opponents with the debuff <b class=\"electrocute\">[Electrocute]</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:burn2}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:electrocute}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+
+    ]
+  }
+
+
+
+
+
+
+
+}

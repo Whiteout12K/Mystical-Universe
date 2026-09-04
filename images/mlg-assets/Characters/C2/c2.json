@@ -94,7 +94,7 @@
   "S3": {
     "name": "Cubic Trinity",
     "type": "Special Skill",
-    "description": "Kaden summons three cubes that swirl around him, lasting a brief time, and will implode upon contact with an opponent, dealing <b><span data-dmg=\"dmg1\">350</span>%</b> of attack as AoE <b class=\"water\">[Water]</b><span class=\"empowered\">empowered</span> damage. The cubes can remain even when Kaden is off-field.",
+    "description": "Kaden summons three cubes that swirl around him, lasting a brief time, and will implode upon contact with an opponent, dealing <b><span data-dmg=\"dmg1\">350</span>%</b> of attack as AoE <b class=\"water\">[Water]</b> <span class=\"empowered\">empowered</span> damage. The cubes can remain even when Kaden is off-field.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "For each cube imploded, he will gain a stack, up to three stacks, of the buff <b class=\"ice-prince\">[Ice Prince]</b>. After each cube implodes, they remain for 10 seconds on-field, dealing <b><span data-dmg=\"dmg2\">180</span>%</b> of attack as AoE <b class=\"water\">[Water]</b> damage per second.",

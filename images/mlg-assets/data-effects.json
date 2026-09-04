@@ -1,5 +1,6 @@
 {
 
+
   "knockback": {
     "name": "Knockback",
     "class": "knockback",
@@ -9,6 +10,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "burn": {
     "name": "Burn",
     "class": "burn",
@@ -17,6 +19,15 @@
     "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.",
     "description_style": {"paddingTop": 3}
   },
+    "burn2": {
+    "name": "Burn II",
+    "class": "burn",
+    "icon": "/images/mlg-assets/Effect-Icons/burn.svg",
+    "type": "Debuff",
+    "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
 
   "blind": {
     "name": "Blind",
@@ -27,6 +38,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "shield": {
     "name": "Shield",
     "class": "shield",
@@ -35,6 +47,7 @@
     "description": "Creates an overshield that absorbs damage equal to a certain amount of health.",
     "description_style": {"paddingTop": 3}
   },
+
 
   "enlightened": {
     "name": "Enlightened",
@@ -45,6 +58,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "embrace-goddess": {
     "name": "Embrace of the Goddess",
     "class": "embrace-goddess",
@@ -53,6 +67,7 @@
     "description": "The character will revive with 20% of max health when defeated and this effect will be removed (Use Cooldown: 120 seconds for each character; Duration: 5 seconds, but +1 second per point present in any light meter)",
     "description_style": {"paddingTop": 3}
   },
+
 
   "magni-mage": {
     "name": "The Magni Mage",
@@ -63,6 +78,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "goddess-blessing": {
     "name": "Goddess' Blessing",
     "class": "goddess-blessing",
@@ -71,6 +87,7 @@
     "description": "At five stacks, heal for 5% of Avery’s max health. Remove debuffs and resets stacks.",
     "description_style": {"paddingTop": 3}
   },
+
 
   "angel-touch": {
     "name": "Angel's Touch",
@@ -81,6 +98,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "rapid-recovery": {
     "name": "Rapid Recovery",
     "class": "rapid-recovery",
@@ -89,6 +107,7 @@
     "description": "Slowly regenerate 2.5% of max health every second for 30 seconds.",
     "description_style": {"paddingTop": 3}
   },
+
 
   "freeze": {
     "name": "Freeze",
@@ -99,6 +118,7 @@
     "description_style": {"paddingTop": 3}
   },
 
+
   "ice-prince": {
     "name": "Ice Prince",
     "class": "ice-prince",
@@ -107,6 +127,7 @@
     "description": "Gain a percentage of critical hit rate and crit damage increase equal to each point, up to 2% of max defense (Stackable, Duration: 15 seconds).",
     "description_style": {"paddingTop": 3}
   },
+
 
   "shadow-miasma": {
     "name": "Shadow Miasma",
@@ -310,6 +331,56 @@
     "icon": "/images/mlg-assets/Effect-Icons/resistance.svg",
     "type": "Buff",
     "description": "When hit, decreases the attacker’s piercing by -50% on their attack.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "indestructible": {
+    "name": "Indestructible",
+    "class": "indestructible",
+    "icon": "/images/mlg-assets/Effect-Icons/indestructible.svg",
+    "type": "Buff",
+    "description": "Immune to the damage and health loss of attacks, status effects, and debuffs for 9 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "weakened": {
+    "name": "Weakened",
+    "class": "weakened",
+    "icon": "/images/mlg-assets/Effect-Icons/weakened.svg",
+    "type": "Debuff",
+    "description": "All elemental attacks do not have elemental advantage for 15 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "inferno": {
+    "name": "Inferno",
+    "class": "inferno",
+    "icon": "/images/mlg-assets/Effect-Icons/inferno.svg",
+    "type": "Unremovable Buff",
+    "description": "Physically change state and become a being imbued with magical energy, gaining +1500 MP as a base stat and damage increase of +20% on all Skills. Increase defense and mana regen by +100%. All attacks will inflict <b class=\"burn\">[Burn]</b> on opponents. Basic Skill and <b class=\"normal\">normal</b> attacks will also be infused with the <b class=\"fire\">[Fire]</b> element. Dashing will deal Basic Skill Stage 3 damage on hit opponents.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "bandage": {
+    "name": "Bandage",
+    "class": "bandage",
+    "icon": "/images/mlg-assets/Effect-Icons/bandage.svg",
+    "type": "Buff",
+    "description": "Incoming healing’s effectiveness increases by +100% for 10 seconds.",
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "electrocute": {
+    "name": "Electrocute",
+    "class": "electrocute",
+    "icon": "/images/mlg-assets/Effect-Icons/electrocute.svg",
+    "type": "Debuff",
+    "description": "Lose health equal to 30% of own attack per second. Any received <b class=\"water\">[Water]</b> elemental damage will apply <b class=\"freeze\">[Freeze]</b> (Duration: 4 seconds).",
     "description_style": {"paddingTop": 3}
   }
 
