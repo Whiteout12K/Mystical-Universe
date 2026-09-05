@@ -1,512 +1,102 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="/images/website/favicon.png" type="image/png">
 <title>MLG Profile Search</title>
-  <link href="/css/bootstrap-min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/home.css">
-  <link rel="stylesheet" href="/css/news.css">
-  <link rel="stylesheet" href="/css/mlg.css">
-  <link rel="stylesheet" href="/css/game-hub.css">
-  <script src="/js/bootstrap-bundle-min.js"></script>
+<link href="/css/bootstrap-min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/news.css">
+<link rel="stylesheet" href="/css/mlg.css">
+<link rel="stylesheet" href="/css/game-hub.css">
+<script src="/js/bootstrap-bundle-min.js"></script>
 <style>
 *{box-sizing:border-box}
-html,body{
- margin:0;min-height:100%;background:#151416;color:#f5ead2;
- font-family:Arial,sans-serif
-}
-body{
- min-height:100vh;
- background:
- radial-gradient(circle at 50% -10%,#4b171d 0,transparent 42%),
- linear-gradient(180deg,#151416 0,#1a1718 45%,#111011 100%)
-}
+html,body{margin:0;min-height:100%;background:#151416;color:#f5ead2;font-family:Arial,sans-serif}
+body{min-height:100vh;background:radial-gradient(circle at 50% -10%,#4b171d 0,transparent 42%),linear-gradient(180deg,#151416 0,#1a1718 45%,#111011 100%)}
 button,input{font-family:Arial,sans-serif}
 #app{min-height:100vh}
-
-.profile-viewer{
-width:min(100%,1050px);
-margin:0 auto;
-padding:45px 20px 70px
-}
-
-.viewer-header{
-text-align:center;
-margin-bottom:30px;
-position:relative
-}
-.viewer-header:after{
-content:"";
-display:block;
-width:90px;
-height:2px;
-margin:17px auto 0;
-background:linear-gradient(90deg,transparent,#d6aa45,transparent);
-box-shadow:0 0 12px #d6aa4540
-}
-.viewer-title{
-margin:0;
-color:#f5ead2;
-font-size:30px;
-font-weight:900;
-letter-spacing:.08em;
-text-transform:uppercase;
-text-shadow:0 2px 15px #000
-}
-.viewer-subtitle{
-margin:8px 0 0;
-color:#a99e8e;
-font-size:13px
-}
-
-.search-section{
-position:relative;
-z-index:10;
-max-width:720px;
-margin:0 auto 34px
-}
-.search-label{
-display:block;
-margin:0 0 8px 3px;
-color:#d6aa45;
-font-size:10px;
-font-weight:900;
-letter-spacing:.12em;
-text-transform:uppercase
-}
+.profile-viewer{width:min(100%,1050px);margin:0 auto;padding:45px 20px 70px}
+.viewer-header{text-align:center;margin-bottom:30px;position:relative}
+.viewer-header:after{content:"";display:block;width:90px;height:2px;margin:17px auto 0;background:linear-gradient(90deg,transparent,#d6aa45,transparent);box-shadow:0 0 12px #d6aa4540}
+.viewer-title{margin:0;color:#f5ead2;font-size:30px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 2px 15px #000}
+.viewer-subtitle{margin:8px 0 0;color:#a99e8e;font-size:13px}
+.search-section{position:relative;z-index:10;max-width:720px;margin:0 auto 34px}
+.search-label{display:block;margin:0 0 8px 3px;color:#d6aa45;font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
 .search-wrap{position:relative}
-.search-input{
-width:100%;
-height:52px;
-padding:0 17px;
-border:1px solid #ffffff18;
-border-radius:7px;
-outline:0;
-background:#211c1de8;
-color:#fff;
-font-size:15px;
-box-shadow:0 10px 30px #00000035,inset 0 1px #ffffff08;
-transition:.2s
-}
+.search-input{width:100%;height:52px;padding:0 17px;border:1px solid #ffffff18;border-radius:7px;outline:0;background:#211c1de8;color:#fff;font-size:15px;box-shadow:0 10px 30px #00000035,inset 0 1px #ffffff08;transition:.2s}
 .search-input::placeholder{color:#77716b}
-.search-input:focus{
-border-color:#d6aa4570;
-box-shadow:0 0 0 2px #d6aa4515,0 10px 30px #00000045
-}
-
-.search-results{
-position:absolute;
-top:59px;
-left:0;
-right:0;
-display:none;
-overflow:hidden;
-border:1px solid #ffffff18;
-border-radius:7px;
-background:#211c1df8;
-box-shadow:0 18px 40px #00000070;
-backdrop-filter:blur(10px)
-}
+.search-input:focus{border-color:#d6aa4570;box-shadow:0 0 0 2px #d6aa4515,0 10px 30px #00000045}
+.search-results{position:absolute;top:59px;left:0;right:0;display:none;overflow:hidden;border:1px solid #ffffff18;border-radius:7px;background:#211c1df8;box-shadow:0 18px 40px #00000070;backdrop-filter:blur(10px)}
 .search-results.open{display:block}
-
-.search-result{
-width:100%;
-display:flex;
-align-items:center;
-gap:12px;
-padding:12px 15px;
-border:0;
-border-bottom:1px solid #ffffff0d;
-background:transparent;
-color:#f5ead2;
-text-align:left;
-cursor:pointer;
-transition:.15s
-}
-.search-result:last-child
-.search-result:hover{
-background:linear-gradient(90deg,#741b2228,#d6aa4510)
-}
-.search-result-avatar{
-width:34px;
-height:34px;
-flex:none;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-border:1px solid #d6aa4540;
-border-radius:50%;
-background:#151416;
-color:#d6aa45;
-font-size:13px;
-font-weight:900
-}
-.search-result-avatar img{
-width:100%;
-height:100%;
-object-fit:cover
-}
-.search-result-name{
-color:#fff;
-font-size:13px;
-font-weight:800
-}
-.search-result-label{
-margin-left:auto;
-color:#8e857b;
-font-size:9px;
-font-weight:700;
-text-transform:uppercase;
-letter-spacing:.06em
-}
-.search-message{
-padding:15px;
-color:#8e857b;
-font-size:12px;
-text-align:center
-}
+.search-result{width:100%;display:flex;align-items:center;gap:12px;padding:12px 15px;border:0;border-bottom:1px solid #ffffff0d;background:transparent;color:#f5ead2;text-align:left;cursor:pointer;transition:.15s}
+.search-result:last-child{border-bottom:0}
+.search-result:hover{background:linear-gradient(90deg,#741b2228,#d6aa4510)}
+.search-result-avatar{width:36px;height:36px;position:relative;flex:none;display:flex;align-items:center;justify-content:center;border:1px solid #d6aa4540;border-radius:50%;background:#151416;color:#d6aa45;font-size:13px;font-weight:900}
+.search-result-avatar-image{width:100%;height:100%;display:block;object-fit:cover;border-radius:50%}
+.search-result-avatar-frame{position:absolute;inset:-3px;width:40px;height:40px;object-fit:contain;pointer-events:none;z-index:2}
+.search-result-name{color:#fff;font-size:13px;font-weight:800}
+.search-result-label{margin-left:auto;color:#8e857b;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.search-message{padding:15px;color:#8e857b;font-size:12px;text-align:center}
 
 /* ============================================================
 PROFILE CARD
 ============================================================ */
 
-.profile-box{
-position:relative;
-display:block;
-overflow:hidden;
-min-height:155px;
-border:1px solid #ffffff18;
-border-radius:10px;
-background:
-radial-gradient(circle at 12% 50%,#741b2218,transparent 38%),
-radial-gradient(circle at 90% 20%,#d6aa4510,transparent 34%),
-linear-gradient(145deg,#2b2526f5,#191718f8);
-box-shadow:0 15px 45px #00000045;
-text-decoration:none;
-color:inherit;
-cursor:pointer;
-isolation:isolate;
-transition:
-transform .28s cubic-bezier(.2,.8,.2,1),
-border-color .28s ease,
-box-shadow .28s ease,
-background .28s ease
-}
-
-.profile-box:before{
-content:"";
-position:absolute;
-inset:0;
-z-index:-1;
-background:
-linear-gradient(
-115deg,
-transparent 20%,
-#d6aa4500 35%,
-#d6aa4512 48%,
-#ffffff0b 52%,
-#d6aa4500 65%,
-transparent 80%
-);
-transform:translateX(-100%);
-transition:transform .7s ease
-}
-
-.profile-box:after{
-content:"";
-position:absolute;
-top:0;
-left:7%;
-right:7%;
-height:2px;
-background:linear-gradient(90deg,transparent,#741b22,#d6aa45,#741b22,transparent);
-box-shadow:0 0 14px #d6aa4560;
-transition:box-shadow .28s ease
-}
-
-.profile-box:hover{
-transform:translateY(-5px);
-border-color:#d6aa4560;
-background:
-radial-gradient(circle at 12% 50%,#741b2230,transparent 38%),
-radial-gradient(circle at 90% 20%,#d6aa4518,transparent 34%),
-linear-gradient(145deg,#302729,#1c1819);
-box-shadow:
-0 22px 55px #00000065,
-0 0 35px #d6aa4515,
-inset 0 0 35px #d6aa4508
-}
-
-.profile-box:hover:before{
-transform:translateX(100%)
-}
-
-.profile-box:hover:after{
-box-shadow:0 0 22px #d6aa4590
-}
-
-.profile-box:active{
-transform:translateY(-2px) scale(.995)
-}
-
-.profile-box-inner{
-position:relative;
-display:flex;
-align-items:center;
-min-height:155px;
-padding:25px 30px
-}
-
-.profile-heading{
-display:flex;
-align-items:center;
-gap:22px;
-min-width:0;
-width:100%
-}
-
-.avatar-wrap{
-width:96px;
-height:96px;
-flex:none;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center
-}
-
-.avatar{
-width:88px;
-height:88px;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:visible;
-border:1px solid #d6aa4560;
-border-radius:50%;
-background:
-radial-gradient(circle,#3a2927,#171516);
-box-shadow:
-0 0 25px #d6aa4520,
-inset 0 0 18px #00000050;
-transition:
-transform .28s ease,
-box-shadow .28s ease,
-border-color .28s ease
-}
-
-.profile-box:hover .avatar{
-transform:scale(1.06);
-border-color:#d6aa45a0;
-box-shadow:
-0 0 32px #d6aa4545,
-0 0 65px #741b2220,
-inset 0 0 18px #00000040
-}
-
-.profile-avatar-image{
-width:100%;
-height:100%;
-object-fit:cover;
-border-radius:50%;
-display:block
-}
-
-.profile-avatar-frame{
-position:absolute;
-inset:-7px;
-width:102px;
-height:102px;
-object-fit:contain;
-pointer-events:none;
-z-index:2;
-transition:filter .28s ease,transform .28s ease
-}
-
-.profile-box:hover .profile-avatar-frame{
-filter:drop-shadow(0 0 7px #d6aa4560);
-transform:rotate(1deg) scale(1.035)
-}
-
-.avatar-fallback{
-color:#d6aa45;
-font-size:34px;
-font-weight:900
-}
-
-.profile-info{
-min-width:0;
-flex:1
-}
-
-.profile-name{
-margin:0;
-overflow:hidden;
-color:#fff;
-font-size:27px;
-font-weight:900;
-letter-spacing:.01em;
-text-overflow:ellipsis;
-white-space:nowrap;
-text-shadow:0 2px 12px #000;
-transition:color .28s ease,text-shadow .28s ease
-}
-
-.profile-box:hover .profile-name{
-color:#f5ead2;
-text-shadow:
-0 0 18px #d6aa4535,
-0 2px 12px #000
-}
-
-.rank{
-display:inline-flex;
-align-items:center;
-margin-top:10px;
-padding:6px 10px;
-border:1px solid #d6aa4540;
-border-radius:4px;
-background:#d6aa450c;
-color:#d6aa45;
-font-size:9px;
-font-weight:900;
-letter-spacing:.08em;
-text-transform:uppercase;
-transition:
-border-color .28s ease,
-background .28s ease,
-box-shadow .28s ease
-}
-
-.profile-box:hover .rank{
-border-color:#d6aa4570;
-background:#d6aa4515;
-box-shadow:0 0 15px #d6aa4515
-}
-
-.profile-arrow{
-width:34px;
-height:34px;
-flex:none;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-left:auto;
-border:1px solid #ffffff15;
-border-radius:50%;
-color:#8e857b;
-font-size:17px;
-transition:
-transform .28s ease,
-color .28s ease,
-border-color .28s ease,
-background .28s ease
-}
-
-.profile-box:hover .profile-arrow{
-transform:translateX(4px);
-color:#d6aa45;
-border-color:#d6aa4560;
-background:#d6aa4510
-}
-
-.loading{
-padding:70px 20px;
-color:#a99e8e;
-text-align:center
-}
-
-.error{
-max-width:600px;
-margin:60px auto;
-padding:30px;
-border:1px solid #ffffff18;
-border-radius:8px;
-background:#211c1d;
-text-align:center
-}
-.error h1{
-margin:0 0 8px;
-color:#d6aa45;
-font-size:20px
-}
-.error p{
-margin:0;
-color:#a99e8e;
-font-size:12px
-}
-
+.profile-box{position:relative;display:block;overflow:hidden;min-height:155px;border:1px solid #ffffff18;border-radius:10px;background:radial-gradient(circle at 12% 50%,#741b2218,transparent 38%),radial-gradient(circle at 90% 20%,#d6aa4510,transparent 34%),linear-gradient(145deg,#2b2526f5,#191718f8);box-shadow:0 15px 45px #00000045;text-decoration:none;color:inherit;cursor:pointer;isolation:isolate;transition:transform .28s cubic-bezier(.2,.8,.2,1),border-color .28s ease,box-shadow .28s ease,background .28s ease}
+.profile-box:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,transparent 20%,#d6aa4500 35%,#d6aa4512 48%,#ffffff0b 52%,#d6aa4500 65%,transparent 80%);transform:translateX(-100%);transition:transform .7s ease}
+.profile-box:after{content:"";position:absolute;top:0;left:7%;right:7%;height:2px;background:linear-gradient(90deg,transparent,#741b22,#d6aa45,#741b22,transparent);box-shadow:0 0 14px #d6aa4560;transition:box-shadow .28s ease}
+.profile-box:hover{transform:translateY(-5px);border-color:#d6aa4560;background:radial-gradient(circle at 12% 50%,#741b2230,transparent 38%),radial-gradient(circle at 90% 20%,#d6aa4518,transparent 34%),linear-gradient(145deg,#302729,#1c1819);box-shadow:0 22px 55px #00000065,0 0 35px #d6aa4515,inset 0 0 35px #d6aa4508}
+.profile-box:hover:before{transform:translateX(100%)}
+.profile-box:hover:after{box-shadow:0 0 22px #d6aa4590}
+.profile-box:active{transform:translateY(-2px) scale(.995)}
+.profile-box-inner{position:relative;display:flex;align-items:center;min-height:155px;padding:25px 30px}
+.profile-heading{display:flex;align-items:center;gap:22px;min-width:0;width:100%}
+.avatar-wrap{width:96px;height:96px;flex:none;position:relative;display:flex;align-items:center;justify-content:center}
+.avatar{width:88px;height:88px;position:relative;display:flex;align-items:center;justify-content:center;overflow:visible;border:1px solid #d6aa4560;border-radius:50%;background:radial-gradient(circle,#3a2927,#171516);box-shadow:0 0 25px #d6aa4520,inset 0 0 18px #00000050;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+.profile-box:hover .avatar{transform:scale(1.06);border-color:#d6aa45a0;box-shadow:0 0 32px #d6aa4545,0 0 65px #741b2220,inset 0 0 18px #00000040}
+.profile-avatar-image{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.profile-avatar-frame{position:absolute;inset:-7px;width:102px;height:102px;object-fit:contain;pointer-events:none;z-index:2;transition:filter .28s ease,transform .28s ease}
+.profile-box:hover .profile-avatar-frame{filter:drop-shadow(0 0 7px #d6aa4560);transform:rotate(1deg) scale(1.035)}
+.avatar-fallback{color:#d6aa45;font-size:34px;font-weight:900}
+.profile-info{min-width:0;flex:1}
+.profile-name{margin:0;overflow:hidden;color:#fff;font-size:27px;font-weight:900;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px 12px #000;transition:color .28s ease,text-shadow .28s ease}
+.profile-box:hover .profile-name{color:#f5ead2;text-shadow:0 0 18px #d6aa4535,0 2px 12px #000}
+.rank{display:inline-flex;align-items:center;margin-top:10px;padding:6px 10px;border:1px solid #d6aa4540;border-radius:4px;background:#d6aa450c;color:#d6aa45;font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;transition:border-color .28s ease,background .28s ease,box-shadow .28s ease}
+.profile-box:hover .rank{border-color:#d6aa4570;background:#d6aa4515;box-shadow:0 0 15px #d6aa4515}
+.profile-arrow{width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;margin-left:auto;border:1px solid #ffffff15;border-radius:50%;color:#8e857b;font-size:17px;transition:transform .28s ease,color .28s ease,border-color .28s ease,background .28s ease}
+.profile-box:hover .profile-arrow{transform:translateX(4px);color:#d6aa45;border-color:#d6aa4560;background:#d6aa4510}
+.loading{padding:70px 20px;color:#a99e8e;text-align:center}
 @media(max-width:700px){
-.profile-viewer{
-padding:30px 14px 50px
+ .profile-viewer{padding:30px 14px 50px}
+ .viewer-title{font-size:24px}
+ .profile-box-inner{min-height:135px;padding:20px}
+ .profile-heading{gap:16px}
+ .avatar-wrap{width:78px;height:78px}
+ .avatar{width:70px;height:70px}
+ .profile-avatar-frame{inset:-6px;width:82px;height:82px}
+ .profile-name{font-size:21px}
+ .profile-arrow{width:30px;height:30px}
 }
-.viewer-title{font-size:24px}
-.profile-box-inner{
-min-height:135px;
-padding:20px
-}
-.profile-heading{gap:16px}
-.avatar-wrap{
-width:78px;
-height:78px
-}
-.avatar{
-width:70px;
-height:70px
-}
-.profile-avatar-frame{
-inset:-6px;
-width:82px;
-height:82px
-}
-.profile-name{font-size:21px}
-.profile-arrow{
-width:30px;
-height:30px
-}
-}
-
 @media(max-width:480px){
-.profile-viewer{padding-top:25px}
-.viewer-header{margin-bottom:25px}
-.viewer-title{font-size:21px}
-.viewer-subtitle{font-size:11px}
-.profile-box-inner{
-min-height:120px;
-padding:17px
+ .profile-viewer{padding-top:25px}
+ .viewer-header{margin-bottom:25px}
+ .viewer-title{font-size:21px}
+ .viewer-subtitle{font-size:11px}
+ .profile-box-inner{min-height:120px;padding:17px}
+ .profile-heading{gap:13px}
+ .avatar-wrap{width:64px;height:64px}
+ .avatar{width:58px;height:58px}
+ .profile-avatar-frame{inset:-6px;width:70px;height:70px}
+ .profile-name{font-size:18px}
+ .rank{margin-top:7px;padding:5px 8px;font-size:8px}
+ .profile-arrow{display:none}
 }
-.profile-heading{gap:13px}
-.avatar-wrap{
-width:64px;
-height:64px
-}
-.avatar{
-width:58px;
-height:58px
-}
-.profile-avatar-frame{
-inset:-6px;
-width:70px;
-height:70px
-}
-.profile-name{font-size:18px}
-.rank{
-margin-top:7px;
-padding:5px 8px;
-font-size:8px
-}
-.profile-arrow{display:none}
-} </style>
-
+</style>
 </head>
 
 <body>
-
 <!-- Navbar/Header -->
 <div id="homeheader-placeholder"></div>
 <br><br><br>
@@ -514,59 +104,55 @@ font-size:8px
 <div id="app"><div class="loading">Loading Profile Search...</div></div>
 
 <script>
-let loggedInUsername="",currentUserData={},accountStyleDatabase={};
+let loggedInUsername="",currentUserData={},accountStyleDatabase={},allUsers=[],usersLoaded=false;
 
 async function loadJSON(path){
  try{
   const r=await fetch(path,{cache:"no-cache"});
   if(!r.ok)throw Error(`HTTP ${r.status}`);
-  return await r.json()
+  return await r.json();
  }catch(e){
   console.error(`Could not load ${path}:`,e);
-  return{}
+  return{};
  }
 }
 
 async function loadAccountStyleDatabase(){
- accountStyleDatabase=await loadJSON("/images/mlg-assets/account-style.json")
+ accountStyleDatabase=await loadJSON("/images/mlg-assets/account-style.json");
 }
 
 function normalizeAssetPath(path){
  if(path==null)return"";
- let v=String(path).trim();
+ const v=String(path).trim();
  if(!v)return"";
- if(/^(https?:|data:|blob:)/.test(v))return v;
- return v.startsWith("/")?v:`/${v}`
+ return /^(https?:|data:|blob:)/.test(v)?v:v.startsWith("/")?v:`/${v}`;
 }
 
 function getAccountStyleAsset(section,key){
  const s=accountStyleDatabase?.[section];
- return s&&typeof s==="object"&&Object.prototype.hasOwnProperty.call(s,key)
-  ?normalizeAssetPath(s[key]):""
+ return s&&typeof s==="object"&&Object.prototype.hasOwnProperty.call(s,key)?normalizeAssetPath(s[key]):"";
 }
 
-function getAvatarImage(id){
- return getAccountStyleAsset("avatar",`img_${id}`)
-}
-
-function getAvatarFrame(id){
- return getAccountStyleAsset("avatar",`frame_${id}`)
-}
+function getAvatarImage(id){return getAccountStyleAsset("avatar",`img_${id}`)}
+function getAvatarFrame(id){return getAccountStyleAsset("avatar",`frame_${id}`)}
 
 async function loadCurrentUser(){
  try{
   const r=await fetch("/api/me",{cache:"no-cache"});
+
   if(!r.ok){
-   renderViewer({});
-   return
+   renderViewer();
+   loadAllUsers();
+   return;
   }
 
   const me=await r.json();
   loggedInUsername=me?.username||me?.user?.username||"";
 
   if(!loggedInUsername){
-   renderViewer({});
-   return
+   renderViewer();
+   loadAllUsers();
+   return;
   }
 
   const p=await fetch(`/api/user/${encodeURIComponent(loggedInUsername)}`,{cache:"no-cache"});
@@ -574,49 +160,59 @@ async function loadCurrentUser(){
   if(p.ok){
    const result=await p.json();
    currentUserData=result?.data&&typeof result.data==="object"?result.data:{};
-   loggedInUsername=result?.username||loggedInUsername
+   loggedInUsername=result?.username||loggedInUsername;
   }
 
-  renderViewer({
-   username:loggedInUsername,
-   data:currentUserData
-  })
+  renderViewer();
+  loadAllUsers();
  }catch(e){
   console.error("Profile Viewer loading error:",e);
-  renderViewer({})
+  loggedInUsername="";
+  currentUserData={};
+  renderViewer();
+  loadAllUsers();
  }
 }
 
-function renderViewer(profile){
+async function loadAllUsers(){
+ try{
+  const r=await fetch("/api/search",{cache:"no-cache"});
+
+  if(!r.ok)throw Error(`User database HTTP ${r.status}`);
+
+  const result=await r.json();
+
+  allUsers=(Array.isArray(result?.users)?result.users:[])
+   .filter(user=>user&&user.username)
+   .map(user=>({
+    username:String(user.username),
+    avatar:num(user.avatar,1),
+    avatar_frame:num(user.avatar_frame,1)
+   }));
+
+  usersLoaded=true;
+ }catch(e){
+  console.error("User database loading error:",e);
+  allUsers=[];
+  usersLoaded=false;
+ }
+}
+
+function renderViewer(){
  document.getElementById("app").innerHTML=`
  <main class="profile-viewer">
-
   <header class="viewer-header">
    <h1 class="viewer-title">Profile Search</h1>
    <p class="viewer-subtitle">Search the Mystical Legends player database</p>
   </header>
-
   <section class="search-section">
    <label class="search-label" for="username-search">Search Username</label>
-
    <div class="search-wrap">
-    <input
-     id="username-search"
-     class="search-input"
-     type="text"
-     placeholder="Enter a username..."
-     autocomplete="off"
-     spellcheck="false"
-     maxlength="32">
-
+    <input id="username-search" class="search-input" type="text" placeholder="Enter a username..." autocomplete="off" spellcheck="false" maxlength="32">
     <div id="search-results" class="search-results"></div>
    </div>
   </section>
-
-  <section>
-   ${createProfilePreview(profile)}
-  </section>
-
+  ${loggedInUsername?`<section>${createProfilePreview()}</section>`:""}
  </main>`;
 
  const input=document.getElementById("username-search");
@@ -624,91 +220,46 @@ function renderViewer(profile){
  input.addEventListener("input",handleSearch);
 
  input.addEventListener("keydown",e=>{
-  if(e.key==="Escape")closeSearch()
- })
+  if(e.key==="Escape")closeSearch();
+ });
 }
 
-function createProfilePreview(profile){
- if(!profile.username){
-  return`
-  <div class="profile-box">
-   <div class="profile-box-inner">
-    <div class="profile-heading">
-     <div class="avatar-wrap">
-      <div class="avatar">
-       <span class="avatar-fallback">?</span>
-      </div>
-     </div>
-
-     <div class="profile-info">
-      <h2 class="profile-name">Not Logged In</h2>
-      <div class="rank">Log In Required</div>
-     </div>
-    </div>
-   </div>
-  </div>`
- }
-
- const d=profile.data||{};
+function createProfilePreview(){
+ const d=currentUserData||{};
  const avatar=getAvatarImage(num(d.avatar,1));
  const frame=getAvatarFrame(num(d.avatar_frame,1));
 
  return`
- <a
-  class="profile-box"
-  href="/ml-game/apps/view?username=${encodeURIComponent(profile.username)}"
-  aria-label="View ${escapeAttribute(profile.username)} profile">
-
+ <a class="profile-box" href="/ml-game/apps/view?username=${encodeURIComponent(loggedInUsername)}" aria-label="View ${escapeAttribute(loggedInUsername)} profile">
   <div class="profile-box-inner">
-
    <div class="profile-heading">
-
     <div class="avatar-wrap">
      <div class="avatar">
-
-      ${avatar
-       ?`<img
-          class="profile-avatar-image"
-          src="${escapeAttribute(avatar)}"
-          alt=""
-          onerror="this.style.display='none'">`
-       :`<span class="avatar-fallback">
-          ${escapeHtml(profile.username.charAt(0).toUpperCase())}
-         </span>`}
-
-      ${frame
-       ?`<img
-          class="profile-avatar-frame"
-          src="${escapeAttribute(frame)}"
-          alt=""
-          aria-hidden="true"
-          onerror="this.style.display='none'">`
-       :""}
-
+      ${avatar?`<img class="profile-avatar-image" src="${escapeAttribute(avatar)}" alt="" onerror="this.style.display='none'">`:`<span class="avatar-fallback">${escapeHtml(loggedInUsername.charAt(0).toUpperCase())}</span>`}
+      ${frame?`<img class="profile-avatar-frame" src="${escapeAttribute(frame)}" alt="" aria-hidden="true" onerror="this.style.display='none'">`:""}
      </div>
     </div>
-
     <div class="profile-info">
-     <h2 class="profile-name">
-      ${escapeHtml(profile.username)}
-     </h2>
-
-     <div class="rank">
-      Adventure Rank ${num(d.ar_level,1)}
-     </div>
+     <h2 class="profile-name">${escapeHtml(loggedInUsername)}</h2>
+     <div class="rank">Adventure Rank ${num(d.ar_level,1)}</div>
     </div>
-
     <span class="profile-arrow" aria-hidden="true">›</span>
-
    </div>
-
   </div>
-
- </a>`
+ </a>`;
 }
 
-let searchTimer=0;
-let searchController=null;
+function createSearchAvatar(user){
+ const avatar=getAvatarImage(num(user.avatar,1));
+ const frame=getAvatarFrame(num(user.avatar_frame,1));
+ const fallback=escapeHtml(String(user.username).charAt(0).toUpperCase());
+
+ return`
+ <span class="search-result-avatar">
+  ${avatar?`<img class="search-result-avatar-image" src="${escapeAttribute(avatar)}" alt="" onerror="this.style.display='none'">`:`<span class="avatar-fallback">${fallback}</span>`}
+  ${frame?`<img class="search-result-avatar-frame" src="${escapeAttribute(frame)}" alt="" aria-hidden="true" onerror="this.style.display='none'">`:""}
+ </span>`;
+}
 
 function handleSearch(){
  const input=document.getElementById("username-search");
@@ -716,96 +267,42 @@ function handleSearch(){
 
  if(!input||!results)return;
 
- const q=input.value.trim();
+ const q=input.value.trim().toLowerCase();
 
- clearTimeout(searchTimer);
+ if(!q)return closeSearch();
 
- if(searchController){
-  searchController.abort();
-  searchController=null
+ if(!usersLoaded){
+  results.classList.add("open");
+  results.innerHTML=`<div class="search-message">Loading players...</div>`;
+  return;
  }
 
- if(!q){
-  closeSearch();
-  return
- }
+ const matches=allUsers
+  .filter(user=>user.username.toLowerCase().startsWith(q))
+  .slice(0,10);
 
  results.classList.add("open");
- results.innerHTML=`<div class="search-message">Searching...</div>`;
 
- searchTimer=setTimeout(()=>searchUsers(q),250)
-}
-
-async function searchUsers(q){
- const results=document.getElementById("search-results");
- if(!results)return;
-
- try{
-  searchController=new AbortController();
-
-  const r=await fetch(
-   `/api/users/search?q=${encodeURIComponent(q)}`,
-   {
-    cache:"no-cache",
-    signal:searchController.signal
-   }
-  );
-
-  if(!r.ok)throw Error(`Search HTTP ${r.status}`);
-
-  const result=await r.json();
-
-  const users=Array.isArray(result)
-   ?result
-   :(Array.isArray(result.users)?result.users:[]);
-
-  const unique=[
-   ...new Set(
-    users.map(v=>{
-     if(typeof v==="string")return v;
-     return v?.username||""
-    }).filter(Boolean)
-   )
-  ];
-
-  if(!unique.length){
-   results.innerHTML=`<div class="search-message">No players found.</div>`;
-   return
-  }
-
-  results.innerHTML=unique.slice(0,10).map(name=>`
-   <button
-    type="button"
-    class="search-result"
-    onclick="openProfile('${escapeAttribute(name)}')">
-
-    <span class="search-result-avatar">
-     ${escapeHtml(name.charAt(0).toUpperCase())}
-    </span>
-
-    <span class="search-result-name">
-     ${escapeHtml(name)}
-    </span>
-
-    <span class="search-result-label">
-     View Profile
-    </span>
-
-   </button>
-  `).join("")
- }catch(e){
-  if(e.name==="AbortError")return;
-
-  console.error("Username search error:",e);
-
-  results.innerHTML=
-   `<div class="search-message">Unable to search players.</div>`
+ if(!matches.length){
+  results.innerHTML=`<div class="search-message">No players found.</div>`;
+  return;
  }
+
+ results.innerHTML=matches.map(user=>`
+  <button type="button" class="search-result" data-username="${escapeAttribute(user.username)}">
+   ${createSearchAvatar(user)}
+   <span class="search-result-name">${escapeHtml(user.username)}</span>
+   <span class="search-result-label">View Profile</span>
+  </button>
+ `).join("");
+
+ results.querySelectorAll(".search-result").forEach(button=>{
+  button.addEventListener("click",()=>openProfile(button.dataset.username));
+ });
 }
 
 function openProfile(name){
- location.href=
-  `/ml-game/apps/view?username=${encodeURIComponent(name)}`
+ location.href=`/ml-game/apps/view?username=${encodeURIComponent(name)}`;
 }
 
 function closeSearch(){
@@ -813,21 +310,19 @@ function closeSearch(){
 
  if(results){
   results.classList.remove("open");
-  results.innerHTML=""
+  results.innerHTML="";
  }
 }
 
 document.addEventListener("click",e=>{
  const section=document.querySelector(".search-section");
 
- if(section&&!section.contains(e.target)){
-  closeSearch()
- }
-})
+ if(section&&!section.contains(e.target))closeSearch();
+});
 
 function num(v,f=0){
  const n=Number(v);
- return Number.isFinite(n)?n:f
+ return Number.isFinite(n)?n:f;
 }
 
 function escapeHtml(v){
@@ -836,21 +331,23 @@ function escapeHtml(v){
   .replaceAll("<","&lt;")
   .replaceAll(">","&gt;")
   .replaceAll('"',"&quot;")
-  .replaceAll("'","&#039;")
+  .replaceAll("'","&#039;");
 }
 
 const escapeAttribute=escapeHtml;
 
-Promise
- .all([loadAccountStyleDatabase()])
- .then(loadCurrentUser);
+async function initializeViewer(){
+ await loadAccountStyleDatabase();
+ await loadCurrentUser();
+}
+
+initializeViewer();
 </script>
 
 <script src="/js/include.js"></script>
 
 <!-- Footer Section -->
-<div id="homefooter-placeholder"> </div>
-
+<div id="homefooter-placeholder"></div>
 
 </body>
 </html>

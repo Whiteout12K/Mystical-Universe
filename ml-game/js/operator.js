@@ -161,7 +161,10 @@ const and=boolBinary("and",(a,b)=>a&&b);
 const or=boolBinary("or",(a,b)=>a||b);
 
 function not(value){
-    return operator("not",c=>!Boolean(resolveValue(value,c)));
+    return operator("not",c=>{
+        const state=Boolean(resolveValue(value,c));
+        return state===true?false:true;
+    });
 }
 
 function join(value,value2){

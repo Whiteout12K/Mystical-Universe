@@ -33,10 +33,12 @@ spriteChangeSize("Player1", 0.1); // Changes sprite scale by value, can be both 
 
 spriteEffect("Player1", "brightness", 0); // Changes a sprite's effect, where 0 is none and 100 is 100% effect.
 //  Effect List: 
-//    brightness: changes sprite costume brightness, from 0-100%, where max is bright white.
+//    brightness: changes sprite costume brightness, from -100 to 100, where max 100 on either side is bright white or darkness.
 //    ghost: changes the sprite's opacity, from 0-100%.
 //    color: changes the sprite's color, from 0-100. 0 is default, and 100 is also default. In between, the sprite goes through the color spectrum.
 //           This basically changes the hue of the colors.
+
+spriteChangeEffect("Player1", "brightness", 10); // Changes a sprite's effect by value, can be both negative or positive to shrink or grow effect.
 
 spriteShow("Player1"); // Shows the sprite
 

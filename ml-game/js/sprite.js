@@ -59,6 +59,28 @@ registerBlock("spriteEffect",async(block,c)=>{
 
     else if(effect==="ghost"||effect==="color")
         s.effects[effect]=Math.max(0,Math.min(100,num(block.value,0,c)));
+
+    s.effectCacheKey=null;
+});
+
+registerBlock("spriteChangeEffect",async(block,c)=>{
+    const s=sprite(block.name,c);
+    if(!s)return;
+
+    const effect=String(resolveValue(block.effect,c)).toLowerCase();
+    const amount=num(block.value,0,c);
+
+    if(effect==="brightness")
+        s.effects.brightness=Math.max(-100,Math.min(100,
+            num(s.effects.brightness,0)+amount
+        ));
+
+    else if(effect==="ghost"||effect==="color")
+        s.effects[effect]=Math.max(0,Math.min(100,
+            num(s.effects[effect],0)+amount
+        ));
+
+    s.effectCacheKey=null;
 });
 
 registerReporter("costumeOfSprite",(value,c)=>
@@ -160,6 +182,10 @@ function spriteEffect(name,effect,value){
     return createSpriteBlock("spriteEffect",{name,effect,value});
 }
 
+function spriteChangeEffect(name,effect,amount){
+    return createSpriteBlock("spriteChangeEffect",{name,effect,value:amount});
+}
+
 function costumeOfSprite(name){
     return createReporter("costumeOfSprite",{name});
 }
@@ -191,4 +217,3 @@ function goBack(name){
 function deleteSprite(name){
     return createSpriteBlock("deleteSprite",{name});
 }
-

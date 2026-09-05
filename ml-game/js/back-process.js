@@ -473,17 +473,35 @@ class Sprite{
 
     updateSize(){
         if(!this.image?.naturalWidth)return;
-        this.width=160*this.scale;
-        this.height=this.width*this.image.naturalHeight/this.image.naturalWidth;
+
+        const width=160*this.scale;
+        const height=width*this.image.naturalHeight/this.image.naturalWidth;
+
+        /*
+         * x/y are always the sprite CENTER.
+         * Width and height change around that center.
+         * No position correction is performed here.
+         */
+        this.width=width;
+        this.height=height;
         this.effectCacheKey=null;
     }
 
     setScale(scale){
         scale=Number(scale);
         if(!Number.isFinite(scale)||scale<=0)scale=1;
+
+        /*
+         * Preserve the exact center while resizing.
+         */
+        const x=this.x,y=this.y;
+
         this.scale=scale;
         this.updateSize();
-        updateEdgeSprite(this);
+
+        this.x=x;
+        this.y=y;
+        this.effectCacheKey=null;
     }
 
     draw(){
@@ -504,6 +522,10 @@ class Sprite{
         ctx.save();
         ctx.globalAlpha=clamp(Number(this.opacity)||0,0,1)*(1-effect.ghost/100);
 
+        /*
+         * x/y are the exact visual center of the costume.
+         * The costume expands equally in every direction.
+         */
         ctx.translate(
             (this.x-ENGINE.camera.x)*s+canvas.width/2,
             -(this.y-ENGINE.camera.y)*s+canvas.height/2
@@ -533,24 +555,47 @@ function updateEdgeSprite(sprite){
     const lock=sprite.edgeLock;
     if(lock.mobile&&!ENGINE.mobile)return;
 
-    const hw=sprite.width/2,hh=sprite.height/2,{x:cx,y:cy}=ENGINE.camera;
-    const vw=ENGINE.viewWidth/2,vh=ENGINE.viewHeight/2;
+    const {x:cx,y:cy}=ENGINE.camera;
+    const vw=ENGINE.viewWidth/2;
+    const vh=ENGINE.viewHeight/2;
     const left=cx-vw,right=cx+vw,bottom=cy-vh,top=cy+vh;
 
+    /*
+     * Edge distances are stored from the sprite CENTER.
+     * Do NOT add/subtract sprite half-size here.
+     *
+     * This is intentional:
+     * resizing a sprite must not move its center.
+     * The costume is allowed to grow equally around that center.
+     */
     if(lock.horizontal==="left")
-        sprite.x=left+lock.horizontalDistance+hw;
+        sprite.x=left+lock.horizontalDistance;
     else if(lock.horizontal==="right")
-        sprite.x=right-lock.horizontalDistance-hw;
+        sprite.x=right-lock.horizontalDistance;
 
     if(lock.vertical==="top")
-        sprite.y=top-lock.verticalDistance-hh;
+        sprite.y=top-lock.verticalDistance;
     else if(lock.vertical==="bottom")
-        sprite.y=bottom+lock.verticalDistance+hh;
+        sprite.y=bottom+lock.verticalDistance;
 
-    const minX=left+hw,maxX=right-hw,minY=bottom+hh,maxY=top-hh;
+    /*
+     * Only clamp when no edge lock controls that axis.
+     * Edge-locked sprites keep their stored center position even
+     * when their costume becomes larger than the visible area.
+     */
+    if(!lock.horizontal){
+        const hw=Math.max(0,sprite.width/2);
+        const minX=left+hw,maxX=right-hw;
+        if(minX<=maxX)sprite.x=clamp(sprite.x,minX,maxX);
+        else sprite.x=cx;
+    }
 
-    sprite.x=minX<=maxX?clamp(sprite.x,minX,maxX):cx;
-    sprite.y=minY<=maxY?clamp(sprite.y,minY,maxY):cy;
+    if(!lock.vertical){
+        const hh=Math.max(0,sprite.height/2);
+        const minY=bottom+hh,maxY=top-hh;
+        if(minY<=maxY)sprite.y=clamp(sprite.y,minY,maxY);
+        else sprite.y=cy;
+    }
 }
 
 function updateEdgeSprites(){
@@ -690,7 +735,7 @@ registerBlock("broadcastScript",(b,c)=>
 
 /* PROGRAM */
 
-const START_DELAY=200;
+const START_DELAY=50;
 
 async function executeProgram(){
     const c=createScriptContext();
