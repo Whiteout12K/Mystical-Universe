@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -74,6 +73,10 @@ function getAvatarImage(id){return getAccountStyleAsset("avatar",`img_${id}`)}
 function getAvatarFrame(id){return getAccountStyleAsset("avatar",`frame_${id}`)}
 function getBackgroundImage(id){return getAccountStyleAsset("background",`img_${id}`)}
 
+function imageAttrs(loading="lazy",priority="low"){
+ return` loading="${loading}" decoding="async" fetchpriority="${priority}"`
+}
+
 async function loadProfile(){
  try{
   if(!username||username==="view.html")return showError("No Player","No username was provided.");
@@ -95,8 +98,8 @@ function renderProfile(username,data){
  <main class="page">
   <section class="${cls}"${style}><div class="profile-content">
    <div class="avatar-wrap"><div class="avatar">
-    ${avatarImage?`<img class="profile-avatar-image" src="${escapeAttribute(avatarImage)}" alt="${escapeAttribute(username)}" onerror="handleAvatarError(this)">`:`<span class="avatar-fallback-letter">${escapeHtml(username.charAt(0).toUpperCase())}</span>`}
-    ${avatarFrame?`<img class="profile-avatar-frame" src="${escapeAttribute(avatarFrame)}" alt="" aria-hidden="true" onerror="this.style.display='none'">`:""}
+    ${avatarImage?`<img class="profile-avatar-image" src="${escapeAttribute(avatarImage)}" alt="${escapeAttribute(username)}"${imageAttrs("eager","high")} width="160" height="160" onerror="handleAvatarError(this)">`:`<span class="avatar-fallback-letter">${escapeHtml(username.charAt(0).toUpperCase())}</span>`}
+    ${avatarFrame?`<img class="profile-avatar-frame" src="${escapeAttribute(avatarFrame)}" alt="" aria-hidden="true"${imageAttrs("eager","high")} width="160" height="160" onerror="this.style.display='none'">`:""}
    </div></div>
    <div class="profile-heading"><h1 class="username">${escapeHtml(username)}</h1><p class="subtitle">Mystical Legends Player Profile</p><div class="rank">Adventure Rank ${num(data.ar_level,1)}</div></div>
   </div></section>
@@ -133,7 +136,7 @@ function createCharacters(data){
 }
 function createCharacterTab(id,data){
  const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=p.rarity??"",img=i.profile_image||"",ri=i.rarity_img||"";
- return`<button type="button" class="character-tab" data-character-id="${id}" onclick="toggleCharacter(${id})"><div class="character-icon-wrap">${img?`<img class="character-icon" src="${escapeAttribute(img)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div><div class="character-tab-info"><div class="character-id">C${id}</div><div class="character-name">${escapeHtml(name)}</div>${rarity!==""?`<div class="character-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}</div></button>`
+ return`<button type="button" class="character-tab" data-character-id="${id}" onclick="toggleCharacter(${id})"><div class="character-icon-wrap">${img?`<img class="character-icon" src="${escapeAttribute(img)}" alt="${escapeAttribute(name)}"${imageAttrs()} width="96" height="96" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div><div class="character-tab-info"><div class="character-id">C${id}</div><div class="character-name">${escapeHtml(name)}</div>${rarity!==""?`<div class="character-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}"${imageAttrs()} onerror="this.style.display='none'">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}</div></button>`
 }
 
 async function toggleCharacter(id){
@@ -162,9 +165,9 @@ async function createCharacterDetails(id,data,cstats){
  const i=getCharacterInfo(id),p=data[`c${id}`]||{},name=i.name||p.name||`Character ${id}`,rarity=p.rarity??"",ri=i.rarity_img||"",splash=i.splash_image||"",level=cstats?.total?.character?.level||p.level||1,species=getValues(i.species,p.species),roles=getValues(i.role,p.role),affinities=getValues(i.affinity,p.affinity);
  return`<div class="character-details" data-character-id="${id}">
  <div class="character-details-top">
-  <div class="character-splash-wrap">${splash?`<img class="character-splash" src="${escapeAttribute(splash)}" alt="${escapeAttribute(name)}" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
+  <div class="character-splash-wrap">${splash?`<img class="character-splash" src="${escapeAttribute(splash)}" alt="${escapeAttribute(name)}"${imageAttrs()} width="320" height="320" onerror="this.style.display='none'">`:`<span class="item-symbol"></span>`}</div>
   <div class="character-info">
-   <div class="character-detail-heading"><h3 class="character-detail-name">${escapeHtml(name)}</h3>${rarity!==""?`<div class="character-detail-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}</div>
+   <div class="character-detail-heading"><h3 class="character-detail-name">${escapeHtml(name)}</h3>${rarity!==""?`<div class="character-detail-rarity ${getRarityClass(rarity)}">${ri?`<img src="${escapeAttribute(ri)}" alt="${escapeAttribute(getRarityName(rarity))}"${imageAttrs()} onerror="this.style.display='none'">`:""}${escapeHtml(getRarityName(rarity))}</div>`:""}</div>
    <div class="character-detail-level">Level <strong>${level}</strong></div>
    ${createCharacterMeta(species,roles,affinities)}${createCharacterStats(cstats)}
   </div>
@@ -239,11 +242,11 @@ function createEquipmentItem(v,type){
 }
 function createWeaponItem(p){
  const id=p.id,i=getDatabaseItem(weaponDatabase,id,"w"),name=i.name||p.name||"Unknown Weapon",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),image=normalizeAssetPath(i.weapon_img||p.weapon_img||""),stats=calculateEquipmentMainStats(i,level);
- return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}"><div class="equipment-card"><div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="equipment-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Weapon</span></div><div class="equipment-name">${escapeHtml(name)}</div><div class="equipment-level">Level <span>${level}</span></div>${createEquipmentMainStats(stats)}</div></div></div>`
+ return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}"><div class="equipment-card"><div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}"${imageAttrs()} width="96" height="96" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="equipment-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Weapon</span></div><div class="equipment-name">${escapeHtml(name)}</div><div class="equipment-level">Level <span>${level}</span></div>${createEquipmentMainStats(stats)}</div></div></div>`
 }
 function createAccessoryItem(p){
  const id=p.id,i=getDatabaseItem(accessoryDatabase,id,"a"),name=i.name||p.name||"Unknown Accessory",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),image=normalizeAssetPath(i.accessory_img||p.accessory_img||""),stats=calculateEquipmentMainStats(i,level);
- return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}"><div class="equipment-card"><div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="equipment-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Accessory</span></div><div class="equipment-name">${escapeHtml(name)}</div><div class="equipment-level">Level <span>${level}</span></div>${createEquipmentMainStats(stats)}</div></div></div>`
+ return`<div class="equipped-item equipped-display ${getRarityBoxClass(rarity)}"><div class="equipment-card"><div class="equipment-image-wrap">${image?`<img class="equipment-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(name)}"${imageAttrs()} width="96" height="96" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="equipment-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Accessory</span></div><div class="equipment-name">${escapeHtml(name)}</div><div class="equipment-level">Level <span>${level}</span></div>${createEquipmentMainStats(stats)}</div></div></div>`
 }
 function getArtifactPieceData(info,p,n){
  n=Number(n)||1;
@@ -251,7 +254,7 @@ function getArtifactPieceData(info,p,n){
 }
 function createArtifactItem(p){
  const id=p.id,i=getDatabaseItem(artifactDatabase,id,"o"),name=i.name||p.name||"Unknown Artifact",rarity=p.rarity??i.rarity,rc=getRarityClass(rarity),rn=getRarityName(rarity),level=num(p.level,i.level||1),pieceNum=num(p.piece_num,1),pieceData=getArtifactPieceData(i,p,pieceNum),pieceType=getArtifactPieceName(pieceNum),artifactDisplayName=pieceData.name?`${pieceType}: ${pieceData.name}`:pieceType,image=pieceData.image,mainStat=calculateArtifactMainStat(i,p,level),subStats=calculateArtifactSubStats(p);
- return`<div class="equipped-item equipped-display artifact-display ${getRarityBoxClass(rarity)}"><div class="artifact-heading"><div class="artifact-image-wrap">${image?`<img class="artifact-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(artifactDisplayName)}" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="artifact-heading-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Artifact</span></div><div class="artifact-name">${escapeHtml(name)}</div><div class="artifact-level">Level <span>${level}</span></div></div></div><div class="artifact-piece"><strong>${escapeHtml(artifactDisplayName)}</strong></div>${mainStat?`<div class="artifact-main-stat"><span class="artifact-stat-label">Main Stat</span><span class="artifact-stat-value"><span class="artifact-stat-name">${escapeHtml(getCharacterStatDisplayName(mainStat.name))}</span>: ${formatGearStat(mainStat.name,mainStat.value,mainStat.type)}</span></div>`:""}${subStats.length?`<div class="artifact-sub-stats">${subStats.map(s=>`<div class="artifact-sub-stat"><span>${escapeHtml(getCharacterStatDisplayName(s.name))}${createRollDots(s.rolls)}</span><strong>${formatGearStat(s.name,s.value,s.type)}</strong></div>`).join("")}</div>`:""}</div>`
+ return`<div class="equipped-item equipped-display artifact-display ${getRarityBoxClass(rarity)}"><div class="artifact-heading"><div class="artifact-image-wrap">${image?`<img class="artifact-image" src="${escapeAttribute(image)}" alt="${escapeAttribute(artifactDisplayName)}"${imageAttrs()} width="64" height="64" onerror="handleEquipmentImageError(this)">`:`<span class="item-symbol"></span>`}</div><div class="artifact-heading-info"><div class="equipment-rarity-line"><span class="equipment-rarity ${rc}">${escapeHtml(rn)}</span><span class="equipment-type ${rc}">Artifact</span></div><div class="artifact-name">${escapeHtml(name)}</div><div class="artifact-level">Level <span>${level}</span></div></div></div><div class="artifact-piece"><strong>${escapeHtml(artifactDisplayName)}</strong></div>${mainStat?`<div class="artifact-main-stat"><span class="artifact-stat-label">Main Stat</span><span class="artifact-stat-value"><span class="artifact-stat-name">${escapeHtml(getCharacterStatDisplayName(mainStat.name))}</span>: ${formatGearStat(mainStat.name,mainStat.value,mainStat.type)}</span></div>`:""}${subStats.length?`<div class="artifact-sub-stats">${subStats.map(s=>`<div class="artifact-sub-stat"><span>${escapeHtml(getCharacterStatDisplayName(s.name))}${createRollDots(s.rolls)}</span><strong>${formatGearStat(s.name,s.value,s.type)}</strong></div>`).join("")}</div>`:""}</div>`
 }
 function createRollDots(rolls){
  const n=Math.min(5,Math.max(0,Number(rolls)||0));
@@ -341,7 +344,8 @@ Promise.all([loadCharacterDatabase(),loadAccountStyleDatabase(),loadWeaponDataba
 
 <style>
 html,body,#app,.page,button,input,textarea,select{font-family:Arial,sans-serif}
-.character-icon,.character-splash{mix-blend-mode:screen;background:transparent}
+img{image-rendering:auto;-ms-interpolation-mode:bicubic}
+.character-icon,.character-splash{mix-blend-mode:screen;background:transparent;image-rendering:auto}
 .character-icon-wrap,.character-splash-wrap{background:transparent}
 .character-list-item{display:inline-block;margin-right:3px}
 .character-meta-values .species,.character-meta-values .affinity,.character-meta-values .element,.character-meta-values .character-list-item,.affinity,.element,.character-affinity-values .affinity,.character-meta-values .element{display:inline-block}
@@ -356,7 +360,7 @@ html,body,#app,.page,button,input,textarea,select{font-family:Arial,sans-serif}
 .equipped-display.rarity-lr{background:linear-gradient(145deg,#80566c,#30252b)}
 .equipment-card{display:flex;align-items:center;gap:9px;min-width:0;height:100%}
 .equipment-image-wrap{width:82px;height:82px;min-width:82px;flex:0 0 82px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:5px;background:transparent}
-.equipment-image{display:block;width:82px;height:82px;object-fit:contain;object-position:center;background:transparent;mix-blend-mode:screen}
+.equipment-image{display:block;width:82px;height:82px;object-fit:contain;object-position:center;background:transparent;mix-blend-mode:screen;image-rendering:auto}
 .equipment-info{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;overflow:hidden}
 .equipment-rarity-line{display:flex;align-items:center;gap:6px;margin-bottom:2px;line-height:1;text-transform:uppercase}
 .equipment-rarity{width:max-content;font-size:9px;font-weight:900;letter-spacing:.07em}
@@ -393,7 +397,7 @@ html,body,#app,.page,button,input,textarea,select{font-family:Arial,sans-serif}
 .artifact-display{min-height:190px;height:auto}
 .artifact-heading{display:flex;align-items:center;gap:8px;min-width:0}
 .artifact-image-wrap{width:48px;height:48px;min-width:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;background:transparent}
-.artifact-image{display:block;width:48px;height:48px;object-fit:contain;object-position:center;background:transparent;mix-blend-mode:screen}
+.artifact-image{display:block;width:48px;height:48px;object-fit:contain;object-position:center;background:transparent;mix-blend-mode:screen;image-rendering:auto}
 .artifact-heading-info{min-width:0;flex:1}
 .artifact-name{overflow:hidden;color:#fff;font:800 14px Arial,sans-serif;line-height:1.2;text-overflow:ellipsis;white-space:nowrap;text-shadow:none}
 .artifact-piece{margin-top:8px;padding:4px 6px;border-top:1px solid #ffffff28;border-bottom:1px solid #ffffff18;color:#d0d0d0;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
@@ -414,7 +418,6 @@ html,body,#app,.page,button,input,textarea,select{font-family:Arial,sans-serif}
  .character-stats-heading{align-items:flex-start;flex-direction:column;gap:5px}.character-stats-heading-legend{justify-content:flex-start;gap:8px}
 }
 </style>
-
 
 <script src="/js/include.js"></script>
 

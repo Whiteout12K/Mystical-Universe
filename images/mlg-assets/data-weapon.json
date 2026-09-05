@@ -7,7 +7,7 @@
         "type": "Weapon",
         "weapon_type": "Sword",
 
-        "weapon_img": "/images/character_art/avery_obtainia_gladius_lucis.png",
+        "weapon_img": "/images/character_art/Equipment/avery_obtainia_gladius_lucis.png",
 
         "additional": [
             {"text": "<b>Weapon Skill: Divine Swords’ Raine</b>",
@@ -72,7 +72,7 @@
         "type": "Weapon",
         "weapon_type": "Sword",
 
-        "weapon_img": "",
+        "weapon_img": "/images/character_art/Equipment/kaden_icelander_seal_ring.png",
 
         "additional": [
             {"text": "<b>Weapon Skill: Divine Swords’ Raine</b>",
