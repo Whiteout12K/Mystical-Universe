@@ -555,19 +555,29 @@ function updateEdgeSprite(sprite){
     const lock=sprite.edgeLock;
     if(lock.mobile&&!ENGINE.mobile)return;
 
-    const {x:cx,y:cy}=ENGINE.camera;
-    const vw=ENGINE.viewWidth/2;
-    const vh=ENGINE.viewHeight/2;
-    const left=cx-vw,right=cx+vw,bottom=cy-vh,top=cy+vh;
+    const cx=ENGINE.camera.x,cy=ENGINE.camera.y;
 
-    /*
-     * Edge distances are stored from the sprite CENTER.
-     * Do NOT add/subtract sprite half-size here.
-     *
-     * This is intentional:
-     * resizing a sprite must not move its center.
-     * The costume is allowed to grow equally around that center.
-     */
+    const canvasHalfWidth=ENGINE.width/2;
+    const canvasHalfHeight=ENGINE.height/2;
+
+    const canvasLeft=cx-canvasHalfWidth;
+    const canvasRight=cx+canvasHalfWidth;
+    const canvasBottom=cy-canvasHalfHeight;
+    const canvasTop=cy+canvasHalfHeight;
+
+    const viewHalfWidth=ENGINE.viewWidth/2;
+    const viewHalfHeight=ENGINE.viewHeight/2;
+
+    const screenLeft=cx-viewHalfWidth;
+    const screenRight=cx+viewHalfWidth;
+    const screenBottom=cy-viewHalfHeight;
+    const screenTop=cy+viewHalfHeight;
+
+    const left=Math.max(canvasLeft,screenLeft);
+    const right=Math.min(canvasRight,screenRight);
+    const bottom=Math.max(canvasBottom,screenBottom);
+    const top=Math.min(canvasTop,screenTop);
+
     if(lock.horizontal==="left")
         sprite.x=left+lock.horizontalDistance;
     else if(lock.horizontal==="right")
@@ -578,11 +588,6 @@ function updateEdgeSprite(sprite){
     else if(lock.vertical==="bottom")
         sprite.y=bottom+lock.verticalDistance;
 
-    /*
-     * Only clamp when no edge lock controls that axis.
-     * Edge-locked sprites keep their stored center position even
-     * when their costume becomes larger than the visible area.
-     */
     if(!lock.horizontal){
         const hw=Math.max(0,sprite.width/2);
         const minX=left+hw,maxX=right-hw;
@@ -735,7 +740,7 @@ registerBlock("broadcastScript",(b,c)=>
 
 /* PROGRAM */
 
-const START_DELAY=50;
+const START_DELAY=200;
 
 async function executeProgram(){
     const c=createScriptContext();
@@ -779,8 +784,6 @@ function resizeGame(){
     ENGINE.unitScale=h/ENGINE.viewHeight;
     ENGINE.viewWidth=w/ENGINE.unitScale;
     ENGINE.centerX=ENGINE.centerY=0;
-    ENGINE.width=ENGINE.viewWidth;
-    ENGINE.height=ENGINE.viewHeight;
 
     updateEdgeSprites();
 }

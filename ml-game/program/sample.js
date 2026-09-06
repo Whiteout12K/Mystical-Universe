@@ -53,6 +53,12 @@ sizeOfSprite("Player1"); // Returns the current sprite size.
 
 deleteSprite("Player1"); // Completely removes sprite.
 
+deleteAllSprites(); // Completely removes all current sprites and clones from canvas.
+
+phaseIn(0.3); // Fades all current sprites in over time. Parameter: time (in seconds)
+phaseOut(0.3); // Fades all current sprites out over time. Parameter: time (in seconds)
+//                Good practice is to delete unused sprites between scenes.
+
 
 // <----- Motion Blocks ----->
 
@@ -254,8 +260,26 @@ volumeOfSound("Sound"); // Returns the volume of a particular sound.
 
 
 
-
 // Others
+
+// <----- JSON Blocks ----->
+
+getJson("data1", ""); // Loads a JSON file and stores it in memory. Parameter: json_name, json_path
+
+removeJson("data1"); // Removes a JSON file from memory. Parameter: json_name
+
+jsonLoeaded("data1"); // Returns true if JSON file is loaded in memory, else false. Parameter: json_name
+
+jsonValue("data1", "c1.name"); // Returns the value of a key in a JSON file. Parameter: json_name, key_name
+
+jsonExists("data1", "c1.name"); // Returns true if a key exists in a JSON file, else false. Parameter: json_name, key_name
+
+jsonKeys("data1", "c1.base_stats"); // Returns an array of all keys in a JSON file. Parameter: json_name
+
+jsonLength("data1", "c1.base_stats"); // Returns the length of a JSON file or key. Parameter: json_name, key_name
+
+jsonType("data1", "c1.name"); // Returns the type of a JSON file or key. Parameter: json_name, key_name
+
 
 // <----- Data Blocks ----->
 

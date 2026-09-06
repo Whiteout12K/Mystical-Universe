@@ -22,6 +22,8 @@ whenBroadcast("Main Menu",
         spriteSetSize("Heroes", 0.9),
     ),
 
+    phaseIn(0.3),
+
     makeSound("mlt", "/images/mlg-assets/Music/ML-Theme.mp3"),
     setPitch("mlt", 5),
     playSound("mlt"),
@@ -45,15 +47,9 @@ whenBroadcast("Main Menu",
             spriteSetSize("Start Button", 0.9),
             ifBlock( equal(keyPressed("leftclick"), true), 
                 setVar("Scene", "Gacha"),
-                repeat(25,
-                    spriteChangeEffect("BG", "ghost", 4),
-                    spriteChangeEffect("Heroes", "ghost", 4),
-                    spriteChangeEffect("Logo", "ghost", 4),
-                    spriteChangeEffect("Overlay", "ghost", 4),
-                    spriteChangeEffect("Start Button", "ghost", 4),
-                    wait(0.01),
-                ),     
+                phaseOut(0.3),
                 stopSound("mlt"),
+                deleteAllSprites(),
             ),
             "else",
             spriteEffect("Start Button", "brightness", 0),
@@ -102,13 +98,19 @@ whenClone("Line",
         wait(0.02),
     ),
     deleteClone("Line"),
-)
-
-
+);
 
 
 loadPlayerData();
 
 makeVar("Scene");
 setVar("Scene", "Main Menu");
+createSprite("Torch"); spriteCostume("Torch", "images/menu/torch_full.png", 0.5);
+spriteEffect("Torch", "ghost", 100);
+phaseIn(0.3);
+wait(1);     
+phaseOut(0.3); deleteSprite("Torch");
 broadcast("Main Menu");
+
+
+

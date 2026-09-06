@@ -155,6 +155,116 @@ registerBlock("deleteSprite",async(block,c)=>{
     ENGINE.spriteOrderDirty=true;
 });
 
+registerBlock("deleteAllSprites",async()=>{
+    const sprites=Object.values(ENGINE.sprites||{});
+
+    for(const s of sprites){
+        if(!s)continue;
+        s.deleted=true;
+        s.visible=false;
+        s.touchable=false;
+    }
+
+    if(ENGINE.clones&&typeof ENGINE.clones==="object"){
+        for(const c of Object.values(ENGINE.clones)){
+            if(!c)continue;
+            c.deleted=true;
+            c.visible=false;
+            c.touchable=false;
+        }
+
+        if(Array.isArray(ENGINE.clones))
+            ENGINE.clones.length=0;
+        else
+            Object.keys(ENGINE.clones).forEach(k=>delete ENGINE.clones[k]);
+    }
+
+    ENGINE.sprites={};
+    ENGINE.spriteOrder=[];
+    ENGINE.spriteOrderDirty=true;
+});
+
+
+/* PHASE EFFECTS */
+
+function getActivePhaseSprites(){
+    const list=[];
+    const seen=new Set();
+
+    const add=s=>{
+        if(!s||s.deleted||seen.has(s))return;
+        seen.add(s);
+        list.push(s);
+    };
+
+    Object.values(ENGINE.sprites||{}).forEach(add);
+
+    if(ENGINE.clones&&typeof ENGINE.clones==="object")
+        Object.values(ENGINE.clones).forEach(add);
+
+    return list;
+}
+
+async function phaseSprites(block,c,direction){
+    const sprites=getActivePhaseSprites();
+    if(!sprites.length)return;
+
+    let time=num(block.time,1,c);
+    if(time<0)time=0;
+
+    const steps=25;
+
+    for(const s of sprites){
+        if(!s||s.deleted)continue;
+
+        if(!s.effects)s.effects={};
+
+        s.effects.ghost=direction==="in"?100:0;
+        s.effectCacheKey=null;
+    }
+
+    if(!time){
+        for(const s of sprites){
+            if(!s||s.deleted)continue;
+
+            if(!s.effects)s.effects={};
+
+            s.effects.ghost=0;
+            s.effectCacheKey=null;
+        }
+
+        return;
+    }
+
+    const stepTime=time*1000/steps;
+
+    for(let i=0;i<steps;i++){
+        if(!ENGINE.running||c?.ended)break;
+
+        await new Promise(resolve=>setTimeout(resolve,stepTime));
+
+        for(const s of sprites){
+            if(!s||s.deleted)continue;
+
+            if(!s.effects)s.effects={};
+
+            s.effects.ghost=direction==="in"
+                ?Math.max(0,100-(i+1)*4)
+                :Math.min(100,(i+1)*4);
+
+            s.effectCacheKey=null;
+        }
+    }
+}
+
+registerBlock("phaseIn",async(block,c)=>{
+    await phaseSprites(block,c,"in");
+});
+
+registerBlock("phaseOut",async(block,c)=>{
+    await phaseSprites(block,c,"out");
+});
+
 
 /* SPRITE API */
 
@@ -216,4 +326,16 @@ function goBack(name){
 
 function deleteSprite(name){
     return createSpriteBlock("deleteSprite",{name});
+}
+
+function deleteAllSprites(){
+    return createSpriteBlock("deleteAllSprites",{});
+}
+
+function phaseIn(time=1){
+    return createSpriteBlock("phaseIn",{time});
+}
+
+function phaseOut(time=1){
+    return createSpriteBlock("phaseOut",{time});
 }

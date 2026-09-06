@@ -102,6 +102,7 @@ function createInitialData() {
             Id:1,
             name:"Avery",
             rarity: 5,
+            star_level: 0,
             level: 100,
             xp: 0,
             equip: {
@@ -275,6 +276,7 @@ function createInitialData() {
             Id:2,
             name:"Kaden Icelander",
             rarity: 5,
+            star_level: 0,
             level: 100,
             xp: 0,
             equip: {
@@ -449,6 +451,7 @@ function createInitialData() {
             Id:4,
             name:"Main Character",
             rarity: 1,
+            star_level: 0,
             level: 100,
             xp: 0,
             equip: {
