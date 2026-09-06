@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MLG Team Builder</title>
+<link rel="icon" href="/images/website/favicon.png" type="image/png">
+<link href="/css/bootstrap-min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/mlg.css">
+<script src="/js/bootstrap-bundle-min.js"></script>
+<script>
+const PRESET_TEAMS={
+ "Mystical Legends 1":{team:["c1","c2","c3"],resonance:{id:"c1",skill:"T1"}},
+ "Tempest Aquia Cohort (Water)":{team:["c6","c1","c5"],resonance:{id:"c6",skill:"T1"}},
+ "Blue Legion Cohort (Dark)":{team:["c8","c2","c1"],resonance:{id:"c8",skill:"T1"}},
+ "Starting":{team:["c4","c5","c3"],resonance:{id:"c4",skill:"T1"}}
+};
+</script>
+<style>
+*{box-sizing:border-box}
+:root{--gold:#d6aa45;--gold2:#f0ca69;--text:#f5ead2;--muted:#a99e8e}
+html{min-height:100%;background:#0d0c0d}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a3028 0,#21191a 32%,#151416 65%,#0d0c0d 100%);background-attachment:fixed;color:var(--text);font-family:Arial,sans-serif}
+.team-builder{width:min(900px,94%);margin:35px auto 180px}
+.builder-header{text-align:center;margin-bottom:25px}
+.builder-header h1{margin:0;color:var(--gold2);font-size:34px;letter-spacing:.05em;text-shadow:0 2px 12px #000}
+.builder-header p{margin:7px 0 18px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.15em}
+.team-select{display:block;width:min(420px,100%);margin:auto;padding:11px 15px;color:var(--text);background:#211b1c;border:0;border-radius:7px;outline:0;font-weight:bold;cursor:pointer;box-shadow:0 5px 15px #0007}
+.team-select:focus{box-shadow:0 0 0 1px #d6aa4570,0 5px 15px #0007}
+.team-area{display:flex;align-items:center;justify-content:center;gap:14px;max-width:750px;margin:auto}
+.team-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:650px;max-width:100%}
+.team-slot{position:relative;aspect-ratio:10/14;min-width:0;overflow:hidden;background:#111;cursor:pointer;border:0;border-radius:18px;isolation:isolate;box-shadow:0 14px 32px #000d,0 0 22px #0008;transition:transform .25s,filter .25s,box-shadow .25s}
+.team-slot:before{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:linear-gradient(135deg,#f0ca69 0,#f0ca6900 17%) top left/42px 42px no-repeat,linear-gradient(225deg,#f0ca69 0,#f0ca6900 17%) top right/42px 42px no-repeat,linear-gradient(45deg,#f0ca69 0,#f0ca6900 17%) bottom left/42px 42px no-repeat,linear-gradient(315deg,#f0ca69 0,#f0ca6900 17%) bottom right/42px 42px no-repeat;opacity:.8}
+.team-slot:not(.empty):hover{transform:translateY(-5px) scale(1.01);filter:brightness(1.06);box-shadow:0 18px 38px #000e,0 0 28px var(--rarity-glow,#d6aa4540)}
+.team-slot.empty{background:radial-gradient(circle at center,#d6aa4510,transparent 50%),linear-gradient(145deg,#211b1caa,#0e0d0eee);box-shadow:0 10px 28px #000b,0 0 22px #d6aa4510}
+.team-slot.empty:hover{box-shadow:0 12px 32px #000c,0 0 30px #d6aa4530}
+.team-slot.empty:before{background:linear-gradient(135deg,#d6aa4560 0,#d6aa4500 20%) top left/42px 42px no-repeat,linear-gradient(225deg,#d6aa4560 0,#d6aa4500 20%) top right/42px 42px no-repeat,linear-gradient(45deg,#d6aa4560 0,#d6aa4500 20%) bottom left/42px 42px no-repeat,linear-gradient(315deg,#d6aa4560 0,#d6aa4500 20%) bottom right/42px 42px no-repeat}
+.slot-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;image-rendering:auto;-ms-interpolation-mode:bicubic;transform:translate3d(0,0,0) scale(1.002);backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:brightness(1.025) saturate(1.015);display:block}
+.slot-shade{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,#0000 25%,#00000008 50%,#000000c8 100%)}
+.rarity-img{position:absolute;right:8px;bottom:62px;z-index:8;width:clamp(60px,30%,100px);height:auto;aspect-ratio:1;object-fit:contain;display:block;border:0;border-radius:0;box-shadow:none;background:none;padding:0;image-rendering:auto;transform:translate3d(0,-5px,0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.slot-info{position:absolute;left:0;right:0;bottom:0;z-index:7;padding:32px 9px 12px;text-align:center;background:linear-gradient(0deg,#080708df,#08070855 65%,transparent)}
+.slot-name{font-size:14px;font-weight:900;text-shadow:0 2px 8px #000,0 0 4px #000}
+.slot-rarity{font-size:9px;font-weight:900;letter-spacing:.15em;margin-top:3px;text-shadow:0 1px 5px #000}
+.slot-number{position:absolute;top:9px;left:9px;z-index:9;width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#100d0dd9;color:var(--gold2);font-size:11px;font-weight:bold;box-shadow:0 2px 8px #000}
+.remove-slot{position:absolute;top:9px;right:9px;z-index:10;width:25px;height:25px;border:0;border-radius:50%;background:#160f10dd;color:#fff;font-weight:bold;cursor:pointer;opacity:0;transition:.2s}
+.team-slot:hover .remove-slot{opacity:1}
+.builder-status{text-align:center;margin-top:16px;color:var(--muted);font-size:11px}
+.rarity-c{background:linear-gradient(145deg,#494949,#181818)!important}
+.rarity-un{background:linear-gradient(145deg,#6aa84f,#203719)!important}
+.rarity-r{background:linear-gradient(145deg,#0000ff,#11115c)!important}
+.rarity-sr{background:linear-gradient(145deg,#9900ff,#3a075c)!important}
+.rarity-ssr{background:linear-gradient(145deg,#ff9900,#713b00)!important}
+.rarity-ur{background:linear-gradient(145deg,#ff0000,#650000)!important}
+.rarity-lr{background:linear-gradient(145deg,#d5a6bd,#633d51)!important}
+
+/* RESONANCE BUTTON */
+.resonance-button{position:relative;flex:0 0 70px;width:70px;height:70px;padding:0;border:1px solid #d6aa4560;border-radius:50%;background:radial-gradient(circle,#3a2a1e,#171213 68%);color:var(--gold2);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 18px #000b,0 0 18px #d6aa4520;transition:.25s}
+.resonance-button:hover{transform:scale(1.08);box-shadow:0 7px 24px #000d,0 0 25px #d6aa4545}
+.resonance-button.active{box-shadow:0 0 0 2px #d6aa4570,0 7px 24px #000d,0 0 30px #d6aa4560}
+.resonance-button img{display:none;width:100%;height:100%;padding:0;object-fit:contain;object-position:center;border-radius:50%}
+.resonance-button.active img{display:block}
+.resonance-button span{position:absolute;left:50%;bottom:-21px;transform:translateX(-50%);white-space:nowrap;color:var(--gold2);font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;text-shadow:0 2px 5px #000}
+
+/* PICKER */
+.character-picker{position:fixed;left:0;right:0;bottom:0;z-index:1000;padding:15px 0 18px;background:linear-gradient(180deg,#211a1bea,#100e0ff8);border-top:1px solid #d6aa4560;box-shadow:0 -12px 35px #000c;backdrop-filter:blur(10px);transform:translateY(100%);transition:.3s ease}
+.character-picker.open{transform:translateY(0)}
+.picker-inner{width:min(1050px,94%);margin:auto}
+.picker-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.picker-title{color:var(--gold2);font-size:13px;font-weight:900;letter-spacing:.08em}
+.picker-close{border:0;background:#211b1c;color:var(--text);border-radius:5px;padding:6px 11px;cursor:pointer}
+.character-list{display:flex;gap:10px;overflow-x:auto;padding:3px 2px 5px;scrollbar-width:thin}
+.character-list::-webkit-scrollbar{height:5px}
+.character-list::-webkit-scrollbar-thumb{background:#d6aa4566;border-radius:5px}
+.pick-character{position:relative;flex:0 0 92px;aspect-ratio:10/14;overflow:hidden;border:0;border-radius:8px;background:#111;cursor:pointer;transition:.18s;box-shadow:0 4px 12px #0009;padding:0}
+.pick-character:hover{transform:translateY(-5px) scale(1.025);filter:brightness(1.08);box-shadow:0 8px 18px #000c,0 0 12px #d6aa4525}
+.pick-character.selected{opacity:.28;filter:grayscale(1);cursor:not-allowed;transform:none;box-shadow:0 3px 8px #0008}
+.pick-character.selected:hover{transform:none;filter:grayscale(1);box-shadow:0 3px 8px #0008}
+.pick-character img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:1;image-rendering:auto;-ms-interpolation-mode:bicubic;transform:translate3d(0,0,0) scale(1.002);backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:brightness(1.02) saturate(1.01);display:block}
+.pick-character.selected img{filter:grayscale(1) brightness(.72)}
+.pick-shade{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,#0000 50%,#00000038 100%)}
+.pick-character.selected:after{content:"ACTIVE";position:absolute;left:50%;top:50%;z-index:5;transform:translate(-50%,-50%) rotate(-8deg);color:#f0ca69;font-size:10px;font-weight:900;letter-spacing:.12em;text-shadow:0 2px 8px #000,0 0 8px #000;white-space:nowrap}
+.no-characters{text-align:center;color:var(--muted);padding:20px}
+
+/* ABILITIES */
+.abilities{max-width:650px;margin:18px auto 0;border:1px solid #d6aa4530;border-radius:9px;overflow:hidden;background:linear-gradient(145deg,#211b1c,#110f10);box-shadow:0 8px 24px #0008}
+.abilities-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;padding:11px 14px;border:0;background:linear-gradient(90deg,#211b1c,#171314,#211b1c);color:var(--gold2);cursor:pointer;text-align:left;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.abilities-toggle:hover{background:linear-gradient(90deg,#2b2021,#1b1617,#2b2021)}
+.abilities-arrow{font-size:11px;transition:transform .25s ease}
+.abilities.open .abilities-arrow{transform:rotate(180deg)}
+.abilities-content{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.abilities.open .abilities-content{grid-template-rows:1fr}
+.abilities-inner{min-height:0;overflow:hidden}
+.ability-character{border-top:1px solid #d6aa4520}
+.ability-character-title{display:flex;align-items:center;padding:10px 12px;color:var(--text);font-weight:900;background:linear-gradient(90deg,#2a2021,#181415)}
+.ability-skills{padding:8px 10px 12px}
+.ability-skill{margin-bottom:8px;border:1px solid #d6aa4520;border-radius:7px;overflow:hidden;background:#100e0f}
+.ability-skill:last-child{margin-bottom:0}
+.ability-skill-head{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border:0;background:linear-gradient(90deg,#241c1d,#171314);color:var(--text);cursor:pointer;text-align:left}
+.ability-skill-head:hover{background:linear-gradient(90deg,#302223,#1c1718)}
+.ability-skill-icon{width:38px;height:38px;flex:0 0 38px;object-fit:contain;border-radius:50%;border:1px solid #d6aa4545;background:#151213;box-shadow:0 2px 8px #0008}
+.ability-skill-name{display:block;min-width:0;color:var(--text);font-size:11px;font-weight:700}
+.ability-skill-label{display:block}
+.ability-skill-arrow{margin-left:auto;color:var(--muted);font-size:10px;transition:transform .2s}
+.ability-skill.open .ability-skill-arrow{transform:rotate(180deg)}
+.ability-skill-content{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.ability-skill.open .ability-skill-content{grid-template-rows:1fr}
+.ability-skill-frame-wrap{min-height:0;overflow:hidden;padding:0 12px}
+.ability-skill-frame{display:block;width:100%;min-height:100px;height:100px;border:0;background:#0f0f0f;opacity:0;transition:opacity .2s ease}
+.ability-skill.open .ability-skill-frame{opacity:1}
+.ability-empty,.ability-loading{padding:14px;color:var(--muted);text-align:center}
+
+/* RESONANCE POPUP */
+#resonance-modal-popup{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;background:#000b;backdrop-filter:blur(7px)}
+#resonance-modal-popup.rb-open{display:flex}
+.rb-dialog{position:relative;width:min(700px,94vw);max-height:85vh;overflow:hidden;border:1px solid #d6aa4560;border-radius:12px;background:linear-gradient(145deg,#211b1c,#100e0f);box-shadow:0 20px 60px #000e,0 0 35px #d6aa4520}
+.rb-header{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 17px;border-bottom:1px solid #d6aa4525;background:linear-gradient(90deg,#2b2021,#171314,#2b2021)}
+.rb-title{color:var(--gold2);font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.rb-close{appearance:none!important;-webkit-appearance:none!important;border:0!important;border-radius:5px!important;padding:6px 10px!important;background:#211b1c!important;color:var(--text)!important;cursor:pointer}
+.rb-list{padding:10px;overflow-y:auto;max-height:calc(85vh - 65px)}
+.rb-character-group{margin-bottom:10px;border:1px solid #d6aa4525;border-radius:8px;overflow:hidden;background:#100e0f}
+.rb-character-group:last-child{margin-bottom:0}
+.rb-character-name{padding:10px 12px;color:var(--text);font-weight:900;background:linear-gradient(90deg,#2a2021,#181415)}
+.rb-skill-list{display:flex;align-items:center;gap:12px;padding:12px}
+.rb-skill{appearance:none!important;-webkit-appearance:none!important;position:relative;display:flex!important;align-items:center;justify-content:center;width:58px!important;height:58px!important;min-width:58px!important;min-height:58px!important;padding:0!important;margin:0!important;border:1px solid #d6aa4545!important;border-radius:50%!important;background:radial-gradient(circle,#30251d,#151213 72%)!important;color:var(--gold2)!important;cursor:pointer;box-shadow:0 3px 10px #0009;transition:.18s;outline:0!important;font:inherit!important}
+.rb-skill:hover{transform:scale(1.08);border-color:#d6aa45!important;box-shadow:0 5px 15px #000c,0 0 14px #d6aa4530}
+.rb-skill.rb-selected{border:2px solid var(--gold2)!important;box-shadow:0 0 0 2px #d6aa4535,0 4px 14px #000c,0 0 18px #d6aa4540}
+.rb-skill-icon{width:42px;height:42px;object-fit:contain;border-radius:50%;pointer-events:none}
+.rb-skill-number{position:absolute;right:-2px;bottom:-2px;width:19px;height:19px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#171213;border:1px solid #d6aa4560;color:var(--gold2);font-size:8px;font-weight:900}
+.rb-skill-check{position:absolute;top:-4px;right:-4px;width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--gold2);color:#171213;font-size:10px;font-weight:900}
+.rb-skill-tooltip{position:absolute;left:50%;bottom:-29px;transform:translateX(-50%);white-space:nowrap;pointer-events:none;color:var(--text);font-size:8px;font-weight:700;text-shadow:0 2px 5px #000;opacity:0;transition:.15s}
+.rb-skill:hover .rb-skill-tooltip{opacity:1}
+.rb-empty{padding:20px;text-align:center;color:var(--muted)}
+
+@media(max-width:600px){
+ .team-builder{width:94%;margin-top:20px}
+ .builder-header h1{font-size:27px}
+ .team-area{gap:7px}
+ .team-slots{gap:8px}
+ .team-slot{border-radius:12px}
+ .team-slot:before{border-radius:12px}
+ .slot-name{font-size:11px}
+ .slot-rarity{font-size:7px}
+ .slot-number{width:19px;height:19px;font-size:9px;top:6px;left:6px}
+ .remove-slot{width:19px;height:19px;font-size:11px;top:6px;right:6px}
+ .rarity-img{width:30%;right:3px;bottom:40px;transform:translate3d(0,-3px,0)}
+ .pick-character{flex-basis:79px}
+ .resonance-button{flex-basis:54px;width:54px;height:54px}
+ .resonance-button span{font-size:8px;bottom:-18px}
+ .abilities{margin-top:15px}
+ .ability-skill-icon{width:34px;height:34px;flex-basis:34px}
+ #resonance-modal-popup{padding:10px}
+ .rb-header{padding:12px}
+ .rb-skill-list{gap:9px;padding:10px}
+ .rb-skill{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important}
+ .rb-skill-icon{width:38px;height:38px}
+}
+</style>
+</head>
+
+<body>
+<div id="homeheader-placeholder"></div>
+<br><br><br>
+
+<main class="team-builder">
+<header class="builder-header">
+<h1>Team Builder</h1>
+<p>Assemble your mystical legends team</p>
+<select id="team-select" class="team-select"><option value="">Custom Team</option></select>
+</header>
+
+<div class="team-area">
+<section id="team-slots" class="team-slots">
+<div class="team-slot empty" data-slot="0"><span class="slot-number">1</span></div>
+<div class="team-slot empty" data-slot="1"><span class="slot-number">2</span></div>
+<div class="team-slot empty" data-slot="2"><span class="slot-number">3</span></div>
+</section>
+
+<button id="resonance-button" class="resonance-button" type="button" title="Choose Resonance Skill">
+<img alt="" draggable="false">
+<span>Resonance</span>
+</button>
+</div>
+
+<div class="builder-status">Select a character slot to build your team.</div>
+
+<section id="abilities" class="abilities">
+<button id="abilities-toggle" class="abilities-toggle" type="button">
+<span>Abilities</span>
+<span class="abilities-arrow">▼</span>
+</button>
+<div class="abilities-content"><div id="abilities-inner" class="abilities-inner"></div></div>
+</section>
+</main>
+
+<div id="character-picker" class="character-picker">
+<div class="picker-inner">
+<div class="picker-top"><div class="picker-title">SELECT CHARACTER</div><button class="picker-close" type="button">Close</button></div>
+<div id="character-list" class="character-list"></div>
+</div>
+</div>
+
+<div id="resonance-modal-popup">
+<div class="rb-dialog">
+<div class="rb-header">
+<div class="rb-title">Select Resonance Skill</div>
+<button id="resonance-close-button" class="rb-close" type="button">Close</button>
+</div>
+<div id="resonance-skill-list" class="rb-list"></div>
+</div>
+</div>
+
+<div id="homefooter-placeholder"></div>
+
+<script>
+const DATA_PATH="/images/mlg-assets/data-character.json",SKILL_VIEW_PATH="/ml-game/apps/skill.html";
+let characters={},team=["","",""],activeSlot=0,resonance=null;
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+
+function rarityClass(r){r=String(r||"c").toLowerCase();return["c","un","r","sr","ssr","ur","lr"].includes(r)?r:"c"}
+function rarityColor(r){return({c:"#777",un:"#83c76a",r:"#5555ff",sr:"#bb55ff",ssr:"#ffb733",ur:"#ff5555",lr:"#e8b9d2"})[rarityClass(r)]}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
+function getCharacters(data){const out={};Object.entries(data||{}).forEach(([k,v])=>{if(/^c\d+$/i.test(k)&&v?.id)out[k]=v});return out}
+
+function loadPresets(){
+ Object.keys(PRESET_TEAMS).forEach(name=>{
+  const o=document.createElement("option");
+  o.value=name;o.textContent=name;
+  $("#team-select").appendChild(o);
+ });
+}
+
+function cleanTeam(list){
+ const used=new Set();
+ return[0,1,2].map(i=>{
+  const id=list[i]||"";
+  if(!id||used.has(id)||!characters[id])return"";
+  used.add(id);
+  return id;
+ });
+}
+
+function renderTeam(){
+ $$(".team-slot").forEach((slot,i)=>{
+  const c=characters[team[i]];
+
+  if(!c){
+   slot.className="team-slot empty";
+   slot.style.removeProperty("--rarity-glow");
+   slot.innerHTML=`<span class="slot-number">${i+1}</span>`;
+   return;
+  }
+
+  const r=rarityClass(c.rarity),color=rarityColor(c.rarity);
+
+  slot.className=`team-slot rarity-${r}`;
+  slot.style.setProperty("--rarity-glow",`${color}66`);
+
+  slot.innerHTML=`
+   <span class="slot-number">${i+1}</span>
+   <button class="remove-slot" type="button" data-remove="${i}">×</button>
+   ${c.profile_image?`<img class="slot-image" src="${esc(c.profile_image)}" alt="${esc(c.name)}" draggable="false">`:""}
+   <div class="slot-shade"></div>
+   ${c.rarity_img?`<img class="rarity-img" src="${esc(c.rarity_img)}" alt="${esc(c.rarity||"")} rarity" draggable="false">`:""}
+   <div class="slot-info">
+    <div class="slot-name">${esc(c.name)}</div>
+    <div class="slot-rarity" style="color:${color}">${esc(c.rarity||"C").toUpperCase()}</div>
+   </div>
+  `;
+ });
+
+ updateResonanceButton();
+}
+
+function renderCharacters(){
+ const list=$("#character-list"),arr=Object.entries(characters);
+
+ if(!arr.length){
+  list.innerHTML=`<div class="no-characters">No playable characters found.</div>`;
+  return;
+ }
+
+ const used=new Set(team.filter(Boolean));
+
+ list.innerHTML=arr.map(([id,c])=>{
+  const r=rarityClass(c.rarity),selected=used.has(id);
+
+  return`
+   <button class="pick-character rarity-${r}${selected?" selected":""}" type="button" data-character="${id}" ${selected?"disabled":""} title="${esc(selected?`${c.name} is already active`:c.name)}">
+   ${c.profile_image?`<img src="${esc(c.profile_image)}" alt="${esc(c.name)}" loading="lazy" draggable="false">`:""}
+   <div class="pick-shade"></div>
+   </button>
+  `;
+ }).join("");
+}
+
+/* TECHNICAL SKILLS */
+function getTechnicalSkills(character){
+ const skills=Array.isArray(character?.skills)?character.skills:[];
+ return skills.filter(skill=>/^T\d+$/i.test(String(skill))||String(skill).toLowerCase()==="dupes");
+}
+
+function getTechnicalOnly(character){
+ const skills=Array.isArray(character?.skills)?character.skills:[];
+ return skills.filter(skill=>/^T\d+$/i.test(String(skill)));
+}
+
+function getSkillIcon(skill,path){
+ return String(skill).toLowerCase()==="dupes"
+  ?"/images/mlg-assets/Stars/dupe.svg"
+  :`${path}/skill_b/${String(skill).toLowerCase()}.svg`;
+}
+
+function getSkillFile(skill,charId){
+ const id=String(skill).toLowerCase()==="dupes"?16:1;
+ return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}`;
+}
+
+function getSkillLabel(skill){
+ const s=String(skill);
+ return s.toLowerCase()==="dupes"
+  ?"Dupes"
+  :`Technical Skill ${s.replace(/^T/i,"")}`;
+}
+
+/* ABILITIES */
+function createAbilitySkill(skill,id,character){
+ const label=getSkillLabel(skill);
+ const icon=getSkillIcon(skill,character.skills_path);
+ const url=getSkillFile(skill,id);
+
+ return`
+  <div class="ability-skill" data-ability-skill="${esc(skill)}">
+   <button class="ability-skill-head" type="button">
+    <img class="ability-skill-icon" src="${esc(icon)}" alt="${esc(label)}" loading="lazy" draggable="false">
+    <span class="ability-skill-name"><span class="ability-skill-label">${esc(label)}</span></span>
+    <span class="ability-skill-arrow">▼</span>
+   </button>
+   <div class="ability-skill-content">
+    <div class="ability-skill-frame-wrap">
+     <iframe class="ability-skill-frame" title="${esc(character.name)} ${esc(label)}" data-src="${esc(url)}"></iframe>
+    </div>
+   </div>
+  </div>
+ `;
+}
+
+function renderAbilities(){
+ const container=$("#abilities-inner");
+ const activeTeam=team.filter(id=>id&&characters[id]);
+
+ if(!activeTeam.length){
+  container.innerHTML=`<div class="ability-empty">Select characters to view their abilities.</div>`;
+  return;
+ }
+
+ container.innerHTML=activeTeam.map(id=>{
+  const character=characters[id],skills=getTechnicalSkills(character);
+
+  return`
+   <div class="ability-character">
+    <div class="ability-character-title">${esc(character.name)}</div>
+    ${skills.length?`<div class="ability-skills">${skills.map(skill=>createAbilitySkill(skill,id,character)).join("")}</div>`:`<div class="ability-empty">No technical skills or dupes listed.</div>`}
+   </div>
+  `;
+ }).join("");
+
+ if(resonance&&characters[resonance.id]){
+  const c=characters[resonance.id];
+
+  container.innerHTML+=`
+   <div class="ability-character" style="border-top-color:#d6aa4560">
+    <div class="ability-character-title" style="color:var(--gold2)">Resonance Skill</div>
+    <div class="ability-skills">${createAbilitySkill(resonance.skill,resonance.id,c)}</div>
+   </div>
+  `;
+ }
+}
+
+/* IFRAME */
+function resizeAbilityIframe(iframe){
+ try{
+  const doc=iframe.contentDocument||iframe.contentWindow.document;
+  if(!doc)return;
+
+  const b=doc.body,h=doc.documentElement;
+  const height=Math.max(
+   b?.scrollHeight||0,b?.offsetHeight||0,b?.clientHeight||0,
+   h?.scrollHeight||0,h?.offsetHeight||0,h?.clientHeight||0,60
+  );
+
+  iframe.style.height=`${height}px`;
+ }catch{}
+}
+
+function prepareAbilityIframe(iframe){
+ try{
+  const doc=iframe.contentDocument||iframe.contentWindow.document;
+  if(!doc)return;
+
+  const style=doc.createElement("style");
+
+  style.textContent=`
+   html{
+    margin:0!important;
+    padding:0!important;
+    background:#0f0f0f!important;
+    color:#e6e6e6!important;
+    overflow:hidden!important;
+   }
+   body{
+    margin:0!important;
+    padding:8px 9px!important;
+    background:#0f0f0f!important;
+    color:#e6e6e6!important;
+    overflow:hidden!important;
+    font-family:Arial,sans-serif!important;
+    zoom:1.5!important;
+   }
+  `;
+
+  if(doc.head)doc.head.appendChild(style);
+
+  const resize=()=>resizeAbilityIframe(iframe);
+
+  iframe.contentWindow.addEventListener("load",resize);
+
+  if(typeof ResizeObserver!=="undefined"&&doc.body){
+   const observer=new ResizeObserver(resize);
+   observer.observe(doc.body);
+   if(doc.documentElement)observer.observe(doc.documentElement);
+   iframe._abilityObserver=observer;
+  }
+
+  setTimeout(resize,50);
+  setTimeout(resize,150);
+  setTimeout(resize,300);
+  setTimeout(resize,600);
+ }catch{}
+}
+
+function loadAbilityIframe(iframe){
+ const bar=iframe.closest(".ability-skill");
+
+ if(!bar?.classList.contains("open"))return;
+
+ if(iframe.dataset.loaded==="true"){
+  iframe.style.opacity="1";
+  resizeAbilityIframe(iframe);
+  return;
+ }
+
+ const url=iframe.dataset.src;
+ if(!url)return;
+
+ iframe.dataset.loaded="loading";
+
+ iframe.addEventListener("load",()=>{
+  if(!bar.classList.contains("open"))return;
+
+  iframe.dataset.loaded="true";
+  prepareAbilityIframe(iframe);
+
+  requestAnimationFrame(()=>{
+   if(!bar.classList.contains("open"))return;
+   resizeAbilityIframe(iframe);
+   iframe.style.opacity="1";
+  });
+ },{once:true});
+
+ iframe.src=url;
+}
+
+function closeAbilitySkill(item){
+ item.classList.remove("open");
+
+ const iframe=item.querySelector(".ability-skill-frame");
+
+ if(iframe){
+  iframe.style.opacity="0";
+  iframe.style.visibility="hidden";
+  iframe.style.pointerEvents="none";
+ }
+}
+
+function toggleAbilitySkill(skillElement){
+ const wasOpen=skillElement.classList.contains("open");
+
+ document.querySelectorAll(".ability-skill.open").forEach(item=>{
+  if(item!==skillElement)closeAbilitySkill(item);
+ });
+
+ if(wasOpen){
+  closeAbilitySkill(skillElement);
+  return;
+ }
+
+ skillElement.classList.add("open");
+
+ const iframe=skillElement.querySelector(".ability-skill-frame");
+
+ if(iframe){
+  iframe.style.visibility="visible";
+  iframe.style.pointerEvents="auto";
+  loadAbilityIframe(iframe);
+ }
+}
+
+/* RESONANCE POPUP */
+function renderResonanceList(){
+ const list=$("#resonance-skill-list");
+
+ const entries=Object.entries(characters)
+  .map(([id,c])=>({id,character:c,skills:getTechnicalOnly(c)}))
+  .filter(x=>x.skills.length);
+
+ if(!entries.length){
+  list.innerHTML=`<div class="rb-empty">No technical skills found.</div>`;
+  return;
+ }
+
+ list.innerHTML=entries.map(({id,character,skills})=>`
+  <div class="rb-character-group">
+   <div class="rb-character-name">${esc(character.name)}</div>
+   <div class="rb-skill-list">
+    ${skills.map(skill=>{
+     const active=
+      resonance?.id===id&&
+      String(resonance.skill).toLowerCase()===String(skill).toLowerCase();
+
+     const number=String(skill).replace(/^T/i,"");
+
+     return`
+      <button class="rb-skill${active?" rb-selected":""}" type="button" data-rb-character="${esc(id)}" data-rb-skill="${esc(skill)}" title="${esc(getSkillLabel(skill))}">
+       <img class="rb-skill-icon" src="${esc(getSkillIcon(skill,character.skills_path))}" alt="${esc(getSkillLabel(skill))}" loading="lazy" draggable="false">
+       <span class="rb-skill-number">${esc(number)}</span>
+       ${active?`<span class="rb-skill-check">✓</span>`:""}
+       <span class="rb-skill-tooltip">${esc(getSkillLabel(skill))}</span>
+      </button>
+     `;
+    }).join("")}
+   </div>
+  </div>
+ `).join("");
+}
+
+function openResonance(){
+ renderResonanceList();
+ $("#resonance-modal-popup").classList.add("rb-open");
+}
+
+function closeResonance(){
+ $("#resonance-modal-popup").classList.remove("rb-open");
+}
+
+function selectResonance(id,skill){
+ const character=characters[id];
+
+ if(!character||!getTechnicalOnly(character).some(s=>String(s).toLowerCase()===String(skill).toLowerCase()))return;
+
+ resonance={id,skill};
+
+ renderResonanceList();
+ renderAbilities();
+ updateResonanceButton();
+ closeResonance();
+}
+
+function updateResonanceButton(){
+ const button=$("#resonance-button"),img=button.querySelector("img");
+
+ if(!resonance||!characters[resonance.id]){
+  button.classList.remove("active");
+  button.title="Choose Resonance Skill";
+  img.removeAttribute("src");
+  img.alt="";
+  return;
+ }
+
+ const c=characters[resonance.id];
+
+ button.classList.add("active");
+ button.title=`Resonance: ${c.name} — ${getSkillLabel(resonance.skill)}`;
+ img.src=getSkillIcon(resonance.skill,c.skills_path);
+ img.alt=getSkillLabel(resonance.skill);
+}
+
+/* CHARACTER PICKER */
+function openPicker(slot){
+ activeSlot=slot;
+ renderCharacters();
+ $("#character-picker").classList.add("open");
+}
+
+function closePicker(){
+ $("#character-picker").classList.remove("open");
+}
+
+function selectCharacter(id){
+ if(!characters[id]||team.includes(id))return;
+
+ team[activeSlot]=id;
+ team=cleanTeam(team);
+ $("#team-select").value="";
+
+ renderTeam();
+ renderCharacters();
+ updateStatus();
+ renderAbilities();
+ closePicker();
+}
+
+function updateStatus(){
+ const count=team.filter(Boolean).length;
+
+ $(".builder-status").textContent=
+  count===3
+   ?"Team complete. Select a character to replace a member."
+   :`${count}/3 characters selected.`;
+}
+
+/* PRESETS + RESONANCE */
+function loadPreset(name){
+ const p=PRESET_TEAMS[name];
+
+ if(!p)return;
+
+ team=cleanTeam(p.team);
+
+ if(
+  p.resonance&&
+  characters[p.resonance.id]&&
+  getTechnicalOnly(characters[p.resonance.id]).some(
+   s=>String(s).toLowerCase()===String(p.resonance.skill).toLowerCase()
+  )
+ ){
+  resonance={
+   id:p.resonance.id,
+   skill:p.resonance.skill
+  };
+ }else{
+  resonance=null;
+ }
+
+ renderTeam();
+ renderCharacters();
+ updateStatus();
+ renderAbilities();
+}
+
+/* EVENTS */
+$("#team-select").addEventListener("change",e=>{
+ if(e.target.value)loadPreset(e.target.value);
+});
+
+$(".picker-close").addEventListener("click",closePicker);
+
+$("#team-slots").addEventListener("click",e=>{
+ const remove=e.target.closest("[data-remove]");
+
+ if(remove){
+  e.stopPropagation();
+
+  team[+remove.dataset.remove]="";
+  $("#team-select").value="";
+
+  renderTeam();
+  renderCharacters();
+  updateStatus();
+  renderAbilities();
+
+  return;
+ }
+
+ const slot=e.target.closest(".team-slot");
+
+ if(slot)openPicker(+slot.dataset.slot);
+});
+
+$("#character-list").addEventListener("click",e=>{
+ const button=e.target.closest("[data-character]");
+
+ if(button&&!button.disabled)
+  selectCharacter(button.dataset.character);
+});
+
+$("#abilities-toggle").addEventListener("click",()=>{
+ $("#abilities").classList.toggle("open");
+});
+
+$("#abilities-inner").addEventListener("click",e=>{
+ const button=e.target.closest(".ability-skill-head");
+
+ if(!button)return;
+
+ const skill=button.closest(".ability-skill");
+
+ if(skill)toggleAbilitySkill(skill);
+});
+
+/* RESONANCE EVENTS */
+$("#resonance-button").addEventListener("click",openResonance);
+$("#resonance-close-button").addEventListener("click",closeResonance);
+
+$("#resonance-skill-list").addEventListener("click",e=>{
+ const button=e.target.closest("[data-rb-character]");
+
+ if(button){
+  selectResonance(
+   button.dataset.rbCharacter,
+   button.dataset.rbSkill
+  );
+ }
+});
+
+$("#resonance-modal-popup").addEventListener("click",e=>{
+ if(e.target===$("#resonance-modal-popup"))
+  closeResonance();
+});
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){
+  closePicker();
+  closeResonance();
+ }
+});
+
+/* INIT */
+async function init(){
+ try{
+  const r=await fetch(DATA_PATH,{cache:"no-cache"});
+
+  if(!r.ok)throw Error(`HTTP ${r.status}`);
+
+  characters=getCharacters(await r.json());
+
+  loadPresets();
+
+  team=cleanTeam(team);
+
+  renderCharacters();
+  renderTeam();
+  updateStatus();
+  renderAbilities();
+
+ }catch(e){
+  console.error(e);
+
+  $("#character-list").innerHTML=
+   `<div class="no-characters">Unable to load characters.</div>`;
+
+  $("#abilities-inner").innerHTML=
+   `<div class="ability-empty">Unable to load abilities.</div>`;
+ }
+}
+
+init();
+</script>
+
+<script src="/js/include.js"></script>
+</body>
+</html>

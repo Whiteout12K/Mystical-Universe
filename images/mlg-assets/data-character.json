@@ -585,6 +585,69 @@
 
 
 
+  "c11": {
+    "id": 11,
+    "profile_image": "/images/character_art/Character_Heads/pyrus_subordinates_head.png",   
+
+    "splash_image": "",
+    "splash_color": "drop-shadow(0 0 18px rgba(181, 79, 215, 0.429))",
+    "button_color": "#89e5f7",
+
+    "name": "Pyro's Subordinates",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
+
+    "species": ["Felior"],
+    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonater"],
+    "affinity": ["Wind"],
+    "role": ["Fighter"],
+
+    "affiliation": ["District 3", "Villain"],
+    "attributes": ["Charging"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C11",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Spear", "Bow"]
+
+  },
+
+
+
+
+
+
+
+
+
+
 
 
   "level_formula": ""

@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MLG Damage Test</title>
-
 <link rel="icon" href="/images/website/favicon.png" type="image/png">
 <link href="/css/bootstrap-min.css" rel="stylesheet">
 <link rel="stylesheet" href="/css/home.css">
@@ -29,7 +28,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 .character-heading{margin:0 0 18px;text-align:center;color:var(--gold2);font-size:18px;letter-spacing:.04em}
 .character-heading:after{content:"";display:block;width:90px;height:1px;margin:8px auto 0;background:linear-gradient(90deg,transparent,#d6aa4580,transparent)}
 .character-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:13px}
-.character-card{--rarity:#7e7e7e;--rarity2:#292929;--glow:#494949;position:relative;height:240px;display:block;overflow:hidden;color:var(--text);text-decoration:none;background:radial-gradient(circle at 50% 32%,color-mix(in srgb,var(--rarity) 25%,#151416),#151416 70%);border:1px solid color-mix(in srgb,var(--rarity) 62%,#ffffff 3%);border-radius:12px;box-shadow:0 7px 18px #0009,0 0 12px color-mix(in srgb,var(--glow) 14%,transparent);transition:.25s}
+.character-card{--rarity:#7e7e7e;--rarity2:#292929;--glow:#494949;position:relative;height:240px;display:block;overflow:hidden;color:var(--text);text-decoration:none;background:radial-gradient(circle at 50% 32%,color-mix(in srgb,var(--rarity) 25%,#151416),#151416 70%);border:1px solid color-mix(in srgb,var(--rarity) 62%,#fff 3%);border-radius:12px;box-shadow:0 7px 18px #0009,0 0 12px color-mix(in srgb,var(--glow) 14%,transparent);transition:.25s}
 .character-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--rarity) 13%,transparent),transparent 38%,transparent 58%,#0b0a0be8 100%);z-index:1;pointer-events:none}
 .character-card:after{content:"";position:absolute;left:8%;right:8%;bottom:51px;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--rarity) 70%,transparent),transparent);opacity:.6;z-index:4}
 .character-card:hover{color:#fff;text-decoration:none;transform:translateY(-5px) scale(1.01);border-color:var(--rarity);box-shadow:0 13px 30px #000b,0 0 24px color-mix(in srgb,var(--glow) 38%,transparent)}
@@ -72,9 +71,9 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 </head>
 
 <body>
-
 <div id="homeheader-placeholder"></div>
 <br><br><br>
+
 <div id="app">
  <main class="damage-test">
   <header class="damage-test-header">
@@ -82,6 +81,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
    <p>Choose a character to begin testing</p>
    <a class="damage-test-button" href="/ml-game/apps/damage_test.html">Enter Damage Test</a>
   </header>
+
   <section class="character-section">
    <h2 class="character-heading">Your Characters</h2>
    <div class="loading">Loading characters...</div>
@@ -92,6 +92,8 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 <script>
 let characterDatabase={};
 
+const rarityMap={c:"C",un:"UN",r:"R",sr:"SR",ssr:"SSR",ur:"UR",lr:"LR"};
+
 async function loadJSON(path){
  const r=await fetch(path,{cache:"no-cache"});
  if(!r.ok)throw Error(`HTTP ${r.status}`);
@@ -99,32 +101,35 @@ async function loadJSON(path){
 }
 
 function getCharacterInfo(id){
- const key=`c${id}`,c=characterDatabase.characters;
- if(characterDatabase[key])return characterDatabase[key];
- if(c?.[key])return c[key];
- if(Array.isArray(c))return c[id-1]||{};
- return{}
+ const k=`c${id}`,c=characterDatabase.characters;
+ return characterDatabase[k]||c?.[k]||(Array.isArray(c)?c[id-1]:{})||{}
 }
 
 function asset(path){
  if(!path)return"";
- let v=String(path).trim();
- if(!v)return"";
- if(/^(https?:|data:|blob:)/.test(v))return v;
- return v.startsWith("/")?v:`/${v}`
+ const v=String(path).trim();
+ return/^(https?:|data:|blob:)/.test(v)?v:v.startsWith("/")?v:`/${v}`
 }
 
 function esc(v){
- return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")
+ return String(v??"")
+  .replaceAll("&","&amp;")
+  .replaceAll("<","&lt;")
+  .replaceAll(">","&gt;")
+  .replaceAll('"',"&quot;")
+  .replaceAll("'","&#039;")
 }
 
-function rarityClass(rarity){
- const r=String(rarity||"c").toLowerCase().replace(/[^a-z]/g,"");
- return["c","un","r","sr","ssr","ur","lr"].includes(r)?r:"c"
+function rarityClass(v){
+ const n=Number(v);
+ const r=Number.isFinite(n)
+  ?({1:"c",2:"un",3:"r",4:"sr",5:"ssr",6:"ur",7:"lr"}[n]||"c")
+  :String(v||"c").toLowerCase().replace(/[^a-z]/g,"");
+ return rarityMap[r]?r:"c"
 }
 
 function rarityName(r){
- return({c:"C",un:"UN",r:"R",sr:"SR",ssr:"SSR",ur:"UR",lr:"LR"})[r]||"C"
+ return rarityMap[r]||"C"
 }
 
 function renderLoggedOut(){
@@ -136,17 +141,11 @@ function renderLoggedOut(){
 async function load(){
  try{
   const me=await fetch("/api/me",{cache:"no-cache"});
-  if(!me.ok){
-   renderLoggedOut();
-   return
-  }
+  if(!me.ok)return renderLoggedOut();
 
   const meData=await me.json();
-  const username=(meData?.username||meData?.user?.username||"").trim();
-  if(!username){
-   renderLoggedOut();
-   return
-  }
+  const username=String(meData?.username||meData?.user?.username||"").trim();
+  if(!username)return renderLoggedOut();
 
   const[userRes,db]=await Promise.all([
    fetch(`/api/user/${encodeURIComponent(username)}`,{cache:"no-cache"}),
@@ -158,19 +157,30 @@ async function load(){
   characterDatabase=db;
 
   const result=await userRes.json();
-  const data=result?.data||{};
+  const data=result?.data||result?.user?.data||{};
   const owned=Array.isArray(data.c_owned)?data.c_owned:[];
 
   const chars=owned.map((v,i)=>{
    if(!v)return"";
 
-   const id=i+1,info=getCharacterInfo(id);
-   const name=info.name||`Character ${id}`;
+   const id=i+1;
+   const key=`c${id}`;
+   const info=getCharacterInfo(id);
+
+   /*
+    * RARITY COMES FROM THE DATABASE:
+    * data.c1.rarity, data.c2.rarity, data.c3.rarity, etc.
+    *
+    * data-character.json is NOT used for rarity.
+    */
+   const characterData=data[key]&&typeof data[key]==="object"?data[key]:{};
+   const rarity=rarityClass(characterData.rarity);
+
+   const name=info.name||characterData.name||`Character ${id}`;
    const image=asset(info.profile_image||info.head_image||info.image||"");
-   const rarity=rarityClass(info.rarity);
 
    return`
-    <a class="character-card ${rarity}" href="/ml-game/apps/damage_test.html?username=${encodeURIComponent(username)}&c=c${id}">
+    <a class="character-card ${rarity}" href="/ml-game/apps/damage_test.html?username=${encodeURIComponent(username)}&c=${key}">
      <span class="rarity-label">${rarityName(rarity)}</span>
      <div class="character-art">
       ${image?`<img class="character-image" src="${esc(image)}" alt="${esc(name)}" loading="lazy">`:""}
@@ -183,9 +193,11 @@ async function load(){
 
   document.querySelector(".character-section").innerHTML=`
    <h2 class="character-heading">Your Characters</h2>
-   ${chars.length?`<div class="character-grid">${chars.join("")}</div>`:`<div class="loading">No owned characters found.</div>`}`
+   ${chars.length
+    ?`<div class="character-grid">${chars.join("")}</div>`
+    :`<div class="loading">No owned characters found.</div>`}`
  }catch(e){
-  console.error(e);
+  console.error("Damage Test character loading error:",e);
   document.querySelector(".character-section").innerHTML=`
    <h2 class="character-heading">Your Characters</h2>
    <div class="error">Unable to load your characters.</div>`
