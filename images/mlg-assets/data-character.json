@@ -8,6 +8,7 @@
     "button_color": "#a20b0b",
 
     "name": "Avery Obtainia",
+    "nickname": "Avery",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
 
@@ -59,7 +60,25 @@
       "unique_stat": "healing_rate"
     },
 
-    "weapon_type": ["Sword", "Catalyst"]
+    "weapon_type": ["Sword", "Catalyst"],
+
+    "character_synergies": [
+      {
+        "with": ["c3", "c5"],
+        "name": "Journey Begins",
+        "effect": "Increase Luck by +5, Crit Rate +5%"
+      },
+      {
+        "with": ["c2"],
+        "name": "Dynamic Duo",
+        "effect": "+10% <b class=\"dark\">[Dark]</b> and <b class=\"light\">[Light]</b> damage"
+      },
+      {
+        "with": ["c6", "c5"],
+        "name": "Aqua Revolution",
+        "effect": "+10% <b class=\"water\">[Water]</b> damage, +15% MP Regen"
+      }
+    ]
 
   },
 
@@ -75,6 +94,7 @@
     "button_color": "#0b2992",
 
     "name": "Kaden Icelander",
+    "nickname": "Kaden",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c2_role.svg",
 
@@ -122,7 +142,15 @@
       "unique_stat": "crit_dmg"
     },
 
-    "weapon_type": ["Sword", "Gun"]
+    "weapon_type": ["Sword", "Gun"],
+
+    "character_synergies": [
+      {
+        "with": ["c8"],
+        "name": "Dark Ablaze",
+        "effect": "Crit Dmg +15%"
+      }
+    ]
 
   },
 
@@ -138,6 +166,7 @@
     "button_color": "#b6e4a7",
 
     "name": "Teddric Tech",
+    "nickname": "Ted",
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c3_role.svg",
 
@@ -179,7 +208,15 @@
       "unique_stat": "piercing"
     },
 
-    "weapon_type": ["Spear", "Gun", "Catalyst"]
+    "weapon_type": ["Spear", "Gun", "Catalyst"],
+
+    "character_synergies": [
+      {
+        "with": ["c4"],
+        "name": "Omni-Artificer",
+        "effect": "+5% increased base stats"
+      }
+    ]
 
   },
 
@@ -195,6 +232,7 @@
     "button_color": "#b6e4a7",
 
     "name": "Main Character",
+    "nickname": "MC",
     "rarity": "C",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c4_role.svg",
 
@@ -252,6 +290,7 @@
     "button_color": "#8ae5ea",
 
     "name": "River Grant",
+    "nickname": "River",
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c5_role.svg",
 
@@ -309,6 +348,7 @@
     "button_color": "#618cfa",
 
     "name": "Atlas Aquia",
+    "nickname": "Atlas",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c6_role.svg",
 
@@ -366,6 +406,7 @@
     "button_color": "#fa6161",
 
     "name": "Pyrus Bourn",
+    "nickname": "Pyro",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c7_role.svg",
 
@@ -407,7 +448,15 @@
       "unique_stat": "crit_rate"
     },
 
-    "weapon_type": ["Sword", "Catalyst", "Gun"]
+    "weapon_type": ["Sword", "Catalyst", "Gun"],
+
+    "character_synergies": [
+      {
+        "with": ["c11"],
+        "name": "Pyro's Gang",
+        "effect": "All elemental damage +8%"
+      }
+    ]
 
   },
 
@@ -423,6 +472,7 @@
     "button_color": "#fa61f7",
 
     "name": "Charlotte Levy",
+    "nickname": "Charlotte",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c8_role.svg",
 
@@ -480,6 +530,7 @@
     "button_color": "#5ea4b3",
 
     "name": "Carla Storm",
+    "nickname": "Carla",
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c9_role.svg",
 
@@ -537,6 +588,7 @@
     "button_color": "#89e5f7",
 
     "name": "Kiara Katzol",
+    "nickname": "Kiara",
     "rarity": "SSR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c10_role.svg",
 
@@ -578,7 +630,20 @@
       "unique_stat": "speed"
     },
 
-    "weapon_type": ["Spear", "Bow"]
+    "weapon_type": ["Spear", "Bow"],
+
+    "character_synergies": [
+      {
+        "with": ["c1"],
+        "name": "Cat and Bird",
+        "effect": "Increase Luck by +5, Piercing +10"
+      },
+      {
+        "with": ["c9"],
+        "name": "Tempest",
+        "effect": "Gauge Gain +10%"
+      }
+    ]
 
   },
 
@@ -594,6 +659,7 @@
     "button_color": "#89e5f7",
 
     "name": "Pyro's Subordinates",
+    "nickname": "Subordinates",
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
 
@@ -638,6 +704,14 @@
     "weapon_type": ["Spear", "Bow"]
 
   },
+
+
+
+
+
+
+
+
 
 
 
