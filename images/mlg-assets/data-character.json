@@ -593,7 +593,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c10_role.svg",
 
     "species": ["Felior"],
-    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonater"],
+    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonator"],
     "affinity": ["Wind"],
     "role": ["Fighter"],
 
@@ -664,7 +664,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
 
     "species": ["Felior"],
-    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonater"],
+    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonator"],
     "affinity": ["Wind"],
     "role": ["Fighter"],
 
@@ -713,6 +713,66 @@
 
 
 
+
+
+
+
+
+
+    "c17": {
+    "id": 17,
+    "profile_image": "/images/character_art/Character_Heads/raymond_valoris_head.png",   
+
+    "splash_image": "/images/character_art/raymond_valoris_winters_dance.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Raymond Valoris",
+    "nickname": "Raymond",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c17_role.svg",
+
+    "species": ["Elf"],
+    "specialty": ["Support", "Sub-DPS", "Defense", "Summoning", "Accuracy", "Resonator"],
+    "affinity": ["Water"],
+    "role": ["Defense"],
+
+    "affiliation": ["Black Rampart Cohort", "District 10"],
+    "attributes": [],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C17",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Spear", "Bow"]
+
+  },
 
 
 
