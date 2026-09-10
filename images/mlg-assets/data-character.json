@@ -225,7 +225,7 @@
 
   "c4": {
     "id": 4,
-    "profile_image": "",   
+    "profile_image": "/images/character_art/Character_Heads/main_character_head.png",   
 
     "splash_image": "",
     "splash_color": "drop-shadow(0 0 18px rgba(80, 168, 240, 0.378))",
@@ -477,7 +477,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c8_role.svg",
 
     "species": ["Gostlynger"],
-    "specialty": ["DPS", "Sub-DPS", "Single-Target Damage", "Disrupter", "Debuffing", "Enforcer", "Support"],
+    "specialty": ["DPS", "Sub-DPS", "Single-Target Damage", "Disrupter", "Debuffer", "Enforcer", "Support"],
     "affinity": ["Fire", "Dark"],
     "role": ["Fighter"],
 
@@ -714,12 +714,73 @@
 
 
 
+  "c14": {
+    "id": 14,
+    "profile_image": "/images/character_art/Character_Heads/cedric_paine_head.png",   
+
+    "splash_image": "/images/character_art/cedric_paine_full.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Cedric Paine",
+    "nickname": "Cedric",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c14_role.svg",
+
+    "species": ["Herbovir"],
+    "specialty": ["DPS", "Debuffer", "Disrupter", "Defense Penetration", "Defense"],
+    "affinity": ["Earth"],
+    "role": ["Agent", "Fighter"],
+
+    "affiliation": ["Centipedes Cohort", "Captain"],
+    "attributes": ["Charging"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C14",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Gun", "Spear"]
+
+  },
 
 
 
 
 
-    "c17": {
+
+
+
+
+
+
+
+  "c17": {
     "id": 17,
     "profile_image": "/images/character_art/Character_Heads/raymond_valoris_head.png",   
 
@@ -770,11 +831,67 @@
       "unique_stat": "speed"
     },
 
-    "weapon_type": ["Spear", "Bow"]
+    "weapon_type": ["Catalyst", "Bow", "Sword"]
 
   },
 
 
+
+
+  "c18": {
+    "id": 18,
+    "profile_image": "/images/character_art/Character_Heads/alteria_aquia_head.png",   
+
+    "splash_image": "/images/character_art/alteria_aquia_full.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Alteria Aquia",
+    "nickname": "Alteria",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c18_role.svg",
+
+    "species": ["Water Spirit"],
+    "specialty": ["DPS", "Sub-DPS", "Enforcer", "Support", "Accuracy"],
+    "affinity": ["Water", "Light"],
+    "role": ["Agent"],
+
+    "affiliation": ["Tempest Aquia Cohort"],
+    "attributes": ["Water Breathing"],
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C18",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Catalyst", "Spear"]
+
+  },
 
 
 
