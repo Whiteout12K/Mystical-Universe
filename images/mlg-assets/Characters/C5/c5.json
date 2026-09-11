@@ -131,7 +131,7 @@
     "additional": [
         {"text": "Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> every 5 seconds (Unconditional). All effect conditions that depend on gaining a stack will trigger automatically when obtaining these passive stacks.",
         "style": {"paddingTop": 5}},
-        {"text": "Using the Dash Skill will enable her to enter into a water transformed state called Aquia Mode, negating damage completely and moving quickly. Stamina will be continuously consumed. She will take +50% more damage from an attack with <b class=\"knockback\">[Knockback]</b>, ending the state.",
+        {"text": "Using the Dash Skill will enable her to enter into a water transformed state called Aquia Mode, negating damage completely and moving quickly, creating a water trail behind her. Stamina will be continuously consumed. She will take +50% more damage from an attack with <b class=\"knockback\">[Knockback]</b>, ending the state.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:overwhelming-mana}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},

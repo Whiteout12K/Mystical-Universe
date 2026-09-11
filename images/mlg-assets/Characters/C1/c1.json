@@ -251,7 +251,7 @@
     "additional": [
       {"text": "While in this state, he gains <b class=\"shield\">[Shield]</b> +50% more effectively and consumes a single percentage per second, increasing his and allies’ damage reduction by +35% until depletion. This functions even while off-field.",
         "style": {"paddingTop": 7}},
-      {"text": "Speed is enhanced by +25%. Flight Mode will turn Avery into a stream of water instead called Aqua Mode; collision with opponents in this mode will deal 0.5% of health multiplied by each percentage of healing rate as <b class=\"water\">[Water]</b> damage every 0.3 seconds.",
+      {"text": "Speed is enhanced by +25%. Flight Mode will turn Avery into a stream of water instead called Aqua Mode; collision with opponents in this mode will deal 0.5% of health multiplied by each percentage of healing rate as <b class=\"water\">[Water]</b> damage every 0.3 seconds. A trail of water is made behind him.",
         "style": {"paddingTop": 7}},
       
       {"text": "<b>Resonance</b>: Other characters that are Water Spirit or Naiad species can utilize this ability, including Aqua Mode. If the character has an element affinity other than <b class=\"water\">[Water]</b>, then their element is not overridden by this skill.",

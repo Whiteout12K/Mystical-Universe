@@ -146,7 +146,7 @@
         {"level": 1,
         "text": "Incoming attacks are converted into <b class=\"shield\">[Shield]</b> equivalent to 25% of defense plus 10% of the incoming attack's damage value before the attack’s damage takes effect.",
         "style": {"paddingTop": 5}},
-        {"text": "When Atlas dashes, his interruption resistance is increased and he will deal 40% of his defense as damage to nearby opponents as short range <b class=\"water\">[Water]</b> projectile needles that automatically hones in on them. Summons 3 at a time.",
+        {"text": "When Atlas dashes, his interruption resistance is increased and he will deal 40% of his defense as damage to nearby opponents as short range <b class=\"water\">[Water]</b> projectile needles that automatically hones in on them. Summons 3 at a time. A trail of water is left behind him.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:shield}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},

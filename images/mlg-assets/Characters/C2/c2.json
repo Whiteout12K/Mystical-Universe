@@ -189,7 +189,7 @@
     "additional": [
         {"text": "He gains resonance within a party of more than 3 different affinities (dual affinity characters count both). Resonance will improve his and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.",
         "style": {"paddingTop": 7}},
-        {"text": "<u>Ice Fowler</u>: While not in combat, Kaden, when dashing, will create a trail of ice behind him as he surfs on an ice field. This state increases his movement speed by +40% and reduces stamina consumption by -50%. His movement across water is not reduced.",
+        {"text": "<u>Ice Fowler</u>: While not in combat, Kaden, when dashing, will create a trail of ice behind him as he surfs on an ice field. After some time, the trial melts to water. This state increases his movement speed by +40% and reduces stamina consumption by -50%. His movement across water is not reduced.",
         "style": {"paddingTop": 7}},
         {"text": "The secrets of District 1 are revealed when he is present. As a genius, puzzles will reveal a hint as the prodigy sees solutions effortlessly.",
         "style": {"paddingTop": 7}},

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MLG Tier List</title>
+<link rel="icon" href="/images/website/favicon.png" type="image/png">
+<link href="/css/bootstrap-min.css" rel="stylesheet">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/mlg.css">
+<script src="/js/bootstrap-bundle-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+:root{--gold:#d6aa45;--gold2:#f0ca69;--text:#f5ead2;--muted:#a99e8e;--line:#d6aa4538}
+html{min-height:100%;background:#0c0b0c}
+body{margin:0;min-height:100vh;color:var(--text);font-family:Arial,sans-serif;background:radial-gradient(circle at 50% -8%,#52342d 0,#241a1c 28%,#151315 60%,#0b0a0b 100%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;background-image:linear-gradient(#d6aa45 1px,transparent 1px),linear-gradient(90deg,#d6aa45 1px,transparent 1px);background-size:48px 48px}
+button,input,select{font:inherit}
+.tier-page{width:min(1180px,95%);margin:34px auto 160px}
+
+/* HEADER */
+.page-header{text-align:center;margin-bottom:20px}
+.page-header h1{margin:0;color:var(--gold2);font-family:Arial, Helvetica, sans-serif,serif;font-size:36px;letter-spacing:.07em;text-shadow:0 2px 13px #000}
+.page-header p{margin:7px 0 0;color:var(--muted);font-size:9px;letter-spacing:.17em;text-transform:uppercase}
+
+/* CONTROLS */
+.controls{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;margin:0 auto 17px;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(145deg,#21191bdd,#110f10ed);box-shadow:0 9px 28px #0009}
+.control-group{display:flex;align-items:center;gap:6px}
+.control-label{color:var(--muted);font-size:8px;font-weight:900;letter-spacing:.11em;text-transform:uppercase}
+.tier-count{width:61px;padding:7px 8px;border:1px solid #d6aa4540;border-radius:5px;outline:0;color:var(--text);background:#171314;font-size:10px;font-weight:800}
+.action-btn{padding:7px 11px;border:1px solid #d6aa4545;border-radius:5px;background:linear-gradient(#2a2021,#171314);color:var(--text);font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:.18s}
+.action-btn:hover{border-color:#d6aa4585;background:#342627;box-shadow:0 0 15px #d6aa4525}
+.export-btn{color:#17120b;border-color:#d6aa45;background:linear-gradient(#f1cf74,#c99535)}
+.export-btn:hover{background:linear-gradient(#ffe18b,#d5a33e)}
+
+/* EXPORT */
+.export-shell{position:relative}
+.export-area{width:100%;padding:13px;border:1px solid #d6aa4538;border-radius:10px;background:radial-gradient(circle at 50% 0,#58332426,transparent 35%),linear-gradient(160deg,#201719,#0e0d0e 68%);box-shadow:0 15px 38px #000c}
+.tier-title{display:block;width:100%;margin:0 0 11px;padding:4px 8px;color:var(--gold2);font-family:Georgia,serif;font-size:25px;font-weight:900;text-align:center;outline:0;border:1px solid transparent;border-radius:4px;text-shadow:0 2px 10px #000}
+.tier-title:hover,.tier-title:focus{border-color:#d6aa4538;background:#0002}
+.tier-title:empty:before{content:"Mystical Legends Tier List";color:#71675b}
+
+/* TIER */
+.tier-wrapper{position:relative;padding-right:38px}
+.tier-wrapper+.tier-wrapper{margin-top:1px}
+.tier-row{--tier:#d76868;display:grid;grid-template-columns:150px 1fr;min-height:91px;border:1px solid #d6aa4520;border-radius:4px;overflow:hidden;background:#0d0c0d}
+.tier-label{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;padding:7px 10px;background:var(--tier);color:#171313;text-align:center;box-shadow:inset -1px 0 #0005}
+.tier-name{width:100%;outline:0;font-size:17px;font-weight:1000;line-height:1.05;text-align:center;overflow-wrap:anywhere;text-shadow:0 1px #fff4}
+.tier-name:empty:before{content:"Tier";opacity:.45}
+
+/* TIER TOOLS */
+.tier-tools{position:absolute;right:4px;top:50%;z-index:4;display:flex;flex-direction:column;align-items:center;gap:5px;transform:translateY(-50%)}
+.color-wrap{position:relative;width:25px;height:25px;border:1px solid #d6aa4570;border-radius:50%;background:#171314;box-shadow:0 3px 10px #0009;overflow:hidden;cursor:pointer}
+.color-wrap:before{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--tier);pointer-events:none}
+.tier-color{position:absolute;inset:-6px;width:40px;height:40px;padding:0;border:0;opacity:0;cursor:pointer}
+.tier-delete{width:25px;height:25px;padding:0;border:1px solid #d6aa4535;border-radius:50%;background:#171314;color:#c7b8a4;font-size:14px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 10px #0009;transition:.15s}
+.tier-delete:hover{border-color:#c85e65;color:#fff;background:#55232a}
+
+/* DROP */
+.tier-drop{min-width:0;min-height:89px;padding:5px;display:flex;align-items:flex-start;align-content:flex-start;flex-wrap:wrap;gap:4px;background:linear-gradient(135deg,#131113,#0e0d0e);transition:.15s}
+.tier-drop.drag-over{background:#292019;box-shadow:inset 0 0 25px #d6aa4525}
+
+/* RARITY BACKGROUNDS */
+.rarity-c{background:linear-gradient(145deg,#636363,#181818)}
+.rarity-un{background:linear-gradient(145deg,#80bd66,#3c5b32)}
+.rarity-r{background:linear-gradient(145deg,#2929ff,#222271)}
+.rarity-sr{background:linear-gradient(145deg,#a726fd,#431960)}
+.rarity-ssr{background:linear-gradient(145deg,#f6a42a,#834b10)}
+.rarity-ur{background:linear-gradient(145deg,#ff3737,#741111)}
+.rarity-lr{background:linear-gradient(145deg,#d3acbf,#644b58)}
+
+/* CHARACTER - EXACT 10/14 */
+.character-card{position:relative;flex:0 0 58px;width:58px;aspect-ratio:10/14;overflow:hidden;border:0;border-radius:5px;cursor:grab;padding:0;isolation:isolate;box-shadow:0 3px 8px #000c;transition:.13s}
+.character-card:hover{z-index:5;transform:translateY(-2px) scale(1.025);filter:brightness(1.08);box-shadow:0 6px 13px #000d,0 0 10px var(--rarity-glow,#d6aa4528)}
+.character-card:active{cursor:grabbing}
+.character-card.dragging{opacity:.25;transform:scale(.92)}
+.character-card.selected{outline:2px solid var(--gold2);box-shadow:0 0 0 2px #d6aa4535,0 5px 13px #000e}
+.character-card:before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border:1px solid #f0ca6940;border-radius:inherit}
+.character-card:after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(180deg,#fff0 55%,#0005 100%)}
+.character-image{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;user-select:none}
+
+/* Keeps rarity color visibly behind/around image */
+.character-card .character-image{background:transparent}
+
+/* UNRANKED */
+.unranked-wrap{margin-top:18px}
+.unranked-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+.unranked-title{color:var(--gold2);font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.unranked-count{color:var(--muted);font-size:8px}
+.unranked{min-height:101px;padding:7px;display:flex;align-items:flex-start;align-content:flex-start;flex-wrap:wrap;gap:5px;border:1px solid #d6aa4530;border-radius:7px;background:linear-gradient(145deg,#20191a,#100e0f);box-shadow:0 8px 22px #0009}
+.unranked.drag-over{background:#2a211c;box-shadow:inset 0 0 25px #d6aa4526}
+.loading{width:100%;padding:28px;text-align:center;color:var(--muted);font-size:10px}
+.help{margin-top:8px;text-align:center;color:#81766a;font-size:8px;line-height:1.5}
+
+/* EXPORT MODE */
+.exporting .tier-title{border-color:transparent;background:transparent}
+.exporting .character-card{transform:none!important;outline:0!important}
+.exporting .tier-drop.drag-over{background:linear-gradient(135deg,#131113,#0e0d0e);box-shadow:none}
+.exporting .tier-wrapper{padding-right:0}
+.exporting .tier-tools{display:none}
+
+/* MOBILE */
+@media(max-width:700px){
+ .tier-page{width:calc(100% - 14px);margin:21px auto 125px}
+ .page-header{margin-bottom:15px}.page-header h1{font-size:26px}.page-header p{font-size:7px}
+ .controls{gap:5px;padding:7px}.action-btn{padding:6px 8px;font-size:7px}.control-label{font-size:7px}.tier-count{width:53px;padding:6px;font-size:9px}
+ .export-area{padding:7px}.tier-title{font-size:18px;margin-bottom:8px}
+ .tier-wrapper{padding-right:31px}
+ .tier-row{grid-template-columns:92px 1fr;min-height:73px}
+ .tier-label{padding:5px}.tier-name{font-size:12px}
+ .tier-drop{min-height:71px;padding:3px;gap:3px}
+ .character-card{flex-basis:46px;width:46px;border-radius:4px}
+ .tier-tools{right:2px;gap:4px}.color-wrap,.tier-delete{width:21px;height:21px}.tier-delete{font-size:11px}
+ .unranked{min-height:84px;gap:4px;padding:5px}.help{font-size:7px}
+}
+@media(max-width:420px){
+ .tier-row{grid-template-columns:78px 1fr}.tier-name{font-size:10px}
+ .character-card{flex-basis:41px;width:41px}.tier-drop{gap:2px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="homeheader-placeholder"></div>
+<br><br><br>
+
+<main class="tier-page">
+
+<header class="page-header">
+<h1>Tier List Maker</h1>
+<p>Rank the legends of the Mystical Legends universe</p>
+</header>
+
+<section class="controls">
+<div class="control-group">
+<span class="control-label">Tiers</span>
+<select id="tier-count" class="tier-count">
+<option>2</option><option>3</option><option>4</option><option>5</option>
+<option selected>6</option><option>7</option><option>8</option>
+<option>9</option><option>10</option>
+</select>
+</div>
+<button id="add-tier" class="action-btn" type="button">Add Tier</button>
+<button id="reset-list" class="action-btn" type="button">Reset</button>
+<button id="export-list" class="action-btn export-btn" type="button">Export PNG</button>
+</section>
+
+<section id="export-shell" class="export-shell">
+<div id="export-area" class="export-area">
+<div id="tier-title" class="tier-title" contenteditable="true" spellcheck="false">Mystical Legends Character Tier List</div>
+<div id="tier-list"></div>
+</div>
+</section>
+
+<section class="unranked-wrap">
+<div class="unranked-head">
+<div class="unranked-title">Unranked Characters</div>
+<div id="unranked-count" class="unranked-count">0 Characters</div>
+</div>
+<div id="unranked" class="unranked"><div class="loading">Loading characters...</div></div>
+<div class="help">Drag characters into tiers. On touch devices, select a character and then tap a tier.</div>
+</section>
+
+</main>
+
+<div id="homefooter-placeholder"></div>
+
+<script>
+const DATA_PATH="/images/mlg-assets/data-character.json",$=s=>document.querySelector(s),
+defaultNames=["S","A","B","C","D","F","G","H","I","J"],
+defaultColors=["#e96b6b","#e39b63","#e2c45f","#89bc70","#63aaa5","#7184b5","#876faa","#a96f9d","#826f72","#66666b"],
+rarityColors={c:"#777",un:"#83c76a",r:"#5555ff",sr:"#bb55ff",ssr:"#ffb733",ur:"#ff5555",lr:"#e8b9d2"};
+
+let characters={},dragId=null,selectedId=null,tierSerial=0;
+
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c])),
+rarityClass=r=>(r=String(r||"c").toLowerCase(),rarityColors[r]?r:"c"),
+rarityColor=r=>rarityColors[rarityClass(r)],
+getCharacters=d=>Object.fromEntries(Object.entries(d||{}).filter(([id,c])=>/^c\d+$/i.test(id)&&c?.id)),
+charNumber=id=>+(String(id).match(/\d+/)?.[0]||0);
+
+function makeTier(name,color){
+ const wrap=document.createElement("div"),row=document.createElement("div");
+ wrap.className="tier-wrapper";
+ row.className="tier-row";
+ row.dataset.tier=++tierSerial;
+ row.style.setProperty("--tier",color);
+ wrap.style.setProperty("--tier",color);
+
+ row.innerHTML=`<div class="tier-label"><div class="tier-name" contenteditable="true" spellcheck="false">${esc(name)}</div></div><div class="tier-drop" data-drop="tier"></div>`;
+ wrap.appendChild(row);
+
+ const tools=document.createElement("div");
+ tools.className="tier-tools";
+ tools.innerHTML=`<label class="color-wrap" title="Tier color"><input class="tier-color" type="color" value="${esc(color)}"></label><button class="tier-delete" type="button" title="Delete tier">×</button>`;
+ wrap.appendChild(tools);
+
+ bindDrop(row.querySelector(".tier-drop"));
+
+ tools.querySelector(".tier-color").addEventListener("input",e=>{
+  row.style.setProperty("--tier",e.target.value);
+  wrap.style.setProperty("--tier",e.target.value)
+ });
+
+ tools.querySelector(".tier-delete").addEventListener("click",()=>{
+  if(document.querySelectorAll(".tier-row").length<=2)return;
+  [...row.querySelectorAll(".character-card")].forEach(c=>$("#unranked").appendChild(c));
+  wrap.remove();
+  $("#tier-count").value=document.querySelectorAll(".tier-row").length;
+  updateCount()
+ });
+
+ return wrap
+}
+
+function setTierCount(count){
+ count=Math.max(2,Math.min(10,+count||6));
+ const list=$("#tier-list");
+ let rows=[...list.querySelectorAll(".tier-wrapper")];
+
+ while(rows.length<count){
+  const i=rows.length;
+  list.appendChild(makeTier(defaultNames[i]||`Tier ${i+1}`,defaultColors[i]||"#777777"));
+  rows=[...list.querySelectorAll(".tier-wrapper")]
+ }
+
+ while(rows.length>count){
+  const wrap=rows.pop();
+  [...wrap.querySelectorAll(".character-card")].forEach(c=>$("#unranked").appendChild(c));
+  wrap.remove()
+ }
+
+ $("#tier-count").value=count;
+ updateCount()
+}
+
+function characterCard(id,c){
+ const b=document.createElement("button"),r=rarityClass(c.rarity);
+ b.type="button";
+ b.className=`character-card rarity-${r}`;
+ b.dataset.character=id;
+ b.draggable=true;
+ b.title=`${c.name||id} — ${String(c.rarity||"C").toUpperCase()}`;
+ b.style.setProperty("--rarity-glow",`${rarityColor(r)}70`);
+
+ b.innerHTML=c.profile_image?`<img class="character-image" src="${esc(c.profile_image)}" alt="${esc(c.name)}" draggable="false">`:"";
+
+ b.addEventListener("dragstart",()=>{
+  dragId=id;selectedId=null;clearSelected();b.classList.add("dragging")
+ });
+
+ b.addEventListener("dragend",()=>{
+  dragId=null;b.classList.remove("dragging");
+  document.querySelectorAll(".drag-over").forEach(x=>x.classList.remove("drag-over"));
+  updateCount()
+ });
+
+ b.addEventListener("click",e=>{
+  if(e.detail===0)return;
+  if(selectedId===id){selectedId=null;b.classList.remove("selected");return}
+  clearSelected();selectedId=id;b.classList.add("selected")
+ });
+
+ return b
+}
+
+function clearSelected(){
+ document.querySelectorAll(".character-card.selected").forEach(x=>x.classList.remove("selected"))
+}
+
+function moveCharacter(id,target,before=null){
+ const card=document.querySelector(`.character-card[data-character="${CSS.escape(id)}"]`);
+ if(!card||!target)return;
+ before&&before!==card?target.insertBefore(card,before):target.appendChild(card);
+ selectedId=null;clearSelected();updateCount()
+}
+
+function getInsertBefore(zone,x,y){
+ const cards=[...zone.querySelectorAll(".character-card:not(.dragging)")];
+ if(!cards.length)return null;
+
+ for(const c of cards){
+  const r=c.getBoundingClientRect(),midX=r.left+r.width/2,midY=r.top+r.height/2;
+  if(y<r.bottom&&y<midY+5)return x<midX?c:c.nextElementSibling
+ }
+
+ return null
+}
+
+function bindDrop(zone){
+ zone.addEventListener("dragover",e=>{
+  e.preventDefault();
+  zone.classList.add("drag-over");
+  if(!dragId)return;
+
+  const dragged=document.querySelector(`.character-card[data-character="${CSS.escape(dragId)}"]`);
+  if(!dragged)return;
+
+  const before=getInsertBefore(zone,e.clientX,e.clientY);
+  before&&before!==dragged?zone.insertBefore(dragged,before):zone.appendChild(dragged)
+ });
+
+ zone.addEventListener("dragleave",e=>{
+  if(!zone.contains(e.relatedTarget))zone.classList.remove("drag-over")
+ });
+
+ zone.addEventListener("drop",e=>{
+  e.preventDefault();
+  zone.classList.remove("drag-over");
+  if(dragId)moveCharacter(dragId,zone)
+ });
+
+ zone.addEventListener("click",e=>{
+  if(!selectedId||e.target.closest(".character-card"))return;
+  moveCharacter(selectedId,zone)
+ })
+}
+
+function renderCharacters(){
+ const box=$("#unranked");
+ box.innerHTML="";
+
+ Object.entries(characters)
+ .sort((a,b)=>charNumber(a[0])-charNumber(b[0]))
+ .forEach(([id,c])=>box.appendChild(characterCard(id,c)));
+
+ updateCount()
+}
+
+function updateCount(){
+ const n=$("#unranked").querySelectorAll(".character-card").length;
+ $("#unranked-count").textContent=`${n} ${n===1?"Character":"Characters"}`
+}
+
+function resetList(){
+ document.querySelectorAll(".character-card").forEach(c=>$("#unranked").appendChild(c));
+ selectedId=null;dragId=null;clearSelected();
+ $("#tier-title").textContent="Mystical Legends Character Tier List";
+
+ [...document.querySelectorAll(".tier-wrapper")].forEach((wrap,i)=>{
+  const row=wrap.querySelector(".tier-row"),color=defaultColors[i]||"#777777";
+  row.querySelector(".tier-name").textContent=defaultNames[i]||`Tier ${i+1}`;
+  row.style.setProperty("--tier",color);
+  wrap.style.setProperty("--tier",color);
+  wrap.querySelector(".tier-color").value=color
+ });
+
+ updateCount()
+}
+
+async function waitImages(root){
+ await Promise.all([...root.querySelectorAll("img")].map(img=>
+  img.complete?Promise.resolve():new Promise(r=>{img.onload=img.onerror=r})
+ ))
+}
+
+async function exportTierList(){
+ const btn=$("#export-list"),area=$("#export-area"),shell=$("#export-shell"),old=btn.textContent;
+ btn.disabled=true;
+ btn.textContent="Exporting...";
+
+ try{
+  if(typeof html2canvas!=="function")throw Error("html2canvas failed to load");
+
+  selectedId=null;
+  clearSelected();
+  shell.classList.add("exporting");
+
+  await waitImages(area);
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  const canvas=await html2canvas(area,{
+   backgroundColor:"#100e0f",
+   scale:2,
+   useCORS:true,
+   allowTaint:false,
+   logging:false,
+   width:area.scrollWidth,
+   height:area.scrollHeight,
+   windowWidth:Math.max(document.documentElement.clientWidth,area.scrollWidth),
+   windowHeight:Math.max(document.documentElement.clientHeight,area.scrollHeight)
+  });
+
+  const title=($("#tier-title").textContent.trim()||"mlg-tier-list")
+  .replace(/[<>:"/\\|?*\x00-\x1F]/g,"")
+  .replace(/\s+/g,"-")
+  .toLowerCase();
+
+  const a=document.createElement("a");
+  a.download=`${title}.png`;
+  a.href=canvas.toDataURL("image/png");
+  a.click()
+ }catch(e){
+  console.error(e);
+  alert("Unable to export the tier list image.")
+ }finally{
+  shell.classList.remove("exporting");
+  btn.disabled=false;
+  btn.textContent=old
+ }
+}
+
+$("#tier-count").addEventListener("change",e=>setTierCount(e.target.value));
+
+$("#add-tier").addEventListener("click",()=>{
+ const n=document.querySelectorAll(".tier-row").length;
+ if(n<10)setTierCount(n+1)
+});
+
+$("#reset-list").addEventListener("click",resetList);
+$("#export-list").addEventListener("click",exportTierList);
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){selectedId=null;clearSelected()}
+});
+
+async function init(){
+ setTierCount(5);
+ bindDrop($("#unranked"));
+
+ try{
+  const r=await fetch(DATA_PATH,{cache:"no-cache"});
+  if(!r.ok)throw Error(`HTTP ${r.status}`);
+
+  characters=getCharacters(await r.json());
+  renderCharacters()
+ }catch(e){
+  console.error(e);
+  $("#unranked").innerHTML='<div class="loading">Unable to load characters.</div>'
+ }
+}
+
+init();
+</script>
+
+<script src="/js/include.js"></script>
+</body>
+</html>
