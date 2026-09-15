@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=no">
 <title>Document Viewer</title>
 
 <style>
@@ -18,7 +18,6 @@ html,body{
     font-family:Arial,sans-serif;
     user-select:none;
     -webkit-user-select:none;
-    overscroll-behavior:none;
 }
 
 #app{
@@ -117,22 +116,25 @@ html,body{
 
 #sidebarOverlay.show{display:block}
 
-/* Top toolbar */
+/* Toolbar */
 #toolbar{
     position:fixed;
     z-index:20;
     top:12px;
     left:12px;
+    display:flex;
+    gap:6px;
 }
 
 .toolbar-btn{
-    width:40px;
     height:40px;
+    min-width:40px;
+    padding:0 11px;
     border:1px solid #444;
     border-radius:7px;
-    background:#191919ed;
+    background:#191919eb;
     color:#eee;
-    font-size:18px;
+    font-size:17px;
     cursor:pointer;
     box-shadow:0 2px 10px #0006;
 }
@@ -144,16 +146,14 @@ html,body{
     position:absolute;
     inset:0;
     overflow:auto;
-    padding:58px 0 120px;
+    padding:60px 0 70px;
     overscroll-behavior:contain;
     touch-action:pan-x pan-y;
 }
 
 #pages{
-    position:relative;
     width:max-content;
     min-width:100%;
-    margin:0 auto;
     transform-origin:top center;
 }
 
@@ -190,48 +190,39 @@ html,body{
     outline:1px solid #5096ff73;
 }
 
-/* Bottom controls */
-#bottomControls{
+/* Page progress */
+#pageProgress{
     position:fixed;
     z-index:20;
+    bottom:16px;
     left:50%;
-    bottom:14px;
     transform:translateX(-50%);
-    width:min(420px,calc(100vw - 24px));
-    padding:10px 14px;
+    min-width:110px;
+    padding:9px 15px;
     border:1px solid #444;
-    border-radius:12px;
-    background:#191919f2;
-    box-shadow:0 3px 16px #0009;
-}
-
-#pageProgress{
-    margin-bottom:8px;
-    color:#ddd;
-    font-size:13px;
+    border-radius:20px;
+    background:#191919ed;
+    color:#eee;
+    font-size:14px;
     text-align:center;
+    pointer-events:none;
+    box-shadow:0 2px 12px #0008;
 }
 
-#zoomRow{
+/* Zoom display */
+#zoomLevel{
     display:flex;
     align-items:center;
-    gap:10px;
-}
-
-#zoomSlider{
-    flex:1;
-    min-width:0;
-    height:5px;
-    cursor:pointer;
-    accent-color:#ddd;
-    touch-action:manipulation;
-}
-
-#zoomLevel{
-    width:45px;
+    justify-content:center;
+    min-width:55px;
+    height:40px;
+    padding:0 8px;
+    border:1px solid #444;
+    border-radius:7px;
+    background:#191919eb;
     color:#bbb;
     font-size:12px;
-    text-align:right;
+    pointer-events:none;
 }
 
 /* Watermark */
@@ -254,25 +245,26 @@ html,body{
     }
 
     .toolbar-btn{
-        width:38px;
         height:38px;
+        min-width:38px;
+        padding:0 9px;
     }
 
-    #viewer{
-        padding-top:50px;
-        padding-bottom:115px;
+    #zoomLevel{
+        height:38px;
+        min-width:50px;
     }
 
-    #bottomControls{
-        bottom:8px;
-        width:calc(100vw - 16px);
-    }
+    #viewer{padding-top:52px}
 
     #watermark{
-        top:10px;
-        right:10px;
+        top:auto;
+        bottom:18px;
+        right:12px;
         font-size:10px;
     }
+
+    #pageProgress{bottom:12px}
 }
 </style>
 </head>
@@ -292,7 +284,11 @@ html,body{
     <div id="sidebarOverlay"></div>
 
     <div id="toolbar">
-        <button id="openSidebar" class="toolbar-btn" title="Book navigation">☰</button>
+        <button id="openSidebar" class="toolbar-btn" title="Navigation">☰</button>
+        <button id="zoomOut" class="toolbar-btn" title="Zoom out">−</button>
+        <div id="zoomLevel">100%</div>
+        <button id="zoomIn" class="toolbar-btn" title="Zoom in">+</button>
+        <button id="fitWidth" class="toolbar-btn" title="Fit width">↔</button>
     </div>
 
     <div id="watermark">Protected View</div>
@@ -301,33 +297,8 @@ html,body{
         <div id="pages"></div>
     </main>
 
-    <div id="bottomControls">
-
-        <div id="pageProgress">
-            Page
-            <span id="currentPage">1</span>
-            /
-            <span id="totalPages">0</span>
-        </div>
-
-        <div id="zoomRow">
-            <span>−</span>
-
-            <input
-                id="zoomSlider"
-                type="range"
-                min="50"
-                max="300"
-                step="5"
-                value="100"
-                aria-label="Document zoom"
-            >
-
-            <span>+</span>
-
-            <span id="zoomLevel">100%</span>
-        </div>
-
+    <div id="pageProgress">
+        Page <span id="currentPage">1</span> / <span id="totalPages">0</span>
     </div>
 
 </div>
@@ -339,20 +310,10 @@ document.addEventListener("contextmenu",e=>e.preventDefault());
 
 document.addEventListener("keydown",e=>{
     if(
-        (e.ctrlKey&&["s","p","u","+","-","="].includes(e.key.toLowerCase()))||
+        (e.ctrlKey&&["s","p","u"].includes(e.key.toLowerCase()))||
         e.key==="F12"
     )e.preventDefault();
 });
-
-/* Prevent browser Ctrl/Cmd + wheel zoom */
-document.addEventListener("wheel",e=>{
-    if(e.ctrlKey||e.metaKey)e.preventDefault();
-},{passive:false});
-
-/* Prevent browser gesture zoom where supported */
-document.addEventListener("gesturestart",e=>e.preventDefault());
-document.addEventListener("gesturechange",e=>e.preventDefault());
-document.addEventListener("gestureend",e=>e.preventDefault());
 </script>
 
 </body>
