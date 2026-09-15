@@ -11,11 +11,11 @@
 *{box-sizing:border-box}
 :root{--gold:#d6aa45;--gold2:#f0ca69;--text:#f7edd9;--muted:#9e9488;--line:#d6aa453d;background:#190707}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;color:var(--text);font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 55% 0,#402026,#1a1316 31%,#0b0a0c 75%,#080809)}
-body{position:fixed;inset:0;width:100%;height:100%;touch-action:manipulation}
+body{position:fixed;inset:0;touch-action:manipulation}
 button,input{font:inherit}
 
 /* APP */
-.app{position:fixed;inset:0;width:100%;height:100dvh;display:grid;grid-template-columns:290px minmax(0,1fr);overflow:hidden}
+.app{position:fixed;inset:0;height:100dvh;display:grid;grid-template-columns:290px minmax(0,1fr);overflow:hidden}
 .sidebar{min-width:0;height:100%;display:flex;flex-direction:column;overflow:hidden;z-index:50;background:linear-gradient(#261a1dfb,#0e0d0ffe);border-right:1px solid var(--line);box-shadow:14px 0 38px #0007}
 .side-head{flex:0 0 auto;padding:21px 17px 15px;border-bottom:1px solid var(--line)}
 .brand{font:900 1.22rem Georgia,serif;color:#f2d18a;letter-spacing:.025em}
@@ -27,7 +27,7 @@ button,input{font:inherit}
 .library-meta{display:flex;justify-content:space-between;margin-top:10px;color:#968c80;font-size:.65rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
 
 /* LIBRARY */
-.card-list{--item-h:54px;--gap:5px;flex:1;min-height:0;width:100%;display:flex;flex-direction:column;gap:var(--gap);padding:9px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y pinch-zoom;scrollbar-width:thin;scrollbar-color:#594438 transparent}
+.card-list{--item-h:54px;--gap:5px;flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--gap);padding:9px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y pinch-zoom;scrollbar-width:thin;scrollbar-color:#594438 transparent}
 .card-list::-webkit-scrollbar{width:6px}
 .card-list::-webkit-scrollbar-thumb{background:#594438;border-radius:20px}
 .card-list::-webkit-scrollbar-thumb:hover{background:#806248}
@@ -38,7 +38,7 @@ button,input{font:inherit}
 .list-name{overflow:hidden;color:#eee5d9;font:700 .8rem Georgia,serif;text-overflow:ellipsis;white-space:nowrap}
 .list-meta{margin-top:4px;overflow:hidden;color:#91877a;font-size:.57rem;font-weight:600;text-overflow:ellipsis;white-space:nowrap}
 .list-rarity{flex:0 0 auto;min-width:32px;padding:3px 5px;border:1px solid #44392a;border-radius:3px;background:#0b0a0c;font-size:.55rem;font-weight:1000;text-align:center}
-.no-results{flex:0 0 auto;padding:30px 10px;color:#81786e;text-align:center;font-size:.76rem}
+.no-results{padding:30px 10px;color:#81786e;text-align:center;font-size:.76rem}
 
 /* MAIN */
 .main{position:relative;min-width:0;height:100%;overflow:hidden;touch-action:pinch-zoom}
@@ -51,8 +51,14 @@ button,input{font:inherit}
 .icon-btn:disabled{opacity:.25;cursor:default}
 .mobile-menu{display:none}
 
-/* CARD */
-.card-shell{position:relative;width:min(430px,calc((100dvh - 105px) * 5 / 7),calc(100% - 30px));max-height:calc(100dvh - 105px);flex:0 1 auto;filter:drop-shadow(0 20px 26px #0009)}
+/* CARD
+   One design for desktop + mobile.
+   Only the complete card scales. Internal layout never changes. */
+.card-shell{
+ position:relative;width:min(430px,calc((100dvh - 105px) * 5 / 7),calc(100% - 30px));
+ max-height:calc(100dvh - 105px);flex:0 1 auto;
+ filter:drop-shadow(0 20px 26px #0009)
+}
 .card-shell:before{content:"";position:absolute;inset:-8px;z-index:-2;border-radius:28px;background:linear-gradient(145deg,#65615e,#181617 24%,#a7894c 48%,#191718 73%,#595450);box-shadow:0 0 0 2px #060607,0 0 30px #d2a54a21}
 .card-shell:after{content:"";position:absolute;inset:-4px;z-index:-1;border:1px solid #ffffff29;border-radius:25px;pointer-events:none}
 .tcg-card{position:relative;width:100%;aspect-ratio:5/7;overflow:hidden;isolation:isolate;border:2px solid #ffffff29;border-radius:21px;background:#111;box-shadow:inset 0 0 0 2px #0008,inset 0 0 30px #0006}
@@ -73,11 +79,7 @@ button,input{font:inherit}
 .tcg-card.card-ur{box-shadow:inset 0 0 27px #ff00006b}
 .tcg-card.card-lr{box-shadow:inset 0 0 27px #d5a6bd70}
 
-/* =========================================================
-   SIMPLE TCG STAT METERS
-   Each completed 10 points remains full while the next
-   lighter layer fills over it.
-   ========================================================= */
+/* STATS */
 .stats{position:absolute;left:5px;top:60px;z-index:18;width:61px;display:flex;flex-direction:column;gap:5px;pointer-events:none}
 .stat{
  --c:#fff;--c2:#fff;--c3:#fff;--c4:#fff;
@@ -89,69 +91,24 @@ button,input{font:inherit}
 .stat.attack{--c:#a12636;--c2:#ef4e5e;--c3:#ff9a73;--c4:#ffe1bd}
 .stat.intelligence{--c:#276c9e;--c2:#4cb6eb;--c3:#9ee6ff;--c4:#e3f9ff}
 
-/* METER */
 .stat-meter{
  --fill1:0%;--fill2:0%;--fill3:0%;--fill4:0%;
  position:relative;grid-column:1;grid-row:1/3;width:13px;height:78px;
- overflow:hidden;border:1px solid #d9bd72;border-radius:3px;
- background:#0d0c0d;
+ overflow:hidden;border:1px solid #d9bd72;border-radius:3px;background:#0d0c0d;
  box-shadow:0 2px 5px #000b,0 0 0 1px #0009,inset 0 0 3px #000
 }
-
-/* LAYERS */
-.meter-fill{
- position:absolute;left:2px;right:2px;bottom:2px;
- max-height:calc(100% - 4px);border-radius:1px;
- transition:height .25s ease
-}
-.meter-fill.base{
- z-index:1;height:var(--fill1);
- background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 70%,#fff));
-}
-.meter-fill.layer2{
- z-index:2;height:var(--fill2);
- background:linear-gradient(90deg,var(--c2),color-mix(in srgb,var(--c2) 72%,#fff));
-}
-.meter-fill.layer3{
- z-index:3;height:var(--fill3);
- background:linear-gradient(90deg,var(--c3),color-mix(in srgb,var(--c3) 72%,#fff));
-}
-.meter-fill.layer4{
- z-index:4;height:var(--fill4);
- background:linear-gradient(90deg,var(--c4),#fff);
-}
-
-/* SINGLE SUBTLE HIGHLIGHT */
-.stat-meter:before{
- content:"";position:absolute;left:3px;top:2px;bottom:2px;width:2px;
- z-index:6;background:#ffffff38;pointer-events:none
-}
-
-/* TEN EVEN DIVISIONS */
-.meter-lines{
- position:absolute;inset:2px;z-index:7;pointer-events:none;
- background:repeating-linear-gradient(
-  to top,
-  transparent 0,
-  transparent calc(10% - 1px),
-  #090809b8 calc(10% - 1px),
-  #090809b8 10%
- )
-}
-
-/* SMALL TCG CAPS */
-.stat-meter:after{
- content:"";position:absolute;inset:0;z-index:8;pointer-events:none;
- border-top:2px solid #f0d5878c;border-bottom:2px solid #8f7139a8;
- box-shadow:inset 1px 0 #fff1,inset -1px 0 #0005
-}
-
-/* ACTIVE TIER GLOW */
+.meter-fill{position:absolute;left:2px;right:2px;bottom:2px;max-height:calc(100% - 4px);border-radius:1px;transition:height .25s ease}
+.meter-fill.base{z-index:1;height:var(--fill1);background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 70%,#fff))}
+.meter-fill.layer2{z-index:2;height:var(--fill2);background:linear-gradient(90deg,var(--c2),color-mix(in srgb,var(--c2) 72%,#fff))}
+.meter-fill.layer3{z-index:3;height:var(--fill3);background:linear-gradient(90deg,var(--c3),color-mix(in srgb,var(--c3) 72%,#fff))}
+.meter-fill.layer4{z-index:4;height:var(--fill4);background:linear-gradient(90deg,var(--c4),#fff)}
+.stat-meter:before{content:"";position:absolute;left:3px;top:2px;bottom:2px;width:2px;z-index:6;background:#ffffff38;pointer-events:none}
+.meter-lines{position:absolute;inset:2px;z-index:7;pointer-events:none;background:repeating-linear-gradient(to top,transparent 0,transparent calc(10% - 1px),#090809b8 calc(10% - 1px),#090809b8 10%)}
+.stat-meter:after{content:"";position:absolute;inset:0;z-index:8;pointer-events:none;border-top:2px solid #f0d5878c;border-bottom:2px solid #8f7139a8;box-shadow:inset 1px 0 #fff1,inset -1px 0 #0005}
 .stat[data-layer="2"] .stat-meter{box-shadow:0 2px 5px #000b,0 0 4px var(--c2)}
 .stat[data-layer="3"] .stat-meter{box-shadow:0 2px 5px #000b,0 0 5px var(--c3)}
 .stat[data-layer="4"] .stat-meter{box-shadow:0 2px 5px #000b,0 0 6px var(--c4)}
 
-/* TEXT */
 .stat-text{grid-column:2;grid-row:1/3;align-self:center;display:flex;flex-direction:column;align-items:flex-start;padding:5px 4px 5px 0}
 .stat-label{display:block;margin-bottom:2px;color:#f5e9d1;font:900 .4rem Georgia,serif;letter-spacing:.11em;line-height:1;text-transform:uppercase;text-shadow:0 1px 3px #000}
 .stat-value{display:block;color:#fff;font:1000 1.42rem/1 Arial Black,Impact,Inter,sans-serif;letter-spacing:-.07em;-webkit-text-stroke:.25px #fff;text-shadow:0 2px 3px #000,0 0 5px var(--c)}
@@ -197,42 +154,42 @@ button,input{font:inherit}
 .error{margin:auto;padding:25px;border:1px solid #834249;border-radius:9px;background:#32191d;text-align:center}
 .overlay{display:none}
 
-@media(max-height:720px) and (min-width:801px){
- .stage{padding:10px 20px}.topbar{margin-bottom:8px}.card-caption{margin-top:8px}
- .card-shell{width:min(390px,calc((100dvh - 80px) * 5 / 7))}
-}
-
-/* MOBILE */
+/* MOBILE: ONLY THE PAGE UI CHANGES.
+   NOTHING INSIDE THE CARD IS OVERRIDDEN. */
 @media(max-width:800px){
- .app{display:block;width:100%;height:100dvh}.main{width:100%;height:100dvh}
- .sidebar{position:fixed!important;top:0!important;bottom:0!important;left:0!important;width:min(310px,86vw);height:100dvh;z-index:2147483647!important;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 40px #000c}
+ .app{display:block;height:100dvh}
+ .main{width:100%;height:100dvh}
+ .sidebar{
+  position:fixed!important;inset:0 auto 0 0!important;width:min(310px,86vw);height:100dvh;
+  z-index:2147483647!important;transform:translateX(-105%);transition:transform .24s ease;
+  box-shadow:18px 0 40px #000c
+ }
  .sidebar.open{transform:translateX(0)!important}
- .overlay{position:fixed!important;inset:0!important;z-index:2147483646!important;display:block;pointer-events:none;background:#000a;opacity:0;transition:opacity .2s}
+ .overlay{
+  position:fixed!important;inset:0!important;z-index:2147483646!important;display:block;
+  pointer-events:none;background:#000a;opacity:0;transition:opacity .2s
+ }
  .overlay.show{pointer-events:auto;opacity:1}
  .mobile-menu{display:block}
- .stage{justify-content:center;padding:12px 14px}
- .topbar{margin-bottom:10px}
- .card-shell{width:min(420px,88vw,calc((100dvh - 100px) * 5 / 7));max-height:calc(100dvh - 100px)}
- .card-caption{margin-top:10px}
+ .stage{padding:12px 14px}
+ .topbar{margin-bottom:12px}
+ .card-shell{width:min(430px,calc(100vw - 44px),calc((100dvh - 105px) * 5 / 7));max-height:calc(100dvh - 105px)}
 }
 
+/* Sidebar only — no card modifications */
 @media(max-width:460px){
  .card-list{--item-h:52px}
  .card-item{padding:7px 8px 7px 10px}
- .list-name{font-size:.76rem}.list-meta{font-size:.54rem}
- .stats{left:15px;top:19px;width:55px;gap:12px}
- .stat{width:54px;height:82px;grid-template-columns:12px 1fr;column-gap:5px}
- .stat-meter{width:12px;height:68px}
- .stat-label{font-size:.35rem}.stat-value{font-size:1.2rem}.stat-level{font-size:.27rem}
- .card-role{top:14px;right:15px;width:49px;height:49px}
- .card-info{left:15px;right:15px;bottom:65px;padding:6px 8px;font-size:.61rem}
- .bottom-panel{height:66px}.card-category{bottom:48px}.card-name{bottom:25px;font-size:1.3rem}
- .card-subtype{bottom:13px;font-size:.4rem}.card-id{bottom:12px}.card-rarity{bottom:8px}
+ .list-name{font-size:.76rem}
+ .list-meta{font-size:.54rem}
 }
 
-@media(max-height:650px) and (max-width:800px){
- .stage{padding:7px 12px}.topbar{margin-bottom:7px}.card-caption{margin-top:7px}
- .card-shell{width:min(360px,82vw,calc((100dvh - 78px) * 5 / 7))}
+/* Same card sizing formula on short screens */
+@media(max-height:720px){
+ .stage{padding:10px 14px}
+ .topbar{margin-bottom:8px}
+ .card-caption{margin-top:8px}
+ .card-shell{width:min(430px,calc(100% - 30px),calc((100dvh - 80px) * 5 / 7));max-height:calc(100dvh - 80px)}
 }
 </style>
 </head>
@@ -367,12 +324,15 @@ async function loadCards(){
 
 function renderLibrary(){
  const q=$("card-search").value.trim().toLowerCase();
+
  filteredIds=cardIds.filter(id=>{
   const c=db.cards[id];
-  return[id,c.name,c.card_number,c.rarity,c.category,strip(normalizeClasses(c.subtype||"")),c.role].join(" ").toLowerCase().includes(q);
+  return[id,c.name,c.card_number,c.rarity,c.category,strip(normalizeClasses(c.subtype||"")),c.role]
+   .join(" ").toLowerCase().includes(q);
  });
 
  $("card-count").textContent=`${filteredIds.length} card${filteredIds.length===1?"":"s"}`;
+
  $("card-list").innerHTML=filteredIds.length?filteredIds.map(id=>{
   const c=db.cards[id],r=getRarity(c.rarity);
   return `<button class="card-item ${id===activeId?"active":""}" data-id="${esc(id)}">
@@ -389,19 +349,23 @@ function renderLibrary(){
 
 function selectCard(id,url=true){
  const c=db.cards?.[id];if(!c)return;
+
  activeId=id;renderCard(c);renderLibrary();updateNavigation();
  document.querySelector(".card-item.active")?.scrollIntoView({block:"nearest",behavior:"auto"});
 
  if(url){
   const u=new URL(location.href);
-  u.searchParams.set("id",id);history.replaceState(null,"",u);
+  u.searchParams.set("id",id);
+  history.replaceState(null,"",u);
  }
+
  closeSidebar();
 }
 
 function renderCard(c){
  const r=getRarity(c.rarity),card=$("card");
- card.className=`tcg-card card-${r}`;card.dataset.sample=String(c.sample??false);
+ card.className=`tcg-card card-${r}`;
+ card.dataset.sample=String(c.sample??false);
 
  $("card-art").src=c.art||"";
  $("card-art").alt=strip(c.name||"Card");
@@ -411,8 +375,12 @@ function renderCard(c){
  setStat("attack",c.stats?.attack??c.stats?.damage??0,c.labels?.attack||c.labels?.damage||"ATK");
  setStat("intelligence",c.stats?.intelligence??0,c.labels?.intelligence||"INT");
 
- const role=$("card-role");role.src=c.role||"";role.style.display=c.role?"block":"none";
- const bottom=$("bottom-panel");removePrefix(bottom,"name-");
+ const role=$("card-role");
+ role.src=c.role||"";
+ role.style.display=c.role?"block":"none";
+
+ const bottom=$("bottom-panel");
+ removePrefix(bottom,"name-");
  if(["c","r","sr","ssr","ur"].includes(r))bottom.classList.add(`name-${r}`);
 
  $("name").innerHTML=normalizeClasses(c.name||"");
@@ -420,23 +388,20 @@ function renderCard(c){
  $("card-id").textContent=c.card_number||"";
  $("category").innerHTML=normalizeClasses(c.category||"");
 
- const rb=$("rarity");rb.className=`card-rarity ${r}`;rb.textContent=c.rarity||"";
- renderAdditional(c.additional||[]);
+ const rb=$("rarity");
+ rb.className=`card-rarity ${r}`;
+ rb.textContent=c.rarity||"";
 
+ renderAdditional(c.additional||[]);
  $("caption-name").textContent=strip(c.name||"");
  $("caption-detail").textContent=` — ${c.card_number||""} · ${c.rarity||""}`;
  document.title=`${strip(c.name||"Card")} | Mystical Legends TCG`;
 }
 
-/*
-  1–10  = base
-  11–20 = base full + lighter overlay
-  21–30 = first two full + bright overlay
-  31–40 = first three full + pale overlay
-*/
 function setStat(k,v,l){
  v=Math.max(0,Number(v)||0);
- $(k).textContent=v;$(`${k}-label`).textContent=l;
+ $(k).textContent=v;
+ $(`${k}-label`).textContent=l;
 
  const meter=$(`${k}-meter`),stat=$(`${k}-stat`);
  const fill=n=>`${Math.min(10,Math.max(0,v-n))*9.5}%`;
@@ -452,7 +417,8 @@ function setStat(k,v,l){
 }
 
 function normalizeClasses(h=""){
- return String(h).replace(/class=(["'])(.*?)\1/gi,(_,q,c)=>`class=${q}${c.trim().split(/[;\s]+/).filter(Boolean).join(" ")}${q}`);
+ return String(h).replace(/class=(["'])(.*?)\1/gi,
+  (_,q,c)=>`class=${q}${c.trim().split(/[;\s]+/).filter(Boolean).join(" ")}${q}`);
 }
 
 function renderAdditional(a){
@@ -464,8 +430,10 @@ function renderAdditional(a){
 
 function buildStyle(s){
  const r=[];
- ["fontSize","paddingTop","paddingBottom","paddingLeft","paddingRight","marginTop","marginBottom","marginLeft","marginRight","letterSpacing"].forEach(k=>addSize(r,cssName(k),s[k]));
- ["fontWeight","fontStyle","textAlign","lineHeight","color","opacity"].forEach(k=>addRaw(r,cssName(k),s[k]));
+ ["fontSize","paddingTop","paddingBottom","paddingLeft","paddingRight","marginTop","marginBottom","marginLeft","marginRight","letterSpacing"]
+  .forEach(k=>addSize(r,cssName(k),s[k]));
+ ["fontWeight","fontStyle","textAlign","lineHeight","color","opacity"]
+  .forEach(k=>addRaw(r,cssName(k),s[k]));
  return r.join(";");
 }
 
@@ -478,12 +446,15 @@ function getRarity(v=""){
  return["c","un","r","sr","ssr","ur","lr"].includes(v)?v:"c";
 }
 
-function removePrefix(el,p){[...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c))}
+function removePrefix(el,p){
+ [...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c));
+}
 
 function updateNavigation(){
  const i=cardIds.indexOf(activeId);
  $("current-position").textContent=`Card ${i+1} / ${cardIds.length}`;
- $("prev-btn").disabled=i<=0;$("next-btn").disabled=i>=cardIds.length-1;
+ $("prev-btn").disabled=i<=0;
+ $("next-btn").disabled=i>=cardIds.length-1;
 }
 
 function navigate(d){
@@ -491,8 +462,15 @@ function navigate(d){
  if(i>=0&&i<cardIds.length)selectCard(cardIds[i]);
 }
 
-function openSidebar(){$("sidebar").classList.add("open");$("overlay").classList.add("show")}
-function closeSidebar(){$("sidebar").classList.remove("open");$("overlay").classList.remove("show")}
+function openSidebar(){
+ $("sidebar").classList.add("open");
+ $("overlay").classList.add("show");
+}
+
+function closeSidebar(){
+ $("sidebar").classList.remove("open");
+ $("overlay").classList.remove("show");
+}
 
 function strip(h){
  const e=document.createElement("div");
@@ -501,7 +479,8 @@ function strip(h){
 }
 
 function esc(v){
- return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+ return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;")
+  .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
 $("copyright-year").textContent=new Date().getFullYear();
@@ -523,18 +502,21 @@ document.addEventListener("wheel",e=>{
 },{passive:false});
 
 let touchStartY=0;
+
 document.addEventListener("touchstart",e=>{
  if(e.touches.length===1)touchStartY=e.touches[0].clientY;
 },{passive:true});
 
 document.addEventListener("touchmove",e=>{
  if(e.touches.length>1)return;
+
  const list=e.target.closest(".card-list");
  if(!list){e.preventDefault();return}
 
- const y=e.touches[0].clientY,dy=y-touchStartY,
- top=list.scrollTop<=0,
- bottom=Math.ceil(list.scrollTop+list.clientHeight)>=list.scrollHeight;
+ const y=e.touches[0].clientY,
+  dy=y-touchStartY,
+  top=list.scrollTop<=0,
+  bottom=Math.ceil(list.scrollTop+list.clientHeight)>=list.scrollHeight;
 
  if((top&&dy>0)||(bottom&&dy<0))e.preventDefault();
 },{passive:false});
