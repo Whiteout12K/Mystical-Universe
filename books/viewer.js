@@ -6,9 +6,9 @@ const params=new URLSearchParams(location.search);
 const id=params.get("id")||"1";
 
 const books={
-    "1":"./pdf/Mystical Legends 1.pdf",
-    "2":"./pdf/Mystical Legends 2.pdf",
-    "3":"./pdf/Mystical Legends 3.pdf"
+    "1":"/books/pdf/Mystical Legends 1.pdf",
+    "2":"/books/pdf/Mystical Legends 2.pdf",
+    "3":"/books/pdf/Mystical Legends 3.pdf"
 };
 
 const url=books[id];
