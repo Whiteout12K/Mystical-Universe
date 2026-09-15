@@ -43,36 +43,35 @@ button,input{font:inherit}
 /* MAIN */
 .main{position:relative;min-width:0;height:100%;overflow:hidden;touch-action:none}
 .main:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.025;background-image:linear-gradient(45deg,#fff 1px,transparent 1px),linear-gradient(-45deg,#fff 1px,transparent 1px);background-size:20px 20px}
-.stage{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 24px;overflow:hidden}
-.topbar{flex:0 0 auto;width:min(500px,100%);display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#aaa095;font-size:.69rem}
+.stage{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:18px 24px;overflow:hidden}
+.topbar{position:relative;z-index:100;flex:0 0 auto;width:min(500px,100%);display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#aaa095;font-size:.69rem}
 .nav-controls{display:flex;gap:6px}
 .icon-btn{width:34px;height:34px;padding:0;border:1px solid var(--line);border-radius:7px;background:#171316d9;color:#d9bd82;cursor:pointer;transition:.15s}
 .icon-btn:hover{background:#292023;border-color:#a98849}
 .icon-btn:disabled{opacity:.25;cursor:default}
 .mobile-menu{display:none}
 
-/* FIXED CARD VIEWPORT
-   Card always renders internally at desktop size: 430 x 602.
-   Only this outer viewport changes size. */
-.card-viewport{
- --card-scale:1;
- position:relative;
- width:430px;
- height:602px;
- flex:0 0 auto;
-}
+/* CARD AREA */
+.card-area{position:relative;flex:1;min-height:0;width:100%;overflow:hidden;touch-action:none;cursor:default}
+.card-area.zoomed{cursor:grab}
+.card-area.dragging{cursor:grabbing}
 
+/* Card remains 430x602 internally forever. */
 .card-shell{
+ --view-scale:1;
+ --pan-x:0px;
+ --pan-y:0px;
  position:absolute;
- left:0;top:0;
+ left:50%;top:50%;
  width:430px;height:602px;
- transform:scale(var(--card-scale));
- transform-origin:top left;
+ transform:translate(-50%,-50%) translate(var(--pan-x),var(--pan-y)) scale(var(--view-scale));
+ transform-origin:center;
+ will-change:transform;
  filter:drop-shadow(0 20px 26px #0009)
 }
-
 .card-shell:before{content:"";position:absolute;inset:-8px;z-index:-2;border-radius:28px;background:linear-gradient(145deg,#65615e,#181617 24%,#a7894c 48%,#191718 73%,#595450);box-shadow:0 0 0 2px #060607,0 0 30px #d2a54a21}
 .card-shell:after{content:"";position:absolute;inset:-4px;z-index:-1;border:1px solid #ffffff29;border-radius:25px;pointer-events:none}
+
 .tcg-card{position:relative;width:430px;height:602px;overflow:hidden;isolation:isolate;border:2px solid #ffffff29;border-radius:21px;background:#111;box-shadow:inset 0 0 0 2px #0008,inset 0 0 30px #0006}
 .card-art{position:absolute;inset:0;z-index:-8;width:100%;height:100%;object-fit:cover;filter:blur(.5px)}
 .art-shade{position:absolute;inset:0;z-index:-7;pointer-events:none;background:linear-gradient(#0003,transparent 23%,transparent 59%,#0000001a 72%,#040304a6),linear-gradient(90deg,#0008,transparent 23% 87%,#0003)}
@@ -93,22 +92,12 @@ button,input{font:inherit}
 
 /* STATS */
 .stats{position:absolute;left:5px;top:60px;z-index:18;width:61px;display:flex;flex-direction:column;gap:5px;pointer-events:none}
-.stat{
- --c:#fff;--c2:#fff;--c3:#fff;--c4:#fff;
- position:relative;width:60px;height:92px;
- display:grid;grid-template-columns:13px 1fr;grid-template-rows:1fr auto;
- column-gap:6px;align-items:center
-}
+.stat{--c:#fff;--c2:#fff;--c3:#fff;--c4:#fff;position:relative;width:60px;height:92px;display:grid;grid-template-columns:13px 1fr;grid-template-rows:1fr auto;column-gap:6px;align-items:center}
 .stat.hp{--c:#39873e;--c2:#72d65e;--c3:#bdff86;--c4:#efffd6}
 .stat.attack{--c:#a12636;--c2:#ef4e5e;--c3:#ff9a73;--c4:#ffe1bd}
 .stat.intelligence{--c:#276c9e;--c2:#4cb6eb;--c3:#9ee6ff;--c4:#e3f9ff}
 
-.stat-meter{
- --fill1:0%;--fill2:0%;--fill3:0%;--fill4:0%;
- position:relative;grid-column:1;grid-row:1/3;width:13px;height:78px;
- overflow:hidden;border:1px solid #d9bd72;border-radius:3px;background:#0d0c0d;
- box-shadow:0 2px 5px #000b,0 0 0 1px #0009,inset 0 0 3px #000
-}
+.stat-meter{--fill1:0%;--fill2:0%;--fill3:0%;--fill4:0%;position:relative;grid-column:1;grid-row:1/3;width:13px;height:78px;overflow:hidden;border:1px solid #d9bd72;border-radius:3px;background:#0d0c0d;box-shadow:0 2px 5px #000b,0 0 0 1px #0009,inset 0 0 3px #000}
 .meter-fill{position:absolute;left:2px;right:2px;bottom:2px;max-height:calc(100% - 4px);border-radius:1px;transition:height .25s ease}
 .meter-fill.base{z-index:1;height:var(--fill1);background:linear-gradient(90deg,var(--c),color-mix(in srgb,var(--c) 70%,#fff))}
 .meter-fill.layer2{z-index:2;height:var(--fill2);background:linear-gradient(90deg,var(--c2),color-mix(in srgb,var(--c2) 72%,#fff))}
@@ -134,41 +123,36 @@ button,input{font:inherit}
 .card-role[src=""]{display:none}
 
 /* INFO */
-.card-info{
- position:absolute;left:17px;right:17px;bottom:70px;z-index:10;width:auto;padding:7px 11px 8px;
- border-left:3px solid #8b3e3e;border-right:1px solid #ffffff26;border-radius:3px;
- background:linear-gradient(110deg,#f9f8f873,#ffffff75);color:#1c1816;font-size:.7rem;line-height:1.27;
- box-shadow:0 5px 18px #0006;backdrop-filter:blur(1.5px);text-shadow:0 0 20px #f7f3f3bd
-}
+.card-info{position:absolute;left:17px;right:17px;bottom:70px;z-index:10;width:auto;padding:7px 11px 8px;border-left:3px solid #8b3e3e;border-right:1px solid #ffffff26;border-radius:3px;background:linear-gradient(110deg,#f9f8f873,#ffffff75);color:#1c1816;font-size:.85rem;line-height:1.27;box-shadow:0 5px 18px #0006;backdrop-filter:blur(1.5px);text-shadow:0 0 20px #f7f3f3bd}
 .card-info:before{content:"";position:absolute;inset:0;opacity:.05;pointer-events:none}
 .additional{position:relative}
-.box,.box1,.box2{display:inline-block;margin-right:3px;padding:2px 5px;border-radius:2px;color:#ffffffe3;font-size:.55rem;font-weight:1000;line-height:1.15}
+.box,.box1,.box2{display:inline-block;margin-right:3px;padding:2px 5px;border-radius:2px;color:#ffffffe3;font-size:.5rem;font-weight:1000;line-height:1.15}
 .box1{background:#272326}.box2{background:#6b5640}.keyword{font-weight:1000}
-.flavor{display:block;padding-top:3px;border-top:1px solid #0003;color:#2a2a2a;font-size:.61rem;font-style:italic}
+.flavor{display:block;padding-top:3px;border-top:1px solid #0003;color:#2a2a2a;font-size:.64rem;font-style:italic}
 
 /* BOTTOM */
 .bottom-panel{position:absolute;left:0;right:0;bottom:0;z-index:6;height:72px;clip-path:polygon(0 13%,100% 0,100% 100%,0 100%)}
 .bottom-panel:before{content:"";position:absolute;inset:0;opacity:.12;background:repeating-linear-gradient(140deg,transparent 0 28px,#ffffff8c 29px,transparent 30px 58px)}
 .bottom-panel:after{content:"";position:absolute;left:0;right:0;top:9px;height:1px;background:#ffffff59}
-.card-category{position:absolute;right:18px;bottom:52px;z-index:12;padding:2px 11px 2px 14px;clip-path:polygon(8% 0,100% 0,92% 100%,0 100%);background:#473131;color:#fff;font-size:.48rem;font-style:italic;font-weight:1000;letter-spacing:.06em}
+.card-category{position:absolute;right:18px;bottom:52px;z-index:12;padding:2px 11px 2px 14px;clip-path:polygon(8% 0,100% 0,92% 100%,0 100%);background:#473131;color:#fff;font-size:.6rem;font-style:italic;font-weight:1000;letter-spacing:.06em}
 .card-name{position:absolute;left:19px;bottom:27px;z-index:10;max-width:73%;overflow:hidden;color:#fff;font:900 1.48rem Georgia,serif;letter-spacing:.005em;text-overflow:ellipsis;text-shadow:0 2px 3px #0006,0 0 7px #0006;white-space:nowrap;line-height:1}
-.card-subtype{position:absolute;left:20px;bottom:14px;z-index:10;max-width:67%;overflow:hidden;color:#eeeeeea3;font-size:.45rem;font-weight:800;line-height:1.1;text-overflow:ellipsis;text-shadow:0 1px 3px #0007;white-space:nowrap}
+.card-subtype{position:absolute;left:20px;bottom:14px;z-index:10;max-width:67%;overflow:hidden;color:#eeeeeea3;font-size:.6rem;font-weight:800;line-height:1.1;text-overflow:ellipsis;text-shadow:0 1px 3px #0007;white-space:nowrap}
 .card-subtype .box{margin:0 1px;padding:1px 3px;font-size:.43rem;vertical-align:middle}
 .card-id{position:absolute;right:59px;bottom:13px;z-index:10;color:#eee;font-size:.48rem;font-weight:900;text-shadow:0 1px 2px #000}
-.card-rarity{position:absolute;right:18px;bottom:9px;z-index:12;min-width:34px;height:20px;display:grid;place-items:center;padding:0 5px;font-size:.5rem;font-weight:1000}
+.card-rarity{position:absolute;right:18px;bottom:9px;z-index:12;min-width:40px;height:22px;display:grid;place-items:center;padding:0 5px;font-size:.8rem;font-weight:1000}
 
 /* LEGAL */
 .card-legal{position:absolute;right:3px;top:50%;z-index:22;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;color:#ffffff57;font-size:.31rem;font-weight:700;letter-spacing:.07em;text-shadow:0 1px 2px #0005;white-space:nowrap;pointer-events:none}
 .sample{position:absolute;inset:0;z-index:40;display:none;place-items:center;pointer-events:none;color:#ffffff6b;font-size:4rem;font-weight:300;letter-spacing:.08em;text-shadow:0 2px 5px #0005;transform:rotate(-4deg)}
 .tcg-card[data-sample="true"] .sample{display:grid}
-.card-caption{flex:0 0 auto;width:min(500px,100%);height:18px;margin-top:13px;color:#81786f;font-size:.67rem;text-align:center}
+
+/* CAPTION */
+.card-caption{position:relative;z-index:100;flex:0 0 auto;width:min(500px,100%);height:18px;margin-top:13px;color:#81786f;font-size:.67rem;text-align:center}
 .card-caption strong{color:#bda370}
 .error{margin:auto;padding:25px;border:1px solid #834249;border-radius:9px;background:#32191d;text-align:center}
 .overlay{display:none}
 
-/* MOBILE
-   No card element receives mobile-specific sizes.
-   The complete 430x602 desktop card is scaled uniformly. */
+/* MOBILE - CARD INTERNAL LAYOUT NEVER CHANGES */
 @media(max-width:800px){
  .app{display:block;width:100%;height:100dvh}
  .main{width:100%;height:100dvh}
@@ -181,7 +165,6 @@ button,input{font:inherit}
  .topbar{margin-bottom:10px}
  .card-caption{margin-top:10px}
 }
-
 @media(max-height:650px){
  .stage{padding:7px 12px}
  .topbar{margin-bottom:7px}
@@ -205,112 +188,160 @@ button,input{font:inherit}
 <div class="overlay" id="overlay"></div>
 
 <main class="main">
-<div class="stage">
+ <div class="stage">
 
- <div class="topbar">
-  <button class="icon-btn mobile-menu" id="menu-btn" aria-label="Open card library">☰</button>
-  <span id="current-position">Card 1 / 1</span>
-  <div class="nav-controls">
-   <button class="icon-btn" id="prev-btn" aria-label="Previous card">‹</button>
-   <button class="icon-btn" id="next-btn" aria-label="Next card">›</button>
+  <div class="topbar">
+   <button class="icon-btn mobile-menu" id="menu-btn" aria-label="Open card library">☰</button>
+   <span id="current-position">Card 1 / 1</span>
+   <div class="nav-controls">
+    <button class="icon-btn" id="prev-btn" aria-label="Previous card">‹</button>
+    <button class="icon-btn" id="next-btn" aria-label="Next card">›</button>
+   </div>
   </div>
- </div>
 
- <div class="card-viewport" id="card-viewport">
-  <div class="card-shell" id="card-shell">
-   <article class="tcg-card" id="card">
-    <img class="card-art" id="card-art" alt="">
-    <div class="art-shade"></div>
-    <div class="card-pattern"></div>
-    <div class="inner-frame"></div>
-    <div class="corner tl"></div>
-    <div class="corner br"></div>
+  <div class="card-area" id="card-area">
+   <div class="card-shell" id="card-shell">
+    <article class="tcg-card" id="card">
+     <img class="card-art" id="card-art" alt="">
+     <div class="art-shade"></div>
+     <div class="card-pattern"></div>
+     <div class="inner-frame"></div>
+     <div class="corner tl"></div>
+     <div class="corner br"></div>
 
-    <div class="stats">
-     <div class="stat hp" id="hp-stat">
-      <div class="stat-meter" id="hp-meter">
-       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
-       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
-       <i class="meter-lines"></i>
+     <div class="stats">
+      <div class="stat hp" id="hp-stat">
+       <div class="stat-meter" id="hp-meter">
+        <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+        <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+        <i class="meter-lines"></i>
+       </div>
+       <div class="stat-text">
+        <span class="stat-label" id="hp-label">HP</span>
+        <span class="stat-value" id="hp">0</span>
+        <span class="stat-level" id="hp-level"></span>
+       </div>
       </div>
-      <div class="stat-text">
-       <span class="stat-label" id="hp-label">HP</span>
-       <span class="stat-value" id="hp">0</span>
-       <span class="stat-level" id="hp-level"></span>
+
+      <div class="stat attack" id="attack-stat">
+       <div class="stat-meter" id="attack-meter">
+        <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+        <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+        <i class="meter-lines"></i>
+       </div>
+       <div class="stat-text">
+        <span class="stat-label" id="attack-label">ATK</span>
+        <span class="stat-value" id="attack">0</span>
+        <span class="stat-level" id="attack-level"></span>
+       </div>
+      </div>
+
+      <div class="stat intelligence" id="intelligence-stat">
+       <div class="stat-meter" id="intelligence-meter">
+        <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+        <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+        <i class="meter-lines"></i>
+       </div>
+       <div class="stat-text">
+        <span class="stat-label" id="intelligence-label">INT</span>
+        <span class="stat-value" id="intelligence">0</span>
+        <span class="stat-level" id="intelligence-level"></span>
+       </div>
       </div>
      </div>
 
-     <div class="stat attack" id="attack-stat">
-      <div class="stat-meter" id="attack-meter">
-       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
-       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
-       <i class="meter-lines"></i>
-      </div>
-      <div class="stat-text">
-       <span class="stat-label" id="attack-label">ATK</span>
-       <span class="stat-value" id="attack">0</span>
-       <span class="stat-level" id="attack-level"></span>
-      </div>
-     </div>
+     <img class="card-role" id="card-role" alt="Role">
+     <div class="card-info" id="card-info"></div>
 
-     <div class="stat intelligence" id="intelligence-stat">
-      <div class="stat-meter" id="intelligence-meter">
-       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
-       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
-       <i class="meter-lines"></i>
-      </div>
-      <div class="stat-text">
-       <span class="stat-label" id="intelligence-label">INT</span>
-       <span class="stat-value" id="intelligence">0</span>
-       <span class="stat-level" id="intelligence-level"></span>
-      </div>
-     </div>
-    </div>
+     <div class="bottom-panel" id="bottom-panel"></div>
+     <div class="card-category" id="category"></div>
+     <div class="card-name" id="name"></div>
+     <div class="card-subtype" id="subtype"></div>
+     <div class="card-id" id="card-id"></div>
+     <div class="card-rarity" id="rarity"></div>
 
-    <img class="card-role" id="card-role" alt="Role">
-    <div class="card-info" id="card-info"></div>
-
-    <div class="bottom-panel" id="bottom-panel"></div>
-    <div class="card-category" id="category"></div>
-    <div class="card-name" id="name"></div>
-    <div class="card-subtype" id="subtype"></div>
-    <div class="card-id" id="card-id"></div>
-    <div class="card-rarity" id="rarity"></div>
-
-    <div class="card-legal">Mystical Legends © <span id="copyright-year"></span> · All Rights Reserved</div>
-    <div class="sample">SAMPLE</div>
-   </article>
+     <div class="card-legal">Mystical Legends © <span id="copyright-year"></span> · All Rights Reserved</div>
+     <div class="sample">SAMPLE</div>
+    </article>
+   </div>
   </div>
- </div>
 
- <div class="card-caption">
-  <strong id="caption-name"></strong>
-  <span id="caption-detail"></span>
- </div>
+  <div class="card-caption">
+   <strong id="caption-name"></strong>
+   <span id="caption-detail"></span>
+  </div>
 
-</div>
+ </div>
 </main>
 </div>
 
 <script>
 const CARD_FILE="tcg-cards.json",$=id=>document.getElementById(id);
-const CARD_W=430,CARD_H=602;
+const CARD_W=430,CARD_H=602,MIN_ZOOM=1,MAX_ZOOM=4,ZOOM_STEP=.2;
 let db={},cardIds=[],filteredIds=[],activeId="";
+let fitScale=1,zoom=1,panX=0,panY=0;
 
-/* Scale the WHOLE desktop card, never its individual contents. */
-function fitCard(){
- const stage=document.querySelector(".stage"),top=document.querySelector(".topbar"),cap=document.querySelector(".card-caption");
- const mobile=innerWidth<=800,pad=mobile?28:48,gap=mobile?20:25;
- const maxW=Math.max(1,stage.clientWidth-pad);
- const maxH=Math.max(1,stage.clientHeight-top.offsetHeight-cap.offsetHeight-gap);
- const scale=Math.min(1,maxW/CARD_W,maxH/CARD_H);
-
- const vp=$("card-viewport");
- vp.style.width=`${CARD_W*scale}px`;
- vp.style.height=`${CARD_H*scale}px`;
- vp.style.setProperty("--card-scale",scale);
+/* =========================
+   CARD VIEW
+========================= */
+function fitCard(reset=false){
+ const area=$("card-area"),r=area.getBoundingClientRect();
+ const pad=20;
+ fitScale=Math.min(1,(r.width-pad)/CARD_W,(r.height-pad)/CARD_H);
+ if(reset){zoom=1;panX=panY=0}
+ clampPan();applyView();
 }
 
+function applyView(){
+ const scale=fitScale*zoom,s=$("card-shell"),area=$("card-area");
+ s.style.setProperty("--view-scale",scale);
+ s.style.setProperty("--pan-x",`${panX}px`);
+ s.style.setProperty("--pan-y",`${panY}px`);
+ area.classList.toggle("zoomed",zoom>1.001);
+}
+
+function clampPan(){
+ if(zoom<=1){panX=panY=0;return}
+
+ const r=$("card-area").getBoundingClientRect();
+ const w=CARD_W*fitScale*zoom,h=CARD_H*fitScale*zoom;
+
+ const maxX=Math.max(0,(w-r.width)/2)+r.width*.35;
+ const maxY=Math.max(0,(h-r.height)/2)+r.height*.35;
+
+ panX=Math.max(-maxX,Math.min(maxX,panX));
+ panY=Math.max(-maxY,Math.min(maxY,panY));
+}
+
+/* Zoom around a point inside card-area. */
+function setZoom(next,cx,cy){
+ const area=$("card-area"),r=area.getBoundingClientRect();
+ next=Math.max(MIN_ZOOM,Math.min(MAX_ZOOM,next));
+
+ if(cx==null)cx=r.left+r.width/2;
+ if(cy==null)cy=r.top+r.height/2;
+
+ const oldScale=fitScale*zoom,newScale=fitScale*next;
+ const px=cx-(r.left+r.width/2)-panX;
+ const py=cy-(r.top+r.height/2)-panY;
+
+ if(oldScale>0){
+  const ratio=newScale/oldScale;
+  panX-=px*(ratio-1);
+  panY-=py*(ratio-1);
+ }
+
+ zoom=next;
+ if(zoom<=1.001){zoom=1;panX=panY=0}
+ clampPan();applyView();
+}
+
+function zoomBy(amount,x,y){setZoom(zoom+amount,x,y)}
+function resetZoom(){zoom=1;panX=panY=0;applyView()}
+
+/* =========================
+   DATA
+========================= */
 async function loadCards(){
  try{
   const r=await fetch(CARD_FILE);
@@ -322,7 +353,7 @@ async function loadCards(){
   activeId=db.cards?.[q]?q:db.cards?.[db.default_card]?db.default_card:cardIds[0];
   filteredIds=[...cardIds];
   renderLibrary();selectCard(activeId,false);
-  requestAnimationFrame(fitCard);
+  requestAnimationFrame(()=>fitCard(true));
  }catch(e){
   console.error(e);
   document.querySelector(".app").innerHTML=`<div class="error"><h2>Unable to load cards</h2><div>${esc(e.message)}</div></div>`;
@@ -360,12 +391,14 @@ function selectCard(id,url=true){
   const u=new URL(location.href);
   u.searchParams.set("id",id);history.replaceState(null,"",u);
  }
- closeSidebar();
+
+ resetZoom();closeSidebar();
 }
 
 function renderCard(c){
  const r=getRarity(c.rarity),card=$("card");
- card.className=`tcg-card card-${r}`;card.dataset.sample=String(c.sample??false);
+ card.className=`tcg-card card-${r}`;
+ card.dataset.sample=String(c.sample??false);
 
  $("card-art").src=c.art||"";
  $("card-art").alt=strip(c.name||"Card");
@@ -375,8 +408,12 @@ function renderCard(c){
  setStat("attack",c.stats?.attack??c.stats?.damage??0,c.labels?.attack||c.labels?.damage||"ATK");
  setStat("intelligence",c.stats?.intelligence??0,c.labels?.intelligence||"INT");
 
- const role=$("card-role");role.src=c.role||"";role.style.display=c.role?"block":"none";
- const bottom=$("bottom-panel");removePrefix(bottom,"name-");
+ const role=$("card-role");
+ role.src=c.role||"";
+ role.style.display=c.role?"block":"none";
+
+ const bottom=$("bottom-panel");
+ removePrefix(bottom,"name-");
  if(["c","r","sr","ssr","ur"].includes(r))bottom.classList.add(`name-${r}`);
 
  $("name").innerHTML=normalizeClasses(c.name||"");
@@ -384,9 +421,11 @@ function renderCard(c){
  $("card-id").textContent=c.card_number||"";
  $("category").innerHTML=normalizeClasses(c.category||"");
 
- const rb=$("rarity");rb.className=`card-rarity ${r}`;rb.textContent=c.rarity||"";
- renderAdditional(c.additional||[]);
+ const rb=$("rarity");
+ rb.className=`card-rarity ${r}`;
+ rb.textContent=c.rarity||"";
 
+ renderAdditional(c.additional||[]);
  $("caption-name").textContent=strip(c.name||"");
  $("caption-detail").textContent=` — ${c.card_number||""} · ${c.rarity||""}`;
  document.title=`${strip(c.name||"Card")} | Mystical Legends TCG`;
@@ -394,7 +433,8 @@ function renderCard(c){
 
 function setStat(k,v,l){
  v=Math.max(0,Number(v)||0);
- $(k).textContent=v;$(`${k}-label`).textContent=l;
+ $(k).textContent=v;
+ $(`${k}-label`).textContent=l;
 
  const meter=$(`${k}-meter`),stat=$(`${k}-stat`);
  const fill=n=>`${Math.min(10,Math.max(0,v-n))*9.5}%`;
@@ -406,7 +446,6 @@ function setStat(k,v,l){
 
  const layer=v>30?4:v>20?3:v>10?2:1;
  stat.dataset.layer=layer;
- $(`${k}-level`).textContent=v>10?`TIER ${layer}`:"";
 }
 
 function normalizeClasses(h=""){
@@ -436,12 +475,15 @@ function getRarity(v=""){
  return["c","un","r","sr","ssr","ur","lr"].includes(v)?v:"c";
 }
 
-function removePrefix(el,p){[...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c))}
+function removePrefix(el,p){
+ [...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c));
+}
 
 function updateNavigation(){
  const i=cardIds.indexOf(activeId);
  $("current-position").textContent=`Card ${i+1} / ${cardIds.length}`;
- $("prev-btn").disabled=i<=0;$("next-btn").disabled=i>=cardIds.length-1;
+ $("prev-btn").disabled=i<=0;
+ $("next-btn").disabled=i>=cardIds.length-1;
 }
 
 function navigate(d){
@@ -449,8 +491,15 @@ function navigate(d){
  if(i>=0&&i<cardIds.length)selectCard(cardIds[i]);
 }
 
-function openSidebar(){$("sidebar").classList.add("open");$("overlay").classList.add("show")}
-function closeSidebar(){$("sidebar").classList.remove("open");$("overlay").classList.remove("show")}
+function openSidebar(){
+ $("sidebar").classList.add("open");
+ $("overlay").classList.add("show");
+}
+
+function closeSidebar(){
+ $("sidebar").classList.remove("open");
+ $("overlay").classList.remove("show");
+}
 
 function strip(h){
  const e=document.createElement("div");
@@ -462,12 +511,167 @@ function esc(v){
  return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
 
-/* Prevent normal page zoom shortcuts. */
-function zoomKey(e){
- if(!(e.ctrlKey||e.metaKey))return false;
- return["=","+","-","_","0","Add","Subtract"].includes(e.key)||["NumpadAdd","NumpadSubtract"].includes(e.code);
-}
+/* =========================
+   DESKTOP ZOOM + DRAG
+========================= */
+const area=$("card-area");
+let mouseDown=false,lastMouseX=0,lastMouseY=0;
 
+area.addEventListener("mousedown",e=>{
+ if(e.button!==0||zoom<=1)return;
+ mouseDown=true;
+ lastMouseX=e.clientX;lastMouseY=e.clientY;
+ area.classList.add("dragging");
+ e.preventDefault();
+});
+
+window.addEventListener("mousemove",e=>{
+ if(!mouseDown)return;
+ panX+=e.clientX-lastMouseX;
+ panY+=e.clientY-lastMouseY;
+ lastMouseX=e.clientX;lastMouseY=e.clientY;
+ clampPan();applyView();
+});
+
+window.addEventListener("mouseup",()=>{
+ mouseDown=false;
+ area.classList.remove("dragging");
+});
+
+/* Ctrl/Cmd + wheel = card zoom. */
+document.addEventListener("wheel",e=>{
+ if(e.ctrlKey||e.metaKey){
+  e.preventDefault();
+  zoomBy(e.deltaY<0?ZOOM_STEP:-ZOOM_STEP,e.clientX,e.clientY);
+  return;
+ }
+
+ if(!e.target.closest(".card-list"))e.preventDefault();
+},{passive:false});
+
+/* Ctrl/Cmd + + - 0 = card zoom, not browser zoom. */
+document.addEventListener("keydown",e=>{
+ const mod=e.ctrlKey||e.metaKey;
+
+ if(mod&&(e.key==="+"||e.key==="="||e.code==="NumpadAdd")){
+  e.preventDefault();zoomBy(ZOOM_STEP);return;
+ }
+
+ if(mod&&(e.key==="-"||e.key==="_"||e.code==="NumpadSubtract")){
+  e.preventDefault();zoomBy(-ZOOM_STEP);return;
+ }
+
+ if(mod&&e.key==="0"){
+  e.preventDefault();resetZoom();return;
+ }
+
+ if(document.activeElement===$("card-search"))return;
+ if(e.key==="ArrowLeft")navigate(-1);
+ if(e.key==="ArrowRight")navigate(1);
+ if(e.key==="Escape")closeSidebar();
+},{passive:false});
+
+/* =========================
+   MOBILE PINCH + DRAG
+========================= */
+let touchMode="",touchX=0,touchY=0;
+let pinchDist=0,pinchZoom=1,pinchCenterX=0,pinchCenterY=0;
+
+const dist=(a,b)=>Math.hypot(b.clientX-a.clientX,b.clientY-a.clientY);
+const center=(a,b)=>({x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2});
+
+area.addEventListener("touchstart",e=>{
+ if(e.touches.length===2){
+  e.preventDefault();
+  touchMode="pinch";
+
+  const a=e.touches[0],b=e.touches[1],c=center(a,b);
+  pinchDist=dist(a,b);
+  pinchZoom=zoom;
+  pinchCenterX=c.x;
+  pinchCenterY=c.y;
+  return;
+ }
+
+ if(e.touches.length===1){
+  touchMode="drag";
+  touchX=e.touches[0].clientX;
+  touchY=e.touches[0].clientY;
+ }
+},{passive:false});
+
+area.addEventListener("touchmove",e=>{
+ if(e.touches.length===2){
+  e.preventDefault();
+
+  const a=e.touches[0],b=e.touches[1],c=center(a,b);
+  const d=dist(a,b);
+
+  if(touchMode!=="pinch"){
+   touchMode="pinch";
+   pinchDist=d;
+   pinchZoom=zoom;
+   pinchCenterX=c.x;
+   pinchCenterY=c.y;
+   return;
+  }
+
+  /* Move with the pinch center as well. */
+  panX+=c.x-pinchCenterX;
+  panY+=c.y-pinchCenterY;
+  pinchCenterX=c.x;
+  pinchCenterY=c.y;
+
+  const next=pinchZoom*(d/Math.max(1,pinchDist));
+  setZoom(next,c.x,c.y);
+  return;
+ }
+
+ if(e.touches.length===1){
+  e.preventDefault();
+
+  const t=e.touches[0];
+
+  if(touchMode!=="drag"){
+   touchMode="drag";
+   touchX=t.clientX;
+   touchY=t.clientY;
+   return;
+  }
+
+  /* Dragging only moves the card once enlarged. */
+  if(zoom>1){
+   panX+=t.clientX-touchX;
+   panY+=t.clientY-touchY;
+   clampPan();applyView();
+  }
+
+  touchX=t.clientX;
+  touchY=t.clientY;
+ }
+},{passive:false});
+
+area.addEventListener("touchend",e=>{
+ if(e.touches.length===1){
+  touchMode="drag";
+  touchX=e.touches[0].clientX;
+  touchY=e.touches[0].clientY;
+ }else if(!e.touches.length){
+  touchMode="";
+ }
+},{passive:false});
+
+area.addEventListener("touchcancel",()=>touchMode="",{passive:false});
+
+/* Prevent Safari native gesture zoom.
+   Our own pinch system above handles card zoom. */
+["gesturestart","gesturechange","gestureend"].forEach(type=>
+ document.addEventListener(type,e=>e.preventDefault(),{passive:false})
+);
+
+/* =========================
+   UI
+========================= */
 $("copyright-year").textContent=new Date().getFullYear();
 $("card-search").addEventListener("input",renderLibrary);
 $("prev-btn").onclick=()=>navigate(-1);
@@ -475,44 +679,8 @@ $("next-btn").onclick=()=>navigate(1);
 $("menu-btn").onclick=openSidebar;
 $("overlay").onclick=closeSidebar;
 
-window.addEventListener("resize",fitCard,{passive:true});
-window.visualViewport?.addEventListener("resize",fitCard,{passive:true});
-
-document.addEventListener("keydown",e=>{
- if(zoomKey(e)){e.preventDefault();return}
- if(document.activeElement===$("card-search"))return;
- if(e.key==="ArrowLeft")navigate(-1);
- if(e.key==="ArrowRight")navigate(1);
- if(e.key==="Escape")closeSidebar();
-},{passive:false});
-
-document.addEventListener("wheel",e=>{
- if(e.ctrlKey||e.metaKey){e.preventDefault();return}
- if(!e.target.closest(".card-list"))e.preventDefault();
-},{passive:false});
-
-["gesturestart","gesturechange","gestureend"].forEach(type=>
- document.addEventListener(type,e=>e.preventDefault(),{passive:false})
-);
-
-let touchStartY=0;
-document.addEventListener("touchstart",e=>{
- if(e.touches.length>1){e.preventDefault();return}
- touchStartY=e.touches[0]?.clientY||0;
-},{passive:false});
-
-document.addEventListener("touchmove",e=>{
- if(e.touches.length>1){e.preventDefault();return}
-
- const list=e.target.closest(".card-list");
- if(!list){e.preventDefault();return}
-
- const y=e.touches[0].clientY,dy=y-touchStartY;
- const top=list.scrollTop<=0;
- const bottom=Math.ceil(list.scrollTop+list.clientHeight)>=list.scrollHeight;
-
- if((top&&dy>0)||(bottom&&dy<0))e.preventDefault();
-},{passive:false});
+window.addEventListener("resize",()=>fitCard(),{passive:true});
+window.visualViewport?.addEventListener("resize",()=>fitCard(),{passive:true});
 
 loadCards();
 </script>
