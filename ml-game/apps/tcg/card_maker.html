@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <link rel="icon" href="/images/website/favicon.png" type="image/png">
 <title>MLG Profile Card Collection</title>
 <link rel="stylesheet" href="/css/mlg.css">
@@ -10,24 +10,24 @@
 <style>
 *{box-sizing:border-box}
 :root{--gold:#d6aa45;--gold2:#f0ca69;--text:#f7edd9;--muted:#9e9488;--line:#d6aa453d;background:#190707}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;color:var(--text);font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 55% 0,#402026,#1a1316 31%,#0b0a0c 75%,#080809)}
-body{position:fixed;inset:0;touch-action:manipulation}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;text-size-adjust:100%;color:var(--text);font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at 55% 0,#402026,#1a1316 31%,#0b0a0c 75%,#080809)}
+body{position:fixed;inset:0;width:100%;height:100%;touch-action:none}
 button,input{font:inherit}
 
 /* APP */
-.app{position:fixed;inset:0;height:100dvh;display:grid;grid-template-columns:290px minmax(0,1fr);overflow:hidden}
+.app{position:fixed;inset:0;width:100%;height:100dvh;display:grid;grid-template-columns:290px minmax(0,1fr);overflow:hidden}
 .sidebar{min-width:0;height:100%;display:flex;flex-direction:column;overflow:hidden;z-index:50;background:linear-gradient(#261a1dfb,#0e0d0ffe);border-right:1px solid var(--line);box-shadow:14px 0 38px #0007}
 .side-head{flex:0 0 auto;padding:21px 17px 15px;border-bottom:1px solid var(--line)}
 .brand{font:900 1.22rem Georgia,serif;color:#f2d18a;letter-spacing:.025em}
 .brand small{display:block;margin-top:5px;color:var(--muted);font:700 .63rem Inter,Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase}
 .search-wrap{position:relative;margin-top:15px}
 .search-wrap:before{content:"⌕";position:absolute;left:11px;top:50%;transform:translateY(-53%);color:#a98c59;font-size:1.3rem}
-#card-search{width:100%;padding:10px 11px 10px 34px;outline:0;border:1px solid var(--line);border-radius:7px;background:#100e10;color:#eee}
+#card-search{width:100%;padding:10px 11px 10px 34px;outline:0;border:1px solid var(--line);border-radius:7px;background:#100e10;color:#eee;font-size:16px}
 #card-search:focus{border-color:#b89049;box-shadow:0 0 0 2px #d6aa451f}
 .library-meta{display:flex;justify-content:space-between;margin-top:10px;color:#968c80;font-size:.65rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
 
 /* LIBRARY */
-.card-list{--item-h:54px;--gap:5px;flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--gap);padding:9px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y pinch-zoom;scrollbar-width:thin;scrollbar-color:#594438 transparent}
+.card-list{--item-h:54px;--gap:5px;flex:1;min-height:0;width:100%;display:flex;flex-direction:column;gap:var(--gap);padding:9px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:#594438 transparent}
 .card-list::-webkit-scrollbar{width:6px}
 .card-list::-webkit-scrollbar-thumb{background:#594438;border-radius:20px}
 .card-list::-webkit-scrollbar-thumb:hover{background:#806248}
@@ -38,10 +38,10 @@ button,input{font:inherit}
 .list-name{overflow:hidden;color:#eee5d9;font:700 .8rem Georgia,serif;text-overflow:ellipsis;white-space:nowrap}
 .list-meta{margin-top:4px;overflow:hidden;color:#91877a;font-size:.57rem;font-weight:600;text-overflow:ellipsis;white-space:nowrap}
 .list-rarity{flex:0 0 auto;min-width:32px;padding:3px 5px;border:1px solid #44392a;border-radius:3px;background:#0b0a0c;font-size:.55rem;font-weight:1000;text-align:center}
-.no-results{padding:30px 10px;color:#81786e;text-align:center;font-size:.76rem}
+.no-results{flex:0 0 auto;padding:30px 10px;color:#81786e;text-align:center;font-size:.76rem}
 
 /* MAIN */
-.main{position:relative;min-width:0;height:100%;overflow:hidden;touch-action:pinch-zoom}
+.main{position:relative;min-width:0;height:100%;overflow:hidden;touch-action:none}
 .main:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.025;background-image:linear-gradient(45deg,#fff 1px,transparent 1px),linear-gradient(-45deg,#fff 1px,transparent 1px);background-size:20px 20px}
 .stage{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 24px;overflow:hidden}
 .topbar{flex:0 0 auto;width:min(500px,100%);display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;color:#aaa095;font-size:.69rem}
@@ -51,17 +51,29 @@ button,input{font:inherit}
 .icon-btn:disabled{opacity:.25;cursor:default}
 .mobile-menu{display:none}
 
-/* CARD
-   One design for desktop + mobile.
-   Only the complete card scales. Internal layout never changes. */
+/* FIXED CARD VIEWPORT
+   Card always renders internally at desktop size: 430 x 602.
+   Only this outer viewport changes size. */
+.card-viewport{
+ --card-scale:1;
+ position:relative;
+ width:430px;
+ height:602px;
+ flex:0 0 auto;
+}
+
 .card-shell{
- position:relative;width:min(430px,calc((100dvh - 105px) * 5 / 7),calc(100% - 30px));
- max-height:calc(100dvh - 105px);flex:0 1 auto;
+ position:absolute;
+ left:0;top:0;
+ width:430px;height:602px;
+ transform:scale(var(--card-scale));
+ transform-origin:top left;
  filter:drop-shadow(0 20px 26px #0009)
 }
+
 .card-shell:before{content:"";position:absolute;inset:-8px;z-index:-2;border-radius:28px;background:linear-gradient(145deg,#65615e,#181617 24%,#a7894c 48%,#191718 73%,#595450);box-shadow:0 0 0 2px #060607,0 0 30px #d2a54a21}
 .card-shell:after{content:"";position:absolute;inset:-4px;z-index:-1;border:1px solid #ffffff29;border-radius:25px;pointer-events:none}
-.tcg-card{position:relative;width:100%;aspect-ratio:5/7;overflow:hidden;isolation:isolate;border:2px solid #ffffff29;border-radius:21px;background:#111;box-shadow:inset 0 0 0 2px #0008,inset 0 0 30px #0006}
+.tcg-card{position:relative;width:430px;height:602px;overflow:hidden;isolation:isolate;border:2px solid #ffffff29;border-radius:21px;background:#111;box-shadow:inset 0 0 0 2px #0008,inset 0 0 30px #0006}
 .card-art{position:absolute;inset:0;z-index:-8;width:100%;height:100%;object-fit:cover;filter:blur(.5px)}
 .art-shade{position:absolute;inset:0;z-index:-7;pointer-events:none;background:linear-gradient(#0003,transparent 23%,transparent 59%,#0000001a 72%,#040304a6),linear-gradient(90deg,#0008,transparent 23% 87%,#0003)}
 .card-pattern{position:absolute;inset:0;z-index:-6;opacity:.09;pointer-events:none;background:repeating-linear-gradient(127deg,transparent 0 36px,#fff3 37px,transparent 38px 74px)}
@@ -154,42 +166,26 @@ button,input{font:inherit}
 .error{margin:auto;padding:25px;border:1px solid #834249;border-radius:9px;background:#32191d;text-align:center}
 .overlay{display:none}
 
-/* MOBILE: ONLY THE PAGE UI CHANGES.
-   NOTHING INSIDE THE CARD IS OVERRIDDEN. */
+/* MOBILE
+   No card element receives mobile-specific sizes.
+   The complete 430x602 desktop card is scaled uniformly. */
 @media(max-width:800px){
- .app{display:block;height:100dvh}
+ .app{display:block;width:100%;height:100dvh}
  .main{width:100%;height:100dvh}
- .sidebar{
-  position:fixed!important;inset:0 auto 0 0!important;width:min(310px,86vw);height:100dvh;
-  z-index:2147483647!important;transform:translateX(-105%);transition:transform .24s ease;
-  box-shadow:18px 0 40px #000c
- }
+ .sidebar{position:fixed!important;inset:0 auto 0 0!important;width:min(310px,86vw);height:100dvh;z-index:2147483647!important;transform:translateX(-105%);transition:transform .24s ease;box-shadow:18px 0 40px #000c}
  .sidebar.open{transform:translateX(0)!important}
- .overlay{
-  position:fixed!important;inset:0!important;z-index:2147483646!important;display:block;
-  pointer-events:none;background:#000a;opacity:0;transition:opacity .2s
- }
+ .overlay{position:fixed!important;inset:0!important;z-index:2147483646!important;display:block;pointer-events:none;background:#000a;opacity:0;transition:opacity .2s}
  .overlay.show{pointer-events:auto;opacity:1}
  .mobile-menu{display:block}
  .stage{padding:12px 14px}
- .topbar{margin-bottom:12px}
- .card-shell{width:min(430px,calc(100vw - 44px),calc((100dvh - 105px) * 5 / 7));max-height:calc(100dvh - 105px)}
+ .topbar{margin-bottom:10px}
+ .card-caption{margin-top:10px}
 }
 
-/* Sidebar only — no card modifications */
-@media(max-width:460px){
- .card-list{--item-h:52px}
- .card-item{padding:7px 8px 7px 10px}
- .list-name{font-size:.76rem}
- .list-meta{font-size:.54rem}
-}
-
-/* Same card sizing formula on short screens */
-@media(max-height:720px){
- .stage{padding:10px 14px}
- .topbar{margin-bottom:8px}
- .card-caption{margin-top:8px}
- .card-shell{width:min(430px,calc(100% - 30px),calc((100dvh - 80px) * 5 / 7));max-height:calc(100dvh - 80px)}
+@media(max-height:650px){
+ .stage{padding:7px 12px}
+ .topbar{margin-bottom:7px}
+ .card-caption{margin-top:7px}
 }
 </style>
 </head>
@@ -220,77 +216,71 @@ button,input{font:inherit}
   </div>
  </div>
 
- <div class="card-shell">
-  <article class="tcg-card" id="card">
-   <img class="card-art" id="card-art" alt="">
-   <div class="art-shade"></div>
-   <div class="card-pattern"></div>
-   <div class="inner-frame"></div>
-   <div class="corner tl"></div>
-   <div class="corner br"></div>
+ <div class="card-viewport" id="card-viewport">
+  <div class="card-shell" id="card-shell">
+   <article class="tcg-card" id="card">
+    <img class="card-art" id="card-art" alt="">
+    <div class="art-shade"></div>
+    <div class="card-pattern"></div>
+    <div class="inner-frame"></div>
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
 
-   <div class="stats">
-    <div class="stat hp" id="hp-stat">
-     <div class="stat-meter" id="hp-meter">
-      <i class="meter-fill base"></i>
-      <i class="meter-fill layer2"></i>
-      <i class="meter-fill layer3"></i>
-      <i class="meter-fill layer4"></i>
-      <i class="meter-lines"></i>
+    <div class="stats">
+     <div class="stat hp" id="hp-stat">
+      <div class="stat-meter" id="hp-meter">
+       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+       <i class="meter-lines"></i>
+      </div>
+      <div class="stat-text">
+       <span class="stat-label" id="hp-label">HP</span>
+       <span class="stat-value" id="hp">0</span>
+       <span class="stat-level" id="hp-level"></span>
+      </div>
      </div>
-     <div class="stat-text">
-      <span class="stat-label" id="hp-label">HP</span>
-      <span class="stat-value" id="hp">0</span>
-      <span class="stat-level" id="hp-level"></span>
-     </div>
-    </div>
 
-    <div class="stat attack" id="attack-stat">
-     <div class="stat-meter" id="attack-meter">
-      <i class="meter-fill base"></i>
-      <i class="meter-fill layer2"></i>
-      <i class="meter-fill layer3"></i>
-      <i class="meter-fill layer4"></i>
-      <i class="meter-lines"></i>
+     <div class="stat attack" id="attack-stat">
+      <div class="stat-meter" id="attack-meter">
+       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+       <i class="meter-lines"></i>
+      </div>
+      <div class="stat-text">
+       <span class="stat-label" id="attack-label">ATK</span>
+       <span class="stat-value" id="attack">0</span>
+       <span class="stat-level" id="attack-level"></span>
+      </div>
      </div>
-     <div class="stat-text">
-      <span class="stat-label" id="attack-label">ATK</span>
-      <span class="stat-value" id="attack">0</span>
-      <span class="stat-level" id="attack-level"></span>
-     </div>
-    </div>
 
-    <div class="stat intelligence" id="intelligence-stat">
-     <div class="stat-meter" id="intelligence-meter">
-      <i class="meter-fill base"></i>
-      <i class="meter-fill layer2"></i>
-      <i class="meter-fill layer3"></i>
-      <i class="meter-fill layer4"></i>
-      <i class="meter-lines"></i>
-     </div>
-     <div class="stat-text">
-      <span class="stat-label" id="intelligence-label">INT</span>
-      <span class="stat-value" id="intelligence">0</span>
-      <span class="stat-level" id="intelligence-level"></span>
+     <div class="stat intelligence" id="intelligence-stat">
+      <div class="stat-meter" id="intelligence-meter">
+       <i class="meter-fill base"></i><i class="meter-fill layer2"></i>
+       <i class="meter-fill layer3"></i><i class="meter-fill layer4"></i>
+       <i class="meter-lines"></i>
+      </div>
+      <div class="stat-text">
+       <span class="stat-label" id="intelligence-label">INT</span>
+       <span class="stat-value" id="intelligence">0</span>
+       <span class="stat-level" id="intelligence-level"></span>
+      </div>
      </div>
     </div>
-   </div>
 
-   <img class="card-role" id="card-role" alt="Role">
-   <div class="card-info" id="card-info"></div>
+    <img class="card-role" id="card-role" alt="Role">
+    <div class="card-info" id="card-info"></div>
 
-   <div class="bottom-panel" id="bottom-panel"></div>
-   <div class="card-category" id="category"></div>
-   <div class="card-name" id="name"></div>
-   <div class="card-subtype" id="subtype"></div>
-   <div class="card-id" id="card-id"></div>
-   <div class="card-rarity" id="rarity"></div>
+    <div class="bottom-panel" id="bottom-panel"></div>
+    <div class="card-category" id="category"></div>
+    <div class="card-name" id="name"></div>
+    <div class="card-subtype" id="subtype"></div>
+    <div class="card-id" id="card-id"></div>
+    <div class="card-rarity" id="rarity"></div>
 
-   <div class="card-legal">
-    Mystical Legends © <span id="copyright-year"></span> · All Rights Reserved
-   </div>
-   <div class="sample">SAMPLE</div>
-  </article>
+    <div class="card-legal">Mystical Legends © <span id="copyright-year"></span> · All Rights Reserved</div>
+    <div class="sample">SAMPLE</div>
+   </article>
+  </div>
  </div>
 
  <div class="card-caption">
@@ -304,7 +294,22 @@ button,input{font:inherit}
 
 <script>
 const CARD_FILE="tcg-cards.json",$=id=>document.getElementById(id);
+const CARD_W=430,CARD_H=602;
 let db={},cardIds=[],filteredIds=[],activeId="";
+
+/* Scale the WHOLE desktop card, never its individual contents. */
+function fitCard(){
+ const stage=document.querySelector(".stage"),top=document.querySelector(".topbar"),cap=document.querySelector(".card-caption");
+ const mobile=innerWidth<=800,pad=mobile?28:48,gap=mobile?20:25;
+ const maxW=Math.max(1,stage.clientWidth-pad);
+ const maxH=Math.max(1,stage.clientHeight-top.offsetHeight-cap.offsetHeight-gap);
+ const scale=Math.min(1,maxW/CARD_W,maxH/CARD_H);
+
+ const vp=$("card-viewport");
+ vp.style.width=`${CARD_W*scale}px`;
+ vp.style.height=`${CARD_H*scale}px`;
+ vp.style.setProperty("--card-scale",scale);
+}
 
 async function loadCards(){
  try{
@@ -315,7 +320,9 @@ async function loadCards(){
 
   const q=new URLSearchParams(location.search).get("id");
   activeId=db.cards?.[q]?q:db.cards?.[db.default_card]?db.default_card:cardIds[0];
-  filteredIds=[...cardIds];renderLibrary();selectCard(activeId,false);
+  filteredIds=[...cardIds];
+  renderLibrary();selectCard(activeId,false);
+  requestAnimationFrame(fitCard);
  }catch(e){
   console.error(e);
   document.querySelector(".app").innerHTML=`<div class="error"><h2>Unable to load cards</h2><div>${esc(e.message)}</div></div>`;
@@ -324,15 +331,12 @@ async function loadCards(){
 
 function renderLibrary(){
  const q=$("card-search").value.trim().toLowerCase();
-
  filteredIds=cardIds.filter(id=>{
   const c=db.cards[id];
-  return[id,c.name,c.card_number,c.rarity,c.category,strip(normalizeClasses(c.subtype||"")),c.role]
-   .join(" ").toLowerCase().includes(q);
+  return[id,c.name,c.card_number,c.rarity,c.category,strip(normalizeClasses(c.subtype||"")),c.role].join(" ").toLowerCase().includes(q);
  });
 
  $("card-count").textContent=`${filteredIds.length} card${filteredIds.length===1?"":"s"}`;
-
  $("card-list").innerHTML=filteredIds.length?filteredIds.map(id=>{
   const c=db.cards[id],r=getRarity(c.rarity);
   return `<button class="card-item ${id===activeId?"active":""}" data-id="${esc(id)}">
@@ -349,23 +353,19 @@ function renderLibrary(){
 
 function selectCard(id,url=true){
  const c=db.cards?.[id];if(!c)return;
-
  activeId=id;renderCard(c);renderLibrary();updateNavigation();
  document.querySelector(".card-item.active")?.scrollIntoView({block:"nearest",behavior:"auto"});
 
  if(url){
   const u=new URL(location.href);
-  u.searchParams.set("id",id);
-  history.replaceState(null,"",u);
+  u.searchParams.set("id",id);history.replaceState(null,"",u);
  }
-
  closeSidebar();
 }
 
 function renderCard(c){
  const r=getRarity(c.rarity),card=$("card");
- card.className=`tcg-card card-${r}`;
- card.dataset.sample=String(c.sample??false);
+ card.className=`tcg-card card-${r}`;card.dataset.sample=String(c.sample??false);
 
  $("card-art").src=c.art||"";
  $("card-art").alt=strip(c.name||"Card");
@@ -375,12 +375,8 @@ function renderCard(c){
  setStat("attack",c.stats?.attack??c.stats?.damage??0,c.labels?.attack||c.labels?.damage||"ATK");
  setStat("intelligence",c.stats?.intelligence??0,c.labels?.intelligence||"INT");
 
- const role=$("card-role");
- role.src=c.role||"";
- role.style.display=c.role?"block":"none";
-
- const bottom=$("bottom-panel");
- removePrefix(bottom,"name-");
+ const role=$("card-role");role.src=c.role||"";role.style.display=c.role?"block":"none";
+ const bottom=$("bottom-panel");removePrefix(bottom,"name-");
  if(["c","r","sr","ssr","ur"].includes(r))bottom.classList.add(`name-${r}`);
 
  $("name").innerHTML=normalizeClasses(c.name||"");
@@ -388,11 +384,9 @@ function renderCard(c){
  $("card-id").textContent=c.card_number||"";
  $("category").innerHTML=normalizeClasses(c.category||"");
 
- const rb=$("rarity");
- rb.className=`card-rarity ${r}`;
- rb.textContent=c.rarity||"";
-
+ const rb=$("rarity");rb.className=`card-rarity ${r}`;rb.textContent=c.rarity||"";
  renderAdditional(c.additional||[]);
+
  $("caption-name").textContent=strip(c.name||"");
  $("caption-detail").textContent=` — ${c.card_number||""} · ${c.rarity||""}`;
  document.title=`${strip(c.name||"Card")} | Mystical Legends TCG`;
@@ -400,8 +394,7 @@ function renderCard(c){
 
 function setStat(k,v,l){
  v=Math.max(0,Number(v)||0);
- $(k).textContent=v;
- $(`${k}-label`).textContent=l;
+ $(k).textContent=v;$(`${k}-label`).textContent=l;
 
  const meter=$(`${k}-meter`),stat=$(`${k}-stat`);
  const fill=n=>`${Math.min(10,Math.max(0,v-n))*9.5}%`;
@@ -417,8 +410,7 @@ function setStat(k,v,l){
 }
 
 function normalizeClasses(h=""){
- return String(h).replace(/class=(["'])(.*?)\1/gi,
-  (_,q,c)=>`class=${q}${c.trim().split(/[;\s]+/).filter(Boolean).join(" ")}${q}`);
+ return String(h).replace(/class=(["'])(.*?)\1/gi,(_,q,c)=>`class=${q}${c.trim().split(/[;\s]+/).filter(Boolean).join(" ")}${q}`);
 }
 
 function renderAdditional(a){
@@ -430,10 +422,8 @@ function renderAdditional(a){
 
 function buildStyle(s){
  const r=[];
- ["fontSize","paddingTop","paddingBottom","paddingLeft","paddingRight","marginTop","marginBottom","marginLeft","marginRight","letterSpacing"]
-  .forEach(k=>addSize(r,cssName(k),s[k]));
- ["fontWeight","fontStyle","textAlign","lineHeight","color","opacity"]
-  .forEach(k=>addRaw(r,cssName(k),s[k]));
+ ["fontSize","paddingTop","paddingBottom","paddingLeft","paddingRight","marginTop","marginBottom","marginLeft","marginRight","letterSpacing"].forEach(k=>addSize(r,cssName(k),s[k]));
+ ["fontWeight","fontStyle","textAlign","lineHeight","color","opacity"].forEach(k=>addRaw(r,cssName(k),s[k]));
  return r.join(";");
 }
 
@@ -446,15 +436,12 @@ function getRarity(v=""){
  return["c","un","r","sr","ssr","ur","lr"].includes(v)?v:"c";
 }
 
-function removePrefix(el,p){
- [...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c));
-}
+function removePrefix(el,p){[...el.classList].forEach(c=>c.startsWith(p)&&el.classList.remove(c))}
 
 function updateNavigation(){
  const i=cardIds.indexOf(activeId);
  $("current-position").textContent=`Card ${i+1} / ${cardIds.length}`;
- $("prev-btn").disabled=i<=0;
- $("next-btn").disabled=i>=cardIds.length-1;
+ $("prev-btn").disabled=i<=0;$("next-btn").disabled=i>=cardIds.length-1;
 }
 
 function navigate(d){
@@ -462,15 +449,8 @@ function navigate(d){
  if(i>=0&&i<cardIds.length)selectCard(cardIds[i]);
 }
 
-function openSidebar(){
- $("sidebar").classList.add("open");
- $("overlay").classList.add("show");
-}
-
-function closeSidebar(){
- $("sidebar").classList.remove("open");
- $("overlay").classList.remove("show");
-}
+function openSidebar(){$("sidebar").classList.add("open");$("overlay").classList.add("show")}
+function closeSidebar(){$("sidebar").classList.remove("open");$("overlay").classList.remove("show")}
 
 function strip(h){
  const e=document.createElement("div");
@@ -479,8 +459,13 @@ function strip(h){
 }
 
 function esc(v){
- return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;")
-  .replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+ return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+/* Prevent normal page zoom shortcuts. */
+function zoomKey(e){
+ if(!(e.ctrlKey||e.metaKey))return false;
+ return["=","+","-","_","0","Add","Subtract"].includes(e.key)||["NumpadAdd","NumpadSubtract"].includes(e.code);
 }
 
 $("copyright-year").textContent=new Date().getFullYear();
@@ -490,33 +475,41 @@ $("next-btn").onclick=()=>navigate(1);
 $("menu-btn").onclick=openSidebar;
 $("overlay").onclick=closeSidebar;
 
+window.addEventListener("resize",fitCard,{passive:true});
+window.visualViewport?.addEventListener("resize",fitCard,{passive:true});
+
 document.addEventListener("keydown",e=>{
+ if(zoomKey(e)){e.preventDefault();return}
  if(document.activeElement===$("card-search"))return;
  if(e.key==="ArrowLeft")navigate(-1);
  if(e.key==="ArrowRight")navigate(1);
  if(e.key==="Escape")closeSidebar();
-});
-
-document.addEventListener("wheel",e=>{
- if(!e.target.closest(".card-list")&&!e.ctrlKey)e.preventDefault();
 },{passive:false});
 
-let touchStartY=0;
+document.addEventListener("wheel",e=>{
+ if(e.ctrlKey||e.metaKey){e.preventDefault();return}
+ if(!e.target.closest(".card-list"))e.preventDefault();
+},{passive:false});
 
+["gesturestart","gesturechange","gestureend"].forEach(type=>
+ document.addEventListener(type,e=>e.preventDefault(),{passive:false})
+);
+
+let touchStartY=0;
 document.addEventListener("touchstart",e=>{
- if(e.touches.length===1)touchStartY=e.touches[0].clientY;
-},{passive:true});
+ if(e.touches.length>1){e.preventDefault();return}
+ touchStartY=e.touches[0]?.clientY||0;
+},{passive:false});
 
 document.addEventListener("touchmove",e=>{
- if(e.touches.length>1)return;
+ if(e.touches.length>1){e.preventDefault();return}
 
  const list=e.target.closest(".card-list");
  if(!list){e.preventDefault();return}
 
- const y=e.touches[0].clientY,
-  dy=y-touchStartY,
-  top=list.scrollTop<=0,
-  bottom=Math.ceil(list.scrollTop+list.clientHeight)>=list.scrollHeight;
+ const y=e.touches[0].clientY,dy=y-touchStartY;
+ const top=list.scrollTop<=0;
+ const bottom=Math.ceil(list.scrollTop+list.clientHeight)>=list.scrollHeight;
 
  if((top&&dy>0)||(bottom&&dy<0))e.preventDefault();
 },{passive:false});
