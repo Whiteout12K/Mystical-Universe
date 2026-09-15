@@ -1,58 +1,4 @@
 /* ================================
-   Feature Image, game-hub.html
-================================ */
-
-#learnMoreBtn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:max-content;
-    min-width:180px;
-    max-width:100%;
-    margin:34px auto 0;
-    padding:12px 28px;
-    border:1px solid rgba(214,170,69,.55);
-    border-radius:999px;
-    color:#f0ca69;
-    background:linear-gradient(180deg,rgba(116,27,34,.92),rgba(57,16,20,.94));
-    font:700 .9rem Arial,Helvetica,sans-serif;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    cursor:pointer;
-    box-shadow:0 8px 22px #0006,inset 0 1px 0 #ffffff0f;
-    text-shadow:0 2px 5px #0009;
-    transition:.2s ease;
-}
-
-#learnMoreBtn:hover{
-    color:#fff1c8;
-    border-color:#f0ca69;
-    background:linear-gradient(180deg,rgba(145,36,45,.96),rgba(75,19,24,.96));
-    box-shadow:0 11px 28px #0008,0 0 18px rgba(214,170,69,.15),inset 0 1px 0 #ffffff14;
-    transform:translateY(-2px);
-}
-
-#learnMoreBtn:active{
-    transform:translateY(0) scale(.98);
-    box-shadow:0 5px 14px #0006,inset 0 1px 4px #0005;
-}
-
-#learnMoreBtn:focus-visible{
-    outline:2px solid #f0ca69;
-    outline-offset:3px;
-}
-
-@media(max-width:600px){
-    #learnMoreBtn{
-        min-width:160px;
-        margin-top:26px;
-        padding:11px 22px;
-        font-size:.82rem;
-    }
-}
-
-
-/* ================================
    Character Grid Styles, game-hub.html
 ================================ */
 
@@ -76,7 +22,7 @@
 .a-section{
     position:relative;
     padding:90px 6% 100px;
-    min-height:70vh;
+    min-height:30vh;
     color:#f1eadb;
     background:
         radial-gradient(circle at 50% 0%,rgba(105,24,24,.18),transparent 45%),

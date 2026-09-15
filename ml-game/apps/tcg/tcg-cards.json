@@ -1,0 +1,74 @@
+{
+  "default_card": "001",
+
+  "cards": {
+
+
+
+
+
+    "001": {
+      "id": "001", "card_number": "001 S1", "sample": false,
+
+      "name": "Avery Obtainia",
+      "rarity": "SSR",
+      "art": "/images/character_art/Pixel_Splashes/pixel_avery.jpeg",
+      "role": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
+      "category": "Character", 
+
+      "stats": {"hp": 8, "attack": 5, "intelligence": 11},
+      "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
+
+      "subtype": "<span class=\"box;species-angelor\">Angelor</span> / <span class=\"box;species-waterspirit\">Water Spirit</span> / Mystical Legends / Deity Contract",
+      "additional": [
+        {"text": "<b class=\"box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
+        "style": {"paddingTop": 5}},
+        {"text": "<b class=\"box2\">On Summon</b> Restore <b>2 HP</b>. Then choose 1 allied Character. It gains +3 <b class=\"light\">[Light]</b> damage until the end of the turn.",
+        "style": {"paddingTop": 5}},
+        {"text": "<span class=\"keyword\">Divine Catalyst:</span> If <b>Avery Obtainia</b> has <b>10 or more Power</b>, reduce all damage dealt to him by <b>1</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "<span class=\"flavor\">“Even the smallest light can become a beacon of hope.”</span>",
+        "style": {"paddingTop": 5}}
+      ],
+
+      "design": {"art_position": "center 20%"}
+    },
+
+
+    "002": {
+      "id": "002", "card_number": "002 S1", "sample": false,
+
+      "name": "Kiara Katzol",
+      "rarity": "SSR",
+      "art": "/images/character_art/kiara_god_of_death.png",
+      "role": "/images/mlg-assets/Characters/c-roles/c10_role.svg",
+      "category": "Character", 
+
+      "stats": {"hp": 8, "attack": 5, "intelligence": 11},
+      "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
+
+      "subtype": "<span class=\"box;species-felior\">Felior</span> / Mystical Legends / District 10 / Deity Contract",
+      "additional": [
+        {"text": "<b class=\"box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
+        "style": {"paddingTop": 5}},
+        {"text": "<b class=\"box2\">On Summon</b> Restore <b>2 HP</b>. Then choose 1 allied Character. It gains <b class=\"light\">+3 Light Damage</b> until the end of the turn.",
+        "style": {"paddingTop": 5}},
+        {"text": "<span class=\"keyword\">Divine Catalyst:</span> If <b>Avery Obtainia</b> has <b>10 or more Power</b>, reduce all damage dealt to him by <b>1</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "<span class=\"flavor\">“Even the smallest light can become a beacon of hope.”</span>",
+        "style": {"paddingTop": 5}}
+      ],
+
+      "design": {"art_position": "center 20%"}
+    }
+
+
+
+
+
+
+
+  }
+
+
+}
