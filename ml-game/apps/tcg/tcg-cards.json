@@ -16,7 +16,7 @@
       "role": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
       "category": "Character", 
 
-      "stats": {"hp": 8, "attack": 5, "intelligence": 11},
+      "stats": {"hp": 12, "attack": 5, "intelligence": 8},
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
       "subtype": "<span class=\"box;species-angelor\">Angelor</span> / <span class=\"box;species-waterspirit\">Water Spirit</span> / Mystical Legends / Deity Contract",
