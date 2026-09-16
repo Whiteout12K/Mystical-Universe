@@ -1,149 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- ==========================================
+       MYSTICAL LEGENDS
+       https://mysticallegends.org/
+       
+       Only include:
+       - Public pages
+       - Canonical URLs
+       - Pages returning HTTP 200
+       - Pages intended for Google indexing
+       
+       Update <lastmod> ONLY when the page's
+       meaningful content actually changes.
+  =========================================== -->
+
+
+  <!-- MAIN WEBSITE -->
+
   <url>
     <loc>https://mysticallegends.org/</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/books_main</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/game-hub</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/webpages/music</loc>
-    <lastmod>2026-03-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/webpages/author</loc>
     <lastmod>2026-03-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.7</priority>
   </url>
 
 
+  <!-- CHARACTERS -->
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
 
 
-
-
-
+  <!-- NEWS -->
 
   <url>
     <loc>https://mysticallegends.org/news/2026-01-31</loc>
     <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/news/2026-02-14</loc>
     <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/news/2026-03-05</loc>
     <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 
 
-
-
-
-
-
-
+  <!-- MYSTICAL LEGENDS GAME -->
 
   <url>
-    <loc>https://mysticallegends.org/webpages/c1</loc>
-    <lastmod>2026-03-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://mysticallegends.org/ml-game/apps/map</loc>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/webpages/c2</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://mysticallegends.org/ml-game/apps/team-builder</loc>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/webpages/c3</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://mysticallegends.org/ml-game/apps/damage-test</loc>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/webpages/c4</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://mysticallegends.org/ml-game/apps/view</loc>
+    <lastmod>2026-09-16</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/webpages/c5</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://mysticallegends.org/ml-game/apps/tierlist</loc>
+    <lastmod>2026-09-16</lastmod>
   </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/c6</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/c7</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/c8</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/c9</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/c10</loc>
-    <lastmod>2026-03-05</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-
-
-
 
 </urlset>
