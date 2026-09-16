@@ -6,12 +6,11 @@
 
 
 
-
     "001": {
       "id": "001", "card_number": "001 S1", "sample": false,
 
       "name": "Avery Obtainia",
-      "rarity": "SSR",
+      "rarity": "LR",
       "art": "/images/character_art/Pixel_Splashes/pixel_avery.jpeg",
       "role": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
       "category": "Character", 
@@ -19,19 +18,19 @@
       "stats": {"hp": 12, "attack": 5, "intelligence": 8},
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
-      "subtype": "<span class=\"box;species-angelor\">Angelor</span> / <span class=\"box;species-waterspirit\">Water Spirit</span> / Mystical Legends / Deity Contract",
       "additional": [
-        {"text": "<b class=\"box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
+        {"text": "<b class=\"box2\">On Summon</b> Attach one <b>Skill</b> or <b>Artifact</b> from hand to self. Self and chosen ally gain <b class=\"card-atk\">+3 ATK</b> and <b class=\"card-hp\">+4 HP</b> until the end of turn.",
         "style": {"paddingTop": 5}},
-        {"text": "<b class=\"box2\">On Summon</b> Restore <b>2 HP</b>. Then choose 1 allied Character. It gains +3 <b class=\"light\">[Light]</b> damage until the end of the turn.",
+        {"text": "Rest self to create <b>2</b> <b class=\"light\">[Light]</b> mana.",
         "style": {"paddingTop": 5}},
-        {"text": "<span class=\"keyword\">Divine Catalyst:</span> If <b>Avery Obtainia</b> has <b>10 or more Power</b>, reduce all damage dealt to him by <b>1</b>.",
+        {"text": "When self is resting, can still block 1 incoming attack, reducing it by <b>-2</b>. Have <b class=\"card-dp\">+1 DP</b> while resting. For each ally that blocks an attack while self is resting, spend <b>1</b> <b class=\"light\">[Light]</b> mana to draw a card.",
         "style": {"paddingTop": 5}},
-        {"text": "<span class=\"flavor\">“Even the smallest light can become a beacon of hope.”</span>",
+        {"text": "<span class=\"flavor\">“The heaven's will, made mine.”</span>",
         "style": {"paddingTop": 5}}
       ],
+      "subtype": "<span class=\"box;species-angelor\">Angelor</span> / <span class=\"box;species-waterspirit\">Water Spirit</span> / Mystical Legends / Tempest Aquia",
 
-      "design": {"art_position": "center 20%"}
+      "design": {"art_position": "center 50%"}
     },
 
 
@@ -39,15 +38,14 @@
       "id": "002", "card_number": "002 S1", "sample": false,
 
       "name": "Kiara Katzol",
-      "rarity": "SSR",
+      "rarity": "UR",
       "art": "/images/character_art/kiara_god_of_death.png",
       "role": "/images/mlg-assets/Characters/c-roles/c10_role.svg",
       "category": "Character", 
 
-      "stats": {"hp": 8, "attack": 5, "intelligence": 11},
+      "stats": {"hp": 8, "attack": 7, "intelligence": 6},
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
-      "subtype": "<span class=\"box;species-felior\">Felior</span> / Mystical Legends / District 10 / Deity Contract",
       "additional": [
         {"text": "<b class=\"box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
         "style": {"paddingTop": 5}},
@@ -58,8 +56,9 @@
         {"text": "<span class=\"flavor\">“Even the smallest light can become a beacon of hope.”</span>",
         "style": {"paddingTop": 5}}
       ],
+      "subtype": "<span class=\"box;species-felior\">Felior</span> / Mystical Legends / District 10 / Deity Contract",
 
-      "design": {"art_position": "center 20%"}
+      "design": {"art_position": "center 30%"}
     }
 
 
