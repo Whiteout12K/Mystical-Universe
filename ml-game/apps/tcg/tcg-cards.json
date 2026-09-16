@@ -19,7 +19,7 @@
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
       "additional": [
-        {"text": "<b class=\"box2\">On Summon</b> Attach one <b>Skill</b> or <b>Artifact</b> from hand to self. Self and chosen ally gain <b class=\"card-atk\">+3 ATK</b> and <b class=\"card-hp\">+4 HP</b> until the end of turn.",
+        {"text": "<b class=\"box;box1\">On Summon</b> Attach one <b>Skill</b> or <b>Artifact</b> from hand to self. Self and chosen ally gain <b class=\"card-atk\">+3 ATK</b> and <b class=\"card-hp\">+4 HP</b> until the end of turn.",
         "style": {"paddingTop": 5}},
         {"text": "Rest self to create <b>2</b> <b class=\"light\">[Light]</b> mana.",
         "style": {"paddingTop": 5}},
@@ -47,11 +47,11 @@
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
       "additional": [
-        {"text": "<b class=\"box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
+        {"text": "<b class=\"box;box1\">Summon Requirement</b> Place 1 of your <b>Characters</b> with <b>8 or more Power</b> in your discard pile.",
         "style": {"paddingTop": 5}},
-        {"text": "<b class=\"box2\">On Summon</b> Restore <b>2 HP</b>. Then choose 1 allied Character. It gains <b class=\"light\">+3 Light Damage</b> until the end of the turn.",
+        {"text": "<b class=\"box;box2\">On Summon</b> Restore <b>2 HP</b>. Then choose 1 allied Character. It gains <b class=\"light\">+3 Light Damage</b> until the end of the turn.",
         "style": {"paddingTop": 5}},
-        {"text": "<span class=\"keyword\">Divine Catalyst:</span> If <b>Avery Obtainia</b> has <b>10 or more Power</b>, reduce all damage dealt to him by <b>1</b>.",
+        {"text": "If <b>Avery Obtainia</b> has <b>10 or more Power</b>, reduce all damage dealt to him by <b>1</b>.",
         "style": {"paddingTop": 5}},
         {"text": "<span class=\"flavor\">“Even the smallest light can become a beacon of hope.”</span>",
         "style": {"paddingTop": 5}}
@@ -59,7 +59,47 @@
       "subtype": "<span class=\"box;species-felior\">Felior</span> / Mystical Legends / District 10 / Deity Contract",
 
       "design": {"art_position": "center 30%"}
+    },
+
+
+
+    "003": {
+      "id": "003", "card_number": "003 S1", "sample": false,
+
+      "name": "Pyrus Bourn",
+      "rarity": "SSR",
+      "art": "/images/character_art/Sketches/pyrus.png",
+      "role": "/images/mlg-assets/Characters/c-roles/c7_role.svg",
+      "category": "Character", 
+
+      "stats": {"hp": 9, "attack": 8, "intelligence": 5},
+      "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
+
+      "additional": [
+        {"text": "Self can attack without a <b>Skill</b>.",
+        "style": {"paddingTop": 5}},
+        {"text": "<b class=\"box;box1\">On Summon</b> Search deck for any <b>District 3</b> ally and place on field, then shuffle deck.",
+        "style": {"paddingTop": 5}},
+        {"text": "<b class=\"box;box2\">Attack</b> <b>Inferno Raine</b>: Deal self's total <b class=\"card-atk\">ATK - 2</b> to up to 2 targets, then rest self. Apply <b class=\"burn\">[Burn]</b> to targets, where targets have <b class=\"card-hp\">-3 HP</b>, lasting 2 turns.",
+        "style": {"paddingTop": 5}},
+        {"text": "<span class=\"flavor\">“The world shall be mine for the taking!”</span>",
+        "style": {"paddingTop": 5}}
+      ],
+      "subtype": "<span class=\"box;species-larvan\">Larvan</span> / <span class=\"box;species-none\">Non-Mystical</span> / Villain / District 3",
+
+      "design": {"art_position": "center 30%"}
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

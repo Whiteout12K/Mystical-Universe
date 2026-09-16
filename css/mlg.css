@@ -185,3 +185,12 @@
 .card-hp { color: #3b803d; }
 
 .card-atk { color: #a03e3e; }
+
+
+.card-info{position:absolute;left:17px;right:17px;bottom:70px;z-index:10;padding:7px 11px 8px;border-left:3px solid #b97c7c;border-right:1px solid #ffffff26;border-radius:3px;background:#f9f8f864;color:#1c1816;font-size:.9rem;line-height:1.27;box-shadow:0 5px 18px #0006;backdrop-filter:blur(1.0px)}
+.additional{position:relative}
+.flavor{display:block;padding-top:3px;border-top:1px solid #0003;color:#2a2a2a;font-size:.64rem;font-style:italic}
+
+.box{display:inline-block;margin-right:3px;padding:3px 3px;border-radius:1px;color:#ffffffe3;font-size:.8rem;font-weight:1000;line-height:1.18}
+.box1{background:#6f3c48} /* On Summon */
+.box2{background:#b04e4e} /* Attack */
