@@ -1,0 +1,150 @@
+.birthday-section{
+  --birthday-gold:#d6aa45;
+  --birthday-gold-light:#f0ca69;
+  --birthday-text:#f5ead2;
+  --birthday-muted:#c7baa2;
+  position:relative;
+  width:min(1200px,calc(100%));
+  padding:30px;
+  overflow:hidden;
+  color:var(--birthday-text);
+}
+
+.birthday-section[hidden]{
+  display:none;
+}
+
+
+.birthday-section::before{
+  top:9px;
+  left:9px;
+  border-top:2px solid;
+  border-left:2px solid;
+}
+
+.birthday-section::after{
+  right:9px;
+  bottom:9px;
+  border-right:2px solid;
+  border-bottom:2px solid;
+}
+
+/* Hide the section heading, splash artwork, and facts */
+.birthday-heading,
+.birthday-splash,
+.birthday-facts{
+  display:none;
+}
+
+.birthday-list{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:14px;
+}
+
+.birthday-card{
+  position:relative;
+  display:flex;
+  align-items:center;
+  min-width:0;
+  padding:14px;
+  overflow:hidden;
+  border:1px solid rgba(214,170,69,.3);
+  border-radius:12px;
+  background:
+    linear-gradient(110deg,rgba(116,27,34,.2),transparent 55%),
+    rgba(29,24,25,.92);
+  box-shadow:0 8px 20px rgba(0,0,0,.32);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+
+.birthday-card:hover{
+  transform:translateY(-2px);
+  border-color:rgba(240,202,105,.62);
+  box-shadow:0 10px 25px rgba(0,0,0,.4),0 0 16px rgba(214,170,69,.08);
+}
+
+.birthday-card::after{
+  content:"";
+  position:absolute;
+  right:14px;
+  color:rgba(214,170,69,.2);
+  font-size:1.15rem;
+  pointer-events:none;
+}
+
+.birthday-content{
+  width:100%;
+  padding:0;
+}
+
+.birthday-character{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+  margin:0;
+  padding-right:28px;
+}
+
+.birthday-avatar{
+  width:62px;
+  height:62px;
+  flex:0 0 62px;
+  object-fit:cover;
+  object-position:center top;
+  border:2px solid var(--birthday-gold);
+  border-radius:50%;
+  background:#171415;
+  box-shadow:0 0 14px rgba(214,170,69,.28);
+}
+
+.birthday-character > div{
+  min-width:0;
+}
+
+.birthday-name{
+  margin:0;
+  overflow:hidden;
+  color:var(--birthday-gold-light);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.2rem;
+  line-height:1.2;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.birthday-date{
+  margin:5px 0 0;
+  color:var(--birthday-muted);
+  font-size:.83rem;
+}
+
+@media(max-width:600px){
+  .birthday-section{
+    width:calc(100% - 20px);
+    margin:28px auto;
+    padding:16px;
+  }
+
+  .birthday-list{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  .birthday-card{
+    padding:12px;
+  }
+
+  .birthday-avatar{
+    width:54px;
+    height:54px;
+    flex-basis:54px;
+  }
+
+  .birthday-name{
+    font-size:1.08rem;
+  }
+}

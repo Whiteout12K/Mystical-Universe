@@ -22,7 +22,7 @@ for (const keyword in TITLE_TAGS) {
   }
 }
 
-fetch("/news-index.json")
+fetch("/webpages/list-news.json")
   .then(res => res.json())
   .then(files => {
     Promise.all(files.map(loadMeta))

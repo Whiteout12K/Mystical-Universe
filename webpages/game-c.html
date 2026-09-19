@@ -24,7 +24,7 @@
   --fantasy-panel2:#242021;
   --fantasy-border:rgba(214,170,69,.32);
   --fantasy-border-bright:rgba(240,202,105,.75);
-  --fantasy-text:#faf4e5;
+  --fantasy-text:#eddcb0;
   --skill-transition:.25s ease;
 }
 
@@ -130,6 +130,7 @@ body{
 .role-icon{
   width:60px;
   height:60px;
+  margin-bottom:15px;
   object-fit:contain;
   filter:drop-shadow(0 0 7px rgba(240,202,105,.3));
 }
@@ -143,8 +144,9 @@ body{
   text-shadow:0 2px 7px #000;
 }
 
+
 #character-rarity.ssr{
-  color:#f0ca69!important;
+  color:#cba952!important;
   text-shadow:
     0 0 5px rgba(240,202,105,.75),
     0 0 14px rgba(240,202,105,.4),
@@ -152,7 +154,7 @@ body{
 }
 
 #character-rarity.sr{
-  color:#cbb3e8!important;
+  color:#a584cd!important;
   text-shadow:
     0 0 5px rgba(203,179,232,.65),
     0 0 13px rgba(203,179,232,.3),
@@ -160,7 +162,7 @@ body{
 }
 
 #character-rarity.r{
-  color:#9bb8d0!important;
+  color:#6593b9!important;
   text-shadow:
     0 0 5px rgba(155,184,208,.55),
     0 0 12px rgba(155,184,208,.25),
@@ -171,18 +173,9 @@ body{
 /* Character information */
 
 .character-info-row{
-  padding:9px 12px!important;
+  padding:4px 12px!important;
   margin-bottom:2px;
   color:var(--fantasy-text)!important;
-  border-bottom:1px solid rgba(214,170,69,.09);
-  border-radius:5px;
-  background:rgba(255,255,255,.018);
-  transition:background .2s ease,border-color .2s ease;
-}
-
-.character-info-row:hover{
-  background:rgba(116,27,34,.1);
-  border-color:rgba(214,170,69,.2);
 }
 
 .character-info-label{
@@ -205,17 +198,6 @@ body{
   display:inline-block;
   padding:2px 7px;
   border-radius:4px;
-  color:#fff!important;
-}
-
-.species-angelor,
-.species-metalor,
-.species-naiad,
-.species-icelorian,
-.species-magnivirigentis,
-.species-elf,
-.species-felior,
-.species-demihuman{
   color:#fff!important;
 }
 
@@ -448,7 +430,7 @@ hr.my-4{
 
 @media(max-width:767px){
   .splash-art{height:420px}
-  #character-info{padding:15px!important}
+  #character-info{padding:25px!important}
   #character-name{font-size:1.8rem}
   .skill-sidebar{gap:10px;padding-left:2px;padding-right:2px}
   .skill-btn{width:62px;height:62px}
