@@ -76,8 +76,6 @@
       "labels": {"hp": "HP", "attack": "ATK", "intelligence": "INT"},
 
       "additional": [
-        {"text": "Self can attack without a <b>Skill</b>.",
-        "style": {"paddingTop": 5}},
         {"text": "<b class=\"box;box1\">On Summon</b> Search deck for any <b>District 3</b> ally and place on field, then shuffle deck.",
         "style": {"paddingTop": 5}},
         {"text": "<b class=\"box;box2\">Attack</b> <b>Inferno Raine</b>: Deal self's total <b class=\"card-atk\">ATK - 2</b> to up to 2 targets, then rest self. Apply <b class=\"burn\">[Burn]</b> to targets, where targets have <b class=\"card-hp\">-3 HP</b>, lasting 2 turns.",

@@ -7,6 +7,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/knockback.svg",
     "type": "Debuff",
     "description": "Knocks opponents back 5 meters.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -17,14 +18,16 @@
     "icon": "/images/mlg-assets/Effect-Icons/burn.svg",
     "type": "Debuff",
     "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
-    "burn2": {
+  "burn2": {
     "name": "Burn II",
     "class": "burn",
     "icon": "/images/mlg-assets/Effect-Icons/burn.svg",
     "type": "Debuff",
-    "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 0.5% of max health to self every other second for 5 seconds.",
+    "description": "Deals continuous <b class=\"fire\">[Fire]</b> damage equal to 1% of max health to self every other second for 5 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -35,6 +38,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/blind.svg",
     "type": "Debuff",
     "description": "Prevent target from attacking for 3 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -45,6 +49,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/shield.svg",
     "type": "Buff",
     "description": "Creates an overshield that absorbs damage equal to a certain amount of health.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -55,6 +60,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/enlightened.svg",
     "type": "Buff",
     "description": "Increases attack by +15% and receives +15% damage reduction for 20 seconds.",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": 15, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -65,6 +71,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/angel-touch.svg",
     "type": "Buff",
     "description": "The character will revive with 20% of max health when defeated and this effect will be removed (Use Cooldown: 120 seconds for each character; Duration: 5 seconds, but +1 second per point present in any light meter)",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -74,7 +81,8 @@
     "class": "magni-mage",
     "icon": "/images/mlg-assets/Effect-Icons/magni-mage.svg",
     "type": "Buff",
-    "description": "Gain +150% mana regen and +50% special skill cooldown for 30 seconds.",
+    "description": "Gain +150% mana regen and +50% Special Skill cooldown for 30 seconds.",
+    "stat_modifiers": [{"stat": "cooldownRed", "operation": "add", "value": 50, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -85,6 +93,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/goddess-blessing.svg",
     "type": "Buff",
     "description": "At five stacks, heal for 5% of Avery’s max health. Remove debuffs and resets stacks.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -95,6 +104,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/angel-touch.svg",
     "type": "Buff",
     "description": "Increase crit rate and damage by +1% per stack (Duration: 25 seconds).",
+    "stat_modifiers": [{"stat": "critRate", "operation": "add", "value": 1, "per_stack": true}, {"stat": "critDmg", "operation": "add", "value": 1, "per_stack": true}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -105,6 +115,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/rapid-recovery.svg",
     "type": "Buff",
     "description": "Slowly regenerate 2.5% of max health every second for 30 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -115,6 +126,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/freeze.svg",
     "type": "Debuff",
     "description": "Stops action for 2 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -124,7 +136,8 @@
     "class": "ice-prince",
     "icon": "/images/mlg-assets/Effect-Icons/ice-prince.svg",
     "type": "Buff",
-    "description": "Gain a percentage of critical hit rate and crit damage increase equal to each point, up to 2% of max defense (Stackable, Duration: 15 seconds).",
+    "description": "Gain a percentage of critical hit rate and crit damage increase equal to each point, up to 0.5% and 1% of max defense respectivaly (Stackable, Duration: 15 seconds).",
+    "stat_modifiers": [{"stat": "critRate", "operation": "from_stat", "source": "defense", "value": 0.5, "per_stack": true}, {"stat": "critDmg", "operation": "from_stat", "source": "defense", "value": 1, "per_stack": true}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -135,6 +148,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/shadow-miasma.svg",
     "type": "Buff",
     "description": "Increases <b class=\"dark\">[Dark]</b> damage by +25%, increases movement speed by +100%, and +30% chance to dodge incoming attacks that would deal damage (Duration: 4 seconds).",
+    "stat_modifiers": [{"stat": "speed", "operation": "percent", "value": 100, "per_stack": false}],
     "description_style": {"paddingTop": 3},
     "description2": "The effect will also slow opponents within 10 meters by -15% and applied element auras by self last +100% longer.",
     "descrption2_style": {"paddingTop": 7}
@@ -147,6 +161,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/flash.svg",
     "type": "Buff",
     "description": "Increases attack and piercing by +1% per stack (Infinite Stacks).",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": 1, "per_stack": true}, {"stat": "piercing", "operation": "percent", "value": 1, "per_stack": true}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -157,6 +172,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/fatigue.svg",
     "type": "Debuff",
     "description": "Decreases movement speed and max stamina by -1% per stack (Infinite Stacks).",
+    "stat_modifiers": [{"stat": "speed", "operation": "percent", "value": -1, "per_stack": true}, {"stat": "stamina", "operation": "percent", "value": -1, "per_stack": true}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -167,6 +183,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/icengon.svg",
     "type": "Buff",
     "description": "All special skill cooldown will decrease by -50%, mana regen will increase by +150%, and energy gauge accumulation increases by +25%. This effect lasts for the duration of <b class=\"fatigue\">[Fatigue]</b> present, losing a stack every second and cannot gain stacks during the buff.",
+    "stat_modifiers": [{"stat": "cooldownRed", "operation": "add", "value": 50, "per_stack": false}, {"stat": "gaugeGain", "operation": "add", "value": 25, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -177,6 +194,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/dazed.svg",
     "type": "Debuff",
     "description": "Become susceptible to critical hit damage for 2 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -187,6 +205,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/gamer.svg",
     "type": "Buff",
     "description": "Increases defense by +30% for 15 seconds.",
+    "stat_modifiers": [{"stat": "defense", "operation": "percent", "value": 30, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -197,6 +216,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/tinkering.svg",
     "type": "Buff",
     "description": "Crit rate increases by +25% for 15 seconds.",
+    "stat_modifiers": [{"stat": "critRate", "operation": "add", "value": 25, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -207,6 +227,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/letm-cook.svg",
     "type": "Buff",
     "description": "Upon reaching increments of 10 stacks (10, 20, etc…), Ted will gain the <b class=\"invention\">[Invention]</b> effect (Infinite Stacks).",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -217,6 +238,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/invention.svg",
     "type": "Buff",
     "description": "A specific action may occur with this effect (Infinite Stacks). Reduce movement speed by -20% per stack while this effect is active. Any gained <b class=\"shield\">[Shield]</b> will give damage reduction of +30% while the effect is active.",
+    "stat_modifiers": [{"stat": "speed", "operation": "percent", "value": -20, "per_stack": true}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -227,6 +249,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/attack-down1.svg",
     "type": "Debuff",
     "description": "Reduces attack by -15% (Duration: 10 seconds).",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": -15, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
   "attack-down2": {
@@ -235,6 +258,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/attack-down2.svg",
     "type": "Debuff",
     "description": "Reduces attack by -30% (Duration: 10 seconds).",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": -30, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
   "attack-down3": {
@@ -243,6 +267,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/attack-down3.svg",
     "type": "Debuff",
     "description": "Reduces attack by -45% (Duration: 10 seconds).",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": -45, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -253,6 +278,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/crit-down1.svg",
     "type": "Debuff",
     "description": "Reduces crit rate by -10% (Duration: 10 seconds).",
+    "stat_modifiers": [{"stat": "critRate", "operation": "add", "value": -10, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
   "crit-down2": {
@@ -261,6 +287,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/crit-down2.svg",
     "type": "Debuff",
     "description": "Reduces crit rate by -20% (Duration: 10 seconds).",
+    "stat_modifiers": [{"stat": "critRate", "operation": "add", "value": -20, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -271,6 +298,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/super-shield.svg",
     "type": "Unremovable Buff",
     "description": "A special shield that requires <span class=\"empowered\">empowered</span> attacks to break, otherwise all other incoming attacks are reduced by -75%. The shield is represented by a break bar above health and will persist until broken. If the bar is broken, the active character will be frozen for 8 seconds and will take +300% increased incoming damage during the duration.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -281,6 +309,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/overwhelming-mana.svg",
     "type": "Buff",
     "description": "Stackable charge of energy (Infinite Stacks).",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -291,6 +320,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/slowness.svg",
     "type": "Debuff",
     "description": "Decreases target’s movement speed by -70% for 3 seconds.",
+    "stat_modifiers": [{"stat": "speed", "operation": "percent", "value": -70, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -301,6 +331,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/speed-up.svg",
     "type": "Buff",
     "description": "Increases movement speed and attack speed by +25% for 3 seconds.",
+    "stat_modifiers": [{"stat": "speed", "operation": "percent", "value": 25, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -311,6 +342,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/mana-recovery.svg",
     "type": "Buff",
     "description": "Increase MP regeneration by +150% for 5 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -321,6 +353,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/magic-amplification.svg",
     "type": "Buff",
     "description": "Increases energy gauge accumulation by +40% for 15 seconds.",
+    "stat_modifiers": [{"stat": "gaugeGain", "operation": "add", "value": 40, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -331,6 +364,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/resistance.svg",
     "type": "Buff",
     "description": "When hit, decreases the attacker’s piercing by -50% on their attack.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -341,6 +375,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/indestructible.svg",
     "type": "Buff",
     "description": "Immune to the damage and health loss of attacks, status effects, and debuffs for 9 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -351,6 +386,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/weakened.svg",
     "type": "Debuff",
     "description": "All elemental attacks do not have elemental advantage for 15 seconds.",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
 
@@ -361,6 +397,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/inferno.svg",
     "type": "Unremovable Buff",
     "description": "Physically change state and become a being imbued with magical energy, gaining +1500 MP as a base stat and damage increase of +20% on all Skills. Increase defense and mana regen by +100%. All attacks will inflict <b class=\"burn\">[Burn]</b> on opponents. Basic Skill and <b class=\"normal\">normal</b> attacks will also be infused with the <b class=\"fire\">[Fire]</b> element. Dashing will deal Basic Skill Stage 3 damage on hit opponents.",
+    "stat_modifiers": [{"stat": "mana", "operation": "flat", "value": 1500, "per_stack": false}, {"stat": "damageIncrease", "operation": "add", "value": 20, "per_stack": false}, {"stat": "defense", "operation": "percent", "value": 100, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -371,6 +408,7 @@
     "icon": "/images/mlg-assets/Effect-Icons/bandage.svg",
     "type": "Buff",
     "description": "Incoming healing’s effectiveness increases by +100% for 10 seconds.",
+    "stat_modifiers": [{"stat": "healingRate", "operation": "add", "value": 100, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
 
@@ -381,8 +419,10 @@
     "icon": "/images/mlg-assets/Effect-Icons/electrocute.svg",
     "type": "Debuff",
     "description": "Lose health equal to 30% of own attack per second. Any received <b class=\"water\">[Water]</b> elemental damage will apply <b class=\"freeze\">[Freeze]</b> (Duration: 4 seconds).",
+    "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   }
+
 
 
 
