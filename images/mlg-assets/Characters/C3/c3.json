@@ -142,7 +142,7 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 1,
-        "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25%.",
+        "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25% and gained <b class=\"shield\">[Shield]</b> on self will also apply to allies as well.",
         "style": {"paddingTop": 5}},
         {"text": "Ted’s Technical Skill effects will also be applied to the party for the same duration.",
         "style": {"paddingTop": 5}},
