@@ -7,6 +7,11 @@
     "birthday": "09-02",
     "avatar": "/images/character_art/Character_Heads/avery_obtainia_head.png"
   },
+  {
+    "name": "Lux Luces",
+    "birthday": "09-29",
+    "avatar": "/images/character_art/Character_Heads/lux_luces_head.png"
+  },
 
   {
     "name": "River Grant",
@@ -18,20 +23,28 @@
     "name": "Teddric Tech",
     "birthday": "09-19",
     "avatar": "/images/character_art/Character_Heads/teddric_tech_head.png"
+  },
+
+  {
+    "name": "Kaden Icelander",
+    "birthday": "04-01",
+    "avatar": "/images/character_art/Character_Heads/kaden_icelander_head.png"
+  },
+
+
+
+
+
+
+
+
+
+
+
+  {
+    "name": "",
+    "birthday": "",
+    "avatar": ""
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ]

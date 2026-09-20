@@ -80,6 +80,31 @@
   },
 
 
+  "S3": {
+    "name": "True Water Spirit Release",
+    "type": "Special Skill",
+    "description": "River creates a spiritual field in which her attacks are enhanced, lasting 15 seconds. She will periodically produce \"Spirit Song\" stacks, up to 10, once per second (indicated in a special meter next to her). Each stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> gained while in the field also gives a stack of \"Spirit Song.\"",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Per stack produced, her field grows and the strength of her Special Skill damage is increased by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> per stack. At a max of 10 stacks, the next Special Skill damage dealt will increase damage by an additional <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>, then removes all stacks.",
+        "style": {"paddingTop": 7}},
+      {"text": "The field will undergo an elemental change based on the absorbed elements from Technical Skill: A Fox’s Tale, where the active character gains +70% resistance to that element and <b class=\"water\">[Water]</b> element while in the field.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Cooldown: 20 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 160 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg_increase": 5,
+      "dmg_increase2": 50
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
   "U1": {
     "name": "Transformation",
     "type": "Ultimate Skill",
@@ -107,16 +132,14 @@
   "T1": {
     "name": "A Fox's Tale",
     "type": "Technical Skill",
-    "description": "River’s Special Skill: Water Ball can absorb incoming elemental attacks of opponents (this does not get rid of the incoming attack), converting to a different color.",
+    "description": "River’s Special Skills can absorb incoming elemental attacks of opponents (this does not get rid of the incoming attack), converting to a different color.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The absorbed elements will increase that element’s damage for allies and self by +20% for 10 seconds. Opponents hit by the water ball will have their resistance to absorbed elements be reduced by -20% for 10 seconds.",
         "style": {"paddingTop": 7}},
       {"text": "<b class=\"water\">[Water]</b> damage will increase automatically as that is River’s innate magical affinity.",
         "style": {"paddingTop": 7}},
-      {"text": "These effects additionally increase by +1% per stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>.",
-        "style": {"paddingTop": 7}},
-      {"text": "Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> when mixing at least two other elements at once (Cooldown: 3 seconds).",
+      {"text": "These effects additionally increase by +1% per stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>. Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> when mixing at least two other elements at once (Cooldown: 3 seconds).",
         "style": {"paddingTop": 7}},
 
       {"text": "<b>Resonance</b>: No additional effects. Exclusive to River.",

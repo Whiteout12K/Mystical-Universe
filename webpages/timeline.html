@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A chronological record of the Mystical Legends universe.">
+<title>Mystical Legends | Chronicle</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23e2ba63' d='M32 3l7 20 20 9-20 9-7 20-7-20-20-9 20-9z'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%237b202a'/%3E%3C/svg%3E">
+<style>
+:root{--wine:#741b25;--wine2:#a83b45;--gold:#d4aa4f;--gold2:#f0d382;--ink:#0c0b0d;--panel:#181417;--panel2:#241b1f;--text:#f6eedc;--muted:#b9ac98;--line:rgba(212,170,79,.3)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:#09080a}body{margin:0;min-height:100vh;color:var(--text);font:16px/1.7 "Libre Baskerville",Georgia,serif;background:radial-gradient(circle at 50% -8%,#5a2028 0,#271519 28%,#100d10 62%,#09080a 100%);background-attachment:fixed}button{font:inherit}.masthead{position:sticky;top:0;z-index:20;min-height:72px;padding:12px clamp(18px,4vw,62px);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;border-bottom:1px solid var(--line);background:rgba(12,9,11,.88);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:10px;color:var(--gold2);font:600 .9rem "Cinzel",serif;letter-spacing:.08em;text-decoration:none;text-transform:uppercase}.brand-mark{display:grid;place-items:center;width:35px;height:35px;border:1px solid var(--gold);transform:rotate(45deg);box-shadow:0 0 20px rgba(212,170,79,.18)}.brand-mark::first-letter{transform:rotate(-45deg)}.heading{text-align:center}.heading p,.heading h1{margin:0}.heading p{color:var(--gold);font:600 .65rem "Cinzel",serif;letter-spacing:.28em;text-transform:uppercase}.heading h1{font:600 clamp(1rem,2vw,1.35rem) "Cinzel",serif}.toggle{justify-self:end;padding:9px 14px;color:var(--gold2);border:1px solid var(--line);border-radius:2px;background:rgba(116,27,37,.24);cursor:pointer}.toggle:hover,.toggle:focus-visible{border-color:var(--gold);background:rgba(116,27,37,.45)}main{width:min(1160px,100%);margin:auto;padding:clamp(54px,8vw,104px) clamp(18px,4vw,52px) 100px}.intro{max-width:730px;margin:0 auto 76px;text-align:center}.eyebrow{margin:0;color:var(--gold);font:600 .74rem "Cinzel",serif;letter-spacing:.28em;text-transform:uppercase}.intro h2{margin:10px 0 16px;font:700 clamp(2rem,6vw,4.2rem)/1.1 "Cinzel",serif;text-shadow:0 3px 18px #000}.intro>p:last-of-type{max-width:650px;margin:0 auto;color:var(--muted)}.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:22px;margin-top:28px;color:#d4c9b5;font-size:.8rem}.legend span{display:flex;align-items:center;gap:8px}.sigil{width:8px;height:8px;border-radius:50%;box-shadow:0 0 9px currentColor}.light{color:#72c7d7;background:currentColor}.danger{color:#d0575e;background:currentColor}.magic{color:#a67ad0;background:currentColor}.timeline{position:relative;max-width:980px;margin:auto}.timeline::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(transparent,var(--gold) 4%,var(--gold) 96%,transparent);box-shadow:0 0 16px rgba(212,170,79,.45)}.chapter{position:relative;width:50%;padding:0 54px 68px 0}.chapter:nth-child(even){margin-left:50%;padding:0 0 68px 54px}.node{position:absolute;top:20px;right:-10px;width:21px;height:21px;border:3px solid #171216;background:var(--gold);transform:rotate(45deg);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(240,211,130,.6)}.chapter:nth-child(even) .node{right:auto;left:-10px}.era{display:inline-block;margin-bottom:10px;color:var(--gold2);font:600 .72rem "Cinzel",serif;letter-spacing:.15em;text-transform:uppercase}.major{position:relative;padding:25px;border:1px solid var(--line);border-radius:3px;background:linear-gradient(145deg,rgba(45,31,36,.96),rgba(19,15,18,.97));box-shadow:0 16px 50px rgba(0,0,0,.3)}.major::before{content:"";position:absolute;inset:7px;pointer-events:none;border:1px solid rgba(212,170,79,.09)}.date{color:var(--gold);font:700 .72rem "Cinzel",serif;letter-spacing:.12em;text-transform:uppercase}.major h3{margin:5px 0 9px;font:600 clamp(1.2rem,2.3vw,1.6rem)/1.25 "Cinzel",serif}.summary{margin:0;color:var(--muted);font-size:.93rem}.details{display:grid;gap:10px;margin-top:19px}.detail{border-left:2px solid var(--accent,var(--gold));background:rgba(4,3,4,.35)}.detail summary{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 14px;color:#f5e9d1;font-weight:700;cursor:pointer;list-style:none}.detail summary::-webkit-details-marker{display:none}.detail summary::after{content:"+";color:var(--gold);font:400 1.3rem/1 sans-serif}.detail[open] summary::after{content:"−"}.detail-body{padding:0 14px 14px}.detail-body p{margin:0;color:var(--muted);font-size:.84rem}.meta{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.meta span{padding:3px 7px;color:#d8c8ac;border:1px solid rgba(212,170,79,.17);font-size:.68rem;letter-spacing:.04em}.empty,.error,.loading{position:relative;padding:30px;text-align:center;color:var(--muted)}footer{padding:35px 20px;text-align:center;color:#807567;border-top:1px solid rgba(212,170,79,.12);font:500 .72rem "Cinzel",serif;letter-spacing:.14em;text-transform:uppercase}footer span{padding:0 10px;color:var(--gold)}
+@media(max-width:800px){.masthead{grid-template-columns:1fr auto}.heading{display:none}.brand{font-size:.78rem}.timeline::before{left:10px}.chapter,.chapter:nth-child(even){width:100%;margin-left:0;padding:0 0 52px 42px}.node,.chapter:nth-child(even) .node{top:18px;right:auto;left:1px}.major{padding:22px}.intro{margin-bottom:56px}}
+@media(max-width:480px){.masthead{gap:10px}.brand span:last-child{display:none}.toggle{padding:8px 10px;font-size:.76rem}main{padding-left:14px;padding-right:14px}.chapter,.chapter:nth-child(even){padding-left:35px}.major{padding:18px 16px}.detail summary{padding:11px}.detail-body{padding:0 11px 12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+</style>
+
+</head>
+<body>
+<header class="masthead">
+  <a class="brand" href="#top" aria-label="Mystical Legends timeline home"><span class="brand-mark">✦</span><span>Mystical Legends</span></a>
+  <div class="heading"><p>The Grand Archive</p><h1>Chronicle of the Mystical World</h1></div>
+  <button id="toggleAll" class="toggle" type="button">Collapse details</button>
+</header>
+<main id="top">
+  <section class="intro" aria-labelledby="archiveTitle">
+    <p class="eyebrow">Recorded across the ages</p>
+    <h2 id="archiveTitle">The Living Timeline</h2>
+    <p>Follow the defining eras, conflicts, and discoveries that shaped the districts. Select any chapter to reveal the individual events within it.</p>
+    <div class="legend"><span><i class="sigil light"></i>Alliance</span><span><i class="sigil danger"></i>Conflict</span><span><i class="sigil magic"></i>Magic</span></div>
+  </section>
+  <section id="timeline" class="timeline" aria-live="polite"><div class="loading">Opening the archive…</div></section>
+</main>
+<footer><span>✦</span> The Grand Archive of Mystical Legends <span>✦</span></footer>
+
+
+<script>
+const timeline=document.querySelector("#timeline"),toggle=document.querySelector("#toggleAll");
+const safe=v=>String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c]));
+const colors={alliance:"#72c7d7",conflict:"#d0575e",magic:"#a67ad0",discovery:"#d4aa4f"};
+function detailHTML(e){const meta=[e.date,e.location,...(e.characters||[])].filter(Boolean).map(x=>`<span>${safe(x)}</span>`).join("");return `<details class="detail" style="--accent:${colors[e.type]||colors.discovery}" open><summary>${safe(e.title)}</summary><div class="detail-body"><p>${safe(e.description)}</p>${meta?`<div class="meta">${meta}</div>`:""}</div></details>`}
+function render(data){document.title=`${data.title||"Mystical Legends"} | Chronicle`;const items=[...(data.timeline||[])].sort((a,b)=>(a.order??0)-(b.order??0));if(!items.length){timeline.innerHTML='<p class="empty">No chronicle entries have been recorded.</p>';return}timeline.innerHTML=items.map((item,i)=>`<article class="chapter"><span class="node" aria-hidden="true"></span><span class="era">${safe(item.era||`Chapter ${i+1}`)}</span><div class="major"><span class="date">${safe(item.date||"Date unknown")}</span><h3>${safe(item.title)}</h3><p class="summary">${safe(item.summary)}</p>${item.events?.length?`<div class="details">${item.events.map(detailHTML).join("")}</div>`:""}</div></article>`).join("")}
+fetch("/webpages/list-timeline.json").then(r=>{if(!r.ok)throw Error();return r.json()}).then(render).catch(()=>timeline.innerHTML='<p class="error">The archive could not be opened. Check timeline.json and try again.</p>');
+toggle.addEventListener("click",()=>{const details=[...document.querySelectorAll(".detail")],willOpen=details.some(d=>!d.open);details.forEach(d=>d.open=willOpen);toggle.textContent=willOpen?"Collapse details":"Expand details"});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+{
+
+
+  "title": "Mystical Legends",
+
+  "timeline": [
+
+    {
+      "order": 1,
+      "era": "The Hidden Age",
+      "date": "Before the Districts",
+      "title": "The Veiling of the Mystical World",
+      "summary": "Mystical species withdraw from the mainland and establish protected districts where their cultures and magic can endure unseen.",
+      "events": [
+        {"date":"Year 0","title":"The Great Passage","description":"The first families cross into the concealed territories under the protection of ancient ward-makers.","location":"The Outer Boundary","type":"magic","characters":["The First Wardens"]},
+        {"date":"Year 3","title":"The District Accord","description":"Leaders define the districts, their responsibilities, and the laws that preserve secrecy from magicless humanity.","location":"Central District","type":"alliance","characters":["District Leaders"]}
+      ]
+    },
+
+    {
+      "order": 2,
+      "era": "The Rising Generation",
+      "date": "Present Era — Early Spring",
+      "title": "The Mystical Legends Assemble",
+      "summary": "Avery, Teddric, and River are drawn together as unusual magical disturbances begin spreading between the districts.",
+      "events": [
+        {"date":"First Moon","title":"A Light Awakens","description":"Avery Obtainia's connection to the mage goddess Lynnhera begins to surface through unstable bursts of light and gravity magic.","location":"District Academy","type":"magic","characters":["Avery Obtainia","Lynnhera"]},
+        {"date":"Third Moon","title":"An Unlikely Team","description":"Teddric's runecrafted technology and River's water magic help Avery contain a disturbance before it reaches the public.","location":"Canal Quarter","type":"alliance","characters":["Avery Obtainia","Teddric Tech","River Grant"]},
+        {"date":"Fourth Moon","title":"Kaden's Directive","description":"Kaden Icelander begins investigating the same incidents through Icelander Tech and takes command of the emerging response.","location":"Icelander Tech","type":"discovery","characters":["Kaden Icelander"]}
+      ]
+    },
+
+    {
+      "order": 3,
+      "era": "The Flame Conspiracy",
+      "date": "Present Era — Midsummer",
+      "title": "Pyrus Bourn Makes His Move",
+      "summary": "The ruler of the Volcanic Lair accelerates his search for the Orb of Destruction, forcing the young heroes into open conflict.",
+      "events": [
+        {"date":"Day 1","title":"The Fire Increaser Raid","description":"Pyrus's forces seize rare catalysts while Tom, Tony, and Ellie carry out competing interpretations of his orders.","location":"Ember Market","type":"conflict","characters":["Pyrus Bourn","Tom Nado","Tony Smith","Ellie Tracey"]},
+        {"date":"Day 4","title":"The Orb's Echo","description":"Avery senses the lost Orb of Destruction through the catalyst fused to Lynnhera, revealing that the relic is closer than anyone believed.","location":"Ruined Shrine","type":"magic","characters":["Avery Obtainia","Lynnhera"]},
+        {"date":"Day 7","title":"Stand at the Glass Bridge","description":"The Mystical Legends prevent a district-wide disaster, but Pyrus escapes with knowledge that changes the balance of power.","location":"Glass Bridge","type":"conflict","characters":["Mystical Legends","Pyrus Bourn"]}
+      ]
+    },
+
+    {
+      "order": 4,
+      "era": "An Unwritten Future",
+      "date": "Beyond the Known Record",
+      "title": "Shadows Beyond the Veil",
+      "summary": "Lordius Doomolo watches the districts from the dark, preparing a campaign that could expose the mystical world forever.",
+      "events": [
+        {"title":"The Shadow Manifesto","description":"Evidence emerges of a plan to end the age of hiding and place mystical beings above humanity.","location":"Unknown","type":"conflict","characters":["Lordius Doomolo"]}
+      ]
+    }
+
+
+
+  ]
+  
+}

@@ -303,7 +303,7 @@
     "affiliation": ["Mystical Legends", "Mystic Cohort"],
     "attributes": ["Water Breathing"],
 
-    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills": ["B1", "S1", "S2", "S3", "U1", "T1", "T2", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C5",
 
     "base_stats": {
