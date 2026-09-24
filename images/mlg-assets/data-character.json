@@ -6,7 +6,7 @@
     "splash_image": "/images/character_art/avery_obtainia_cultivator.png",
     "splash_image2": "/images/character_art/avery_obtainia_mlg_main2.png",
     "splash_color": "drop-shadow(0 0 18px rgba(255, 69, 69, 0.725))",
-    "button_color": "#a20b0b",
+    "button_color": "#a20b0b", 
 
     "name": "Avery Obtainia",
     "nickname": "Avery",
