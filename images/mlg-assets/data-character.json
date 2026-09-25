@@ -179,7 +179,7 @@
     "affiliation": ["Mystical Legends", "Dai-Battalion Cohort"],
     "attributes": ["Charging", "Flight"],
 
-    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills": ["B1", "S1", "S2", "S3", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C3",
 
     "base_stats": {

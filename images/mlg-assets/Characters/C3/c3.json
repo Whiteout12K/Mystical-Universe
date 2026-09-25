@@ -34,7 +34,7 @@
   "S1": {
     "name": "Metal Barrier",
     "type": "Special Skill",
-    "description": "Ted creates a large destructible metal barrier in front of him equal to his entire defense for its toughness to shield off incoming attacks in one direction. He then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
+    "description": "Ted creates a large destructible metal barrier in front of him with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of his own defense stat for its toughness to deflect incoming attacks and endure damage. He then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice his defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
@@ -48,6 +48,7 @@
         "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
+      "summon": 150,
       "shield": 200,
       "shield2": 150
     },
@@ -74,6 +75,39 @@
     ],
     "base_damage": {
       "dmg1": 240
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S3": {
+    "name": "Overloaded",
+    "type": "Special Skill",
+    "description": "Stands still for 5 seconds to load and charge a firearm cannon, absorbing the element affinities in the party into charged shells. Once cannon is loaded, it will be a summon with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of Ted’s defense stat.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "While Ted is on-field, he can ride the cannon, gaining +50% damage reduction, and hold this skill to charge up <span class=\"empowered\">empowered</span> shots. When holding, a stack of <b class=\"letm-cook\">[Let’m Cook]</b> is consumed every half-second, up to a max of 10. Up to 3 of these shots can be fired. Releasing skill will trigger the following conditions:",
+        "style": {"paddingTop": 7}},
+      {"text": "Less than 10 stacks - Shoot a compiled bullet at aimed direction, dealing <b class=\"earth\">[Earth]</b> AoE <span class=\"empowered\">empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense multiplied by the number of each consumed stack.",
+        "style": {"paddingTop": 7, "paddingLeft": 15}},
+      {"text": "At 10 stacks - Shoot an overpowering bullet at aimed direction, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as a large AoE <span class=\"empowered\">super empowered</span> <b class=\"earth\">[Earth]</b> element, and the encompassing elements of the team, damage, applying all auras at once. If <b class=\"invention\">[Invention]</b> is active, consume a stack and a secondary shell is quickly fired, dealing 120% of the previous’ damage.",
+        "style": {"paddingTop": 7, "paddingLeft": 15}},
+      {"text": "When Ted is off-field, the cannon will aim and periodically shoot mixed-element bullets, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage. Cannon shoots every 2 seconds. 50% chance of the bullet being infused with one other element of the team. ",
+        "style": {"paddingTop": 7}},
+      {"text": "If the skill is used while a summon is present, its health will be restored and no charging is necessary. New shells are also provided.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "Cooldown: 14 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 100 MP per shot",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "summon": 120,
+      "dmg1": 40,
+      "dmg2": 400,
+      "dmg3": 190
     },
     "max_level": 10,
     "level_multiplier": 0.1
@@ -168,7 +202,7 @@
         "style": {"paddingTop": 5}},
 
         {"level": 5,
-        "text": "Rapidly consuming all Dash Skills will automatically give Ted the effect <b class=\"gamer\">[Gamer]</b> and <b class=\"tinkering\">[Tinkering]</b>. These effects are considered effects from a Technical Skill. Whenever either of these effects end, Ted’s Special Skill cooldowns will reset and he gains 2 stacks of <b class=\"invention\">[Invention]</b>.",
+        "text": "Rapidly consuming all Dash Skills will automatically give Ted the effect <b class=\"gamer\">[Gamer]</b> and <b class=\"tinkering\">[Tinkering]</b>. These effects are considered effects from a Technical Skill. Whenever either of these effects end, Ted’s Special Skill cooldowns will reset and he gains 2 stacks of <b class=\"invention\">[Invention]</b>. He gains twice as many stacks of <b class=\"letm-cook\">[Let’m Cook]</b>.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:gamer}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
