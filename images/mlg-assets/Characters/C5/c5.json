@@ -148,6 +148,47 @@
   },
 
 
+  "T2": {
+    "name": "Infinity Beans",
+    "type": "Technical Skill",
+    "description": "Collect the limited time beans progressively through the featured season events.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "<u>Ability</u>: Uncovers a bag of beans, getting an effect per bean eaten. There is a limit of one bean effect at a time with a cooldown limit interval of eating. Hold skill to alternate between the following:",
+        "style": {"paddingTop": 7}},
+
+      {"text": "{{effect:rouge}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:jaune}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:vert}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:bleu}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:violet}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:blanc}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:noir}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+      {"text": "If River is the active character, she only has a 1 second cooldown per bean consumption. When she gains all bean effects, she will switch to an alternate outfit donning a hero’s mark. In this state, all the radiant beans circle around the active character for the remainder of the battle. River’s water attacks from Basic Skill and Special Skills will be infused with the mixed element affinities of the entire party, inflicting their auras on opponents, and triggers element conditions from her other skills if equipped. She gains the effect <b class=\"infinity-beans\">[Infinity Beans]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:infinity-beans}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+
+      {"text": "Cooldown: 15 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Cooldown: 1 second if River is active character",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Condition: Adds +5 seconds to Special Skills and putting them in cooldown",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+
+      {"text": "<b>Resonance</b>: Other <b class=\"mystical-legends\">Mystical Legends</b> allies can also use the direct buffs of the Technical Skill. Kiara Katzol may also gain the 1 second bean consumption cooldown and the effect <b class=\"infinity-beans\">[Infinity Beans]</b> after consumption of all the beans.",
+        "style": {"paddingTop": 15}}
+    ]
+  },
+
 
   "Dupes": {
     "description": "Can obtain infinite stacks of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> and each stack gained will heal self and allies for 5% of her max health. For every 5 stacks, increase crit rate and damage for self by +5% but increase mana consumption by +5%. When 50 stacks are gained, increase self’s damage of all skills by +50%.",

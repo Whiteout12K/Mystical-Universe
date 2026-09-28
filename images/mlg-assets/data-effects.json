@@ -369,6 +369,109 @@
   },
 
 
+  "rouge": {
+    "name": "Rouge",
+    "class": "rouge",
+    "icon": "/images/mlg-assets/Effect-Icons/rouge.svg",
+    "type": "Buff",
+    "description": "Consume 0.3% of health every second. Increase attack by +30% (Duration: 25 seconds).",
+    "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": 30, "per_stack": false}],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "jaune": {
+    "name": "Jaune",
+    "class": "jaune",
+    "icon": "/images/mlg-assets/Effect-Icons/jaune.svg",
+    "type": "Buff",
+    "description": "In an AoE around self, deals own element damage equal to 120% of attack (Duration: 25 seconds).",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "vert": {
+    "name": "Vert",
+    "class": "vert",
+    "icon": "/images/mlg-assets/Effect-Icons/vert.svg",
+    "type": "Buff",
+    "description": "Recover 20% of max health once, then 1% per second (Duration: 25 seconds).",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "bleu": {
+    "name": "Bleu",
+    "class": "bleu",
+    "icon": "/images/mlg-assets/Effect-Icons/bleu.svg",
+    "type": "Buff",
+    "description": "To be added.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "violet": {
+    "name": "Violet",
+    "class": "violet",
+    "icon": "/images/mlg-assets/Effect-Icons/violet.svg",
+    "type": "Buff",
+    "description": "To be added.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "blanc": {
+    "name": "Blanc",
+    "class": "blanc",
+    "icon": "/images/mlg-assets/Effect-Icons/blanc.svg",
+    "type": "Buff",
+    "description": "To be added.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "noir": {
+    "name": "Noir",
+    "class": "noir",
+    "icon": "/images/mlg-assets/Effect-Icons/noir.svg",
+    "type": "Buff",
+    "description": "To be added.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "infinity-beans": {
+    "name": "Infinity Beans",
+    "class": "infinity-beans",
+    "icon": "/images/mlg-assets/Effect-Icons/infinity-beans.svg",
+    "type": "Unremovable Buff",
+    "description": "Gains +10% increase on all stats. Allows all effects of the individual beans to remain in effect without a duration limit. This effect has indefinite duration and cannot be removed.",
+    "stat_modifiers": [
+      {"stat": "health", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "attack", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "defense", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "defense", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "mana", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "stamina", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "critRate", "operation": "add", "value": 10, "per_stack": false},
+      {"stat": "critDmg", "operation": "add", "value": 10, "per_stack": false},
+      {"stat": "speed", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "piercing", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "healingRate", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "luck", "operation": "percent", "value": 10, "per_stack": false},
+      {"stat": "gaugeGain", "operation": "add", "value": 10, "per_stack": false},
+      {"stat": "cooldownRed", "operation": "add", "value": 10, "per_stack": false}
+    ],
+    "description_style": {"paddingTop": 3}
+  },
+
+
   "indestructible": {
     "name": "Indestructible",
     "class": "indestructible",
