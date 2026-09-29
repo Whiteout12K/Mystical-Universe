@@ -374,7 +374,7 @@
     "class": "rouge",
     "icon": "/images/mlg-assets/Effect-Icons/rouge.svg",
     "type": "Buff",
-    "description": "Consume 0.3% of health every second. Increase attack by +30% (Duration: 25 seconds).",
+    "description": "Consume 3% of health every second. Increase attack by +30% (Duration: 25 seconds).",
     "stat_modifiers": [{"stat": "attack", "operation": "percent", "value": 30, "per_stack": false}],
     "description_style": {"paddingTop": 3}
   },
@@ -396,7 +396,7 @@
     "class": "vert",
     "icon": "/images/mlg-assets/Effect-Icons/vert.svg",
     "type": "Buff",
-    "description": "Recover 20% of max health once, then 1% per second (Duration: 25 seconds).",
+    "description": "Recover 20% of max health once, then 3% per second (Duration: 25 seconds).",
     "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },

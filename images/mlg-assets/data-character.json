@@ -21,6 +21,9 @@
     "affiliation": ["Mystical Legends", "Tempest Aquia Cohort", "IT Agency", "Spirit Vessel", "Deity Contract"],
     "attributes": ["Water Breathing", "Flight", "Charging"],
 
+    "formatted_name": "<b>Avery Obtainia</b>",
+    "character-event": "",
+
     "skills": ["B1", "B2", "S1", "S2", "S3", "U1", "U2", "T1", "T2", "T3", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C1",
 
@@ -107,6 +110,9 @@
     "affiliation": ["Mystical Legends", "Blue Legion Cohort", "IT Agency"],
     "attributes": ["Charging"],
 
+    "formatted_name": "<div style=\"font-size:14px\"><b>Kaden Icelander</b></div>",
+    "character-event": "",
+
     "skills": ["B1", "S1", "S2", "S3", "U1", "U2", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C2",
 
@@ -179,6 +185,9 @@
     "affiliation": ["Mystical Legends", "Dai-Battalion Cohort"],
     "attributes": ["Charging", "Flight"],
 
+    "formatted_name": "<b>Teddric Tech</b>",
+    "character-event": "",
+
     "skills": ["B1", "S1", "S2", "S3", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C3",
 
@@ -245,6 +254,9 @@
     "affiliation": [],
     "attributes": [],
 
+    "formatted_name": "<b>Main Character</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #252525ab;\">Starting Unit</div>",
+
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C3",
 
@@ -302,6 +314,9 @@
 
     "affiliation": ["Mystical Legends", "Mystic Cohort"],
     "attributes": ["Water Breathing"],
+
+    "formatted_name": "<b>River Grant</b>",
+    "character-event": "",
 
     "skills": ["B1", "S1", "S2", "S3", "U1", "T1", "T2", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C5",
@@ -361,6 +376,9 @@
     "affiliation": ["Tempest Aquia Cohort", "Captain"],
     "attributes": ["Water Breathing", "Flight"],
 
+    "formatted_name": "<b>Atlas Aquia</b>",
+    "character-event": "",
+
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C6",
 
@@ -418,6 +436,9 @@
 
     "affiliation": ["Villain", "District 3"],
     "attributes": ["Flight", "Charging"],
+
+    "formatted_name": "<b>Pyrus Bourn</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #e3b733ab;\">Version 1.1</div>",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C7",
@@ -485,6 +506,9 @@
     "affiliation": ["Blue Legion Cohort", "Captain"],
     "attributes": [],
 
+    "formatted_name": "<b>Charlotte Levy</b>",
+    "character-event": "",
+
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C8",
 
@@ -543,6 +567,9 @@
     "affiliation": ["Black Rampart Cohort", "Captain"],
     "attributes": [],
 
+    "formatted_name": "<b>Carla Storm</b>",
+    "character-event": "",
+
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C9",
 
@@ -600,6 +627,9 @@
 
     "affiliation": ["Black Rampart Cohort", "Mystical Legends", "Deity Contract", "District 10"],
     "attributes": ["Charging"],
+
+    "formatted_name": "<b>Kiara Katzol</b>",
+    "character-event": "",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C10",
@@ -664,13 +694,16 @@
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
 
-    "species": ["Felior"],
+    "species": ["Elementor", "Elementor", "Wentor"],
     "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonator"],
-    "affinity": ["Wind"],
-    "role": ["Fighter"],
+    "affinity": ["Earth", "Fire", "Wind"],
+    "role": ["Healer"],
 
     "affiliation": ["District 3", "Villain"],
     "attributes": ["Charging"],
+
+    "formatted_name": "<div style=\"font-size:12px\"><b>Pyro's Subordinates</b></div>",
+    "character-event": "",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C11",
@@ -709,8 +742,124 @@
 
 
 
+  "c12": {
+    "id": 12,
+    "profile_image": "/images/character_art/Character_Heads/jane_tee_head.png",   
+
+    "splash_image": "/images/character_art/jane_tee_academy.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Jane Tee",
+    "nickname": "Jane",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c12_role.svg",
+
+    "species": ["Herbovir"],
+    "specialty": ["Debuffing", "Summoning", "Accuracy", "Sub-DPS", "AoE Damage", "Crowd Controlling", "Resonator"],
+    "affinity": ["Earth"],
+    "role": ["Agent"],
+
+    "affiliation": ["Black Rampart Cohort"],
+    "attributes": [],
+
+    "formatted_name": "<b>Jane Tee</b>",
+    "character-event": "",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C12",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Sword", "Catalyst"]
+
+  },
 
 
+
+
+  "c13": {
+    "id": 13,
+    "profile_image": "",   
+
+    "splash_image": "",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Elmor Locks",
+    "nickname": "Elmor",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c13_role.svg",
+
+    "species": ["Wentor"],
+    "specialty": ["Sub-DPS", "AoE Damage", "Defense Penetration", "Defense", "Disrupter"],
+    "affinity": ["Wind"],
+    "role": ["Defense"],
+
+    "affiliation": ["Mystic Cohort", "Captain"],
+    "attributes": ["Flight"],
+
+    "formatted_name": "<b>Elmor Locks</b>",
+    "character-event": "",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C13",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Gun", "Spear"]
+
+  },
 
 
 
@@ -735,6 +884,9 @@
 
     "affiliation": ["Centipedes Cohort", "Captain"],
     "attributes": ["Charging"],
+
+    "formatted_name": "<b>Cedric Paine</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C14",
@@ -773,10 +925,124 @@
 
 
 
+  "c15": {
+    "id": 15,
+    "profile_image": "/images/character_art/Character_Heads/lucy_terner_head.png",   
+
+    "splash_image": "/images/character_art/lucy_terner_full.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Lucy Terner",
+    "nickname": "Lucy",
+    "rarity": "SSR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c15_role.svg",
+
+    "species": ["Elf"],
+    "specialty": [],
+    "affinity": ["Wind"],
+    "role": ["Agent"],
+
+    "affiliation": ["Mystical Legends"],
+    "attributes": [],
+
+    "formatted_name": "<b>Lucy Terner</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C15",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Gun", "Spear"]
+
+  },
 
 
 
 
+  "c16": {
+    "id": 16,
+    "profile_image": "/images/character_art/Character_Heads/amos_black_head.png",   
+
+    "splash_image": "/images/character_art/amos_black_cultivator.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "Amos Black",
+    "nickname": "Amos",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c16_role.svg",
+
+    "species": ["Magnivirigentis"],
+    "specialty": [],
+    "affinity": ["Earth"],
+    "role": ["Agent"],
+
+    "affiliation": ["Mystical Legends"],
+    "attributes": [],
+
+    "formatted_name": "<b>Amos Black</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C16",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Gun", "Spear"]
+
+  },
 
 
 
@@ -801,6 +1067,9 @@
 
     "affiliation": ["Black Rampart Cohort", "District 10"],
     "attributes": [],
+
+    "formatted_name": "<div style=\"font-size:14px\"><b>Raymond Valoris</b></div>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C17",
@@ -859,6 +1128,9 @@
 
     "affiliation": ["Tempest Aquia Cohort"],
     "attributes": ["Water Breathing"],
+
+    "formatted_name": "<b>Alteria Aquia</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C18",

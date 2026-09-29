@@ -12,15 +12,17 @@
 .rarity-c{background:linear-gradient(145deg,#939292d8,#3e3e3ed2);}
 .rarity-r{background:linear-gradient(145deg,#2f80ed,#1c4aa3);}
 .rarity-sr{background:linear-gradient(145deg,#bf72e0da,#2f1342db);}
-.rarity-ssr{background:linear-gradient(145deg,#ffc273dc,#ff9838d1);}
+.rarity-ssr{background:linear-gradient(145deg,#f8c178dc,#ff8f26d1);}
 .rarity-ur{background:linear-gradient(145deg,#ff7373dc,#ff3838d1);}
+.rarity-lr{background:linear-gradient(145deg,#d6fed6dc,#fbbce8d1);}
 
 /* RARITY Overly Styles */
 .name-c{background:linear-gradient(180deg,#6e6e6e00,#525151);}
 .name-r{background:linear-gradient(180deg,#183d8600,#263655);}
 .name-sr{background:linear-gradient(180deg,#993ad800,#4a2c5edb);}
 .name-ssr{background:linear-gradient(180deg,#fca42900,#5d472c);}  
-.name-ur{background:linear-gradient(180deg,#fc292900,#532323cb);}    
+.name-ur{background:linear-gradient(180deg,#fc292900,#532323cb);}
+.name-lr{background:linear-gradient(180deg,#ff44b700,#673157b3);}    
 
 
 
@@ -119,71 +121,23 @@
   text-transform: uppercase;
 }
 
-.species-none {
-  color: #fff;
-  background: #3a3131;
-}
+.species-none {color: #fff; background: #3a3131;}
+.species-angelor {color: #fff; background: #a95f88;}
+.species-metalor {color: #fff; background: #5e5a5a;}
+.species-naiad {color: #fff; background: #4f8878;}
+.species-waterspirit {color: #fff; background: #60769d;}
+.species-icelorian {color: #fff; background: #0f477a;}
+.species-gostlynger {color: #fff; background: #320f57;}
+.species-herbovir {color: #fff; background: #4e9d4e;}
+.species-magnivirigentis {color: #fff; background: #a34430;}
+.species-elf {color: #fff; background: #174422;}
+.species-elementor {color: #fff; background: #615e9e;}
+.species-icelorian {color: #fff; background: #0f477a;}
+.species-larvan {color: #fff; background: #a83a13;}
+.species-felior {color: #fff; background: #251b09;}
+.species-vulpivor {color: #fff; background: #7b4166;}
 
-.species-angelor {
-  color: #fff;
-  background: #a95f88;
-}
-
-.species-metalor {
-  color: #fff;
-  background: #5e5a5a;
-}
-
-.species-naiad {
-  color: #fff;
-  background: #4f8878;
-}
-
-.species-waterspirit {
-  color: #fff;
-  background: #60769d;
-}
-
-.species-icelorian {
-  color: #fff;
-  background: #0f477a;
-}
-
-.species-gostlynger {
-  color: #fff;
-  background: #320f57;
-}
-
-.species-herbovir {
-  color: #fff;
-  background: #4e9d4e;
-}
-
-.species-magnivirigentis {
-  color: #fff;
-  background: #a34430;
-}
-
-.species-elf {
-  color: #fff;
-  background: #174422;
-}
-
-.species-larvan {
-  color: #fff;
-  background: #a83a13;
-}
-
-.species-felior {
-  color: #fff;
-  background: #251b09;
-}
-
-.species-vulpivor {
-  color: #fff;
-  background: #7b4166;
-}
-
+.species-wentor {color: #fff; background: #b8984e;}
 
 
 

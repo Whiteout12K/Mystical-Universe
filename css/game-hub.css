@@ -71,6 +71,627 @@
 
 
 /* ================================
+   Character Filters
+================================ */
+
+.character-filter-panel{
+    position:relative;
+    width:100%;
+    max-width:1150px;
+    margin:0 auto 38px;
+    padding:22px 24px;
+    border:1px solid rgba(201,168,76,.42);
+    border-radius:8px;
+    background:
+        linear-gradient(135deg,rgba(72,20,20,.16),transparent 40%),
+        linear-gradient(180deg,rgba(32,29,29,.97),rgba(18,17,17,.97));
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.32),
+        inset 0 1px rgba(255,224,145,.05);
+}
+
+.character-filter-panel::before,
+.character-filter-panel::after{
+    content:"";
+    position:absolute;
+    width:32px;
+    height:32px;
+    pointer-events:none;
+}
+
+.character-filter-panel::before{
+    top:7px;
+    left:7px;
+    border-top:1px solid #c9a84c;
+    border-left:1px solid #c9a84c;
+}
+
+.character-filter-panel::after{
+    right:7px;
+    bottom:7px;
+    border-right:1px solid #c9a84c;
+    border-bottom:1px solid #c9a84c;
+}
+
+.character-search-row{
+    position:relative;
+    z-index:20;
+    display:grid;
+    grid-template-columns:minmax(220px,1fr) 240px auto;
+    gap:10px;
+    width:100%;
+    margin-bottom:24px;
+}
+
+.character-search-box{
+    position:relative;
+    display:flex;
+    align-items:center;
+    min-width:0;
+}
+
+.character-search-box input,
+.filter-dropdown-search{
+    width:100%;
+    height:44px;
+    border:1px solid rgba(184,150,69,.48);
+    border-radius:5px;
+    outline:none;
+    background:#111010;
+    color:#f6e8c2;
+    font:14px Arial,sans-serif;
+    transition:border-color .2s ease,box-shadow .2s ease;
+}
+
+.character-search-box input{
+    padding:0 40px;
+}
+
+.character-search-box input:focus,
+.filter-dropdown-search:focus{
+    border-color:#d8b85c;
+    box-shadow:
+        0 0 0 2px rgba(201,168,76,.1),
+        0 0 14px rgba(201,168,76,.08);
+}
+
+.character-search-box input::placeholder,
+.filter-dropdown-search::placeholder{
+    color:#817968;
+}
+
+.filter-search-icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    color:#c9a84c;
+    font:24px/1 Georgia,serif;
+    transform:translateY(-54%);
+    pointer-events:none;
+    z-index:2;
+}
+
+.filter-input-clear{
+    position:absolute;
+    right:8px;
+    top:50%;
+    width:27px;
+    height:27px;
+    padding:0;
+    border:0;
+    background:transparent;
+    color:#8f8777;
+    font-size:21px;
+    line-height:27px;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+.filter-input-clear:hover{
+    color:#f0d58b;
+}
+
+
+/* ================================
+   Affiliation / Species Dropdowns
+================================ */
+
+.filter-dropdown{
+    position:relative;
+}
+
+.filter-dropdown-button{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    width:100%;
+    height:44px;
+    padding:0 14px;
+    border:1px solid rgba(184,150,69,.48);
+    border-radius:5px;
+    background:#111010;
+    color:#d8cba9;
+    font:14px Arial,sans-serif;
+    cursor:pointer;
+    transition:border-color .2s ease,background .2s ease,box-shadow .2s ease;
+}
+
+.filter-dropdown-button:hover,
+.filter-dropdown.open .filter-dropdown-button{
+    border-color:#d1ad54;
+    background:#191615;
+    box-shadow:0 0 12px rgba(201,168,76,.08);
+}
+
+.filter-dropdown-arrow{
+    color:#c9a84c;
+    transition:transform .2s ease;
+}
+
+.filter-dropdown.open .filter-dropdown-arrow{
+    transform:rotate(180deg);
+}
+
+.filter-dropdown-menu{
+    position:absolute;
+    top:calc(100% + 6px);
+    left:0;
+    display:none;
+    width:100%;
+    min-width:240px;
+    max-height:320px;
+    padding:8px;
+    border:1px solid rgba(201,168,76,.52);
+    border-radius:6px;
+    background:#161414;
+    box-shadow:0 15px 30px rgba(0,0,0,.55);
+    overflow:hidden;
+    z-index:100;
+}
+
+.filter-dropdown.open .filter-dropdown-menu{
+    display:block;
+}
+
+.filter-dropdown-search{
+    height:38px;
+    margin-bottom:7px;
+    padding:0 10px;
+}
+
+.filter-dropdown-options{
+    max-height:250px;
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:#765e29 #191716;
+}
+
+.filter-dropdown-group-title{
+    padding:9px 10px 6px;
+    color:#b99b4d;
+    font:700 10px Arial,sans-serif;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+}
+
+.filter-dropdown-option{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    width:100%;
+    padding:9px 10px;
+    border:0;
+    border-bottom:1px solid rgba(255,255,255,.035);
+    border-radius:3px;
+    background:transparent;
+    color:#d8d1c2;
+    font:13px Arial,sans-serif;
+    text-align:left;
+    cursor:pointer;
+}
+
+.filter-dropdown-option[hidden]{
+    display:none!important;
+}
+
+.filter-dropdown-option:hover{
+    background:rgba(201,168,76,.09);
+    color:#ffe7a7;
+}
+
+.filter-dropdown-option.selected{
+    background:rgba(201,168,76,.07);
+    color:#f2d987;
+}
+
+.dropdown-check{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:17px;
+    height:17px;
+    flex:0 0 17px;
+    border:1px solid #615538;
+    border-radius:50%;
+    color:transparent;
+    font-size:10px;
+    transition:.15s ease;
+}
+
+.filter-dropdown-option.selected .dropdown-check{
+    border-color:#e2bd59;
+    background:#c9a84c;
+    color:#18130a;
+    box-shadow:0 0 8px rgba(231,193,88,.55);
+}
+
+.clear-character-filters{
+    height:44px;
+    padding:0 17px;
+    border:1px solid rgba(158,70,70,.5);
+    border-radius:5px;
+    background:rgba(90,28,28,.18);
+    color:#d9aaa0;
+    font:13px Arial,sans-serif;
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+.clear-character-filters:hover{
+    border-color:#b25b4f;
+    background:rgba(121,36,36,.3);
+    color:#ffd1c9;
+}
+
+
+/* ================================
+   Filter Rows
+================================ */
+
+.filter-section{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    align-items:center;
+    gap:16px;
+    min-height:52px;
+    margin-top:11px;
+}
+
+.filter-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#e4c675;
+    font:600 12px Arial,sans-serif;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+}
+
+.filter-title div{
+    width:22px;
+    height:1px;
+    background:linear-gradient(to right,#9f8035,transparent);
+}
+
+.filter-options{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:17px;
+}
+
+.icon-filter-options{
+    min-height:50px;
+}
+
+
+/* ================================
+   Image-only Filters
+================================ */
+
+.filter-icon-button{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:48px;
+    height:48px;
+    padding:0;
+    border:0;
+    outline:0;
+    background:transparent;
+    cursor:pointer;
+    opacity:.5;
+    filter:
+        drop-shadow(0 2px 2px rgba(0,0,0,.8))
+        drop-shadow(0 0 3px rgba(255,255,255,.05));
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        filter .18s ease;
+}
+
+.filter-icon-button:hover{
+    opacity:.85;
+    transform:scale(1.1);
+}
+
+.filter-icon-button.selected{
+    opacity:1;
+    transform:scale(1.12);
+}
+
+.filter-icon-button img{
+    display:block;
+    width:42px;
+    height:42px;
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    pointer-events:none;
+}
+
+
+/* ================================
+   Affinity Icons
+================================ */
+
+.affinity-icon{
+    width:45px;
+    height:45px;
+}
+
+.affinity-icon img{
+    width:38px;
+    height:38px;
+}
+
+.affinity-icon.selected{
+    filter:
+        drop-shadow(0 0 3px currentColor)
+        drop-shadow(0 0 7px currentColor)
+        drop-shadow(0 0 13px currentColor);
+}
+
+.affinity-fire{color:#ff6447}
+.affinity-water{color:#53bfff}
+.affinity-earth{color:#d2a555}
+.affinity-wind{color:#6fe0a9}
+.affinity-light{color:#ffe78c}
+.affinity-dark{color:#a989ef}
+
+.affinity-fire.selected{
+    filter:
+        drop-shadow(0 0 4px #ff5338c4)
+        drop-shadow(0 0 9px #ff5338c1)
+        drop-shadow(0 0 15px rgba(255, 83, 56, 0.481));
+}
+
+.affinity-water.selected{
+    filter:
+        drop-shadow(0 0 4px #4cc0ffb7)
+        drop-shadow(0 0 9px #4cc0ffbf)
+        drop-shadow(0 0 15px rgba(76, 139, 255, 0.483));
+}
+
+.affinity-earth.selected{
+    filter:
+        drop-shadow(0 0 4px #70e5acbb)
+        drop-shadow(0 0 9px #70e5acbb)
+        drop-shadow(0 0 15px rgba(112, 229, 172, 0.45));
+}
+
+.affinity-wind.selected{
+    filter:
+        drop-shadow(0 0 4px #d2a455c6)
+        drop-shadow(0 0 9px #d2a455bd)
+        drop-shadow(0 0 15px rgba(210, 164, 85, 0.478));
+}
+
+.affinity-light.selected{
+    filter:
+        drop-shadow(0 0 4px #ffe4f58c)
+        drop-shadow(0 0 9px #ffd9f89f)
+        drop-shadow(0 0 15px rgba(254, 196, 255, 0.513));
+}
+
+.affinity-dark.selected{
+    filter:
+        drop-shadow(0 0 4px #a57de9b3)
+        drop-shadow(0 0 9px #a57de9b3)
+        drop-shadow(0 0 15px rgba(165, 125, 233, 0.539));
+}
+
+.affinity-fallback{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;
+    height:40px;
+    color:currentColor;
+    font:32px/1 Georgia,serif;
+}
+
+
+/* ================================
+   Rarity Icons
+================================ */
+
+.rarity-icon{
+    width:55px;
+    height:48px;
+}
+
+.rarity-icon img{
+    width:50px;
+    height:42px;
+}
+
+.rarity-text-fallback{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:auto;
+    height:auto;
+    padding:0;
+    border:0;
+    background:none;
+    font:800 20px/1 Arial,sans-serif;
+    letter-spacing:.04em;
+    text-shadow:0 2px 3px #000;
+}
+
+.rarity-icon-c{
+    color:#bcbcbc;
+}
+
+.rarity-icon-r{
+    color:#5a9cff;
+}
+
+.rarity-icon-sr{
+    color:#d58bfa;
+}
+
+.rarity-icon-ssr{
+    color:#ffc46d;
+}
+
+.rarity-icon-ur{
+    color:#ff6a6a;
+}
+
+.rarity-icon-lr{
+    color:#ffbee3;
+}
+
+.rarity-icon-c.selected{
+    filter:
+        drop-shadow(0 0 4px #c8c8c8)
+        drop-shadow(0 0 9px rgba(200,200,200,.75));
+}
+
+.rarity-icon-r.selected{
+    filter:
+        drop-shadow(0 0 4px #438eff)
+        drop-shadow(0 0 9px #438eff)
+        drop-shadow(0 0 14px rgba(67,142,255,.65));
+}
+
+.rarity-icon-sr.selected{
+    filter:
+        drop-shadow(0 0 4px #ca73f3)
+        drop-shadow(0 0 9px #ca73f3)
+        drop-shadow(0 0 14px rgba(202,115,243,.65));
+}
+
+.rarity-icon-ssr.selected{
+    filter:
+        drop-shadow(0 0 4px #ffad43)
+        drop-shadow(0 0 9px #ffad43)
+        drop-shadow(0 0 15px rgba(255,173,67,.75));
+}
+
+.rarity-icon-ur.selected{
+    filter:
+        drop-shadow(0 0 4px #ff5252)
+        drop-shadow(0 0 9px #ff5252)
+        drop-shadow(0 0 15px rgba(255,82,82,.75));
+}
+
+.rarity-icon-lr.selected{
+    filter:
+        drop-shadow(0 0 4px #ffb8cf)
+        drop-shadow(0 0 9px #ffaed3)
+        drop-shadow(0 0 16px rgba(255, 168, 226, 0.8));
+}
+
+
+/* ================================
+   Role Icons
+================================ */
+
+.role-icon{
+    width:56px;
+    height:50px;
+}
+
+.role-icon img{
+    width:52px;
+    height:52px;
+}
+
+.role-icon.selected{
+    filter:
+        drop-shadow(0 0 3px #e6c666)
+        drop-shadow(0 0 8px #c9a84c)
+        drop-shadow(0 0 15px rgba(201,168,76,.65));
+}
+
+.role-fallback{
+    color:#d8bc69;
+    font:35px/1 Georgia,serif;
+}
+
+
+/* ================================
+   Active Filters
+================================ */
+
+.active-filter-row{
+    display:none;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:18px;
+    padding-top:15px;
+    border-top:1px solid rgba(201,168,76,.12);
+}
+
+.active-filter-row.show{
+    display:flex;
+}
+
+.active-filter-tag{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:5px 8px 5px 10px;
+    border:1px solid rgba(201,168,76,.34);
+    border-radius:20px;
+    background:rgba(201,168,76,.08);
+    color:#d9c998;
+    font:11px Arial,sans-serif;
+    cursor:pointer;
+}
+
+.active-filter-tag b{
+    color:#a99a72;
+    font-size:15px;
+    line-height:1;
+}
+
+.active-filter-tag:hover{
+    border-color:#c9a84c;
+    color:#ffe7a7;
+}
+
+.active-filter-tag:hover b{
+    color:#ffe7a7;
+}
+
+.character-result-info{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:14px;
+    color:#827a6a;
+    font:11px Arial,sans-serif;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+}
+
+
+/* ================================
    Character Grid
    Fixed card dimensions everywhere
 ================================ */
@@ -177,23 +798,68 @@
     text-shadow:none;
 }
 
+.character-card-disabled{
+    cursor:default;
+}
 
-/* ================================
-   Rarity
-================================ */
+.character-card-disabled:hover{
+    transform:none;
+}
 
-.rarity-c{background:linear-gradient(145deg,#939292d8,#3e3e3ed2)}
-.rarity-r{background:linear-gradient(145deg,#2f80ed,#1c4aa3)}
-.rarity-sr{background:linear-gradient(145deg,#bf72e0da,#2f1342db)}
-.rarity-ssr{background:linear-gradient(145deg,#ffc273dc,#ff9838d1)}
-.rarity-ur{background:linear-gradient(145deg,#ff7373dc,#ff3838d1)}
+.character-no-results{
+    display:none;
+    width:100%;
+    padding:50px 20px;
+    color:#9c9484;
+    text-align:center;
+    font:14px Arial,sans-serif;
+}
 
-.name-c{background:linear-gradient(180deg,#6e6e6e00,#525151)}
-.name-r{background:linear-gradient(180deg,#183d8600,#263655)}
-.name-sr{background:linear-gradient(180deg,#993ad800,#4a2c5edb)}
-.name-ssr{background:linear-gradient(180deg,#fca42900,#5d472c)}
-.name-ur{background:linear-gradient(180deg,#fc292900,#532323cb)}
+.character-no-results.show{
+    display:block;
+}
 
+.no-results-rune{
+    margin-bottom:10px;
+    color:#c7a956;
+    font:38px Georgia,serif;
+}
+
+.character-no-results button{
+    margin-top:15px;
+    padding:8px 17px;
+    border:1px solid #8d7437;
+    border-radius:4px;
+    background:rgba(201,168,76,.08);
+    color:#ddc57f;
+    cursor:pointer;
+}
+
+.character-no-results button:hover{
+    border-color:#c9a84c;
+    background:rgba(201,168,76,.15);
+}
+
+.character-load-error{
+    grid-column:1/-1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    padding:45px 20px;
+    color:#c9bfa9;
+    text-align:center;
+}
+
+.character-load-error>div{
+    color:#c9a84c;
+    font-size:36px;
+}
+
+.character-load-error span{
+    color:#887f70;
+    font-size:12px;
+}
 
 /* ================================
    Tools Section
@@ -294,6 +960,18 @@
     }
 
     .mlg-tool-title{font-size:14px}
+
+    .character-search-row{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .character-search-box{
+        grid-column:1/-1;
+    }
+
+    .clear-character-filters{
+        grid-column:1/-1;
+    }
 }
 
 
@@ -304,6 +982,72 @@
 ================================ */
 
 @media(max-width:600px){
+    #char{
+        padding-left:12px!important;
+        padding-right:12px!important;
+    }
+
+    .character-filter-panel{
+        padding:18px 13px;
+    }
+
+    .character-search-row{
+        display:flex;
+        flex-direction:column;
+    }
+
+    .filter-dropdown-menu{
+        position:relative;
+        top:5px;
+        min-width:0;
+        margin-bottom:5px;
+    }
+
+    .filter-section{
+        grid-template-columns:1fr;
+        gap:8px;
+        margin-top:17px;
+    }
+
+    .filter-title div{
+        flex:1;
+        width:auto;
+    }
+
+    .filter-options{
+        gap:12px;
+    }
+
+    .filter-icon-button{
+        width:43px;
+        height:43px;
+    }
+
+    .filter-icon-button img{
+        width:38px;
+        height:38px;
+    }
+
+    .role-icon{
+        width:48px;
+        height:45px;
+    }
+
+    .role-icon img{
+        width:45px;
+        height:45px;
+    }
+
+    .rarity-icon{
+        width:49px;
+        height:43px;
+    }
+
+    .rarity-icon img{
+        width:45px;
+        height:39px;
+    }
+
     .character-grid{
         grid-template-columns:repeat(auto-fill,130px);
         justify-content:center;
@@ -351,6 +1095,25 @@
 
 @media(max-width:390px){
     .character-grid{gap:9px}
+
+    .character-filter-panel{
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .filter-options{
+        gap:9px;
+    }
+
+    .filter-icon-button{
+        width:40px;
+        height:40px;
+    }
+
+    .filter-icon-button img{
+        width:35px;
+        height:35px;
+    }
 
     .mlg-tools-section{
         padding-left:4px;
