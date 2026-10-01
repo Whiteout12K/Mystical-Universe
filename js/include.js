@@ -1,4 +1,20 @@
-function loadComponent(id,file){fetch(file).then(res=>res.text()).then(data=>{document.getElementById(id).innerHTML=data;if(id==="header-placeholder"||id==="subheader-placeholder"||id==="sub4header-placeholder"||id==="homeheader-placeholder"){loadLoggedInUser();setupNavbarLogin();}}).catch(error=>console.error(`Unable to load ${file}:`,error));}
+async function loadComponent(id,file){
+const target=document.getElementById(id);
+if(!target)return;
+try{
+const response=await fetch(file);
+if(!response.ok)throw new Error('Component unavailable');
+target.innerHTML=await response.text();
+if(id.includes('header')){loadLoggedInUser();setupNavbarLogin();
+for(const link of target.querySelectorAll('.nav-link[href]')){
+if(new URL(link.href).pathname.replace(/\.html$/, '')===location.pathname.replace(/\.html$/, '')){link.classList.add('active');link.setAttribute('aria-current','page');}
+}}
+}catch(error){
+console.error(`Unable to load ${file}:`,error);
+const link=document.createElement('a');link.href='/';link.textContent='Mystical Legends home';target.replaceChildren(link);
+const retry=document.createElement('button');retry.type='button';retry.textContent='Retry navigation';retry.onclick=()=>loadComponent(id,file);target.append(retry);
+}
+}
 
 async function loadLoggedInUser(){
 const loginUser=document.getElementById("loginUser"),loginMenu=document.getElementById("loginMenu"),userMenu=document.getElementById("userMenu"),profileImage=document.getElementById("profileImage"),usernameText=document.getElementById("usernameText"),mlGameProfile=document.getElementById("mlGameProfile");
@@ -79,12 +95,15 @@ window.location.reload();
 });
 }
 
-loadComponent("header-placeholder","index/header.html");
-loadComponent("footer-placeholder","index/footer.html");
-loadComponent("subheader-placeholder","../index/header.html");
-loadComponent("subfooter-placeholder","../index/footer.html");
-loadComponent("sub4header-placeholder","../../../../index/header.html");
-loadComponent("sub4footer-placeholder","../../../../index/footer.html");
+function loadPageComponents(){
+loadComponent("header-placeholder","/index/header.html");
+loadComponent("footer-placeholder","/index/footer.html");
+loadComponent("subheader-placeholder","/index/header.html");
+loadComponent("subfooter-placeholder","/index/footer.html");
+loadComponent("sub4header-placeholder","/index/header.html");
+loadComponent("sub4footer-placeholder","/index/footer.html");
 
 loadComponent("homeheader-placeholder","/index/header.html");
 loadComponent("homefooter-placeholder","/index/footer.html");
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPageComponents,{once:true});else loadPageComponents();

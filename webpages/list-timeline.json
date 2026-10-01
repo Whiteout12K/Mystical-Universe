@@ -1,61 +1,1006 @@
 {
-
-
   "title": "Mystical Legends",
-
+  "notes": "Summarized from the author’s supplied series outline. Dates are relative unless specified. Empty arc headings are not expanded into invented events. Book XIII is absent from the source; Books XIX–XXI are tentative continuations. Historical time-travel events are grouped by narrative journey rather than presented as fixed calendar dates.",
   "timeline": [
-
     {
       "order": 1,
-      "era": "The Hidden Age",
-      "date": "Before the Districts",
-      "title": "The Veiling of the Mystical World",
-      "summary": "Mystical species withdraw from the mainland and establish protected districts where their cultures and magic can endure unseen.",
+      "era": "Zenith Luces — Before the Main Series",
+      "date": "Past eras; includes travel across fractured time",
+      "title": "Journey of the Mystical Beings",
+      "summary": "Zenith’s journey revolves around an artifact ring, the founding of the Mystical Island, and repeated confrontations with Lordius Doomolo across fractured realities.",
+      "status": "outlined",
       "events": [
-        {"date":"Year 0","title":"The Great Passage","description":"The first families cross into the concealed territories under the protection of ancient ward-makers.","location":"The Outer Boundary","type":"magic","characters":["The First Wardens"]},
-        {"date":"Year 3","title":"The District Accord","description":"Leaders define the districts, their responsibilities, and the laws that preserve secrecy from magicless humanity.","location":"Central District","type":"alliance","characters":["District Leaders"]}
-      ]
+        {
+          "title": "The Original Banishment",
+          "description": "An Angelor uses an artifact ring to banish Lordius Doomolo and Tomolock into a fractured reality between the spirit and shadow realms. They escape weakened hundreds of years later, during the Journey of the Mystical Beings.",
+          "type": "magic",
+          "characters": [
+            "Lordius Doomolo",
+            "Tomolock"
+          ],
+          "storyRole": "side-story"
+        },
+        {
+          "title": "The Sustination Orb",
+          "description": "After the island’s founding, the weakened Doomolo obtains the Sustination Orb and threatens the island. He is defeated and flees.",
+          "type": "conflict",
+          "characters": [
+            "Lordius Doomolo"
+          ],
+          "location": "Mystical Island",
+          "storyRole": "main"
+        },
+        {
+          "title": "Tomolock’s Artifact Search",
+          "description": "Tomolock escapes the fractured reality, obtains William’s map, and travels to another island in search of the ring that imprisoned him.",
+          "type": "discovery",
+          "characters": [
+            "Tomolock",
+            "William"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Battle Across Time",
+          "description": "A struggle over the artifact sends Zenith, Caela, Pyrus, Doomolo, and Tomolock into fractured reality. They emerge more than ninety years later, roughly sixteen years before the main story, and continue their battle.",
+          "type": "conflict",
+          "characters": [
+            "Zenith Luces",
+            "Caela Obtainia",
+            "Pyrus Bourn",
+            "Lordius Doomolo",
+            "Tomolock"
+          ],
+          "date": "Roughly sixteen years before Book I",
+          "storyRole": "main"
+        },
+        {
+          "title": "Zenith’s Return to the Past",
+          "description": "Zenith takes Doomolo back into fractured reality and learns to regress his enemy’s powers. Both are displaced to a time before the Journey and separated. Zenith discovers that his presence helps inspire Caela to begin that very journey.",
+          "type": "magic",
+          "characters": [
+            "Zenith Luces",
+            "Lordius Doomolo",
+            "Caela Obtainia"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Ring’s Protector",
+          "description": "Zenith defeats Doomolo in a final battle and prepares a new district to protect the ring. The return to this earlier moment is made possible by outside intervention from the past: ancestors create fractures into their future, rather than into their past.",
+          "type": "discovery",
+          "characters": [
+            "Zenith Luces",
+            "Lordius Doomolo"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "prequel"
     },
-
     {
       "order": 2,
-      "era": "The Rising Generation",
-      "date": "Present Era — Early Spring",
-      "title": "The Mystical Legends Assemble",
-      "summary": "Avery, Teddric, and River are drawn together as unusual magical disturbances begin spreading between the districts.",
+      "era": "Nuntios — Before the Main Series",
+      "date": "Before Kaden’s life in New York",
+      "title": "The Fall of District 1",
+      "summary": "Ioward Icelander’s attempt to revive his wife destroys District 1, while Kaden’s first IT Agency fights Malum and leaves behind the Nuntios’ mission to protect others.",
+      "status": "outlined",
       "events": [
-        {"date":"First Moon","title":"A Light Awakens","description":"Avery Obtainia's connection to the mage goddess Lynnhera begins to surface through unstable bursts of light and gravity magic.","location":"District Academy","type":"magic","characters":["Avery Obtainia","Lynnhera"]},
-        {"date":"Third Moon","title":"An Unlikely Team","description":"Teddric's runecrafted technology and River's water magic help Avery contain a disturbance before it reaches the public.","location":"Canal Quarter","type":"alliance","characters":["Avery Obtainia","Teddric Tech","River Grant"]},
-        {"date":"Fourth Moon","title":"Kaden's Directive","description":"Kaden Icelander begins investigating the same incidents through Icelander Tech and takes command of the emerging response.","location":"Icelander Tech","type":"discovery","characters":["Kaden Icelander"]}
-      ]
+        {
+          "title": "Ioward’s Pact",
+          "description": "District 1’s progenitor, Ioward Icelander, becomes the vessel of a powerful member of the twelve Demon Gods to revive his late wife. Soul harvesting raises him from Ultimus Deus to Celestius Deus and grants immortality.",
+          "type": "magic",
+          "characters": [
+            "Ioward Icelander"
+          ],
+          "location": "District 1",
+          "storyRole": "main"
+        },
+        {
+          "title": "Malum and the First IT Agency",
+          "description": "Master Malum undermines the IT model established by Ioward and Kaden. Kaden gathers the Nuntios into the first IT Agency to resist the company, unaware that Ioward secretly hired Malum to destroy both his legacy and District 1.",
+          "type": "conflict",
+          "characters": [
+            "Ioward Icelander",
+            "Kaden Icelander",
+            "Master Malum"
+          ],
+          "location": "District 1",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Failed Revival",
+          "description": "Despite Kaden and the Nuntios’ intervention, the bomb destroys District 1 and leaves few survivors. The revival ritual fails; the Demon God gains an independent body and abandons Ioward. Ioward and Kaden leave for New York.",
+          "type": "conflict",
+          "characters": [
+            "Ioward Icelander",
+            "Kaden Icelander"
+          ],
+          "location": "District 1",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Nuntios’ New Purpose",
+          "description": "Kaden releases the Nuntios from his service and asks them to prevent similar tragedies. Josh Picard, Jay Neomo, Lux Luces, and Marin Kne train at Regnum Academy until the four can undertake S+ missions together.",
+          "type": "alliance",
+          "characters": [
+            "Josh Picard",
+            "Jay Neomo",
+            "Lux Luces",
+            "Marin Kne"
+          ],
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "prequel"
     },
-
     {
       "order": 3,
-      "era": "The Flame Conspiracy",
-      "date": "Present Era — Midsummer",
-      "title": "Pyrus Bourn Makes His Move",
-      "summary": "The ruler of the Volcanic Lair accelerates his search for the Orb of Destruction, forcing the young heroes into open conflict.",
+      "era": "Book I",
+      "date": "Beginning of the main series",
+      "title": "Rune of the Spellcaster",
+      "summary": "Avery discovers his Angelor identity, enters mystical schooling, and faces Pyrus Bourn’s invasion as the Rune of the Spellcaster and Orb of Destruction reshape his future.",
+      "status": "outlined",
       "events": [
-        {"date":"Day 1","title":"The Fire Increaser Raid","description":"Pyrus's forces seize rare catalysts while Tom, Tony, and Ellie carry out competing interpretations of his orders.","location":"Ember Market","type":"conflict","characters":["Pyrus Bourn","Tom Nado","Tony Smith","Ellie Tracey"]},
-        {"date":"Day 4","title":"The Orb's Echo","description":"Avery senses the lost Orb of Destruction through the catalyst fused to Lynnhera, revealing that the relic is closer than anyone believed.","location":"Ruined Shrine","type":"magic","characters":["Avery Obtainia","Lynnhera"]},
-        {"date":"Day 7","title":"Stand at the Glass Bridge","description":"The Mystical Legends prevent a district-wide disaster, but Pyrus escapes with knowledge that changes the balance of power.","location":"Glass Bridge","type":"conflict","characters":["Mystical Legends","Pyrus Bourn"]}
-      ]
+        {
+          "title": "OSNYC Admission",
+          "description": "Former street boy Avery Obtainia learns about Mystical Beings and his Angelor heritage at the mainland school OSNYC. He meets Teddric Tech and River Grant during admission, while magical species, basic magic, and rankings are introduced.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Teddric Tech",
+            "River Grant"
+          ],
+          "location": "New York / OSNYC",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Cabin and the Ancient Rune",
+          "description": "Avery discovers a cabin holding the Rune of the Spellcaster. A fragment of Doomolo’s power reveals a vision of Caela Obtainia, Zenith Luces, and the sealing of the Orb of Destruction. Avery first uses healing magic.",
+          "type": "magic",
+          "characters": [
+            "Avery Obtainia",
+            "Caela Obtainia",
+            "Zenith Luces"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "Kaden and the Shadow Cult",
+          "description": "IT manager Kaden Icelander demonstrates ice magic and Ice Travel. A shadow cult encounter leads to an ATLAS meeting about the incident and student placement, involving Jim Jaedin and Marx Sumaho.",
+          "type": "discovery",
+          "characters": [
+            "Kaden Icelander",
+            "Jim Jaedin",
+            "Marx Sumaho"
+          ],
+          "location": "ATLAS",
+          "storyRole": "main"
+        },
+        {
+          "title": "Regnum Academy Start",
+          "description": "The students travel to District 7, Lux Urbis, and begin at Regnum Academy. Elmor Locks, Jane Tee, Ken and Kirk Masumi, and Charlotte Levy enter the story; cohorts, the Three Symbols, and magical discharge are introduced.",
+          "type": "discovery",
+          "characters": [
+            "Elmor Locks",
+            "Jane Tee",
+            "Ken Masumi",
+            "Kirk Masumi",
+            "Charlotte Levy"
+          ],
+          "location": "Regnum Academy / District 7",
+          "storyRole": "main"
+        },
+        {
+          "title": "Invasion by Fire",
+          "description": "Pyrus crashes into District 7’s town hall and awakens as a Larvan wielding inferno magic. Contact with the Orb reveals Avery’s wings and strengthens his magic, while Kaden shows the Icelorian Blade and other defenders reveal further affinities.",
+          "type": "conflict",
+          "characters": [
+            "Pyrus Bourn",
+            "Avery Obtainia",
+            "Kaden Icelander",
+            "Elmor Locks",
+            "Charlotte Levy"
+          ],
+          "location": "Lux Urbis",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Mystical Legends’ Promise",
+          "description": "Oceanus Aquia appears in the aftermath. Regnum Spei and Avery’s Compression are revealed, and the concept of the Mystical Legends takes shape. Avery and River vow to pursue equality between commoners and nobles.",
+          "type": "alliance",
+          "characters": [
+            "Avery Obtainia",
+            "River Grant",
+            "Oceanus Aquia"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
     },
-
     {
       "order": 4,
-      "era": "An Unwritten Future",
-      "date": "Beyond the Known Record",
-      "title": "Shadows Beyond the Veil",
-      "summary": "Lordius Doomolo watches the districts from the dark, preparing a campaign that could expose the mystical world forever.",
+      "era": "Book II",
+      "date": "Following Book I",
+      "title": "The I.T.E.R. Chronicles — Initialization",
+      "summary": "Cohort competition and an IT internship establish the next stage of the students’ training and their ties to Kaden’s work.",
+      "status": "outlined",
       "events": [
-        {"title":"The Shadow Manifesto","description":"Evidence emerges of a plan to end the age of hiding and place mystical beings above humanity.","location":"Unknown","type":"conflict","characters":["Lordius Doomolo"]}
-      ]
+        {
+          "title": "Cohort Clash",
+          "description": "Additional cohort captains, including Cedric Paine, Len Hiyama, and Carla Storm, are introduced.",
+          "type": "discovery",
+          "characters": [
+            "Cedric Paine",
+            "Len Hiyama",
+            "Carla Storm"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "Flag Game and IT Internship",
+          "description": "The outline names the Flag Game and IT Internship arcs. Later notes establish that Avery and Teddric earn prize money from the flag game; further details of these arcs are not yet supplied.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Teddric Tech"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 5,
+      "era": "Book III",
+      "date": "Following Initialization; includes Kaden’s earlier life",
+      "title": "The I.T.E.R. Chronicles — Rectification",
+      "summary": "Stolen robot blueprints, demihuman kidnappings, and political manipulation force Kaden and his allies into hiding as Lux Urbis approaches a three-faction conflict.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "Kaden’s Past and the Cohort Selections",
+          "description": "At fourteen, one year after District 1’s fall, Kaden is withdrawn in New York until new friends inspire him to act. Later, the group of seven undergoes cohort selection; sixteen-year-old Kaden remains a second-year Blue Legion student and Avery joins Tempest Aquia.",
+          "type": "discovery",
+          "characters": [
+            "Kaden Icelander",
+            "Avery Obtainia",
+            "Ken Masumi",
+            "Kirk Masumi"
+          ],
+          "storyRole": "side-story"
+        },
+        {
+          "title": "Kidnappings and Council Schemes",
+          "description": "River is captured for forced labor producing illicit I.T.E.R. parts. Noble Thelio denies the evidence with Hayman’s backing, while Hayman secretly supports the kidnappings and manipulates the council against Kaden. Council discussions also foreshadow an army gathering in the north, District 6, and Imperium.",
+          "type": "conflict",
+          "characters": [
+            "River Grant",
+            "Thelio",
+            "Hayman",
+            "Kaden Icelander"
+          ],
+          "location": "Lux Urbis",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Robot Outbreak",
+          "description": "A longtime IT employee steals the I.T.E.R. blueprints and unleashes duplicate robots to frame the company. The heroes’ auction trip is interrupted by the outbreak; police and council officials converge on IT, and Martin identifies Kaden as the project’s creator.",
+          "type": "conflict",
+          "characters": [
+            "Kaden Icelander",
+            "Martin",
+            "Avery Obtainia",
+            "Teddric Tech"
+          ],
+          "location": "IT Tower / Lux Urbis",
+          "storyRole": "main"
+        },
+        {
+          "title": "Fugitives and the Dark Market",
+          "description": "Kaden, Lucy, Avery, and their allies escape IT Tower and are declared S-ranked fugitives. Pursued through nomadic forest land, they reach District 13’s black market to trace a captured robot’s network and identify its source.",
+          "type": "conflict",
+          "characters": [
+            "Kaden Icelander",
+            "Lucy Terner",
+            "Avery Obtainia"
+          ],
+          "location": "Forests between districts / District 13",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Slum Factory and Three Factions",
+          "description": "Anger over demihuman exploitation escalates into fighting at Lux Urbis’s gates as robots defend the city they previously attacked. The heroes uncover a forced-labor factory; a defeated deputy identifies Morphius as its boss.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia",
+            "Morphius"
+          ],
+          "location": "Lux Urbis / factory district",
+          "storyRole": "main"
+        },
+        {
+          "title": "After the I.T.E.R. Conflict",
+          "description": "The seven pursue intensive training to reach the next tier before school resumes, while the Masumi brothers disappear elsewhere. River encounters Josh Picard, who rescues her from trouble.",
+          "type": "discovery",
+          "characters": [
+            "River Grant",
+            "Josh Picard",
+            "Ken Masumi",
+            "Kirk Masumi"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 6,
+      "era": "Book IV",
+      "date": "The next semester and preparations for the festival",
+      "title": "Aqua Revolution",
+      "summary": "The Nuntios return, the Aquia family’s history emerges, and a water-kingdom conflict leads into reforms at Regnum and preparations for the school festival.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "Nuntios’ Return and Winter’s Dance",
+          "description": "Josh, Jay, Lux, and Marin take teaching roles at Regnum. Kiara Katzol and Imo Lordius transfer in. At the mandatory Winter’s Dance, River stays out of the festivities and Atlas confronts her.",
+          "type": "discovery",
+          "characters": [
+            "Josh Picard",
+            "Jay Neomo",
+            "Lux Luces",
+            "Marin Kne",
+            "Kiara Katzol",
+            "Imo Lordius",
+            "River Grant",
+            "Atlas Aquia"
+          ],
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Atalantia Investigation",
+          "description": "Avery discovers he can breathe underwater. Atlas, Alteria, and Avery are commissioned to address an urgent issue in the water kingdom, where investigations connect Atalantia, Malum, and Mas Rellim to District 1’s destruction and later conflicts.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Atlas Aquia",
+            "Alteria Aquia",
+            "Atalantia Aquia",
+            "Mas Rellim"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "River’s Family History",
+          "description": "Atalantia adopted River alongside her biological children, Atlas and Alteria. River fled after her adoptive father was captured and killed during a failed secret arrangement involving citizen trafficking and a demanded marriage alliance. Atlas’s investigation exposes the family’s concealed dealings, though both siblings continue to blame River before confronting their own wrongs.",
+          "type": "discovery",
+          "characters": [
+            "River Grant",
+            "Atalantia Aquia",
+            "Atlas Aquia",
+            "Alteria Aquia"
+          ],
+          "storyRole": "side-story"
+        },
+        {
+          "title": "The Attack on the Water Kingdom",
+          "description": "Atalantia diverts Mas Rellim’s water weapons to defend her kingdom. Hidden interference, including the Whale Lord’s influence, is suspected. Atlas and Alteria acknowledge their failings, advance in rank, and fight together against Mas Rellim.",
+          "type": "conflict",
+          "characters": [
+            "Atalantia Aquia",
+            "Atlas Aquia",
+            "Alteria Aquia",
+            "Mas Rellim",
+            "Whale Lord"
+          ],
+          "location": "Water kingdom",
+          "storyRole": "main"
+        },
+        {
+          "title": "Homerooms, Familiars, and the Pre-Festival",
+          "description": "Regnum introduces homeroom groups to curb noble influence and formally teaches familiars and spiritual bonds. Second-years perform a lifelong familiar ritual. Cohort missions and a pre-festival tournament test the students, with resources and rank-enhancing alchemy pills among the prizes. Billy Bones Acitas is fully introduced as Red Shred’s captain.",
+          "type": "magic",
+          "characters": [
+            "Billy Bones Acitas"
+          ],
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 7,
+      "era": "Book V",
+      "date": "Festival season, followed by summer",
+      "title": "Festival Saga",
+      "summary": "Regnum’s celebrations and competitions are interrupted by the Hands of Doom, Imo’s defection, and renewed struggles over magical orbs.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Regnum Festival",
+          "description": "A large tournament, alchemy and runecrafting contests, entertainment, and elective competitions bring the cohorts and elite students together. The outline also names Beast Hunt and Advancements arcs without further details.",
+          "type": "discovery",
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Festival Raid and Imo’s Choice",
+          "description": "The first two Hands of Doom appear to sow chaos and conduct a search. Alienated from his classmates and persuaded by his family’s ambitions, Imo Lordius joins the Hands of Doom and leaves Regnum.",
+          "type": "conflict",
+          "characters": [
+            "Imo Lordius"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Earth Orb and Pyrus’s Escape",
+          "description": "A battle over the earth orb begins during the festival. Pyrus accepts aid from shadow cultists to escape prison while pursuing his own aims, and the Magni Mage personally confronts an invader.",
+          "type": "conflict",
+          "characters": [
+            "Pyrus Bourn",
+            "Magni Mage"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Aquia Estate",
+          "description": "With no home for summer, Avery reluctantly accepts work at the Aquia Estate as Alteria’s servant, revealing the estate more fully.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Alteria Aquia"
+          ],
+          "location": "Aquia Estate",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 8,
+      "era": "Book VI",
+      "date": "After the festival attack",
+      "title": "Red Showdown",
+      "summary": "District unrest, Pyrus’s return, and rising shadow threats shape school rivalries, mainland internships, and Red Shred’s efforts to restore stability.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "District 3 Recapture",
+          "description": "Pyrus retakes District 3 without openly opposing District 7. A truce redirects attention toward the shadow cult, whose attempt to seize the orb unsettles the districts’ balance of power.",
+          "type": "conflict",
+          "characters": [
+            "Pyrus Bourn"
+          ],
+          "location": "District 3",
+          "storyRole": "main"
+        },
+        {
+          "title": "Trading Town and New York Internship",
+          "description": "Diplomatic transfers intensify competition among incoming students. Avery and others return to OSNYC as IT Agency interns supporting Mystical Surveillance Units.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia"
+          ],
+          "location": "Trading town / New York",
+          "storyRole": "main"
+        },
+        {
+          "title": "Red Shred’s Response",
+          "description": "Billy Bones Acitas and the cohorts suppress rising danger after the festival attack. His cohort band performs around Lux Urbis to lift morale, with Avery’s group assisting despite continuing distrust and tension.",
+          "type": "alliance",
+          "characters": [
+            "Billy Bones Acitas",
+            "Avery Obtainia"
+          ],
+          "location": "Lux Urbis",
+          "storyRole": "main"
+        },
+        {
+          "title": "School Selection and Council Quarantine",
+          "description": "The biannual competition among Regnum, Magis, and Imperium brings the rival schools into focus. Avery and Teddric are assigned to work directly under council members.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Teddric Tech"
+          ],
+          "location": "Regnum / Magis / Imperium",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 9,
+      "era": "Book VII",
+      "date": "Before the main group’s graduation",
+      "title": "The Rogue God",
+      "summary": "A surviving deity targets those blessed by the gods, while Kaden restores District 1 and the graduating Mystical Legends choose their separate paths.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "Deity Encirclement",
+          "description": "A millennia-old Rogue God, sustained by a secondary mana catalyst, directs followers to find deities and seize their power. Avery, who holds Lynnhera, becomes a target as the twelve deities are introduced.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia",
+            "Lynnhera",
+            "Rogue God"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "Avery and Kiara’s Capture",
+          "description": "The group captures Avery and Kiara and attempts to extract their deities. Lynnhera’s integration with Avery prevents ordinary extraction, so his captors instead seek his catalyst.",
+          "type": "magic",
+          "characters": [
+            "Avery Obtainia",
+            "Kiara Katzol",
+            "Lynnhera"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "District 1 Rekindling",
+          "description": "The deity followers seek shadow energy in District 1 to continue their ritual. Kaden uses the opportunity to retake the district; Avery and their allies help cleanse it. Citizens return and Kaden becomes the new Magni Sage.",
+          "type": "alliance",
+          "characters": [
+            "Kaden Icelander",
+            "Avery Obtainia"
+          ],
+          "location": "District 1",
+          "storyRole": "main"
+        },
+        {
+          "title": "Graduation and Separate Paths",
+          "description": "The students complete their final graduation test with high marks. Kaden joins Avery and the others as they leave school and pursue individual paths to grow stronger against the shadows.",
+          "type": "discovery",
+          "characters": [
+            "Kaden Icelander",
+            "Avery Obtainia"
+          ],
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 10,
+      "era": "Interlude",
+      "date": "A few weeks after the group separates",
+      "title": "The Faraway Paladin",
+      "summary": "A shadowy island leads Avery’s companions into the history of the deities and their war against Demon Lord Bathybius Dion.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Unmarked Island",
+          "description": "Some of the separated Mystical Legends arrive on a shadowy island rumored to have been discovered by Zenith Luces. Trisdain Leonard and the rulers’ black knights enter the story.",
+          "type": "discovery",
+          "characters": [
+            "Zenith Luces",
+            "Trisdain Leonard"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Lady of the Lake",
+          "description": "Lynnhera awakens and guides Avery and his companions to Artiana, the Lady of the Lake. The deities’ war against Bathybius Dion is explained, along with their continuing influence on history. The Leaf Series arc remains undeveloped in these notes.",
+          "type": "discovery",
+          "characters": [
+            "Lynnhera",
+            "Avery Obtainia",
+            "Artiana",
+            "Bathybius Dion"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "side-story"
+    },
+    {
+      "order": 11,
+      "era": "Book VIII",
+      "date": "Avery is nineteen",
+      "title": "Shadow Dwelling",
+      "summary": "Avery’s reunion with his allies coincides with marriage-alliance tensions and Doomolo’s full revival as shadow-realm experiments threaten the world.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "District 12 and the Wedding Alliance",
+          "description": "Avery meets Lumen and helps repel two Hands of Doom attacking District 12. Lumen proposes an alliance with District 10 through marriage, but Lux refuses; Kiara and Prince Aether are involved, and Avery later protects Lux.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia",
+            "Lumen",
+            "Lux Luces",
+            "Kiara Katzol",
+            "Prince Aether"
+          ],
+          "location": "District 12 / District 10",
+          "storyRole": "main"
+        },
+        {
+          "title": "Reunion and the Mainland Laboratory",
+          "description": "The outline names Reunion and Mainland Laboratory arcs as part of the renewed struggle against the shadow cult, without supplying their full events.",
+          "type": "discovery",
+          "storyRole": "main"
+        },
+        {
+          "title": "Doomolo’s Revival",
+          "description": "Lordius Doomolo revives using Luo Ye’s immortal blood and escapes fractured reality. Venjolo’s shadow-realm experiments support his plan to expose magic, raise ambient magical density through rifts, and unleash shadow soldiers and spiritless entities such as a revived Mas Rellim.",
+          "type": "magic",
+          "characters": [
+            "Lordius Doomolo",
+            "Luo Ye",
+            "Venjolo",
+            "Mas Rellim"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 12,
+      "era": "Book IX",
+      "date": "Before the Mystic War",
+      "title": "Districts’ Unition",
+      "summary": "The heroes work to unite the districts against Doomolo, resolving local conflicts to win the trust of their Magni.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The First District Union",
+          "description": "Districts 1, 5, 7, and 12 begin discussing a united response to Doomolo and his army.",
+          "type": "alliance",
+          "location": "Districts 1, 5, 7, and 12",
+          "storyRole": "main"
+        },
+        {
+          "title": "Winning the Other Districts",
+          "description": "The heroes journey through the other districts to resolve disputes and gain each Magni’s support. Named arcs include Throneless Silvastra, District 3’s Silence, District 6 Split, District 8 Capture, and Pre-War Confrontation; their detailed outcomes are not supplied.",
+          "type": "alliance",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 13,
+      "era": "Book X",
+      "date": "The war against Doomolo",
+      "title": "Mystic War",
+      "summary": "The outlined war brings Doomolo’s assault, the districts’ rally, mounting casualties, and a climactic confrontation leading into world revelation.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "From Confrontation to War",
+          "description": "Pre-War Confrontation continues into Doom’s Assault and Districts Rally, bringing the unified districts into the central conflict. Detailed battles are not yet described.",
+          "type": "conflict",
+          "characters": [
+            "Lordius Doomolo"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The War’s Climax",
+          "description": "Mystic War Peak, War Casualty, Battle Against Doom, and War Climax are listed as major stages. World Revelation begins at the end of this book; specific outcomes remain unspecified.",
+          "type": "conflict",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 14,
+      "era": "Book XI",
+      "date": "After the Mystic War",
+      "title": "World Revelation",
+      "summary": "Magic becomes widespread, society faces new dangers, and Avery’s relationship with Lynnhera develops into a struggle over his body and identity.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "Mystical Convergence and Global Revelation",
+          "description": "The revelation of magic continues. Increased magical density brings more creatures and greater magical capabilities, while a current Magni’s death signals a turning point. Beasts become sources of cultivation and rare materials, and rising crime creates a need for a national response.",
+          "type": "magic",
+          "storyRole": "main"
+        },
+        {
+          "title": "Rising of the Saints",
+          "description": "Lynnhera’s past and the lives of the deities are explored. Avery accepts her account and follows her advice as her influence on his life deepens.",
+          "type": "discovery",
+          "characters": [
+            "Avery Obtainia",
+            "Lynnhera"
+          ],
+          "storyRole": "side-story"
+        },
+        {
+          "title": "Against the Gods",
+          "description": "Lynnhera manifests as a living deity through Avery, transforms him into mana, and absorbs him, using the Spellcaster Seal Ring to reform her crown. His friends defeat her before greater harm occurs, but Avery does not fully awaken; she remains in control under the concealed identity Morgen.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia",
+            "Lynnhera",
+            "Morgen"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Angelor Betrayal and Holy War Prelude",
+          "description": "An Angelor girl who had become close to Avery betrays him, contributing to the Angelors’ later return. Lynnhera’s ulterior motives partly align with those of the foreign Angelors as the Holy War approaches.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia",
+            "Lynnhera"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 15,
+      "era": "Book XII",
+      "date": "The Holy War",
+      "title": "Angelos’ Retribution",
+      "summary": "The return of the exiled Angelors brings a campaign to restrict magic to the worthy while Avery struggles to regain consciousness.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Angelors’ Exile",
+          "description": "In the past, Doomolo devastated the Angelor clan and forced its survivors to retreat from Earth. They remained trapped at the sun because travel required abundant magic at both ends of the route.",
+          "type": "discovery",
+          "characters": [
+            "Lordius Doomolo"
+          ],
+          "date": "Historical background",
+          "storyRole": "side-story"
+        },
+        {
+          "title": "The Holy War",
+          "description": "Rising magic on Earth enables the Angelors to break their seal and open a portal back. They seek to fulfill the first Demon Lord’s wish to remove magic from those deemed unworthy and establish a world guided by chosen Mystical Beings.",
+          "type": "conflict",
+          "storyRole": "main"
+        },
+        {
+          "title": "Avery Awakens",
+          "description": "Lynnhera controls Avery through much of this period. By the book’s end, Avery regains consciousness but remains in Hera’s body.",
+          "type": "magic",
+          "characters": [
+            "Avery Obtainia",
+            "Lynnhera"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 16,
+      "era": "Book XIV",
+      "date": "After Angelos’ Retribution; Book XIII is not specified in the notes",
+      "title": "The Reign of Magni",
+      "summary": "Important marriages and succession trials establish the next generation of district leaders.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Marriage Arc",
+          "description": "Planned weddings include Avery and Lux, and Teddric and Jane. Kaden’s partner and other pairings are left unspecified.",
+          "type": "alliance",
+          "characters": [
+            "Avery Obtainia",
+            "Lux Luces",
+            "Teddric Tech",
+            "Jane Tee",
+            "Kaden Icelander"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Magni Trials",
+          "description": "Ultimus Deus candidates compete to succeed the current Magni, and the districts’ new leaders are declared.",
+          "type": "discovery",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 17,
+      "era": "Book XV",
+      "date": "Twelve years later",
+      "title": "Inheritance",
+      "summary": "Robin Obtainia and Ava Icelander become the focus as a new generation begins its journey at Regnum.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "New Regnum",
+          "description": "Robin and Ava enroll in Regnum Academy’s middle school with new friends. Games, competition, and the start of cultivation give way to unexplained trouble.",
+          "type": "discovery",
+          "characters": [
+            "Robin Obtainia",
+            "Ava Icelander"
+          ],
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 18,
+      "era": "Book XVI",
+      "date": "The next generation’s academy years",
+      "title": "Regnum Legends",
+      "summary": "A major Regnum competition seeks the seven students who will represent the school’s future.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Next Mystical Legends",
+          "description": "Regnum Academy holds a grand competition to choose its next seven bright stars.",
+          "type": "discovery",
+          "location": "Regnum Academy",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 19,
+      "era": "Book XVII",
+      "date": "As global magic continues to increase",
+      "title": "Fractured Reality",
+      "summary": "Shadow gates and immortal demons force the heroes to seek Seal Rings capable of altering space and reality.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "Chaos Emergence",
+          "description": "The balance between creation and destruction comes into focus, alongside the Demon Lord’s past and the mysterious scepter known as the Judger.",
+          "type": "discovery",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Shadow Gates",
+          "description": "Rising magic allows the shadow and physical realms to connect through gates. Magical defenders are tasked with containing beasts whose strength depends on each gate’s intensity.",
+          "type": "magic",
+          "location": "Earth / shadow realm",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Demon Threat",
+          "description": "High-ranking immortal demonic beings in the shadow realm seek entry into Earth, with strength described as rank ten or higher.",
+          "type": "conflict",
+          "storyRole": "main"
+        },
+        {
+          "title": "Seal Hunt and Activation",
+          "description": "The heroes seek Seal Rings and their wielders to bend space and reality against the demons. The Augment Ring is identified as particularly important.",
+          "type": "magic",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 20,
+      "era": "Book XVIII",
+      "date": "The final outlined demon war",
+      "title": "From That Day",
+      "summary": "Despite the Seal Rings, twelve demons emerge on Earth, prompting the Mystical Legends and their allies to pursue Celestius Deus and prepare for a final war.",
+      "status": "outlined",
+      "events": [
+        {
+          "title": "The Heirs of Gods",
+          "description": "Seal Activation continues, and the truth of the zodiac pagoda array is revealed and put to use.",
+          "type": "magic",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Twelve Demons Emerge",
+          "description": "The group’s defense ultimately fails and all twelve demons establish themselves on Earth. Avery and his allies continue cultivating toward Celestius Deus, a previously unknown tier rumored to grant immortality.",
+          "type": "conflict",
+          "characters": [
+            "Avery Obtainia"
+          ],
+          "location": "Earth",
+          "storyRole": "main"
+        },
+        {
+          "title": "Demon War Finale",
+          "description": "The demons’ pursuit of immortality and its cost are unveiled. Deities, the Mystical Legends, and their allies join a final offensive into demon-held territory with the world’s survival at stake. The notes do not specify the final outcome.",
+          "type": "conflict",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 21,
+      "era": "Book XIX — Tentative Continuation",
+      "date": "Possible future; a few months after the demon war",
+      "title": "Immortal Hunts",
+      "summary": "Tentative: normalized gates become resources while public fear of the heroes’ immortal power fractures their lives and shifts the focus to Robin and Ava.",
+      "status": "tentative",
+      "events": [
+        {
+          "title": "The Immortal Hunts",
+          "description": "Gates serve as sources of cultivation, materials, and training. News of the group’s immortal ascension raises fears of their world-shaking power, beginning the immortal hunts; some companions are corrupted by power.",
+          "type": "conflict",
+          "storyRole": "main"
+        },
+        {
+          "title": "The Families Left Behind",
+          "description": "Avery leaves to protect his family, and the story turns to Robin and Ava after their parents depart. The immortals ultimately pledge to defend the world independently of any single group, with Avery and Kaden retaining their Magni titles beyond District 7.",
+          "type": "alliance",
+          "characters": [
+            "Avery Obtainia",
+            "Kaden Icelander",
+            "Robin Obtainia",
+            "Ava Icelander"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 22,
+      "era": "Book XX — Tentative Continuation",
+      "date": "Possible future; Robin and Ava’s teenage years",
+      "title": "Subzero",
+      "summary": "Tentative: stronger shadow creatures and a catastrophic sea threat draw Robin and Ava into expeditions to the world’s coldest regions.",
+      "status": "tentative",
+      "events": [
+        {
+          "title": "The Sea Creature Threat",
+          "description": "Shadow monsters become stronger and influence other creatures beyond Tier 8. A massive sea creature rises to threaten catastrophic destruction, prompting a task force.",
+          "type": "conflict",
+          "characters": [
+            "Robin Obtainia",
+            "Ava Icelander"
+          ],
+          "storyRole": "main"
+        },
+        {
+          "title": "The Subzero Expedition",
+          "description": "With magic commonplace and peace fragile, exploration reaches remote frozen regions. Teenage Robin and Ava sneak into an exclusive expedition team in search of adventure.",
+          "type": "discovery",
+          "characters": [
+            "Robin Obtainia",
+            "Ava Icelander"
+          ],
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
+    },
+    {
+      "order": 23,
+      "era": "Book XXI — Tentative Continuation",
+      "date": "Possible future; decades later",
+      "title": "Deep Space",
+      "summary": "Tentative: an era of magical technology and international peace opens the way to interstellar exploration and settlement.",
+      "status": "tentative",
+      "events": [
+        {
+          "title": "Magic Beyond Earth",
+          "description": "Countries and districts retain their governments under an aligned peace agreement. Advances led by IT use magic to overcome gravity, mass, and the limits of space travel, developing faster-than-light devices and wormholes.",
+          "type": "magic",
+          "storyRole": "main"
+        },
+        {
+          "title": "Galactic Settlement",
+          "description": "Humanity spreads across hundreds of celestial bodies. Advanced cultivation and magic support life beyond Earth, including survival in space.",
+          "type": "discovery",
+          "storyRole": "main"
+        }
+      ],
+      "storyRole": "main"
     }
-
-
-
   ]
-  
 }

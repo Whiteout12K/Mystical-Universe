@@ -28,17 +28,69 @@ const overlay=document.getElementById("sidebarOverlay");
 const scale=1.5;
 const pageElements=new Map();
 
-const pdf=await pdfjsLib.getDocument(url).promise;
+let pdf;
+try { pdf=await pdfjsLib.getDocument(url).promise; }
+catch(error) {
+    document.getElementById('readingProgress').textContent='Book could not be loaded.';
+    const notice=document.createElement('p');notice.textContent='Unable to open this book. ';
+    const retry=document.createElement('button');retry.textContent='Retry';retry.onclick=()=>location.reload();notice.append(retry);viewer.append(notice);
+    throw error;
+}
+const storageKey=`ml-reader-${id}`;
+let saved={};
+try { const value=JSON.parse(localStorage.getItem(storageKey)||'{}'); if(value && typeof value==='object' && !Array.isArray(value))saved=value; } catch {}
+let currentPage=1;
+function saveReading(){try{localStorage.setItem(storageKey,JSON.stringify(saved));}catch{}}
+function jump(page){const target=pageElements.get(Number(page));if(target)viewer.scrollTop=target.offsetTop-20;}
+const resume=document.getElementById('resumeReading');
+const resumePage=saved.page;
+resume.hidden=!(resumePage>1 && resumePage<=pdf.numPages);
+resume.onclick=()=>{jump(resumePage);closeSidebar();};
+const validPage=page=>Number.isInteger(page) && page>=1 && page<=pdf.numPages;
+saved.bookmarks=[...new Set((Array.isArray(saved.bookmarks)?saved.bookmarks:[saved.bookmark]).filter(validPage))].sort((a,b)=>a-b);
+delete saved.bookmark;
+const addBookmark=document.getElementById('saveBookmark');
+function renderBookmarks(){
+ const list=document.getElementById('bookmarkList');list.replaceChildren();
+ document.getElementById('bookmarkEmpty').hidden=saved.bookmarks.length>0;
+ for(const page of saved.bookmarks){
+  const row=document.createElement('li');
+  const go=document.createElement('button');go.type='button';go.className='bookmark-jump';go.textContent=`Page ${page}`;go.onclick=()=>{jump(page);closeSidebar();};
+  const remove=document.createElement('button');remove.type='button';remove.className='bookmark-remove';remove.textContent='×';remove.setAttribute('aria-label',`Remove bookmark for page ${page}`);
+  remove.onclick=()=>{saved.bookmarks=saved.bookmarks.filter(p=>p!==page);saveReading();renderBookmarks();document.getElementById('bookmarkStatus').textContent=`Bookmark for page ${page} removed.`;addBookmark.focus();};
+  row.append(go,remove);list.append(row);
+ }
+ addBookmark.disabled=saved.bookmarks.includes(currentPage);
+ addBookmark.textContent=addBookmark.disabled?'Page saved':'Add page';
+ addBookmark.setAttribute('aria-label',addBookmark.disabled?`Page ${currentPage} is bookmarked`:`Bookmark page ${currentPage}`);
+}
+addBookmark.onclick=()=>{if(!saved.bookmarks.includes(currentPage)){saved.bookmarks.push(currentPage);saved.bookmarks.sort((a,b)=>a-b);saveReading();renderBookmarks();document.getElementById('bookmarkStatus').textContent=`Page ${currentPage} bookmarked.`;}};
+renderBookmarks();
+let scrollFrame;
+viewer.addEventListener('scroll',()=>{
+ if(scrollFrame)return;
+ scrollFrame=requestAnimationFrame(()=>{scrollFrame=null;
+ const line=viewer.scrollTop+viewer.clientHeight*.35;
+ for(const [number,element] of pageElements){if(element.offsetTop<=line)currentPage=number;else break;}
+ saved.page=currentPage;saveReading();renderBookmarks();document.getElementById('readingProgress').textContent=`Page ${currentPage} of ${pdf.numPages}`;
+ });
+},{passive:true});
 
 /* ---------------- Sidebar ---------------- */
 
 function openSidebar(){
+    sidebar.inert=false;
     sidebar.classList.add("open");
+    document.getElementById("openSidebar").setAttribute("aria-expanded","true");
+    document.getElementById("closeSidebar").focus();
     overlay.classList.add("show");
 }
 
 function closeSidebar(){
     sidebar.classList.remove("open");
+    sidebar.inert=true;
+    document.getElementById("openSidebar").setAttribute("aria-expanded","false");
+    document.getElementById("openSidebar").focus();
     overlay.classList.remove("show");
 }
 
@@ -47,7 +99,13 @@ document.getElementById("closeSidebar").onclick=closeSidebar;
 overlay.onclick=closeSidebar;
 
 document.addEventListener("keydown",e=>{
-    if(e.key==="Escape")closeSidebar();
+    if(e.key==="Escape" && sidebar.classList.contains("open"))closeSidebar();
+    if(e.key==="Tab" && sidebar.classList.contains("open")){
+      const controls=[...sidebar.querySelectorAll('button:not(:disabled),a[href]')].filter(el=>!el.hidden && el.getClientRects().length);
+      const first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey && document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey && document.activeElement===last){e.preventDefault();first.focus();}
+    }
 });
 
 /* ---------------- Destinations ---------------- */
@@ -205,69 +263,43 @@ async function renderAnnotations(page,viewport,layer){
 
 /* ---------------- Page Rendering ---------------- */
 
-async function renderPage(pageNum){
-    const page=await pdf.getPage(pageNum);
-
-    const viewport=page.getViewport({
-        scale
-    });
-
-    const wrapper=document.createElement("div");
-
-    wrapper.className="pdf-page";
-    wrapper.dataset.page=pageNum;
-
-    wrapper.style.width=`${viewport.width}px`;
-    wrapper.style.height=`${viewport.height}px`;
-
-    const canvas=document.createElement("canvas");
-
-    const context=canvas.getContext(
-        "2d",
-        {alpha:false}
-    );
-
-    canvas.width=Math.ceil(viewport.width);
-    canvas.height=Math.ceil(viewport.height);
-
-    canvas.style.width=`${viewport.width}px`;
-    canvas.style.height=`${viewport.height}px`;
-
-    const annotationLayer=document.createElement("div");
-    annotationLayer.className="annotation-layer";
-
-    wrapper.append(
-        canvas,
-        annotationLayer
-    );
-
-    viewer.appendChild(wrapper);
-
-    pageElements.set(
-        pageNum,
-        wrapper
-    );
-
-    await page.render({
-        canvasContext:context,
-        viewport
-    }).promise;
-
-    await renderAnnotations(
-        page,
-        viewport,
-        annotationLayer
-    );
+const rendered=new Set();
+let renderQueue=Promise.resolve();
+async function paintPage(pageNum){
+ const wrapper=pageElements.get(pageNum);
+ try{
+ const page=await pdf.getPage(pageNum);
+ const viewport=page.getViewport({scale});
+ const canvas=document.createElement('canvas');
+ canvas.width=Math.ceil(viewport.width);canvas.height=Math.ceil(viewport.height);
+ canvas.style.width=`${viewport.width}px`;canvas.style.height=`${viewport.height}px`;
+ canvas.setAttribute('role','img');canvas.setAttribute('aria-label',`Book page ${pageNum}`);
+ const layer=document.createElement('div');layer.className='annotation-layer';
+ wrapper.replaceChildren(canvas,layer);
+ await page.render({canvasContext:canvas.getContext('2d',{alpha:false}),viewport}).promise;
+ await renderAnnotations(page,viewport,layer);
+ }catch{
+ rendered.delete(pageNum);
+ const retry=document.createElement('button');retry.textContent=`Retry page ${pageNum}`;retry.onclick=()=>schedulePage(pageNum);wrapper.replaceChildren(retry);
+ }
 }
-
+function schedulePage(pageNum){
+ if(rendered.has(pageNum))return;
+ rendered.add(pageNum);renderQueue=renderQueue.then(()=>paintPage(pageNum));
+}
 async function renderBook(){
-    for(
-        let pageNum=1;
-        pageNum<=pdf.numPages;
-        pageNum++
-    ){
-        await renderPage(pageNum);
-    }
+ // Place lightweight page frames first; only nearby pages allocate canvases.
+ for(let pageNum=1;pageNum<=pdf.numPages;pageNum++){
+ const page=await pdf.getPage(pageNum),viewport=page.getViewport({scale});
+ const wrapper=document.createElement('div');wrapper.className='pdf-page';wrapper.dataset.page=pageNum;
+ wrapper.style.width=`${viewport.width}px`;wrapper.style.height=`${viewport.height}px`;
+ wrapper.setAttribute('aria-label',`Page ${pageNum}`);viewer.append(wrapper);pageElements.set(pageNum,wrapper);
+ }
+ if('IntersectionObserver' in window){
+ const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting)schedulePage(Number(entry.target.dataset.page));},{root:viewer,rootMargin:'1000px 0px'});
+ for(const wrapper of pageElements.values())observer.observe(wrapper);
+ }else{for(const pageNum of pageElements.keys())schedulePage(pageNum);}
+ document.getElementById('readingProgress').textContent=`Page 1 of ${pdf.numPages}`;
 }
 
 /* ---------------- Start ---------------- */

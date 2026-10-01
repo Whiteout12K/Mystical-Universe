@@ -17,6 +17,13 @@
 
   <link rel="stylesheet" href="/css/game-hub.css">
   <script src="/js/bootstrap-bundle-min.js"></script>
+<link rel="canonical" href="https://mysticallegends.org/game-hub.html">
+<meta property="og:title" content="MLG Hub">
+<meta property="og:description" content="Mystical Legends Game is based off the original story and series featuring Avery Obtainia and his discovery of the mystical beings living among us in modern times.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mysticallegends.org/game-hub.html">
+<meta property="og:image" content="https://mysticallegends.org/images/website/main-bg.png">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body>
@@ -30,11 +37,11 @@
     src="/images/website/mlg/og-menu.png"
     alt="Article Header Image"
     class="img-fluid w-100"
-    style="object-fit: cover;">
+    style="object-fit: cover;" width="1210" height="700" decoding="async">
 
   <!-- Overlay image -->
   <div class="overlay-image" style="top: 20%; left: 22%;">
-    <img src="/images/mlg-assets/mlg-logo.png" alt="Icon">
+    <img src="/images/mlg-assets/mlg-logo.png" alt="Icon" width="960" height="469" decoding="async">
   </div>
 </div>
 
@@ -60,7 +67,7 @@
   <div class="mlg-tools-grid">
 
     <a class="mlg-tool-item" href="#char">
-      <div class="mlg-tool-icon">✧</div>
+      <div class="mlg-tool-icon">⟡</div>
       <div class="mlg-tool-title">Characters</div>
     </a>
 
@@ -722,6 +729,7 @@ async function loadCharacters(){
     }
 
     characterData=await response.json();
+    if(!characterData || typeof characterData!=="object" || Array.isArray(characterData))throw new Error("Invalid character data");
 
     characters=Object.entries(characterData)
       .filter(([id,data])=>
@@ -751,13 +759,14 @@ async function loadCharacters(){
 
     grid.innerHTML=`
       <div class="character-load-error">
-        <div>✧</div>
+        <div></div>
         <strong>Character data could not be loaded.</strong>
         <span>${escapeHTML(error.message)}</span>
       </div>
     `;
 
     resultCount.textContent="Character data unavailable";
+    const retry=document.createElement('button');retry.type='button';retry.className='fantasy-button';retry.textContent='Retry loading characters';retry.onclick=()=>{grid.textContent='Loading characters…';loadCharacters();};grid.append(retry);
   }
 }
 

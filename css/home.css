@@ -67,7 +67,7 @@ a:hover {
   align-items: flex-end;
   overflow: hidden;
   background:
-    url("../images/website/main-bg.png") center / cover no-repeat;
+    url("../images/website/main-bg.webp") center / cover no-repeat;
 }
 
 .hero-overlay {

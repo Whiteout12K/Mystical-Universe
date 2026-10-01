@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Document Viewer</title>
+<title>Mystical Legends Book Reader</title>
 
 <style>
 *{box-sizing:border-box}
@@ -128,6 +128,8 @@ html,body{
     left:12px;
     display:flex;
     gap:8px;
+    flex-wrap:wrap;
+    max-width:calc(100vw - 24px);
 }
 
 .toolbar-btn{
@@ -220,6 +222,30 @@ html,body{
         padding-right:5px;
     }
 }
+
+/* Keep reading tools inside the off-canvas panel. */
+.toolbar-btn { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-size: 14px; box-shadow: none; border-radius: 5px; }
+.sidebar-body { height: calc(100% - 58px); overflow-y: auto; padding: 16px; }
+#outline { height: auto; overflow: visible; padding: 0; }
+.reader-links { display: flex; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid #333; }
+.reader-links a, .reader-action { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; padding: 7px 11px; border: 1px solid #3e3e3e; border-radius: 5px; background: #222; color: #ddd; font: 13px Arial,sans-serif; text-decoration: none; cursor: pointer; }
+.reader-links a:hover, .reader-action:hover { background: #303030; }
+.reading-tools { padding: 16px 0; border-bottom: 1px solid #333; }
+#readingProgress { font-size: 12px; color: #aaa; margin: 0 0 12px; }
+.bookmark-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 16px; }
+.bookmark-heading h3, .contents-label { font-size: 12px; color: #aaa; font-weight: 600; margin: 0; }
+.contents-label { margin: 18px 0 8px; }
+#bookmarkList { list-style: none; padding: 0; margin: 10px 0 0; }
+#bookmarkList li { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.bookmark-jump { flex: 1; text-align: left; padding: 9px 10px; border: 0; border-radius: 4px; color: #ddd; background: #232323; font-size: 13px; cursor: pointer; }
+.bookmark-remove { width: 32px; height: 32px; border: 0; border-radius: 4px; color: #aaa; background: transparent; cursor: pointer; font-size: 18px; }
+.bookmark-remove:hover { color: #fff; background: #342323; }
+#bookmarkEmpty, .reader-status { color: #999; font-size: 12px; margin: 10px 0 0; line-height: 1.5; }
+.reader-status:empty { display: none; }
+.reader-action:disabled { opacity: .5; cursor: default; }
+.reader-action[hidden] { display: none; }
+#sidebar :is(a,button):focus-visible, .toolbar-btn:focus-visible { outline: 2px solid #c9a84c; outline-offset: 2px; }
+@media(prefers-reduced-motion:reduce) { #sidebar { transition: none; } }
 </style>
 </head>
 
@@ -227,24 +253,36 @@ html,body{
 
 <div id="app">
 
-    <aside id="sidebar">
+    <aside id="sidebar" aria-label="Book navigation" inert>
         <div class="sidebar-header">
             <h2>Book Navigation</h2>
             <button id="closeSidebar" aria-label="Close navigation">×</button>
         </div>
 
-        <nav id="outline"></nav>
+        <div class="sidebar-body">
+          <nav class="reader-links" aria-label="Explore"><a href="/books_main.html">Books</a><a href="/index.html#characters">Characters</a></nav>
+          <section class="reading-tools" aria-label="Reading tools">
+            <p id="readingProgress" role="status" aria-live="polite">Loading book…</p>
+            <button id="resumeReading" class="reader-action" hidden>Resume reading</button>
+            <div class="bookmark-heading"><h3>Bookmarks</h3><button id="saveBookmark" class="reader-action" disabled>Add page</button></div>
+            <p id="bookmarkEmpty">No bookmarks yet.</p>
+            <ul id="bookmarkList" aria-label="Saved bookmarks"></ul>
+            <p id="bookmarkStatus" class="reader-status" role="status"></p>
+          </section>
+          <h3 class="contents-label">Contents</h3>
+          <nav id="outline" aria-label="Book chapters"></nav>
+        </div>
     </aside>
 
     <div id="sidebarOverlay"></div>
 
     <div id="toolbar">
-        <button id="openSidebar" class="toolbar-btn" title="Book navigation">☰</button>
+        <button id="openSidebar" class="toolbar-btn" title="Book navigation" aria-label="Open book navigation" aria-controls="sidebar" aria-expanded="false">☰</button>
     </div>
 
     <div id="watermark">Protected View</div>
 
-    <main id="viewer"></main>
+    <main id="viewer" aria-label="Book pages" tabindex="0"></main>
 
 </div>
 
