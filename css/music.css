@@ -570,3 +570,21 @@
     line-height: 1.55;
   }
 }
+/* Native sliders provide reliable touch, pointer, and keyboard seeking. */
+#progress-container { display: block; height: 28px; border: 0; background: transparent; accent-color: var(--ml-gold); overflow: visible; }
+#song-artist { margin: 8px 0 0; color: #b5ada1; font-size: .85rem; }
+#retry { padding: 8px 12px; color: var(--ml-gold-light); background: #241616; border: 1px solid #5d4931; border-radius: 3px; }
+#player-status { min-height: 24px; margin: 16px 0 0; text-align: center; color: #c5baaa; font-size: .85rem; }
+#retry { display: block; margin: 8px auto 0; }
+#retry[hidden], .song[hidden], .song-details[hidden] { display: none; }
+.playlist-tools { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-size: .85rem; color: #c5baaa; }
+#playlist-search { flex: 1; min-width: 200px; padding: 12px; border: 1px solid #5d4931; border-radius: 3px; background: #171414; color: #eee5d4; }
+#playlist-count { width: 100%; margin: 0; color: #b5ada1; }
+.playlist-tools + .playlist { margin-top: 16px; }
+button.song-header { width: 100%; border: 0; background: transparent; color: inherit; font: inherit; }
+.song.active .song-details { max-height: none; }
+.song-text small { color: #b5ada1; }
+#jukebox :is(button, input):focus-visible { outline: 2px solid var(--ml-gold); outline-offset: 3px; }
+.controls button:disabled { opacity: .45; cursor: wait; }
+@media (max-width: 600px) { .controls button { min-width: 44px; min-height: 44px; } }
+@media (prefers-reduced-motion: reduce) { #jukebox *, #jukebox *::before, #jukebox *::after { transition: none; } }
