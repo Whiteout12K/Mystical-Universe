@@ -39,9 +39,20 @@
     el('current-time').textContent = time(dragging && valid ? seek.value / 100 * duration : audio.currentTime);
     el('duration').textContent = time(duration);
     seek.setAttribute('aria-valuetext', `${el('current-time').textContent} of ${time(duration)}`);
-    if (valid && !dragging && 'mediaSession' in navigator && navigator.mediaSession.setPositionState) {
-      try { navigator.mediaSession.setPositionState({duration, playbackRate: audio.playbackRate, position: Math.min(duration, audio.currentTime)}); } catch {}
+    if (!dragging && 'mediaSession' in navigator && navigator.mediaSession.setPositionState) {
+      try {
+        if (valid) navigator.mediaSession.setPositionState({duration, playbackRate: audio.playbackRate, position: Math.max(0, Math.min(duration, audio.currentTime))});
+        else navigator.mediaSession.setPositionState();
+      } catch {}
     }
+  }
+  function seekTo(position, fast = false) {
+    if (!Number.isFinite(audio.duration) || audio.duration <= 0 || !Number.isFinite(position)) return;
+    dragging = false;
+    const target = Math.max(0, Math.min(audio.duration, position));
+    if (fast && typeof audio.fastSeek === 'function') audio.fastSeek(target);
+    else audio.currentTime = target;
+    progress();
   }
   function refillBag() {
     bag = songs.map((_, i) => i).filter(i => i !== index);
@@ -76,7 +87,13 @@
       row.querySelector('.song-details').hidden = !active;
     });
     if ('mediaSession' in navigator && 'MediaMetadata' in window) {
-      navigator.mediaSession.metadata = new MediaMetadata({title: song.title, artist: song.artist, album: song.album});
+      // Use the same track artwork in the player, playlist, and phone controls.
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: song.title, artist: song.artist || 'Unknown artist', album: song.album || 'Soundtrack',
+          artwork: [{src: new URL(el('cover').src, document.baseURI).href}]
+        });
+      } catch {}
     }
     message('Loading track…');
     syncControls();
@@ -196,7 +213,7 @@
       audio.currentTime = event.key === 'Home' ? 0 : event.key === 'End' ? audio.duration : Math.max(0, Math.min(audio.duration, audio.currentTime + delta)); progress();
     }
   });
-  ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked'].forEach(event => audio.addEventListener(event, progress));
+  ['timeupdate', 'loadedmetadata', 'durationchange', 'seeked', 'ratechange', 'emptied'].forEach(event => audio.addEventListener(event, progress));
   audio.addEventListener('playing', () => { syncControls(); message(''); });
   audio.addEventListener('pause', syncControls);
   audio.addEventListener('waiting', () => { if (wanted || !audio.paused) message('Buffering…'); });
@@ -209,7 +226,14 @@
     repeat = ['off', 'all', 'one'].includes(saved.repeat) ? saved.repeat : 'off';
   } catch {}
   if ('mediaSession' in navigator) {
-    const handlers = {play, pause, previoustrack: previous, nexttrack: () => next(), seekto: details => { if (Number.isFinite(audio.duration) && Number.isFinite(details.seekTime)) audio.currentTime = Math.max(0, Math.min(audio.duration, details.seekTime)); }};
+    const offset = details => Number.isFinite(details.seekOffset) && details.seekOffset > 0 ? details.seekOffset : 10;
+    const handlers = {
+      play, pause, previoustrack: previous, nexttrack: () => next(),
+      seekbackward: (details = {}) => seekTo(audio.currentTime - offset(details)),
+      seekforward: (details = {}) => seekTo(audio.currentTime + offset(details)),
+      seekto: (details = {}) => seekTo(details.seekTime, details.fastSeek === true),
+      stop: () => { pause(); seekTo(0); }
+    };
     Object.entries(handlers).forEach(([action, handler]) => { try { navigator.mediaSession.setActionHandler(action, handler); } catch {} });
   }
   syncControls(); loadDatabase();
