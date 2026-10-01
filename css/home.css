@@ -944,6 +944,11 @@ a:hover {
   color:var(--ml-gold-light) !important;
 }
 
+.mystical-navbar .nav-link.nav-explore{
+  color:#d8d2c5 !important;
+  text-shadow:none;
+}
+
 
 /* =========================================================
    PROFILE

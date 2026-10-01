@@ -135,9 +135,9 @@
     }
     select(target, ended || wanted || !audio.paused);
   }
-  function previous() {
+  function previous(restartCurrent = true) {
     if (!songs.length) return;
-    if (audio.currentTime > 3) { audio.currentTime = 0; progress(); return; }
+    if (restartCurrent && audio.currentTime > 3) { audio.currentTime = 0; progress(); return; }
     const target = history.pop() ?? (index - 1 + songs.length) % songs.length;
     if (shuffled && target !== index && !bag.includes(index)) bag.push(index);
     select(target, wanted || !audio.paused, false);
@@ -226,11 +226,11 @@
     repeat = ['off', 'all', 'one'].includes(saved.repeat) ? saved.repeat : 'off';
   } catch {}
   if ('mediaSession' in navigator) {
-    const offset = details => Number.isFinite(details.seekOffset) && details.seekOffset > 0 ? details.seekOffset : 10;
     const handlers = {
-      play, pause, previoustrack: previous, nexttrack: () => next(),
-      seekbackward: (details = {}) => seekTo(audio.currentTime - offset(details)),
-      seekforward: (details = {}) => seekTo(audio.currentTime + offset(details)),
+      play, pause, previoustrack: () => previous(false), nexttrack: () => next(),
+      // Disable interval buttons so phone controls can show track navigation.
+      seekbackward: null,
+      seekforward: null,
       seekto: (details = {}) => seekTo(details.seekTime, details.fastSeek === true),
       stop: () => { pause(); seekTo(0); }
     };

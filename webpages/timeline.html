@@ -6,10 +6,8 @@
 <meta name="description" content="A chronological record of the Mystical Legends universe.">
 <title>Mystical Legends | Chronicle</title>
 <link rel="icon" href="/images/website/favicon.png" type="image/png">
-<link rel="stylesheet" href="/css/bootstrap-min.css">
 <link rel="stylesheet" href="/css/home.css">
-<link rel="stylesheet" href="/css/timeline.css?v=tree-2">
-<script src="/js/bootstrap-bundle-min.js" defer></script>
+<link rel="stylesheet" href="/css/timeline.css?v=separate-1">
 <link rel="canonical" href="https://mysticallegends.org/webpages/timeline.html">
 <meta property="og:title" content="Mystical Legends | Chronicle">
 <meta property="og:description" content="A chronological record of the Mystical Legends universe.">
@@ -19,31 +17,25 @@
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
-<div id="header-placeholder"></div>
-<main class="chronicle-page" id="top">
-  <header class="chronicle-intro">
-    <p class="chronicle-eyebrow">THE GRAND ARCHIVE</p>
-    <h1>The Living Timeline</h1>
-    <p>Trace the eras, alliances, and discoveries of the Mystical Legends universe.</p>
-    <p class="chronicle-note">Contains story spoilers. Event details stay closed until you choose to reveal them.</p>
-  </header>
+<main class="chronicle-page" id="top" aria-label="Mystical Legends timeline map">
+  <button id="open-jump" class="map-side-tab" type="button" aria-controls="jump-panel" aria-expanded="false"><span aria-hidden="true">☰</span><span>Arcs</span></button>
+  <a class="map-back" href="/" aria-label="Back to the main website">← <span>Main website</span></a>
   <div class="tree-toolbar" aria-label="Timeline controls">
-    <button id="open-jump" class="chronicle-toggle" type="button" aria-controls="jump-panel" aria-expanded="false">Quick jump</button>
-    <label for="tree-zoom">Zoom <input id="tree-zoom" type="range" min="70" max="120" value="100" step="10"><output id="zoom-value">100%</output></label>
-    <button id="reset-view" class="chronicle-toggle" type="button">Reset view</button>
+    <label for="tree-zoom">Zoom <input id="tree-zoom" type="range" min="60" max="140" value="100" step="10"><output id="zoom-value">100%</output></label>
+    <button id="reset-view" class="chronicle-toggle" type="button">Recenter</button>
     <button id="toggleAll" class="chronicle-toggle" type="button" disabled>Expand events</button>
   </div>
-  <p class="tree-hint">Scroll in either direction or drag the grid to explore. The main line follows narrative order; branches show events, characters, and side stories. Dates are relative.</p>
-  <div class="tree-viewport" id="tree-viewport" tabindex="0" role="region" aria-label="Scrollable timeline tree">
+  <div class="tree-viewport" id="tree-viewport" tabindex="0" role="region" aria-label="Timeline map. Swipe or scroll to explore; use the Arcs tab to jump.">
     <section id="timeline" class="timeline-tree" aria-label="World timeline" aria-busy="true"><p role="status">Opening the archive…</p></section>
   </div>
+  <p class="map-caption">Arcs: left → right <span>Events: top → bottom</span></p>
   <dialog id="jump-panel" aria-labelledby="jump-title">
-    <header class="jump-heading"><h2 id="jump-title">Quick jump</h2><button id="close-jump" type="button" aria-label="Close quick jump">×</button></header>
+    <header class="jump-heading"><h2 id="jump-title">Quick jump</h2><button id="close-jump" type="button" autofocus aria-label="Close quick jump">×</button></header>
     <label for="jump-search">Find an arc, event, or character</label>
     <input id="jump-search" type="search" placeholder="Search the timeline…">
     <div class="jump-filters" aria-label="Jump categories">
-      <button type="button" data-kind="all" aria-pressed="true">All</button>
-      <button type="button" data-kind="arc" aria-pressed="false">Major arcs</button>
+      <button type="button" data-kind="all" aria-pressed="false">All</button>
+      <button type="button" data-kind="arc" aria-pressed="true">Major arcs</button>
       <button type="button" data-kind="event" aria-pressed="false">Events</button>
       <button type="button" data-kind="character" aria-pressed="false">Characters</button>
       <button type="button" data-kind="side" aria-pressed="false">Side stories</button>
@@ -52,8 +44,6 @@
     <nav id="era-links" aria-label="Timeline destinations"></nav>
   </dialog>
 </main>
-<div id="footer-placeholder"></div>
-<script src="/js/include.js" defer></script>
-<script src="/js/timeline.js?v=tree-2" defer></script>
+<script src="/js/timeline.js?v=separate-1" defer></script>
 </body>
 </html>

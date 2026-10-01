@@ -18,7 +18,15 @@
             "Lordius Doomolo",
             "Tomolock"
           ],
-          "storyRole": "side-story"
+          "storyRole": "side-story",
+          "timing": "history",
+          "date": "Hundreds of years before the Journey; exact date unknown",
+          "relatedEvents": [
+            {
+              "title": "Tomolock’s Artifact Search",
+              "label": "Escape from the earlier banishment"
+            }
+          ]
         },
         {
           "title": "The Sustination Orb",
@@ -52,7 +60,13 @@
             "Tomolock"
           ],
           "date": "Roughly sixteen years before Book I",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "The Cabin and the Ancient Rune",
+              "label": "The ring and sealing history are discovered"
+            }
+          ]
         },
         {
           "title": "Zenith’s Return to the Past",
@@ -63,7 +77,9 @@
             "Lordius Doomolo",
             "Caela Obtainia"
           ],
-          "storyRole": "main"
+          "storyRole": "main",
+          "timing": "time-travel",
+          "date": "Returns to a time before the Journey"
         },
         {
           "title": "The Ring’s Protector",
@@ -73,7 +89,9 @@
             "Zenith Luces",
             "Lordius Doomolo"
           ],
-          "storyRole": "main"
+          "storyRole": "main",
+          "timing": "time-travel",
+          "date": "Earlier moment reached through fractured time"
         }
       ],
       "storyRole": "prequel"
@@ -117,7 +135,17 @@
             "Kaden Icelander"
           ],
           "location": "District 1",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "Kaden’s Past and the Cohort Selections",
+              "label": "One year later: Kaden at fourteen"
+            },
+            {
+              "title": "District 1 Rekindling",
+              "label": "Later: District 1 is reclaimed"
+            }
+          ]
         },
         {
           "title": "The Nuntios’ New Purpose",
@@ -130,7 +158,13 @@
             "Marin Kne"
           ],
           "location": "Regnum Academy",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "Nuntios’ Return and Winter’s Dance",
+              "label": "The Nuntios later return as teachers"
+            }
+          ]
         }
       ],
       "storyRole": "prequel"
@@ -270,7 +304,9 @@
             "Ken Masumi",
             "Kirk Masumi"
           ],
-          "storyRole": "side-story"
+          "storyRole": "side-story",
+          "timing": "history",
+          "date": "Kaden at fourteen, one year after District 1’s fall; later cohort selections"
         },
         {
           "title": "Kidnappings and Council Schemes",
@@ -384,7 +420,19 @@
             "Atlas Aquia",
             "Alteria Aquia"
           ],
-          "storyRole": "side-story"
+          "storyRole": "side-story",
+          "timing": "history",
+          "date": "Before River’s admission to OSNYC; exact date unknown",
+          "relatedEvents": [
+            {
+              "title": "OSNYC Admission",
+              "label": "River later meets Avery and Teddric"
+            },
+            {
+              "title": "The Atalantia Investigation",
+              "label": "Her family history comes to light"
+            }
+          ]
         },
         {
           "title": "The Attack on the Water Kingdom",
@@ -435,7 +483,13 @@
           "characters": [
             "Imo Lordius"
           ],
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "Red Shred’s Response",
+              "label": "Response to the festival attack"
+            }
+          ]
         },
         {
           "title": "The Earth Orb and Pyrus’s Escape",
@@ -564,7 +618,13 @@
             "Avery Obtainia"
           ],
           "location": "Regnum Academy",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "The Unmarked Island",
+              "label": "A few weeks after separation"
+            }
+          ]
         }
       ],
       "storyRole": "main"
@@ -640,7 +700,13 @@
             "Venjolo",
             "Mas Rellim"
           ],
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "The First District Union",
+              "label": "The districts begin a united response"
+            }
+          ]
         }
       ],
       "storyRole": "main"
@@ -690,7 +756,13 @@
           "title": "The War’s Climax",
           "description": "Mystic War Peak, War Casualty, Battle Against Doom, and War Climax are listed as major stages. World Revelation begins at the end of this book; specific outcomes remain unspecified.",
           "type": "conflict",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "Mystical Convergence and Global Revelation",
+              "label": "World Revelation continues after the war"
+            }
+          ]
         }
       ],
       "storyRole": "main"
@@ -717,7 +789,13 @@
             "Avery Obtainia",
             "Lynnhera"
           ],
-          "storyRole": "side-story"
+          "storyRole": "side-story",
+          "relatedEvents": [
+            {
+              "title": "Against the Gods",
+              "label": "Lynnhera’s influence leads into the confrontation"
+            }
+          ]
         },
         {
           "title": "Against the Gods",
@@ -728,7 +806,13 @@
             "Lynnhera",
             "Morgen"
           ],
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "Avery Awakens",
+              "label": "Avery later regains consciousness"
+            }
+          ]
         },
         {
           "title": "The Angelor Betrayal and Holy War Prelude",
@@ -758,8 +842,15 @@
           "characters": [
             "Lordius Doomolo"
           ],
-          "date": "Historical background",
-          "storyRole": "side-story"
+          "date": "Before the Holy War; exact era unknown",
+          "storyRole": "side-story",
+          "timing": "history",
+          "relatedEvents": [
+            {
+              "title": "The Holy War",
+              "label": "Rising magic enables the Angelors’ return"
+            }
+          ]
         },
         {
           "title": "The Holy War",
@@ -805,7 +896,13 @@
           "title": "The Magni Trials",
           "description": "Ultimus Deus candidates compete to succeed the current Magni, and the districts’ new leaders are declared.",
           "type": "discovery",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "New Regnum",
+              "label": "Next generation: twelve years later"
+            }
+          ]
         }
       ],
       "storyRole": "main"
@@ -881,7 +978,13 @@
           "title": "Seal Hunt and Activation",
           "description": "The heroes seek Seal Rings and their wielders to bend space and reality against the demons. The Augment Ring is identified as particularly important.",
           "type": "magic",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "The Heirs of Gods",
+              "label": "Seal Activation continues"
+            }
+          ]
         }
       ],
       "storyRole": "main"
@@ -914,7 +1017,13 @@
           "title": "Demon War Finale",
           "description": "The demons’ pursuit of immortality and its cost are unveiled. Deities, the Mystical Legends, and their allies join a final offensive into demon-held territory with the world’s survival at stake. The notes do not specify the final outcome.",
           "type": "conflict",
-          "storyRole": "main"
+          "storyRole": "main",
+          "relatedEvents": [
+            {
+              "title": "The Immortal Hunts",
+              "label": "Tentative continuation: a few months later"
+            }
+          ]
         }
       ],
       "storyRole": "main"

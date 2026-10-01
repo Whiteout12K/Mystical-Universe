@@ -1,0 +1,43 @@
+/* Explore page: shared fantasy palette, with a clear reading path. */
+.explore-page { max-width:1080px; margin:auto; padding:132px 28px 80px; }
+.explore-page * { box-sizing:border-box; }
+.explore-intro { max-width:680px; margin:0 auto 40px; text-align:center; }
+.explore-eyebrow,.explore-card-category { color:var(--ml-gold); font-size:.65rem; letter-spacing:.16em; line-height:1.6; }
+.explore-eyebrow { margin:0 0 12px; }
+.explore-intro h1 { margin:0 0 18px; color:var(--ml-gold-light); font-family:Georgia,serif; font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.15; font-weight:normal; }
+.explore-intro > p:last-child { margin:0; color:#bcb5a9; font-size:.94rem; line-height:1.8; }
+.explore-start { display:grid; grid-template-columns:168px 1fr; align-items:center; gap:38px; padding:32px; border:1px solid #c9a84c40; border-radius:16px; background:radial-gradient(ellipse at top right,#65151525,transparent 70%),linear-gradient(135deg,#211b19,#151313); box-shadow:0 16px 45px #0003; }
+.explore-cover { display:block; border-radius:7px; overflow:hidden; box-shadow:0 10px 25px #0006; }
+.explore-cover img { display:block; width:100%; height:auto; }
+.explore-start h2 { margin:0 0 14px; font-family:Georgia,serif; font-size:clamp(1.6rem,3vw,2.2rem); font-weight:normal; color:var(--ml-gold-light); line-height:1.25; }
+.explore-start-copy > p:not(.explore-eyebrow) { max-width:580px; margin:0; color:#c4bdb1; font-size:.88rem; line-height:1.8; }
+.explore-actions { display:flex; align-items:center; flex-wrap:wrap; gap:14px 24px; margin-top:24px; }
+.explore-button { display:inline-flex; align-items:center; justify-content:center; gap:16px; min-height:44px; padding:11px 18px; border:1px solid #c9a84c77; border-radius:7px; color:var(--ml-gold-pale); background:#c9a84c14; text-decoration:none; font-size:.8rem; }
+.explore-button:hover { background:#c9a84c25; color:var(--ml-gold-pale); }
+.explore-secondary { display:inline-flex; gap:10px; align-items:center; min-height:44px; color:#c3b79d; text-decoration:none; font-size:.78rem; }
+.explore-section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin:44px 0 20px; }
+.explore-section-heading h2 { margin:0; font-family:Georgia,serif; font-size:1.65rem; color:var(--ml-gold-light); font-weight:normal; }
+.explore-section-heading p { margin:0; color:var(--ml-muted); font-size:.78rem; }
+.explore-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.explore-card { display:flex; flex-direction:column; padding:24px; border:1px solid #c9a84c25; border-radius:12px; color:var(--ml-white); background:linear-gradient(135deg,#1c1817,#141212); text-decoration:none; transition:border-color .2s,background .2s; }
+.explore-card:hover { color:var(--ml-white); border-color:#c9a84c77; background:#211b18; }
+.explore-card h3 { display:flex; justify-content:space-between; gap:16px; margin:10px 0; color:#e5d6b5; font-family:Georgia,serif; font-size:1.2rem; font-weight:normal; line-height:1.4; }
+.explore-card h3 span { color:var(--ml-gold); font-family:Arial,sans-serif; }
+.explore-card p { margin:0; color:#b9b1a5; font-size:.82rem; line-height:1.75; }
+.explore-note { display:block; margin-top:12px; color:#9f9687; font-size:.68rem; line-height:1.7; }
+.explore-history { grid-column:1 / -1; flex-direction:row; align-items:center; justify-content:space-between; gap:24px; }
+.explore-history-arrow { color:var(--ml-gold); font-size:1.4rem; }
+.explore-page a:focus-visible { outline:2px solid var(--ml-gold-light); outline-offset:5px; }
+@media(max-width:600px) {
+ .explore-page { padding:110px 18px 56px; }
+ .explore-intro { margin-bottom:28px; }
+ .explore-start { grid-template-columns:1fr; gap:22px; padding:24px; }
+ .explore-cover { width:120px; margin:auto; }
+ .explore-start-copy { text-align:center; }
+ .explore-actions { justify-content:center; gap:8px 20px; }
+ .explore-section-heading { align-items:flex-start; flex-direction:column; gap:8px; margin-top:34px; }
+ .explore-grid { grid-template-columns:1fr; gap:12px; }
+ .explore-card { padding:22px; }
+ .explore-history { gap:14px; }
+}
+@media(prefers-reduced-motion:reduce) { .explore-card { transition:none; } }
