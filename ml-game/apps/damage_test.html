@@ -402,7 +402,7 @@ function selectEffect(id){
  const stacks=Math.max(1,Math.floor(Number($("effectStacks").value)||1)),existing=activeEffects.find(e=>e.id===id);
  existing?existing.stacks+=stacks:activeEffects.push({id,stacks});
  $("effectSearch").value="";$("effectStacks").value=1;renderEffects();
- $("effectMenu").classList.remove("open");$("effectSearch").focus();
+ $("effectMenu").classList.remove("open");
 }
 function removeEffect(i){activeEffects.splice(i,1);renderEffects()}
 function setEffectStacks(i,value){activeEffects[i].stacks=Math.max(1,Math.floor(Number(value)||1));renderEffects()}
