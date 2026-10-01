@@ -114,14 +114,14 @@
   "T1": {
     "name": "Tempest Aquia",
     "type": "Technical Skill",
-    "description": "<u>Ability</u>: Plants a banner on the ground equal to 200% of defense which boosts all <b class=\"tempest-aquia\">Tempest Aquia</b> cohort members until it is destroyed.",
+    "description": "<u>Ability</u>: <span class=\"undim\">Plants a banner on the ground equal to 200% of defense which boosts all <b class=\"tempest-aquia\">Tempest Aquia</b> cohort members until it is destroyed.</span>",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "> +15% damage increase for each same cohort member in the party (max 3 stacks).",
+      {"text": "<span class=\"undim\">> +15% damage increase for each same cohort member in the party (max 3 stacks).</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"text": "> Gain the <b class=\"resistance\">[Resistance]</b> effect.",
+      {"text": "<span class=\"undim\">> Gain the <b class=\"resistance\">[Resistance]</b> effect.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"text": "> Accumulate <b class=\"shield\">[Shield]</b> effect equal to 0.3% of Atlas’ defense every second.",
+      {"text": "<span class=\"undim\">> Accumulate <b class=\"shield\">[Shield]</b> effect equal to 0.3% of Atlas’ defense every second.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"text": "When this skill is used again, if the banner still remains, sacrifice it to gain +150 MP per second for Atlas for 10 seconds. This activation ability does not cost energy.",
         "style": {"paddingTop": 7}},

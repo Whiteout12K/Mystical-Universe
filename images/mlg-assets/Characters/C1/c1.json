@@ -246,10 +246,10 @@
   "T1": {
     "name": "Transformation",
     "type": "Technical Skill",
-    "description": "<u>Ability</u>: Avery lets magic pour out and changes parts of his body into water, gaining an aquatic state. By doing so, his skills will become <b class=\"water\">[Water]</b> elemental attacks until this technical skill is used again.",
+    "description": "<u>Ability</u>: Avery lets magic pour out and changes parts of his body into water, gaining an aquatic state. By doing so, his skills will become <b class=\"water\">[Water]</b> elemental attacks until this Technical Skill is used again.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "While in this state, he gains <b class=\"shield\">[Shield]</b> +50% more effectively and consumes a single percentage per second, increasing his and allies’ damage reduction by +35% until depletion. This functions even while off-field.",
+      {"text": "While in this state, he gains <b class=\"shield\">[Shield]</b> +50% more effectively and consumes a single percentage per second, <span class=\"undim\">increasing his and allies’ damage reduction by +35%</span> until depletion. This functions even while off-field.",
         "style": {"paddingTop": 7}},
       {"text": "Speed is enhanced by +25%. Flight Mode will turn Avery into a stream of water instead called Aqua Mode; collision with opponents in this mode will deal 0.5% of health multiplied by each percentage of healing rate as <b class=\"water\">[Water]</b> damage every 0.3 seconds. A trail of water is made behind him.",
         "style": {"paddingTop": 7}},
@@ -266,20 +266,20 @@
     "description": "Avery enters enlightened mode after using an Ultimate Skill, where he gains a special light meter which accumulates specific element points, lasting for 25 seconds and resetting whenever the Ultimate Skill is used again. Each new element aura applied to opponents will fill the light meter by 1, up to a max of 20, if the light meter is active.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "When a <b class=\"light\">[Light]</b> element attack from an ally or self hits an opponent with an elemental aura (applied by a contributor, either self or ally), the attack will become a special discharge called <b class=\"light\">[True Light Element]</b>. This occurs only once per every 2 points gained.",
+      {"text": "When a <span class=\"undim\"><b class=\"light\">[Light]</b> element attack from an ally or self hits an opponent with an elemental aura (applied by a contributor, either self or ally), the attack will become a special discharge called <b class=\"light\">[True Light Element]</b>.</span> This occurs only once per every 2 points gained.",
         "style": {"paddingTop": 7}},
       {"text": "<b class=\"light\">[True Light Element]</b>: A special element attack that deals additional damage based on the aura element, equal to 5% of the inflictor’s health in a small AoE. The attack can crit based on the crit stats of the inflictor.",
         "style": {"paddingTop": 15}},
       {"text": "The following are the immediate obtainable effects gained for inflictor and contributor based on the type of element aura in the discharge, lasting the duration of light meter:",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
 
-      {"text": "> <b class=\"fire\">[Fire]</b>: Damage of skills increases by +10% for 5 seconds. Gain an additional +5% damage increase for each point in the light meter.",
+      {"text": "<span class=\"undim\"> > <b class=\"fire\">[Fire]</b>: Damage of skills increases by +10% for 5 seconds. Gain an additional +5% damage increase for each point in the light meter.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"text": "> <b class=\"wind\">[Wind]</b>: Attack speed of Basic Skills increases by +3% per point on any light meter. The AoE of attacks, even on single target ones, increases by +50% while the meter is active.",
+      {"text": "<span class=\"undim\"> > <b class=\"wind\">[Wind]</b>: Attack speed of Basic Skills increases by +3% per point on any light meter. The AoE of attacks, even on single target ones, increases by +50% while the meter is active.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"text": "> <b class=\"earth\">[Earth]</b>: Defense increases by +2% per point on any light meter. Debuffs applied on opponents have their duration increased by +0.5 seconds per point on any light meter.",
+      {"text": "<span class=\"undim\"> > <b class=\"earth\">[Earth]</b>: Defense increases by +2% per point on any light meter. Debuffs applied on opponents have their duration increased by +0.5 seconds per point on any light meter.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"text": "> <b class=\"water\">[Water]</b>: Health and defense increases by +25% for 5 seconds. Gain the effect <b class=\"embrace-goddess\">[Embrace of the Goddess]</b>.",
+      {"text": "<span class=\"undim\"> > <b class=\"water\">[Water]</b>: Health and defense increases by +25% for 5 seconds. Gain the effect <b class=\"embrace-goddess\">[Embrace of the Goddess]</b>.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
 
       {"text": "{{effect:embrace-goddess}}",
@@ -299,7 +299,7 @@
   "T3": {
     "name": "Goddess' Spirit Release",
     "type": "Technical Skill",
-    "description": "<u>Ability</u>: The damage of the special element attack increases by +10% for each level of basic skill of inflictor.",
+    "description": "<u>Ability</u>: Avery consumes 50% of his health to summon the goddess Lynnhera, acting as an ally, to aid him and the team. When gaining this skill, Lynnhera will become a character who may utilize equipment and artifacts, but only the passives and set effects activate initially. She is summoned with initial health of 20% from max, shared from the same stats from Avery. Like any partying character, she can benefit from buffs and teamwide status effects.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The damage of Lynnhera’s skills scales up by +10% for each level of Avery’s equipping Basic Skill level. She utilizes the following skills:",
@@ -325,7 +325,7 @@
         "style": {"paddingTop": 7}},
       {"text": "Using this skill again while the goddess is active will sacrifice her for Avery to gain the buff <b class=\"magni-mage\">[The Magni Mage]</b>. If she is defeated in the current battle, she will grant the buff permanently to Avery and cannot be re-summoned. If Avery is defeated, she will disappear as well.",
         "style": {"paddingTop": 7}},
-      {"text": "<b>Auxiliary Passive</b>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting [Light] aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
+      {"text": "<b>Auxiliary Passive</b>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting <b class=\"light\">[Light]</b> aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
         "style": {"paddingTop": 5}},
       {"text": "{{effect:magni-mage}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -341,7 +341,7 @@
 
 
   "Dupes": {
-    "description": "Every third melee hit will grant all allies and self 1 instance of <b class=\"goddess-blessing\">[Goddess’ Blessing]</b>. Upon reaching five stacks, the effect will activate.",
+    "description": "<span class=\"undim\">Every third melee hit will grant all allies and self 1 instance of <b class=\"goddess-blessing\">[Goddess’ Blessing]</b>. Can also give a stack passively once every 3 seconds when off-field.</span> Upon reaching five stacks, the effect will activate.",
     "additional": [
         {"text": "Upon dashing, pressing any Special Skill will allow Avery to enter Flight Mode, gradually losing stamina, which will greatly enhance his speed by +25%, height and damage reduction by +50%, and increased ranged damage by +10%, until stamina is empty or when Dash Skill is used again. Remaining idle does not consume stamina.",
         "style": {"paddingTop": 7}},
@@ -353,13 +353,13 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 1,
-        "text": "Gain <b class=\"shield\">[Shield]</b> equal to 0.5% of total health, but multiplied by each percentage of healing rate, for self and allies when using any special skill.",
+        "text": "<span class=\"undim\">Gain <b class=\"shield\">[Shield]</b> equal to 0.5% of total health, but multiplied by each percentage of healing rate, for self and allies when using any Special Skill.</span>",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:shield}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 2,
-        "text": "When attacking, after inflicting <b class=\"blind\">[Blind]</b> on any opponent, gain 1 stack of <b class=\"angel-touch\">[Angel's Touch]</b> up to a max of 25 for self and all allies.",
+        "text": "<span class=\"undim\">When attacking, after inflicting <b class=\"blind\">[Blind]</b> on any opponent, gain 1 stack of <b class=\"angel-touch\">[Angel's Touch]</b> up to a max of 25 for self and all allies.</span>",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:angel-touch}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -369,7 +369,7 @@
         "style": {"paddingTop": 5}},
 
         {"level": 4,
-        "text": "When an ally drops below 20% health, swap health points with that ally and gain the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b>; this ability can only be triggered when Avery’s health is greater than the ally’s (Cooldown: 120 seconds).",
+        "text": "<span class=\"undim\">When an ally drops below 20% health, swap health points with that ally and gain the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b></span>; this ability can only be triggered when Avery’s health is greater than the ally’s (Cooldown: 120 seconds).",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:rapid-recovery}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -377,9 +377,9 @@
         {"level": 5,
         "text": "After using stage 3 of the Basic Skill, convert the next Basic Skill attack into Basic Skill: Lotus Wildflare Beam. After using, reverts back to normal Basic Skill.",
         "style": {"paddingTop": 5}},
-        {"text": "5% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summmons).",
+        {"text": "10% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summmons).",
         "style": {"paddingTop": 5}},
-        {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - Avery summons a concentration of light that blasts in a flower-like arch in front of him, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies. Special Skill cooldowns for self are reduced by 3 seconds and instantly restore 50 MP for self and allies. Damage scales up by +10% for each level of the equipped Basic Skill.",
+        {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - Avery summons a concentration of light that blasts in a flower-like arch in front of him, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and <span class=\"undim\">gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies</span>. Special Skill cooldowns for self are reduced by 3 seconds and <span class=\"undim\">instantly restore 50 MP for self and allies</span>. Damage scales up by +10% for each level of the equipped Basic Skill.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
 
     ]

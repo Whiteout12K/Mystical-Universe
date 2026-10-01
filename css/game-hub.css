@@ -99,20 +99,6 @@
     pointer-events:none;
 }
 
-.character-filter-panel::before{
-    top:7px;
-    left:7px;
-    border-top:1px solid #c9a84c;
-    border-left:1px solid #c9a84c;
-}
-
-.character-filter-panel::after{
-    right:7px;
-    bottom:7px;
-    border-right:1px solid #c9a84c;
-    border-bottom:1px solid #c9a84c;
-}
-
 .character-search-row{
     position:relative;
     z-index:20;
@@ -684,6 +670,7 @@
     display:flex;
     justify-content:flex-end;
     margin-top:14px;
+    margin-right:8px;
     color:#827a6a;
     font:11px Arial,sans-serif;
     letter-spacing:.05em;

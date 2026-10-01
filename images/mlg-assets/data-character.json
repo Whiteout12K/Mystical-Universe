@@ -14,7 +14,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
 
     "species": ["Angelor", "Water Spirit"],
-    "specialty": ["Support", "Crowd Controlling", "Defense", "Healing", "Single-Target Damage", "Resonator"],
+    "specialty": ["Support", "Crowd Controlling", "Defense", "Healing", "Single-Target Damage", "Modulator", "Resonator"],
     "affinity": ["Light", "Water"],
     "role": ["Defense", "Healer"],
 
@@ -83,6 +83,35 @@
         "effect": "+10% <b class=\"water\">[Water]</b> damage, +15% MP Regen"
       }
     ]
+
+  },
+
+  "#c1b": {
+    "id": 1,
+    "profile_image": "",
+
+    "splash_image": "/images/character_art/avery_obtainia_cultivator.png",
+    "splash_color": "drop-shadow(0 0 18px rgba(255, 69, 69, 0.725))",
+    "button_color": "#a20b0b", 
+
+    "name": "Caela Obtainia (Alter)",
+    "nickname": "Caela",
+    "rarity": "UR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c1b_role.svg",
+
+    "species": ["Angelor"],
+    "specialty": ["Support", "Crowd Controlling", "Defense", "Healing", "Single-Target Damage", "Modulator", "Resonator"],
+    "affinity": ["Light"],
+    "role": ["Defense", "Healer"],
+
+    "affiliation": ["Magni"],
+    "attributes": ["Flight"],
+
+    "formatted_name": "<div style=\"font-size:12px\"><b>Caela Obtainia</b> <span class=\"alter\">Alter</span></div>",
+    "character-event": "",
+
+    "skills": ["Alter", "S1b", "Dupes2"],
+    "skills_path": "/images/mlg-assets/Characters/C1"
 
   },
 
@@ -756,7 +785,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c12_role.svg",
 
     "species": ["Herbovir"],
-    "specialty": ["Debuffing", "Summoning", "Accuracy", "Sub-DPS", "AoE Damage", "Crowd Controlling", "Resonator"],
+    "specialty": ["Debuffer", "Summoning", "Accuracy", "Sub-DPS", "AoE Damage", "Crowd Controlling", "Resonator"],
     "affinity": ["Earth"],
     "role": ["Agent"],
 

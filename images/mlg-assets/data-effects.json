@@ -92,7 +92,7 @@
     "class": "goddess-blessing",
     "icon": "/images/mlg-assets/Effect-Icons/goddess-blessing.svg",
     "type": "Buff",
-    "description": "At five stacks, heal for 5% of Avery’s max health. Remove debuffs and resets stacks.",
+    "description": "Each stack gained reduces Special Skill cooldowns by -1 second once. At five stacks, heal for 5% of Avery’s max health. Remove debuffs and resets stacks.",
     "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },

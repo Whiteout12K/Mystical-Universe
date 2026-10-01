@@ -135,7 +135,7 @@
     "description": "River’s Special Skills can absorb incoming elemental attacks of opponents (this does not get rid of the incoming attack), converting to a different color.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "The absorbed elements will increase that element’s damage for allies and self by +20% for 10 seconds. Opponents hit by the water ball will have their resistance to absorbed elements be reduced by -20% for 10 seconds.",
+      {"text": "The absorbed elements will increase that <span class=\"undim\">element’s damage for allies and self by +20% for 10 seconds.</span> Opponents hit by the water ball will have their <span class=\"undim\">resistance to absorbed elements be reduced by -20% for 10 seconds.</span>",
         "style": {"paddingTop": 7}},
       {"text": "<b class=\"water\">[Water]</b> damage will increase automatically as that is River’s innate magical affinity.",
         "style": {"paddingTop": 7}},
@@ -191,7 +191,7 @@
 
 
   "Dupes": {
-    "description": "Can obtain infinite stacks of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> and each stack gained will heal self and allies for 5% of her max health. For every 5 stacks, increase crit rate and damage for self by +5% but increase mana consumption by +5%. When 50 stacks are gained, increase self’s damage of all skills by +50%.",
+    "description": "Can obtain infinite stacks of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> and <span class=\"undim\">each stack gained will heal self and allies for 5% of her max health.</span> For every 5 stacks, <span class=\"undim\">increase crit rate and damage for self and allies by +5% but increase mana consumption by +5%.</span> When 50 stacks are gained, increase self’s damage of all skills by +50%.",
     "additional": [
         {"text": "Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> every 5 seconds (Unconditional). All effect conditions that depend on gaining a stack will trigger automatically when obtaining these passive stacks.",
         "style": {"paddingTop": 5}},
@@ -209,7 +209,7 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 2,
-        "text": "When obtaining <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>, gain two instances instead of one. Gaining a stack increases her and allies’ MP regen by +1%, up to +50%. Effect scales proportionally to the number of stacks she has and is infinite so long as she has a stack.",
+        "text": "When obtaining <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>, gain two instances instead of one. <span class=\"undim\">Gaining a stack increases her and allies’ MP regen by +1%, up to +50%.</span> Effect scales proportionally to the number of stacks she has and is infinite so long as she has a stack.",
         "style": {"paddingTop": 5}},
 
         {"level": 3,

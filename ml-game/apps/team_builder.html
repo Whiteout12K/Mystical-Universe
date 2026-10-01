@@ -447,7 +447,14 @@ function resizeIframe(f){
 function prepareIframe(f){
  try{
   const d=f.contentDocument||f.contentWindow.document,s=d.createElement("style");
-  s.textContent=`html{margin:0!important;padding:0!important;background:#0f0f0f!important;color:#e6e6e6!important;overflow:hidden!important}body{margin:0!important;padding:8px 9px!important;background:#0f0f0f!important;color:#e6e6e6!important;overflow:hidden!important;font-family:Arial,sans-serif!important;zoom:1.5!important}`;
+
+  s.textContent=`
+   html{margin:0!important;padding:0!important;background:#0f0f0f!important;color:#e6e6e6!important;overflow:hidden!important}
+   body{position:relative!important;margin:0!important;padding:8px 9px!important;background:#0f0f0f!important;color:#e6e6e6!important;overflow:hidden!important;font-family:Arial,sans-serif!important;zoom:1.5!important}
+   body:after{content:"";position:fixed;inset:0;z-index:9998;background:#0f0f0f;opacity:.3;pointer-events:none}
+   .undim{position:relative!important;z-index:9999!important}
+  `;
+
   d.head?.appendChild(s);
 
   const resize=()=>resizeIframe(f);

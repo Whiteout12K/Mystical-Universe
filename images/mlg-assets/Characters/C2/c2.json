@@ -168,7 +168,7 @@
     "description": "Kaden will phase through the shadow realm with the creation of two ice portals. This mechanic works by synchronizing two portals, each placed separately by using this skill a total of two times. Portals will remain indefinitely while in a combat session. Use skill again after placing two portals to reset and remove them.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "The two portals will allow any character to travel between them rapidly. Upon a successful warp, the character gains the buff <b class=\"shadow-miasma\">[Shadow Miasma]</b>. Standing within the portal after warping will maintain the effect.",
+      {"text": "<span class=\"undim\">The two portals will allow any character to travel between them rapidly. Upon a successful warp, the character gains the buff <b class=\"shadow-miasma\">[Shadow Miasma]</b>.</span> Standing within the portal after warping will maintain the effect.",
         "style": {"paddingTop": 7}},
       {"text": "If Kaden gains the effect, his Special Skill attacks will also do <b class=\"dark\">[Dark]</b> damage during its duration.",
         "style": {"paddingTop": 7}},
@@ -185,9 +185,9 @@
 
 
   "Dupes": {
-    "description": "Kaden will gain a <b class=\"shield\">[Shield]</b> equal to 350% of his defense whenever his health reaches at or below 50% (Cooldown: 30 seconds). He will also accumulate stacks of <b class=\"flash\">[Flash]</b> upon successful basic skill attack hits with a cooldown of 1 second.",
+    "description": "Kaden will gain a <b class=\"shield\">[Shield]</b> equal to 350% of his defense whenever his health reaches at or below 50% (Cooldown: 30 seconds). He will also accumulate stacks of <b class=\"flash\">[Flash]</b> upon successful Basic Skill attack hits with a cooldown of 1 second.",
     "additional": [
-        {"text": "He gains resonance within a party of more than 3 different affinities (dual affinity characters count both). Resonance will improve his and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.",
+        {"text": "He gains resonance within a party of more than 3 different affinities (dual affinity characters count both). <span class=\"undim\">Resonance will improve his and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.</span>",
         "style": {"paddingTop": 7}},
         {"text": "<u>Ice Fowler</u>: While not in combat, Kaden, when dashing, will create a trail of ice behind him as he surfs on an ice field. After some time, the trail melts to water. This state increases his movement speed by +40% and reduces stamina consumption by -50%. His movement across water is not reduced.",
         "style": {"paddingTop": 7}},
@@ -207,9 +207,9 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 2,
-        "text": "The <b class=\"flash\">[Flash]</b> effect can be applied to allies also but at half the speed, along with gaining continuous stacks of <b class=\"fatigue\">[Fatigue]</b> on self for every stack gained on self.",
+        "text": "<span class=\"undim\">The <b class=\"flash\">[Flash]</b> effect can be applied to allies also but at half the speed</span>, along with gaining continuous stacks of <b class=\"fatigue\">[Fatigue]</b> on self for every stack gained on self.",
         "style": {"paddingTop": 5}},
-        {"text": "The Technical Skill: Ice Travel will apply effect even if Kaden stands within 10 meters of any portal. The range of <b class=\"shadow-miasma\">[Shadow Miasma]</b> will also increase by +100%.",
+        {"text": "The Technical Skill: Ice Travel will apply effect even if Kaden stands within 10 meters of any portal. <span class=\"undim\">The range of <b class=\"shadow-miasma\">[Shadow Miasma]</b> will also increase by +100%.</span>",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:fatigue}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -225,9 +225,9 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 5,
-        "text": "Whenever this character gains <b class=\"fatigue\">[Fatigue]</b>, gain 1% of health as mana for self and heal allies for that percentage of health. Deal an additional +5% more damage on opponents for each stack of <b class=\"freeze\">[Freeze]</b> applied.",
+        "text": "Whenever this character gains <b class=\"fatigue\">[Fatigue]</b>, gain 1% of health as mana for self and <span class=\"undim\">heal allies for that percentage of health.</span> Deal an additional +5% more damage on opponents for each stack of <b class=\"freeze\">[Freeze]</b> applied.",
         "style": {"paddingTop": 5}},
-        {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each basic skill stage, therefore increasing the rate of accumulation without a cooldown.",
+        {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each Basic Skill stage, therefore increasing the rate of accumulation without a cooldown.",
         "style": {"paddingTop": 5}}
 
     ]
