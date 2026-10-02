@@ -524,6 +524,151 @@
     "description": "Lose health equal to 30% of own attack per second. Any received <b class=\"water\">[Water]</b> elemental damage will apply <b class=\"freeze\">[Freeze]</b> (Duration: 4 seconds).",
     "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
+  },
+
+
+  "assassin-s-touch": {
+    "name": "Assassin’s Touch",
+    "class": "assassins-touch",
+    "icon": "",
+    "type": "Buff",
+    "description": "Attacking an opponent a single time will grant the <b class=\"marked\">[Marked]</b> effect on them. When opponents hit active character, deal 25% of received damage back at them.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "marked": {
+    "name": "Marked",
+    "class": "marked",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Target’s movement and direction will become reversed, lasting 3 seconds. Incoming backside attacks will deal +10% more damage. The duration of effect is dependent on self’s debuff resistance.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "valiant": {
+    "name": "Valiant",
+    "class": "valiant",
+    "icon": "",
+    "type": "Buff",
+    "description": "Reduce incoming damage by -30% and increase movement speed by +20% for 10 seconds.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "ultimate-shield": {
+    "name": "Ultimate Shield",
+    "class": "ultimate-shield",
+    "icon": "",
+    "type": "Buff",
+    "description": "Creates an overshield that absorbs damage equal to a certain amount of health. If any remains for more than 5 seconds, it is then converted into healing equal to the value of the shield. Decreases incoming damage by -20%.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "swing": {
+    "name": "Swing",
+    "class": "swing",
+    "icon": "",
+    "type": "Buff",
+    "description": "Extends the size of melee and ranged attacks by +30%, lasting the duration of single attack.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "armor-weakness": {
+    "name": "Armor Weakness",
+    "class": "armor-weakness",
+    "icon": "",
+    "type": "Debuff",
+    "description": "The next incoming damage is considered empowered damage, then the effect is removed.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "miss": {
+    "name": "Miss",
+    "class": "miss",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Decreases crit rate by -5% for 15 seconds (Stackable, up to 10 times).",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "tactical-insight": {
+    "name": "Tactical Insight",
+    "class": "tactical-insight",
+    "icon": "",
+    "type": "Buff",
+    "description": "Gain +15% crit rate and +60% crit damage for 10 seconds.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "stealth": {
+    "name": "Stealth",
+    "class": "stealth",
+    "icon": "",
+    "type": "Buff",
+    "description": "Become partially invisible (transparency) when idle and moving slowly and opponents will not spot you and engage in combat. Your first attack will deal +300% more damage.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "pen-testing": {
+    "name": "Pen Testing",
+    "class": "pen-testing",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Decreases all max stats by -2% and becomes vulnerable to skills being hacked and breached with a 10% chance per stack. A chance to hack occurs when gaining a stack. Apples <b class=\"skill-disable\">[Skill Disable]</b> when hacked (Stackable up to 5, Duration: 15 seconds).",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "system-infiltration": {
+    "name": "System Infiltration",
+    "class": "system-infiltration",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Lose -5% of MP every other second for 10 seconds.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "skill-disable": {
+    "name": "Skill Disable",
+    "class": "skill-disable",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Disables a random skill (Special or Ultimate) for 5 seconds. Reduced against higher debuff resistance.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
+  },
+  "firewall": {
+    "name": "Firewall",
+    "class": "firewall",
+    "icon": "",
+    "type": "Buff",
+    "description": "Reduces incoming attacks’ chance to crit by -10% for 15 seconds, up to 5 stacks.",
+    "stat_modifiers": [],
+    "description_style": {
+      "paddingTop": 3
+    }
   }
 
 
@@ -534,4 +679,10 @@
 
 
 
+
+
+
+
+  
 }
+

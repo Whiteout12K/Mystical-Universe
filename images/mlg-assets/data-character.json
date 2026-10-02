@@ -654,7 +654,7 @@
     "affinity": ["Wind"],
     "role": ["Fighter"],
 
-    "affiliation": ["Black Rampart Cohort", "Mystical Legends", "Deity Contract", "District 10"],
+    "affiliation": ["Black Rampart Cohort", "Mystical Legends", "Deity Contract", "District 10", "Demoness Trio"],
     "attributes": ["Charging"],
 
     "formatted_name": "<b>Kiara Katzol</b>",
@@ -972,7 +972,7 @@
     "affinity": ["Wind"],
     "role": ["Agent"],
 
-    "affiliation": ["Mystical Legends"],
+    "affiliation": ["Mystical Legends", "IT Agency"],
     "attributes": [],
 
     "formatted_name": "<b>Lucy Terner</b>",
@@ -1033,7 +1033,7 @@
     "affinity": ["Earth"],
     "role": ["Agent"],
 
-    "affiliation": ["Mystical Legends"],
+    "affiliation": ["Mystical Legends", "IT Agency"],
     "attributes": [],
 
     "formatted_name": "<b>Amos Black</b>",
@@ -1198,11 +1198,109 @@
 
 
 
+  "c19": {
+    "id": 19,
+    "profile_image": "",   
+
+    "splash_image": "",
+    "splash_color": "drop-shadow(0 0 18px rgba(180, 203, 255, 0.43))",
+    "button_color": "#81d5fc",
+
+    "name": "James Shera",
+    "nickname": "James",
+    "rarity": "SR",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c19_role.svg",
+
+    "species": ["Elementor"],
+    "specialty": ["DPS", "Sub-DPS", "Enforcer", "Support", "Accuracy"],
+    "affinity": ["Fire"],
+    "role": ["Healer"],
+
+    "affiliation": ["IT Agency"],
+    "attributes": [],
+
+    "formatted_name": "<b>James Shera</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C19",
+
+    "base_stats": {
+        "health": 1000,
+        "attack": 54,
+        "defense": 90,
+        "mana": 850,
+        "mana_regen": 10,
+        "stamina": 1000,
+        "stamina_regen": 10,
+        "crit_rate": 15,
+        "crit_dmg": 35,
+        "speed": 115,
+        "piercing": 5,
+        "healing_rate": 0,
+        "luck": 9,
+        "gauge_gain": 0,
+        "cooldown_red": 0
+    },
+
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.08,
+      "unique_stat_weight": 0.025,
+
+      "main_stat": ["health", "defense", "attack"],
+      "unique_stat": "speed"
+    },
+
+    "weapon_type": ["Catalyst", "Spear"]
+
+  },
 
 
+  "c20": {
+    "id": 20,
+    "profile_image": "/images/character_art/Character_Heads/lux_luces_head.png",
 
+    "splash_image": "/images/character_art/lux_luces_formal.png",
+    "splash_color": "",
+    "button_color": "",
 
+    "name": "Lux Luces",
+    "nickname": "Lux",
+    "rarity": "SSR",
+    "rarity_img": "",
 
-  "level_formula": ""
+    "species": ["Angelor"],
+    "specialty": ["Support", "Healing", "Crowd Controlling", "Single-Target Damage", "Debuffer", "Disrupter"],
+    "affinity": ["Light", "Wind"],
+    "role": ["Healer"],
+
+    "affiliation": ["Nuntios", "Demoness Trio"],
+    "attributes": ["Flight"],
+
+    "formatted_name": "<b>Lux Luces</b>",
+    "character-event": "<div class=\"character-event\" style=\"background-color: #597994b9;\">Later Release</div>",
+
+    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
+    "skills_path": "/images/mlg-assets/Characters/C20",
+
+    "base_stats": {
+        "health": 950,
+        "attack": 55,
+        "defense": 90,
+        "mana": 1200,
+        "mana_regen": 6,
+        "stamina": 1200,
+        "stamina_regen": 12,
+        "crit_rate": 20,
+        "crit_dmg": 30,
+        "speed": 100,
+        "piercing": 0,
+        "healing_rate": 12,
+        "luck": 12
+    },
+
+    "weapon_type": []
+  }
 
 }

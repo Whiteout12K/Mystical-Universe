@@ -714,6 +714,8 @@
 
 .character-card:hover{transform:scale(1.05)}
 
+.character-card.character-later-release{opacity:.5}
+
 .character-card img.character-avatar{
     width:110px;
     height:140px;
@@ -774,6 +776,11 @@
     width:60px;
     height:60px;
     z-index:3;
+}
+
+.character-affinity{
+    left:2px;
+    right:auto;
 }
 
 .alter{

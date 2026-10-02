@@ -230,7 +230,7 @@ const characterLinks={
   c1b:"/webpages/game-c?char=c1b",
   c2:"/webpages/game-c?char=c2",
   c3:"/webpages/game-c?char=c3",
-  c4:"",
+  c4:"/webpages/game-c?char=c4",
   c5:"/webpages/game-c?char=c5",
   c6:"/webpages/game-c?char=c6",
   c7:"/webpages/game-c?char=c7",
@@ -244,7 +244,9 @@ const characterLinks={
   c15:"",
   c16:"",
   c17:"/webpages/game-c?char=c17",
-  c18:""
+  c18:"",
+  c19:"",
+  c20:"/webpages/game-c?char=c20"
 };
 
 let characterData={};
@@ -355,6 +357,7 @@ function renderCharacters(){
   grid.innerHTML=filtered.map(character=>{
     const rarity=rarityClass(character.rarity||"c");
     const event=getCharacterEvent(character);
+    const laterRelease=/\blater\s+release\b/i.test(event);
     const id=character.character_id;
 
     const link=Object.prototype.hasOwnProperty.call(characterLinks,id)
@@ -366,13 +369,18 @@ function renderCharacters(){
       :"";
 
     const roleImage=hasPath(character.rarity_img)
-      ?`<img class="character-role" src="${escapeHTML(character.rarity_img.trim())}" alt="">`
+      ?`<img class="character-role" src="${escapeHTML(character.rarity_img.trim())}" alt="" onerror="this.remove()">`
+      :"";
+
+    const affinityImage=hasPath(character.affinity_img)
+      ?`<img class="character-role character-affinity" src="${escapeHTML(character.affinity_img.trim())}" alt="${escapeHTML(array(character.affinity).join(', '))}" onerror="this.remove()">`
       :"";
 
     return `
-      <div class="character-card rarity-${rarity}" data-character="${escapeHTML(id)}" data-link="${escapeHTML(link)}">
+      <div class="character-card rarity-${rarity}${laterRelease?' character-later-release':''}" data-character="${escapeHTML(id)}" data-link="${escapeHTML(link)}">
         ${profileImage}
         ${roleImage}
+        ${affinityImage}
         <div class="character-name name-${rarity}">${getFormattedName(character)}</div>
         ${event}
       </div>
