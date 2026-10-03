@@ -1,1134 +1,234 @@
 {
-
-  "Heart": {
-    "name": "The Heart",
-    "type": "Origin",
-    "description": "The beginning of one’s journey. Progress and gain new skills.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "For certain additional roles beyond the initial, per level, you will need to use Star Level fragments to either unlock the option or add an additional bonus effect. These are special effects that are independent of which path you choose and are quite powerful. When resetting the tree to choose a different flex path, the particular nodes are not refunded and remain permanent as they are similar to regular characters’ Star Level conditions.",
-        "style": {"paddingTop": 7}},
-      {"text": "Join a cohort at Regnum Academy for additional synergy with other characters. Attain affiliations by exploring the world and increase synergy with even more allies.",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "icon": ""
-  },
+  "layout": {"width": 4000, "height": 4000, "maxConnections": 4},
+  "rootId": "n001",
+  "nodes": {
 
 
-  "L1": {
-    "name": "Paths",
-    "type": "Level 1",
-    "description": "Choose 1 of the following:",
-    "description_style": {"paddingTop": 7},
-    "additional": [],
-    "status": "outlined",
-    "level": 1,
-    "nodes": [
-      {
-        "name": "Path of the Mystical",
-        "type": "Paths",
-        "description": "Become a Mystical Being, gaining mana through inherent magical potential. Gain +800 MP as a base stat.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L1-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/b1.svg"
-      },
-      {
-        "name": "Path of the Mainlander",
-        "type": "Paths",
-        "description": "Become a Mainlander, a non-Mystical Being, remaining adamant of the Mystical and relying on one’s mind and physical strengths. Reject the ability to use MP and element attacks, but attack stat increases by +40%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L1-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/b1.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/C4/skill_b/b1.svg"
-  },
+    "n001": {
+      "name": "The Heart",
+      "type": "Origin",
+      "description": "The beginning of one’s journey. Progress and gain new skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "For certain additional roles beyond the initial, you will need to use Star Level fragments to either unlock the option or add an additional bonus effect. These are special effects that are independent of which connected route you follow and are quite powerful. When resetting the tree to choose a different flex path, the particular nodes are not refunded and remain permanent as they are similar to regular characters’ Star Level conditions.",
+          "style": {"paddingTop": 7}},
+        {"text": "Join a cohort at Regnum Academy for additional synergy with other characters. Attain affiliations by exploring the world and increase synergy with even more allies.",
+          "style": {"paddingTop": 7}}
+      ],
+      "icon": "",
+      "id": "n001",
+      "before": [],
+      "position": {"x": 2000, "y": 2000}
+    },
 
 
-  "L2": {
-    "name": "Role",
-    "type": "Level 2",
-    "description": "Choose 1 of the following:",
-    "description_style": {"paddingTop": 7},
-    "additional": [],
-    "status": "outlined",
-    "level": 2,
-    "nodes": [
-      {
-        "name": "Agent",
-        "type": "Role",
-        "description": "Become a stealthy assassin that bewilders enemies before striking. Increase luck by +40%, gain +5% crit hit rate, and increase movement speed by +30%. Passively gain the consistent effect <b class=\"assassin-s-touch\">[Assassin’s Touch]</b>.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:assassin-s-touch}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:marked}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L2-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/agent.svg"
-      },
-      {
-        "name": "Defender",
-        "type": "Role",
-        "description": "Absorb attacks of allies and become the very best armor piercer. Increase defense by +50% and gain +15 base piercing as a stat. Whenever the third stage of the basic skill is used, gain a single stack of <b class=\"flash\">[Flash]</b>. Using any special skill will grant a <b class=\"shield\">[Shield]</b> equal to 200% of defense to self and allies.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:shield}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:flash}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L2-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/defense.svg"
-      },
-      {
-        "name": "Fighter",
-        "type": "Role",
-        "description": "A warrior by heart who seeks the victory in conquering head on with strength and tactics. Increase attack by +20%, movement speed by +10%, and crit damage by +10%. When using staged basic skills, the first stage hit will apply <b class=\"valiant\">[Valiant]</b> to self, the second stage will apply <b class=\"dazed\">[Dazed]</b> on hit opponent, and the third stage will apply <b class=\"flash\">[Flash]</b>.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:valiant}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:dazed}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:flash}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L2-3",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/fighter.svg"
-      },
-      {
-        "name": "Healer",
-        "type": "Role",
-        "description": "Become the lifeline of the party by buffing and healing self and allies. Increase health by +25% and gain +15% base healing rate stat. Apply the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b> whenever an ally or self drops below 20% health (Cooldown: 30 seconds). All received <b class=\"shield\">[Shield]</b> effects on self will be enhanced to the buff <b class=\"ultimate-shield\">[Ultimate Shield]</b> when health reaches below 50%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "When receiving a buff, heal self and the party for 5% of max health. This only occurs once per instance of buff gained with a cooldown of 3 seconds.",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:ultimate-shield}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:rapid-recovery}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L2-4",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/healer.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/c-roles/agent.svg"
-  },
 
 
-  "L3": {
-    "name": "Affinity",
-    "type": "Level 3",
-    "description": "Unlock the Special Skill: Element Discharge.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "Choose 1 of the following:",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "level": 3,
-    "nodes": [
-      {
-        "name": "Light Affinity",
-        "type": "Affinity",
-        "description": "Gain the light affinity, dealing <b class=\"light\">[Light]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/light.svg"
-      },
-      {
-        "name": "Dark Affinity",
-        "type": "Affinity",
-        "description": "Gain the dark affinity, dealing <b class=\"dark\">[Dark]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/shadow.svg"
-      },
-      {
-        "name": "Fire Affinity",
-        "type": "Affinity",
-        "description": "Gain the fire affinity, dealing <b class=\"fire\">[Fire]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-3",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/fire.svg"
-      },
-      {
-        "name": "Wind Affinity",
-        "type": "Affinity",
-        "description": "Gain the wind affinity, dealing <b class=\"wind\">[Wind]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-4",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/wind.svg"
-      },
-      {
-        "name": "Water Affinity",
-        "type": "Affinity",
-        "description": "Gain the water affinity, dealing <b class=\"water\">[Water]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-5",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/water.svg"
-      },
-      {
-        "name": "Earth Affinity",
-        "type": "Affinity",
-        "description": "Gain the earth affinity, dealing <b class=\"earth\">[Earth]</b> elemental damage from all skills.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-6",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/earth.svg"
-      },
-      {
-        "name": "Affinityless",
-        "type": "Affinity",
-        "description": "Disable affinity to deal normal damage from all skills. If Path of the Mainlander was chosen, this node is required to be active.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L3-7",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/c-roles/light.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/c-roles/light.svg"
-  },
+
+    "n002": {
+      "name": "Path of the Mystical",
+      "type": "Paths",
+      "description": "Become a Mystical Being, gaining mana through inherent magical potential. Gain +800 MP as a base stat.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "id": "n002",
+      "icon": "",
+      "before": ["n006"],
+      "position": {"x": 2400, "y": 2000}
+    },
+    "n003": {
+      "name": "Path of the Mainlander",
+      "type": "Paths",
+      "description": "Become a Mainlander, a non-Mystical Being, remaining adamant of the Mystical and relying on one’s mind and physical strengths. Reject the ability to use MP and element attacks, but attack stat increases by +40%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "id": "n003",
+      "icon": "",
+      "before": ["n005"],
+      "position": {"x": 1600, "y": 2000}
+    },
 
 
-  "L4": {
-    "name": "Derived-Paths",
-    "type": "Level 4",
-    "description": "Choose 1 of the following:",
-    "description_style": {"paddingTop": 7},
-    "additional": [],
-    "status": "outlined",
-    "level": 4,
-    "nodes": [
-      {
-        "name": "Mystical Path - Arch-Elemental",
-        "type": "Derived-Paths",
-        "description": "Wielding extraordinary magical potential, the arch-elemental consists of the strongest magic users, each one owning potential that could rival a Magni. Gain +500 additional base MP and decrease base stamina by -300 points.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L4-1",
-        "group": "",
-        "prerequisite": "Path of the Mystical",
-        "icon": ""
-      },
-      {
-        "name": "Mystical Path - Elemental",
-        "type": "Derived-Paths",
-        "description": "Consisting of the twelve common Mystical Beings, the elementals wield the broadest range of magical affinities and physical characteristics. Increase elemental damage by +15% and decrease movement speed by -20%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L4-2",
-        "group": "",
-        "prerequisite": "Path of the Mystical",
-        "icon": ""
-      },
-      {
-        "name": "Mystical Path - Demihuman",
-        "type": "Derived-Paths",
-        "description": "Though just as magic attuned as the other species, the demihumans are more specialized in physical and agility based characteristics. Increase crit rate and piercing by +10% and decrease base MP by -100 p.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L4-3",
-        "group": "",
-        "prerequisite": "Path of the Mystical",
-        "icon": ""
-      },
-      {
-        "name": "Mainlander Path - Non-Mystical",
-        "type": "Derived-Paths",
-        "description": "As a normal human, one does not possess any magical potential to gain unique physical characteristics, however, resistance to all elemental affinities is increased by +40%. Deal +20% more normal damage. Only Path of the Mainlander can choose this path as the only option.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L4-4",
-        "group": "",
-        "prerequisite": "Path of the Mainlander",
-        "icon": ""
-      }
-    ],
-    "icon": ""
-  },
+
+    "n004": {
+      "name": "Agent",
+      "type": "Role",
+      "description": "Become a stealthy assassin that bewilders enemies before striking. Increase luck by +40%, gain +5% crit hit rate, and increase movement speed by +30%. Passively gain the consistent effect <b class=\"assassin-s-touch\">[Assassin’s Touch]</b>.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "{{effect:assassin-s-touch}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:marked}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n004",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/agent1.svg",
+      "before": ["n001"],
+      "position": {"x": 2000, "y": 2200}
+    },
+
+    "n005": {
+      "name": "Defense",
+      "type": "Role",
+      "description": "Absorb attacks of allies and become the very best armor piercer. Increase defense by +50% and gain +15 base piercing as a stat. Whenever the third stage of the basic skill is used, gain a single stack of <b class=\"flash\">[Flash]</b>. Using any special skill will grant a <b class=\"shield\">[Shield]</b> equal to 200% of defense to self and allies.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "{{effect:shield}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:flash}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n005",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/defense1.svg",
+      "before": ["n001"],
+      "position": {"x": 1800, "y": 2000}
+    },
+
+    "n006": {
+      "name": "Fighter",
+      "type": "Role",
+      "description": "A warrior by heart who seeks the victory in conquering head on with strength and tactics. Increase attack by +20%, movement speed by +10%, and crit damage by +10%. When using staged basic skills, the first stage hit will apply <b class=\"valiant\">[Valiant]</b> to self, the second stage will apply <b class=\"dazed\">[Dazed]</b> on hit opponent, and the third stage will apply <b class=\"flash\">[Flash]</b>.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "{{effect:valiant}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:dazed}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:flash}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n006",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/fighter1.svg",
+      "before": ["n001"],
+      "position": {"x": 2200, "y": 2000}
+    },
+
+    "n007": {
+      "name": "Healer",
+      "type": "Role",
+      "description": "Become the lifeline of the party by buffing and healing self and allies. Increase health by +25% and gain +15% base healing rate stat. Apply the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b> whenever an ally or self drops below 20% health (Cooldown: 30 seconds). All received <b class=\"shield\">[Shield]</b> effects on self will be enhanced to the buff <b class=\"ultimate-shield\">[Ultimate Shield]</b> when health reaches below 50%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "When receiving a buff, heal self and the party for 5% of max health. This only occurs once per instance of buff gained with a cooldown of 3 seconds.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:ultimate-shield}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:rapid-recovery}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n007",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/healer1.svg",
+      "before": ["n001"],
+      "position": {"x": 2000, "y": 1800}
+    },
 
 
-  "L5": {
-    "name": "Specialty",
-    "type": "Level 5",
-    "description": "Unlock the Ultimate Skill: Dawn of Light",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "Any number of the following nodes may be active. Each node costs SR Star Level fragment  x 4.",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "level": 5,
-    "nodes": [
-      {
-        "name": "AoE Damage",
-        "type": "Specialty",
-        "description": "Increase the extent (reach) of all AoE damage by +50%. Basic Skill melee weapons will also gain <b class=\"swing\">[Swing]</b> whenever used.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:swing}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L5-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Disrupter",
-        "type": "Specialty",
-        "description": "When attacks of the special skill hit, create a pool of sludge under the opponent for 3 seconds that will slow their movement rotation by -70% and movement speed by -40% as they touch it. Applies <b class=\"armor-weakness\">[Armor Weakness]</b> at the end of the duration.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:armor-weakness}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L5-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Debuffing",
-        "type": "Specialty",
-        "description": "When opponents inflict debuffs on you, there is a 30% chance it will not apply. When you inflict debuffs on opponents, there is a 30% chance for the debuff to apply guaranteed, regardless of opponent debuff resistance.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L5-3",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Defense Penetration",
-        "type": "Specialty",
-        "description": "Each percentage of <b class=\"shield\">[Shield]</b> on character in respect to max health will increase piercing by that percentage (max 100% increase). If piercing stat is high enough to remove all defense, then additional piercing will give the opponent negative defense which will make incoming damage increased (by a similar calculation of damage reduction by defense but inversed).",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L5-4",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Accuracy",
-        "type": "Specialty",
-        "description": "Hitting an opponent with active debuffs with Stage 3 Basic Skill attacks will apply the <b class=\"miss\">[Miss]</b> effect on them and can be stacked (new stacks reset cooldown).",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:miss}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L5-5",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Crowd Controlling",
-        "type": "Specialty",
-        "description": "Summon a boulder of rock with 100% of character’s max health when this character loses more than 10% of max health in a single hit from opponents. The boulder acts as an obstacle, blocking movement and attacks and tumbles with collisions. Opponents hit by the moving boulder will be inflicted with <b class=\"freeze\">[Freeze]</b>.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "{{effect:freeze}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L5-6",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Shredder",
-        "type": "Specialty",
-        "description": "All opponents’ resistance to an element decreases by -8% for each ally of that same element in the party, stacking up if multiple same elements (counting self). Several different element resistances may be applied at once from a multi-color team.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L5-7",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      },
-      {
-        "name": "Agility",
-        "type": "Specialty",
-        "description": "Gain +10% chance to dodge an incoming attack. The chance to dodge increases by +1% for each 5 points above the 100 point basic movement speed. Movement speed increases by a percent for each percent of health missing from max.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L5-8",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/C4/skill_b/s1.svg"
-  },
+
+    "n008": {
+      "name": "Water Affinity",
+      "type": "Affinity",
+      "description": "Gain the water affinity, dealing <b class=\"water\">[Water]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n008",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/water1.svg",
+      "before": ["n005", "n007"],
+      "position": {"x": 1750, "y": 1750}
+    },
+    "n009": {
+      "name": "Earth Affinity",
+      "type": "Affinity",
+      "description": "Gain the earth affinity, dealing <b class=\"earth\">[Earth]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n009",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/earth1.svg",
+      "before": ["n005", "n004"],
+      "position": {"x": 1750, "y": 2250}
+    },
+    "n010": {
+      "name": "Fire Affinity",
+      "type": "Affinity",
+      "description": "Gain the fire affinity, dealing <b class=\"fire\">[Fire]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n010",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/fire1.svg",
+      "before": ["n006", "n004"],
+      "position": {"x": 2250, "y": 2250}
+    },
+    "n012": {
+      "name": "Wind Affinity",
+      "type": "Affinity",
+      "description": "Gain the wind affinity, dealing <b class=\"wind\">[Wind]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "id": "n012",
+      "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/wind1.svg",
+      "before": ["n006", "n007"],
+      "position": {"x": 2250, "y": 1750}
+    }
 
 
-  "L6": {
-    "name": "Sub-Roles",
-    "type": "Level 6",
-    "description": "Choose a designated specialty of a chosen role from a prior node. One must be of the same role path as previously selected as these nodes offer sub-class capabilities.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "Choose 1 of the following:",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "level": 6,
-    "nodes": [
-      {
-        "name": "Agent - Scout",
-        "type": "Sub-Roles",
-        "description": "If stamina is above 80% before dashing, the character’s movement speed increases by +300% for a short duration to perform a quick flashstep. Activating a basic skill or special skill after the flashstep will increase the piercing of the damage dealt by +250%. If piercing stat is high enough to remove all defense, then additional piercing will give the opponent negative defense which will make incoming damage increased (by a similar calculation of damage reduction by defense but inversed).",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "Increase luck by +15. Additionally, defeating enemies while in combat has a 10% chance to drop <b class=\"tactical-insight\">[Tactical Insight]</b> nearby, a consumable that grants a buff to self and all allies.",
-            "style": {"paddingTop": 7}},
-          {"text": "Covert Recon: In non-combat, gain <b class=\"stealth\">[Stealth]</b>, which can be removed by quick movements or a first attack.",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:tactical-insight}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:stealth}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L6-1",
-        "group": "",
-        "prerequisite": "Agent",
-        "icon": "/images/mlg-assets/Characters/c-roles/agent.svg"
-      },
-      {
-        "name": "Agent - Hacker",
-        "type": "Sub-Roles",
-        "description": "Every third basic skill hit from this character will apply a stack <b class=\"pen-testing\">[Pen Testing]</b> on hit opponents. When an opponent reaches 5 stacks, all current stacks are consumed, and they are inflicted with <b class=\"system-infiltration\">[System Infiltration]</b>.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "Every 10 seconds in combat, if there's an opponent nearby with <b class=\"pen-testing\">[Pen Testing]</b> stacks, this character generates a single stack of <b class=\"firewall\">[Firewall]</b> buff for self.",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:pen-testing}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:system-infiltration}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:skill-disable}}",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:firewall}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L6-2",
-        "group": "",
-        "prerequisite": "Agent",
-        "icon": "/images/mlg-assets/Characters/c-roles/agent.svg"
-      },
-      {
-        "name": "Defender - Guardian Knight",
-        "type": "Sub-Roles",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L6-3",
-        "group": "",
-        "prerequisite": "Defender",
-        "icon": "/images/mlg-assets/Characters/c-roles/defense.svg"
-      },
-      {
-        "name": "Defender - Aggrevator",
-        "type": "Sub-Roles",
-        "description": "Whenever the active team member attacks with Basic Skill (any character so long as this character is off-field), additional damage will be done in a small AoE shockwave every 1.5 seconds, dealing damage equal to the amount of <b class=\"shield\">[Shield]</b> present on this character and can crit. The attack gains the element affinity of this character.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "Spokes above health bar records instances. When five instances of this damage occur, send 2 shockwave instances of <b class=\"knockback\">[Knockback]</b> and gain <b class=\"shield\">[Shield]</b> equal to 25% of own max health. After the instances, this character's Special Skills’ cooldowns are reset and trigger again automatically in succession (the character appearing briefly from off-field as an ally).",
-            "style": {"paddingTop": 7}},
-          {"text": "{{effect:knockback}}",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L6-4",
-        "group": "",
-        "prerequisite": "Defender",
-        "icon": "/images/mlg-assets/Characters/c-roles/defense.svg"
-      },
-      {
-        "name": "Fighter - Retribution Knight",
-        "type": "Sub-Roles",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L6-5",
-        "group": "",
-        "prerequisite": "Fighter",
-        "icon": "/images/mlg-assets/Characters/c-roles/fighter.svg"
-      },
-      {
-        "name": "Fighter - Military Soldier",
-        "type": "Sub-Roles",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L6-6",
-        "group": "",
-        "prerequisite": "Fighter",
-        "icon": "/images/mlg-assets/Characters/c-roles/fighter.svg"
-      },
-      {
-        "name": "Healer - Physician",
-        "type": "Sub-Roles",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L6-7",
-        "group": "",
-        "prerequisite": "Healer",
-        "icon": "/images/mlg-assets/Characters/c-roles/healer.svg"
-      },
-      {
-        "name": "Healer - Mad Scientist",
-        "type": "Sub-Roles",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L6-8",
-        "group": "",
-        "prerequisite": "Healer",
-        "icon": "/images/mlg-assets/Characters/c-roles/healer.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/c-roles/agent.svg"
-  },
 
 
-  "L7": {
-    "name": "Stat Buffing",
-    "type": "Level 7",
-    "description": "Any number of the following nodes may be active. Each node costs SR Star Level fragments  x 4.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "Upon activating a node, the stat boosting effects are permanently active. They are calculated as final modifiers when character is active idle or in battle.",
-        "style": {"paddingTop": 7}},
-      {"text": "Each of the nodes begin at level 0 when unlocked and may be upgraded, costing SR Star Level fragments  x 2 per upgrade, up to 10 additional times, adding +2% to the respective stats.",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "level": 7,
-    "nodes": [
-      {
-        "name": "Attack Buff",
-        "type": "Stat Buffing",
-        "description": "Increases attack by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Defense Buff",
-        "type": "Stat Buffing",
-        "description": "Increases defense by +20%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Health Buff",
-        "type": "Stat Buffing",
-        "description": "Increases health by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-3",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Mana Buff",
-        "type": "Stat Buffing",
-        "description": "Increase MP by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-4",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Mana Regen Buff",
-        "type": "Stat Buffing",
-        "description": "Increases mana regen by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-5",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Stamina Buff",
-        "type": "Stat Buffing",
-        "description": "Increases stamina by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-6",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Stamina Regen Buff",
-        "type": "Stat Buffing",
-        "description": "Increase stamina regen by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-7",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Crit Rate Buff",
-        "type": "Stat Buffing",
-        "description": "Increases crit rate by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-8",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Crit Damage Buff",
-        "type": "Stat Buffing",
-        "description": "Increases crit damage by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-9",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Speed Buff",
-        "type": "Stat Buffing",
-        "description": "Increases speed by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-10",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Piercing Buff",
-        "type": "Stat Buffing",
-        "description": "Increases piercing by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-11",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Healing Rate Buff",
-        "type": "Stat Buffing",
-        "description": "Increases healing rate by +10%. (max +30% at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-12",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      },
-      {
-        "name": "Luck Buff",
-        "type": "Stat Buffing",
-        "description": "Increases luck by +10. (max +30 at Level 10)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L7-13",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Stars/dupe.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Stars/dupe.svg"
-  },
 
 
-  "L8": {
-    "name": "Skill Enhancement",
-    "type": "Level 8",
-    "description": "Any number of the following nodes may be active. Each node costs SR Star Level fragments  x 8.",
-    "description_style": {"paddingTop": 7},
-    "additional": [],
-    "status": "outlined",
-    "level": 8,
-    "nodes": [
-      {
-        "name": "Basic Skill Buff",
-        "type": "Skill Enhancement",
-        "description": "Increases Basic Skill damage by +20%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L8-1",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s2.svg"
-      },
-      {
-        "name": "Special Skill I Buff",
-        "type": "Skill Enhancement",
-        "description": "Increase Special Skill damage by +15%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L8-2",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s2.svg"
-      },
-      {
-        "name": "Special Skill II Buff",
-        "type": "Skill Enhancement",
-        "description": "Increase Special Skill damage by +15%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L8-3",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s2.svg"
-      },
-      {
-        "name": "Ultimate Skill Buff",
-        "type": "Skill Enhancement",
-        "description": "increases Ultimate Skill damage by +30%.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L8-4",
-        "group": "",
-        "prerequisite": "",
-        "icon": "/images/mlg-assets/Characters/C4/skill_b/s2.svg"
-      }
-    ],
-    "icon": "/images/mlg-assets/Characters/C4/skill_b/s2.svg"
-  },
-  "L9": {
-    "name": "Species",
-    "type": "Level 9",
-    "description": "Unlock the power of one of the famed Mystical Beings. Select one of the main designations of Mystical Beings and the sub-nodes for each species will be activated and shown.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "Choose 1 of the following:",
-        "style": {"paddingTop": 7}},
-      {"text": "Depending on active selection, Technical Skill: Blessing of Power will undergo changes.",
-        "style": {"paddingTop": 7}}
-    ],
-    "status": "outlined",
-    "level": 9,
-    "nodes": [
-      {
-        "name": "Icelorian",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-1",
-        "group": "Arch-Elemental Path",
-        "prerequisite": "Mystical Path - Arch-Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Gostlynger",
-        "type": "Species",
-        "description": "(Later release) Gain an additional skill and passive.",
-        "description_style": {"paddingTop": 7},
-        "additional": [
-          {"text": "Whenever an opponent is defeated, their soul will drop. Approaching it will collect it into the shadow storage. When using this skill, you can select a specific shadow and it will then form as a minion to fight for your side. Bosses cannot become shadows. Collected shadows persist in inventory (and can be freely removed) and can be resummoned in any location or gamemode so long as they do not die in battle. Using the skill again will unsummon the shadows.",
-            "style": {"paddingTop": 7}},
-          {"text": "Special Skill: Shadow Necromancy - Gain the Gostlynger ability to manipulate morality and convert defeated foes to build your army. The summoned minions will stay indefinitely whilst in battle (or 10 seconds idle) and inherit 40% of the character’s max health and 80% of all other stats; they may also receive buffs that “allies” can receive. The minion will maintain its characteristics as when it was alive. Up to 5 shadows may be summoned at once but the energy gauge cost scales per shadow.",
-            "style": {"paddingTop": 7}},
-          {"text": "Energy Gauge: 20%",
-            "style": {"paddingTop": 7}}
-        ],
-        "status": "outlined",
-        "id": "L9-2",
-        "group": "Arch-Elemental Path",
-        "prerequisite": "Mystical Path - Arch-Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Water Spirit",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-3",
-        "group": "Arch-Elemental Path",
-        "prerequisite": "Mystical Path - Arch-Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Dracolor",
-        "type": "Species",
-        "description": "(Later release)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L9-4",
-        "group": "Arch-Elemental Path",
-        "prerequisite": "Mystical Path - Arch-Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Larvan",
-        "type": "Species",
-        "description": "Nodeless - Cannot be subject to the same path of Pyrus Bourn.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L9-5",
-        "group": "Arch-Elemental Path",
-        "prerequisite": "Mystical Path - Arch-Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Naiad",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-6",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Nereid",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-7",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Nymph",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-8",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Elf",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-9",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Dwarf",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-10",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Magnivirigentis",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-11",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Elementor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-12",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Metalor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-13",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Wentor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-14",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Terralor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-15",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Herbovir",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-16",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Huolor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-17",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Runigist",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-18",
-        "group": "Elemental Path",
-        "prerequisite": "Mystical Path - Elemental",
-        "icon": ""
-      },
-      {
-        "name": "Angelor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-19",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Vulpivor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-20",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Canilor",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-21",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Avilerion",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-22",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Merpeople",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-23",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Satyr",
-        "type": "Species",
-        "description": "Details have not yet been specified.",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "unspecified",
-        "id": "L9-24",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      },
-      {
-        "name": "Luporian",
-        "type": "Species",
-        "description": "(Beastman) (Later release)",
-        "description_style": {"paddingTop": 7},
-        "additional": [],
-        "status": "outlined",
-        "id": "L9-25",
-        "group": "Demihuman Path",
-        "prerequisite": "Mystical Path - Demihuman",
-        "icon": ""
-      }
-    ],
-    "icon": ""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
 
 
 
 
-  
 }

@@ -1,0 +1,1306 @@
+ 
+{
+ 
+    "n008": {
+      "name": "Light Affinity",
+      "type": "Affinity",
+      "description": "Gain the light affinity, dealing <b class=\"light\">[Light]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n008",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n007"],
+      "after": ["n021", "n033", "n010"],
+      "branch": "n007",
+      "position": {"x": 2140, "y": 1478}
+    },
+
+    "n009": {
+      "name": "Dark Affinity",
+      "type": "Affinity",
+      "description": "Gain the dark affinity, dealing <b class=\"dark\">[Dark]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n009",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n004"],
+      "after": ["n020", "n023", "n013"],
+      "branch": "n004",
+      "position": {"x": 1860, "y": 2522}
+    },
+
+    "n010": {
+      "name": "Fire Affinity",
+      "type": "Affinity",
+      "description": "Gain the fire affinity, dealing <b class=\"fire\">[Fire]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n010",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n006", "n008"],
+      "after": ["n019", "n022"],
+      "branch": "n006",
+      "position": {"x": 2522, "y": 1860}
+    },
+
+    "n011": {
+      "name": "Wind Affinity",
+      "type": "Affinity",
+      "description": "Gain the wind affinity, dealing <b class=\"wind\">[Wind]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n011",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n003", "n032"],
+      "after": ["n026", "n027"],
+      "branch": "n004",
+      "position": {"x": 2404, "y": 2714}
+    },
+
+    "n012": {
+      "name": "Water Affinity",
+      "type": "Affinity",
+      "description": "Gain the water affinity, dealing <b class=\"water\">[Water]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n012",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n002", "n029"],
+      "after": ["n034", "n038"],
+      "branch": "n007",
+      "position": {"x": 1596, "y": 1286}
+    },
+
+    "n013": {
+      "name": "Earth Affinity",
+      "type": "Affinity",
+      "description": "Gain the earth affinity, dealing <b class=\"earth\">[Earth]</b> elemental damage from all skills.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n013",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n005", "n009"],
+      "after": ["n018", "n024"],
+      "branch": "n005",
+      "position": {"x": 1478, "y": 2140}
+    },
+
+    "n014": {
+      "name": "Affinityless",
+      "type": "Affinity",
+      "description": "Disable affinity to deal normal damage from all skills. If Path of the Mainlander was chosen, this node is required to be active.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Special Skill: Element Discharge.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n014",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n005"],
+      "after": ["n025", "n029", "n002"],
+      "branch": "n005",
+      "position": {"x": 1478, "y": 1860}
+    },
+
+    "n015": {
+      "name": "Mystical Path - Arch-Elemental",
+      "type": "Derived-Paths",
+      "description": "Wielding extraordinary magical potential, the arch-elemental consists of the strongest magic users, each one owning potential that could rival a Magni. Gain +500 additional base MP and decrease base stamina by -300 points.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n015",
+      "group": "",
+      "prerequisite": "Path of the Mystical",
+      "icon": "",
+      "before": ["n006"],
+      "after": ["n031", "n032", "n003"],
+      "branch": "n006",
+      "position": {"x": 2522, "y": 2140}
+    },
+
+    "n016": {
+      "name": "Mystical Path - Elemental",
+      "type": "Derived-Paths",
+      "description": "Consisting of the twelve common Mystical Beings, the elementals wield the broadest range of magical affinities and physical characteristics. Increase elemental damage by +15% and decrease movement speed by -20%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n016",
+      "group": "",
+      "prerequisite": "Path of the Mystical",
+      "icon": "",
+      "before": ["n002"],
+      "after": ["n039", "n046"],
+      "branch": "n007",
+      "position": {"x": 1860, "y": 1192}
+    },
+
+    "n017": {
+      "name": "Mystical Path - Demihuman",
+      "type": "Derived-Paths",
+      "description": "Though just as magic attuned as the other species, the demihumans are more specialized in physical and agility based characteristics. Increase crit rate and piercing by +10% and decrease base MP by -100 p.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n017",
+      "group": "",
+      "prerequisite": "Path of the Mystical",
+      "icon": "",
+      "before": ["n003"],
+      "after": ["n028", "n042"],
+      "branch": "n004",
+      "position": {"x": 2140, "y": 2808}
+    },
+
+    "n018": {
+      "name": "Mainlander Path - Non-Mystical",
+      "type": "Derived-Paths",
+      "description": "As a normal human, one does not possess any magical potential to gain unique physical characteristics, however, resistance to all elemental affinities is increased by +40%. Deal +20% more normal damage. Only Path of the Mainlander can choose this path as the only option.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n018",
+      "group": "",
+      "prerequisite": "Path of the Mainlander",
+      "icon": "",
+      "before": ["n013", "n023"],
+      "after": ["n030", "n036"],
+      "branch": "n005",
+      "position": {"x": 1286, "y": 2404}
+    },
+
+    "n019": {
+      "name": "AoE Damage",
+      "type": "Specialty",
+      "description": "Increase the extent (reach) of all AoE damage by +50%. Basic Skill melee weapons will also gain <b class=\"swing\">[Swing]</b> whenever used.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:swing}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n019",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n010", "n033"],
+      "after": ["n035", "n040"],
+      "branch": "n006",
+      "position": {"x": 2714, "y": 1596}
+    },
+
+    "n020": {
+      "name": "Disrupter",
+      "type": "Specialty",
+      "description": "When attacks of the special skill hit, create a pool of sludge under the opponent for 3 seconds that will slow their movement rotation by -70% and movement speed by -40% as they touch it. Applies <b class=\"armor-weakness\">[Armor Weakness]</b> at the end of the duration.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:armor-weakness}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n020",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n009"],
+      "after": ["n044", "n047"],
+      "branch": "n004",
+      "position": {"x": 1860, "y": 2808}
+    },
+
+    "n021": {
+      "name": "Debuffing",
+      "type": "Specialty",
+      "description": "When opponents inflict debuffs on you, there is a 30% chance it will not apply. When you inflict debuffs on opponents, there is a 30% chance for the debuff to apply guaranteed, regardless of opponent debuff resistance.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n021",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n008"],
+      "after": ["n049", "n057"],
+      "branch": "n007",
+      "position": {"x": 2140, "y": 1192}
+    },
+
+    "n022": {
+      "name": "Defense Penetration",
+      "type": "Specialty",
+      "description": "Each percentage of <b class=\"shield\">[Shield]</b> on character in respect to max health will increase piercing by that percentage (max 100% increase). If piercing stat is high enough to remove all defense, then additional piercing will give the opponent negative defense which will make incoming damage increased (by a similar calculation of damage reduction by defense but inversed).",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n022",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n010"],
+      "after": ["n041", "n043"],
+      "branch": "n006",
+      "position": {"x": 2808, "y": 1860}
+    },
+
+    "n023": {
+      "name": "Accuracy",
+      "type": "Specialty",
+      "description": "Hitting an opponent with active debuffs with Stage 3 Basic Skill attacks will apply the <b class=\"miss\">[Miss]</b> effect on them and can be stacked (new stacks reset cooldown).",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:miss}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n023",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n009"],
+      "after": ["n050", "n070", "n018"],
+      "branch": "n004",
+      "position": {"x": 1596, "y": 2714}
+    },
+
+    "n024": {
+      "name": "Crowd Controlling",
+      "type": "Specialty",
+      "description": "Summon a boulder of rock with 100% of character’s max health when this character loses more than 10% of max health in a single hit from opponents. The boulder acts as an obstacle, blocking movement and attacks and tumbles with collisions. Opponents hit by the moving boulder will be inflicted with <b class=\"freeze\">[Freeze]</b>.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:freeze}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n024",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n013"],
+      "after": ["n037", "n051"],
+      "branch": "n005",
+      "position": {"x": 1192, "y": 2140}
+    },
+
+    "n025": {
+      "name": "Shredder",
+      "type": "Specialty",
+      "description": "All opponents’ resistance to an element decreases by -8% for each ally of that same element in the party, stacking up if multiple same elements (counting self). Several different element resistances may be applied at once from a multi-color team.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n025",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n014"],
+      "after": [],
+      "branch": "n005",
+      "position": {"x": 1192, "y": 1860}
+    },
+
+    "n026": {
+      "name": "Agility",
+      "type": "Specialty",
+      "description": "Gain +10% chance to dodge an incoming attack. The chance to dodge increases by +1% for each 5 points above the 100 point basic movement speed. Movement speed increases by a percent for each percent of health missing from max.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Unlock the Ultimate Skill: Dawn of Light.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n026",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n011"],
+      "after": ["n071", "n072"],
+      "branch": "n004",
+      "position": {"x": 2537, "y": 2960}
+    },
+    "n027": {
+      "name": "Agent - Scout",
+      "type": "Sub-Roles",
+      "description": "If stamina is above 80% before dashing, the character’s movement speed increases by +300% for a short duration to perform a quick flashstep. Activating a basic skill or special skill after the flashstep will increase the piercing of the damage dealt by +250%. If piercing stat is high enough to remove all defense, then additional piercing will give the opponent negative defense which will make incoming damage increased (by a similar calculation of damage reduction by defense but inversed).",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Increase luck by +15. Additionally, defeating enemies while in combat has a 10% chance to drop <b class=\"tactical-insight\">[Tactical Insight]</b> nearby, a consumable that grants a buff to self and all allies.",
+          "style": {"paddingTop": 7}},
+        {"text": "Covert Recon: In non-combat, gain <b class=\"stealth\">[Stealth]</b>, which can be removed by quick movements or a first attack.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:tactical-insight}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:stealth}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n027",
+      "group": "",
+      "prerequisite": "Agent",
+      "icon": "",
+      "before": ["n011"],
+      "after": ["n073", "n074"],
+      "branch": "n004",
+      "position": {"x": 2278, "y": 3064}
+    },
+
+    "n028": {
+      "name": "Agent - Hacker",
+      "type": "Sub-Roles",
+      "description": "Every third basic skill hit from this character will apply a stack <b class=\"pen-testing\">[Pen Testing]</b> on hit opponents. When an opponent reaches 5 stacks, all current stacks are consumed, and they are inflicted with <b class=\"system-infiltration\">[System Infiltration]</b>.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Every 10 seconds in combat, if there's an opponent nearby with <b class=\"pen-testing\">[Pen Testing]</b> stacks, this character generates a single stack of <b class=\"firewall\">[Firewall]</b> buff for self.",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:pen-testing}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:system-infiltration}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:skill-disable}}",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:firewall}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n028",
+      "group": "",
+      "prerequisite": "Agent",
+      "icon": "",
+      "before": ["n017"],
+      "after": ["n075", "n076"],
+      "branch": "n004",
+      "position": {"x": 2000, "y": 3100}
+    },
+
+    "n029": {
+      "name": "Defender - Guardian Knight",
+      "type": "Sub-Roles",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n029",
+      "group": "",
+      "prerequisite": "Defender",
+      "icon": "",
+      "before": ["n014"],
+      "after": ["n012"],
+      "branch": "n005",
+      "position": {"x": 1286, "y": 1596}
+    },
+    "n030": {
+      "name": "Defender - Aggrevator",
+      "type": "Sub-Roles",
+      "description": "Whenever the active team member attacks with Basic Skill (any character so long as this character is off-field), additional damage will be done in a small AoE shockwave every 1.5 seconds, dealing damage equal to the amount of <b class=\"shield\">[Shield]</b> present on this character and can crit. The attack gains the element affinity of this character.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Spokes above health bar records instances. When five instances of this damage occur, send 2 shockwave instances of <b class=\"knockback\">[Knockback]</b> and gain <b class=\"shield\">[Shield]</b> equal to 25% of own max health. After the instances, this character's Special Skills’ cooldowns are reset and trigger again automatically in succession (the character appearing briefly from off-field as an ally).",
+          "style": {"paddingTop": 7}},
+        {"text": "{{effect:knockback}}",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n030",
+      "group": "",
+      "prerequisite": "Defender",
+      "icon": "",
+      "before": ["n018"],
+      "after": [],
+      "branch": "n005",
+      "position": {"x": 980, "y": 2411}
+    },
+
+    "n031": {
+      "name": "Fighter - Retribution Knight",
+      "type": "Sub-Roles",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n031",
+      "group": "",
+      "prerequisite": "Fighter",
+      "icon": "",
+      "before": ["n015"],
+      "after": ["n045", "n048"],
+      "branch": "n006",
+      "position": {"x": 2808, "y": 2140}
+    },
+    "n032": {
+      "name": "Fighter - Military Soldier",
+      "type": "Sub-Roles",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n032",
+      "group": "",
+      "prerequisite": "Fighter",
+      "icon": "",
+      "before": ["n015"],
+      "after": ["n052", "n053", "n011"],
+      "branch": "n006",
+      "position": {"x": 2714, "y": 2404}
+    },
+
+    "n033": {
+      "name": "Healer - Physician",
+      "type": "Sub-Roles",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n033",
+      "group": "",
+      "prerequisite": "Healer",
+      "icon": "",
+      "before": ["n008"],
+      "after": ["n058", "n059", "n019"],
+      "branch": "n007",
+      "position": {"x": 2404, "y": 1286}
+    },
+    "n034": {
+      "name": "Healer - Mad Scientist",
+      "type": "Sub-Roles",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n034",
+      "group": "",
+      "prerequisite": "Healer",
+      "icon": "",
+      "before": ["n012"],
+      "after": ["n060", "n061"],
+      "branch": "n007",
+      "position": {"x": 1463, "y": 1040}
+    },
+
+    "n035": {
+      "name": "Attack Buff",
+      "type": "Stat Buffing",
+      "description": "Increases attack by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n035",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n019"],
+      "after": ["n054", "n055"],
+      "branch": "n006",
+      "position": {"x": 2960, "y": 1463}
+    },
+
+    "n036": {
+      "name": "Defense Buff",
+      "type": "Stat Buffing",
+      "description": "Increases defense by +20%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n036",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n018"],
+      "after": [],
+      "branch": "n005",
+      "position": {"x": 909, "y": 2140}
+    },
+
+    "n037": {
+      "name": "Health Buff",
+      "type": "Stat Buffing",
+      "description": "Increases health by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n037",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n024"],
+      "after": [],
+      "branch": "n005",
+      "position": {"x": 909, "y": 1860}
+    },
+
+    "n038": {
+      "name": "Mana Buff",
+      "type": "Stat Buffing",
+      "description": "Increase MP by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n038",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n012"],
+      "after": ["n062", "n063"],
+      "branch": "n007",
+      "position": {"x": 1722, "y": 936}
+    },
+    "n039": {
+      "name": "Mana Regen Buff",
+      "type": "Stat Buffing",
+      "description": "Increases mana regen by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n039",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n016"],
+      "after": ["n064", "n065"],
+      "branch": "n007",
+      "position": {"x": 2000, "y": 900}
+    },
+
+    "n040": {
+      "name": "Stamina Buff",
+      "type": "Stat Buffing",
+      "description": "Increases stamina by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n040",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n019"],
+      "after": ["n056"],
+      "branch": "n006",
+      "position": {"x": 3064, "y": 1722}
+    },
+    "n041": {
+      "name": "Stamina Regen Buff",
+      "type": "Stat Buffing",
+      "description": "Increase stamina regen by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n041",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n022"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3100, "y": 2000}
+    },
+
+    "n042": {
+      "name": "Crit Rate Buff",
+      "type": "Stat Buffing",
+      "description": "Increases crit rate by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n042",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n017"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1722, "y": 3064}
+    },
+    "n043": {
+      "name": "Crit Damage Buff",
+      "type": "Stat Buffing",
+      "description": "Increases crit damage by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n043",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n022"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3064, "y": 2278}
+    },
+
+    "n044": {
+      "name": "Speed Buff",
+      "type": "Stat Buffing",
+      "description": "Increases speed by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n044",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n020"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1463, "y": 2960}
+    },
+
+    "n045": {
+      "name": "Piercing Buff",
+      "type": "Stat Buffing",
+      "description": "Increases piercing by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n045",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n031"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 2960, "y": 2537}
+    },
+
+    "n046": {
+      "name": "Healing Rate Buff",
+      "type": "Stat Buffing",
+      "description": "Increases healing rate by +10%. (max +30% at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n046",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n016"],
+      "after": ["n066", "n067"],
+      "branch": "n007",
+      "position": {"x": 2278, "y": 936}
+    },
+
+    "n047": {
+      "name": "Luck Buff",
+      "type": "Stat Buffing",
+      "description": "Increases luck by +10. (max +30 at Level 10)",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 4 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n047",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n020"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 2790, "y": 3131}
+    },
+
+    "n048": {
+      "name": "Basic Skill Buff",
+      "type": "Skill Enhancement",
+      "description": "Increases Basic Skill damage by +20%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 8 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n048",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n031"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3206, "y": 1329}
+    },
+
+    "n049": {
+      "name": "Special Skill I Buff",
+      "type": "Skill Enhancement",
+      "description": "Increase Special Skill damage by +15%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 8 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n049",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n021"],
+      "after": ["n068", "n069"],
+      "branch": "n007",
+      "position": {"x": 2537, "y": 1040}
+    },
+    
+    "n050": {
+      "name": "Special Skill II Buff",
+      "type": "Skill Enhancement",
+      "description": "Increase Special Skill damage by +15%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 8 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n050",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n023"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 2546, "y": 3268}
+    },
+
+    "n051": {
+      "name": "Ultimate Skill Buff",
+      "type": "Skill Enhancement",
+      "description": "increases Ultimate Skill damage by +30%.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Cost: 8 SR Star Level fragments.",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n051",
+      "group": "",
+      "prerequisite": "",
+      "icon": "",
+      "before": ["n024"],
+      "after": [],
+      "branch": "n005",
+      "position": {"x": 980, "y": 1589}
+    },
+
+    "n052": {
+      "name": "Icelorian",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n052",
+      "group": "Arch-Elemental Path",
+      "prerequisite": "Mystical Path - Arch-Elemental",
+      "icon": "",
+      "before": ["n032"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3316, "y": 1586}
+    },
+
+    "n053": {
+      "name": "Gostlynger",
+      "type": "Species",
+      "description": "(Later release) Gain an additional skill and passive.",
+      "description_style": {"paddingTop": 7},
+      "additional": [
+        {"text": "Whenever an opponent is defeated, their soul will drop. Approaching it will collect it into the shadow storage. When using this skill, you can select a specific shadow and it will then form as a minion to fight for your side. Bosses cannot become shadows. Collected shadows persist in inventory (and can be freely removed) and can be resummoned in any location or gamemode so long as they do not die in battle. Using the skill again will unsummon the shadows.",
+          "style": {"paddingTop": 7}},
+        {"text": "Special Skill: Shadow Necromancy - Gain the Gostlynger ability to manipulate morality and convert defeated foes to build your army. The summoned minions will stay indefinitely whilst in battle (or 10 seconds idle) and inherit 40% of the character’s max health and 80% of all other stats; they may also receive buffs that “allies” can receive. The minion will maintain its characteristics as when it was alive. Up to 5 shadows may be summoned at once but the energy gauge cost scales per shadow.",
+          "style": {"paddingTop": 7}},
+        {"text": "Energy Gauge: 20%",
+          "style": {"paddingTop": 7}}
+      ],
+      "status": "outlined",
+      "id": "n053",
+      "group": "Arch-Elemental Path",
+      "prerequisite": "Mystical Path - Arch-Elemental",
+      "icon": "",
+      "before": ["n032"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3373, "y": 1860}
+    },
+
+    "n054": {
+      "name": "Water Spirit",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n054",
+      "group": "Arch-Elemental Path",
+      "prerequisite": "Mystical Path - Arch-Elemental",
+      "icon": "",
+      "before": ["n035"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3373, "y": 2140}
+    },
+
+    "n055": {
+      "name": "Dracolor",
+      "type": "Species",
+      "description": "(Later release)",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n055",
+      "group": "Arch-Elemental Path",
+      "prerequisite": "Mystical Path - Arch-Elemental",
+      "icon": "",
+      "before": ["n035"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3316, "y": 2414}
+    },
+
+    "n056": {
+      "name": "Larvan",
+      "type": "Species",
+      "description": "Nodeless - Cannot be subject to the same path of Pyrus Bourn.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n056",
+      "group": "Arch-Elemental Path",
+      "prerequisite": "Mystical Path - Arch-Elemental",
+      "icon": "",
+      "before": ["n040"],
+      "after": [],
+      "branch": "n006",
+      "position": {"x": 3206, "y": 2671}
+    },
+
+    "n057": {
+      "name": "Naiad",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n057",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n021"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1210, "y": 869}
+    },
+
+    "n058": {
+      "name": "Nereid",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n058",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n033"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1454, "y": 732}
+    },
+
+    "n059": {
+      "name": "Nymph",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n059",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n033"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1721, "y": 648}
+    },
+
+    "n060": {
+      "name": "Elf",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n060",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n034"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2000, "y": 620}
+    },
+
+    "n061": {
+      "name": "Dwarf",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n061",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n034"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2279, "y": 648}
+    },
+
+    "n062": {
+      "name": "Magnivirigentis",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n062",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n038"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2546, "y": 732}
+    },
+
+    "n063": {
+      "name": "Elementor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n063",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n038"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2790, "y": 869}
+    },
+
+    "n064": {
+      "name": "Metalor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n064",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n039"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1320, "y": 486}
+    },
+
+    "n065": {
+      "name": "Wentor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n065",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n039"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1584, "y": 393}
+    },
+
+    "n066": {
+      "name": "Terralor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n066",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n046"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 1860, "y": 346}
+    },
+
+    "n067": {
+      "name": "Herbovir",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n067",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n046"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2140, "y": 346}
+    },
+
+    "n068": {
+      "name": "Huolor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n068",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n049"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2416, "y": 393}
+    },
+
+    "n069": {
+      "name": "Runigist",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n069",
+      "group": "Elemental Path",
+      "prerequisite": "Mystical Path - Elemental",
+      "icon": "",
+      "before": ["n049"],
+      "after": [],
+      "branch": "n007",
+      "position": {"x": 2680, "y": 486}
+    },
+
+    "n070": {
+      "name": "Angelor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n070",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n023"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 2279, "y": 3352}
+    },
+
+    "n071": {
+      "name": "Vulpivor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n071",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n026"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 2000, "y": 3380}
+    },
+
+    "n072": {
+      "name": "Canilor",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n072",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n026"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1721, "y": 3352}
+    },
+
+    "n073": {
+      "name": "Avilerion",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n073",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n027"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1454, "y": 3268}
+    },
+
+    "n074": {
+      "name": "Merpeople",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n074",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n027"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1210, "y": 3131}
+    },
+
+    "n075": {
+      "name": "Satyr",
+      "type": "Species",
+      "description": "Details have not yet been specified.",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "unspecified",
+      "id": "n075",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n028"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 2140, "y": 3654}
+    },
+
+    "n076": {
+      "name": "Luporian",
+      "type": "Species",
+      "description": "(Beastman) (Later release)",
+      "description_style": {"paddingTop": 7},
+      "additional": [],
+      "status": "outlined",
+      "id": "n076",
+      "group": "Demihuman Path",
+      "prerequisite": "Mystical Path - Demihuman",
+      "icon": "",
+      "before": ["n028"],
+      "after": [],
+      "branch": "n004",
+      "position": {"x": 1860, "y": 3654}
+    }
+
+}

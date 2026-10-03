@@ -338,7 +338,7 @@
 
     "species": ["Naiad", "Vulpivor"],
     "specialty": ["AoE Damage", "Single-Target Damage", "Support", "Support", "Crowd Controlling", "Shredder", "Healing"],
-    "affinity": ["Earth"],
+    "affinity": ["Water"],
     "role": ["Defense", "Healer"],
 
     "affiliation": ["Mystical Legends", "Mystic Cohort"],

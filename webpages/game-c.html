@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/css/home.css">
 <link rel="stylesheet" href="/css/news.css">
 <link rel="stylesheet" href="/css/mlg.css">
-<link rel="stylesheet" href="/css/c4-skill-tree.css?v=4">
+<link rel="stylesheet" href="/css/c4-skill-tree.css?v=11">
 <script src="/js/bootstrap-bundle-min.js"></script>
 
 <style>
@@ -511,8 +511,14 @@ hr.my-4{
     <div id="skillPanel" class="skill-panel"></div>
   </section>
   <section id="c4-tree-view" class="c4-tree-view" role="tabpanel" aria-labelledby="c4-tree-tab" hidden>
-    <p class="c4-tree-hint">Follow the Heart down through nine levels. Select a node to read its effects and requirements.</p>
-    <div id="c4-tree-viewport" class="c4-tree-viewport" role="region" aria-label="Vertical skill tree grouped by level"><p id="c4-tree-status" role="status">Open Skill Tree to explore.</p><div id="c4-tree-map" class="c4-tree-map"></div></div>
+    <div class="c4-plane-controls" role="group" aria-label="Skill tree map controls">
+      <button id="c4-zoom-out" type="button" aria-label="Zoom out">−</button>
+      <output id="c4-zoom-value" aria-label="Map zoom">100%</output>
+      <button id="c4-zoom-in" type="button" aria-label="Zoom in">+</button>
+      <button id="c4-fit-tree" type="button">Expand</button>
+      <button id="c4-focus-heart" type="button">Heart</button>
+    </div>
+    <div id="c4-tree-viewport" tabindex="0" class="c4-tree-viewport" role="region" aria-label="Skill tree branching from the Heart"><p id="c4-tree-status" role="status">Open Skill Tree to explore.</p><div id="c4-tree-space" class="c4-tree-space"><div id="c4-tree-map" class="c4-tree-map"></div></div></div>
   </section>
   <dialog id="c4-node-dialog" class="c4-node-dialog" aria-labelledby="c4-node-title">
     <button id="c4-node-close" class="c4-node-close" type="button" aria-label="Close node details" autofocus>×</button>
@@ -1069,7 +1075,7 @@ async function loadCharacter(){
 loadCharacter();
 </script>
 
-<script src="/js/c4-skill-tree.js?v=4" defer></script>
+<script src="/js/c4-skill-tree.js?v=15" defer></script>
 <script src="/js/include.js"></script>
 <script src="/js/home.js"></script>
 <div id="subfooter-placeholder"></div>
