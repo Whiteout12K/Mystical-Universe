@@ -399,6 +399,18 @@ function abilitySkill(s,id,c){
  </div>`;
 }
 
+function skillTreeAbility(){
+ return `<div class="ability-skill">
+  <button class="ability-skill-head" type="button">
+   <img class="ability-skill-icon" src="/images/mlg-assets/Characters/C4/skill-tree-b/heart.svg" alt="" loading="lazy" draggable="false">
+   <span class="ability-skill-name">Skill Tree</span><span class="ability-skill-arrow">▼</span>
+  </button>
+  <div class="ability-skill-content"><div class="ability-skill-frame-wrap">
+   <iframe class="ability-skill-frame" title="Main Character Skill Tree" data-tree-path="true" data-src="/ml-game/apps/skill_tree_path.html"></iframe>
+  </div></div>
+ </div>`;
+}
+
 const abilityGroup=(title,content,extra="")=>
  `<div class="ability-character" ${extra}><div class="ability-character-title">${title}</div>${content}</div>`;
 
@@ -413,6 +425,7 @@ function renderAbilities(){
 
  ids.forEach(id=>{
   const c=characters[id],list=abilitySkills(c);
+  if(id.toLowerCase()==="c4"){html+=abilityGroup(esc(c.name),`<div class="ability-skills">${list.map(s=>abilitySkill(s,id,c)).join("")}${skillTreeAbility()}</div>`);return;}
   html+=abilityGroup(esc(c.name),list.length
    ?`<div class="ability-skills">${list.map(s=>abilitySkill(s,id,c)).join("")}</div>`
    :`<div class="ability-empty">No technical skills or dupes listed.</div>`);
@@ -420,8 +433,9 @@ function renderAbilities(){
 
  if(support&&characters[support]){
   const c=characters[support],list=dupeSkills(c);
+  if(support.toLowerCase()==="c4")list.push("SkillTree");
   html+=abilityGroup(`Support — ${esc(c.name)}`,list.length
-   ?`<div class="ability-skills">${list.map(s=>abilitySkill(s,support,c)).join("")}</div>`
+   ?`<div class="ability-skills">${list.map(s=>s==="SkillTree"?skillTreeAbility():abilitySkill(s,support,c)).join("")}</div>`
    :`<div class="ability-empty">No dupes listed.</div>`,
    'style="border-top-color:#d6aa4560"');
  }

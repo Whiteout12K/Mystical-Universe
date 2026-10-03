@@ -266,7 +266,7 @@
     "id": 4,
     "profile_image": "/images/character_art/Character_Heads/main_character_head.png",   
 
-    "splash_image": "",
+    "splash_image": "/images/character_art/alana_thelio_full.png",
     "splash_color": "drop-shadow(0 0 18px rgba(80, 168, 240, 0.378))",
     "button_color": "#b6e4a7",
 
@@ -275,12 +275,12 @@
     "rarity": "C",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c4_role.svg",
 
-    "species": [],
+    "species": ["Non-Mystical"],
     "specialty": [],
     "affinity": [],
     "role": ["Agent"],
 
-    "affiliation": [],
+    "affiliation": ["District 7"],
     "attributes": [],
 
     "formatted_name": "<b>Main Character</b>",

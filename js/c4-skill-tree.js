@@ -233,12 +233,13 @@
    }
    for(const [id,node] of Object.entries(result.nodes)){
     const count=neighbors.get(id).size;
-    if(count>4)throw Error();
+    const limit=Number(result.layout.maxConnections)||4;
+    if(count>limit)console.warn(`Skill tree: ${node.name||id} has ${count} connections (configured maximum: ${limit}).`);
     if(count&&(!node.position||!Number.isFinite(node.position.x)||!Number.isFinite(node.position.y)))throw Error();
    }
    graphEdges=[...edges.values()];
    effects=definitions;data=result;draw();restorePath();updatePath();el('c4-tree-status').hidden=true;}
-  catch {el('c4-tree-status').textContent='The skill tree could not be loaded. ';const retry=make('button','c4-tree-retry','Try again');retry.type='button';retry.onclick=load;el('c4-tree-status').append(retry);}
+  catch(error) {data=null;console.error('Unable to load c4 skill tree:',error);el('c4-tree-status').textContent='The skill tree could not be loaded. ';const retry=make('button','c4-tree-retry','Try again');retry.type='button';retry.onclick=load;el('c4-tree-status').append(retry);}
   finally {loading=false;view.setAttribute('aria-busy','false');}
  }
  function select(index) {tabs.forEach((t,i)=>{t.setAttribute('aria-selected',String(i===index));t.tabIndex=i===index?0:-1;});el('skills-view').hidden=index!==0;el('c4-tree-view').hidden=index!==1;if(index===1)load();}

@@ -565,7 +565,7 @@
     "class": "ultimate-shield",
     "icon": "",
     "type": "Buff",
-    "description": "Creates an overshield that absorbs damage equal to a certain amount of health. If any remains for more than 5 seconds, it is then converted into healing equal to the value of the shield. Decreases incoming damage by -20%.",
+    "description": "Creates an overshield that absorbs damage equal to a certain amount of health. If any remains for more than 5 seconds, it is then converted into healing equal to the value of the shield. Gains +20% damage reduction while having this buff.",
     "stat_modifiers": [],
     "description_style": {
       "paddingTop": 3
@@ -683,6 +683,6 @@
 
 
 
-  
+
 }
 
