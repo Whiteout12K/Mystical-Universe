@@ -140,10 +140,14 @@
   if(activeConflict(id))return false;
   return selectedPath.length?selectedPath.some(active=>neighbors.get(id)?.has(active)):id===data.rootId;
  }
- function canRemove(id) {
-  if(!selectedPath.includes(id))return false;
-  if(id===data.rootId)return selectedPath.length===1;
-  return [...(neighbors.get(id)||[])].filter(peer=>selectedPath.includes(peer)).length<=1;
+ function pruneDisconnectedPath() {
+  const active=new Set(selectedPath),connected=new Set(),pending=active.has(data.rootId)?[data.rootId]:[];
+  while(pending.length){
+   const id=pending.pop();if(connected.has(id))continue;
+   connected.add(id);
+   for(const peer of neighbors.get(id)||[])if(active.has(peer)&&!connected.has(peer))pending.push(peer);
+  }
+  selectedPath=selectedPath.filter(id=>connected.has(id));
  }
  function updatePath(message) {
   const active=new Set(selectedPath);
@@ -152,16 +156,16 @@
   view.classList.toggle('c4-simulating',simulating);
   el('c4-clear-path').disabled=!selectedPath.length;
   map.querySelectorAll('.c4-tree-node').forEach(button=>{
-   const chosen=active.has(button.dataset.node),available=chosen?canRemove(button.dataset.node):canActivate(button.dataset.node);
+   const chosen=active.has(button.dataset.node),available=chosen||canActivate(button.dataset.node);
    button.classList.toggle('c4-node-available',simulating&&!chosen&&available);
    const conflict=activeConflict(button.dataset.node);
-   button.title=simulating&&conflict&&!chosen?`Conflicts with ${data.nodes[conflict].name}: ${data.nodes[button.dataset.node].name}`:simulating?(chosen?(available?'Deselect outer node: ':'Keep connected: '):(available?'Select node: ':'Connect your path first: '))+data.nodes[button.dataset.node].name:data.nodes[button.dataset.node].name;
+   button.title=simulating&&conflict&&!chosen?`Conflicts with ${data.nodes[conflict].name}: ${data.nodes[button.dataset.node].name}`:simulating?(chosen?'Deselect node: ':(available?'Select node: ':'Connect your path first: '))+data.nodes[button.dataset.node].name:data.nodes[button.dataset.node].name;
    button.classList.toggle('c4-node-active',chosen);button.classList.toggle('c4-node-unavailable',simulating?!available:!chosen);
    if(simulating){button.setAttribute('aria-pressed',String(chosen));button.setAttribute('aria-disabled',String(!available));}
    else {button.removeAttribute('aria-pressed');button.removeAttribute('aria-disabled');}
   });
   map.querySelectorAll('.c4-tree-edge').forEach(line=>line.classList.toggle('c4-edge-active',active.has(line.dataset.source)&&active.has(line.dataset.target)));
-  el('c4-path-message').textContent=message||(simulating?(selectedPath.length?'Select a glowing node to extend your path, or click an outer selected node to deselect it. Click Done — Exit Simulation when finished.':'Select the Heart to begin your path. Click Done — Exit Simulation when finished.'):(selectedPath.length?`${selectedPath.length} active nodes saved. Select a node to view its details.`:''));
+  el('c4-path-message').textContent=message||(simulating?(selectedPath.length?'Select a glowing node to extend your path, or click any selected node to deselect it. Nodes disconnected from the Heart are also removed. Click Done — Exit Simulation when finished.':'Select the Heart to begin your path. Click Done — Exit Simulation when finished.'):(selectedPath.length?`${selectedPath.length} active nodes saved. Select a node to view its details.`:''));
   const list=el('c4-active-path');list.replaceChildren();list.hidden=!selectedPath.length;
   if(selectedPath.length)list.append(make('h3','','Active Path'));
   for(const id of selectedPath){
@@ -176,8 +180,7 @@
  function activateNode(node) {
   if(!simulating){showNode(node);return;}
   if(selectedPath.includes(node.id)){
-   if(!canRemove(node.id)){el('c4-path-message').textContent='Only outer nodes can be deselected. Remove the end nodes first, or click Done — Exit Simulation when finished.';return;}
-   selectedPath=selectedPath.filter(id=>id!==node.id);savePath();updatePath();return;
+   selectedPath=selectedPath.filter(id=>id!==node.id);pruneDisconnectedPath();savePath();updatePath();return;
   }
   const conflict=activeConflict(node.id);
   if(conflict){el('c4-path-message').textContent=`${node.name} conflicts with ${data.nodes[conflict].name}. Only one can be active; deselect the conflicting path first.`;return;}
