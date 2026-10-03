@@ -32,7 +32,7 @@
       const link = document.createElement('a'); link.className = 'news-card'; link.href = item.file;
       if (item.image) {
         const image = document.createElement('img'); image.src = item.image; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async'; image.width = 640; image.height = 360;
-        if (document.body.classList.contains('home-ornaments')) {
+        if (document.body.classList.contains('news-ornaments') || document.body.classList.contains('home-ornaments')) {
           const imageFrame = document.createElement('div'); imageFrame.className = 'news-card-image'; imageFrame.append(image); link.append(imageFrame);
         } else { link.append(image); }
       }

@@ -242,31 +242,26 @@ body {
 }
 
 
-/* Small decorative corner */
-
-.book-content::before {
-  content: "";
+/* Open cloud-and-flame embroidery straddles each description corner. */
+.book-embroidery-corner {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 22px;
-  height: 22px;
-  border-top: 1px solid rgba(201, 168, 76, 0.5);
-  border-left: 1px solid rgba(201, 168, 76, 0.5);
+  width: 64px;
+  height: 64px;
+  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+  pointer-events: none;
+  z-index: 1;
 }
+.book-embroidery-top-left { top: -21px; left: -21px; }
+.book-embroidery-top-right { top: -21px; right: -21px; transform: scaleX(-1); }
+.book-embroidery-bottom-left { bottom: -21px; left: -21px; transform: scaleY(-1); }
+.book-embroidery-bottom-right { bottom: -21px; right: -21px; transform: scale(-1); }
 
-
-/* Bottom corner */
-
-.book-content::after {
-  content: "";
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 22px;
-  height: 22px;
-  border-right: 1px solid rgba(201, 168, 76, 0.5);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.5);
+@media (max-width: 600px) {
+  .book-embroidery-corner { width: 40px; height: 40px; }
+  .book-embroidery-top-left { top: -13px; left: -13px; }
+  .book-embroidery-top-right { top: -13px; right: -13px; }
+  .book-embroidery-bottom-left { bottom: -13px; left: -13px; }
+  .book-embroidery-bottom-right { bottom: -13px; right: -13px; }
 }
 
 

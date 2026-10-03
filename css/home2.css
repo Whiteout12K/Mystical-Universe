@@ -179,27 +179,27 @@
 .home-ornaments #characters .heading-decoration:last-child {
   background-image: url('../images/ornaments/wing-right.svg');
 }
-.home-ornaments .news-section h2::before,
-.home-ornaments .news-section h2::after {
+.news-ornaments .news-section h2::before,
+.news-ornaments .news-section h2::after {
   width: 76px;
   height: 24px;
   background: center / contain no-repeat;
   pointer-events: none;
 }
-.home-ornaments .news-section h2::before {
+.news-ornaments .news-section h2::before {
   background-image: url('../images/ornaments/wing-left.svg');
   transform: translateY(-50%);
 }
-.home-ornaments .news-section h2::after {
+.news-ornaments .news-section h2::after {
   background-image: url('../images/ornaments/wing-right.svg');
   transform: translateY(-50%);
 }
 
 /* The bracket straddles the card edge; artwork retains its own clipping. */
-.home-ornaments #newsContainer { row-gap: 42px; padding-bottom: 14px; }
-.home-ornaments #newsContainer .news-card { overflow: visible; padding-bottom: 12px; }
-.home-ornaments #newsContainer .news-card-image { overflow: hidden; border-radius: 11px 11px 0 0; }
-.home-ornaments #newsContainer .news-card::after {
+.news-ornaments #newsContainer { row-gap: 42px; padding-bottom: 14px; }
+.news-ornaments #newsContainer .news-card { overflow: visible; padding-bottom: 12px; }
+.news-ornaments #newsContainer .news-card-image { overflow: hidden; border-radius: 11px 11px 0 0; }
+.news-ornaments #newsContainer .news-card::after {
   content: "";
   top: auto;
   right: auto;
@@ -212,16 +212,16 @@
   pointer-events: none;
   opacity: .85;
 }
-.home-ornaments #newsContainer .news-card:hover::after { transform: translate(-50%, 50%); opacity: 1; }
+.news-ornaments #newsContainer .news-card:hover::after { transform: translate(-50%, 50%); opacity: 1; }
 
 @media (max-width: 600px) {
   .home-ornaments #characters .section-heading { gap: 8px; }
   .home-ornaments #characters .heading-decoration { width: 24px; height: 18px; flex-basis: 24px; }
   .home-ornaments #characters .section-heading h2 { min-width: 0; }
-  .home-ornaments .news-section h2::before,
-  .home-ornaments .news-section h2::after { width: 32px; height: 18px; }
-  .home-ornaments .news-section h2::before { right: calc(100% + 10px); }
-  .home-ornaments .news-section h2::after { left: calc(100% + 10px); }
+  .news-ornaments .news-section h2::before,
+  .news-ornaments .news-section h2::after { width: 32px; height: 18px; }
+  .news-ornaments .news-section h2::before { right: calc(100% + 10px); }
+  .news-ornaments .news-section h2::after { left: calc(100% + 10px); }
   .character-embroidery-corner { width: 56px; height: 56px; }
   .embroidery-top-left { top: -18.5px; left: -18.5px; }
   .embroidery-top-right { top: -18.5px; right: -18.5px; }
