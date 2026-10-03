@@ -111,14 +111,44 @@
 }
 
 
-/* Decorative corners */
+/* Gold cloud-and-flame corners and delicate bracket edges. */
+#jukebox .player { overflow: visible; }
 
-.player::before,
-.player::after {
+.player-ornament-corner {
   position: absolute;
-  color: var(--ml-gold, #c9a84c);
-  font-size: 1rem;
-  opacity: 0.65;
+  width: 76px;
+  height: 76px;
+  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+.player-ornament-top-left { top: -25px; left: -25px; }
+.player-ornament-top-right { top: -25px; right: -25px; transform: scaleX(-1); }
+.player-ornament-bottom-left { bottom: -25px; left: -25px; transform: scaleY(-1); }
+.player-ornament-bottom-right { bottom: -25px; right: -25px; transform: scale(-1); }
+
+#jukebox .player::before,
+#jukebox .player::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: min(70%, 420px);
+  height: 28px;
+  background: url('../images/ornaments/merged-wing-bracket.svg?v=3') center / 100% 100% no-repeat;
+  pointer-events: none;
+  z-index: 2;
+  opacity: .85;
+}
+#jukebox .player::before { top: 0; transform: translate(-50%, -50%) scaleY(-1); }
+#jukebox .player::after { bottom: 0; transform: translate(-50%, 50%); }
+
+@media (max-width: 600px) {
+  .player-ornament-corner { width: 56px; height: 56px; }
+  .player-ornament-top-left { top: -18.5px; left: -18.5px; }
+  .player-ornament-top-right { top: -18.5px; right: -18.5px; }
+  .player-ornament-bottom-left { bottom: -18.5px; left: -18.5px; }
+  .player-ornament-bottom-right { bottom: -18.5px; right: -18.5px; }
+  #jukebox .player::before, #jukebox .player::after { height: 22px; }
 }
 
 

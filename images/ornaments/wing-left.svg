@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="138 4 54 28" fill="none">
+  <title>Left Ornament Wing</title>
+  <defs><linearGradient id="gold" x1="138" y1="0" x2="192" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#b88a42"/><stop offset="1" stop-color="#e6c47e"/></linearGradient></defs>
+  <path d="M188 20Q177 12 161 13L142 8Q151 18 165 20L150 25Q164 29 174 24L188 20" stroke="url(#gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 56" fill="none" preserveAspectRatio="none">
+  <title>Merged Wing Bracket</title>
+  <desc>A delicate horizontal gold bracket with swept feather tips, mirrored wing accents, and a layered flame-shaped center. All detailing uses smooth solid lines.</desc>
+  <defs>
+    <linearGradient id="gold"><stop stop-color="#b88a42" stop-opacity=".65"/><stop offset=".25" stop-color="#d4af68"/><stop offset=".5" stop-color="#f3d995"/><stop offset=".75" stop-color="#d4af68"/><stop offset="1" stop-color="#b88a42" stop-opacity=".65"/></linearGradient>
+    <g id="feathers">
+      <path d="M14 9C35 21 60 19 92 12C83 21 71 26 57 27 M62 27C83 27 104 20 122 17C111 25 99 29 87 30" stroke-width="1.35"/>
+      <path d="M100 30C129 29 151 24 174 24 M37 20Q45 23 52 23" stroke-width=".85" opacity=".7"/>
+    </g>
+  </defs>
+  <g stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 8C17 29 48 31 80 31C137 31 187 27 250 27C277 27 292 31 300 46C308 31 323 27 350 27C413 27 463 31 520 31C552 31 583 29 588 8" stroke-width="1.7"/>
+    <use href="#feathers"/>
+    <use href="#feathers" transform="translate(600 0) scale(-1 1)"/>
+    <path d="M256 20C277 16 289 19 300 31C311 19 323 16 344 20 M287 27C295 25 298 19 300 12C302 19 305 25 313 27" stroke-width="1.2"/>
+  </g>
+</svg>

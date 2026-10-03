@@ -152,7 +152,7 @@
   position: absolute;
   width: 76px;
   height: 76px;
-  background: url('../images/ornaments/square-embroidery-corner.svg?v=9') center / contain no-repeat;
+  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
   pointer-events: none;
   z-index: 2;
 }
@@ -162,7 +162,66 @@
 .embroidery-bottom-left { bottom: -25px; left: -25px; transform: scaleY(-1); }
 .embroidery-bottom-right { bottom: -25px; right: -25px; transform: scale(-1); }
 
+/* Separate wings keep the original outline without interior lines. */
+.home-ornaments .hero-bottom-decoration {
+  width: min(560px, 100%);
+  height: 42px;
+  background: url('../images/ornaments/merged-wing-bracket.svg?v=2') left center / contain no-repeat;
+}
+.home-ornaments .hero-bottom-decoration > * { display: none; }
+.home-ornaments #characters .heading-decoration {
+  width: 76px;
+  height: 24px;
+  flex: 0 0 76px;
+  background: url('../images/ornaments/wing-left.svg') center / contain no-repeat;
+  pointer-events: none;
+}
+.home-ornaments #characters .heading-decoration:last-child {
+  background-image: url('../images/ornaments/wing-right.svg');
+}
+.home-ornaments .news-section h2::before,
+.home-ornaments .news-section h2::after {
+  width: 76px;
+  height: 24px;
+  background: center / contain no-repeat;
+  pointer-events: none;
+}
+.home-ornaments .news-section h2::before {
+  background-image: url('../images/ornaments/wing-left.svg');
+  transform: translateY(-50%);
+}
+.home-ornaments .news-section h2::after {
+  background-image: url('../images/ornaments/wing-right.svg');
+  transform: translateY(-50%);
+}
+
+/* The bracket straddles the card edge; artwork retains its own clipping. */
+.home-ornaments #newsContainer { row-gap: 42px; padding-bottom: 14px; }
+.home-ornaments #newsContainer .news-card { overflow: visible; padding-bottom: 12px; }
+.home-ornaments #newsContainer .news-card-image { overflow: hidden; border-radius: 11px 11px 0 0; }
+.home-ornaments #newsContainer .news-card::after {
+  content: "";
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  height: 34px;
+  background: url('../images/ornaments/merged-wing-bracket.svg?v=3') center / 100% 100% no-repeat;
+  transform: translate(-50%, 50%);
+  pointer-events: none;
+  opacity: .85;
+}
+.home-ornaments #newsContainer .news-card:hover::after { transform: translate(-50%, 50%); opacity: 1; }
+
 @media (max-width: 600px) {
+  .home-ornaments #characters .section-heading { gap: 8px; }
+  .home-ornaments #characters .heading-decoration { width: 24px; height: 18px; flex-basis: 24px; }
+  .home-ornaments #characters .section-heading h2 { min-width: 0; }
+  .home-ornaments .news-section h2::before,
+  .home-ornaments .news-section h2::after { width: 32px; height: 18px; }
+  .home-ornaments .news-section h2::before { right: calc(100% + 10px); }
+  .home-ornaments .news-section h2::after { left: calc(100% + 10px); }
   .character-embroidery-corner { width: 56px; height: 56px; }
   .embroidery-top-left { top: -18.5px; left: -18.5px; }
   .embroidery-top-right { top: -18.5px; right: -18.5px; }

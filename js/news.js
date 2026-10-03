@@ -30,7 +30,12 @@
     container.replaceChildren();
     for (const item of filtered.slice(0, count)) {
       const link = document.createElement('a'); link.className = 'news-card'; link.href = item.file;
-      if (item.image) { const image = document.createElement('img'); image.src = item.image; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async'; image.width = 640; image.height = 360; link.append(image); }
+      if (item.image) {
+        const image = document.createElement('img'); image.src = item.image; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async'; image.width = 640; image.height = 360;
+        if (document.body.classList.contains('home-ornaments')) {
+          const imageFrame = document.createElement('div'); imageFrame.className = 'news-card-image'; imageFrame.append(image); link.append(imageFrame);
+        } else { link.append(image); }
+      }
       const date = document.createElement('time'); date.className = 'news-card-date'; date.dateTime = item.date;
       date.textContent = new Intl.DateTimeFormat('en-US', {month:'long', day:'numeric', year:'numeric', timeZone:'UTC'}).format(new Date(item.date)); link.append(date);
       const heading = document.createElement('h3'); heading.textContent = item.title; link.append(heading); container.append(link);
