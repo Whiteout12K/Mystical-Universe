@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <title>Cloud and Simple Flame Embroidery Corner</title>
+  <desc>Japanese-inspired cloud ribbons follow both edges, with a simple outward-pointing flame at the very corner. The cloud lines remain open.</desc>
+  <defs>
+    <linearGradient id="gold" x1="8" y1="8" x2="153" y2="153" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3d995"/><stop offset=".55" stop-color="#b88a42"/><stop offset="1" stop-color="#e6c47e"/>
+    </linearGradient>
+    <g id="cloud">
+      <!-- A continuous cloud ribbon joins the corner rather than floating beside it. -->
+      <path d="M53 53H72C81 53 81 42 91 42C98 42 99 47 104 47C109 47 108 34 119 34C130 34 128 48 137 48H153 M72 53C85 53 86 65 101 65C111 65 113 58 125 58H145"/>
+      <path d="M92 52H104C114 52 112 43 120 43 M103 59H116" stroke-width="1.2"/>
+    </g>
+    <g id="corner">
+      <!-- A simple diagonal flame replaces the small corner scrolls. -->
+      <path d="M53 78V53H78" stroke-width="3"/>
+      <path d="M48 56C35 54 32 45 34 39C35 35 31 30 27 27C30 31 35 35 39 34C45 32 54 35 56 48" stroke-width="2.5"/>
+      <path d="M53 53Q43 50 41 41" stroke-width="1.5"/>
+      <use href="#cloud"/>
+      <use href="#cloud" transform="matrix(0 1 1 0 0 0)"/>
+    </g>
+  </defs>
+  <use href="#corner" stroke="#392616" stroke-width="4.5" transform="translate(0 1.5)" opacity=".75"/>
+  <use href="#corner" stroke="url(#gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <use href="#corner" stroke="#fff0bc" stroke-width=".6" stroke-dasharray="1 4" opacity=".65"/>
+</svg>

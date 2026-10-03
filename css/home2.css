@@ -148,3 +148,24 @@
     font-size:1.08rem;
   }
 }
+.character-embroidery-corner {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  background: url('../images/ornaments/square-embroidery-corner.svg?v=9') center / contain no-repeat;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.embroidery-top-left { top: -25px; left: -25px; }
+.embroidery-top-right { top: -25px; right: -25px; transform: scaleX(-1); }
+.embroidery-bottom-left { bottom: -25px; left: -25px; transform: scaleY(-1); }
+.embroidery-bottom-right { bottom: -25px; right: -25px; transform: scale(-1); }
+
+@media (max-width: 600px) {
+  .character-embroidery-corner { width: 56px; height: 56px; }
+  .embroidery-top-left { top: -18.5px; left: -18.5px; }
+  .embroidery-top-right { top: -18.5px; right: -18.5px; }
+  .embroidery-bottom-left { bottom: -18.5px; left: -18.5px; }
+  .embroidery-bottom-right { bottom: -18.5px; right: -18.5px; }
+}
