@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
   function renderTitle(data){
     return `
       <div>
-        <b style="font-size:14px">
+        <b class="skill-title" style="font-size:14px">
           ${data.type||"Skill"}: ${data.name||""}
         </b>
       </div>
@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     };
 
     return `
-      <div style="${buildStyle(style)}">
+      <div class="${style.fontSize!==undefined&&parseFloat(style.fontSize)<=9?'skill-meta':''}" style="${buildStyle(style)}">
         ${renderEmbeddedContent(text,effects)}
       </div>
     `;
