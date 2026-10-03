@@ -575,7 +575,7 @@ function getSkillIcon(skill,path){
 
 function getSkillFile(skill,charId){
   const id=skill==="Dupes"?16:1;
-  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}&style=rich-2`;
+  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}&style=rich-3`;
 }
 
 function createSkillButtons(character){
@@ -622,12 +622,12 @@ function setActiveButton(index){
    Iframe
 --------------------------------------------------------- */
 
-function createSkillIframe(url){
+function createSkillIframe(){
   const iframe=document.createElement("iframe");
   iframe.className="skill-frame";
   iframe.title="Skill information";
 
-  iframe.src=url;
+  iframe.loading="eager";
 
   return iframe;
 }
@@ -660,6 +660,7 @@ async function prepareIframe(iframe){
 
     style.textContent=`
       html{background:transparent!important;overflow:hidden!important;font-size:18.4px!important}
+      html,body{height:auto!important;min-height:0!important}
       body{
         margin:0!important;padding:7px!important;box-sizing:border-box;
         background:transparent!important;
@@ -668,6 +669,9 @@ async function prepareIframe(iframe){
         border:0;border-radius:0;
       }
       .skill-title{display:block;font-family:Georgia,serif!important;font-size:1.7rem!important;color:#f0ca69;line-height:1.2;margin:0 0 14px}
+      .skill-type{display:block;font-family:Arial,sans-serif!important;font-size:.75rem!important;font-weight:400;color:#bba77e;line-height:1.45;margin-bottom:5px}
+      .skill-title-separator{display:none}
+      .skill-name{display:block}
       #skill-content u{text-decoration:none;color:#d6aa45;font-weight:700}
       .icon-container{gap:10px;line-height:1.45}
       .effect-icon{flex:none;padding-top:3px}
@@ -680,20 +684,6 @@ async function prepareIframe(iframe){
 
     if(doc.head)doc.head.appendChild(style);
 
-    if(doc.fonts?.ready){
-      try{await doc.fonts.ready}catch{}
-    }
-
-    const images=[...(doc.images||[])];
-
-    await Promise.all(images.map(image=>{
-      if(image.complete)return Promise.resolve();
-
-      return new Promise(resolve=>{
-        image.addEventListener("load",resolve,{once:true});
-        image.addEventListener("error",resolve,{once:true});
-      });
-    }));
   }catch(error){
     console.error("Skill iframe preparation error:",error);
   }
@@ -704,17 +694,13 @@ function getIframeHeight(iframe){
     const doc=iframe.contentDocument||iframe.contentWindow.document;
     if(!doc)return MIN_SKILL_HEIGHT;
 
-    const body=doc.body,html=doc.documentElement;
-
+    const body=doc.body;
+    // Measure natural content, never the iframe viewport: viewport height
+    // would feed the previous assigned height back into the next resize.
     return Math.max(
-      body?.scrollHeight||0,
-      body?.offsetHeight||0,
-      body?.clientHeight||0,
-      html?.scrollHeight||0,
-      html?.offsetHeight||0,
-      html?.clientHeight||0,
+      Math.ceil(body?.getBoundingClientRect().height||0)+20,
       MIN_SKILL_HEIGHT
-    )+20;
+    );
   }catch{
     return MIN_SKILL_HEIGHT;
   }
@@ -746,43 +732,40 @@ async function waitForStableHeight(iframe){
 }
 
 function observeIframeHeight(iframe,panel,token){
-  try{
-    const doc=iframe.contentDocument||iframe.contentWindow.document;
-    if(!doc)return null;
-
-    const body=doc.body,html=doc.documentElement;
-    if(!body&&!html)return null;
-
-    let lastHeight=0;
-
-    const update=()=>{
-      if(token!==skillLoadToken)return;
-
-      const height=getIframeHeight(iframe);
-      if(Math.abs(height-lastHeight)<2)return;
-
-      lastHeight=height;
-      iframe.style.height=`${height}px`;
-
-      if(panel.style.height==="auto"||!panel.style.height){
-        panel.style.height=`${height}px`;
-
-        requestAnimationFrame(()=>{
-          if(token===skillLoadToken)panel.style.height="auto";
-        });
-      }
-    };
-
-    const observer=new ResizeObserver(update);
-    if(body)observer.observe(body);
-    if(html)observer.observe(html);
-
-    return observer;
-  }catch(error){
-    console.warn("Skill ResizeObserver unavailable:",error);
-    return null;
-  }
+  const doc=iframe.contentDocument;
+  if(!doc?.body)return null;
+  let frame=0,lastHeight=0;
+  const update=()=>{
+    frame=0;
+    if(token!==skillLoadToken||!iframe.isConnected)return;
+    const height=getIframeHeight(iframe);
+    if(Math.abs(height-lastHeight)<2)return;
+    lastHeight=height;
+    iframe.style.height=`${height}px`;
+  };
+  const schedule=()=>{
+    if(!frame)frame=requestAnimationFrame(update);
+  };
+  const resize=typeof ResizeObserver!=="undefined"?new ResizeObserver(schedule):null;
+  resize?.observe(doc.body);
+  resize?.observe(panel);
+  const mutation=new MutationObserver(schedule);
+  mutation.observe(doc.body,{subtree:true,childList:true,characterData:true,attributes:true});
+  doc.addEventListener("load",schedule,true);
+  doc.addEventListener("error",schedule,true);
+  window.addEventListener("resize",schedule);
+  doc.fonts?.ready.then(schedule).catch(()=>{});
+  schedule();
+  return {disconnect(){
+    resize?.disconnect();
+    mutation.disconnect();
+    if(frame)cancelAnimationFrame(frame);
+    doc.removeEventListener("load",schedule,true);
+    doc.removeEventListener("error",schedule,true);
+    window.removeEventListener("resize",schedule);
+  }};
 }
+
 
 /* ---------------------------------------------------------
    Skill display
@@ -792,13 +775,14 @@ async function showSkill(index){
   if(!characterData||!skills[index])return;
 
   const panel=$("skillPanel");
-  const token=++skillLoadToken;
   const charId=getCharacterId();
   const skill=skills[index];
   const url=getSkillFile(skill,charId);
 
   if(index===activeSkillIndex&&panel.querySelector(".skill-frame"))
     return;
+
+  const token=++skillLoadToken;
 
   /*
     Only one iframe is allowed to exist in the panel at any time.
@@ -828,28 +812,13 @@ async function showSkill(index){
     activeSkillIndex=-1;
   }
 
-  const newIframe=createSkillIframe(url);
-
-  newIframe.style.opacity="0";
-  newIframe.style.pointerEvents="none";
+  const newIframe=createSkillIframe();
   newIframe.style.height=`${MIN_SKILL_HEIGHT}px`;
 
+  // Subscribe before navigation/insertion, including cached loads.
+  const loaded=loadSkillIframe(newIframe,url);
   panel.appendChild(newIframe);
-
-  await new Promise(resolve=>{
-    let finished=false;
-
-    const finish=()=>{
-      if(finished)return;
-      finished=true;
-      clearTimeout(timeout);
-      newIframe.removeEventListener("load",finish);
-      resolve();
-    };
-
-    const timeout=setTimeout(finish,8000);
-    newIframe.addEventListener("load",finish,{once:true});
-  });
+  await loaded;
 
   if(token!==skillLoadToken){
     newIframe.remove();

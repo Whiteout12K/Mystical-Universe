@@ -1134,3 +1134,29 @@
         letter-spacing:0;
     }
 }
+/* Match the homepage image frame corner size and placement. */
+.hub-ornament {
+    --hub-ornament-size:76px;
+    --hub-ornament-offset:-25px;
+    position:absolute;
+    width:var(--hub-ornament-size);
+    height:var(--hub-ornament-size);
+    background:url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+    pointer-events:none;
+    z-index:4;
+    opacity:.85;
+}
+.hub-ornament-top-left{top:var(--hub-ornament-offset);left:var(--hub-ornament-offset)}
+.hub-ornament-top-right{top:var(--hub-ornament-offset);right:var(--hub-ornament-offset);transform:scaleX(-1)}
+.hub-ornament-bottom-left{bottom:var(--hub-ornament-offset);left:var(--hub-ornament-offset);transform:scaleY(-1)}
+.hub-ornament-bottom-right{bottom:var(--hub-ornament-offset);right:var(--hub-ornament-offset);transform:scale(-1)}
+.mlg-tool-item{position:relative;border:1px solid #c9a84c33;border-radius:8px;background:linear-gradient(145deg,#28202288,#13111488)}
+.character-no-results{position:relative;border:1px solid #c9a84c33;border-radius:8px}
+.filter-dropdown-menu>.hub-ornament{opacity:.55}
+.character-filter-panel::before,
+.character-filter-panel::after{display:none}
+@media(max-width:600px){
+    .hub-ornament{--hub-ornament-size:56px;--hub-ornament-offset:-18.5px}
+}
+[data-ornamented="true"]{overflow:visible}
+.news-card-image{overflow:hidden;border-radius:11px 11px 0 0}

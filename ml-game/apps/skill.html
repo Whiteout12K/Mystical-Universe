@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     return `
       <div>
         <b class="skill-title" style="font-size:14px">
-          ${data.type||"Skill"}: ${data.name||""}
+          <span class="skill-type">${data.type||"Skill"}</span><span class="skill-title-separator">: </span><span class="skill-name">${data.name||""}</span>
         </b>
       </div>
     `;
