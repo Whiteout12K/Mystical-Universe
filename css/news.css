@@ -7,7 +7,7 @@
   position: relative;
   padding: 90px 6% 100px;
   min-height: 70vh;
-  color: #f1eadb;
+  color: #d8cdb8;
   background:
     radial-gradient(
       circle at 50% 0%,
@@ -53,9 +53,9 @@
   position: relative;
   width: fit-content;
   margin: 0 auto 35px;
-  color: var(--ml-gold-light);
-  font-family: arial, Helvetica, sans-serif;
-  font-size: clamp(2rem, 4vw, 3rem);
+  color: #f0ca69;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(1.8rem, 3.6vw, 2.7rem);
   font-weight: bold;
   letter-spacing: 0.06em;
   text-align: center;
@@ -185,14 +185,14 @@
   display: block;
   min-height: 270px;
   overflow: hidden;
-  border: 1px solid #40352d;
-  border-radius: 3px;
-  color: #f1eadb;
+  border: 1px solid #d6aa4544;
+  border-radius: 12px;
+  color: #d8cdb8;
   background:
     linear-gradient(
       145deg,
-      #242020,
-      #171515
+      #282022,
+      #131114
     );
   text-decoration: none;
   box-shadow:
@@ -298,11 +298,11 @@
   position: relative;
   margin: 0;
   padding: 17px 20px 19px;
-  color: #e9dfcd;
-  font-family: arial, Helvetica, sans-serif;
-  font-size: 1.15rem;
+  color: #f0ca69;
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
   font-weight: bold;
-  line-height: 1.35;
+  line-height: 1.45;
   letter-spacing: 0.025em;
   text-shadow:
     0 2px 5px rgba(0, 0, 0, 0.7);
@@ -460,7 +460,7 @@
   }
 
   .news-section h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
     margin-bottom: 28px;
   }
 
@@ -515,3 +515,44 @@
   }
 
 }
+/* Article typography matches the character skill descriptions. */
+.article-section {
+  color:#d8cdb8;
+  font-family:Arial,sans-serif;
+  font-size:15.64px;
+  line-height:1.45;
+  background:linear-gradient(145deg,#211b1d,#131114);
+}
+.article-section .row > :is(.col-lg-8,.col-md-10) {
+  padding:28px;
+  border:1px solid #d6aa4544;
+  border-radius:12px;
+  background:linear-gradient(145deg,#282022,#131114);
+  box-shadow:0 8px 25px #0006;
+}
+.article-section :is(h1,h2) {
+  color:#f0ca69;
+  font-family:Georgia,serif;
+  line-height:1.2;
+  text-shadow:0 2px 7px #0006;
+}
+.article-section h1 { font-size:clamp(1.7rem,3vw,31.28px); }
+.article-section h2 { font-size:1.5rem; margin:28px 0 14px; }
+.article-section :is(h3,h4,h5) { color:#d6aa45; line-height:1.3; }
+.article-section p { margin:0 0 16px; }
+.article-section .mb-2 { color:#bba77e; font-size:13.8px; }
+.article-section :is(ul,ol) { padding-left:24px; margin:14px 0; }
+.article-section li { margin:7px 0; }
+.article-section a { color:#f0ca69; text-underline-offset:3px; }
+.article-section a:hover { color:#fff0c5; }
+.article-section blockquote { margin:20px 0; padding:12px 18px; border-left:2px solid #d6aa4577; color:#eddcb0; background:#d6aa4508; }
+.article-section .row img { border:1px solid #d6aa4533; border-radius:8px; }
+.article-section center { color:#bba77e; font-size:13.8px; line-height:1.45; }
+@media(max-width:600px) {
+  .article-section .container { padding-left:20px; padding-right:20px; }
+  .article-section .row > :is(.col-lg-8,.col-md-10) { padding:20px; }
+}
+
+.news-card-date { display:block; padding:17px 20px 0; color:#bba77e; font:400 13px/1.45 Arial,Helvetica,sans-serif; }
+.news-card-date + h3 { padding-top:7px; }
+@media(max-width:600px) { .news-card-date { padding:14px 16px 0; font-size:12px; } }

@@ -17,7 +17,7 @@
     if (!response.ok) throw new Error('Article unavailable');
     const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
     const meta = name => doc.querySelector(`meta[name="news-${name}"]`)?.content;
-    const title = meta('title') || doc.title;
+    const title = (meta('title') || doc.title).replace(/^[A-Za-z]+\s+\d{1,2},\s+\d{4}\s*[-–—:]\s*/, '');
     const date = meta('date');
     if (!title || !date || !Number.isFinite(Date.parse(date))) throw new Error('Missing article metadata');
     const tags = (meta('tags') || '').split(',').map(t => t.trim()).filter(Boolean);
@@ -31,6 +31,8 @@
     for (const item of filtered.slice(0, count)) {
       const link = document.createElement('a'); link.className = 'news-card'; link.href = item.file;
       if (item.image) { const image = document.createElement('img'); image.src = item.image; image.alt = ''; image.loading = 'lazy'; image.decoding = 'async'; image.width = 640; image.height = 360; link.append(image); }
+      const date = document.createElement('time'); date.className = 'news-card-date'; date.dateTime = item.date;
+      date.textContent = new Intl.DateTimeFormat('en-US', {month:'long', day:'numeric', year:'numeric', timeZone:'UTC'}).format(new Date(item.date)); link.append(date);
       const heading = document.createElement('h3'); heading.textContent = item.title; link.append(heading); container.append(link);
     }
     more.style.display = count < filtered.length ? 'block' : 'none';
