@@ -30,7 +30,11 @@
       "type": "Paths",
       "description": "Become a Mystical Being, gaining mana through inherent magical potential. Gain +800 MP as a base stat.",
       "description_style": {"paddingTop": 7},
-      "additional": [],
+      "additional": [
+        {"text": "Conflicts with Path of the Mainlander.",
+          "style": {"paddingTop": 7}}
+      ],
+      "conflict": ["n002", "n003"],
       "id": "n002",
       "icon": "",
       "before": ["n006"],
@@ -41,7 +45,11 @@
       "type": "Paths",
       "description": "Become a Mainlander, a non-Mystical Being, remaining adamant of the Mystical and relying on one’s mind and physical strengths. Reject the ability to use MP and element attacks, but attack stat increases by +40%.",
       "description_style": {"paddingTop": 7},
-      "additional": [],
+      "additional": [
+        {"text": "Conflicts with Path of the Mystical.",
+          "style": {"paddingTop": 7}}
+      ],
+      "conflict": ["n002", "n003"],
       "id": "n003",
       "icon": "",
       "before": ["n005"],
@@ -56,11 +64,14 @@
       "description": "Become a stealthy assassin that bewilders enemies before striking. Increase luck by +40%, gain +5% crit hit rate, and increase movement speed by +30%. Passively gain the consistent effect <b class=\"assassin-s-touch\">[Assassin’s Touch]</b>.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Roles. Can only choose one main role.",
+          "style": {"paddingTop": 7}},
         {"text": "{{effect:assassin-s-touch}}",
           "style": {"paddingTop": 7}},
         {"text": "{{effect:marked}}",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n004", "n005", "n006", "n007"],
       "id": "n004",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/agent1.svg",
       "before": ["n001"],
@@ -73,11 +84,14 @@
       "description": "Absorb attacks of allies and become the very best armor piercer. Increase defense by +50% and gain +15 base piercing as a stat. Whenever the third stage of the basic skill is used, gain a single stack of <b class=\"flash\">[Flash]</b>. Using any special skill will grant a <b class=\"shield\">[Shield]</b> equal to 200% of defense to self and allies.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Roles. Can only choose one main role.",
+          "style": {"paddingTop": 7}},
         {"text": "{{effect:shield}}",
           "style": {"paddingTop": 7}},
         {"text": "{{effect:flash}}",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n004", "n005", "n006", "n007"],
       "id": "n005",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/defense1.svg",
       "before": ["n001"],
@@ -90,6 +104,8 @@
       "description": "A warrior by heart who seeks the victory in conquering head on with strength and tactics. Increase attack by +20%, movement speed by +10%, and crit damage by +10%. When using staged basic skills, the first stage hit will apply <b class=\"valiant\">[Valiant]</b> to self, the second stage will apply <b class=\"dazed\">[Dazed]</b> on hit opponent, and the third stage will apply <b class=\"flash\">[Flash]</b>.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Roles. Can only choose one main role.",
+          "style": {"paddingTop": 7}},
         {"text": "{{effect:valiant}}",
           "style": {"paddingTop": 7}},
         {"text": "{{effect:dazed}}",
@@ -97,6 +113,7 @@
         {"text": "{{effect:flash}}",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n004", "n005", "n006", "n007"],
       "id": "n006",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/fighter1.svg",
       "before": ["n001"],
@@ -109,6 +126,8 @@
       "description": "Become the lifeline of the party by buffing and healing self and allies. Increase health by +25% and gain +15% base healing rate stat. Apply the effect <b class=\"rapid-recovery\">[Rapid Recovery]</b> whenever an ally or self drops below 20% health (Cooldown: 30 seconds). All received <b class=\"shield\">[Shield]</b> effects on self will be enhanced to the buff <b class=\"ultimate-shield\">[Ultimate Shield]</b> when health reaches below 50%.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Roles. Can only choose one main role.",
+          "style": {"paddingTop": 7}},
         {"text": "When receiving a buff, heal self and the party for 5% of max health. This only occurs once per instance of buff gained with a cooldown of 3 seconds.",
           "style": {"paddingTop": 7}},
         {"text": "{{effect:ultimate-shield}}",
@@ -116,6 +135,7 @@
         {"text": "{{effect:rapid-recovery}}",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n004", "n005", "n006", "n007"],
       "id": "n007",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/healer1.svg",
       "before": ["n001"],
@@ -130,9 +150,12 @@
       "description": "Gain the water affinity, dealing <b class=\"water\">[Water]</b> elemental damage from all skills.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Element Affinities. Can only choose one affinity.",
+          "style": {"paddingTop": 7}},
         {"text": "Unlock the Special Skill: Element Discharge.",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n008", "n009", "n010", "n011"],
       "id": "n008",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/water1.svg",
       "before": ["n005", "n007"],
@@ -144,9 +167,12 @@
       "description": "Gain the earth affinity, dealing <b class=\"earth\">[Earth]</b> elemental damage from all skills.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Element Affinities. Can only choose one affinity.",
+          "style": {"paddingTop": 7}},
         {"text": "Unlock the Special Skill: Element Discharge.",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n008", "n009", "n010", "n011"],
       "id": "n009",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/earth1.svg",
       "before": ["n005", "n004"],
@@ -158,24 +184,30 @@
       "description": "Gain the fire affinity, dealing <b class=\"fire\">[Fire]</b> elemental damage from all skills.",
       "description_style": {"paddingTop": 7},
       "additional": [
+        {"text": "Conflicts with other Element Affinities. Can only choose one affinity.",
+          "style": {"paddingTop": 7}},
         {"text": "Unlock the Special Skill: Element Discharge.",
           "style": {"paddingTop": 7}}
       ],
+      "conflict": ["n008", "n009", "n010", "n011"],
       "id": "n010",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/fire1.svg",
       "before": ["n006", "n004"],
       "position": {"x": 2250, "y": 2250}
     },
-    "n012": {
+    "n011": {
       "name": "Wind Affinity",
       "type": "Affinity",
       "description": "Gain the wind affinity, dealing <b class=\"wind\">[Wind]</b> elemental damage from all skills.",
       "description_style": {"paddingTop": 7},
       "additional": [
-        {"text": "Unlock the Special Skill: Element Discharge.",
+        {"text": "Conflicts with other Element Affinities. Can only choose one affinity.",
+          "style": {"paddingTop": 7}},
+        {"text": "Unlock the <b>Special Skill: Element Discharge</b>.",
           "style": {"paddingTop": 7}}
       ],
-      "id": "n012",
+      "conflict": ["n008", "n009", "n010", "n011"],
+      "id": "n011",
       "icon": "/images/mlg-assets/Characters/C4/skill-tree-b/wind1.svg",
       "before": ["n006", "n007"],
       "position": {"x": 2250, "y": 1750}

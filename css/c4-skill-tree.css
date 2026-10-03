@@ -20,7 +20,6 @@
 .c4-tree-map { position:absolute; top:0; left:0; transform-origin:0 0; }
 .c4-tree-lines { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
 .c4-tree-edge { fill:none; stroke:#a888455e; stroke-width:1.5; }
-.c4-tree-edge.c4-edge-current { stroke:#f0ca69; stroke-width:2.5; }
 .c4-tree-point { position:absolute; transform:translate(-50%,-38px); width:104px; display:grid; justify-items:center; gap:9px; }
 .c4-tree-label { width:104px; text-align:center; color:#c6bba5; font-size:.68rem; line-height:1.4; pointer-events:none; }
 .c4-tree-node { display:grid; place-items:center; flex:none; width:76px; height:76px; padding:0; overflow:hidden; border:2px solid #d6aa4577; border-radius:50%; background:radial-gradient(#3a2d30,#171419); box-shadow:0 4px 14px #0006; cursor:pointer; }
@@ -29,9 +28,9 @@
 .c4-tree-heart { width:108px; height:108px; border-color:#f0ca69; }
 .c4-heart-point { width:120px; transform:translate(-50%,-54px); }
 .c4-node-group { margin:16px 0 12px; color:#bba77e; font:400 .72rem Arial,sans-serif; }
-:is(.c4-node-dialog,.c4-level-requirements) .icon-container { display:flex; align-items:flex-start; gap:10px; }
-:is(.c4-node-dialog,.c4-level-requirements) .effect-icon { flex:none; padding-top:3px; }
-:is(.c4-node-dialog,.c4-level-requirements) .effect-text { min-width:0; }
+:is(.c4-node-dialog,.c4-active-path) .icon-container { display:flex; align-items:flex-start; gap:10px; }
+:is(.c4-node-dialog,.c4-active-path) .effect-icon { flex:none; padding-top:3px; }
+:is(.c4-node-dialog,.c4-active-path) .effect-text { min-width:0; }
 .c4-node-dialog { position:fixed; width:620px; max-width:calc(100vw - 28px); max-height:85dvh; padding:32px; margin:auto; border:1px solid #d6aa4577; border-radius:16px; color:#d8cdb8; background:linear-gradient(145deg,#282022,#131114); box-shadow:0 20px 80px #0009; overflow:auto; overscroll-behavior:contain; }
 .c4-node-dialog::backdrop { background:#000b; backdrop-filter:blur(3px); }
 .c4-node-close { position:absolute; top:10px; right:12px; width:36px; height:36px; border:0; background:none; color:#d8cdb8; font-size:1.6rem; }
@@ -45,3 +44,25 @@
 @media(max-width:600px) { .c4-node-dialog { padding:24px 20px; } }
 .c4-node-connections { margin-top:22px; }
 .c4-neighbor-link { display:inline-block; margin:4px 12px 4px 0; padding:5px 0; border:0; border-bottom:1px solid #d6aa4555; color:#eddcb0; background:none; font-size:.8rem; cursor:pointer; }
+
+.c4-path-controls { display:flex; justify-content:center; flex-wrap:wrap; gap:28px; margin:24px 0 12px; }
+.c4-path-controls button,.c4-path-title { padding:8px 0; border:0; border-bottom:1px solid #d6aa4577; background:none; color:#eddcb0; font:700 .85rem Arial,sans-serif; cursor:pointer; }
+.c4-path-controls button[aria-pressed=true] { color:#f0ca69; border-bottom-color:#f0ca69; }
+.c4-path-controls button:disabled { opacity:.45; cursor:default; }
+.c4-path-message { min-height:1.5em; color:#bba77e; text-align:center; font-size:.75rem; }
+.c4-node-active { border-color:#f0ca69; background:#5e4728; box-shadow:0 4px 10px #0006; }
+.c4-node-unavailable:not(.c4-node-active) { opacity:.4; }
+.c4-node-active[aria-disabled=true] { cursor:default; }
+.c4-tree-edge.c4-edge-active { stroke:#f0ca69; stroke-width:3; }
+.c4-active-path[hidden] { display:none; }
+.c4-active-path { margin:28px 0; }
+.c4-active-path h3 { color:#eddcb0; font-size:1rem; }
+.c4-path-entry { padding:20px 0; border-bottom:1px solid #d6aa4526; }
+.c4-path-entry h4 { margin:0 0 12px; }
+.c4-path-entry h5 { color:#eddcb0; margin:16px 0 8px; font-size:.8rem; }
+.c4-path-entry .c4-rich-text { color:#d8cdb8; }
+
+.c4-simulating .c4-tree-node:hover,.c4-simulating .c4-node-current { box-shadow:0 4px 10px #0006; }
+.c4-simulating .c4-tree-node.c4-node-available { animation:c4-selectable-glow 1.7s ease-in-out infinite; }
+@keyframes c4-selectable-glow { 0%,100% { box-shadow:0 0 9px 2px #f0ca6944; } 50% { box-shadow:0 0 25px 6px #f0ca6999; } }
+@media(prefers-reduced-motion:reduce) { .c4-simulating .c4-tree-node.c4-node-available { animation:none; box-shadow:0 0 16px 3px #f0ca6977; } }

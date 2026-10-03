@@ -4,7 +4,8 @@
  const el=id=>document.getElementById(id), tabs=[el('c4-skills-tab'),el('c4-tree-tab')];
  const view=el('c4-tree-viewport'),map=el('c4-tree-map'),dialog=el('c4-node-dialog');
  let data=null,effects={},loading=false,graphEdges=[],neighbors=new Map();
- let pageScroll=null;
+ let pageScroll=null,simulating=false,selectedPath=[];
+ const pathCookie='c4_skill_tree_path';
  function lockPageScroll() {
   if(pageScroll)return;
   const body=document.body,root=document.documentElement;
@@ -51,7 +52,6 @@
    body.append(section);
   }
   map.querySelectorAll('.c4-tree-node').forEach(button=>button.classList.toggle('c4-node-current',button.dataset.node===node.id));
-  map.querySelectorAll('.c4-tree-edge').forEach(line=>line.classList.toggle('c4-edge-current',line.dataset.source===node.id||line.dataset.target===node.id));
   if(!dialog.open){dialog.showModal();lockPageScroll();}
  }
  el('c4-node-close').onclick=()=>dialog.close();
@@ -76,12 +76,9 @@
   const heart=worldPosition(data.nodes[data.rootId]);
   view.scrollLeft=heart.x*zoom+(parseFloat(map.style.left)||0)-view.clientWidth/2;view.scrollTop=heart.y*zoom+(parseFloat(map.style.top)||0)-view.clientHeight/2;
  }
- function fitTree() {if(!data)return;setZoom(Math.min(view.clientWidth/plane.width,view.clientHeight/plane.height)*.94);centerHeart();}
  new ResizeObserver(()=>{if(data&&plane)setZoom(zoom);}).observe(view);
  el('c4-zoom-in').onclick=()=>setZoom(zoom*1.25);
  el('c4-zoom-out').onclick=()=>setZoom(zoom/1.25);
- el('c4-fit-tree').onclick=fitTree;
- el('c4-focus-heart').onclick=()=>{setZoom(1);centerHeart();};
  view.addEventListener('wheel',event=>{
   if(!(event.ctrlKey||event.metaKey)||!data)return;
   event.preventDefault();const r=view.getBoundingClientRect();setZoom(zoom*Math.exp(-event.deltaY*.006),event.clientX-r.left,event.clientY-r.top);
@@ -120,12 +117,82 @@
   else if(event.key==='-'){event.preventDefault();setZoom(zoom/1.25);}
   else if(event.key==='Home'){event.preventDefault();centerHeart();}
  });
+ function savePath() {
+  document.cookie=`${pathCookie}=${encodeURIComponent(JSON.stringify(selectedPath))}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol==='https:'?'; Secure':''}`;
+ }
+ function restorePath() {
+  selectedPath=[];
+  try {
+   const value=document.cookie.split('; ').find(part=>part.startsWith(`${pathCookie}=`));
+   const saved=value?JSON.parse(decodeURIComponent(value.slice(pathCookie.length+1))):[];
+   if(Array.isArray(saved))for(const id of saved){
+    if(typeof id!=='string'||!data.nodes[id]||selectedPath.includes(id))continue;
+    if(canActivate(id))selectedPath.push(id);
+   }
+  }catch {selectedPath=[];}
+  savePath();
+ }
+ function activeConflict(id) {
+  const declared=node=>Array.isArray(node?.conflict)?node.conflict:typeof node?.conflict==='string'?[node.conflict]:[];
+  return selectedPath.find(active=>declared(data.nodes[id]).includes(active)||declared(data.nodes[active]).includes(id));
+ }
+ function canActivate(id) {
+  if(activeConflict(id))return false;
+  return selectedPath.length?selectedPath.some(active=>neighbors.get(id)?.has(active)):id===data.rootId;
+ }
+ function canRemove(id) {
+  if(!selectedPath.includes(id))return false;
+  if(id===data.rootId)return selectedPath.length===1;
+  return [...(neighbors.get(id)||[])].filter(peer=>selectedPath.includes(peer)).length<=1;
+ }
+ function updatePath(message) {
+  const active=new Set(selectedPath);
+  el('c4-simulate-path').disabled=!data;el('c4-simulate-path').setAttribute('aria-pressed',String(simulating));
+  el('c4-simulate-path').textContent=simulating?'Done — Exit Simulation':'Simulate Path';
+  view.classList.toggle('c4-simulating',simulating);
+  el('c4-clear-path').disabled=!selectedPath.length;
+  map.querySelectorAll('.c4-tree-node').forEach(button=>{
+   const chosen=active.has(button.dataset.node),available=chosen?canRemove(button.dataset.node):canActivate(button.dataset.node);
+   button.classList.toggle('c4-node-available',simulating&&!chosen&&available);
+   const conflict=activeConflict(button.dataset.node);
+   button.title=simulating&&conflict&&!chosen?`Conflicts with ${data.nodes[conflict].name}: ${data.nodes[button.dataset.node].name}`:simulating?(chosen?(available?'Deselect outer node: ':'Keep connected: '):(available?'Select node: ':'Connect your path first: '))+data.nodes[button.dataset.node].name:data.nodes[button.dataset.node].name;
+   button.classList.toggle('c4-node-active',chosen);button.classList.toggle('c4-node-unavailable',simulating?!available:!chosen);
+   if(simulating){button.setAttribute('aria-pressed',String(chosen));button.setAttribute('aria-disabled',String(!available));}
+   else {button.removeAttribute('aria-pressed');button.removeAttribute('aria-disabled');}
+  });
+  map.querySelectorAll('.c4-tree-edge').forEach(line=>line.classList.toggle('c4-edge-active',active.has(line.dataset.source)&&active.has(line.dataset.target)));
+  el('c4-path-message').textContent=message||(simulating?(selectedPath.length?'Select a glowing node to extend your path, or click an outer selected node to deselect it. Click Done — Exit Simulation when finished.':'Select the Heart to begin your path. Click Done — Exit Simulation when finished.'):(selectedPath.length?`${selectedPath.length} active nodes saved. Select a node to view its details.`:''));
+  const list=el('c4-active-path');list.replaceChildren();list.hidden=!selectedPath.length;
+  if(selectedPath.length)list.append(make('h3','','Active Path'));
+  for(const id of selectedPath){
+   const node=data.nodes[id],entry=make('article','c4-path-entry'),heading=make('h4',''),link=make('button','c4-path-title',node.name);
+   link.type='button';link.onclick=()=>showNode(node);heading.append(link);entry.append(heading);
+   rich(entry,node.description,node.description_style);
+   for(const part of node.additional||[])rich(entry,part.text,part.style);
+   for(const stage of node.stages||[]){entry.append(make('h5','',stage.name));rich(entry,stage.text,stage.style);}
+   list.append(entry);
+  }
+ }
+ function activateNode(node) {
+  if(!simulating){showNode(node);return;}
+  if(selectedPath.includes(node.id)){
+   if(!canRemove(node.id)){el('c4-path-message').textContent='Only outer nodes can be deselected. Remove the end nodes first, or click Done — Exit Simulation when finished.';return;}
+   selectedPath=selectedPath.filter(id=>id!==node.id);savePath();updatePath();return;
+  }
+  const conflict=activeConflict(node.id);
+  if(conflict){el('c4-path-message').textContent=`${node.name} conflicts with ${data.nodes[conflict].name}. Only one can be active; deselect the conflicting path first.`;return;}
+  if(!canActivate(node.id)){el('c4-path-message').textContent=selectedPath.length?'Choose a node connected to your active path.':'Start by selecting the Heart.';return;}
+  selectedPath.push(node.id);savePath();updatePath();
+ }
+ el('c4-simulate-path').onclick=()=>{if(!data)return;simulating=!simulating;updatePath();};
+ el('c4-clear-path').onclick=()=>{selectedPath=[];savePath();updatePath('Path cleared.');};
  function draw() {
   map.replaceChildren();
   const connectedNodes=Object.values(data.nodes).filter(node=>neighbors.get(node.id)?.size);
-  const positions=connectedNodes.map(node=>node.position);
-  const offsetX=Math.min(0,...positions.map(p=>p.x-160)),offsetY=Math.min(0,...positions.map(p=>p.y-160));
-  plane={offsetX,offsetY,width:Math.max(data.layout.width,...positions.map(p=>p.x+160))-offsetX,height:Math.max(data.layout.height,...positions.map(p=>p.y+160))-offsetY};
+  const positions=connectedNodes.length?connectedNodes.map(node=>node.position):[data.nodes[data.rootId].position];
+  const padding=200;
+  const offsetX=Math.min(...positions.map(p=>p.x))-padding,offsetY=Math.min(...positions.map(p=>p.y))-padding;
+  plane={offsetX,offsetY,width:Math.max(...positions.map(p=>p.x))+padding-offsetX,height:Math.max(...positions.map(p=>p.y))+padding-offsetY};
   const {width,height}=plane;
   map.style.width=`${width}px`;map.style.height=`${height}px`;
   const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');
@@ -145,7 +212,7 @@
    const wrap=make('div',`c4-tree-point${node.id===data.rootId?' c4-heart-point':''}`);const position=worldPosition(node);wrap.style.left=`${position.x}px`;wrap.style.top=`${position.y}px`;
    const button=make('button',`c4-tree-node${node.id===data.rootId?' c4-tree-heart':''}`);button.type='button';button.title=node.name;button.dataset.node=node.id;button.setAttribute('aria-label',node.name);
    if(node.icon){const image=document.createElement('img');image.src=node.icon;image.alt='';image.loading='lazy';image.decoding='async';button.append(image);}
-   button.onclick=()=>showNode(node);wrap.append(button,make('span','c4-tree-label',node.name));map.append(wrap);
+   button.onclick=()=>activateNode(node);wrap.append(button,make('span','c4-tree-label',node.name));map.append(wrap);
   }
   setZoom(1);centerHeart();
  }
@@ -170,7 +237,7 @@
     if(count&&(!node.position||!Number.isFinite(node.position.x)||!Number.isFinite(node.position.y)))throw Error();
    }
    graphEdges=[...edges.values()];
-   effects=definitions;data=result;draw();el('c4-tree-status').hidden=true;}
+   effects=definitions;data=result;draw();restorePath();updatePath();el('c4-tree-status').hidden=true;}
   catch {el('c4-tree-status').textContent='The skill tree could not be loaded. ';const retry=make('button','c4-tree-retry','Try again');retry.type='button';retry.onclick=load;el('c4-tree-status').append(retry);}
   finally {loading=false;view.setAttribute('aria-busy','false');}
  }

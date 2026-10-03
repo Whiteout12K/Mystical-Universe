@@ -286,8 +286,8 @@
     "formatted_name": "<b>Main Character</b>",
     "character-event": "<div class=\"character-event\" style=\"background-color: #252525ab;\">Starting Unit</div>",
 
-    "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
-    "skills_path": "/images/mlg-assets/Characters/C3",
+    "skills": ["B1", "S1", "S2", "U1", "T1"],
+    "skills_path": "/images/mlg-assets/Characters/C4",
 
     "base_stats": {
         "health": 965,
