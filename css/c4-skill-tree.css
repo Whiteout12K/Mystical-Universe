@@ -35,9 +35,9 @@
 .c4-node-dialog::backdrop { background:#000b; backdrop-filter:blur(3px); }
 .c4-node-close { position:absolute; top:10px; right:12px; width:36px; height:36px; border:0; background:none; color:#d8cdb8; font-size:1.6rem; }
 .c4-node-level { color:#c9a84c; font-size:.65rem; letter-spacing:.08em; padding-right:24px; }
-.c4-node-dialog h2 { font-family:Georgia,serif; color:#f0ca69; font-size:1.7rem; margin:14px 0 20px; }
-.c4-node-dialog h3 { font-size:.75rem; color:#d6aa45; margin:0 0 8px; }
-.c4-rich-text { font-size:.85rem; line-height:1.45; }
+.c4-node-dialog h2 { font-family:Georgia,serif; color:#f0ca69; font-size:31.28px; margin:14px 0 20px; }
+.c4-node-dialog h3 { font-size:13.8px; color:#d6aa45; margin:0 0 8px; }
+.c4-rich-text { font-size:15.64px; line-height:1.45; }
 .c4-level-requirements { margin:-10px 0 20px; color:#c6bba5; }
 .c4-node-requirement { color:#bbaa7d; font-size:.75rem; }
 :is(.c4-skill-tabs,.c4-tree-view,.c4-node-dialog) :is(button,select):focus-visible { outline:2px solid #f0ca69; outline-offset:4px; }
