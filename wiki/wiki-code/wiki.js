@@ -57,12 +57,15 @@
         const isActive = active ? link.hash === '#' + active.querySelector('h2,h3')?.id : link.hash === '#wiki-title';
         if(isActive) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current');
       });
-      const topLink=footer?.querySelector('a[href^="#"]');
-      if(topLink) topLink.href=active ? '#' + active.querySelector('h2,h3').id : '#wiki-title';
       requestAnimationFrame(() => { (active && target === active.querySelector('h2,h3') ? title : target)?.scrollIntoView({block:'start'}); });
     }
     window.addEventListener('hashchange', applyView); applyView();
   } else if(location.hash) requestAnimationFrame(() => {try {document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();}catch {}});
+  // Scrolling to the top must not change the hash that selects a virtual view.
+  document.querySelector('[data-wiki-back-to-top]')?.addEventListener('click', event => {
+    event.preventDefault();
+    document.getElementById('wiki-title')?.scrollIntoView({block:'start', behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+  });
   // Portraits are ordinary editable figures; only the active one is displayed.
   for (const button of document.querySelectorAll('[data-wiki-portrait]')) {
     button.addEventListener('click', () => {

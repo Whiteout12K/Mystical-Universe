@@ -66,8 +66,8 @@ Infobox fields are completely custom and render in your order. `title`, `image`,
 - `[[Page Name]]` links locally to `/wiki/page_name`.
 - `[[page_name|Display label]]` customizes the text.
 - `[[/books_main.html|Books]]` points to another part of this website.
-- `[[fandom:Page Name|Label]]` explicitly links to Fandom.
-- `[https://example.com Display label]` links externally.
+- `[[fandom:Page Name|Label]]` resolves to the matching local wiki page when it exists; otherwise it remains inactive.
+- External links remain visible but inactive. Links to existing website pages and image/media files remain clickable.
 - `[[File:/images/art.png|Caption]]` inserts an image in the body.
 - Blank lines separate paragraphs. `== Heading ==` through `===== Heading =====` create sections and automatic contents links. `*` and `#` create bullet and numbered lists.
 - Three apostrophes mark bold; two mark italic. `<br>` remains supported.
@@ -83,8 +83,10 @@ Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML 
 
 `home.html` uses the same text renderer without an infobox. `{{RandomArticle|title=From the Wiki Archive}}` shows an existing article drawn from wiki URLs in `sitemap.xml`; it checks that the page has wiki text before displaying it. Re-run `python3 sitemap_gen.py` after creating new wiki HTML pages so they join the selection. The home page itself is excluded.
 
-`{{Characters|Character Name=/images/avatar.png :: wiki_page}}` creates avatar cards; add one named parameter per character. Destinations can be nested local page names or explicit `fandom:` links. The home currently shows Avery, Kaden, River, Lucy, Teddric, Amos, and Kiara.
+`{{Characters|Character Name=/images/avatar.png :: wiki_page}}` creates avatar cards; add one named parameter per character. Destinations can be nested local page names or legacy `fandom:` page names. The home currently shows Avery, Kaden, River, Lucy, Teddric, Amos, and Kiara.
 
 ## Virtual article views
 
 Add `|views=powers-abilities` in the Page block to show that top-level section as a separate view in the same HTML. Point a Tabs item to `#powers-abilities`. Other sections and the infobox are hidden while viewing it; Overview (`#wiki-title`) restores them. Multiple view heading IDs can be separated with commas. Section links, refresh, and browser back/forward preserve the selected view.
+
+Wiki links use `sitemap.xml` to recognize available website pages. Regenerate it with `sitemap_gen.py` after adding pages. Missing destinations stay visible without navigating.

@@ -69,3 +69,7 @@
 /* Indent the whole subsection; nesting adds one step per heading level. */
 .wiki-article .wiki-section[data-heading-level]{margin-inline-start:calc(var(--wiki-section-indent,0)*20px)}
 @media(max-width:600px){.wiki-article .wiki-section[data-heading-level]{margin-inline-start:calc(var(--wiki-section-indent,0)*12px)}}
+
+.wiki-page a.wiki-link-unavailable{cursor:default}.wiki-page a.wiki-link-unavailable:hover{color:inherit}
+
+.wiki-back-to-top{appearance:none;background:none;border:0;padding:0;color:var(--wiki-gold,#dec68c);font:inherit;cursor:pointer;text-decoration:none}.wiki-back-to-top:hover{color:#fff}.wiki-back-to-top:focus-visible{outline:2px solid currentColor;outline-offset:4px}

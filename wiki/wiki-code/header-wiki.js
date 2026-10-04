@@ -6,13 +6,9 @@
   await loadComponent('wiki-header-placeholder', '/index/header-wiki.html');
   const navigation = document.getElementById('wiki-navigation');
   if (!navigation) return;
-  const safeHref = href => {
-    try { const url = new URL(href, location.href); return ['http:', 'https:'].includes(url.protocol) ? url.href : ''; } catch { return ''; }
-  };
   const makeLink = item => {
     const a = document.createElement('a'); a.textContent = item.label;
-    const href = safeHref(item.href); if (href) a.href = href;
-    if (href && new URL(href).origin !== location.origin) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    window.wikiLinks.attach(a, item.href || '');
     return a;
   };
   function branch(items) {
@@ -22,7 +18,7 @@
       if (item.children?.length) {
         const details = document.createElement('details'), summary = document.createElement('summary');
         summary.textContent = item.label; details.append(summary);
-        if (item.href) { const a = makeLink({...item, label:`View ${item.label}`}); a.className = 'wiki-nav-category-link'; details.append(a); }
+        if (item.href) { const a = makeLink({...item, label:`View ${item.label}`}); a.classList.add('wiki-nav-category-link'); details.append(a); }
         details.append(branch(item.children)); row.append(details);
       } else row.append(makeLink(item));
       list.append(row);
