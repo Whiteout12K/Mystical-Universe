@@ -20,8 +20,9 @@ window.wikiLinksReady = (async () => {
     }catch{return null;}
   }
   function enable(a,u){a.href=u.href;a.removeAttribute('aria-disabled');a.classList.remove('wiki-link-unavailable');a.addEventListener('click',event=>{if(normalize(u.pathname)===normalize(location.pathname)&&u.hash){try{if(!document.getElementById(decodeURIComponent(u.hash.slice(1))))event.preventDefault();}catch{event.preventDefault();}}});}
-  window.wikiLinks = {attach(a,target){
+  window.wikiLinks = {attach(a,target,{allowExternal=false}={}){
     a.removeAttribute('href');a.removeAttribute('target');a.removeAttribute('rel');a.setAttribute('aria-disabled','true');a.classList.add('wiki-link-unavailable');
+    if(allowExternal&&/^https?:\/\//i.test(target)){try{const external=new URL(target);if(['http:','https:'].includes(external.protocol)){enable(a,external);return a;}}catch{}}
     const u=candidate(target);if(!u)return a;
     if(pages.has(normalize(u.pathname))){enable(a,u);return a;}
     if(/\.(?:png|jpe?g|webp|gif|svg|pdf|mp3|mp4|ogg|wav)$/i.test(u.pathname)){

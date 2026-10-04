@@ -33,23 +33,23 @@
   const imageBase=page['image base']||'/images/character_art/';
   const slug=s=>s.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
   function href(target){if(target.startsWith('fandom:'))return 'https://mysticallegends.fandom.com/wiki/'+target.slice(7).replace(/ /g,'_').split('/').map(encodeURIComponent).join('/');if(/^(?:https?:|\/|#)/i.test(target))return safe(target);const parts=target.split('/').map(slug);return parts.every(Boolean)?'/wiki/'+parts.join('/'):'';}
-  function link(label,target){const a=make('a','',label);window.wikiLinks.attach(a,href(target));return a;}
+  function link(label,target,allowExternal=false){const a=make('a','',label);window.wikiLinks.attach(a,href(target),{allowExternal});return a;}
   function imageURL(file){return safe(file.startsWith('/')||/^https?:/i.test(file)?file:imageBase.replace(/\/?$/,'/')+file);}
   function figure(file,caption='',cls='wiki-figure'){
     const url=imageURL(file);if(!url)return null;
     const f=make('figure',cls),img=make('img');img.src=url;img.alt=caption||title;img.loading='lazy';img.decoding='async';
     const a=link('',url);a.append(img);f.append(a);if(caption)f.append(make('figcaption','',caption));return f;
   }
-  function inline(parent,value){
+  function inline(parent,value,allowExternal=false){
     // Protect generated markup with placeholders so plain text can never inject HTML.
     const slots=[];const slot=n=>{slots.push(n);return `\uE000${slots.length-1}\uE001`;};
     let remaining=value;
     for(const t of templates(value).reverse()){
       if(t.name!=='spoiler')continue;
-      const d=make('details','wiki-spoiler'),s=make('summary');s.innerHTML='<span class="wiki-show-spoiler">Show Spoiler</span><span class="wiki-hide-spoiler">Hide Spoiler</span>';const c=make('div','wiki-inline-spoiler');inline(c,t.parts.join('|'));d.append(s,c);remaining=remaining.slice(0,t.start)+slot(d)+remaining.slice(t.end);
+      const d=make('details','wiki-spoiler'),s=make('summary');s.innerHTML='<span class="wiki-show-spoiler">Show Spoiler</span><span class="wiki-hide-spoiler">Hide Spoiler</span>';const c=make('div','wiki-inline-spoiler');inline(c,t.parts.join('|'),allowExternal);d.append(s,c);remaining=remaining.slice(0,t.start)+slot(d)+remaining.slice(t.end);
     }
-    remaining=remaining.replace(/\[\[([^\]]+)\]\]/g,(_,inside)=>{const [target,label]=split(inside);if(/^File:/i.test(target))return slot(figure(target.slice(5),label)||make('span'));return slot(link(label||target.replace(/^fandom:/,''),target));});
-    remaining=remaining.replace(/\[(https?:\/\/[^\s\]]+)\s+([^\]]+)\]/g,(_,url,label)=>slot(link(label,url)));
+    remaining=remaining.replace(/\[\[([^\]]+)\]\]/g,(_,inside)=>{const [target,label]=split(inside);if(/^File:/i.test(target))return slot(figure(target.slice(5),label)||make('span'));return slot(link(label||target.replace(/^fandom:/,''),target,allowExternal));});
+    remaining=remaining.replace(/\[(https?:\/\/[^\s\]]+)\s+([^\]]+)\]/g,(_,url,label)=>slot(link(label,url,allowExternal)));
     // Only block spoilers absorb surrounding breaks; inline links retain them.
     remaining=remaining.replace(/(?:<br\s*\/?>\s*)+(\uE000(\d+)\uE001)/gi,
       (match, marker, index) => slots[Number(index)]?.tagName === 'DETAILS' ? marker : match);
@@ -89,12 +89,12 @@
   text=text.replace(/\{\{Spoiler\|([\s\S]*?)\}\}/gi,(_,v)=>'{{Spoiler|'+v.replace(/\n/g,' ')+'}}');
   for(const line of text.trim().split('\n')){const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);s.append(h);(stack.at(-1)?.s||sectionRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#])\s*(.*)$/);if(bullet){if(paragraph.length)flush();const tag=bullet[1]==='*'?'ul':'ol';if(!list||list.tagName.toLowerCase()!==tag){list=make(tag);parent.append(list);}const li=make('li');inline(li,bullet[2]);list.append(li);continue;}paragraph.push(line.trim());}flush();
   const gallery=get('gallery');if(gallery){const section=make('section','wiki-section'),grid=make('div','wiki-gallery');section.append(make('h2','','Gallery'),grid);for(const line of gallery.parts.join('\n').split('\n')){const [file,label]=line.split(' :: ').map(x=>x.trim());if(file){const f=figure(file,label);if(f)grid.append(f);}}if(grid.children.length)article.append(section);}
-  const references=get('references');if(references){const section=make('section','wiki-section'),list=make('ol');section.append(make('h2','','References'),list);for(const [label,url] of params(references.parts)){if(!url)continue;const li=make('li');li.append(link(label||url,url));list.append(li);}if(list.children.length)article.append(section);}
+  const references=get('references');if(references){const section=make('section','wiki-section'),list=make('ol');section.append(make('h2','','References'),list);for(const [label,url] of params(references.parts)){if(!url)continue;const li=make('li');li.append(link(label||url,url,true));list.append(li);}if(list.children.length)article.append(section);}
   const random=get('randomarticle');if(random){const section=make('section','wiki-section');section.append(make('h2','',Object.fromEntries(params(random.parts)).title||'Discover an article'));const host=make('div','wiki-random-article');host.id='wiki-random-article';section.append(host);article.append(section);}
   const characters=get('characters');if(characters){const section=make('section','wiki-section'),grid=make('div','wiki-character-grid');section.append(make('h2','','Meet the Mystical Legends'),grid);for(const [name,value] of params(characters.parts)){if(!name||!value)continue;const [file,target]=value.split(' :: ').map(x=>x.trim());const card=link('',target||name);card.className='wiki-character-card';const img=make('img');img.src=imageURL(file);img.alt=name;img.loading='lazy';img.decoding='async';card.append(img,make('span','',name));grid.append(card);}if(grid.children.length)article.append(section);}
   const footer=make('footer','wiki-article-footer');
   if(categories.length){const n=make('div');n.id='wiki-categories';n.setAttribute('aria-label','Categories');categories.forEach(c=>n.append(make('span','wiki-category',c)));footer.append(n);}
-  const credits=get('credits');if(credits){const n=make('p');inline(n,credits.parts.join('|'));footer.append(n);}const backToTop=make('button','wiki-back-to-top','Back to top');backToTop.type='button';backToTop.dataset.wikiBackToTop='';footer.append(backToTop);article.append(footer);
+  const credits=get('credits');if(credits){const n=make('p');inline(n,credits.parts.join('|'),true);footer.append(n);}const backToTop=make('button','wiki-back-to-top','Back to top');backToTop.type='button';backToTop.dataset.wikiBackToTop='';footer.append(backToTop);article.append(footer);
   const host=make('div');host.id='wiki-header-placeholder';const skip=link('Skip to article','#wiki-body');skip.className='wiki-skip';const bottom=make('div');bottom.id='subfooter-placeholder';document.body.append(skip,host,shell,bottom);
   document.title=title+' | Mystical Legends Wiki';if(page.description)document.querySelector('meta[name="description"]')?.setAttribute('content',page.description);
 })();

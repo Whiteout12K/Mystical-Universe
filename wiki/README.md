@@ -90,3 +90,5 @@ Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML 
 Add `|views=powers-abilities` in the Page block to show that top-level section as a separate view in the same HTML. Point a Tabs item to `#powers-abilities`. Other sections and the infobox are hidden while viewing it; Overview (`#wiki-title`) restores them. Multiple view heading IDs can be separated with commas. Section links, refresh, and browser back/forward preserve the selected view.
 
 Wiki links use `sitemap.xml` to recognize available website pages. Regenerate it with `sitemap_gen.py` after adding pages. Missing destinations stay visible without navigating.
+
+Full HTTP/HTTPS links in References and Credits remain clickable external source links. Other unavailable wiki destinations stay inactive.
