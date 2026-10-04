@@ -105,10 +105,14 @@ class PageParser(HTMLParser):
         self.links = []
         self.noindex = False
         self.canonical = None
+        self.is_document = False
 
     def handle_starttag(self, tag, attrs):
 
         attrs = dict(attrs)
+
+        if tag == "html":
+            self.is_document = True
 
         # Normal HTML links
         if tag == "a":
@@ -147,7 +151,7 @@ def ignored(path: Path):
     except ValueError:
         return True
 
-    if any(part in IGNORE_DIRS for part in relative.parts):
+    if any(part in IGNORE_DIRS or part.startswith(".") for part in relative.parts):
         return True
 
     if path.name in IGNORE_FILES:
@@ -266,6 +270,9 @@ def normalize_url(url: str):
     parsed = urlparse(url)
 
     # External site.
+    if parsed.scheme and parsed.scheme.lower() not in {"http", "https"}:
+        return None
+
     if parsed.netloc:
 
         site_domain = urlparse(DOMAIN).netloc.lower()
@@ -355,6 +362,10 @@ def find_pages():
         except Exception:
             pass
 
+        # Shared header/footer fragments are not standalone search pages.
+        if not parser.is_document:
+            continue
+
         if parser.noindex:
 
             print(
@@ -364,9 +375,18 @@ def find_pages():
 
             continue
 
+        url = file_to_url(path)
+        if parser.canonical:
+            canonical = normalize_url(parser.canonical)
+            # A copied canonical must not make a different wiki article disappear.
+            if canonical and urlparse(canonical).path.rstrip("/") == urlparse(url).path.rstrip("/"):
+                url = canonical
+            else:
+                print(f"[CANONICAL MISMATCH] {path.relative_to(ROOT)}: using {url}")
+
         pages.append({
             "file": path,
-            "url": file_to_url(path),
+            "url": url,
             "lastmod": modification_date(path),
             "text": text,
             "parser": parser,
@@ -517,6 +537,11 @@ def discover_urls(pages):
                 continue
 
             parsed = urlparse(normalized)
+
+            # Wiki articles use one clean, canonical URL per HTML file.
+            # Old template query URLs and arbitrary wiki query variants are excluded.
+            if parsed.path.startswith("/wiki/") and parsed.query:
+                continue
 
             # --------------------------------------------
             # Parameterized URL

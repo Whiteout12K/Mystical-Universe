@@ -1,14 +1,234 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mysticallegends.org/</loc></url>
-  <url><loc>https://mysticallegends.org/books_main.html</loc></url>
-  <url><loc>https://mysticallegends.org/books/viewer.html?id=1</loc></url>
-  <url><loc>https://mysticallegends.org/game-hub.html</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/explore.html</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/music.html</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/author.html</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/timeline.html</loc></url>
-  <url><loc>https://mysticallegends.org/news/2026-01-31.html</loc></url>
-  <url><loc>https://mysticallegends.org/news/2026-02-14.html</loc></url>
-  <url><loc>https://mysticallegends.org/news/2026-03-05.html</loc></url>
+
+  <url>
+    <loc>https://mysticallegends.org/</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books/viewer</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books/viewer?id=1</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books_main</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/game-hub</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/c-stat/c-stat</loc>
+    <lastmod>2026-09-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/damage_test</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/damage_test?username=%24%7BencodeURIComponent%28username%29%7D&amp;c=%24%7Bkey%7D</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/jscratch</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/map</loc>
+    <lastmod>2026-09-11</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/skill</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/skill_tree_path</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/tcg/card_maker</loc>
+    <lastmod>2026-09-16</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/team_builder</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/tierlist</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/view</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/view?username=</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/view?username=%24%7BencodeURIComponent%28loggedInUsername%29%7D</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/apps/view?username=USERNAME</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/canvas</loc>
+    <lastmod>2026-09-06</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/ml-game/effect</loc>
+    <lastmod>2026-08-21</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-01-31</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-02-14</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-03-05</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/author</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/create-user</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c1</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c10</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c17</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c1b</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c2</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c20</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c3</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c4</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c5</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c6</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c7</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c8</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c9</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/mlg/cviewer</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/mlg/dtest</loc>
+    <lastmod>2026-09-12</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/music</loc>
+    <lastmod>2026-10-03</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/timeline</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/avery_obtainia</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/home</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+
 </urlset>

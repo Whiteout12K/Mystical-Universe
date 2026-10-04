@@ -1,0 +1,893 @@
+{
+  "items": [
+    {
+      "label": "Explore",
+      "children": [
+        {
+          "label": "Wiki Home",
+          "href": "/wiki/home"
+        },
+        {
+          "label": "Book Series",
+          "href": "/books_main.html"
+        },
+        {
+          "label": "Game Hub",
+          "href": "/game-hub.html"
+        },
+        {
+          "label": "World Timeline",
+          "href": "/webpages/timeline.html"
+        },
+        {
+          "label": "Music",
+          "href": "/webpages/music.html"
+        }
+      ]
+    },
+    {
+      "label": "World",
+      "children": [
+        {
+          "label": "Story Arcs",
+          "page": "Story Arcs",
+          "href": "https://mysticallegends.fandom.com/wiki/Story_Arcs"
+        },
+        {
+          "label": "Mystical Legends Series",
+          "children": [
+            {
+              "label": "Rune of the Spellcaster",
+              "page": "Rune of the Spellcaster",
+              "href": "https://mysticallegends.fandom.com/wiki/Rune_of_the_Spellcaster"
+            },
+            {
+              "label": "I.T.E.R. Chronicles - Initialization",
+              "page": "I.T.E.R. Chronicles - Initialization",
+              "href": "https://mysticallegends.fandom.com/wiki/I.T.E.R._Chronicles_-_Initialization"
+            },
+            {
+              "label": "I.T.E.R. Chronicles - Rectification",
+              "page": "I.T.E.R. Chronicles - Rectification",
+              "href": "https://mysticallegends.fandom.com/wiki/I.T.E.R._Chronicles_-_Rectification"
+            },
+            {
+              "label": "Aqua Revolution",
+              "page": "Aqua Revolution",
+              "href": "https://mysticallegends.fandom.com/wiki/Aqua_Revolution"
+            },
+            {
+              "label": "Nuntios",
+              "page": "Nuntios - Search for Survival",
+              "href": "https://mysticallegends.fandom.com/wiki/Nuntios_-_Search_for_Survival"
+            }
+          ]
+        },
+        {
+          "label": "Mystical Legends: Game",
+          "page": "Mystical Legends: Game",
+          "href": "https://mysticallegends.fandom.com/wiki/Mystical_Legends:_Game",
+          "children": [
+            {
+              "label": "Updates",
+              "page": "MLG Updates",
+              "href": "https://mysticallegends.fandom.com/wiki/MLG_Updates"
+            },
+            {
+              "label": "How to Play",
+              "page": "MLG How to Play",
+              "href": "https://mysticallegends.fandom.com/wiki/MLG_How_to_Play",
+              "children": [
+                {
+                  "label": "Affinities",
+                  "page": "MLG Affinities",
+                  "href": "https://mysticallegends.fandom.com/wiki/MLG_Affinities"
+                },
+                {
+                  "label": "Characteristics",
+                  "page": "MLG Characteristics",
+                  "href": "https://mysticallegends.fandom.com/wiki/MLG_Characteristics"
+                },
+                {
+                  "label": "Stats",
+                  "page": "MLG Stats",
+                  "href": "https://mysticallegends.fandom.com/wiki/MLG_Stats"
+                },
+                {
+                  "label": "Currencies",
+                  "page": "MLG Currencies",
+                  "href": "https://mysticallegends.fandom.com/wiki/MLG_Currencies"
+                },
+                {
+                  "label": "Skills",
+                  "page": "MLG Skills",
+                  "href": "https://mysticallegends.fandom.com/wiki/MLG_Skills"
+                }
+              ]
+            },
+            {
+              "label": "Roles",
+              "page": "Roles",
+              "href": "https://mysticallegends.fandom.com/wiki/Roles",
+              "children": [
+                {
+                  "label": "Agent",
+                  "page": "Agent",
+                  "href": "https://mysticallegends.fandom.com/wiki/Agent"
+                },
+                {
+                  "label": "Fighter",
+                  "page": "Fighter",
+                  "href": "https://mysticallegends.fandom.com/wiki/Fighter"
+                },
+                {
+                  "label": "Medic",
+                  "page": "Medic",
+                  "href": "https://mysticallegends.fandom.com/wiki/Medic"
+                },
+                {
+                  "label": "Defense",
+                  "page": "Defense",
+                  "href": "https://mysticallegends.fandom.com/wiki/Defense"
+                }
+              ]
+            },
+            {
+              "label": "Main Character",
+              "page": "MLG Main Character",
+              "href": "https://mysticallegends.fandom.com/wiki/MLG_Main_Character",
+              "children": [
+                {
+                  "label": "Skills",
+                  "page": "MC/Skills",
+                  "href": "https://mysticallegends.fandom.com/wiki/MC/Skills"
+                },
+                {
+                  "label": "Skill Tree",
+                  "page": "MC/Skill Tree",
+                  "href": "https://mysticallegends.fandom.com/wiki/MC/Skill_Tree"
+                }
+              ]
+            },
+            {
+              "label": "Summon Pool",
+              "page": "Category:MLU Units",
+              "href": "https://mysticallegends.fandom.com/wiki/Category:MLU_Units",
+              "children": [
+                {
+                  "label": "Avery Obtainia",
+                  "page": "Avery Obtainia/MLG",
+                  "href": "https://mysticallegends.fandom.com/wiki/Avery_Obtainia/MLG"
+                },
+                {
+                  "label": "Kaden Icelander",
+                  "page": "Kaden Icelander/MLG",
+                  "href": "https://mysticallegends.fandom.com/wiki/Kaden_Icelander/MLG"
+                },
+                {
+                  "label": "Teddric Tech",
+                  "page": "Teddric Tech/MLG",
+                  "href": "https://mysticallegends.fandom.com/wiki/Teddric_Tech/MLG"
+                }
+              ]
+            },
+            {
+              "label": "Brainstorming",
+              "page": "Brainstorming",
+              "href": "https://mysticallegends.fandom.com/wiki/Brainstorming"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Terminology",
+      "children": [
+        {
+          "label": "Mystical Species",
+          "page": "Mystical Species",
+          "href": "https://mysticallegends.fandom.com/wiki/Mystical_Species",
+          "children": [
+            {
+              "label": "Arch-Elemental",
+              "page": "Arch-Elemental",
+              "href": "https://mysticallegends.fandom.com/wiki/Arch-Elemental",
+              "children": [
+                {
+                  "label": "Icelorian",
+                  "page": "Icelorian",
+                  "href": "https://mysticallegends.fandom.com/wiki/Icelorian"
+                },
+                {
+                  "label": "Gostlynger",
+                  "page": "Gostlynger",
+                  "href": "https://mysticallegends.fandom.com/wiki/Gostlynger"
+                },
+                {
+                  "label": "Water Spirit",
+                  "page": "Water Spirit",
+                  "href": "https://mysticallegends.fandom.com/wiki/Water_Spirit"
+                },
+                {
+                  "label": "Dracolor",
+                  "page": "Dracolor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Dracolor"
+                },
+                {
+                  "label": "Larvan",
+                  "page": "Larvan",
+                  "href": "https://mysticallegends.fandom.com/wiki/Larvan"
+                }
+              ]
+            },
+            {
+              "label": "Elemental",
+              "page": "Elemental",
+              "href": "https://mysticallegends.fandom.com/wiki/Elemental",
+              "children": [
+                {
+                  "label": "Naiad",
+                  "page": "Naiad",
+                  "href": "https://mysticallegends.fandom.com/wiki/Naiad"
+                },
+                {
+                  "label": "Nymph",
+                  "page": "Nymph",
+                  "href": "https://mysticallegends.fandom.com/wiki/Nymph"
+                },
+                {
+                  "label": "Nereid",
+                  "page": "Nereid",
+                  "href": "https://mysticallegends.fandom.com/wiki/Nereid"
+                },
+                {
+                  "label": "Elf",
+                  "page": "Elf",
+                  "href": "https://mysticallegends.fandom.com/wiki/Elf"
+                },
+                {
+                  "label": "Dwarf",
+                  "page": "Dwarf",
+                  "href": "https://mysticallegends.fandom.com/wiki/Dwarf"
+                },
+                {
+                  "label": "Magnivirigentis",
+                  "page": "Magnivirigentis",
+                  "href": "https://mysticallegends.fandom.com/wiki/Magnivirigentis"
+                },
+                {
+                  "label": "Metalor",
+                  "page": "Metalor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Metalor"
+                },
+                {
+                  "label": "Wentor",
+                  "page": "Wentor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Wentor"
+                },
+                {
+                  "label": "Terralor",
+                  "page": "Terralor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Terralor"
+                },
+                {
+                  "label": "Herbovir",
+                  "page": "Herbovir",
+                  "href": "https://mysticallegends.fandom.com/wiki/Herbovir"
+                },
+                {
+                  "label": "Huolor",
+                  "page": "Huolor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Huolor"
+                },
+                {
+                  "label": "Runigist",
+                  "page": "Runigist",
+                  "href": "https://mysticallegends.fandom.com/wiki/Runigist"
+                }
+              ]
+            },
+            {
+              "label": "Demihuman",
+              "page": "Demihuman",
+              "href": "https://mysticallegends.fandom.com/wiki/Demihuman",
+              "children": [
+                {
+                  "label": "Angelor",
+                  "page": "Angelor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Angelor"
+                },
+                {
+                  "label": "Vulpivor",
+                  "page": "Vulpivor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Vulpivor"
+                },
+                {
+                  "label": "Canilor",
+                  "page": "Canilor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Canilor"
+                },
+                {
+                  "label": "Satyr",
+                  "page": "Satyr",
+                  "href": "https://mysticallegends.fandom.com/wiki/Satyr"
+                },
+                {
+                  "label": "Luporian",
+                  "page": "Luporian",
+                  "href": "https://mysticallegends.fandom.com/wiki/Luporian"
+                },
+                {
+                  "label": "Avilerion",
+                  "page": "Avilerion",
+                  "href": "https://mysticallegends.fandom.com/wiki/Avilerion"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Origin Magic",
+          "page": "Origin Magic",
+          "href": "https://mysticallegends.fandom.com/wiki/Origin_Magic",
+          "children": [
+            {
+              "label": "Light",
+              "page": "Light",
+              "href": "https://mysticallegends.fandom.com/wiki/Light"
+            },
+            {
+              "label": "Shadow",
+              "page": "Shadow",
+              "href": "https://mysticallegends.fandom.com/wiki/Shadow"
+            },
+            {
+              "label": "Fire",
+              "page": "Fire",
+              "href": "https://mysticallegends.fandom.com/wiki/Fire"
+            },
+            {
+              "label": "Water",
+              "page": "Water",
+              "href": "https://mysticallegends.fandom.com/wiki/Water"
+            },
+            {
+              "label": "Wind",
+              "page": "Wind",
+              "href": "https://mysticallegends.fandom.com/wiki/Wind"
+            },
+            {
+              "label": "Earth",
+              "page": "Earth",
+              "href": "https://mysticallegends.fandom.com/wiki/Earth"
+            }
+          ]
+        },
+        {
+          "label": "Derived Magic",
+          "page": "Derived Magic",
+          "href": "https://mysticallegends.fandom.com/wiki/Derived_Magic",
+          "children": [
+            {
+              "label": "Ice",
+              "page": "Ice",
+              "href": "https://mysticallegends.fandom.com/wiki/Ice"
+            },
+            {
+              "label": "Mist",
+              "page": "Mist",
+              "href": "https://mysticallegends.fandom.com/wiki/Mist"
+            },
+            {
+              "label": "Metal",
+              "page": "Metal",
+              "href": "https://mysticallegends.fandom.com/wiki/Metal"
+            },
+            {
+              "label": "Lightning",
+              "page": "Lightning",
+              "href": "https://mysticallegends.fandom.com/wiki/Lightning"
+            }
+          ]
+        },
+        {
+          "label": "Magic Users",
+          "page": "Magic Users",
+          "href": "https://mysticallegends.fandom.com/wiki/Magic_Users",
+          "children": [
+            {
+              "label": "Elementalist",
+              "page": "Elementalist",
+              "href": "https://mysticallegends.fandom.com/wiki/Elementalist"
+            },
+            {
+              "label": "Runecrafting",
+              "page": "Runecrafting",
+              "href": "https://mysticallegends.fandom.com/wiki/Runecrafting"
+            },
+            {
+              "label": "Alchemy",
+              "page": "Alchemy",
+              "href": "https://mysticallegends.fandom.com/wiki/Alchemy"
+            },
+            {
+              "label": "Sage",
+              "page": "Sage",
+              "href": "https://mysticallegends.fandom.com/wiki/Sage"
+            },
+            {
+              "label": "Mage",
+              "page": "Mage",
+              "href": "https://mysticallegends.fandom.com/wiki/Mage"
+            },
+            {
+              "label": "Cultivation",
+              "page": "Cultivation",
+              "href": "https://mysticallegends.fandom.com/wiki/Cultivation"
+            }
+          ]
+        },
+        {
+          "label": "Magic Rank",
+          "page": "Magic Rank",
+          "href": "https://mysticallegends.fandom.com/wiki/Magic_Rank",
+          "children": [
+            {
+              "label": "Ultimus Dominus",
+              "page": "Ultimus Dominus",
+              "href": "https://mysticallegends.fandom.com/wiki/Ultimus_Dominus"
+            },
+            {
+              "label": "Maximus Dominus",
+              "page": "Maximus Dominus",
+              "href": "https://mysticallegends.fandom.com/wiki/Maximus_Dominus"
+            },
+            {
+              "label": "Magna Domina",
+              "page": "Magna Domina",
+              "href": "https://mysticallegends.fandom.com/wiki/Magna_Domina"
+            },
+            {
+              "label": "Altier Dominus",
+              "page": "Altier Dominus",
+              "href": "https://mysticallegends.fandom.com/wiki/Altier_Dominus"
+            },
+            {
+              "label": "Bonus Dominus",
+              "page": "Bonus Dominus",
+              "href": "https://mysticallegends.fandom.com/wiki/Bonus_Dominus"
+            },
+            {
+              "label": "Maximus",
+              "page": "Maximus",
+              "href": "https://mysticallegends.fandom.com/wiki/Maximus"
+            },
+            {
+              "label": "Magnus",
+              "page": "Magnus",
+              "href": "https://mysticallegends.fandom.com/wiki/Magnus"
+            },
+            {
+              "label": "Altus",
+              "page": "Altus",
+              "href": "https://mysticallegends.fandom.com/wiki/Altus"
+            },
+            {
+              "label": "Bonus",
+              "page": "Bonus",
+              "href": "https://mysticallegends.fandom.com/wiki/Bonus"
+            },
+            {
+              "label": "Commonus",
+              "page": "Commonus",
+              "href": "https://mysticallegends.fandom.com/wiki/Commonus"
+            }
+          ]
+        },
+        {
+          "label": "Realms",
+          "page": "Realms",
+          "href": "https://mysticallegends.fandom.com/wiki/Realms",
+          "children": [
+            {
+              "label": "Overworld Realm",
+              "page": "Overworld Realm",
+              "href": "https://mysticallegends.fandom.com/wiki/Overworld_Realm"
+            },
+            {
+              "label": "Shadow Realm",
+              "page": "Shadow Realm",
+              "href": "https://mysticallegends.fandom.com/wiki/Shadow_Realm"
+            },
+            {
+              "label": "Spirit Realm",
+              "page": "Spirit Realm",
+              "href": "https://mysticallegends.fandom.com/wiki/Spirit_Realm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Characters",
+      "children": [
+        {
+          "label": "Mystical Legends Heroes",
+          "page": "Mystical Legends",
+          "href": "https://mysticallegends.fandom.com/wiki/Mystical_Legends",
+          "children": [
+            {
+              "label": "Avery Obtainia",
+              "page": "Avery Obtainia",
+              "href": "/wiki/avery_obtainia"
+            },
+            {
+              "label": "Kaden Icelander",
+              "page": "Kaden Icelander",
+              "href": "https://mysticallegends.fandom.com/wiki/Kaden_Icelander"
+            },
+            {
+              "label": "River Grantia",
+              "page": "River Grantia",
+              "href": "https://mysticallegends.fandom.com/wiki/River_Grantia"
+            },
+            {
+              "label": "Lucy Terner",
+              "page": "Lucy Terner",
+              "href": "https://mysticallegends.fandom.com/wiki/Lucy_Terner"
+            },
+            {
+              "label": "Teddric Tech",
+              "page": "Teddric Tech",
+              "href": "https://mysticallegends.fandom.com/wiki/Teddric_Tech"
+            },
+            {
+              "label": "Amos Black",
+              "page": "Amos Black",
+              "href": "https://mysticallegends.fandom.com/wiki/Amos_Black"
+            }
+          ]
+        },
+        {
+          "label": "Mystical Beings",
+          "page": "Mystical Species",
+          "href": "https://mysticallegends.fandom.com/wiki/Mystical_Species",
+          "children": [
+            {
+              "label": "Regnum Cohort Captains",
+              "page": "Regnum Cohort Captains",
+              "href": "https://mysticallegends.fandom.com/wiki/Regnum_Cohort_Captains",
+              "children": [
+                {
+                  "label": "Charlotte Levy",
+                  "page": "Charlotte Levy",
+                  "href": "https://mysticallegends.fandom.com/wiki/Charlotte_Levy"
+                },
+                {
+                  "label": "Atlas Aquia",
+                  "page": "Atlas Aquia",
+                  "href": "https://mysticallegends.fandom.com/wiki/Atlas_Aquia"
+                },
+                {
+                  "label": "Oceanus Aquia",
+                  "page": "Oceanus Aquia",
+                  "href": "https://mysticallegends.fandom.com/wiki/Oceanus_Aquia"
+                },
+                {
+                  "label": "Billy Bones Acitas",
+                  "page": "Billy Bones Acitas",
+                  "href": "https://mysticallegends.fandom.com/wiki/Billy_Bones_Acitas"
+                }
+              ]
+            },
+            {
+              "label": "Regnum Students",
+              "page": "Regnum Students",
+              "href": "https://mysticallegends.fandom.com/wiki/Regnum_Students",
+              "children": [
+                {
+                  "label": "Ken Masamune",
+                  "page": "Ken Masamune",
+                  "href": "https://mysticallegends.fandom.com/wiki/Ken_Masamune"
+                },
+                {
+                  "label": "Kirk Masamune",
+                  "page": "Kirk Masamune",
+                  "href": "https://mysticallegends.fandom.com/wiki/Kirk_Masamune"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Nuntios",
+          "page": "Nuntios",
+          "href": "https://mysticallegends.fandom.com/wiki/Nuntios",
+          "children": [
+            {
+              "label": "Lux Luces",
+              "page": "Lux Luces",
+              "href": "https://mysticallegends.fandom.com/wiki/Lux_Luces"
+            },
+            {
+              "label": "Jay Neomo",
+              "page": "Jay Neomo",
+              "href": "https://mysticallegends.fandom.com/wiki/Jay_Neomo"
+            },
+            {
+              "label": "Josh Picard",
+              "page": "Josh Picard",
+              "href": "https://mysticallegends.fandom.com/wiki/Josh_Picard"
+            },
+            {
+              "label": "Marin Kne",
+              "page": "Marin Kne",
+              "href": "https://mysticallegends.fandom.com/wiki/Marin_Kne"
+            }
+          ]
+        },
+        {
+          "label": "Antagonists",
+          "page": "Antagonists",
+          "href": "https://mysticallegends.fandom.com/wiki/Antagonists",
+          "children": [
+            {
+              "label": "Pyrus Bourn",
+              "page": "Pyrus Bourn",
+              "href": "https://mysticallegends.fandom.com/wiki/Pyrus_Bourn"
+            },
+            {
+              "label": "Lordius Doomolo",
+              "page": "Lordius Doomolo",
+              "href": "https://mysticallegends.fandom.com/wiki/Lordius_Doomolo"
+            },
+            {
+              "label": "Marth Morphius",
+              "page": "Marth Morphius",
+              "href": "https://mysticallegends.fandom.com/wiki/Marth_Morphius"
+            },
+            {
+              "label": "Mass Rellim",
+              "page": "Mass Rellim",
+              "href": "https://mysticallegends.fandom.com/wiki/Mass_Rellim"
+            },
+            {
+              "label": "Ben Lock Burr",
+              "page": "Ben Lock Burr",
+              "href": "https://mysticallegends.fandom.com/wiki/Ben_Lock_Burr"
+            },
+            {
+              "label": "Master Malum",
+              "page": "Master Malum",
+              "href": "https://mysticallegends.fandom.com/wiki/Master_Malum"
+            }
+          ]
+        },
+        {
+          "label": "Zenith Luces Era",
+          "page": "Zenith Luces Era",
+          "href": "https://mysticallegends.fandom.com/wiki/Zenith_Luces_Era",
+          "children": [
+            {
+              "label": "Caela Obtainia",
+              "page": "Caela Obtainia",
+              "href": "https://mysticallegends.fandom.com/wiki/Caela_Obtainia"
+            },
+            {
+              "label": "Ion Mustard",
+              "page": "Ion Mustard",
+              "href": "https://mysticallegends.fandom.com/wiki/Ion_Mustard"
+            },
+            {
+              "label": "Rowan Ager",
+              "page": "Rowan Ager",
+              "href": "https://mysticallegends.fandom.com/wiki/Rowan_Ager"
+            },
+            {
+              "label": "Zenith Luces",
+              "page": "Zenith Luces",
+              "href": "https://mysticallegends.fandom.com/wiki/Zenith_Luces"
+            },
+            {
+              "label": "William Luces",
+              "page": "William Luces",
+              "href": "https://mysticallegends.fandom.com/wiki/William_Luces"
+            }
+          ]
+        },
+        {
+          "label": "Deities",
+          "page": "Deities",
+          "href": "https://mysticallegends.fandom.com/wiki/Deities",
+          "children": [
+            {
+              "label": "Zekron",
+              "page": "Zekron",
+              "href": "https://mysticallegends.fandom.com/wiki/Zekron"
+            },
+            {
+              "label": "Hadestias",
+              "page": "Hadestias",
+              "href": "https://mysticallegends.fandom.com/wiki/Hadestias"
+            },
+            {
+              "label": "Napoleon",
+              "page": "Napoleon",
+              "href": "https://mysticallegends.fandom.com/wiki/Napoleon"
+            },
+            {
+              "label": "Lynnhera",
+              "page": "Lynnhera",
+              "href": "https://mysticallegends.fandom.com/wiki/Lynnhera"
+            },
+            {
+              "label": "Lorares",
+              "page": "Lorares",
+              "href": "https://mysticallegends.fandom.com/wiki/Lorares"
+            },
+            {
+              "label": "Son Adoli",
+              "page": "Son Adoli",
+              "href": "https://mysticallegends.fandom.com/wiki/Son_Adoli"
+            },
+            {
+              "label": "Catathena",
+              "page": "Catathena",
+              "href": "https://mysticallegends.fandom.com/wiki/Catathena"
+            },
+            {
+              "label": "Ceresara",
+              "page": "Ceresara",
+              "href": "https://mysticallegends.fandom.com/wiki/Ceresara"
+            },
+            {
+              "label": "Venersa",
+              "page": "Venersa",
+              "href": "https://mysticallegends.fandom.com/wiki/Venersa"
+            },
+            {
+              "label": "Vulcus",
+              "page": "Vulcus",
+              "href": "https://mysticallegends.fandom.com/wiki/Vulcus"
+            },
+            {
+              "label": "Artiana",
+              "page": "Artiana",
+              "href": "https://mysticallegends.fandom.com/wiki/Artiana"
+            },
+            {
+              "label": "Mercemes",
+              "page": "Mercemes",
+              "href": "https://mysticallegends.fandom.com/wiki/Mercemes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Affiliations",
+      "children": [
+        {
+          "label": "Royals",
+          "page": "Royals",
+          "href": "https://mysticallegends.fandom.com/wiki/Royals",
+          "children": [
+            {
+              "label": "Magni",
+              "page": "Magni",
+              "href": "https://mysticallegends.fandom.com/wiki/Magni"
+            },
+            {
+              "label": "Royal Families",
+              "page": "Royal Families",
+              "href": "https://mysticallegends.fandom.com/wiki/Royal_Families"
+            }
+          ]
+        },
+        {
+          "label": "Nobles",
+          "page": "Nobles",
+          "href": "https://mysticallegends.fandom.com/wiki/Nobles",
+          "children": [
+            {
+              "label": "Council",
+              "page": "Council",
+              "href": "https://mysticallegends.fandom.com/wiki/Council"
+            },
+            {
+              "label": "Government",
+              "page": "Government",
+              "href": "https://mysticallegends.fandom.com/wiki/Government"
+            }
+          ]
+        },
+        {
+          "label": "Commoner",
+          "page": "Commoner",
+          "href": "https://mysticallegends.fandom.com/wiki/Commoner"
+        },
+        {
+          "label": "Locations",
+          "page": "Locations",
+          "href": "https://mysticallegends.fandom.com/wiki/Locations",
+          "children": [
+            {
+              "label": "Districts",
+              "page": "Districts",
+              "href": "https://mysticallegends.fandom.com/wiki/Districts",
+              "children": [
+                {
+                  "label": "District 1",
+                  "page": "District 1",
+                  "href": "https://mysticallegends.fandom.com/wiki/District_1"
+                },
+                {
+                  "label": "District 7",
+                  "page": "District 7",
+                  "href": "https://mysticallegends.fandom.com/wiki/District_7"
+                },
+                {
+                  "label": "District 12",
+                  "page": "District 12",
+                  "href": "https://mysticallegends.fandom.com/wiki/District_12"
+                }
+              ]
+            },
+            {
+              "label": "New York",
+              "page": "New York",
+              "href": "https://mysticallegends.fandom.com/wiki/New_York"
+            }
+          ]
+        },
+        {
+          "label": "Regnum Academy Cohorts",
+          "page": "Regnum Academy Cohorts",
+          "href": "https://mysticallegends.fandom.com/wiki/Regnum_Academy_Cohorts",
+          "children": [
+            {
+              "label": "Blue Legion",
+              "page": "Blue Legion",
+              "href": "https://mysticallegends.fandom.com/wiki/Blue_Legion"
+            },
+            {
+              "label": "Tempest Aquia",
+              "page": "Tempest Aquia",
+              "href": "https://mysticallegends.fandom.com/wiki/Tempest_Aquia"
+            },
+            {
+              "label": "Nuntios",
+              "page": "Nuntios",
+              "href": "https://mysticallegends.fandom.com/wiki/Nuntios"
+            },
+            {
+              "label": "Red Shred",
+              "page": "Red Shred",
+              "href": "https://mysticallegends.fandom.com/wiki/Red_Shred"
+            },
+            {
+              "label": "Mystic",
+              "page": "Mystic",
+              "href": "https://mysticallegends.fandom.com/wiki/Mystic"
+            },
+            {
+              "label": "Dai-Battalion",
+              "page": "Dai-Battalion",
+              "href": "https://mysticallegends.fandom.com/wiki/Dai-Battalion"
+            },
+            {
+              "label": "Red Rampart",
+              "page": "Red Rampart",
+              "href": "https://mysticallegends.fandom.com/wiki/Red_Rampart"
+            },
+            {
+              "label": "Centipedes",
+              "page": "Centipedes",
+              "href": "https://mysticallegends.fandom.com/wiki/Centipedes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
