@@ -1,0 +1,153 @@
+{
+
+  "B1": {
+    "name": "Dancing Purple Flame",
+    "type": "Basic Skill",
+    "description": "Charlotte lights her hands with bright flames, dealing <b class=\"fire\">[Fire]</b> damage and inflicting <b>[Life Drain]</b> every other hit.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1", "text": "Blows fluttering butterfly flames at opponents, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2", "text": "Tosses sparkling flames that explode, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3", "text": "A fiery flower descends and crushes enemies, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as empowered damage.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:life-drain}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 85,
+      "dmg2": 95,
+      "dmg3": 140
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S1": {
+    "name": "Hellflame Purgatory Prison",
+    "type": "Special Skill",
+    "description": "A small flaming cage appears and traps enemies in front in a small radius, clumping them and nearby opponents together and making it more difficult for escape, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> damage per second for 8 seconds.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Applies 2 stacks of the <b class=\"life-drain\">[Life Drain]</b> effect on each trapped opponent upon the first instance of damage.",
+        "style": {"paddingTop": 7}},
+      {"text": "The attack can be active while she is off-field and will deal the same damage per second to opponents that touch the cage. There is then a <b><span data-dmg=\"chance\"></span>%</b> chance for the <b class=\"life-drain\">[Life Drain]</b> effect to apply per hit (amount above 100% counts chance for extra stacks).",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:life-drain}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "Cooldown: 12 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 170 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 165,
+      "chance": 40
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Magic Absorption",
+    "type": "Special Skill",
+    "description": "Charlotte summons a spiral of flames in front of her that sucks incoming attacks and converts them into mana proportional to the mana cost of that attack. For every attack sucked, <b><span data-dmg=\"mp1\"></span>%</b> of the mana cost of the attack becomes her own. The field effect will last for 4 seconds starting.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Opponents hit in the vortex also get a single instance of the effects <b class=\"mana-drain\">[Mana Drain]</b> and <b class=\"life-drain\">[Life Drain]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:mana-drain}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "{{effect:life-drain}}",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"text": "Cooldown: 15 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 110 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "mp1": 50
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "Flame Dragon’s Ascent - True Coming",
+    "type": "Ultimate Skill",
+    "description": "Summon a flaming dragon to descend from the skies to burn opponents in a wide line in front, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> AoE super empowered damage.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "The damage increases by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for each percentage of MP opponents are missing from their max cap.",
+        "style": {"paddingTop": 7}},
+      {"text": "<u>Auxiliary Passive</u>: Energy gauge will fill by +2.5% for every 1% MP gained from opponents (based on opponents’ percentage drained from their max). Each instance of natural MP regen and external restoration will fill the energy gauge by +1%. This effect is active indefinitely during the battle.",
+        "style": {"paddingTop": 7}},
+      {"text": "Energy Gauge: 100%",
+        "style": {"paddingTop": 15, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 800,
+      "dmg_increase": 2.5
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Blue Legion",
+    "type": "Technical Skill",
+    "description": "<b>Ability</b>: Activate and use a random Special Skill of a fellow ally <b class=\"blue-legion\">Blue Legion</b> cohort member. The used skill does not cost any mana nor activates the owner’s skill cooldown. The skill keeps its original affinities and effects.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Energy Gauge: 25%",
+        "style": {"paddingTop": 7, "fontSize": 7}},
+      {"text": "The other <span class=\"undim\">members of the cohort in party will have all their Special, Basic, and Ultimate Skill levels increased by +1 from current level</span> (can exceed max level cap). Each time they use a Special or Ultimate Skill, Charlotte’s skills’ field duration increases by +50% from original duration (stacking infinitely).",
+        "style": {"paddingTop": 15}},
+      {"text": "<b>Resonance</b>: No additional effects.",
+        "style": {"paddingTop": 15}}
+    ]
+  },
+
+
+  "Dupes": {
+    "description": "When opponents with <b class=\"life-drain\">[Life Drain]</b> effect attack Charlotte, their attack stat is decreased by the percentage value missing from their max health, up to 99.9% attack reduction.",
+    "additional": [
+      {"text": "When skills inflict damage on opponents with <b class=\"life-drain\">[Life Drain]</b> effect, Charlotte’s skills does <b class=\"dark\">[Dark]</b> element damage in addition, adding its aura as well. Excess gained health from the effect will be evenly distributed among allies as a healing effect.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 1, 
+      "text": "Every Basic Skill hit on opponents will consume 0.3% of Charlotte’s health but will increase Basic Skill damage by +15%, only when above 50% max health.",
+        "style": {"paddingTop": 5}},
+
+      {"level": 2, 
+      "text": "Restore 5 MP per 0.5% of health taken from <b class=\"life-drain\">[Life Drain]</b> (stackable from multiple targets).",
+        "style": {"paddingTop": 5}},
+
+      {"level": 3, 
+      "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 5}},
+
+      {"level": 4, 
+      "text": "So long as MP is at max, crit damage increases by +200% for self.",
+        "style": {"paddingTop": 5}},
+
+      {"level": 5, 
+      "text": "MP gain from all sources increases by +100%, including Mana Regen, for self.",
+        "style": {"paddingTop": 5}},
+      {"text": "<span class=\"undim\">If she would gain mana that goes above max MP, give the extra to allies split equally.</span> If allies have max MP, store the extra MP as a surplus that increases <b class=\"fire\">[Fire]</b> elemental damage for the team by each percentage of MP above her max MP.",
+        "style": {"paddingTop": 5}},
+      {"text": "A special purple meter covers part of each character’s MP bar to display active stored percentage. A number above will indicate the elemental damage increase accumulated. The active character that consumes the most MP from the bar while it is active will be prioritized and the elemental damage increase will be converted to the element damage dealt in their skills.",
+        "style": {"paddingTop": 5}},
+      {"text": "For another character to take priority, they must also instead consume the most MP to convert the elemental damage increase. A new instance of the meter will reset state and priorities.",
+        "style": {"paddingTop": 5}}
+    ]
+  }
+
+}

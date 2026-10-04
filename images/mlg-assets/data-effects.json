@@ -525,6 +525,73 @@
     "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
   },
+ 
+
+  "life-drain": {
+    "name": "Life Drain",
+    "class": "life-drain",
+    "icon": "/images/mlg-assets/Effect-Icons/life-drain.svg",
+    "type": "Debuff",
+    "description": "Loses 0.5% of health per second and returns it as healing to the user who inflicted this effect (Duration: 9 seconds).",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "mana-drain": {
+    "name": "Mana Drain",
+    "class": "mana-drain",
+    "icon": "/images/mlg-assets/Effect-Icons/mana-drain.svg",
+    "type": "Debuff",
+    "description": "Loses 0.5% of max MP per second and returns it to the user who inflicted this effect (Duration: 9 seconds).",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "charged": {
+    "name": "Charged",
+    "class": "charged",
+    "icon": "/images/mlg-assets/Effect-Icons/charged.svg",
+    "type": "Debuff",
+    "description": "Does the following, lasts indefinitely:",
+    "description2": "At five stacks, if having <b class=\"lightning\">[Lightning Element]</b> aura and next damaged by <b class=\"water\">[Water]</b> attacks, deals small AoE damage equal to 250% of the inflictor’s attack to self which is considered <b class=\"lightning\">[Lightning Element]</b> damage, then clear all stacks. AoE aura applies to both allies and opponents.",
+    "description3": "At five stacks, if having <b class=\"water\">[Water]</b> aura and hit by <b class=\"lightning\">[Lightning Element]</b> attack, a smaller single-hit damage is dealt to self equal to 400% of the inflictor’s attack which is considered <b class=\"lightning\">[Lightning Element]</b> damage, then clear all stacks.",
+    "description4": "The damage is increased by +15% for each level of the skill used to deal damage. The damage dealt from this effect can crit, equal to the inflictor’s crit rate and damage.",
+    "description5": "Damage is also further increased by +1% for each point of piercing of the inflictor.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3},
+    "description2_style": {"paddingTop": 7},
+    "description3_style": {"paddingTop": 7},
+    "description4_style": {"paddingTop": 7},
+    "description5_style": {"paddingTop": 7}
+  },
+
+  "claw-mark": {
+    "name": "Claw Mark",
+    "class": "claw-mark",
+    "icon": "/images/mlg-assets/Effect-Icons/claw-mark.svg",
+    "type": "Debuff",
+    "description": "Has a 30% chance to apply this effect for 5 seconds, otherwise remove the effect. Prevent self from going more than 10 meters away from the inflictor of this effect.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+  "invincibility": {
+    "name": "Invincibility",
+    "class": "invincibility",
+    "icon": "/images/mlg-assets/Effect-Icons/indestructible.svg",
+    "type": "Buff",
+    "description": "Become immune to incoming damage for 6 seconds.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+
+
+
+
 
 
   "assassin-s-touch": {
@@ -534,9 +601,7 @@
     "type": "Buff",
     "description": "Attacking an opponent a single time will grant the <b class=\"marked\">[Marked]</b> effect on them. When opponents hit active character, deal 25% of received damage back at them.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "marked": {
     "name": "Marked",
@@ -545,9 +610,7 @@
     "type": "Debuff",
     "description": "Target’s movement and direction will become reversed, lasting 3 seconds. Incoming backside attacks will deal +10% more damage. The duration of effect is dependent on self’s debuff resistance.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "valiant": {
     "name": "Valiant",
@@ -556,9 +619,7 @@
     "type": "Buff",
     "description": "Reduce incoming damage by -30% and increase movement speed by +20% for 10 seconds.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "ultimate-shield": {
     "name": "Ultimate Shield",
@@ -567,9 +628,7 @@
     "type": "Buff",
     "description": "Creates an overshield that absorbs damage equal to a certain amount of health. If any remains for more than 5 seconds, it is then converted into healing equal to the value of the shield. Gains +20% damage reduction while having this buff.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "swing": {
     "name": "Swing",
@@ -578,9 +637,7 @@
     "type": "Buff",
     "description": "Extends the size of melee and ranged attacks by +30%, lasting the duration of single attack.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "armor-weakness": {
     "name": "Armor Weakness",
@@ -589,9 +646,7 @@
     "type": "Debuff",
     "description": "The next incoming damage is considered empowered damage, then the effect is removed.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "miss": {
     "name": "Miss",
@@ -600,9 +655,7 @@
     "type": "Debuff",
     "description": "Decreases crit rate by -5% for 15 seconds (Stackable, up to 10 times).",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "tactical-insight": {
     "name": "Tactical Insight",
@@ -611,9 +664,7 @@
     "type": "Buff",
     "description": "Gain +15% crit rate and +60% crit damage for 10 seconds.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "stealth": {
     "name": "Stealth",
@@ -622,9 +673,7 @@
     "type": "Buff",
     "description": "Become partially invisible (transparency) when idle and moving slowly and opponents will not spot you and engage in combat. Your first attack will deal +300% more damage.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "pen-testing": {
     "name": "Pen Testing",
@@ -633,9 +682,7 @@
     "type": "Debuff",
     "description": "Decreases all max stats by -2% and becomes vulnerable to skills being hacked and breached with a 10% chance per stack. A chance to hack occurs when gaining a stack. Apples <b class=\"skill-disable\">[Skill Disable]</b> when hacked (Stackable up to 5, Duration: 15 seconds).",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "system-infiltration": {
     "name": "System Infiltration",
@@ -644,9 +691,7 @@
     "type": "Debuff",
     "description": "Lose -5% of MP every other second for 10 seconds.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "skill-disable": {
     "name": "Skill Disable",
@@ -655,9 +700,7 @@
     "type": "Debuff",
     "description": "Disables a random skill (Special or Ultimate) for 5 seconds. Reduced against higher debuff resistance.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   },
   "firewall": {
     "name": "Firewall",
@@ -666,10 +709,9 @@
     "type": "Buff",
     "description": "Reduces incoming attacks’ chance to crit by -10% for 15 seconds, up to 5 stacks.",
     "stat_modifiers": [],
-    "description_style": {
-      "paddingTop": 3
-    }
+    "description_style": {"paddingTop": 3}
   }
+
 
 
 

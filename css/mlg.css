@@ -75,6 +75,7 @@
 .indestructible { color: #999999 }
 .inferno { color: #cc0000; }
 .bandage { color: #38761d; }
+.invincibility { color: #f0ca69; }
 
 /* Debuffs */
 .debuff { color: #969595ad; }
@@ -89,10 +90,16 @@
 .slowness { color: #c883f5 }
 .weakened { color: #6c6860; }
 .electrocute { color: #8e7cc3; }
+.mana-drain { color: #587db9; }
+.life-drain { color: #9e55cf; }
+.charged { color: #e69138; }
+.claw-mark { color: #498794; }
+
 
 /* Mystical Legends Faction */
 .mystical-legends { color: #ff0000; }
 .tempest-aquia { color: #466da8 }
+.blue-legion { color: #3d2ac9 }
 
 /* Conditions */
 .empowered { color: #dd7e6b; }

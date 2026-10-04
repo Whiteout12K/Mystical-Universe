@@ -391,10 +391,17 @@ function modifierText(effect,stacks){
    :`${modifierNames[m.stat]||m.stat} ${signs(value)}${m.operation==="percent"||additiveStats.has(m.stat)||m.stat==="damageIncrease"?"%":""}`;
  }).join(" · ")||"No stat changes.";
 }
+function effectDescriptionRows(effect){
+ return Object.keys(effect)
+  .filter(key=>/^description\d*$/.test(key))
+  .sort((a,b)=>(a==="description"?1:Number(a.slice(11)))-(b==="description"?1:Number(b.slice(11))))
+  .map(key=>effect[key])
+  .filter(text=>typeof text==="string"&&text.trim());
+}
 function searchEffects(){
  const q=$("effectSearch").value.trim().toLowerCase();
- filteredEffects=Object.entries(effects).filter(([id,e])=>`${id} ${e.name} ${e.type} ${e.description||""} ${e.description2||""}`.toLowerCase().includes(q)).slice(0,999);
- $("effectMenu").innerHTML=filteredEffects.map(([id,e])=>`<div class="effect-option" data-id="${esc(id)}"><img src="${esc(e.icon)}" alt=""><span class="effect-copy"><strong>${esc(e.name)}</strong><small>${esc(e.type)}</small><span class="effect-desc">${safeHTML(e.description)}${e.description2?`<br>${safeHTML(e.description2)}`:""}</span></span></div>`).join("")||'<div class="effect-option"><span class="effect-copy">No effects found.</span></div>';
+ filteredEffects=Object.entries(effects).filter(([id,e])=>`${id} ${e.name} ${e.type} ${effectDescriptionRows(e).join(" ")}`.toLowerCase().includes(q)).slice(0,999);
+ $("effectMenu").innerHTML=filteredEffects.map(([id,e])=>`<div class="effect-option" data-id="${esc(id)}"><img src="${esc(e.icon)}" alt=""><span class="effect-copy"><strong>${esc(e.name)}</strong><small>${esc(e.type)}</small><span class="effect-desc">${effectDescriptionRows(e).map(text=>safeHTML(text)).join("<br>")}</span></span></div>`).join("")||'<div class="effect-option"><span class="effect-copy">No effects found.</span></div>';
  $("effectMenu").classList.add("open");
 }
 function selectEffect(id){
