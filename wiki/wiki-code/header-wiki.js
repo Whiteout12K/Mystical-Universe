@@ -19,6 +19,13 @@
       if (item.children?.length) {
         const details = document.createElement('details'), summary = document.createElement('summary');
         summary.textContent = item.label; details.append(summary);
+        details.addEventListener('toggle', () => {
+          if (!details.open) return;
+          for (const sibling of list.children) {
+            const other = sibling.firstElementChild;
+            if (other !== details && other?.tagName === 'DETAILS') other.open = false;
+          }
+        });
         if (item.href) { const a = makeLink({...item, label:`View ${item.label}`}); a.classList.add('wiki-nav-category-link'); details.append(a); }
         details.append(branch(item.children)); row.append(details);
       } else row.append(makeLink(item));

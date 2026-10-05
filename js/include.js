@@ -5,7 +5,7 @@ try{
 const response=await fetch(file);
 if(!response.ok)throw new Error('Component unavailable');
 target.innerHTML=await response.text();
-if(id.includes('header')){loadLoggedInUser();setupNavbarLogin();
+if(id.includes('header')){setupMobileNavbar(target.querySelector('.mystical-navbar'));loadLoggedInUser();setupNavbarLogin();
 for(const link of target.querySelectorAll('.nav-link[href]')){
 if(new URL(link.href).pathname.replace(/\.html$/, '')===location.pathname.replace(/\.html$/, '')){link.classList.add('active');link.setAttribute('aria-current','page');}
 }}
@@ -107,3 +107,25 @@ loadComponent("homeheader-placeholder","/index/header.html");
 loadComponent("homefooter-placeholder","/index/footer.html");
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPageComponents,{once:true});else loadPageComponents();
+
+// Fit mobile dropdowns to the visible space, including the on-screen keyboard.
+function setupMobileNavbar(navbar){
+if(!navbar||navbar.dataset.mobileMenuReady)return;
+navbar.dataset.mobileMenuReady='true';
+const menu=navbar.querySelector('.navbar-collapse');
+if(!menu)return;
+const update=()=>{
+if(!window.matchMedia('(max-width:991.98px)').matches){navbar.style.removeProperty('--mobile-menu-height');return;}
+const viewport=window.visualViewport;
+const bottom=viewport?viewport.offsetTop+viewport.height:window.innerHeight;
+navbar.style.setProperty('--mobile-menu-height',Math.max(0,bottom-navbar.getBoundingClientRect().bottom-8)+'px');
+};
+window.addEventListener('resize',update,{passive:true});
+window.visualViewport?.addEventListener('resize',update,{passive:true});
+window.visualViewport?.addEventListener('scroll',update,{passive:true});
+menu.addEventListener('show.bs.collapse',update);
+menu.addEventListener('shown.bs.collapse',update);
+menu.addEventListener('focusin',()=>requestAnimationFrame(update));
+new ResizeObserver(update).observe(navbar);
+update();
+}

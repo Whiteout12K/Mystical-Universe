@@ -1452,3 +1452,9 @@ a:hover {
     font-size:.6rem;
   }
 }
+
+/* Mobile menus open below the header without moving the page content. */
+@media(max-width:991.98px){
+  .mystical-navbar>.container-fluid{position:static}
+  .mystical-navbar .navbar-collapse,.mystical-navbar .collapsing{position:absolute;top:100%;left:0;right:0;width:100%;margin:0;padding:12px 24px 18px;max-height:var(--mobile-menu-height,calc(100dvh - 70px));overflow-y:auto;overscroll-behavior:contain;background:linear-gradient(145deg,#1e1517,#100e10);border-bottom:1px solid #d6aa4555;box-shadow:0 12px 24px #0008;scrollbar-width:thin}
+}

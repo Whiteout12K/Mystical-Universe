@@ -1,6 +1,6 @@
 # Simple wiki text pages
 
-Copy `avery_obtainia.html` to `your_page.html`, then replace Avery’s text with your own. Edit the text inside `script type="text/x-wiki"`; keep the small HTML wrapper. Update the HTML title, description, and canonical address at the top too. No article JSON or build step is used. Shared JavaScript builds the layout. `navigation.json` still controls the header.
+Copy `char/avery_obtainia.html` to `your_page.html`, then replace Avery’s text with your own. Edit the text inside `script type="text/x-wiki"`; keep the small HTML wrapper. Update the HTML title, description, and canonical address at the top too. No article JSON or build step is used. Shared JavaScript builds the layout. `navigation.json` still controls the header.
 
 Cloudflare serves `your_page.html` at `/wiki/your_page`. A basic HTTP preview uses the `.html` address. The text wrapper must not contain a literal closing script tag.
 
@@ -26,7 +26,7 @@ Cloudflare serves `your_page.html` at `/wiki/your_page`. A basic HTTP preview us
 |image=/images/other/art.png :: Another appearance
 |section=General Information
 |Any field name=Any value
-|Users=[[avery_obtainia|Avery Obtainia]]
+|Users=[[char/avery_obtainia|Avery Obtainia]]
 |Members=First member
 Second member
 |Hidden information={{Spoiler|Secret details}}
@@ -97,3 +97,11 @@ Full HTTP/HTTPS links in References and Credits remain clickable external source
 The wiki header search discovers existing wiki pages from `sitemap.xml`, including nested folders. Regenerate the sitemap after adding articles. It loads page names when first opened and filters them as you type; arrow keys, Enter, and Escape control the dropdown.
 
 Preview descriptions come automatically from the first article paragraph outside templates and infoboxes. This supplies the home archive preview, search results, and the rendered page’s metadata. Wiki links and bold/italic text become plain text; hidden spoilers are excluded. No `|description=` field is needed.
+
+## Local wiki editor
+
+Use your existing VS Code local server and open `/wiki/wiki-editor/`. The editor automatically finds served wiki pages from `sitemap.xml`. In Chrome or Edge, the first save asks for the website’s `wiki` folder, or you can click Open Wiki Folder. Allow folder access when prompted. The folder is remembered in this browser for this localhost address; later visits scan it automatically while permission remains granted. If permission expires, Save asks to reconnect it. No Python server or backend is needed. Browsers without directory access can view pages but cannot save directly. Regenerate the sitemap after adding pages if you have not connected the folder; a connected folder discovers new pages directly.
+
+The selected folder is scanned recursively, including nested folders, without depending on the sitemap. The sidebar preserves their hierarchy. Visual editor shows formatted, editable headings, paragraphs, nested lists, links, spoilers, and infobox entries. Its compact menu places Undo/Redo on the left and Discard/Save on the right, with formatting and an Insert wiki content dropdown below. Insert blocks, rename tabs, add or remove infobox fields/sections/images, edit field names and values, manage gallery images and captions, and remove blocks using their × controls. Double-click a link to edit its destination. Undo/Redo also restores structural changes. Click a field in a wiki block, then choose Insert wiki content → Paragraph to add a paragraph after that block. Its placeholder text is selected so you can type immediately. The ↵ control does the same. Enter creates a separate paragraph in article text with the same spacing as existing paragraphs. Shift+Enter creates a single line break. Infobox values and compact template fields keep single-line breaks with Enter; lists keep their normal item behavior. Images and inline spoilers have their own continue-writing controls. Source code is a separate tab for changing template structure, images, galleries, tabs, or other advanced markup. Switching views preserves unsaved changes. The editor condenses repeated blank rows to one blank line between article elements when switching views or saving; spacing inside template values is preserved. Save writes directly to the matching HTML file through the connected folder; it never downloads a copy. Save Change writes only the existing wiki text block, preserving the surrounding HTML. Changes stay local until your normal GitHub push. Reopening a page loads changes made in VS Code; concurrent changes are rejected rather than overwritten. Discard Changes restores the last loaded or saved text.
+
+The editor is disabled on hosted domains and excluded from search indexing.

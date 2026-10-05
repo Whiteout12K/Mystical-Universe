@@ -98,3 +98,18 @@
 @media(max-width:991px){.wiki-search-dropdown{--wiki-search-view-height:45dvh}}
 
 .wiki-article li>ul,.wiki-article li>ol{margin-top:6px;padding-inline-start:24px}.wiki-list-placeholder{list-style:none}
+
+/* Mobile wiki dropdown: one scrollable menu with naturally expanding submenus. */
+@media(max-width:991.98px){
+  .wiki-navbar,.wiki-navbar.navbar-scroll-fixed,.wiki-navbar.navbar-at-top{display:block;position:relative!important;top:auto;left:auto;right:auto;transform:none!important;animation:none;will-change:auto}
+  .wiki-navbar>.container-fluid{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+  .wiki-navbar .navbar-brand{min-width:0}
+  .wiki-navbar .navbar-toggler{order:0}
+  .wiki-navbar .navbar-collapse{position:absolute;top:100%;left:0;right:0;order:0;min-width:0;width:100%;margin:0;padding:12px 24px 18px;max-height:var(--mobile-menu-height,calc(100dvh - 70px));overflow-y:auto;flex-basis:auto}
+  .wiki-navbar .navbar-collapse.show{display:block;height:auto}
+  .wiki-navbar .navbar-nav{display:block;min-width:0}
+  .wiki-navbar .wiki-nav-panel{position:static;width:100%;max-width:none;max-height:none;overflow:visible}
+  .wiki-navbar .wiki-nav-tree summary,.wiki-navbar .wiki-nav-tree a{white-space:normal;overflow-wrap:anywhere}
+  .wiki-navbar .wiki-search-dropdown{max-height:none;overflow:visible}
+  .wiki-navbar .wiki-search-dropdown ul{max-height:440px;overflow-y:auto}
+}
