@@ -9,7 +9,13 @@
   }
   // Blank-line counts outside templates do not affect wiki rendering.
   function compactSource(text){
-    const compact=value=>value.replace(/\n(?:[ \t]*\n){2,}/g,'\n\n');
+    text=text.replace(/\[\[Category:([^\]|]+)(?:\|[^\]]*)?\]\]/gi,(_,name)=>'[[Category:'+name.trim()+']]');
+    const compact=value=>value.replace(/\[\[Category:[^\]]+\]\](?:\s*\[\[Category:[^\]]+\]\])*/gi,(group,offset,input)=>{
+      const tags=group.match(/\[\[Category:[^\]]+\]\]/gi).join('\n');
+      const before=offset>0&&input[offset-1]!=='\n'?'\n':'',end=offset+group.length;
+      const after=end<input.length&&input[end]!=='\n'?'\n':'';
+      return before+tags+after;
+    }).replace(/\n(?:[ \t]*\n){2,}/g,'\n\n');
     let output='',offset=0;
     for(const token of templates(text)){
       output+=compact(text.slice(offset,token.start))+token.value;
@@ -197,7 +203,7 @@
     }article(position,source.length);
     compose();
     root.onclick=event=>{if(event.target.closest('a'))event.preventDefault();};
-    root.ondblclick=event=>{const category=event.target.closest('[data-wiki-category]');if(category){const name=prompt('Category name:',category.dataset.wikiCategory);if(name===null)return;const clean=name.replace(/[|\[\]\r\n]/g,'').replace(/^Category:/i,'').trim();if(!clean)return;const suffix=category.dataset.wikiToken.slice(2,-2).split('|').slice(1).join('|');category.dataset.wikiToken='[[Category:'+clean+(suffix?'|'+suffix:'')+']]';category.dataset.wikiCategory=clean;category.firstElementChild.textContent=clean;category.querySelector('button').setAttribute('aria-label','Remove category '+clean);category.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));return;}const link=event.target.closest('a');if(!link)return;const target=prompt('Link destination:',link.dataset.wikiTarget);if(target===null)return;link.dataset.wikiTarget=target;link.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));};
+    root.ondblclick=event=>{const category=event.target.closest('[data-wiki-category]');if(category){const name=prompt('Category name:',category.dataset.wikiCategory);if(name===null)return;const clean=name.replace(/[|\[\]\r\n]/g,'').replace(/^Category:/i,'').trim();if(!clean)return;category.dataset.wikiToken='[[Category:'+clean+']]';category.dataset.wikiCategory=clean;category.firstElementChild.textContent=clean;category.querySelector('button').setAttribute('aria-label','Remove category '+clean);category.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));return;}const link=event.target.closest('a');if(!link)return;const target=prompt('Link destination:',link.dataset.wikiTarget);if(target===null)return;link.dataset.wikiTarget=target;link.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));};
   }
   window.WikiVisual={render,serialize,inline,selectParagraph,compactSource};
 })();

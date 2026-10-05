@@ -13,3 +13,11 @@ label{display:block;color:#c0b4cb;font-size:12px}textarea,input{display:block;wi
 .visual-category{display:inline-flex;align-items:center;gap:5px;margin:2px 5px 2px 0;padding:2px 7px;border:1px solid var(--line);border-radius:4px;color:#d9c69e;font:12px/1.5 Arial,sans-serif;background:#a88b5710}.visual-category .inline-remove{font-size:12px;line-height:1.2;padding:0 3px}
 
 .wiki-home-button{display:inline-block;white-space:nowrap;border:1px solid var(--line);border-radius:4px;padding:5px 9px;font-size:12px;color:#ede7f3}.wiki-home-button:hover{background:#b5986330;color:#ede7f3}
+
+.visual-tab-marker{background:#f0dfb7;color:#705019;border:1px solid #b99a5f;border-radius:4px;padding:7px 10px}.visual-tab-marker>input{color:#705019}.visual-tab-marker .block-action{color:#705019}.visual-tab-marker .block-action:hover{background:#b5986330;border-color:#b99a5f}
+
+#insert-content optgroup{font-weight:700;color:#dbc494;background:#251b2d}#insert-content option{font-weight:400;color:#f3eff7;background:#18131e}#insert-content hr{border:0;border-top:1px solid var(--gold)}
+
+#category-dialog{width:340px;max-width:calc(100vw - 32px);background:var(--panel);color:#f3eff7;border:1px solid var(--gold);border-radius:8px;padding:20px}#category-dialog::backdrop{background:#0009}#category-dialog h2{font:21px Georgia,serif;color:var(--gold);margin:0 0 16px}#category-name{margin-top:6px}.category-dialog-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+
+.visual-category{white-space:nowrap}

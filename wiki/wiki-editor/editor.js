@@ -167,10 +167,36 @@
   document.addEventListener('keydown',event=>{
     if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'&&$('editor-container').contains(event.target)){event.preventDefault();historyStep(event.shiftKey?1:-1);}
   });
-  $('visual-editor').addEventListener('focusin',event=>{state.lastBlock=event.target.closest('[data-insert-at]');if(event.target.matches('input'))state.selection=null;});
+  $('visual-editor').addEventListener('focusin',event=>{state.lastBlock=event.target.closest('[data-insert-at]');if(!event.target.closest('.visual-section > .visual-body'))state.selection=null;});
   document.addEventListener('selectionchange',()=>{const selection=getSelection();if(selection.rangeCount&&selection.anchorNode?.parentElement?.closest('.visual-editable')&&$('visual-editor').contains(selection.anchorNode))state.selection=selection.getRangeAt(0).cloneRange();});
+  function categoryParagraph(range){
+    if(!range||!$('visual-editor').contains(range.commonAncestorContainer))return null;
+    const element=node=>node.nodeType===Node.ELEMENT_NODE?node:node.parentElement;
+    const start=element(range.startContainer),end=element(range.endContainer),paragraph=start?.closest('p');
+    if(!paragraph||end?.closest('p')!==paragraph||!paragraph.parentElement.matches('.visual-section > .visual-body')||start.closest('.visual-template,.visual-spoiler,.visual-media,[contenteditable="false"]')||end.closest('.visual-template,.visual-spoiler,.visual-media,[contenteditable="false"]'))return null;
+    return paragraph;
+  }
+  $('category-cancel').addEventListener('click',()=>$('category-dialog').close());
+  $('category-name').addEventListener('input',()=>$('category-name').setCustomValidity(''));
+  $('category-form').addEventListener('submit',event=>{
+    event.preventDefault();
+    const field=$('category-name'),clean=field.value.replace(/^Category:/i,'').replace(/[|\[\]\r\n]/g,'').trim();
+    const existing=[...state.source.matchAll(/\[\[Category:([^\]|]+)(?:\|[^\]]*)?\]\]/gi)];
+    if(!clean||existing.some(match=>match[1].trim().toLowerCase()===clean.toLowerCase())){field.setCustomValidity(clean?'This category is already on the page.':'Enter a category name.');field.reportValidity();return;}
+    const range=state.categoryRange,paragraph=categoryParagraph(range);
+    if(!paragraph){$('category-dialog').close();status('Place your typing cursor in an article paragraph before adding a category.',true);return;}
+    const holder=document.createElement('div');WikiVisual.inline(holder,'[[Category:'+clean+']]','/images/character_art/');const chip=holder.firstElementChild;
+    // Remove only an empty paragraph's caret placeholder, never an intentional line break.
+    if(!paragraph.textContent.trim()&&paragraph.children.length===1&&paragraph.firstElementChild.tagName==='BR'){paragraph.firstElementChild.remove();range.selectNodeContents(paragraph);}
+    const anchor=document.createTextNode('\u200B'),fragment=document.createDocumentFragment();fragment.append(chip,anchor);
+    range.collapse(false);range.insertNode(fragment);state.lastEdit=0;
+    const editor=paragraph.closest('.visual-editable');editor.dispatchEvent(new Event('input',{bubbles:true}));
+    $('category-dialog').close();editor.focus();range.setStart(anchor,anchor.length);range.collapse(true);getSelection().removeAllRanges();getSelection().addRange(range);state.selection=range.cloneRange();
+    status('Category added at your typing cursor. Double-click its tag to rename it.');
+  });
   $('insert-content').addEventListener('change',()=>{
     const type=$('insert-content').value;$('insert-content').value='';if(!type||!state.page)return;
+    if(type==='category'){if(!categoryParagraph(state.selection)){status('Place your typing cursor in an article paragraph before adding a category.',true);return;}state.categoryRange=state.selection.cloneRange();$('category-name').value='';$('category-name').setCustomValidity('');$('category-dialog').showModal();$('category-name').focus();return;}
     if(type==='spoiler'&&state.selection&&$('visual-editor').contains(state.selection.commonAncestorContainer)){
       const range=state.selection,editor=(range.commonAncestorContainer.nodeType===Node.ELEMENT_NODE?range.commonAncestorContainer:range.commonAncestorContainer.parentElement).closest('.visual-editable');
       if(editor){const holder=document.createElement('div');WikiVisual.inline(holder,'{{Spoiler|Write spoiler text here.}}','/images/character_art/');const node=holder.firstElementChild;range.deleteContents();range.insertNode(node);state.lastEdit=0;editor.dispatchEvent(new Event('input',{bubbles:true}));const next=document.createRange();next.selectNodeContents(node.querySelector('[data-spoiler-content]'));getSelection().removeAllRanges();getSelection().addRange(next);status('Spoiler inserted in the selected text.');return;}
