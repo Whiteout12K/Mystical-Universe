@@ -9,7 +9,6 @@ Cloudflare serves `your_page.html` at `/wiki/your_page`. A basic HTTP preview us
 ```
 {{Page
 |title=Page Name
-|description=Search description
 |notice=Optional notice
 |source=https://example.com/original
 |image base=/images/character_art/
@@ -69,7 +68,7 @@ Infobox fields are completely custom and render in your order. `title`, `image`,
 - `[[fandom:Page Name|Label]]` resolves to the matching local wiki page when it exists; otherwise it remains inactive.
 - External links remain visible but inactive. Links to existing website pages and image/media files remain clickable.
 - `[[File:/images/art.png|Caption]]` inserts an image in the body.
-- Blank lines separate paragraphs. `== Heading ==` through `===== Heading =====` create sections and automatic contents links. `*` and `#` create bullet and numbered lists.
+- Blank lines separate paragraphs. `== Heading ==` through `===== Heading =====` create sections and automatic contents links. `*` and `#` create bullet and numbered lists. Repeat markers for nesting: `**` is indented under the preceding `*` item, `***` adds another level, and `##` nests numbered items.
 - Three apostrophes mark bold; two mark italic. `<br>` remains supported.
 - `{{Spoiler|Hidden text with [[links]]}}` works within a field or the body and becomes Show Spoiler / Hide Spoiler text.
 
@@ -87,8 +86,14 @@ Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML 
 
 ## Virtual article views
 
-Add `|views=powers-abilities` in the Page block to show that top-level section as a separate view in the same HTML. Point a Tabs item to `#powers-abilities`. Other sections and the infobox are hidden while viewing it; Overview (`#wiki-title`) restores them. Multiple view heading IDs can be separated with commas. Section links, refresh, and browser back/forward preserve the selected view.
+Place `|tab=Overview` on its own line before the first tab’s body. Use `|tab=Powers & Abilities` (or any custom name) where the next tab starts. Each marker ends the previous tab; the final tab ends at the end of the body. All heading levels work within each tab. The first tab shows the infobox; other tabs hide it.
+
+In `{{Tabs}}`, a bare entry such as `|Overview` or `|Powers & Abilities` links to the matching marker. An explicit entry such as `|MLG=/webpages/game-c.html?char=c1` still links to a separate page. Without a Tabs block, multiple markers generate navigation automatically. Names without a matching marker remain inactive. Infobox, Gallery, References, Credits, and home widgets remain shared optional directives; Gallery/References appear with the first tab and Credits stay below every tab. Existing pages without markers still work.
 
 Wiki links use `sitemap.xml` to recognize available website pages. Regenerate it with `sitemap_gen.py` after adding pages. Missing destinations stay visible without navigating.
 
 Full HTTP/HTTPS links in References and Credits remain clickable external source links. Other unavailable wiki destinations stay inactive.
+
+The wiki header search discovers existing wiki pages from `sitemap.xml`, including nested folders. Regenerate the sitemap after adding articles. It loads page names when first opened and filters them as you type; arrow keys, Enter, and Escape control the dropdown.
+
+Preview descriptions come automatically from the first article paragraph outside templates and infoboxes. This supplies the home archive preview, search results, and the rendered page’s metadata. Wiki links and bold/italic text become plain text; hidden spoilers are excluded. No `|description=` field is needed.

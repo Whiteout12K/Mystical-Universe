@@ -25,7 +25,23 @@
   // Optional virtual views stay in the same HTML and use shareable section hashes.
   const source = document.querySelector('script[type="text/x-wiki"]')?.textContent || '';
   const viewIds = (source.match(/\|views\s*=([^\n|}]+)/)?.[1] || '').split(',').map(id => id.trim()).filter(Boolean);
-  const views = viewIds.map(id => document.getElementById(id)?.closest('.wiki-section')).filter(Boolean);
+  const markedTabs = [...document.querySelectorAll('[data-wiki-tab]')];
+  const overviewTab = markedTabs[0];
+  const viewStarts = markedTabs.length ? markedTabs.slice(1) : viewIds.map(id => document.getElementById(id)?.closest('.wiki-section')).filter(Boolean);
+  // A view includes following sibling sections, even when they also use H2.
+  // The next configured view starts a new group; the last runs to the body end.
+  const starts = new Set(viewStarts);
+  const views = viewStarts.map(start => {
+    if (start.dataset.wikiTab) return start;
+    const group = document.createElement('div'); group.className = 'wiki-view-content';
+    start.before(group);
+    let section = start;
+    while (section && (section === start || !starts.has(section))) {
+      const next = section.nextElementSibling;
+      group.append(section); section = next;
+    }
+    return group;
+  });
   if (views.length) {
     const article = document.getElementById('wiki-body'), box = document.getElementById('wiki-infobox');
     const layout = article.closest('.wiki-layout'), title = document.getElementById('wiki-title');
@@ -45,7 +61,7 @@
       viewHost.hidden = !active; views.forEach(view => { view.hidden = view !== active; });
       if(box) box.hidden = Boolean(active);
       layout.classList.toggle('wiki-layout-no-infobox', Boolean(active) || !box);
-      title.textContent = active ? `${originalTitle} — ${active.querySelector('h2,h3')?.textContent || 'Article'}` : originalTitle;
+      title.textContent = active ? `${originalTitle} — ${active.dataset.wikiTab || active.querySelector('h2,h3')?.textContent || 'Article'}` : originalTitle;
       document.title = active ? `${title.textContent} | Mystical Legends Wiki` : originalDocumentTitle;
       links.forEach(link => {
         const heading = document.getElementById(link.hash.slice(1));
@@ -54,10 +70,10 @@
       });
       if(sharedTOC) sharedTOC.hidden = !links.some(link => !link.hidden);
       document.querySelectorAll('.wiki-related a').forEach(link => {
-        const isActive = active ? link.hash === '#' + active.querySelector('h2,h3')?.id : link.hash === '#wiki-title';
+        const isActive = active ? link.hash === '#' + (active.dataset.wikiTab ? active.id : active.querySelector('h2,h3')?.id) : link.hash === '#wiki-title' || (overviewTab && link.hash === '#' + overviewTab.id);
         if(isActive) link.setAttribute('aria-current','page'); else link.removeAttribute('aria-current');
       });
-      requestAnimationFrame(() => { (active && target === active.querySelector('h2,h3') ? title : target)?.scrollIntoView({block:'start'}); });
+      requestAnimationFrame(() => { (active && (target === active || target === active.querySelector('h2,h3')) ? title : target)?.scrollIntoView({block:'start'}); });
     }
     window.addEventListener('hashchange', applyView); applyView();
   } else if(location.hash) requestAnimationFrame(() => {try {document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();}catch {}});

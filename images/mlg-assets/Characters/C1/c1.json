@@ -320,7 +320,7 @@
         "style": {"paddingTop": 7}},
       {"text": "Using this skill again while the goddess is active will sacrifice her for Avery to gain the buff <b class=\"magni-mage\">[The Magni Mage]</b>. If she is defeated in the current battle, she will grant the buff permanently to Avery and cannot be re-summoned. If Avery is defeated, she will disappear as well.",
         "style": {"paddingTop": 7}},
-      {"text": "<b>Auxiliary Passive</b>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting <b class=\"light\">[Light]</b> aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
+      {"text": "<u>Auxiliary Passive</u>: The Goddess’ Meter persists even after Lynnhera is not present. This meter lasts until all MP equal to Avery’s max is spent. Every 300 MP spent on the meter will send a holy shockwave in an AoE, inflicting <b class=\"light\">[Light]</b> aura and canceling opponent Special Skill cast. Every 200 MP spent will unlock +5% of her equipping equipment and artifact stats and increase her and Avery’s shared stats.",
         "style": {"paddingTop": 5}},
       {"text": "{{effect:magni-mage}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},

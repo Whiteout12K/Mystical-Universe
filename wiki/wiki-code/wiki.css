@@ -56,9 +56,9 @@
 .wiki-intro .wiki-paragraph{margin-bottom:16px}
 
 .wiki-character-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:18px}
-.wiki-character-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 12px;background:linear-gradient(145deg,#282022,#131114);border:1px solid var(--wiki-border);border-radius:10px;text-align:center;font:700 15px/1.4 Georgia,serif}
+.wiki-character-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:12px;text-align:center;font:700 15px/1.4 Georgia,serif}
 .wiki-character-card img{width:100px;height:100px;object-fit:cover;border-radius:50%;border:1px solid #d6aa4560;background:#191317}
-.wiki-character-card:hover{background:#30242a;border-color:#d6aa4580}
+.wiki-character-portrait{display:block;line-height:0;border-radius:50%}.wiki-character-portrait[href]:hover img{border-color:#e6c47e}.wiki-character-portrait:focus-visible{outline:2px solid #e6c47e;outline-offset:4px}
 .wiki-random-card{display:flex;gap:24px;align-items:center;padding:24px;background:linear-gradient(145deg,#282022,#131114);border:1px solid var(--wiki-border);border-radius:10px}
 .wiki-random-image{width:160px;height:190px;object-fit:contain;flex-shrink:0}
 .wiki-random-title{font:bold 24px/1.3 Georgia,serif}.wiki-random-copy p{margin:12px 0}
@@ -73,3 +73,28 @@
 .wiki-page a.wiki-link-unavailable{cursor:default}.wiki-page a.wiki-link-unavailable:hover{color:inherit}
 
 .wiki-back-to-top{appearance:none;background:none;border:0;padding:0;color:var(--wiki-gold,#dec68c);font:inherit;cursor:pointer;text-decoration:none}.wiki-back-to-top:hover{color:#fff}.wiki-back-to-top:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+
+/* Search lives beside the account controls and inside the mobile menu. */
+.wiki-navbar .wiki-account-nav{align-items:center;gap:8px}
+.wiki-search{position:relative;width:clamp(160px,17vw,240px)}
+.wiki-search input{display:block;width:100%;padding:8px 12px;border:1px solid #d6aa4555;border-radius:6px;background:#191417;color:#f3e5c8;font:14px/1.4 Arial,sans-serif;outline:none}
+.wiki-search input::placeholder{color:#bba77e}
+.wiki-search input:focus{border-color:#e6c47e;box-shadow:0 0 0 2px #d6aa4518}
+.wiki-search-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:340px;max-width:calc(100vw - 32px);max-height:60dvh;overflow:auto;border:1px solid #d6aa4555;border-radius:8px;background:linear-gradient(145deg,#282022,#131114);box-shadow:0 12px 28px #0008;z-index:1050;scrollbar-width:thin}
+.wiki-search-dropdown[hidden]{display:none}
+.wiki-search-status{margin:0;padding:12px 14px;color:#bba77e;font:12px/1.4 Arial,sans-serif}
+.wiki-search-dropdown ul{list-style:none;padding:0 6px 6px;margin:0}
+.wiki-search-dropdown a{display:block;padding:10px 8px;border-radius:4px;color:#e6c47e;font:15px/1.4 Georgia,serif}
+.wiki-search-dropdown small{display:block;margin-top:4px;color:#c4b7a0;font:12px/1.4 Arial,sans-serif;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wiki-search-dropdown li[aria-selected=true] a,.wiki-search-dropdown a:hover{background:#c9a84c18;color:#fff0bc}
+@media(max-width:991px){.wiki-navbar .wiki-account-nav{align-items:stretch;gap:0}.wiki-search{width:100%;margin:10px 0}.wiki-search input{font-size:16px}.wiki-search-dropdown{position:static;margin-top:8px;width:100%;max-width:none;max-height:45dvh}}
+
+/* Keep the archive list to five rows; more matches remain scrollable. */
+.wiki-search-dropdown{--wiki-search-view-height:60dvh;overflow:hidden}
+.wiki-search-dropdown ul{max-height:min(440px,calc(var(--wiki-search-view-height) - 44px));overflow-y:auto;padding-bottom:0;scrollbar-width:thin;overscroll-behavior:contain}
+.wiki-search-dropdown li{height:88px}
+.wiki-search-dropdown a{height:100%;box-sizing:border-box;overflow:hidden}
+.wiki-search-dropdown a>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:991px){.wiki-search-dropdown{--wiki-search-view-height:45dvh}}
+
+.wiki-article li>ul,.wiki-article li>ol{margin-top:6px;padding-inline-start:24px}.wiki-list-placeholder{list-style:none}

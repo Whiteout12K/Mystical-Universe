@@ -15,10 +15,12 @@
       while(remaining.length){
         const choices=remaining.filter(p=>p!==current),path=choices[Math.floor(Math.random()*choices.length)]||remaining[0];
         try {
-          const r=await fetch(path,{cache:'no-cache'});if(!r.ok)throw Error();
+          let destination=path,r=await fetch(path,{cache:'no-cache'});
+          if(r.status===404&&!/\.html?$/i.test(path)){destination=path+'.html';r=await fetch(destination,{cache:'no-cache'});}
+          if(!r.ok)throw Error();
           const doc=new DOMParser().parseFromString(await r.text(),'text/html'),source=doc.querySelector('script[type="text/x-wiki"]');if(!source)throw Error();
           const name=source.textContent.match(/\|title\s*=([^\n|}]+)/)?.[1]?.trim()||doc.title.replace(/\s*\|.*$/,'');
-          title.textContent=name;title.href=path;summary.textContent=doc.querySelector('meta[name="description"]')?.content||'Explore this article from the Mystical Legends archive.';
+          title.textContent=name;title.href=destination;summary.textContent=window.wikiArticleSummary(source.textContent);
           card.querySelector('img')?.remove();
           const file=source.textContent.match(/\|image\s*=([^\n|}]+)/)?.[1]?.split(' :: ')[0].trim();
           if(file){const base=source.textContent.match(/\|image base\s*=([^\n|}]+)/)?.[1]?.trim()||'/images/character_art/';const img=make('img','wiki-random-image');const url=new URL(file.startsWith('/')||/^https?:/i.test(file)?file:base.replace(/\/?$/,'/')+file,location.href);if(['http:','https:'].includes(url.protocol)){img.src=url.href;img.alt=name;img.loading='lazy';card.prepend(img);}}

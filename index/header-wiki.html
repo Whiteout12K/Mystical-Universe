@@ -32,6 +32,25 @@
       <!-- Right Navigation -->
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0 wiki-account-nav">
 
+        <li class="nav-item wiki-search" id="wiki-search">
+          <label class="visually-hidden" for="wiki-search-input">Search wiki pages</label>
+          <input
+            id="wiki-search-input"
+            type="search"
+            placeholder="Search wiki…"
+            autocomplete="off"
+            spellcheck="false"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded="false"
+            aria-controls="wiki-search-results"
+          >
+          <div class="wiki-search-dropdown" id="wiki-search-dropdown" hidden>
+            <p class="wiki-search-status" id="wiki-search-status" role="status"></p>
+            <ul id="wiki-search-results" role="listbox" aria-label="Wiki pages"></ul>
+          </div>
+        </li>
+
         <!-- Logged In -->
         <li
           class="nav-item dropdown"

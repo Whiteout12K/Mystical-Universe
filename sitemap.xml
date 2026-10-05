@@ -93,7 +93,7 @@
 
   <url>
     <loc>https://mysticallegends.org/ml-game/apps/view?username=USERNAME</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
 
   <url>
@@ -223,12 +223,22 @@
 
   <url>
     <loc>https://mysticallegends.org/wiki/avery_obtainia</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/home</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/kaden_icelander</loc>
+    <lastmod>2026-10-05</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/kiara_katzol</loc>
+    <lastmod>2026-10-05</lastmod>
   </url>
 
 </urlset>

@@ -30,6 +30,8 @@
   const get=name=>directives.find(t=>t.name===name);
   const page=Object.fromEntries(params(get('page')?.parts||[]).map(([k,v])=>[k.toLowerCase(),v]));
   const title=page.title||document.title.replace(/\s*\|.*$/,'');
+  const tabID=label=>label.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'tab';
+  const tabNames=[...text.matchAll(/^\|tab\s*=\s*(.+)$/gm)].map(match=>match[1].trim());
   const imageBase=page['image base']||'/images/character_art/';
   const slug=s=>s.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
   function href(target){if(target.startsWith('fandom:'))return 'https://mysticallegends.fandom.com/wiki/'+target.slice(7).replace(/ /g,'_').split('/').map(encodeURIComponent).join('/');if(/^(?:https?:|\/|#)/i.test(target))return safe(target);const parts=target.split('/').map(slug);return parts.every(Boolean)?'/wiki/'+parts.join('/'):'';}
@@ -65,7 +67,7 @@
   const shell=make('main','wiki-shell'),heading=make('header','wiki-heading'),h1=make('h1','',title);h1.id='wiki-title';heading.append(h1);shell.append(heading);
   const content=make('div');content.id='wiki-content';shell.append(content);
   if(page.notice){const n=make('div','wiki-note');inline(n,page.notice);content.append(n);}
-  const tabs=get('tabs');if(tabs){const nav=make('nav','wiki-related');nav.setAttribute('aria-label','Related pages');for(const [label,target] of params(tabs.parts)){if(target)nav.append(link(label||target,target));}if(nav.children.length)content.append(nav);}
+  const tabs=get('tabs');if(tabs||tabNames.length>1){const nav=make('nav','wiki-related');nav.setAttribute('aria-label','Related pages');const entries=tabs?params(tabs.parts):tabNames.map(name=>['',name]);for(const [label,target] of entries){const name=label||target;const marker=tabNames.find(tab=>tab===name);const destination=label?target:marker?'#'+tabID(marker):'';if(name)nav.append(link(name,destination));}if(nav.children.length)content.append(nav);}
   const layout=make('div','wiki-layout'),article=make('article','wiki-article');article.id='wiki-body';article.tabIndex=-1;layout.append(article);content.append(layout);
   const intro=make('div','wiki-intro');article.append(intro);
   const toc=make('details','wiki-toc');toc.open=true;toc.append(make('summary','','Contents'));const tocNav=make('nav');tocNav.id='wiki-toc-links';tocNav.setAttribute('aria-label','Article contents');toc.append(tocNav);article.append(toc);
@@ -83,18 +85,33 @@
   }else layout.classList.add('wiki-layout-no-infobox');
   for(const d of directives.slice().reverse())text=text.slice(0,d.start)+text.slice(d.end);
   const categories=[];text=text.replace(/\[\[Category:([^\]]+)\]\]/gi,(_,name)=>{categories.push(name);return '';});
-  let parent=intro,paragraph=[],list=null;const stack=[];
-  function flush(){if(paragraph.length){const n=make('div','wiki-paragraph');inline(n,paragraph.join(' '));parent.append(n);paragraph=[];}list=null;}
+  let bodyRoot=sectionRoot,parent=intro,paragraph=[];const stack=[],listStack=[];
+  function flush(){if(paragraph.length){const n=make('div','wiki-paragraph');inline(n,paragraph.join(' '));parent.append(n);paragraph=[];}listStack.length=0;}
+  function appendList(markers, value) {
+    listStack.length=Math.min(listStack.length,markers.length);
+    for(let depth=0;depth<markers.length;depth++){
+      const marker=markers[depth];
+      if(listStack[depth]?.marker!==marker)listStack.length=depth;
+      if(!listStack[depth]){
+        const list=make(marker==='*'?'ul':'ol');
+        (depth?listStack[depth-1].item:parent).append(list);
+        listStack.push({marker,list,item:null});
+      }
+      const entry=listStack[depth];
+      if(depth===markers.length-1){const li=make('li');inline(li,value);entry.list.append(li);entry.item=li;}
+      else if(!entry.item){entry.item=make('li','wiki-list-placeholder');entry.list.append(entry.item);}
+    }
+  }
   // Keep multiline spoiler templates as one paragraph token.
   text=text.replace(/\{\{Spoiler\|([\s\S]*?)\}\}/gi,(_,v)=>'{{Spoiler|'+v.replace(/\n/g,' ')+'}}');
-  for(const line of text.trim().split('\n')){const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);s.append(h);(stack.at(-1)?.s||sectionRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#])\s*(.*)$/);if(bullet){if(paragraph.length)flush();const tag=bullet[1]==='*'?'ul':'ol';if(!list||list.tagName.toLowerCase()!==tag){list=make(tag);parent.append(list);}const li=make('li');inline(li,bullet[2]);list.append(li);continue;}paragraph.push(line.trim());}flush();
+  for(const line of text.trim().split('\n')){const tab=line.match(/^\|tab\s*=\s*(.+)$/);if(tab){flush();stack.length=0;const group=make('div','wiki-tab-content');group.id=tabID(tab[1]);group.dataset.wikiTab=tab[1].trim();sectionRoot.append(group);bodyRoot=group;parent=group;continue;}const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);s.append(h);(stack.at(-1)?.s||bodyRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#]+)\s*(.*)$/);if(bullet){if(paragraph.length)flush();appendList(bullet[1],bullet[2]);continue;}paragraph.push(line.trim());}flush();
   const gallery=get('gallery');if(gallery){const section=make('section','wiki-section'),grid=make('div','wiki-gallery');section.append(make('h2','','Gallery'),grid);for(const line of gallery.parts.join('\n').split('\n')){const [file,label]=line.split(' :: ').map(x=>x.trim());if(file){const f=figure(file,label);if(f)grid.append(f);}}if(grid.children.length)article.append(section);}
   const references=get('references');if(references){const section=make('section','wiki-section'),list=make('ol');section.append(make('h2','','References'),list);for(const [label,url] of params(references.parts)){if(!url)continue;const li=make('li');li.append(link(label||url,url,true));list.append(li);}if(list.children.length)article.append(section);}
   const random=get('randomarticle');if(random){const section=make('section','wiki-section');section.append(make('h2','',Object.fromEntries(params(random.parts)).title||'Discover an article'));const host=make('div','wiki-random-article');host.id='wiki-random-article';section.append(host);article.append(section);}
-  const characters=get('characters');if(characters){const section=make('section','wiki-section'),grid=make('div','wiki-character-grid');section.append(make('h2','','Meet the Mystical Legends'),grid);for(const [name,value] of params(characters.parts)){if(!name||!value)continue;const [file,target]=value.split(' :: ').map(x=>x.trim());const card=link('',target||name);card.className='wiki-character-card';const img=make('img');img.src=imageURL(file);img.alt=name;img.loading='lazy';img.decoding='async';card.append(img,make('span','',name));grid.append(card);}if(grid.children.length)article.append(section);}
+  const characters=get('characters');if(characters){const section=make('section','wiki-section'),grid=make('div','wiki-character-grid');section.append(make('h2','','Meet the Mystical Legends'),grid);for(const [name,value] of params(characters.parts)){if(!name||!value)continue;const [file,target]=value.split(' :: ').map(x=>x.trim());const card=make('div','wiki-character-card'),portrait=link('',target||name);portrait.classList.add('wiki-character-portrait');const img=make('img');img.src=imageURL(file);img.alt=name;img.loading='lazy';img.decoding='async';portrait.append(img);card.append(portrait,link(name,target||name));grid.append(card);}if(grid.children.length)article.append(section);}
   const footer=make('footer','wiki-article-footer');
   if(categories.length){const n=make('div');n.id='wiki-categories';n.setAttribute('aria-label','Categories');categories.forEach(c=>n.append(make('span','wiki-category',c)));footer.append(n);}
   const credits=get('credits');if(credits){const n=make('p');inline(n,credits.parts.join('|'),true);footer.append(n);}const backToTop=make('button','wiki-back-to-top','Back to top');backToTop.type='button';backToTop.dataset.wikiBackToTop='';footer.append(backToTop);article.append(footer);
   const host=make('div');host.id='wiki-header-placeholder';const skip=link('Skip to article','#wiki-body');skip.className='wiki-skip';const bottom=make('div');bottom.id='subfooter-placeholder';document.body.append(skip,host,shell,bottom);
-  document.title=title+' | Mystical Legends Wiki';if(page.description)document.querySelector('meta[name="description"]')?.setAttribute('content',page.description);
+  document.title=title+' | Mystical Legends Wiki';const description=window.wikiArticleSummary(source.textContent);if(description)document.querySelector('meta[name="description"]')?.setAttribute('content',description);
 })();
