@@ -266,9 +266,9 @@
                   "href": "https://mysticallegends.fandom.com/wiki/Wentor"
                 },
                 {
-                  "label": "Terralor",
-                  "page": "Terralor",
-                  "href": "https://mysticallegends.fandom.com/wiki/Terralor"
+                  "label": "Elementor",
+                  "page": "Elementor",
+                  "href": "https://mysticallegends.fandom.com/wiki/Elementor"
                 },
                 {
                   "label": "Herbovir",
@@ -387,6 +387,11 @@
               "label": "Lightning",
               "page": "Lightning",
               "href": "https://mysticallegends.fandom.com/wiki/Lightning"
+            },
+            {
+              "label": "Glass",
+              "page": "Glass",
+              "href": "https://mysticallegends.fandom.com/wiki/Glass"
             }
           ]
         },
@@ -532,6 +537,11 @@
               "href": "https://mysticallegends.fandom.com/wiki/River_Grantia"
             },
             {
+              "label": "Kiara Katzol",
+              "page": "Kiara Katzol",
+              "href": "/wiki/char/kiara_katzol"
+            },
+            {
               "label": "Lucy Terner",
               "page": "Lucy Terner",
               "href": "https://mysticallegends.fandom.com/wiki/Lucy_Terner"
@@ -545,6 +555,33 @@
               "label": "Amos Black",
               "page": "Amos Black",
               "href": "https://mysticallegends.fandom.com/wiki/Amos_Black"
+            }
+          ]
+        },
+        {
+          "label": "Nuntios",
+          "page": "Nuntios",
+          "href": "https://mysticallegends.fandom.com/wiki/Nuntios",
+          "children": [
+            {
+              "label": "Lux Luces",
+              "page": "Lux Luces",
+              "href": "/wiki/char/lux_luces"
+            },
+            {
+              "label": "Jay Neomo",
+              "page": "Jay Neomo",
+              "href": "https://mysticallegends.fandom.com/wiki/Jay_Neomo"
+            },
+            {
+              "label": "Josh Picard",
+              "page": "Josh Picard",
+              "href": "https://mysticallegends.fandom.com/wiki/Josh_Picard"
+            },
+            {
+              "label": "Marin Kne",
+              "page": "Marin Kne",
+              "href": "https://mysticallegends.fandom.com/wiki/Marin_Kne"
             }
           ]
         },
@@ -596,33 +633,6 @@
                   "href": "https://mysticallegends.fandom.com/wiki/Kirk_Masamune"
                 }
               ]
-            }
-          ]
-        },
-        {
-          "label": "Nuntios",
-          "page": "Nuntios",
-          "href": "https://mysticallegends.fandom.com/wiki/Nuntios",
-          "children": [
-            {
-              "label": "Lux Luces",
-              "page": "Lux Luces",
-              "href": "https://mysticallegends.fandom.com/wiki/Lux_Luces"
-            },
-            {
-              "label": "Jay Neomo",
-              "page": "Jay Neomo",
-              "href": "https://mysticallegends.fandom.com/wiki/Jay_Neomo"
-            },
-            {
-              "label": "Josh Picard",
-              "page": "Josh Picard",
-              "href": "https://mysticallegends.fandom.com/wiki/Josh_Picard"
-            },
-            {
-              "label": "Marin Kne",
-              "page": "Marin Kne",
-              "href": "https://mysticallegends.fandom.com/wiki/Marin_Kne"
             }
           ]
         },

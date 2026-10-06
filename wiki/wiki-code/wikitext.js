@@ -26,7 +26,7 @@
   }
   const params = parts => parts.map(part=>{const i=part.indexOf('=');return i<0?['',part]:[part.slice(0,i).trim(),part.slice(i+1).trim()];});
   let text=source.textContent.replace(/<div\b[^>]*class=["'][^"']*mw-collapsible[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi,'{{Spoiler|$1}}');
-  const directives=templates(text).filter(t=>['page','infobox','character','tabs','gallery','references','credits','randomarticle','characters'].includes(t.name));
+  const directives=templates(text).filter(t=>['page','infobox','character','tabs','gallery','references','credits','randomarticle','characters','categorypages'].includes(t.name));
   const get=name=>directives.find(t=>t.name===name);
   const page=Object.fromEntries(params(get('page')?.parts||[]).map(([k,v])=>[k.toLowerCase(),v]));
   const title=page.title||document.title.replace(/\s*\|.*$/,'');
@@ -109,8 +109,9 @@
   const references=get('references');if(references){const section=make('section','wiki-section'),list=make('ol');section.append(make('h2','','References'),list);for(const [label,url] of params(references.parts)){if(!url)continue;const li=make('li');li.append(link(label||url,url,true));list.append(li);}if(list.children.length)article.append(section);}
   const random=get('randomarticle');if(random){const section=make('section','wiki-section');section.append(make('h2','',Object.fromEntries(params(random.parts)).title||'Discover an article'));const host=make('div','wiki-random-article');host.id='wiki-random-article';section.append(host);article.append(section);}
   const characters=get('characters');if(characters){const section=make('section','wiki-section'),grid=make('div','wiki-character-grid');section.append(make('h2','','Meet the Mystical Legends'),grid);for(const [name,value] of params(characters.parts)){if(!name||!value)continue;const [file,target]=value.split(' :: ').map(x=>x.trim());const card=make('div','wiki-character-card'),portrait=link('',target||name);portrait.classList.add('wiki-character-portrait');const img=make('img');img.src=imageURL(file);img.alt=name;img.loading='lazy';img.decoding='async';portrait.append(img);card.append(portrait,link(name,target||name));grid.append(card);}if(grid.children.length)article.append(section);}
+  const categoryPages=get('categorypages');if(categoryPages){const settings=Object.fromEntries(params(categoryPages.parts)),section=make('section','wiki-section'),host=make('div','wiki-category-pages');host.dataset.category=settings.category||title;section.append(make('h2','',settings.title||'Pages in this category'),host);article.append(section);}
   const footer=make('footer','wiki-article-footer');
-  if(categories.length){const n=make('div');n.id='wiki-categories';n.setAttribute('aria-label','Categories');categories.forEach(c=>n.append(make('span','wiki-category',c)));footer.append(n);}
+  if(categories.length){const n=make('div');n.id='wiki-categories';n.setAttribute('aria-label','Categories');categories.forEach(c=>{const tag=link(c,'/wiki/category/'+slug(c));tag.classList.add('wiki-category');n.append(tag);});footer.append(n);}
   const credits=get('credits');if(credits){const n=make('p');inline(n,credits.parts.join('|'),true);footer.append(n);}const backToTop=make('button','wiki-back-to-top','Back to top');backToTop.type='button';backToTop.dataset.wikiBackToTop='';const footerActions=make('div','wiki-actions');footerActions.append(backToTop);
   if(/^\/wiki\/home(?:\.html)?\/?$/.test(location.pathname)){const editor=make('a','','Wiki editor');editor.href='/wiki/wiki-editor/';footerActions.append(editor);}
   footer.append(footerActions);article.append(footer);

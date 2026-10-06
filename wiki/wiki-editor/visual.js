@@ -164,7 +164,7 @@
     for(const template of templates(source)){
       article(position,template.start);position=template.end;const block={...template};blocks.push(block);const parameters=parts(template.value),namePart=parameters.shift(),name=namePart.value.trim().toLowerCase();
       const section=make(name==='spoiler'||name==='credits'?'section':'details','visual-template');block.element=section;
-      const names={page:'Page information',infobox:'Infobox',character:'Infobox',references:'References',characters:'Character list',randomarticle:'Random article',tabs:'Tabs',gallery:'Gallery',credits:'Credits',spoiler:'Spoiler'};
+      const names={page:'Page information',infobox:'Infobox',character:'Infobox',references:'References',characters:'Character list',randomarticle:'Random article',categorypages:'Category pages',tabs:'Tabs',gallery:'Gallery',credits:'Credits',spoiler:'Spoiler'};
       title(section,names[name]||namePart.value.trim(),block);
       if(name==='spoiler'||name==='credits'){
         const content=make('div','visual-body');inline(content,parameters.map(p=>p.value).join('|').trim(),imageBase);editable(content,()=>block.value='{{'+(name==='spoiler'?'Spoiler':'Credits')+'|'+serialize(content,{field:true}).trim().replace(/\n/g,'<br>')+'}}',names[name]+' text');section.append(content);
@@ -182,11 +182,11 @@
         if(name==='tabs')tabMenus.push({rows,commit});
         function rowView(row){
           const element=make('div','visual-info-row'),key=input(row.key,name==='tabs'?'Tab name':'Field name',value=>{
-            const previous=row.key;row.key=value.replace(/[\r\n|{}=]/g,'');row.raw=row.key+(row.named?'='+row.value:'')+'\n';commit();
+            const previous=row.key;row.key=value.replace(/[\r\n|{}=]/g,'');element.classList.toggle('visual-infobox-section',['infobox','character'].includes(name)&&row.key.toLowerCase()==='section');row.raw=row.key+(row.named?'='+row.value:'')+'\n';commit();
             element.querySelector('.visual-info-value')?.setAttribute('aria-label','Value for '+row.key);const removeButton=element.querySelector('[data-remove-row]');if(removeButton){removeButton.setAttribute('aria-label','Remove '+(row.key||'field')+' row');removeButton.title='Remove '+(row.key||'field')+' row';}
             if(name==='tabs'&&previous!==row.key){for(const other of blocks){if(/^\|tab\s*=/.test(other.value)&&other.value.replace(/^\|tab\s*=\s*/,'').trim()===previous){other.value='|tab='+row.key;const field=other.element?.querySelector('input');if(field)field.value=row.key;}}}
           });
-          row.keyField=key;row.element=element;element.append(key);let content;
+          element.classList.toggle('visual-infobox-section',['infobox','character'].includes(name)&&row.key.toLowerCase()==='section');row.keyField=key;row.element=element;element.append(key);let content;
           if(name==='tabs'||['image','image base','source'].includes(row.key.toLowerCase())||name==='characters'||name==='randomarticle'||name==='references'){
             content=input(row.value,name==='tabs'?'Tab destination (empty for an article tab)':'Field value',value=>{row.value=value.replace(/[\r\n|]/g,'');row.named=name!=='tabs'||Boolean(row.value);row.raw=row.key+(row.named?'='+row.value:'')+'\n';commit();});
           }else{content=make('div','visual-info-value');inline(content,row.value,imageBase);editable(content,()=>{row.value=serialize(content,{field:true}).trim();row.named=true;row.raw=row.key+'='+row.value+'\n';commit();},'Value for '+row.key);}
@@ -206,6 +206,17 @@
       }
       root.append(section);
     }article(position,source.length);
+    // Group each tab's independently editable text and wiki blocks in one body.
+    let tabBody=null;
+    for(const element of [...root.children]){
+      if(element.classList.contains('visual-tab-marker')){
+        const tab=make('section','visual-tab-section');root.append(tab);tab.append(element);
+        tabBody=make('div','visual-tab-body');tab.append(tabBody);
+      }else{
+        if(!tabBody){const page=make('section','visual-tab-section visual-page-section'),label=make('div','visual-page-label','Page content');tabBody=make('div','visual-tab-body');page.append(label,tabBody);root.append(page);}
+        tabBody.append(element);
+      }
+    }
     panelCounts.clear();
     for(const panel of root.querySelectorAll('details.visual-template')){const name=panel.dataset.blockName,index=panelCounts.get(name)||0;panelCounts.set(name,index+1);const key=name+':'+index;if(panelStates.has(key))panel.open=panelStates.get(key);}
     compose();
