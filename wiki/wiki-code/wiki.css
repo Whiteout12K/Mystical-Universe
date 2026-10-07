@@ -147,3 +147,13 @@ html[data-wiki-theme=light] .wiki-shell a:not(.wiki-link-unavailable),
 html[data-wiki-theme=light] :is(.wiki-nav-panel,.wiki-search-dropdown) a:not(.wiki-link-unavailable){color:#93651f}
 html[data-wiki-theme=light] .wiki-shell a:not(.wiki-link-unavailable):hover,
 html[data-wiki-theme=light] :is(.wiki-nav-panel,.wiki-search-dropdown) a:not(.wiki-link-unavailable):hover{color:#a36e20}
+
+/* Decorative rails stay in the article's side padding, away from the text. */
+.wiki-shell{position:relative;padding-inline:56px}
+.wiki-shell::before,.wiki-shell::after{content:"";position:absolute;top:40px;bottom:48px;width:28px;pointer-events:none;opacity:.55;background-repeat:no-repeat;background-size:28px 28px,24px 14px,24px 14px,1px calc(100% - 90px);background-position:center top,center 50%,center bottom,center center}
+.wiki-shell::before{left:12px;background-image:url('/images/ornaments/square-embroidery-corner.svg?v=10'),url('/images/ornaments/wing-left.svg'),url('/images/ornaments/wing-left.svg'),linear-gradient(transparent,var(--wiki-border) 12%,var(--wiki-border) 88%,transparent)}
+.wiki-shell::after{right:12px;transform:scaleX(-1);background-image:url('/images/ornaments/square-embroidery-corner.svg?v=10'),url('/images/ornaments/wing-left.svg'),url('/images/ornaments/wing-left.svg'),linear-gradient(transparent,var(--wiki-border) 12%,var(--wiki-border) 88%,transparent)}
+html[data-wiki-theme=light] .wiki-shell::before,html[data-wiki-theme=light] .wiki-shell::after{opacity:.75}
+@media(max-width:900px){.wiki-shell{padding-inline:38px}.wiki-shell::before,.wiki-shell::after{width:20px;background-size:20px 20px,18px 10px,18px 10px,1px calc(100% - 70px)}.wiki-shell::before{left:7px}.wiki-shell::after{right:7px}}
+@media(max-width:700px){.wiki-shell{padding-inline:28px}.wiki-shell::before,.wiki-shell::after{top:24px;bottom:32px;width:14px;background-size:14px 14px,12px 8px,12px 8px,1px calc(100% - 54px);opacity:.4}.wiki-shell::before{left:3px}.wiki-shell::after{right:3px}}
+@media print{.wiki-shell{padding:0}.wiki-shell::before,.wiki-shell::after{display:none}}
