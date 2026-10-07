@@ -29,7 +29,8 @@ window.initializeWikiSearch = () => {
     input.removeAttribute('aria-activedescendant');
     const terms = normalize(input.value.trim()).split(/\s+/).filter(Boolean);
     const matches = articles.filter(article => terms.every(term => article.search.includes(term)));
-    for (const [index, article] of matches.entries()) {
+    const visibleMatches = matches.slice(0, 10);
+    for (const [index, article] of visibleMatches.entries()) {
       const row = document.createElement('li'), link = document.createElement('a');
       row.id = `wiki-search-option-${index}`;
       row.setAttribute('role', 'option'); row.setAttribute('aria-selected', 'false');
@@ -41,7 +42,7 @@ window.initializeWikiSearch = () => {
       }
       row.append(link); results.append(row);
     }
-    status.textContent = pending ? 'Loading wiki pages…' : failed ? 'Wiki search is unavailable. Click here again to retry.' : !matches.length ? 'No matching wiki pages.' : `${matches.length} wiki ${matches.length === 1 ? 'page' : 'pages'}`;
+    status.textContent = pending ? 'Loading wiki pages…' : failed ? 'Wiki search is unavailable. Click here again to retry.' : !matches.length ? 'No matching wiki pages.' : matches.length > 10 ? `Showing 10 of ${matches.length} wiki pages. Type to narrow your search.` : `${matches.length} wiki ${matches.length === 1 ? 'page' : 'pages'}`;
   }
   async function loadArticles() {
     try {

@@ -115,6 +115,6 @@
   const credits=get('credits');if(credits){const n=make('p');inline(n,credits.parts.join('|'),true);footer.append(n);}const backToTop=make('button','wiki-back-to-top','Back to top');backToTop.type='button';backToTop.dataset.wikiBackToTop='';const footerActions=make('div','wiki-actions');footerActions.append(backToTop);
   if(/^\/wiki\/home(?:\.html)?\/?$/.test(location.pathname)){const editor=make('a','','Wiki editor');editor.href='/wiki/wiki-editor/';footerActions.append(editor);}
   footer.append(footerActions);article.append(footer);
-  const host=make('div');host.id='wiki-header-placeholder';const skip=link('Skip to article','#wiki-body');skip.className='wiki-skip';const bottom=make('div');bottom.id='subfooter-placeholder';document.body.append(skip,host,shell,bottom);
+  const host=make('div');host.id='wiki-header-placeholder';const skip=link('Skip to article','#wiki-body');skip.className='wiki-skip';const bottom=make('div');bottom.id='subfooter-placeholder';const backdrop=make('div','wiki-content-backdrop');backdrop.append(shell);document.body.append(skip,host,backdrop,bottom);
   document.title=title+' | Mystical Legends Wiki';const description=window.wikiArticleSummary(source.textContent);if(description)document.querySelector('meta[name="description"]')?.setAttribute('content',description);
 })();

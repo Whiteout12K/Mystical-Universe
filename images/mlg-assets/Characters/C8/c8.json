@@ -10,7 +10,7 @@
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 2", "text": "Tosses sparkling flames that explode, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"name": "Stage 3", "text": "A fiery flower descends and crushes enemies, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as empowered damage.",
+      {"name": "Stage 3", "text": "A fiery flower descends and crushes enemies, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as <span class=\"empowered\">empowered</span> damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
     ],
     "additional": [
@@ -81,7 +81,7 @@
   "U1": {
     "name": "Flame Dragon’s Ascent - True Coming",
     "type": "Ultimate Skill",
-    "description": "Summon a flaming dragon to descend from the skies to burn opponents in a wide line in front, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> AoE super empowered damage.",
+    "description": "Summon a flaming dragon to descend from the skies to burn opponents in a wide line in front, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> AoE <span class=\"empowered\">super empowered</span> damage.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The damage increases by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for each percentage of MP opponents are missing from their max cap.",
