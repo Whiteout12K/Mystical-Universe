@@ -239,9 +239,10 @@ async function phaseSprites(block,c,direction){
     const stepTime=time*1000/steps;
 
     for(let i=0;i<steps;i++){
-        if(!ENGINE.running||c?.ended)break;
+        if(!contextActive(c))break;
 
-        await new Promise(resolve=>setTimeout(resolve,stepTime));
+        await runtimeWait(stepTime,c);
+        if(!contextActive(c))break;
 
         for(const s of sprites){
             if(!s||s.deleted)continue;

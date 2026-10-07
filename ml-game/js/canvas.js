@@ -16,21 +16,19 @@ registerBlock("canvasCostume",async(b,c)=>{
         return;
     }
 
-    const image=new Image();
+    const asset=loadImageAsset(path),image=asset.image;
     ENGINE.backgroundImage=image;
     ENGINE.backgroundScale=scale;
     ENGINE.backgroundCostume=path;
-    ENGINE.backgroundLoaded=false;
+    ENGINE.backgroundLoaded=image.complete&&image.naturalWidth>0;
     ENGINE.backgroundEffectCacheKey=null;
 
-    image.onload=()=>{
+    asset.ready.then(()=>{
         if(ENGINE.backgroundImage===image){
             ENGINE.backgroundLoaded=true;
             ENGINE.backgroundEffectCacheKey=null;
         }
-    };
-
-    image.onerror=()=>{
+    }).catch(()=>{
         if(ENGINE.backgroundImage===image){
             ENGINE.backgroundImage=null;
             ENGINE.backgroundLoaded=false;
@@ -38,9 +36,7 @@ registerBlock("canvasCostume",async(b,c)=>{
             ENGINE.backgroundEffectCacheKey=null;
         }
         console.warn("Could not load background costume:",path);
-    };
-
-    image.src=path;
+    });
 });
 
 const recordCanvas=(type,data)=>ENGINE.recordBlock(createBlock(type,data));

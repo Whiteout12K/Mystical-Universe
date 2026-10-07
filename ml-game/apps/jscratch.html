@@ -98,7 +98,8 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}
 #toolbar .tool:not(#blocksToggle):not(#newScript):not(#showCode){display:none}
 #zoomText{min-width:43px}#zoomControls{right:8px;bottom:8px}#zoomControls .tool{padding:7px}
 #codeHead b{font-size:13px}
-}</style>
+}#toolbar{height:auto;min-height:50px;flex-wrap:wrap}#projectStatus{font-size:11px;color:var(--gold);margin-left:auto}#runtimePanel{width:min(1000px,96vw);height:min(800px,94dvh);padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--panel);color:var(--text)}#runtimePanel::backdrop{background:#000b}.runtime-tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.runtime-tools button{padding:7px;border-radius:4px;background:var(--panel3);color:var(--gold2)}#runtimeFrame{width:100%;height:65%;border:0;background:#000}#runtimeDebug{max-height:22%;overflow:auto;font:12px/1.5 monospace;white-space:pre-wrap}.block.runtime-active{outline:2px solid #70d29a}.block.runtime-error{outline:2px solid #ff8585}.load-blocks{background:var(--panel3);color:var(--gold2);padding:9px;margin:8px 0}#toolbar{max-height:130px;overflow:auto}@media(max-width:430px){#toolbar .tool:is(#runProject,#saveProject,#openProject,#undoProject,#redoProject){display:block;padding:6px;font-size:11px}}
+</style>
 
 </head>
 <body>
@@ -121,6 +122,10 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}
 <button class="tool green" id="showCode">Preview</button>
 <button class="tool" id="copyCode">Copy</button>
 <button class="tool" id="download">Save .js</button>
+<button class="tool" id="saveProject">Save project</button><button class="tool" id="openProject">Open project</button><input id="projectInput" type="file" accept=".json,application/json" hidden>
+<button class="tool" id="undoProject" disabled>Undo</button><button class="tool" id="redoProject" disabled>Redo</button>
+<button class="tool green" id="runProject">Run</button>
+<span id="projectStatus" role="status"></span>
 </div>
 <div id="scripts"></div>
 <div id="workspace">
@@ -136,6 +141,7 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}
 </main>
 </div>
 
+<dialog id="runtimePanel" aria-label="JScratch project preview"><div class="runtime-tools"><button id="restartProject">Restart</button><button id="pauseProject">Pause</button><button id="stepProject">Step</button><button id="stopProject">Stop</button><button id="closeRuntime">Close</button></div><iframe id="runtimeFrame" title="Project stage"></iframe><pre id="runtimeDebug" aria-live="polite"></pre></dialog>
 <div id="zoomControls">
 <button class="tool" id="zoomOut">−</button>
 <span id="zoomText">100%</span>
@@ -145,6 +151,7 @@ button,input,select{font:inherit}button{border:0;cursor:pointer}
 
 <div class="context-menu" id="menu"><button data-action="duplicate">Duplicate</button><button data-action="delete">Delete</button></div>
 
+<script src="/ml-game/js/jscratch-project.js"></script>
 <script>
 const BLOCKS={
 Canvas:[
@@ -197,6 +204,7 @@ whenClone:[]
 const EVENT_GAP=90,ROOT_GAP=2,EDGE_GAP=100;
 const $=id=>document.getElementById(id);
 const cats=Object.keys(BLOCKS),categories=$("categories"),palette=$("palette"),paletteTitle=$("palette-title"),world=$("world"),workspace=$("workspace"),empty=$("empty"),dropLine=$("dropLine"),dropSlot=$("dropSlot"),scriptsBar=$("scripts"),menu=$("menu"),sidebar=$("sidebar"),sidebarBackdrop=$("sidebarBackdrop");
+const deferredStacks=new WeakMap();let renderedModelCount=0;
 let activeCat=cats[0],scripts=[],activeScript=0,drag=null,selected=null,zoom=1,codePanelOpen=false,nextId=1,scriptDrag=null;
 
 function isMobileEditor(){return matchMedia("(max-width:700px)").matches}
@@ -280,10 +288,10 @@ function createBlock(def,paletteMode=false){
     return b
 }
 function setupPaletteBlock(b,def){
-    b.onpointerdown=e=>{if(e.button!==0||e.target.closest("input"))return;e.preventDefault();e.stopPropagation();startPaletteDrag(e,def)}
+    b.onpointerdown=e=>{if(e.button!==0||e.target.closest("input,button,select,textarea"))return;e.preventDefault();e.stopPropagation();startPaletteDrag(e,def)}
 }
 function setupBlock(b){
-    b.onpointerdown=e=>{if(e.button!==0||e.target.closest("input")||b.classList.contains("palette-block"))return;e.preventDefault();e.stopPropagation();selectBlock(b);startBlockDrag(e,b)};
+    b.onpointerdown=e=>{if(e.button!==0||e.target.closest("input,button,select,textarea")||b.classList.contains("palette-block"))return;e.preventDefault();e.stopPropagation();selectBlock(b);startBlockDrag(e,b)};
     b.oncontextmenu=e=>{e.preventDefault();selected=b;menu.style.display="block";menu.style.left=e.clientX+"px";menu.style.top=e.clientY+"px"};
     b.onclick=e=>{if(e.target===b||e.target.classList.contains("label"))selectBlock(b)}
 }
@@ -297,9 +305,9 @@ function selectBlock(b){
 }
 
 function startDrag(e,b,paletteMode){
-    const r=b.getBoundingClientRect();
+    const r=b.getBoundingClientRect(),fromParent=b.parentElement,fromNext=b.nextSibling;
     b.classList.add("dragging");b.style.position="fixed";b.style.left=(e.clientX-(paletteMode?r.width/2:e.clientX-r.left))+"px";b.style.top=(e.clientY-(paletteMode?r.height/2:e.clientY-r.top))+"px";b.style.transform=`scale(${zoom})`;document.body.appendChild(b);
-    drag={block:b,palette:paletteMode,fromParent:paletteMode?null:b.parentElement,fromNext:paletteMode?null:b.nextSibling,offsetX:paletteMode?r.width/2:e.clientX-r.left,offsetY:paletteMode?r.height/2:e.clientY-r.top,target:null,stackTarget:null,slotTarget:null,deleteToPalette:false};
+    drag={block:b,palette:paletteMode,fromParent:paletteMode?null:fromParent,fromNext:paletteMode?null:fromNext,offsetX:paletteMode?r.width/2:e.clientX-r.left,offsetY:paletteMode?r.height/2:e.clientY-r.top,target:null,stackTarget:null,slotTarget:null,deleteToPalette:false};
     document.addEventListener("pointermove",dragMove,{passive:false});document.addEventListener("pointerup",dragEnd,{once:true})
 }
 function startPaletteDrag(e,def){startDrag(e,createBlock(def),true)}
@@ -424,11 +432,12 @@ function normalizeWorld(){
         if(EVENT_HANDLER_BLOCKS.has(b.dataset.fn))y+=EVENT_GAP;
         b.querySelectorAll(".stack").forEach(normalizeStack)
     });
+    const more=$("moreRootBlocks");if(more){more.style.position="absolute";more.style.left="20px";more.style.top=y+"px";}
     world.style.transform=`scale(${zoom})`;resizeWorld()
 }
 function resizeWorld(){
     let right=20,bottom=20;
-    [...world.children].filter(isRootBlock).forEach(b=>{
+    [...world.children].filter(b=>isRootBlock(b)||b.id==="moreRootBlocks").forEach(b=>{
         const x=parseFloat(b.style.left)||0,y=parseFloat(b.style.top)||0;right=Math.max(right,x+b.offsetWidth);bottom=Math.max(bottom,y+b.offsetHeight)
     });
     world.style.width=Math.max(workspace.clientWidth/zoom||1,right+EDGE_GAP)+"px";
@@ -493,9 +502,9 @@ function renderScripts(){
 
 function serializeBlock(b,root=false){
     const data={type:b.dataset.type,values:[],slots:[],stacks:{}};
-    if(root){data.x=20;data.y=20;data.manualPosition=false}
+    if(root){data.x=parseFloat(b.style.left)||20;data.y=parseFloat(b.style.top)||20;data.manualPosition=!!b.dataset.manualPosition}
     getDirectSlots(b).forEach((slot,i)=>data.slots[i]=serializeSlot(slot));
-    b.querySelectorAll(":scope > .stack").forEach(stack=>data.stacks[stack.dataset.stack||"main"]=[...stack.children].filter(x=>x.classList.contains("block")).map(serializeNested));
+    b.querySelectorAll(":scope > .stack,:scope > .if-else > .stack").forEach(stack=>data.stacks[stack.dataset.stack||"main"]=[...[...stack.children].filter(x=>x.classList.contains("block")).map(serializeNested),...(deferredStacks.get(stack)||[])]);
     return data
 }
 const serializeNested=b=>serializeBlock(b,false),serialize=b=>serializeBlock(b,true);
@@ -503,7 +512,7 @@ function serializeSlot(slot){
     const child=slot.querySelector(":scope > .block");if(child)return{block:serializeNested(child)};
     const input=slot.querySelector(":scope > input");return{value:input?.value||"",type:slot.dataset.type||"text"}
 }
-function saveCurrent(){if(scripts[activeScript])scripts[activeScript].blocks=[...world.children].filter(isRootBlock).map(serialize)}
+function saveCurrent(){if(scripts[activeScript]){const visible=[...world.children].filter(isRootBlock).map(serialize);scripts[activeScript].blocks=visible.concat(scripts[activeScript].blocks.slice(renderedModelCount));renderedModelCount=visible.length;}}
 function restoreSlot(slot,data){
     if(!slot||!data)return;
     if(data.block){
@@ -516,17 +525,19 @@ function restoreState(b,data){
     if(!data)return;if(data.manualPosition)b.dataset.manualPosition="true";
     const slots=getDirectSlots(b);data.slots?.forEach((v,i)=>slots[i]&&restoreSlot(slots[i],v));
     if(data.stacks)Object.entries(data.stacks).forEach(([name,list])=>{
-        const stack=b.querySelector(`:scope > .stack[data-stack="${name}"]`);if(!stack)return;
-        stack.replaceChildren();list.forEach(childData=>{const def=findDef(childData.type);if(!def)return;const child=createBlock(def);restoreState(child,childData);stack.appendChild(child)})
+        const stack=b.querySelector(`:scope > .stack[data-stack="${name}"],:scope > .if-else > .stack[data-stack="${name}"]`);if(!stack)return;
+        stack.replaceChildren();if(list.length>150){deferredStacks.set(stack,list.slice());const load=document.createElement('button');load.className='load-blocks';load.textContent='Show next 150 blocks ('+list.length+' remaining)';load.onclick=e=>{e.stopPropagation();const remaining=deferredStacks.get(stack);const chunk=remaining.splice(0,150);const fragment=document.createDocumentFragment();for(const data of chunk){const def=findDef(data.type);if(def){const child=createBlock(def);restoreState(child,data);fragment.append(child);}}stack.insertBefore(fragment,load);if(!remaining.length){deferredStacks.delete(stack);load.remove();}else load.textContent='Show next 150 blocks ('+remaining.length+' remaining)';normalizeWorld();};stack.append(load);}else list.forEach(childData=>{const def=findDef(childData.type);if(!def)return;const child=createBlock(def);restoreState(child,childData);stack.appendChild(child)})
     })
 }
-function renderWorld(){
+function renderWorld(limit=200){
     world.replaceChildren();const s=scripts[activeScript];
     if(!s){updateEmpty();resizeWorld();return}
-    s.blocks.forEach(data=>{
+    renderedModelCount=Math.min(limit,s.blocks.length);
+    s.blocks.slice(0,renderedModelCount).forEach(data=>{
         const def=findDef(data.type);if(!def)return;
         const b=createBlock(def);b.style.position="absolute";b.style.left=b.style.top="20px";restoreState(b,data);world.appendChild(b)
     });
+    if(s.blocks.length>renderedModelCount){const load=document.createElement('button');load.className='load-blocks';load.id='moreRootBlocks';load.textContent='Show next 200 blocks ('+(s.blocks.length-renderedModelCount)+' remaining)';load.onclick=()=>{saveCurrent();const top=workspace.scrollTop;renderWorld(renderedModelCount+200);workspace.scrollTop=top;};world.append(load);}
     normalizeWorld();updateEmpty();workspace.scrollLeft=workspace.scrollTop=0
 }
 const defs=new Map(cats.flatMap(c=>BLOCKS[c].map(d=>[d[0],d])));
@@ -599,23 +610,9 @@ function generateScript(){
     return out
 }
 
-function generateAll(){
-    saveCurrent();
-    const old=activeScript,oldData=scripts.map(s=>({name:s.name,blocks:structuredClone(s.blocks)}));
-    let out="// Start of Code Blocks.\n";
-    scripts.forEach((s,i)=>{
-        activeScript=i;
-        renderWorld();
-        const code=generateScript();
-        if(code)out+="\n// "+s.name+"\n"+code+"\n";
-    });
-    scripts=oldData;
-    activeScript=old;
-    renderWorld();
-    return out.trim()+"\n"
-}
+function generateAll(){saveCurrent();return JScratchProject.generate(scripts,defs,ZERO_FIELD_BLOCKS).code;}
 
-function refreshCode(){if(codePanelOpen)$("code").textContent=generateAll()}
+function refreshCode(){scheduleProjectSave();if(codePanelOpen){clearTimeout(codeRefreshTimer);codeRefreshTimer=setTimeout(()=>$("code").textContent=generateAll(),100);}}
 $("showCode").onclick=()=>{saveCurrent();codePanelOpen=true;$("code").textContent=generateAll();$("codePanel").style.display="flex"};
 $("closeCode").onclick=()=>{codePanelOpen=false;$("codePanel").style.display="none"};
 $("copyCode").onclick=async()=>{saveCurrent();await navigator.clipboard.writeText(generateAll());const b=$("copyCode");b.textContent="Copied!";setTimeout(()=>b.textContent="Copy",900)};
@@ -645,7 +642,7 @@ menu.onclick=e=>{
 };
 document.addEventListener("keydown",e=>{
     if(e.key==="Escape"&&isMobileEditor()&&sidebar.classList.contains("open")){closeBlocks();return}
-    if(!selected||document.activeElement.tagName==="INPUT")return;
+    if(!selected||document.activeElement.closest("input,textarea,select,[contenteditable]"))return;
     if(e.key==="Delete"||e.key==="Backspace"){deleteSelected();return}
     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="d"){e.preventDefault();duplicateBlock(selected);normalizeWorld();saveCurrent();refreshCode()}
 });
@@ -721,48 +718,28 @@ function splitImportedScripts(source){
     }
     if(current.length)sections.push({name,source:current.join("\n")});return sections
 }
-function setSlotFromImported(slot,value){
-    if(!slot||!value)return;
-    if(value.kind==="call"){
-        const b=createImportedBlock(value);if(b){slot.replaceChildren(b);setupBlock(b)}return
-    }
-    const input=slot.querySelector(":scope > input");if(!input)return;
-    input.value=String(value.value??"")
-}
-function createImportedBlock(call){
-    const def=findDef(call.fn);if(!def)return null;
-    const b=createBlock(def),slots=getDirectSlots(b),args=ZERO_FIELD_BLOCKS.has(call.fn)?[]:[...call.args];
-    if(call.fn==="ifBlock"){
-        const ei=args.findIndex(x=>x.kind==="literal"&&x.value==="else"),main=ei<0?args:args.slice(0,ei),ms=b.querySelector('[data-stack="main"]'),es=b.querySelector('[data-stack="else"]');
-        if(slots[0]&&main[0])setSlotFromImported(slots[0],main[0]);
-        main.slice(1).forEach(a=>{const c=createImportedBlock(a);if(c)ms.appendChild(c)});
-        if(ei>=0)args.slice(ei+1).forEach(a=>{const c=createImportedBlock(a);if(c)es.appendChild(c)});
-        return b
-    }
-    if(EVENT_HANDLER_BLOCKS.has(call.fn)){
-        if(slots[0]&&args[0])setSlotFromImported(slots[0],args[0]);
-        const stack=b.querySelector('[data-stack="main"]');args.slice(1).forEach(a=>{const c=createImportedBlock(a);if(c)stack.appendChild(c)});return b
-    }
-    if(["repeat","repeatUntil","whileBlock"].includes(call.fn)){
-        if(slots[0]&&args[0])setSlotFromImported(slots[0],args.shift());
-        const stack=b.querySelector('[data-stack="main"]');args.forEach(a=>{const c=createImportedBlock(a);if(c)stack.appendChild(c)});return b
-    }
-    if(call.fn==="forever"){
-        const stack=b.querySelector('[data-stack="main"]');args.forEach(a=>{const c=createImportedBlock(a);if(c)stack.appendChild(c)});return b
-    }
-    args.forEach((a,i)=>slots[i]&&setSlotFromImported(slots[i],a));return b
+function importedModel(call,omitted,depth=0){
+    const def=findDef(call.fn);if(!def){omitted.add(call.fn);return null;}if(depth>300)throw Error('Imported block nesting is too deep.');
+    const fields=ZERO_FIELD_BLOCKS.has(call.fn)?[]:(SPECIAL_ROWS[call.fn]||def.slice(3)).filter(Array.isArray);
+    if(EVENT_HANDLER_BLOCKS.has(call.fn))fields.push(['text',call.fn==='whenBroadcast'?'Start Menu':'Player1']);
+    const data={type:def[0],values:[],slots:[],stacks:{}};
+    data.slots=fields.map(([type,value],i)=>{const arg=call.args[i];if(arg?.kind==='call'){const block=importedModel(arg,omitted,depth+1);if(block)return{block};}return{type,value:arg?.kind==='literal'?String(arg.value??''):String(value??'')};});
+    const nested=args=>args.filter(arg=>arg.kind==='call').map(arg=>importedModel(arg,omitted,depth+1)).filter(Boolean);
+    if(call.fn==='ifBlock'){const ei=call.args.findIndex(arg=>arg.kind==='literal'&&arg.value==='else');data.stacks.main=nested(call.args.slice(1,ei<0?undefined:ei));data.stacks.else=ei<0?[]:nested(call.args.slice(ei+1));}
+    else if(['repeat','repeatUntil','whileBlock','forever',...EVENT_HANDLER_BLOCKS].includes(call.fn))data.stacks.main=nested(call.args.slice(fields.length));
+    return data;
 }
 function importJS(source){
     const sections=splitImportedScripts(source);
     if(!sections.length){alert("No code sections were found in this .js file.");return}
-    const imported=[];
+    const imported=[],omitted=new Set();
     sections.forEach((section,index)=>{
         const calls=parseImportedProgram(section.source),blocks=[];
-        calls.forEach(call=>{const b=createImportedBlock(call);if(b){const data=serializeNested(b);data.x=data.y=20;data.manualPosition=false;blocks.push(data)}});
+        calls.forEach(call=>{const data=importedModel(call,omitted);if(data){data.x=data.y=20;data.manualPosition=false;blocks.push(data)}});
         if(blocks.length)imported.push({name:section.name||"Script "+(index+1),blocks})
     });
     if(!imported.length){alert("No supported code blocks were found in this .js file.");return}
-    scripts=imported;activeScript=0;renderScripts();renderWorld();workspace.scrollLeft=workspace.scrollTop=0;refreshCode()
+    scripts=imported;activeScript=0;renderScripts();renderWorld();workspace.scrollLeft=workspace.scrollTop=0;refreshCode();if(omitted.size)alert("Unsupported calls were omitted: "+[...omitted].join(", "));
 }
 $("importJS").onclick=()=>$("importInput").click();
 $("importInput").onchange=async e=>{
@@ -778,9 +755,45 @@ window.addEventListener("resize",()=>{if(!isMobileEditor())closeBlocks();resizeW
 
 function centerEditor(){workspace.scrollLeft=workspace.scrollTop=0}
 
+let codeRefreshTimer=null,projectSaveTimer=null,projectHistory=[],projectHistoryIndex=-1,restoringProject=true;
+const PROJECT_KEY='jscratch-project-v1';
+function projectData(){saveCurrent();return{format:'jscratch',version:1,scripts,activeScript,zoom};}
+function projectSnapshot(){return JSON.stringify(projectData());}
+function projectNotice(text){$('projectStatus').textContent=text;}
+function historyControls(){$('undoProject').disabled=projectHistoryIndex<=0;$('redoProject').disabled=projectHistoryIndex>=projectHistory.length-1;}
+function recordProject(){if(restoringProject)return;const text=projectSnapshot();if(projectHistory[projectHistoryIndex]!==text){projectHistory.splice(projectHistoryIndex+1);projectHistory.push(text);let bytes=projectHistory.reduce((sum,item)=>sum+item.length,0);while(projectHistory.length>2&&(projectHistory.length>40||bytes>20000000)){bytes-=projectHistory.shift().length;}projectHistoryIndex=projectHistory.length-1;}historyControls();try{localStorage.setItem(PROJECT_KEY,text);projectNotice('Autosaved');}catch{projectNotice('Autosave unavailable — use Save project');}}
+function scheduleProjectSave(){if(restoringProject)return;clearTimeout(projectSaveTimer);projectSaveTimer=setTimeout(recordProject,300);}
+function restoreProject(project){JScratchProject.validate(project,defs);restoringProject=true;clearTimeout(projectSaveTimer);scripts=project.scripts;activeScript=Math.max(0,Math.min(scripts.length-1,Number(project.activeScript)||0));zoom=Math.max(.5,Math.min(2,Number(project.zoom)||1));renderScripts();renderWorld();$('zoomText').textContent=Math.round(zoom*100)+'%';if(codePanelOpen)$('code').textContent=JScratchProject.generate(scripts,defs,ZERO_FIELD_BLOCKS).code;restoringProject=false;}
+$('undoProject').onclick=()=>{clearTimeout(projectSaveTimer);recordProject();if(projectHistoryIndex>0){restoreProject(JSON.parse(projectHistory[--projectHistoryIndex]));historyControls();try{localStorage.setItem(PROJECT_KEY,projectHistory[projectHistoryIndex]);}catch{}projectNotice('Undone');}};
+$('redoProject').onclick=()=>{if(projectHistoryIndex<projectHistory.length-1){restoreProject(JSON.parse(projectHistory[++projectHistoryIndex]));historyControls();try{localStorage.setItem(PROJECT_KEY,projectHistory[projectHistoryIndex]);}catch{}projectNotice('Redone');}};
+function downloadProjectText(text,name,type){const url=URL.createObjectURL(new Blob([text],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('saveProject').onclick=()=>{recordProject();downloadProjectText(JSON.stringify(projectData(),null,2),'project.jscratch.json','application/json');};
+$('openProject').onclick=()=>$('projectInput').click();
+$('projectInput').onchange=async e=>{const file=e.target.files[0];if(file)try{const project=JSON.parse(await file.text());restoreProject(project);recordProject();projectNotice('Project opened');}catch(error){projectNotice(error.message);}e.target.value='';};
+document.addEventListener('keydown',event=>{if(event.target.closest('input,textarea,[contenteditable]'))return;if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();$(event.shiftKey?'redoProject':'undoProject').click();}});
+window.addEventListener('pagehide',()=>{if(!restoringProject)recordProject();});
+const runtimeModules=['back-process','canvas','sprite','motion','operator','data','sensing','control','clone','sound','json','ui'];let runtimeLocations=new Map(),debugTimer=null;
+function runPreview(){
+    const generated=JScratchProject.generate(projectData().scripts,defs,ZERO_FIELD_BLOCKS,{debug:true});runtimeLocations=generated.locations;
+    const frame=$('runtimeFrame');frame.contentWindow?.MLGame?.stop();
+    const base=new URL('/ml-game/',location.href).href;
+    const stage='<canvas id="game-canvas"></canvas>';
+    const assets=runtimeModules.map(name=>'<script src="'+new URL('js/'+name+'.js',base).href+'"><'+'/script>').join('');
+    const tagging='function __jscratchTag(id,value){if(value&&typeof value==="object")value._editorId=id;return value;}';
+    const code=(tagging+'\n'+generated.code).replace(/<\/script/gi,'<\\/script');
+    frame.srcdoc='<!doctype html><html><head><base href="'+base+'"><style>html,body{margin:0;overflow:hidden;background:#000}canvas{display:block}</style></head><body>'+stage+assets+'<script>'+code+'<'+'/script></body></html>';
+    if(!$('runtimePanel').open)$('runtimePanel').showModal();$('pauseProject').textContent='Pause';
+    clearInterval(debugTimer);debugTimer=setInterval(()=>{const api=frame.contentWindow?.MLGame;if(!api)return;const state=api.inspect();$('runtimeDebug').textContent=(state.paused?'Paused':state.running?'Running':'Stopped')+' · '+state.executedBlocks+' blocks executed\n'+JSON.stringify(state.variables,null,2)+(state.errors.length?'\n'+state.errors.map(e=>e.script+': '+e.message).join('\n'):'');const current=api.ENGINE.lastBlock;const source=runtimeLocations.get(current?._editorId);document.querySelectorAll('.runtime-active,.runtime-error').forEach(b=>b.classList.remove('runtime-active','runtime-error'));if(source&&source.scriptIndex===activeScript){const roots=[...world.children].filter(isRootBlock);let b=roots[Number(source.path.split('.')[0])];for(const part of source.path.split('.').slice(1)){const m=part.match(/^(main|else)(\d+)$/);if(m){const stack=b?.querySelector('[data-stack="'+m[1]+'"]');b=stack?[...stack.children].filter(isRootBlock)[Number(m[2])]:null;}}b?.classList.add(state.errors.length?'runtime-error':'runtime-active');}},250);
+}
+$('runProject').onclick=runPreview;$('restartProject').onclick=runPreview;
+$('pauseProject').onclick=()=>{const api=$('runtimeFrame').contentWindow?.MLGame;if(!api)return;if(api.ENGINE.paused){api.resume();$('pauseProject').textContent='Pause';}else{api.pause();$('pauseProject').textContent='Resume';}};
+$('stepProject').onclick=()=>{$('runtimeFrame').contentWindow?.MLGame?.step();$('pauseProject').textContent='Resume';};
+$('stopProject').onclick=()=>$('runtimeFrame').contentWindow?.MLGame?.stop();
+$('closeRuntime').onclick=()=>$('runtimePanel').close();$('runtimePanel').addEventListener('close',()=>{$('runtimeFrame').contentWindow?.MLGame?.stop();clearInterval(debugTimer);});
 renderPalette();
 newScript();
 setZoom(1);
+try{const saved=localStorage.getItem(PROJECT_KEY);if(saved)restoreProject(JSON.parse(saved));}catch(error){projectNotice('Saved project could not be opened: '+error.message);}restoringProject=false;recordProject();
 requestAnimationFrame(()=>{resizeWorld();centerEditor()});
 </script>
 

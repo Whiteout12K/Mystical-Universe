@@ -58,6 +58,7 @@ function copySpriteState(source,clone){
 
 function createClone(source){
     if(!source||source.deleted)return null;
+    if(ENGINE.clones.length>=ENGINE.maxClones){reportRuntimeError(new Error("Clone limit reached ("+ENGINE.maxClones+")"),null,null);return null;}
 
     const clone=new Sprite(source.isClone?source.cloneName:source.name,true);
     copySpriteState(source,clone);

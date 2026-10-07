@@ -13,16 +13,14 @@ const ENGINE={
 const canvas=document.getElementById("game-canvas"),ctx=canvas.getContext("2d",{alpha:false});
 ctx.imageSmoothingEnabled=true;
 ctx.imageSmoothingQuality="high";
-document.documentElement.style.touchAction=document.body.style.touchAction=canvas.style.touchAction="none";
-document.documentElement.style.userSelect=document.body.style.userSelect=canvas.style.userSelect="none";
-const prevent=e=>e.preventDefault();
-["gesturestart","gesturechange","gestureend"].forEach(e=>document.addEventListener(e,prevent,{passive:false}));
-document.addEventListener("wheel",e=>{if(e.ctrlKey)prevent(e)},{passive:false});
-document.addEventListener("touchmove",e=>{if(e.touches.length>1)prevent(e)},{passive:false});
+canvas.style.touchAction="none";
+canvas.style.userSelect=canvas.style.webkitUserSelect="none";
+canvas.addEventListener("wheel",event=>{if(event.ctrlKey)event.preventDefault();},{passive:false});
+canvas.addEventListener("touchmove",event=>{if(event.touches.length>1)event.preventDefault();},{passive:false});
 
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
-const frame=()=>delay(0);
+const frame=c=>runtimeWait(0,c,true);
 
 
 /* VALUES / BLOCKS */
@@ -114,39 +112,23 @@ const createReporter=(type,data={})=>({type:"operator",operator:type,...data});
 
 /* PROGRAM */
 
+const programMembership=new Set(),removedProgramBlocks=new Set();
+let trackedProgram=ENGINE.program;
+function syncProgramMembership(){if(trackedProgram!==ENGINE.program){trackedProgram=ENGINE.program;programMembership.clear();removedProgramBlocks.clear();for(const block of ENGINE.program)programMembership.add(block);}}
 ENGINE.recordBlock=b=>{
-    if(b&&typeof b==="object"&&!ENGINE.program.includes(b))ENGINE.program.push(b);
-    return b;
+    syncProgramMembership();
+    if(b&&typeof b==="object"&&!programMembership.has(b)){programMembership.add(b);ENGINE.program.push(b);}
+    removedProgramBlocks.delete(b);return b;
 };
-
-ENGINE.removeTopLevelBlock=b=>{
-    const i=ENGINE.program.indexOf(b);
-    if(i>=0)ENGINE.program.splice(i,1);
-};
-
-ENGINE.absorbBlocks=bs=>{
-    if(Array.isArray(bs))bs.forEach(ENGINE.absorbBlock);
-};
-
-ENGINE.absorbBlock=b=>{
-    if(!b||typeof b!=="object")return;
-    ENGINE.removeTopLevelBlock(b);
-    absorbNested(b);
-};
-
+ENGINE.removeTopLevelBlock=b=>{if(programMembership.has(b))removedProgramBlocks.add(b);};
+function compactProgram(){if(removedProgramBlocks.size){ENGINE.program=ENGINE.program.filter(b=>!removedProgramBlocks.has(b));removedProgramBlocks.forEach(b=>programMembership.delete(b));removedProgramBlocks.clear();trackedProgram=ENGINE.program;}}
+ENGINE.absorbBlocks=bs=>{if(Array.isArray(bs))bs.forEach(ENGINE.absorbBlock);while(removedProgramBlocks.has(ENGINE.program.at(-1))){const block=ENGINE.program.pop();removedProgramBlocks.delete(block);programMembership.delete(block);}};
+ENGINE.absorbBlock=b=>{if(!b||typeof b!=="object")return;ENGINE.removeTopLevelBlock(b);absorbNested(b);};
 function absorbNested(b){
-    if(!b||typeof b!=="object")return;
-    for(const v of Object.values(b))
-        if(Array.isArray(v))
-            for(const x of v)
-                if(x?.type){
-                    ENGINE.removeTopLevelBlock(x);
-                    absorbNested(x);
-                }
-        else if(v?.type){
-            ENGINE.removeTopLevelBlock(v);
-            absorbNested(v);
-        }
+    const pending=[b],visited=new Set();
+    while(pending.length){const item=pending.pop();if(!item||typeof item!=="object"||visited.has(item))continue;visited.add(item);
+        for(const value of Object.values(item)){const children=Array.isArray(value)?value:[value];for(const child of children)if(child?.type){ENGINE.removeTopLevelBlock(child);pending.push(child);}}
+    }
 }
 
 function markBlockTreeHandled(b){
@@ -195,19 +177,12 @@ function flushPendingSounds(){
 );
 
 async function loadSoundBuffer(sound){
-    const ac=ENGINE.audioContext;
-    if(!ac||!sound?.path)return null;
+    const ac=ENGINE.audioContext;if(!ac||!sound?.path)return null;
     if(sound.buffer&&sound.bufferPath===sound.path)return sound.buffer;
-    try{
-        const r=await fetch(sound.path);
-        if(!r.ok)throw Error(`HTTP ${r.status}`);
-        sound.buffer=await ac.decodeAudioData(await r.arrayBuffer());
-        sound.bufferPath=sound.path;
-        return sound.buffer;
-    }catch(e){
-        console.warn("Could not load sound:",sound.name,sound.path,e);
-        return null;
-    }
+    const path=sound.path;if(sound.loadingPath===path&&sound.loading)return sound.loading;
+    sound.loadingPath=path;
+    const loading=(async()=>{try{const response=await fetch(path);if(!response.ok)throw Error(`HTTP ${response.status}`);const buffer=await ac.decodeAudioData(await response.arrayBuffer());if(sound.path===path){sound.buffer=buffer;sound.bufferPath=path;}return buffer;}catch(error){console.warn('Could not load sound:',sound.name,path,error);return null;}})();
+    sound.loading=loading;try{return await loading;}finally{if(sound.loading===loading){sound.loading=null;sound.loadingPath='';}}
 }
 
 function removeSoundInstance(sound,instance){
@@ -224,6 +199,7 @@ function disconnectSound(instance){
 }
 
 async function playSoundInternal(sound){
+    const runId=ENGINE.runId;
     const ac=initAudio();
     if(!ac)return;
     if(ac.state!=="running"){
@@ -231,6 +207,7 @@ async function playSoundInternal(sound){
         return;
     }
     const buffer=await loadSoundBuffer(sound);
+    if(runId!==ENGINE.runId||!ENGINE.running)return;
     if(!buffer||!ENGINE.running)return;
     const source=ac.createBufferSource(),gain=ac.createGain(),panner=ac.createStereoPanner();
     source.buffer=buffer;
@@ -440,35 +417,15 @@ class Sprite{
             return;
         }
 
-        const image=new Image();
+        const asset=loadImageAsset(path),image=asset.image;
         this.imageCache[path]=image;
         this.costumeCacheOrder.push(path);
-
-        if(this.costumeCacheOrder.length>4){
-            const old=this.costumeCacheOrder.shift();
-            if(old!==path)delete this.imageCache[old];
-        }
-
-        this.image=image;
-        this.loaded=false;
-
-        image.onload=()=>{
-            if(this.imageCache[path]!==image)return;
-
-            if(this.costume===path){
-                this.loaded=true;
-                this.effectCacheKey=null;
-                this.updateSize();
-                updateEdgeSprite(this);
-            }
-        };
-
-        image.onerror=()=>{
-            if(this.imageCache[path]===image)
-                console.warn("Could not load costume:",path);
-        };
-
-        image.src=path;
+        if(this.costumeCacheOrder.length>4){const old=this.costumeCacheOrder.shift();if(old!==path)delete this.imageCache[old];}
+        this.image=image;this.loaded=image.complete&&image.naturalWidth>0;
+        if(this.loaded){this.updateSize();updateEdgeSprite(this);}
+        asset.ready.then(()=>{
+            if(this.image===image&&this.costume===path){this.loaded=true;this.effectCacheKey=null;this.updateSize();updateEdgeSprite(this);}
+        }).catch(()=>console.warn("Could not load costume:",path));
     }
 
     updateSize(){
@@ -612,7 +569,7 @@ function updateEdgeSprites(){
 
 function createScriptContext(clone=null){
     return{
-        ended:false,
+        ended:false,runId:ENGINE.runId,
         clone:clone||null,
         privateVariables:clone?.privateVariables||Object.create(null)
     };
@@ -654,7 +611,10 @@ async function broadcastAndWaitMessage(message){
 /* EXECUTION */
 
 async function executeBlock(block,context){
-    if(!block||typeof block!=="object"||!ENGINE.running||context.ended)return;
+    if(!block||typeof block!=="object"||!contextActive(context))return;
+    await executionTurn(context);
+    while(contextActive(context)&&ENGINE.paused&&ENGINE.stepBudget===0)await executionTurn(context);
+    if(!contextActive(context))return;
 
     if(block.type==="endScript"){
         context.ended=true;
@@ -662,14 +622,20 @@ async function executeBlock(block,context){
     }
 
     const handler=ENGINE.blocks[block.type]?.execute;
-    if(handler)await handler(block,context);
+    if(!handler){reportRuntimeError(new Error("Unknown block type: "+block.type),block,context);context.ended=true;return;}
+    const container=Array.isArray(block.blocks)||Array.isArray(block.thenBlocks);
+    if(ENGINE.paused&&ENGINE.stepBudget>0&&!container)ENGINE.stepBudget--;
+    ENGINE.lastBlock=block;ENGINE.executedBlocks++;
+    try{await handler(block,context);}catch(error){reportRuntimeError(error,block,context);context.ended=true;}
+
+
 }
 
 async function executeBlocks(blocks,context){
     if(!Array.isArray(blocks))return;
 
     for(const block of blocks){
-        if(!ENGINE.running||context.ended)break;
+        if(!contextActive(context))break;
         await executeBlock(block,context);
     }
 }
@@ -680,14 +646,16 @@ async function executeBlocks(blocks,context){
 registerBlock("repeat",async(b,c)=>{
     const n=Math.max(0,Math.floor(Number(resolveValue(b.times,c))||0));
 
-    for(let i=0;i<n&&ENGINE.running&&!c.ended;i++)
-        await executeBlocks(b.blocks,c);
+    for(let i=0;i<n&&contextActive(c);i++){
+        await executionTurn(c);
+        if(contextActive(c))await executeBlocks(b.blocks,c);
+    }
 });
 
 registerBlock("forever",async(b,c)=>{
-    while(ENGINE.running&&!c.ended){
+    while(contextActive(c)){
         await executeBlocks(b.blocks,c);
-        await frame();
+        await frame(c);
     }
 });
 
@@ -699,9 +667,9 @@ registerBlock("if",async(b,c)=>{
 });
 
 async function conditionalLoop(b,c,test,yieldFn){
-    while(ENGINE.running&&!c.ended&&test(b,c)){
+    while(contextActive(c)&&test(b,c)){
         await executeBlocks(b.blocks,c);
-        await yieldFn();
+        await yieldFn(c);
     }
 }
 
@@ -714,14 +682,14 @@ registerBlock("while",(b,c)=>
 );
 
 registerBlock("wait",async(b,c)=>
-    delay(Math.max(0,Number(resolveValue(b.time,c))||0)*1000)
+    runtimeWait(Math.max(0,Number(resolveValue(b.time,c))||0)*1000,c)
 );
 
 registerBlock("waitUntil",(b,c)=>
     conditionalLoop(
         b,c,
         (b,c)=>!resolveValue(b.condition,c),
-        ()=>delay(16)
+        c=>runtimeWait(16,c)
     )
 );
 
@@ -743,6 +711,7 @@ registerBlock("broadcastScript",(b,c)=>
 const START_DELAY=200;
 
 async function executeProgram(){
+    compactProgram();
     const c=createScriptContext();
     ENGINE.scripts=ENGINE.program.slice();
 
@@ -755,7 +724,7 @@ async function executeProgram(){
 
 async function runScripts(){
     await delay(START_DELAY);
-    if(ENGINE.running)await executeProgram();
+    if(ENGINE.running&&ENGINE.runId===0)await startRuntime();
 }
 
 
@@ -770,7 +739,8 @@ function resizeGame(){
 
     ENGINE.mobile=w<700;
 
-    const pw=Math.ceil(w),ph=Math.ceil(h);
+    const pixelRatio=Math.min(3,window.devicePixelRatio||1);
+    const pw=Math.ceil(w*pixelRatio),ph=Math.ceil(h*pixelRatio);
 
     canvas.style.width=w+"px";
     canvas.style.height=h+"px";
@@ -781,8 +751,9 @@ function resizeGame(){
     }
 
     ENGINE.viewHeight=getViewHeight(w);
-    ENGINE.unitScale=h/ENGINE.viewHeight;
-    ENGINE.viewWidth=w/ENGINE.unitScale;
+    ENGINE.unitScale=h*pixelRatio/ENGINE.viewHeight;
+    ENGINE.viewWidth=w*pixelRatio/ENGINE.unitScale;
+    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";
     ENGINE.centerX=ENGINE.centerY=0;
 
     updateEdgeSprites();
@@ -851,23 +822,68 @@ function render(){
     ctx.globalAlpha=1;
 }
 
-function gameLoop(timestamp){
-    if(!ENGINE.running)return;
-
-    if(!ENGINE.lastTime)ENGINE.lastTime=timestamp;
-
-    const elapsed=timestamp-ENGINE.lastRender;
-
-    if(elapsed>=ENGINE.frameInterval){
-        ENGINE.deltaTime=(timestamp-ENGINE.lastTime)/1000;
-        ENGINE.lastTime=timestamp;
-        ENGINE.lastRender=timestamp-elapsed%ENGINE.frameInterval;
-        render();
-    }
-
-    requestAnimationFrame(gameLoop);
+Object.assign(ENGINE,{runId:0,paused:false,clock:0,frameNumber:0,stepBudget:0,executedBlocks:0,lastBlock:null,errors:[],waiters:new Set(),budgetStarted:0,budgetBlocks:0,loopHandle:null,maxClones:10000});
+// Shared decoded images avoid repeated loading for sprites and clones.
+const imageAssets=new Map();
+function loadImageAsset(path){
+    if(imageAssets.has(path)){const asset=imageAssets.get(path);imageAssets.delete(path);imageAssets.set(path,asset);return asset;}
+    const image=new Image();
+    const ready=new Promise((resolve,reject)=>{image.onload=()=>resolve(image);image.onerror=()=>{imageAssets.delete(path);reject(new Error('Could not load image: '+path));};});
+    const asset={image,ready};imageAssets.set(path,asset);image.src=path;
+    while(imageAssets.size>128)imageAssets.delete(imageAssets.keys().next().value);
+    return asset;
 }
-
+async function preloadAssets(paths){
+    const queue=[...new Set(paths)].filter(path=>typeof path==='string'&&path),results=[];
+    let index=0;
+    await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{while(index<queue.length){const path=queue[index++];try{await loadImageAsset(path).ready;results.push({path,loaded:true});}catch(error){results.push({path,loaded:false,error:error.message});}}}));
+    return results;
+}
+function contextActive(c){return ENGINE.running&&!c?.ended&&(c?.runId===undefined||c.runId===ENGINE.runId)&&!c?.clone?.deleted;}
+function runtimeWait(ms,c,nextFrame=false){
+    if(!contextActive(c))return Promise.resolve();
+    return new Promise(resolve=>ENGINE.waiters.add({resolve,c,deadline:ENGINE.clock+Math.max(0,ms),frame:ENGINE.frameNumber+(nextFrame?1:0),gate:false}));
+}
+async function executionTurn(c){
+    if(ENGINE.paused&&ENGINE.stepBudget===0)await new Promise(resolve=>ENGINE.waiters.add({resolve,c,gate:true}));
+    if(!contextActive(c))return;
+    if(++ENGINE.budgetBlocks>=500||performance.now()-ENGINE.budgetStarted>=6)await runtimeWait(0,c,true);
+}
+function reportRuntimeError(error,block,c){
+    const entry={message:error?.message||String(error),blockId:block?._id,blockType:block?.type,script:c?.scriptName||'Main program'};
+    ENGINE.errors.push(entry);if(ENGINE.errors.length>100)ENGINE.errors.shift();
+    window.dispatchEvent(new CustomEvent('mlgame-error',{detail:entry}));console.error(entry.script+': '+entry.message);
+}
+function stopRuntime(){
+    ENGINE.running=false;ENGINE.paused=false;ENGINE.stepBudget=0;ENGINE.runId++;if(ENGINE.audioPaused){ENGINE.audioPaused=false;ENGINE.audioContext?.resume().catch(()=>{});}
+    for(const waiter of ENGINE.waiters)waiter.resolve();ENGINE.waiters.clear();
+    ENGINE.audioPending.length=0;for(const sound of Object.values(ENGINE.sounds))for(const instance of [...(sound.instances||[])])stopSoundInstance(instance);
+    window.dispatchEvent(new CustomEvent('mlgame-state',{detail:'stopped'}));
+}
+function resetRuntime(){
+    if(typeof ML_UI!=='undefined'){ML_UI.elements={};ML_UI.order=[];ML_UI.nextId=1;}
+    if(typeof SENSING!=='undefined'){SENSING.keys={};SENSING.leftClick=false;SENSING.rightClick=false;}
+    ENGINE.variables={};ENGINE.sprites={};ENGINE.clones=[];ENGINE.sounds={};ENGINE.spriteOrder=[];ENGINE.spriteOrderDirty=true;ENGINE.cloneId=0;
+    ENGINE.background='#000000';ENGINE.backgroundImage=null;ENGINE.backgroundLoaded=false;ENGINE.backgroundScale=1;ENGINE.backgroundCostume='';ENGINE.backgroundEffects={brightness:0,ghost:0,color:0};ENGINE.backgroundEffectCacheKey=null;ENGINE.camera={x:0,y:0};
+}
+async function startRuntime(){
+    stopRuntime();resetRuntime();ENGINE.running=true;ENGINE.clock=0;ENGINE.executedBlocks=0;ENGINE.errors=[];ENGINE.lastBlock=null;ENGINE.lastTime=0;ENGINE.budgetStarted=performance.now();ENGINE.budgetBlocks=0;
+    if(ENGINE.loopHandle===null)ENGINE.loopHandle=requestAnimationFrame(gameLoop);
+    window.dispatchEvent(new CustomEvent('mlgame-state',{detail:'running'}));return executeProgram();
+}
+function pauseRuntime(){if(ENGINE.running){ENGINE.paused=true;if(ENGINE.audioContext?.state==='running'){ENGINE.audioPaused=true;ENGINE.audioContext.suspend().catch(error=>console.warn('Could not pause audio:',error));}window.dispatchEvent(new CustomEvent('mlgame-state',{detail:'paused'}));}}
+function resumeRuntime(){if(ENGINE.running){ENGINE.paused=false;if(ENGINE.audioPaused){ENGINE.audioPaused=false;ENGINE.audioContext?.resume().catch(error=>console.warn('Could not resume audio:',error));}ENGINE.stepBudget=0;window.dispatchEvent(new CustomEvent('mlgame-state',{detail:'running'}));}}
+function stepRuntime(){if(ENGINE.running){pauseRuntime();ENGINE.stepBudget=1;}}
+function gameLoop(timestamp){
+    ENGINE.loopHandle=null;
+    if(!ENGINE.lastTime)ENGINE.lastTime=timestamp;
+    const dt=Math.min(100,Math.max(0,timestamp-ENGINE.lastTime));ENGINE.lastTime=timestamp;
+    if(ENGINE.running&&!ENGINE.paused)ENGINE.clock+=dt;
+    ENGINE.frameNumber++;ENGINE.budgetStarted=performance.now();ENGINE.budgetBlocks=0;
+    for(const waiter of ENGINE.waiters){if(!contextActive(waiter.c)||(waiter.gate?(!ENGINE.paused||ENGINE.stepBudget>0):ENGINE.running&&!ENGINE.paused&&ENGINE.clock>=waiter.deadline&&ENGINE.frameNumber>=waiter.frame)){ENGINE.waiters.delete(waiter);waiter.resolve();}}
+    if(timestamp-ENGINE.lastRender>=ENGINE.frameInterval){ENGINE.deltaTime=ENGINE.running&&!ENGINE.paused?dt/1000:0;ENGINE.lastRender=timestamp;render();}
+    if(ENGINE.running)ENGINE.loopHandle=requestAnimationFrame(gameLoop);
+}
 
 /* EVENTS */
 
@@ -879,7 +895,7 @@ window.addEventListener("load",()=>{
     initAudio();
     runScripts();
     ENGINE.lastRender=performance.now();
-    requestAnimationFrame(gameLoop);
+    if(ENGINE.loopHandle===null)ENGINE.loopHandle=requestAnimationFrame(gameLoop);
 });
 
 
@@ -892,5 +908,8 @@ window.MLGame={
     registerBlock,registerReporter,createBlock,createReporter,
     executeBlock,executeBlocks,createScriptContext,
     resolveValue,resolveSpriteName,getContextSprite,
-    getSprites,getAllSprites
+    getSprites,getAllSprites,
+    start:startRuntime,restart:startRuntime,stop:stopRuntime,pause:pauseRuntime,resume:resumeRuntime,step:stepRuntime,
+    reportError:reportRuntimeError,contextActive,runtimeWait,preloadAssets,
+    inspect:()=>({running:ENGINE.running,paused:ENGINE.paused,executedBlocks:ENGINE.executedBlocks,blockId:ENGINE.lastBlock?._id,blockType:ENGINE.lastBlock?.type,variables:{...ENGINE.variables},sprites:Object.keys(ENGINE.sprites),clones:ENGINE.clones.length,errors:ENGINE.errors.slice()})
 };

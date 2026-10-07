@@ -114,21 +114,11 @@ async function glideSprite(s,x,y,time,context){
         return;
     }
 
-    const sx=s.x,sy=s.y,start=performance.now(),duration=time*1000;
-
-    await new Promise(resolve=>{
-        const animate=now=>{
-            if(!ENGINE.running||context.ended)return resolve();
-
-            const p=Math.min(1,(now-start)/duration);
-            s.x=sx+(x-sx)*p;
-            s.y=sy+(y-sy)*p;
-
-            if(p>=1)return resolve();
-            requestAnimationFrame(animate);
-        };
-        requestAnimationFrame(animate);
-    });
+    const sx=s.x,sy=s.y,start=ENGINE.clock,duration=time*1000;
+    while(contextActive(context)){
+        const progress=Math.min(1,(ENGINE.clock-start)/duration);s.x=sx+(x-sx)*progress;s.y=sy+(y-sy)*progress;
+        if(progress>=1)break;await runtimeWait(0,context,true);
+    }
 }
 
 registerBlock("glideTo",async(block,c)=>{

@@ -7,9 +7,8 @@ const createControlBlock=(type,data={})=>{
 };
 
 const control=(type,data,absorb=true)=>{
-    const b=createControlBlock(type,data);
-    if(absorb)ENGINE.absorbBlocks(data.blocks);
-    return b;
+    if(absorb){ENGINE.absorbBlocks(data.blocks);ENGINE.absorbBlocks(data.thenBlocks);ENGINE.absorbBlocks(data.elseBlocks);}
+    return createControlBlock(type,data);
 };
 
 function wait(time){
@@ -32,7 +31,7 @@ function ifBlock(condition,...blocks){
     const i=blocks.indexOf("else");
     const thenBlocks=i<0?blocks:blocks.slice(0,i);
     const elseBlocks=i<0?[]:blocks.slice(i+1);
-    return control("if",{condition,thenBlocks,elseBlocks},false);
+    return control("if",{condition,thenBlocks,elseBlocks});
 }
 
 function repeatUntil(condition,...blocks){
