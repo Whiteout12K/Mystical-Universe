@@ -22,6 +22,7 @@ window.wikiLinksReady = (async () => {
     }
     return url;
   }
+  for(const page of await window.wikiArticleIndex||[]){const path=normalize(page.path);pages.add(path);const name=path.split('/').pop();if(!articlePaths.has(name))articlePaths.set(name,path);}
   const assets=new Map();
   function candidate(target) {
     try {

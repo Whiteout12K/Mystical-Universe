@@ -46,13 +46,7 @@ window.initializeWikiSearch = () => {
   }
   async function loadArticles() {
     try {
-      const response = await fetch('/sitemap.xml', {cache:'no-cache'});
-      if (!response.ok) throw Error('Archive unavailable');
-      const xml = new DOMParser().parseFromString(await response.text(), 'application/xml');
-      const paths = [...new Set([...xml.getElementsByTagName('loc')].map(node => {
-        const url = new URL(node.textContent);
-        return url.pathname;
-      }).filter(path => path.startsWith('/wiki/') && !path.startsWith('/wiki/wiki-code/')))].sort();
+      const paths=(await window.wikiArticleIndex).map(page=>page.path).sort();
       const found = [];
       let cursor = 0, errors = 0;
       await Promise.all(Array.from({length:Math.min(4, paths.length)}, async () => {

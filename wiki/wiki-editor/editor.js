@@ -68,7 +68,14 @@
     });
   }
   async function rememberFolder(folder){try{await folderStore(folder);}catch{/* Folder persistence is optional. */}}
+  async function writeArticleIndex(){
+    if(!state.folder)return;
+    const handle=await state.folder.getFileHandle('article-index.json',{create:true});const writer=await handle.createWritable();
+    await writer.write(JSON.stringify({pages:state.pages.map(page=>({path:'/wiki/'+page.path.replace(/\.html?$/i,''),title:page.title}))},null,2)+'\n');await writer.close();
+  }
   async function discoverPages(){
+    try{const r=await fetch('/wiki/article-index.json',{cache:'no-store'});if(r.ok){const data=await r.json();if(Array.isArray(data.pages)){state.pages=data.pages.map(page=>({path:page.path.slice(6)+(/\.html?$/i.test(page.path)?'':'.html'),title:page.title})).sort((a,b)=>a.path.localeCompare(b.path));tree();status('Wiki pages found automatically. Open Wiki Folder to include new local pages.');return;}}}catch{}
+
     const response=await fetch('/sitemap.xml',{cache:'no-store'});
     if(!response.ok)throw Error('No wiki index found. Open Wiki Folder once to discover all local pages.');
     const xml=new DOMParser().parseFromString(await response.text(),'application/xml'),paths=new Set();
@@ -123,7 +130,7 @@
           }
         }
       }
-      await scan(state.folder);state.pages=pages.sort((a,b)=>a.path.localeCompare(b.path));state.handles=handles;tree();status('Choose a page. Save writes directly to its local HTML file.');
+      await scan(state.folder);state.pages=pages.sort((a,b)=>a.path.localeCompare(b.path));state.handles=handles;await writeArticleIndex();tree();status('Choose a page. Save writes directly to its local HTML file.');
     }catch(error){status(error.message,true);}
   }
   $('choose-folder').addEventListener('click',async()=>{
@@ -232,7 +239,7 @@
   $('discard').addEventListener('click',()=>{if(confirm('Discard changes to this page?')){state.source=state.saved;resetHistory();render();status('Changes discarded.');}});
   $('save').addEventListener('click',async()=>{
     state.busy=true;controls();$('editor-container').inert=true;
-    try{const data=await savePage();state.page.html=data.html;state.page.revision=data.revision;state.saved=state.source;status('Saved wiki/'+state.page.path+'. Your normal GitHub push publishes it.');}
+    try{const data=await savePage();state.page.html=data.html;state.page.revision=data.revision;state.saved=state.source;await refresh();status('Saved wiki/'+state.page.path+'. Your normal GitHub push publishes it.');}
     catch(error){status(error.message,true);}
     finally{state.busy=false;$('editor-container').inert=false;controls();}
   });

@@ -5,9 +5,7 @@
   const make=(tag,cls,text)=>{const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node;};
   hosts.forEach(host=>{host.setAttribute('aria-live','polite');host.append(make('p','','Loading category pages…'));});
   try{
-    const response=await fetch('/sitemap.xml',{cache:'no-cache'});if(!response.ok)throw Error('Archive unavailable');
-    const xml=new DOMParser().parseFromString(await response.text(),'application/xml');
-    const paths=[...new Set([...xml.getElementsByTagName('loc')].map(node=>new URL(node.textContent).pathname).filter(path=>path.startsWith('/wiki/')&&!/^\/wiki\/wiki-(?:code|editor)\//.test(path)))];
+    const paths=(await window.wikiArticleIndex).map(page=>page.path);
     const articles=[];let cursor=0,failures=0;
     await Promise.all(Array.from({length:Math.min(4,paths.length)},async()=>{
       while(cursor<paths.length){const path=paths[cursor++];

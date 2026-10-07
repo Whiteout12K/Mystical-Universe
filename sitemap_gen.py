@@ -5,6 +5,7 @@ from urllib.parse import urlparse, parse_qsl, urlencode
 from html.parser import HTMLParser
 from datetime import datetime, timezone
 import html
+import json
 import re
 
 # ============================================================
@@ -686,6 +687,21 @@ def print_report(discovered):
 # MAIN
 # ============================================================
 
+def create_wiki_article_index():
+    pages = []
+    for file in sorted((ROOT / "wiki").rglob("*.html")):
+        relative = file.relative_to(ROOT / "wiki")
+        if any(part.startswith(".") or part in {"wiki-code", "wiki-editor"} for part in relative.parts):
+            continue
+        text = file.read_text(encoding="utf-8")
+        source = re.search(r'<script[^>]*type=["\']text/x-wiki["\'][^>]*>(.*?)</script>', text, re.S | re.I)
+        if not source or re.search(r'<meta[^>]*name=["\']robots["\'][^>]*noindex', text, re.I):
+            continue
+        title = re.search(r"\|title\s*=([^\n|}]+)", source.group(1))
+        pages.append({"path": "/wiki/" + relative.with_suffix("").as_posix(), "title": title.group(1).strip() if title else file.stem.replace("_", " ")})
+    (ROOT / "wiki" / "article-index.json").write_text(json.dumps({"pages": pages}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def main():
 
     print()
@@ -711,6 +727,7 @@ def main():
     discovered = discover_urls(pages)
 
     create_sitemap(discovered)
+    create_wiki_article_index()
 
     print_report(discovered)
 

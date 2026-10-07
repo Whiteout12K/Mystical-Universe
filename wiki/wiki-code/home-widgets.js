@@ -4,9 +4,7 @@
   const make=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text)n.textContent=text;return n;};
   const message=make('p','','Opening the archive…');host.append(message);
   try {
-    const response=await fetch('/sitemap.xml',{cache:'no-cache'});if(!response.ok)throw Error('Archive unavailable');
-    const sitemap=new DOMParser().parseFromString(await response.text(),'application/xml');
-    const paths=[...new Set([...sitemap.getElementsByTagName('loc')].map(n=>new URL(n.textContent).pathname).filter(p=>p.startsWith('/wiki/')&&!p.startsWith('/wiki/wiki-code/')&&!['/wiki/home','/wiki/home.html'].includes(p)))];
+    const paths=(await window.wikiArticleIndex).map(page=>page.path).filter(path=>!['/wiki/home','/wiki/relationship'].includes(path));
     let remaining=[...paths],current='';
     const card=make('div','wiki-random-card'),body=make('div','wiki-random-copy'),title=make('a','wiki-random-title'),summary=make('p'),button=make('button','','Show another article');button.type='button';
     body.append(title,summary,button);card.append(body);

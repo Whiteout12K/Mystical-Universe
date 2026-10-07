@@ -32,9 +32,7 @@
   }
   window.wikiCharacterArchive = (async () => {
     try {
-      const response=await fetch('/sitemap.xml',{cache:'no-cache'});if(!response.ok)throw Error('Archive unavailable');
-      const xml=new DOMParser().parseFromString(await response.text(),'application/xml');
-      const paths=[...new Set([...xml.querySelectorAll('loc')].map(n=>new URL(n.textContent).pathname).filter(p=>p.startsWith('/wiki/char/')))];
+      const paths=(await window.wikiArticleIndex).map(page=>page.path).filter(path=>path.startsWith('/wiki/char/'));
       const profiles=[];let cursor=0;
       await Promise.all(Array.from({length:Math.min(4,paths.length)},async()=>{while(cursor<paths.length){const path=paths[cursor++];try{let r=await fetch(path);if(r.status===404)r=await fetch(path+'.html');if(!r.ok)continue;const doc=new DOMParser().parseFromString(await r.text(),'text/html');const source=doc.querySelector('#wiki-source')?.textContent;if(!source)continue;
         const field=name=>source.match(new RegExp('^\\|'+name+'=([^]*?)(?=^\\||^\\}\\})','m'))?.[1]?.trim()||'';
@@ -42,7 +40,7 @@
         const title=field('title'),base=field('image base')||'/images/character_art/',file=field('image').split(' :: ')[0];
         const image=file?new URL(file.startsWith('/')?file:base.replace(/\/?$/,'/')+file,location.origin).pathname:'';
         const affiliations=clean(field('Affiliation')).split('\n').map(x=>x.replace(/\s*\([^)]*\)/g,'').trim()).filter(Boolean);
-        profiles.push({title,path,source,image,affiliations,relations:['Relatives','Leader','Subordinates'].flatMap(kind=>field(kind).split('\n').filter(Boolean).map(line=>kind+': '+line)).join('\n'),description:window.wikiArticleSummary(source)});
+        profiles.push({title,path,source,image,affiliations,relations:['Relatives','Relationships','Love Interest','Love Interests','Girlfriend','Boyfriend','Partner','Spouse','Husband','Wife','Fiancé','Fiancée','Host','Vessel','Vessal','Anchored Spirit','Spiritual Bond','Leader','Subordinates'].flatMap(kind=>field(kind).split('\n').filter(Boolean).map(line=>kind+': '+line)).join('\n'),description:window.wikiArticleSummary(source)});
       }catch{}}}));await Promise.all(profiles.map(async profile=>{profile.portrait=await window.wikiPortraits.resolve(profile.title,profile.path,profile.image);}));return profiles.sort((a,b)=>a.title.localeCompare(b.title));
     }catch{return [];}
   })();
