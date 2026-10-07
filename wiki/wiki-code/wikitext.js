@@ -26,7 +26,7 @@
   }
   const params = parts => parts.map(part=>{const i=part.indexOf('=');return i<0?['',part]:[part.slice(0,i).trim(),part.slice(i+1).trim()];});
   let text=source.textContent.replace(/<div\b[^>]*class=["'][^"']*mw-collapsible[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi,'{{Spoiler|$1}}');
-  const directives=templates(text).filter(t=>['page','infobox','character','tabs','gallery','references','credits','randomarticle','characters','categorypages','relationshipmap'].includes(t.name));
+  const directives=templates(text).filter(t=>['page','infobox','character','tabs','gallery','references','credits','randomarticle','characters','categorypages','relationshipmap','collapse'].includes(t.name));
   const get=name=>directives.find(t=>t.name===name);
   const page=Object.fromEntries(params(get('page')?.parts||[]).map(([k,v])=>[k.toLowerCase(),v]));
   const title=page.title||document.title.replace(/\s*\|.*$/,'');
@@ -83,9 +83,11 @@
     groups.filter(g=>g.querySelector('dl').children.length).forEach(g=>aside.append(g));
     if(images.length||groups.some(g=>g.querySelector('dl').children.length)){layout.append(aside);}else layout.classList.add('wiki-layout-no-infobox');
   }else layout.classList.add('wiki-layout-no-infobox');
-  for(const d of directives.slice().reverse())text=text.slice(0,d.start)+text.slice(d.end);
+  const collapses=directives.filter(d=>d.name==='collapse');
+  for(const d of directives.slice().reverse())text=text.slice(0,d.start)+(d.name==='collapse'?'\nWIKI_COLLAPSE_'+collapses.indexOf(d)+'\n':'')+text.slice(d.end);
   const categories=[];text=text.replace(/\[\[Category:([^\]]+)\]\]/gi,(_,name)=>{const category=name.split('|')[0].trim();if(category&&!categories.includes(category))categories.push(category);return '';});
-  let bodyRoot=sectionRoot,parent=intro,paragraph=[];const stack=[],listStack=[];
+  function renderText(text,root,nested=false){
+  let bodyRoot=root,parent=nested?root:intro,paragraph=[];const stack=[],listStack=[];
   function flush(){if(paragraph.length){const n=make('div','wiki-paragraph');inline(n,paragraph.join(' '));parent.append(n);paragraph=[];}listStack.length=0;}
   function appendList(markers, value) {
     listStack.length=Math.min(listStack.length,markers.length);
@@ -104,7 +106,10 @@
   }
   // Keep multiline spoiler templates as one paragraph token.
   text=text.replace(/\{\{Spoiler\|([\s\S]*?)\}\}/gi,(_,v)=>'{{Spoiler|'+v.replace(/\n/g,' ')+'}}');
-  for(const line of text.trim().split('\n')){const tab=line.match(/^\|tab\s*=\s*(.+)$/);if(tab){flush();stack.length=0;const group=make('div','wiki-tab-content');group.id=tabID(tab[1]);group.dataset.wikiTab=tab[1].trim();sectionRoot.append(group);bodyRoot=group;parent=group;continue;}const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);s.append(h);(stack.at(-1)?.s||bodyRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#]+)\s*(.*)$/);if(bullet){if(paragraph.length)flush();appendList(bullet[1],bullet[2]);continue;}paragraph.push(line.trim());}flush();
+  for(const line of text.trim().split('\n')){const collapse=line.match(/^WIKI_COLLAPSE_(\d+)$/);if(collapse){flush();const settings=Object.fromEntries(params(collapses[Number(collapse[1])].parts)),details=make('details','wiki-disclosure'),summary=make('summary','',settings.title||'Read more'),body=make('div');details.append(summary,body);parent.append(details);renderText(settings.content||'',body,true);continue;}const tab=line.match(/^\|tab\s*=\s*(.+)$/);if(tab){flush();stack.length=0;const group=make('div','wiki-tab-content');group.id=tabID(tab[1]);group.dataset.wikiTab=tab[1].trim();root.append(group);bodyRoot=group;parent=group;continue;}const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);if(nested)h.dataset.wikiTocExclude='';s.append(h);(stack.at(-1)?.s||bodyRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#]+)\s*(.*)$/);if(bullet){if(paragraph.length)flush();appendList(bullet[1],bullet[2]);continue;}paragraph.push(line.trim());}flush();
+  }
+  renderText(text,sectionRoot);
+  window.addEventListener('hashchange',()=>{let target;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch{}const details=target?.closest('.wiki-disclosure');if(details){details.open=true;requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));}});
   const gallery=get('gallery');if(gallery){const section=make('section','wiki-section'),grid=make('div','wiki-gallery');section.append(make('h2','','Gallery'),grid);for(const line of gallery.parts.join('\n').split('\n')){const [file,label]=line.split(' :: ').map(x=>x.trim());if(file){const f=figure(file,label);if(f)grid.append(f);}}if(grid.children.length)article.append(section);}
   const references=get('references');if(references){const section=make('section','wiki-section'),list=make('ol');section.append(make('h2','','References'),list);for(const [label,url] of params(references.parts)){if(!url)continue;const li=make('li');li.append(link(label||url,url,true));list.append(li);}if(list.children.length)article.append(section);}
   const random=get('randomarticle');if(random){const section=make('section','wiki-section');section.append(make('h2','',Object.fromEntries(params(random.parts)).title||'Discover an article'));const host=make('div','wiki-random-article');host.id='wiki-random-article';section.append(host);article.append(section);}

@@ -121,9 +121,12 @@
     const candidates=[...(container||root).querySelectorAll('p')].filter(node=>node.textContent==='New paragraph.');
     const paragraph=container&&Number(container.dataset.sourceStart)<offset-2?candidates.at(-1):candidates[0];
     if(!paragraph)return;
+    if(paragraph.closest('.visual-tab-body')?.hidden)paragraph.closest('.visual-tab-section').querySelector('.visual-tab-fold')?.click();
     (paragraph.closest('.visual-editable')||paragraph).focus();const range=document.createRange();range.selectNodeContents(paragraph);getSelection().removeAllRanges();getSelection().addRange(range);
   }
   function render(source,root,onChange){
+    const pageKey=source.match(/\|title\s*=([^\n]+)/)?.[1]?.trim()||'';
+    const tabStates=new Map();if(root.dataset.visualPage===pageKey)for(const tab of root.querySelectorAll('.visual-tab-section'))tabStates.set(tab.dataset.tabKey,tab.querySelector('.visual-tab-body')?.hidden);root.dataset.visualPage=pageKey;
     const panelStates=new Map(),panelCounts=new Map();
     for(const panel of root.querySelectorAll('details.visual-template')){const name=panel.dataset.blockName,index=panelCounts.get(name)||0;panelCounts.set(name,index+1);panelStates.set(name+':'+index,panel.open);}
     root.replaceChildren();const blocks=[],tabMenus=[];let position=0,imageBase='/images/character_art/';
@@ -164,9 +167,15 @@
     for(const template of templates(source)){
       article(position,template.start);position=template.end;const block={...template};blocks.push(block);const parameters=parts(template.value),namePart=parameters.shift(),name=namePart.value.trim().toLowerCase();
       const section=make(name==='spoiler'||name==='credits'?'section':'details','visual-template');block.element=section;
-      const names={page:'Page information',infobox:'Infobox',character:'Infobox',references:'References',characters:'Character list',randomarticle:'Random article',categorypages:'Category pages',tabs:'Tabs',gallery:'Gallery',credits:'Credits',spoiler:'Spoiler'};
+      const names={page:'Page information',infobox:'Infobox',character:'Infobox',references:'References',characters:'Character list',randomarticle:'Random article',categorypages:'Category pages',tabs:'Tabs',gallery:'Gallery',credits:'Credits',spoiler:'Spoiler',collapse:'Expandable section'};
       title(section,names[name]||namePart.value.trim(),block);
-      if(name==='spoiler'||name==='credits'){
+      if(name==='collapse'){
+        const settings=Object.fromEntries(parameters.map(part=>{const i=part.value.indexOf('=');return [part.value.slice(0,i).trim(),part.value.slice(i+1).trim()];}));
+        const content=make('div','visual-body');body(content,settings.content||'',imageBase);
+        const commit=()=>block.value='{{Collapse\n|title='+settings.title+'\n|content=\n'+serialize(content).trim().replace(/\n(?:[ \t]*\n){2,}/g,'\n\n')+'\n}}';
+        section.append(input(settings.title||'Read more','Expandable section title',value=>{settings.title=value.replace(/[\r\n|{}]/g,'');commit();}));
+        editable(content,commit,'Expandable section text');section.append(content);
+      }else if(name==='spoiler'||name==='credits'){
         const content=make('div','visual-body');inline(content,parameters.map(p=>p.value).join('|').trim(),imageBase);editable(content,()=>block.value='{{'+(name==='spoiler'?'Spoiler':'Credits')+'|'+serialize(content,{field:true}).trim().replace(/\n/g,'<br>')+'}}',names[name]+' text');section.append(content);
       }else if(name==='gallery'){
         const images=parameters.map(p=>p.value).join('|').split('\n').filter(v=>v.trim()).map(line=>{const [file,...caption]=line.trim().split(' :: ');return{file,caption:caption.join(' :: ')};});
@@ -217,6 +226,23 @@
         tabBody.append(element);
       }
     }
+    const tabs=[...root.querySelectorAll('.visual-tab-section')];
+    const navigation=make('div','visual-section-nav');navigation.dataset.editorUi='';
+    const select=make('select');select.setAttribute('aria-label','Jump to editor section');
+    const placeholder=make('option','','Jump to section…');placeholder.value='';select.append(placeholder);
+    function setFold(tab,collapsed){tab.querySelector('.visual-tab-body').hidden=collapsed;const toggle=tab.querySelector('.visual-tab-fold');toggle.textContent=collapsed?'▸':'▾';toggle.setAttribute('aria-expanded',String(!collapsed));toggle.setAttribute('aria-label',(collapsed?'Expand ':'Collapse ')+tab.dataset.tabName);}
+    tabs.forEach((tab,index)=>{
+      const bar=tab.querySelector('.visual-tab-marker,.visual-page-label'),field=bar.querySelector('input');
+      tab.dataset.tabName=field?.value||'Page content';tab.dataset.tabKey=index+':'+tab.dataset.tabName;
+      const toggle=button('▾','Collapse '+tab.dataset.tabName,()=>setFold(tab,!tab.querySelector('.visual-tab-body').hidden));toggle.classList.add('visual-tab-fold');
+      const body=tab.querySelector('.visual-tab-body');body.id='visual-tab-body-'+index;toggle.setAttribute('aria-controls',body.id);bar.prepend(toggle);
+      setFold(tab,tabStates.get(tab.dataset.tabKey)||false);
+      const option=make('option','',tab.dataset.tabName);option.value=String(index);select.append(option);
+      field?.addEventListener('input',()=>{tab.dataset.tabName=field.value;option.textContent=field.value;setFold(tab,body.hidden);});
+    });
+    select.addEventListener('change',()=>{if(select.value==='')return;const tab=tabs[Number(select.value)];setFold(tab,false);tab.scrollIntoView({block:'start',behavior:'smooth'});tab.querySelector('.visual-tab-fold').focus({preventScroll:true});select.value='';});
+    navigation.append(select,button('Collapse all','Collapse all editor sections',()=>tabs.forEach(tab=>setFold(tab,true))),button('Expand all','Expand all editor sections',()=>tabs.forEach(tab=>setFold(tab,false))));
+    const toolbar=document.getElementById('format-toolbar');if(toolbar){toolbar.querySelector('.visual-section-nav')?.remove();toolbar.append(navigation);}else root.prepend(navigation);
     panelCounts.clear();
     for(const panel of root.querySelectorAll('details.visual-template')){const name=panel.dataset.blockName,index=panelCounts.get(name)||0;panelCounts.set(name,index+1);const key=name+':'+index;if(panelStates.has(key))panel.open=panelStates.get(key);}
     compose();

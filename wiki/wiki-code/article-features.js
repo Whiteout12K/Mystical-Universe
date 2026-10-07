@@ -18,13 +18,13 @@
     const dialog = document.createElement('dialog');dialog.className='wiki-gallery-viewer';
     const controls=document.createElement('div');controls.className='wiki-gallery-controls';
     const prev=document.createElement('button'),next=document.createElement('button'),close=document.createElement('button');
-    prev.textContent='Previous';next.textContent='Next';close.textContent='Close';
+    prev.textContent='Previous';next.textContent='Next';close.textContent='Close';close.autofocus=true;
     for(const button of [prev,next,close])button.type='button';
-    const image=document.createElement('img'),caption=document.createElement('p');caption.id='wiki-gallery-caption';dialog.setAttribute('aria-label','Artwork viewer');dialog.setAttribute('aria-describedby',caption.id);
+    const image=document.createElement('img');image.draggable=false;const caption=document.createElement('p');caption.id='wiki-gallery-caption';dialog.setAttribute('aria-label','Artwork viewer');dialog.setAttribute('aria-describedby',caption.id);
     controls.append(prev,next,close);dialog.append(controls,image,caption);document.body.append(dialog);
     let index=0,originalOverflow='';
     const show = value => {index=(value+pictures.length)%pictures.length;const original=pictures[index].querySelector('img');image.src=original.currentSrc||original.src;image.alt=original.alt;caption.textContent=pictures[index].querySelector('figcaption')?.textContent||original.alt;prev.hidden=next.hidden=pictures.length<2;};
-    pictures.forEach((figure,i)=>{const anchor=figure.querySelector('a');if(!anchor)return;anchor.setAttribute('aria-label','Enlarge '+(figure.querySelector('figcaption')?.textContent||figure.querySelector('img').alt));anchor.addEventListener('click',event=>{event.preventDefault();show(i);originalOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();});});
+    pictures.forEach((figure,i)=>{const anchor=figure.querySelector('a');if(!anchor)return;anchor.classList.add('wiki-image-trigger');figure.querySelector('img').draggable=false;anchor.setAttribute('aria-label','Enlarge '+(figure.querySelector('figcaption')?.textContent||figure.querySelector('img').alt));anchor.addEventListener('click',event=>{event.preventDefault();if(matchMedia('(pointer: coarse)').matches)window.getSelection()?.removeAllRanges();show(i);originalOverflow=document.body.style.overflow;document.body.style.overflow='hidden';dialog.showModal();close.focus({preventScroll:true});});});
     prev.addEventListener('click',()=>show(index-1));next.addEventListener('click',()=>show(index+1));close.addEventListener('click',()=>dialog.close());
     dialog.addEventListener('close',()=>{document.body.style.overflow=originalOverflow;});
     dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});

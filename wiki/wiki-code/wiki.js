@@ -5,7 +5,7 @@
   const toc = document.getElementById('wiki-toc-links');
   if (toc) {
     const used = new Set([...document.querySelectorAll('[id]')].map(node => node.id));
-    for (const heading of document.querySelectorAll('#wiki-body .wiki-section > :is(h2,h3,h4,h5)')) {
+    for (const heading of document.querySelectorAll('#wiki-body .wiki-section > :is(h2,h3,h4,h5):not([data-wiki-toc-exclude])')) {
       if (!heading.id && heading.textContent==='Mystical Rank and Heritage') heading.id='heritage';
       if (!heading.id && heading.textContent==='Tools and Equipment') heading.id='equipment';
       if (!heading.id) {
@@ -76,7 +76,7 @@
       requestAnimationFrame(() => { (active && (target === active || target === active.querySelector('h2,h3')) ? title : target)?.scrollIntoView({block:'start'}); });
     }
     window.addEventListener('hashchange', applyView); applyView();
-  } else if(location.hash) requestAnimationFrame(() => {try {document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();}catch {}});
+  } else if(location.hash) requestAnimationFrame(() => {try {const target=document.getElementById(decodeURIComponent(location.hash.slice(1)));const details=target?.closest('.wiki-disclosure');if(details)details.open=true;target?.scrollIntoView();}catch {}});
   // Scrolling to the top must not change the hash that selects a virtual view.
   document.querySelector('[data-wiki-back-to-top]')?.addEventListener('click', event => {
     event.preventDefault();

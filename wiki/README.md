@@ -76,11 +76,11 @@ The renderer escapes arbitrary HTML and restricts links to web addresses. This i
 
 ## Nested wiki pages
 
-Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML wrapper, retaining the absolute loader path `/wiki/wiki-code/boot.js?v=1`, and replace its title, description, canonical URL, and wiki text. Assets and navigation use absolute paths, so any folder depth works. Link to nested articles using `[[magic/light|Light]]` or `[[/wiki/magic/light|Light]]`. Set the canonical URL to `https://mysticallegends.org/wiki/magic/light`. No registry or build step is required.
+Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML wrapper, retaining the absolute loader path `/wiki/wiki-code/boot.js`, and replace its title, description, canonical URL, and wiki text. Assets and navigation use absolute paths, so any folder depth works. Link to nested articles using `[[magic/light|Light]]` or `[[/wiki/magic/light|Light]]`. Set the canonical URL to `https://mysticallegends.org/wiki/magic/light`. No registry or build step is required.
 
 ## Home page features
 
-`home.html` uses the same text renderer without an infobox. `{{RandomArticle|title=From the Wiki Archive}}` shows an existing article drawn from wiki URLs in `sitemap.xml`; it checks that the page has wiki text before displaying it. Re-run `python3 sitemap_gen.py` after creating new wiki HTML pages so they join the selection. The home page itself is excluded.
+`home.html` uses the same text renderer without an infobox. `{{RandomArticle|title=From the Wiki Archive}}` shows an existing article drawn from `article-index.json`; it checks that the page has wiki text before displaying it. Re-run `python3 sitemap_gen.py` after creating new wiki HTML pages so they join the selection. The home page itself is excluded.
 
 `{{Characters|Character Name=/images/avatar.png :: wiki_page}}` creates avatar cards; add one named parameter per character. Destinations can be nested local page names or legacy `fandom:` page names. The home currently shows Avery, Kaden, River, Lucy, Teddric, Amos, and Kiara.
 

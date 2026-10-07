@@ -103,6 +103,10 @@
     {
       "path": "/wiki/relationship",
       "title": "Character Relationships"
+    },
+    {
+      "path": "/wiki/timeline",
+      "title": "World Timeline"
     }
   ]
 }
