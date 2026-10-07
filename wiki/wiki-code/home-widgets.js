@@ -21,9 +21,9 @@
           const doc=new DOMParser().parseFromString(await r.text(),'text/html'),source=doc.querySelector('script[type="text/x-wiki"]');if(!source)throw Error();
           const name=source.textContent.match(/\|title\s*=([^\n|}]+)/)?.[1]?.trim()||doc.title.replace(/\s*\|.*$/,'');
           title.textContent=name;title.href=destination;summary.textContent=window.wikiArticleSummary(source.textContent);
-          card.querySelector('img')?.remove();
+          card.querySelector('.wiki-random-portrait')?.remove();
           const file=source.textContent.match(/\|image\s*=([^\n|}]+)/)?.[1]?.split(' :: ')[0].trim();
-          if(file){const base=source.textContent.match(/\|image base\s*=([^\n|}]+)/)?.[1]?.trim()||'/images/character_art/';const img=make('img','wiki-random-image');const url=new URL(file.startsWith('/')||/^https?:/i.test(file)?file:base.replace(/\/?$/,'/')+file,location.href);if(['http:','https:'].includes(url.protocol)){img.src=url.href;img.alt=name;img.loading='lazy';card.prepend(img);}}
+          if(file){const base=source.textContent.match(/\|image base\s*=([^\n|}]+)/)?.[1]?.trim()||'/images/character_art/';const img=make('img','wiki-random-image');const url=new URL(file.startsWith('/')||/^https?:/i.test(file)?file:base.replace(/\/?$/,'/')+file,location.href);if(['http:','https:'].includes(url.protocol)){img.src=url.href;img.alt=name;img.loading='lazy';const frame=make('span','wiki-random-portrait');frame.append(img);card.prepend(frame);}}
           current=path;host.replaceChildren(card);button.hidden=remaining.length<2;button.disabled=false;return;
         }catch{remaining=remaining.filter(p=>p!==path);}
       }
