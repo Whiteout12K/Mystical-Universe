@@ -1,0 +1,115 @@
+{
+  "characters": [
+    {
+      "id": "avery-obtainia-vol1",
+      "name": "Avery Obtainia",
+      "subtitle": "Mystical Legends",
+      "image": "/images/character_art/avery_obtainia_regnum_outfit.png",
+      "description": "",
+      "fields": [
+        { "label": "Age", "value": "15 yrs" },
+        { "label": "Species", "value": "Angelor" },
+        { "label": "Affiliate", "value": "Regnum Academy" },
+
+        { "label": "Magic Rank", "value": "Tier 1, Commonus (current) \n Tier 0, Nothing" },
+        { "label": "Abilities", "value": "Light Discharge (enhancement, energy creation, barrier) \n Healing Magic" },
+        { "label": "Items", "value": "Rune of the Spellcaster" },
+
+        { "label": "Likes", "value": "" },
+        { "label": "Dislikes", "value": "" }
+      ],
+      "footer": "",
+      "pageNumber": ""
+    },
+
+    {
+      "id": "teddric-tech-vol1",
+      "name": "Teddric Tech",
+      "subtitle": "Mystical Legends",
+      "image": "/images/character_art/teddric_tech_buff.png",
+      "description": "",
+      "fields": [
+        { "label": "Age", "value": "15 yrs" },
+        { "label": "Species", "value": "Metalor" },
+        { "label": "Affiliate", "value": "Regnum Academy" },
+
+        { "label": "Magic Rank", "value": "Tier 2, Bonus, Level 3 (current)" },
+        { "label": "Abilities", "value": "Metal Discharge (creation, manipulation, conduction) \n Master Hacker \n Tech Genius \n Runecrafting" },
+        { "label": "Items", "value": "Mystery... \n Tools" },
+
+        { "label": "Likes", "value": "" },
+        { "label": "Dislikes", "value": "" }
+      ],
+      "footer": "",
+      "pageNumber": ""
+    },
+
+    {
+      "id": "river-grant-vol1",
+      "name": "River Grant",
+      "subtitle": "Mystical Legends",
+      "image": "/images/character_art/river_grant_civilian.png",
+      "description": "",
+      "fields": [
+        { "label": "Age", "value": "15 yrs" },
+        { "label": "Species", "value": "Naiad \n Vulpivor (Demihuman)" },
+        { "label": "Affiliate", "value": "Regnum Academy" },
+
+        { "label": "Magic Rank", "value": "Tier 3, Altus, Level 1 (current)" },
+        { "label": "Abilities", "value": "Water Discharge (creation, manipulation) \n Massive Mana Pool" },
+        { "label": "Items", "value": "" },
+
+        { "label": "Likes", "value": "" },
+        { "label": "Dislikes", "value": "" }
+      ],
+      "footer": "",
+      "pageNumber": ""
+    },
+
+
+
+
+
+    
+
+
+
+    {
+      "id": "avery-obtainia-vol2",
+      "name": "Avery Obtainia",
+      "subtitle": "Mystical Legends",
+      "image": "/images/character_art/avery_obtainia_regnum_outfit.png",
+      "description": "",
+      "fields": [
+        { "label": "Age", "value": "15 yrs" },
+        { "label": "Species", "value": "Angelor" },
+        { "label": "Affiliate", "value": "Regnum Academy" },
+
+        { "label": "Magic Rank", "value": "Tier 1, Commonus (current) \n Tier 0, Nothing" },
+        { "label": "Abilities", "value": "Light Discharge (enhancement, energy creation, barrier) \n Healing Magic" },
+        { "label": "Items", "value": "Rune of the Spellcaster" },
+
+        { "label": "Likes", "value": "" },
+        { "label": "Dislikes", "value": "" }
+      ],
+      "footer": "",
+      "pageNumber": ""
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ]
+}

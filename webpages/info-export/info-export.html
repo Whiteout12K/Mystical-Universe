@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Character Page Export | Mystical Legends</title>
+  <link rel="stylesheet" href="info-export.css">
+  <script src="../../js/html2canvas.js" defer></script>
+  <script src="info-export.js" defer></script>
+</head>
+<body>
+  <main class="export-tool">
+    <header class="tool-header">
+      <div><p class="eyebrow">Mystical Legends</p><h1>Character page export</h1><p>A book-ready portrait page, with your artwork and character details.</p></div>
+      <a href="../../index.html">Back to website</a>
+    </header>
+    <section class="toolbar" aria-label="Page controls">
+      <label>Character <select id="character-select"></select></label>
+      <label class="color-option"><input id="color-art" type="checkbox" checked> Color artwork</label>
+      <button id="open-json" type="button">Open JSON</button>
+      <button id="export-png" type="button" disabled>Export PNG</button>
+      <input id="json-file" type="file" accept=".json,application/json" hidden>
+    </section>
+    <p id="status" role="status" aria-live="polite">Loading character data…</p>
+    <div class="preview-window"><div id="page-holder"><article id="character-page" aria-label="Character book page">
+      <header class="page-heading"><p id="page-subtitle"></p><h2 id="character-name"></h2><div class="heading-rule" aria-hidden="true"><span>INFOCARD</span></div></header>
+      <div class="page-content">
+      <div class="artwork"><div class="art-halo" aria-hidden="true"></div><img id="character-splash" alt="" hidden><p id="image-placeholder" hidden>Add a splash image path to this character’s JSON.</p></div>
+      <section class="character-details" aria-label="Character information"><p id="character-description" hidden></p><div class="record-heading"><span>Stats</span></div><dl id="character-fields"></dl></section>
+      </div>
+      <footer class="page-footer"><span id="page-footer-text"></span><span id="page-number"></span></footer>
+    </article></div></div>
+  </main>
+</body>
+</html>
