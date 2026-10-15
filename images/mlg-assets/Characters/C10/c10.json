@@ -106,7 +106,7 @@
       {"text": "<b class=\"lightning\">[Lightning Element]</b>: A special elemental attack which shreds barriers, reducing hit opponent’s defense by -25% when lightning attack lands. The lightning attack will also apply a <b class=\"charged\">[Charged]</b> counter on opponents which stack up to 5 times. This element can maintain its lightning element aura for a short time on inflicted opponents.",
         "style": {"paddingTop": 15}},
       {"text": "When this element interacts with water in the environment, it creates a reactive explosion that launches self, allies, and foes a great deal in velocity direction.",
-        "style": {"paddingLeft": 15, "paddingTop": 7}},
+        "style": {"paddingTop": 7}},
       {"text": "{{effect:charged}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
       {"text": "<b>Resonance</b>: No additional effects. Condition remains the same for lightning-based attack requirements.",

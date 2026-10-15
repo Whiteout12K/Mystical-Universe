@@ -76,6 +76,7 @@
 .inferno { color: #cc0000; }
 .bandage { color: #38761d; }
 .invincibility { color: #f0ca69; }
+.surge { color: #4a86e8 }
 
 /* Debuffs */
 .debuff { color: #969595ad; }
@@ -100,6 +101,7 @@
 .mystical-legends { color: #ff0000; }
 .tempest-aquia { color: #466da8 }
 .blue-legion { color: #3d2ac9 }
+.black-rampart { color: #666666 }
 
 /* Conditions */
 .empowered { color: #dd7e6b; }

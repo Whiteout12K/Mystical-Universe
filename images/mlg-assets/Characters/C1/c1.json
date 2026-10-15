@@ -266,7 +266,7 @@
       {"text": "<b class=\"light\">[True Light Element]</b>: A special element attack that deals additional damage based on the aura element, equal to 5% of the inflictor’s health in a small AoE. The attack can crit based on the crit stats of the inflictor.",
         "style": {"paddingTop": 15}},
       {"text": "The following are the immediate obtainable effects gained for inflictor and contributor based on the type of element aura in the discharge, lasting the duration of light meter:",
-        "style": {"paddingLeft": 15, "paddingTop": 7}},
+        "style": {"paddingTop": 7}},
 
       {"text": "<span class=\"undim\"> > <b class=\"fire\">[Fire]</b>: Damage of skills increases by +10% for 5 seconds. Gain an additional +5% damage increase for each point in the light meter.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}},

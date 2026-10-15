@@ -724,7 +724,7 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
 
     "species": ["Elementor", "Elementor", "Wentor"],
-    "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonator"],
+    "specialty": ["Defense", "AoE Damage", "Support", "Debuffer", "Shredder", "Healing", "Disrupter"],
     "affinity": ["Earth", "Fire", "Wind"],
     "role": ["Healer"],
 
