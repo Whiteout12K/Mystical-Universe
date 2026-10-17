@@ -1,0 +1,262 @@
+{
+
+  "B1-1": {
+    "name": "Fighting For His Boss (Earth Discharge)",
+    "type": "Basic Skill",
+    "description": "Tony Smith unleashes his hammer of rock and pounds around, dealing <b class=\"earth\">[Earth]</b> damage and <b class=\"knockback\">[Knockback]</b>.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Smash in front, dealing AoE empowered damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Swing hammer in an arc in front, dealing AoE damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Smash around three times, forming large craters, dealing AoE empowered damage equal to <b><span data-dmg=\"dmg3\"></span>%</b> of attack. Opponents touching craters get the debuff <b class=\"dazed\">[Dazed]</b>.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "{{effect:dazed}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:knockback}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 80,
+      "dmg2": 95,
+      "dmg3": 125
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+  "B1-2": {
+    "name": "Lightning Rondo (Electricity Discharge)",
+    "type": "Basic Skill",
+    "description": "Ellie Tracey coats her body in lightning and charges forward, dealing <b class=\"fire\">[Fire]</b> damage and applying <b class=\"electrocute\">[Electrocute]</b> per hit.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Shoot small bolts ahead, dealing damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Throw a condensed whip of lightning, dealing damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "<b>Charged Basic Skill:</b> Costing -5% of energy gauge, charge up an ultra-sized ball of lightning, taking 3 seconds, increasing movement speed by +150% during its charge. When charged, it will be tossed forward, dealing AoE ranged damage equal to <b><span data-dmg=\"dmg3\"></span>%</b> of attack. This stage will be skipped if the energy gauge is empty.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "Can activate Stage 3 by holding Basic Skill.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:electrocute}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
+    ],
+    "base_damage": {
+      "dmg1": 60,
+      "dmg2": 85,
+      "dmg3": 670
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+  "B1-3": {
+    "name": "Tornado Engulfment (Wind Discharge)",
+    "type": "Basic Skill",
+    "description": "Tom Nado conjures wind around him that bends to his will, dealing <b class=\"wind\">[Wind]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "stages": [
+      {"name": "Stage 1",
+        "text": "Wields a wind blade and swipes quickly, dealing damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 2",
+        "text": "Send a gust of wind that bewilders opponents, dealing damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}},
+      {"name": "Stage 3",
+        "text": "Costing -3% of energy gauge, summons a mini-tornado in front, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of attack as damage. The tornado will linger for 5 seconds and absorb the next attack (from self or ally) and buff its damage by +20% (<b class=\"fire\">[Fire]</b> getting +40% instead). This stage will be skipped if the energy gauge is empty.",
+        "style": {"paddingLeft": 15, "paddingTop": 7}}
+    ],
+    "additional": [
+      {"text": "Every stage hit will heal self and allies for 30% of the damage dealt.",
+        "style": {"paddingTop": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 75,
+      "dmg2": 105,
+      "dmg3": 130
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+
+  "S1-1": {
+    "name": "Mound Defense",
+    "type": "Special Skill",
+    "description": "Tony Smith becomes fired up (only temporarily as he is lazy often, but chooses to act for his boss). He grants a <b class=\"shield\">[Shield]</b> to allies and self equal to <b><span data-dmg=\"shield\"></span>%</b> of max health if any ally has their health at or below 30%.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "{{effect:shield}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "Cooldown: 16 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 170 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "shield": 20
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+  "S1-2": {
+    "name": "Mana Zone - Eletrostep Overdrive",
+    "type": "Special Skill",
+    "description": "Gathering the surrounding mana, Ellie will gain an enhanced electricity state that will increase her Basic Skill damage by <b><span data-dmg=\"bonus\"></span>%</b> for 15 seconds. Her steps become a blur of lightning, increasing movement speed by an additional +1% for each extra point of movement speed above 100.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "In the state, her interruption resistance will increase and she can pass through opponents, inflicting <b class=\"electrocute\">[Electrocute]</b>.",
+        "style": {"paddingTop": 7}},
+      {"text": "{{effect:electrocute}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "{{effect:freeze}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+      {"text": "Cooldown: 18 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 230 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "bonus": 20
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+  "S1-3": {
+    "name": "Towering Tornado",
+    "type": "Special Skill",
+    "description": "Summon a larger swirling tornado for 5 seconds that gathers opponents together, a range of 20 meters, and flattens them, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"wind\">[Wind]</b> damage.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Each opponent gathered will struggle, unable to escape easily for the tornado’s duration, and heal self and allies for <b><span data-dmg=\"heal\"></span>%</b> of max health for each opponent gathered.",
+        "style": {"paddingTop": 7}},
+      {"text": "Cooldown: 15 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 155 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 320,
+      "heal": 5
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "S2": {
+    "name": "Prepare to Fight!",
+    "type": "Special Skill",
+    "description": "Gather elemental power together and create a ring around self with the respective active subordinate’s element, absorbing <b><span data-dmg=\"absorb\"></span>%</b> of incoming damage, an additional +10% for projectiles, for 10 seconds.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "Active character will continuously gain the effect <b class=\"hyped\">[Hyped]</b> while elemental ring is active.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>[Hyped]</b> Buff: Basic Skill will only perform Stage 3 when attacking, skipping prior stages, lasting 5 seconds.",
+        "style": {"paddingTop": 7}},
+      {"text": "Cooldown: 10 seconds",
+        "style": {"paddingTop": 15, "fontSize": 7}},
+      {"text": "Mana Cost: 90 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "absorb": 18
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "U1": {
+    "name": "A Kick, a Punch, and… Serious",
+    "type": "Ultimate Skill",
+    "description": "If the character’s health is above 40%, perform the skill as titled, otherwise, when below, transform to Ultimate Skill: Mountain Truck Rampage.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "<u>Ultimate Skill: A Kick, a Punch, and…</u> - The current subordinate proves their worth to their boss with exclusive talent. Throw a series of fast close-quarters punches via the Basic Skill, imbued with the damage and element of the subordinate’s Stage 3. The state lasts for 15 seconds and will add a rage to the tri-node rage meter per hit, dispersing a shockwave and resistance shred at its prescribed intervals.",
+        "style": {"paddingTop": 7}},
+      {"text": "<u>Ultimate Skill: Mountain Truck Rampage</u> - The other two subordinates arrive on the scene and the trio will hop into the newly summoned vehicle, a truck. The vehicle can be controlled and will deal active member’s elemental damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack when ramming any number of enemies. The vehicle gains +20% of speed stat and lasts for 13 seconds.",
+        "style": {"paddingTop": 7}},
+      {"text": "During the duration, gain 15 combat rage points and other subordinates will perform their Stage 3 Basic Skill attacks per stack, depleting a stack per attack. If Pyrus Bourn is an ally, he will also join the ride and attack with his Stage 3 Basic Skill, consuming a stack. All who can attack will attack every 2 seconds.",
+        "style": {"paddingTop": 7}},
+      {"text": "For self and Pyrus, heal <b>+<span data-dmg=\"heal\"></span>%</b> of health per second on the ride’s duration.",
+        "style": {"paddingTop": 7}},
+      {"text": "Energy Gauge: 130% (Requires overflow energy as indicated by a secondary gauge on the Ultimate Skill button)",
+        "style": {"paddingTop": 15, "fontSize": 7}}
+    ],
+    "base_damage": {
+      "dmg1": 380,
+      "heal": 4
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  },
+
+
+  "T1": {
+    "name": "Attack Unison - All for One!",
+    "type": "Technical Skill",
+    "description": "When stamina is reduced to less than 5%, rotate to the next subordinate in the order: Tony Smith, Tom Nado, Ellie Tracey (Cooldown: 20 seconds). Restore 30% stamina upon switching.",
+    "description_style": {"paddingTop": 7},
+    "additional": [
+      {"text": "When switching, the next character will come in and deal 350% of attack as their respective elemental damage and apply a -15% resistance reduction to that element to hit opponents for 25 seconds.",
+        "style": {"paddingTop": 7}},
+      {"text": "A special tri-node rage meter will record the instance of each rotation. At three points, a shockwave will hit nearby opponents for the same damage and an additional elemental resistance reduction of -25% will be applied to those that have one for a new duration of 40 seconds (costs -15% of energy gauge to apply).",
+        "style": {"paddingTop": 7}},
+      {"text": "The damage each subordinate deals upon entry and the damage of the shockwave is further amplified by +10% per level of the highest Special Skill equipped.",
+        "style": {"paddingTop": 7}},
+
+      {"text": "<b>Resonance:</b> No additional effects.",
+        "style": {"paddingTop": 15}}
+    ]
+  },
+
+
+  "Dupes": {
+    "description": "Tony Smith will receive a defense bonus of +30%, Tom Nado gains +50% piercing, and Ellie Tracey receives +20% attack speed and movement speed. The subordinates’ energy gauge accumulation is -20% less effective as other characters but they can gain a max of 200% of energy instead of 100%.",
+    "additional": [
+      {"text": "A main individual can be chosen out of the trio to be the first summoned when in a party selection.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 1,
+        "text": "Obtain a combat rage meter that stores the number of successive Basic Skill stage hits (max 25), deteriorating one stack per 2 seconds when reaching 10 stacks. While rage meter is active, it will cause the other two subordinates not active to attack with their respective Stage 1 Basic Skills randomly every 3 seconds. This can occur even when the active subordinate is off-field.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 2,
+        "text": "When the other subordinates attack from the cumulative rage meter, inflict the <b>[Debuff Contagion]</b> effect on opponents. Increases energy gauge gain by +2% for every stack in the rage meter.",
+        "style": {"paddingTop": 7}},
+      {"text": "<b>[Debuff Contagion]</b> Debuff: Opponents’ resistance to debuffs are decreased by -50% for 9 seconds.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 3,
+        "text": "Increases the damage of Special Skills by +15%.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 4,
+        "text": "Status effects that deal damage over time, like <b class=\"burn\">[Burn]</b> or <b class=\"poison\">[Poison]</b>, will deal more damage to enemies with resistance reduction of any element, the damage scaling increases as a percentage equal to the highest percentage of resistance reduction on the opponent. Such applied debuff effects will have a duration increase of +30%.",
+        "style": {"paddingTop": 7}},
+
+      {"level": 5,
+        "text": "The combat rage meter can accumulate stacks while the subordinates are off-field when the current active character attacks with Basic Skill hits. All three subordinates will then attack with Stage 2 Basic Skill attacks randomly every 3 seconds. The damage will increase by +30% when the subordinates are off-field for more than 5 seconds and effect will end when they come back on-field.",
+        "style": {"paddingTop": 7}}
+    ]
+  }
+
+}

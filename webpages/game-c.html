@@ -49,6 +49,14 @@ body{
     linear-gradient(180deg,#0d0c0d 0%,#171415 55%,#0d0c0d 100%);
 }
 
+.skills-heading-row{display:contents}
+.skills-heading-row:has(.skill-variant-selector:not([hidden])){display:flex;align-items:center;flex-wrap:wrap;gap:20px}
+.skills-heading-row:has(.skill-variant-selector:not([hidden])) h3{margin:0}
+.skill-variant-selector:not([hidden]){display:flex;flex-wrap:wrap;gap:16px;margin:0;padding:4px 8px}
+.skill-variant-selector button{border:0;border-bottom:1px solid rgba(214,170,69,.16);border-radius:0;padding:3px 0;background:transparent;color:var(--fantasy-text);font:400 12px/1.5 Arial,sans-serif;cursor:pointer}
+.skill-variant-selector button:hover,.skill-variant-selector button[aria-pressed="true"]{border-bottom-color:rgba(240,202,105,.4);color:var(--fantasy-gold2)}
+.skill-variant-selector button:focus-visible{outline:2px solid var(--fantasy-gold2);outline-offset:3px}
+
 /* Page heading */
 
 #page-heading{
@@ -446,6 +454,7 @@ hr.my-4{
 /* Mobile */
 
 @media(max-width:767px){
+  .character-summary{margin-bottom:28px}
   .splash-art{height:420px}
   #character-info{padding:25px!important}
   #character-name{font-size:1.8rem}
@@ -464,7 +473,7 @@ hr.my-4{
 <h1 id="page-heading">Mystical Legends Game - Loading Character</h1>
 
 <div class="container py-4">
-  <section class="row g-4 align-items-center">
+  <section class="character-summary row g-4 align-items-center">
     <div class="col-12 col-md-5">
       <img id="character-splash" class="splash-art" src="" alt="Character Splash">
     </div>
@@ -503,7 +512,10 @@ hr.my-4{
     <button id="c4-skills-tab" type="button" role="tab" aria-selected="true" aria-controls="skills-view">Skills</button>
     <button id="c4-tree-tab" type="button" role="tab" aria-selected="false" aria-controls="c4-tree-view" tabindex="-1">Skill Tree</button>
   </div>
-  <h3 id="skills-heading">Skills</h3>
+  <div class="skills-heading-row">
+    <h3 id="skills-heading">Skills</h3>
+    <div id="skill-variant-selector" class="skill-variant-selector" role="group" aria-label="Choose subordinate" hidden></div>
+  </div>
   <hr id="skills-divider" class="my-4">
 
   <section id="skills-view">
@@ -538,6 +550,7 @@ hr.my-4{
 <script>
 "use strict";
 
+let activeSkillVariant=0;
 let characterData=null,skills=[],activeSkillIndex=-1,skillLoadToken=0,skillResizeObserver=null;
 const TRANSITION_DURATION=250,MIN_SKILL_HEIGHT=120,SKILL_VIEW_PATH="/ml-game/apps/skill.html";
 const $=id=>document.getElementById(id);
@@ -570,7 +583,7 @@ function getSkillCategory(skill){
 function getSkillIcon(skill,path){
   return skill==="Dupes"
     ?"/images/mlg-assets/Stars/dupe.svg"
-    :`${path}/skill_b/${skill.toLowerCase()}.svg`;
+    :`${path}/skill_b/${skill.split("-")[0].toLowerCase()}.svg`;
 }
 
 function getSkillFile(skill,charId){
@@ -581,7 +594,8 @@ function getSkillFile(skill,charId){
 function createSkillButtons(character){
   const sidebar=$("skillSidebar");
   sidebar.innerHTML="";
-  skills=Array.isArray(character.skills)?character.skills:[];
+  const overrides=character.skill_variants?.[activeSkillVariant]?.skill_overrides||{};
+  skills=(Array.isArray(character.skills)?character.skills:[]).map(skill=>overrides[skill]||skill);
   sidebar.style.display=skills.length?"flex":"none";
 
   let previousCategory=null;
@@ -605,10 +619,39 @@ function createSkillButtons(character){
     image.alt=skill;
     image.loading="eager";
     image.decoding="async";
+    button.title=skill;
+    image.addEventListener("error",()=>{
+      image.remove();
+      button.textContent=skill.split("-")[0];
+    },{once:true});
 
     button.appendChild(image);
     sidebar.appendChild(button);
     previousCategory=category;
+  });
+}
+
+function createSkillVariantSelector(character){
+  const selector=$("skill-variant-selector");
+  selector.replaceChildren();
+  const variants=character.skill_variants||[];
+  selector.hidden=variants.length===0;
+  activeSkillVariant=0;
+  variants.forEach((variant,index)=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.textContent=variant.name;
+    button.setAttribute("aria-pressed",String(index===0));
+    button.addEventListener("click",()=>{
+      if(activeSkillVariant===index)return;
+      const skillIndex=Math.max(0,activeSkillIndex);
+      activeSkillVariant=index;
+      selector.querySelectorAll("button").forEach((item,i)=>item.setAttribute("aria-pressed",String(i===index)));
+      activeSkillIndex=-1;
+      createSkillButtons(character);
+      showSkill(Math.min(skillIndex,skills.length-1));
+    });
+    selector.appendChild(button);
   });
 }
 
@@ -673,6 +716,7 @@ async function prepareIframe(iframe){
       .skill-title-separator{display:none}
       .skill-name{display:block}
       #skill-content u{text-decoration:none;color:#d6aa45;font-weight:700}
+      :where(#skill-content) b{color:#f6dfa2;font-weight:700}
       .icon-container{gap:10px;line-height:1.45}
       .effect-icon{flex:none;padding-top:3px}
       .effect-text{min-width:0}
@@ -1010,6 +1054,7 @@ function setupCharacter(character){
   $("character-affiliation").innerHTML=createListItems(character.affiliation);
   $("character-attributes").innerHTML=createListItems(character.attributes);
 
+  createSkillVariantSelector(character);
   createSkillButtons(character);
   loadCharacterStyles(character);
 

@@ -115,18 +115,6 @@
   },
 
 
-  "T2": {
-    "name": "Contamination",
-    "type": "Technical Skill",
-    "description": "One of the Eight Forces, now wielded by Kiara herself. If Kiara has unlocked up to 2 unique Special Skills that infuse her Basic Skill with two unique elements, then any Special Skill that has infusion will apply both elements simultaneously to Basic Skill, allowing simultaneous aura application. Only one of these Special Skills need to be equipped.",
-    "description_style": {"paddingTop": 7},
-    "additional": [
-      {"text": "<b>Resonance</b>: No additional effects. Condition remains the same for lightning-based attack requirements.",
-        "style": {"paddingTop": 15}}
-    ]
-  },
-
-
   "Dupes": {
     "description": "Kiara’s movement speed is inversely related to her health where every 1% of health missing from max will increase her movement speed by +1%. Skill damage will increase by each percentage of crit rate over 100% at a 1-to-1 rate. Whenever Kiara damages an opponent with an uninfused skill, she applies <b class=\"claw-mark\">[Claw Mark]</b> effect on them.",
     "additional": [

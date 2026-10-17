@@ -714,7 +714,7 @@
     "id": 11,
     "profile_image": "/images/character_art/Character_Heads/pyrus_subordinates_head.png",   
 
-    "splash_image": "",
+    "splash_image": "/images/character_art/ellie_tracey_posed.png",
     "splash_color": "drop-shadow(0 0 18px rgba(181, 79, 215, 0.429))",
     "button_color": "#89e5f7",
 
@@ -723,7 +723,7 @@
     "rarity": "SR",
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c11_role.svg",
 
-    "species": ["Elementor", "Elementor", "Wentor"],
+    "species": ["Elementor", "Wentor"],
     "specialty": ["Defense", "AoE Damage", "Support", "Debuffer", "Shredder", "Healing", "Disrupter"],
     "affinity": ["Earth", "Fire", "Wind"],
     "role": ["Healer"],
@@ -736,6 +736,19 @@
 
     "skills": ["B1", "S1", "S2", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C11",
+    "skill_variants": [
+      {"name": "Tony Smith",
+       "skill_overrides": {
+       "B1": "B1-1",
+       "S1": "S1-1"} },
+      {"name": "Ellie Tracey",
+       "skill_overrides": {
+       "B1": "B1-2",
+       "S1": "S1-2"} },
+      {"name": "Tom Nado",
+       "skill_overrides": {
+       "B1": "B1-3",
+       "S1": "S1-3"} }  ],
 
     "base_stats": {
         "health": 1000,

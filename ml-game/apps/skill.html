@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     const charData=await charResponse.json();
     const effects=await effectResponse.json();
-    const data=charData?.[skill];
+    const data=charData?.[skill]||(character==="c11"?charData?.[`${skill}-1`]:null);
 
     if(!data)throw new Error(`"${skill}" was not found in ${character}.json.`);
 
@@ -125,6 +125,12 @@ document.addEventListener("DOMContentLoaded",async()=>{
     if(Array.isArray(data.additional))
       html+=renderDupeAdditional(data.additional,level,effects);
 
+    // Some characters also document Red/Rainbow progression beyond Gold Stars.
+    for(const tier of data.star_tiers||[]){
+      html+=renderContent(`<b>${tier.name}</b>`,effects,{paddingTop:15});
+      for(const star of tier.stars||[])
+        html+=renderContent(`<b>${star.label}:</b> ${star.text}`,effects,{paddingTop:7});
+    }
     document.getElementById("skill-content").innerHTML=html;
     updateDamageValues(data,level);
   }
