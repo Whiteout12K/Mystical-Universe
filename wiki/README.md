@@ -80,7 +80,7 @@ Create `wiki/magic/light.html` for `/wiki/magic/light`. Copy Avery's small HTML 
 
 ## Home page features
 
-`home.html` uses the same text renderer without an infobox. `{{RandomArticle|title=From the Wiki Archive}}` shows an existing article drawn from `article-index.json`; it checks that the page has wiki text before displaying it. Re-run `python3 sitemap_gen.py` after creating new wiki HTML pages so they join the selection. The home page itself is excluded.
+`home.html` uses the same text renderer without an infobox. `{{RandomArticle|title=From the Wiki Archive}}` shows an existing article drawn from `article-index.json`; it checks that the page has wiki text before displaying it. Re-run `python3 scripts/sitemap_gen.py` after creating new wiki HTML pages so they join the selection. The home page itself is excluded.
 
 `{{Characters|Character Name=/images/avatar.png :: wiki_page}}` creates avatar cards; add one named parameter per character. Destinations can be nested local page names or legacy `fandom:` page names. The home currently shows Avery, Kaden, River, Lucy, Teddric, Amos, and Kiara.
 
@@ -90,7 +90,7 @@ Place `|tab=Overview` on its own line before the first tab’s body. Use `|tab=P
 
 In `{{Tabs}}`, a bare entry such as `|Overview` or `|Powers & Abilities` links to the matching marker. An explicit entry such as `|MLG=/webpages/game-c.html?char=c1` still links to a separate page. Without a Tabs block, multiple markers generate navigation automatically. Names without a matching marker remain inactive. Infobox, Gallery, References, Credits, and home widgets remain shared optional directives; Gallery/References appear with the first tab and Credits stay below every tab. Existing pages without markers still work.
 
-Wiki links use `sitemap.xml` to recognize available website pages. Regenerate it with `sitemap_gen.py` after adding pages. Missing destinations stay visible without navigating.
+Wiki links use `sitemap.xml` to recognize available website pages. Regenerate it with `scripts/sitemap_gen.py` after adding pages. Missing destinations stay visible without navigating.
 
 Full HTTP/HTTPS links in References and Credits remain clickable external source links. Other unavailable wiki destinations stay inactive.
 
@@ -110,4 +110,4 @@ The editor is disabled on hosted domains and excluded from search indexing.
 
 Create a wiki HTML article anywhere under wiki/, then open or refresh your wiki folder in the local wiki editor. The editor automatically refreshes article-index.json when it scans the folder or saves a page. Publish that index alongside the HTML files. New pages become searchable, linkable, and discoverable without changing navigation.json. The header’s curated navigation remains controlled by navigation.json.
 
-When adding files directly in VS Code, run `python3 sitemap_gen.py` from the website root to refresh both the article index and sitemap. You can also use that command as the Cloudflare Pages build command. Browser code cannot enumerate unpublished files in a static hosting folder.
+When adding files directly in VS Code, run `python3 scripts/sitemap_gen.py` from the website root to refresh both the article index and sitemap. You can also use that command as the Cloudflare Pages build command. Browser code cannot enumerate unpublished files in a static hosting folder.

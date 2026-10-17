@@ -1,6 +1,6 @@
 import importlib.util,json,tempfile,unittest
 from pathlib import Path
-spec=importlib.util.spec_from_file_location('index',Path(__file__).with_name('build-site-index.py'))
+spec=importlib.util.spec_from_file_location('index',Path(__file__).resolve().parents[1]/'scripts'/'build-site-index.py')
 index=importlib.util.module_from_spec(spec);spec.loader.exec_module(index)
 class SearchSafetyTests(unittest.TestCase):
  def test_nested_spoilers_do_not_enter_summary(self):
@@ -23,7 +23,7 @@ class SearchSafetyTests(unittest.TestCase):
 
 class ContentCheckTests(unittest.TestCase):
  def test_new_missing_skill_placeholder_and_damage_are_reported(self):
-  spec=importlib.util.spec_from_file_location('checker',Path(__file__).with_name('check-content.py'));checker=importlib.util.module_from_spec(spec);spec.loader.exec_module(checker)
+  spec=importlib.util.spec_from_file_location('checker',Path(__file__).resolve().parents[1]/'scripts'/'check-content.py');checker=importlib.util.module_from_spec(spec);spec.loader.exec_module(checker)
   with tempfile.TemporaryDirectory() as directory:
    root=Path(directory);checker.ROOT=root
    (root/'images/mlg-assets/Characters/C1').mkdir(parents=True)

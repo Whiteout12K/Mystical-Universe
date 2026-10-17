@@ -5,3 +5,8 @@
 .wrangler/
 .venv/
 .books/music/
+
+# Finder metadata and Python-generated caches
+.DS_Store
+__pycache__/
+*.py[cod]

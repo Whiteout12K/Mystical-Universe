@@ -93,7 +93,7 @@ def main():
  print(f'{len(issues)} existing issues; {len(new)} '+('total failures' if args.strict else 'new failures')+f'; {len(fixed)} baseline issues now resolved.')
  for issue in new:print('ERROR '+issue)
  if args.baseline:
-  report=ROOT/'CONTENT-AUDIT.md';report.write_text('# Existing content issues\n\nThese issues were already present when the website improvements were added. No missing story or skill content has been invented. New issues fail the default check; `--strict` also fails for these known issues.\n\n'+''.join('- '+issue+'\n' for issue in issues))
+  report=ROOT/'docs/CONTENT-AUDIT.md';report.parent.mkdir(exist_ok=True);report.write_text('# Existing content issues\n\nThese issues were already present when the website improvements were added. No missing story or skill content has been invented. New issues fail the default check; `--strict` also fails for these known issues.\n\n'+''.join('- '+issue+'\n' for issue in issues))
  spec=importlib.util.spec_from_file_location('site_index',ROOT/'scripts/build-site-index.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
  stale=[]
  for filename,data in module.build().items():
@@ -101,5 +101,5 @@ def main():
   if not path.exists() or path.read_text()!=expected:stale.append(filename)
  if stale:print('ERROR Stale indexes: '+', '.join(stale)+'; run python3 scripts/build-site-index.py')
  if new or stale:raise SystemExit(1)
- print('Content checks passed (known issues are recorded in CONTENT-AUDIT.md).')
+ print('Content checks passed (known issues are recorded in docs/CONTENT-AUDIT.md).')
 if __name__=='__main__':main()

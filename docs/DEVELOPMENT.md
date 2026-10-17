@@ -19,7 +19,7 @@ wrangler whoami
 wrangler d1 create mystical-data
 
 # Apply schema locally
-wrangler d1 execute mystical-data --local --file=./schema.sql
+wrangler d1 execute mystical-data --local --file=./migrations/schema.sql
 
 # Start local website
 wrangler pages dev .
@@ -52,7 +52,7 @@ http://localhost:8788/create-user
 > Remote Export to Official
 
 # Apply schema to Cloudflare
-wrangler d1 execute mystical-data --remote --file=./schema.sql
+wrangler d1 execute mystical-data --remote --file=./migrations/schema.sql
 
 # See Cloudflare users and data
 wrangler d1 execute mystical-data --remote --command="SELECT id, username, json_extract(save_data, '$.silver_coin') AS silver_coin, json_extract(save_data, '$.ar_level') AS ar_level, json_extract(save_data, '$.energy') AS energy FROM users;"

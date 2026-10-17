@@ -36,8 +36,8 @@ For a complete code removal, remove the corresponding module/page and its loader
 ```sh
 python3 scripts/build-site-index.py
 python3 scripts/check-content.py
-python3 -m unittest discover -s scripts -p 'test_*.py'
-node --test scripts/test-*.mjs
+python3 -m unittest discover -s tests -p 'test_*.py'
+node --test tests/test-*.mjs
 ```
 
 Generated files:
@@ -63,7 +63,7 @@ Existing `{{Spoiler|text}}` entries are unclassified and remain hidden for finit
 
 ## Content audit and checks
 
-`CONTENT-AUDIT.md` records issues already present when the additions were implemented, including unfinished skill definitions and missing assets. `data/content-check-baseline.json` holds the exact same known-issue list. The normal check fails on **new** problems and stale indexes; `--strict` also fails on known issues. Existing unfinished content is not invented or silently removed.
+`docs/CONTENT-AUDIT.md` records issues already present when the additions were implemented, including unfinished skill definitions and missing assets. `data/content-check-baseline.json` holds the exact same known-issue list. The normal check fails on **new** problems and stale indexes; `--strict` also fails on known issues. Existing unfinished content is not invented or silently removed.
 
 ```sh
 python3 scripts/check-content.py --strict
@@ -91,12 +91,12 @@ Signed-in visitors can open **Account** from their user menu at `/webpages/accou
 
 Wiki appearance has three account choices: Use browser preference, Light, or Dark. A saved Light/Dark account choice takes priority over `wiki_theme` cookies. Use browser preference falls back to the cookie. Signed-out readers always use the cookie/default; the account override does not overwrite that cookie. The wiki's own mode toggle saves the theme to the signed-in account, or to the cookie for a signed-out visitor.
 
-Account appearance and theme are stored in `user_account_preferences`, separate from `users.save_data`. The idempotent table definition is included in `schema.sql`, and account/profile handlers initialize it when necessary. No remote database command was run during implementation. `/api/account` uses the existing login session and returns only the current account name, preferences, and resolved appearance URLs. The update endpoint accepts only catalogue IDs and known wiki modes, and rejects cross-origin changes and unknown fields. Partial updates let the wiki toggle change the theme without resetting profile appearance. Public profiles receive avatar/background IDs, not the user's private wiki preference.
+Account appearance and theme are stored in `user_account_preferences`, separate from `users.save_data`. The idempotent table definition is included in `migrations/schema.sql`, and account/profile handlers initialize it when necessary. No remote database command was run during implementation. `/api/account` uses the existing login session and returns only the current account name, preferences, and resolved appearance URLs. The update endpoint accepts only catalogue IDs and known wiki modes, and rejects cross-origin changes and unknown fields. Partial updates let the wiki toggle change the theme without resetting profile appearance. Public profiles receive avatar/background IDs, not the user's private wiki preference.
 
 Tests:
 
 ```sh
-node --test scripts/test-*.mjs
+node --test tests/test-*.mjs
 python3 scripts/check-content.py
 ```
 
