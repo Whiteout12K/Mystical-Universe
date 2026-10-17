@@ -4,6 +4,9 @@ pdfjsLib.GlobalWorkerOptions.workerSrc="./pdfjs/pdf.worker.mjs";
 
 const params=new URLSearchParams(location.search);
 const id=params.get("id")||"1";
+const readingEnhancements=await fetch('/data/site-features.json').then(r=>r.ok?r.json():{}).then(f=>f.readingContinuity===true).catch(()=>false);
+let chapterLocations=[],chapterControls=null;
+if(readingEnhancements){const css=document.createElement('link');css.rel='stylesheet';css.href='/css/site-enhancements.css';document.head.append(css);}
 
 const books={
     "1":"/books/pdf/Mystical Legends 1.pdf",
@@ -72,7 +75,9 @@ viewer.addEventListener('scroll',()=>{
  scrollFrame=requestAnimationFrame(()=>{scrollFrame=null;
  const line=viewer.scrollTop+viewer.clientHeight*.35;
  for(const [number,element] of pageElements){if(element.offsetTop<=line)currentPage=number;else break;}
- saved.page=currentPage;saveReading();renderBookmarks();document.getElementById('readingProgress').textContent=`Page ${currentPage} of ${pdf.numPages}`;
+ saved.page=currentPage;
+ if(readingEnhancements){const wrapper=pageElements.get(currentPage);saved.offset=wrapper?Math.max(0,Math.min(1,(viewer.scrollTop-wrapper.offsetTop)/wrapper.offsetHeight)):0;try{localStorage.setItem('ml-reading-current',JSON.stringify({id,page:currentPage,updatedAt:Date.now()}));}catch{}updateChapterControls();}
+ saveReading();renderBookmarks();document.getElementById('readingProgress').textContent=`Page ${currentPage} of ${pdf.numPages}`;
  });
 },{passive:true});
 
@@ -162,6 +167,11 @@ async function renderOutline(){
     }
 
     outlineEl.appendChild(createOutlineList(outline));
+    if(readingEnhancements){
+      const flatten=items=>items.flatMap(item=>[item,...flatten(item.items||[])]);
+      const locations=await Promise.all(flatten(outline).filter(item=>item.dest).map(async item=>({page:await getDestinationPage(item.dest),title:item.title||'Section'})));
+      chapterLocations=locations.filter(item=>Number.isInteger(item.page)&&item.page>0&&item.page<=pdf.numPages).sort((a,b)=>a.page-b.page).filter((item,i,list)=>i===0||item.page!==list[i-1].page);
+    }
 }
 
 function createOutlineList(items){
@@ -302,9 +312,27 @@ async function renderBook(){
  document.getElementById('readingProgress').textContent=`Page 1 of ${pdf.numPages}`;
 }
 
+/* ---------------- Reading continuity ---------------- */
+function updateChapterControls(){
+ if(!chapterControls)return;
+ const index=chapterLocations.findLastIndex(chapter=>chapter.page<=currentPage);
+ chapterControls.previous.disabled=index<=0;chapterControls.next.disabled=index>=chapterLocations.length-1;
+ chapterControls.label.textContent=chapterLocations[index]?.title||'Book sections';
+ chapterControls.previous.onclick=()=>{if(index>0)jump(chapterLocations[index-1].page);};
+ chapterControls.next.onclick=()=>{if(chapterLocations[index+1])jump(chapterLocations[index+1].page);};
+}
+function setupReadingContinuity(){
+ if(!readingEnhancements)return;
+ if(chapterLocations.length>1){const nav=document.createElement('nav');nav.className='ml-chapter-nav';nav.setAttribute('aria-label','Chapter navigation');const previous=document.createElement('button'),next=document.createElement('button'),label=document.createElement('span');previous.type=next.type='button';previous.textContent='← Previous';next.textContent='Next →';previous.setAttribute('aria-label','Previous chapter or section');next.setAttribute('aria-label','Next chapter or section');label.className='ml-chapter-label';nav.append(previous,label,next);document.getElementById('toolbar').append(nav);chapterControls={previous,next,label};updateChapterControls();}
+ const restore=()=>{if(!validPage(Number(resumePage)))return;jump(resumePage);const target=pageElements.get(Number(resumePage));if(target&&Number.isFinite(saved.offset))viewer.scrollTop=target.offsetTop+Math.max(0,Math.min(1,saved.offset))*target.offsetHeight;};
+ resume.onclick=()=>{restore();closeSidebar();};
+ if(params.get('resume')==='1')restore();
+}
+
 /* ---------------- Start ---------------- */
 
 await Promise.all([
     renderBook(),
     renderOutline()
 ]);
+setupReadingContinuity();

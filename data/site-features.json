@@ -1,0 +1,12 @@
+{
+  "unifiedSearch": true,
+  "characterConnections": true,
+  "spoilerPreferences": true,
+  "characterComparison": false,
+  "mobileNavigation": true,
+  "effectsGlossary": true,
+  "readingContinuity": true,
+  "visualConsistency": true,
+  "contentChecks": true,
+  "fastWikiSearch": true
+}

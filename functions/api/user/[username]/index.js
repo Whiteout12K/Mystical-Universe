@@ -1,3 +1,4 @@
+import {readAccountPreferences} from "../../../_account.js";
 import {
     jsonResponse,
     getUser
@@ -44,10 +45,13 @@ export async function onRequestGet(context) {
     }
 
 
-    return jsonResponse({
-        username,
-        data
-    });
+    if(!data||typeof data!=="object"||Array.isArray(data))data={};
+    const preferences=await readAccountPreferences(context.env,user);
+    data.avatar=preferences.avatar;
+    data.bg=preferences.background;
+    const response=jsonResponse({username,data});
+    response.headers.set("Cache-Control","no-store");
+    return response;
 }
 
 

@@ -1,0 +1,80 @@
+# Existing content issues
+
+These issues were already present when the website improvements were added. No missing story or skill content has been invented. New issues fail the default check; `--strict` also fails for these known issues.
+
+- images/mlg-assets/Characters/C1/c1.json: missing placeholder character: c1b
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C12
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C13
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C14
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C15
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C16
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C17
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C18
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C19
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/C20
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/c-roles/c15_role.svg
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/c-roles/c16_role.svg
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/c-roles/c19_role.svg
+- images/mlg-assets/data-character.json: missing asset: /images/mlg-assets/Characters/c-roles/c1b_role.svg
+- images/mlg-assets/data-character.json: missing skill: #c1b/Alter in c1.json
+- images/mlg-assets/data-character.json: missing skill: #c1b/Alter-Dupes in c1.json
+- images/mlg-assets/data-character.json: missing skill: #c1b/S1b in c1.json
+- images/mlg-assets/data-character.json: missing skill: c12/B1 in c12.json
+- images/mlg-assets/data-character.json: missing skill: c12/Dupes in c12.json
+- images/mlg-assets/data-character.json: missing skill: c12/S1 in c12.json
+- images/mlg-assets/data-character.json: missing skill: c12/S2 in c12.json
+- images/mlg-assets/data-character.json: missing skill: c12/T1 in c12.json
+- images/mlg-assets/data-character.json: missing skill: c12/U1 in c12.json
+- images/mlg-assets/data-character.json: missing skill: c13/B1 in c13.json
+- images/mlg-assets/data-character.json: missing skill: c13/Dupes in c13.json
+- images/mlg-assets/data-character.json: missing skill: c13/S1 in c13.json
+- images/mlg-assets/data-character.json: missing skill: c13/S2 in c13.json
+- images/mlg-assets/data-character.json: missing skill: c13/T1 in c13.json
+- images/mlg-assets/data-character.json: missing skill: c13/U1 in c13.json
+- images/mlg-assets/data-character.json: missing skill: c14/B1 in c14.json
+- images/mlg-assets/data-character.json: missing skill: c14/Dupes in c14.json
+- images/mlg-assets/data-character.json: missing skill: c14/S1 in c14.json
+- images/mlg-assets/data-character.json: missing skill: c14/S2 in c14.json
+- images/mlg-assets/data-character.json: missing skill: c14/T1 in c14.json
+- images/mlg-assets/data-character.json: missing skill: c14/U1 in c14.json
+- images/mlg-assets/data-character.json: missing skill: c15/B1 in c15.json
+- images/mlg-assets/data-character.json: missing skill: c15/Dupes in c15.json
+- images/mlg-assets/data-character.json: missing skill: c15/S1 in c15.json
+- images/mlg-assets/data-character.json: missing skill: c15/S2 in c15.json
+- images/mlg-assets/data-character.json: missing skill: c15/T1 in c15.json
+- images/mlg-assets/data-character.json: missing skill: c15/U1 in c15.json
+- images/mlg-assets/data-character.json: missing skill: c16/B1 in c16.json
+- images/mlg-assets/data-character.json: missing skill: c16/Dupes in c16.json
+- images/mlg-assets/data-character.json: missing skill: c16/S1 in c16.json
+- images/mlg-assets/data-character.json: missing skill: c16/S2 in c16.json
+- images/mlg-assets/data-character.json: missing skill: c16/T1 in c16.json
+- images/mlg-assets/data-character.json: missing skill: c16/U1 in c16.json
+- images/mlg-assets/data-character.json: missing skill: c17/B1 in c17.json
+- images/mlg-assets/data-character.json: missing skill: c17/Dupes in c17.json
+- images/mlg-assets/data-character.json: missing skill: c17/S1 in c17.json
+- images/mlg-assets/data-character.json: missing skill: c17/S2 in c17.json
+- images/mlg-assets/data-character.json: missing skill: c17/T1 in c17.json
+- images/mlg-assets/data-character.json: missing skill: c17/U1 in c17.json
+- images/mlg-assets/data-character.json: missing skill: c18/B1 in c18.json
+- images/mlg-assets/data-character.json: missing skill: c18/Dupes in c18.json
+- images/mlg-assets/data-character.json: missing skill: c18/S1 in c18.json
+- images/mlg-assets/data-character.json: missing skill: c18/S2 in c18.json
+- images/mlg-assets/data-character.json: missing skill: c18/T1 in c18.json
+- images/mlg-assets/data-character.json: missing skill: c18/U1 in c18.json
+- images/mlg-assets/data-character.json: missing skill: c19/B1 in c19.json
+- images/mlg-assets/data-character.json: missing skill: c19/Dupes in c19.json
+- images/mlg-assets/data-character.json: missing skill: c19/S1 in c19.json
+- images/mlg-assets/data-character.json: missing skill: c19/S2 in c19.json
+- images/mlg-assets/data-character.json: missing skill: c19/T1 in c19.json
+- images/mlg-assets/data-character.json: missing skill: c19/U1 in c19.json
+- images/mlg-assets/data-character.json: missing skill: c20/B1 in c20.json
+- images/mlg-assets/data-character.json: missing skill: c20/Dupes in c20.json
+- images/mlg-assets/data-character.json: missing skill: c20/S1 in c20.json
+- images/mlg-assets/data-character.json: missing skill: c20/S2 in c20.json
+- images/mlg-assets/data-character.json: missing skill: c20/T1 in c20.json
+- images/mlg-assets/data-character.json: missing skill: c20/U1 in c20.json
+- images/mlg-assets/data-character.json: missing skill: c4/B1 in c4.json
+- images/mlg-assets/data-character.json: missing skill: c4/S1 in c4.json
+- images/mlg-assets/data-character.json: missing skill: c4/S2 in c4.json
+- images/mlg-assets/data-character.json: missing skill: c4/T1 in c4.json
+- images/mlg-assets/data-character.json: missing skill: c4/U1 in c4.json

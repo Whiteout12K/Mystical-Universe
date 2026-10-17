@@ -1,21 +1,67 @@
 {
-
+  "avatar": {
+    "img_1": "/images/website/torch_full.png",
+    "frame_1": "",
+    "img_2": "/images/character_art/Character_Heads/alteria_aquia_head.png",
+    "img_3": "/images/character_art/Character_Heads/amos_black_head.png",
+    "img_4": "/images/character_art/Character_Heads/atlas_aquia_head.png",
+    "img_5": "/images/character_art/Character_Heads/avery_obtainia_head.png",
+    "img_6": "/images/character_art/Character_Heads/carla_storm_head.png",
+    "img_7": "/images/character_art/Character_Heads/cedric_paine_head.png",
+    "img_8": "/images/character_art/Character_Heads/charlotte_levy_head.png",
+    "img_9": "/images/character_art/Character_Heads/ellie_tracey_head.png",
+    "img_10": "/images/character_art/Character_Heads/iter_head.png",
+    "img_11": "/images/character_art/Character_Heads/jane_tee_head.png",
+    "img_12": "/images/character_art/Character_Heads/kaden_icelander_head.png",
+    "img_13": "/images/character_art/Character_Heads/kiara_katzol_head.png",
+    "img_14": "/images/character_art/Character_Heads/lucy_terner_head.png",
+    "img_15": "/images/character_art/Character_Heads/lux_luces_head.png",
+    "img_16": "/images/character_art/Character_Heads/lynnhera_head.png",
+    "img_17": "/images/character_art/Character_Heads/main_character_head.png",
+    "img_18": "/images/character_art/Character_Heads/pyrus_bourn_head.png",
+    "img_19": "/images/character_art/Character_Heads/pyrus_subordinates_head.png",
+    "img_20": "/images/character_art/Character_Heads/raymond_valoris_head.png",
+    "img_21": "/images/character_art/Character_Heads/river_grant_head.png",
+    "img_22": "/images/character_art/Character_Heads/teddric_tech_head.png",
+    "img_23": "/images/character_art/Character_Heads/tom_nado_head.png"
+  },
+  "background": {
+    "img_1": "",
+    "img_2": "/images/character_art/Backgrounds/bag-og.png",
+    "img_3": "/images/website/main-bg.webp",
+    "img_4": "/images/character_art/Backgrounds/bg-main2-styled.jpg"
+  },
+  "labels": {
     "avatar": {
-        "img_1": "images/website/torch_full.png",
-        "frame_1": ""
+      "img_1": "Mystical Legends Torch",
+      "img_2": "Alteria Aquia",
+      "img_3": "Amos Black",
+      "img_4": "Atlas Aquia",
+      "img_5": "Avery Obtainia",
+      "img_6": "Carla Storm",
+      "img_7": "Cedric Paine",
+      "img_8": "Charlotte Levy",
+      "img_9": "Ellie Tracey",
+      "img_10": "I.T.E.R.",
+      "img_11": "Jane Tee",
+      "img_12": "Kaden Icelander",
+      "img_13": "Kiara Katzol",
+      "img_14": "Lucy Terner",
+      "img_15": "Lux Luces",
+      "img_16": "Lynnhera",
+      "img_17": "Main Character",
+      "img_18": "Pyrus Bourn",
+      "img_19": "Pyrus Subordinates",
+      "img_20": "Raymond Valoris",
+      "img_21": "River Grant",
+      "img_22": "Teddric Tech",
+      "img_23": "Tom Nado"
     },
-
     "background": {
-        "img_1": "",
-        "img_2": "images/character_art/Backgrounds/bag-og.png",
-        "img_3": "images/website/background_3.png"
+      "img_1": "Default",
+      "img_2": "Mystical scenery",
+      "img_3": "Mystical Legends",
+      "img_4": "Illustrated scenery"
     }
-
-
-
+  }
 }
-
-
-
-
-

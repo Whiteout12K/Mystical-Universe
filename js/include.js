@@ -27,10 +27,8 @@ if(profileImage)profileImage.style.display="none";
 };
 
 try{
-const response=await fetch("/api/me",{cache:"no-store"});
-if(!response.ok){setLoggedOut();return;}
-
-const data=await response.json();
+const {loadAccountPreferences}=await import("/js/account-preferences.js");
+const data=await loadAccountPreferences();
 const user=data.user||data;
 
 if(data.authenticated&&user.username){
@@ -42,7 +40,7 @@ mlGameProfile.href="/ml-game/apps/view.html?username="+encodeURIComponent(user.u
 
 loginMenu.style.display="none";
 userMenu.style.display="";
-if(profileImage)profileImage.style.display="";
+if(profileImage){profileImage.src=data.appearance?.avatar_url||"/images/website/torch_full.png";profileImage.alt=user.username+" profile";profileImage.style.display="";}
 setupLogout();
 }else setLoggedOut();
 
@@ -129,3 +127,10 @@ menu.addEventListener('focusin',()=>requestAnimationFrame(update));
 new ResizeObserver(update).observe(navbar);
 update();
 }
+
+// Optional website improvements have independent switches in data/site-features.json.
+if(!document.querySelector('script[data-ml-site-features]')){
+ const enhancements=document.createElement('script');enhancements.type='module';enhancements.src='/js/site-enhancements/boot.js';enhancements.dataset.mlSiteFeatures='';document.head.append(enhancements);
+}
+
+if(!window.mlAccountHeaderListener){window.mlAccountHeaderListener=true;document.addEventListener('ml-account-change',()=>loadLoggedInUser());}

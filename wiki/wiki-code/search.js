@@ -46,6 +46,16 @@ window.initializeWikiSearch = () => {
   }
   async function loadArticles() {
     try {
+      let useIndex=false;
+      try{const settings=await fetch('/data/site-features.json',{cache:'no-cache'});useIndex=settings.ok&&(await settings.json()).fastWikiSearch===true;}catch{}
+      if(useIndex){
+        const response=await fetch('/data/wiki-search-index.json');
+        if(!response.ok)throw Error('Wiki search index unavailable');
+        const data=await response.json();
+        if(!Array.isArray(data.pages))throw Error('Invalid wiki search index');
+        articles=data.pages.map(page=>({...page,search:normalize(page.search+' '+page.title)})).sort((a,b)=>a.title.localeCompare(b.title));
+        failed=false;pending=false;if(!dropdown.hidden)render();return;
+      }
       const paths=(await window.wikiArticleIndex).map(page=>page.path).sort();
       const found = [];
       let cursor = 0, errors = 0;

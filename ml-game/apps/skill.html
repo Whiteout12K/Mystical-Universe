@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded",async()=>{
   let level=parseInt(params.get("id"),10);
   level=Number.isFinite(level)?level:(isDupe?5:1);
 
+  let effectsGlossaryEnabled=false;
   try{
+    try{const settings=await fetch("/data/site-features.json");effectsGlossaryEnabled=settings.ok&&(await settings.json()).effectsGlossary===true;}catch{}
     const rosterResponse=await fetch("/images/mlg-assets/data-character.json");
     if(!rosterResponse.ok)throw new Error("Unable to load character nicknames");
     const roster=await rosterResponse.json();
@@ -407,9 +409,11 @@ document.addEventListener("DOMContentLoaded",async()=>{
         </div>
 
         <div class="effect-text">
+          ${effectsGlossaryEnabled?`<a href="/webpages/effects.html#${encodeURIComponent(effectId)}" target="_top" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(228,197,121,.15);text-decoration-thickness:1px;text-underline-offset:3px" aria-label="${String(effect.name||effectId).replace(/&/g,"&amp;").replace(/"/g,"&quot;")} effect details">`:""}
           <b class="${effect.class||""}">
             [${effect.name||effectId}]
           </b>
+          ${effectsGlossaryEnabled?"</a>":""}
 
           ${descriptions}
         </div>

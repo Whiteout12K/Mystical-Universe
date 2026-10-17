@@ -35,7 +35,7 @@ async function loadJSON(path){
 async function loadDatabases(){
  [characterDatabase,accountStyleDatabase,weaponDatabase,accessoryDatabase,artifactDatabase]=await Promise.all([
   loadJSON("/images/mlg-assets/data-character.json"),
-  loadJSON("/images/mlg-assets/account-style.json"),
+  loadJSON("/images/mlg-assets/account-styles.json"),
   loadJSON("/images/mlg-assets/data-weapon.json"),
   loadJSON("/images/mlg-assets/data-accessory.json"),
   loadJSON("/images/mlg-assets/data-artifact.json")
