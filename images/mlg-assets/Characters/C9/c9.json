@@ -3,14 +3,14 @@
   "B1": {
     "name": "Flash Rejuvenate",
     "type": "Basic Skill",
-    "description": "Carla slices the air to create lightning that she controls, its diverse intensity able to harm and heal, having <b class=\"wind\">[Wind]</b> element.",
+    "description": "{{nickname}} slices the air to create lightning that {{subject}} controls, its diverse intensity able to harm and heal, having <b class=\"wind\">[Wind]</b> element.",
     "description_style": {"paddingTop": 7},
     "stages": [
-      {"name": "Stage 1", "text": "Claps lightning between her hands and heals the ally with the lowest health by <b><span data-dmg=\"heal\"></span>%</b> of her own max health. Attacks opponents in the blast for that amount of health amount as damage.",
+      {"name": "Stage 1", "text": "Claps lightning between {{possessive}} hands and heals the ally with the lowest health by <b><span data-dmg=\"heal\"></span>%</b> of {{possessive}} own max health. Attacks opponents in the blast for that amount of health amount as damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 2", "text": "Clutch a lightning orb and release it forward rapidly, becoming able to absorb and reflect a single incoming attack for its duration. This can also work with AoE attacks.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-      {"name": "Stage 3", "text": "Directs a surge of lightning around her that inflicts <b class=\"knockback\">[Knockback]</b>, damaging and converting <b><span data-dmg=\"effect_num\"></span>x</b> random debuff on self or allies into an applicable buff. Hit opponents are dealt damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of her health. Skill upgrades can increase the debuff conversion number by a percentage, acting as a percentage rate.",
+      {"name": "Stage 3", "text": "Directs a surge of lightning around {{object}} that inflicts <b class=\"knockback\">[Knockback]</b>, damaging and converting <b><span data-dmg=\"effect_num\"></span>x</b> random debuff on self or allies into an applicable buff. Hit opponents are dealt damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of {{possessive}} health. Skill upgrades can increase the debuff conversion number by a percentage, acting as a percentage rate.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
     ],
     "additional": [
@@ -37,7 +37,7 @@
     "additional": [
       {"text": "When the electric sphere is on-field, this skill button can be spammed to raise its charge meter. When the charge meter is filled, the electric sphere will implode and send a shockwave that reduces self, allies, and all opponents’ health within a medium range, dealing 2 instances of <b class=\"wind\">[Wind]</b> <span class=\"empowered\">super empowered</span> damage.",
         "style": {"paddingTop": 7}},
-      {"text": "The amount of damage per target per hit is equal to <b><span data-dmg=\"dmg1\"></span>%</b> of Carla’s max health, being able to reduce at max 90% of a target character’s health. The damage is tripled on bosses. After 4 seconds, if any character has buffs, they immediately recover their lost health. ",
+      {"text": "The amount of damage per target per hit is equal to <b><span data-dmg=\"dmg1\"></span>%</b> of {{nickname}}’s max health, being able to reduce at max 90% of a target character’s health. The damage is tripled on bosses. After 4 seconds, if any character has buffs, they immediately recover their lost health. ",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:knockback}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -59,10 +59,10 @@
   "S2": {
     "name": "Electrostatic Engage",
     "type": "Special Skill",
-    "description": "A wave of electricity is expanded outward around Carla, inflicting the <b class=\"freeze\">[Freeze]</b> debuff on opponents in range. The wave inflicts an effect that transfers buffs from them to self. The amount of buffs is dependent on their debuff resistance. Up to <b><span data-dmg=\"effect_num\"></span>x</b> of 5 buffs can be transferred (above 100% increases the number of buffs even more).",
+    "description": "A wave of electricity is expanded outward around {{nickname}}, inflicting the <b class=\"freeze\">[Freeze]</b> debuff on opponents in range. The wave inflicts an effect that transfers buffs from them to self. The amount of buffs is dependent on their debuff resistance. Up to <b><span data-dmg=\"effect_num\"></span>x</b> of 5 buffs can be transferred (above 100% increases the number of buffs even more).",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "The buffs transferred go in a time-frozen state in which they do not activate nor tick down their duration. Stolen <b class=\"shield\">[Shield]</b> and the related will take effect and will not be time-frozen. Each buff gained on self will heal self and allies by <b><span data-dmg=\"heal\"></span>%</b> of her max health. ",
+      {"text": "The buffs transferred go in a time-frozen state in which they do not activate nor tick down their duration. Stolen <b class=\"shield\">[Shield]</b> and the related will take effect and will not be time-frozen. Each buff gained on self will heal self and allies by <b><span data-dmg=\"heal\"></span>%</b> of {{possessive}} max health. ",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -85,12 +85,12 @@
   "U1": {
     "name": "Electrostasis Pulse",
     "type": "Ultimate Skill",
-    "description": "Kiara gathers lightning into her palm and lets it free to implode the space around her.",
+    "description": "{{nickname:c10}} gathers lightning into {{possessive:c10}} palm and lets it free to implode the space around {{object:c10}}.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The lightning will send a high current in a wide AoE, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"wind\">[Wind]</b> damage.",
         "style": {"paddingTop": 7}},
-      {"text": "If she has an active power meter, consumes 9 points and the AoE is increased further and, upon use, gains 30% of energy gauge back.",
+      {"text": "If {{subject}} has an active power meter, consumes 9 points and the AoE is increased further and, upon use, gains 30% of energy gauge back.",
         "style": {"paddingTop": 7}},
       {"text": "Energy Gauge: 100%",
         "style": {"paddingTop": 15, "fontSize": 7}}
@@ -106,7 +106,7 @@
   "T1": {
     "name": "Black Rampart",
     "type": "Technical Skill",
-    "description": "When Carla heals and the entire team is at max health, fill a health meter with the excess health points. All <b class=\"black-rampart\">Black Rampart</b> members that have <b class=\"surge\">[Surge]</b> will have every stat scaled and increased by +0.005% for each point of additional health in the health meter. Excess health will be depleted before regular health when taking damage and is shared between all characters in the party. The health meter stays indefinitely.",
+    "description": "When {{nickname}} heals and the entire team is at max health, fill a health meter with the excess health points. All <b class=\"black-rampart\">Black Rampart</b> members that have <b class=\"surge\">[Surge]</b> will have every stat scaled and increased by +0.005% for each point of additional health in the health meter. Excess health will be depleted before regular health when taking damage and is shared between all characters in the party. The health meter stays indefinitely.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "<b>Resonance</b>: No additional effects.",
@@ -116,7 +116,7 @@
 
 
   "Dupes": {
-    "description": "Kiara’s movement speed is inversely related to her health where every 1% of health missing from max will increase her movement speed by +1%. Skill damage will increase by each percentage of crit rate over 100% at a 1-to-1 rate. Whenever Kiara damages an opponent with an uninfused skill, she applies <b class=\"claw-mark\">[Claw Mark]</b> effect on them.",
+    "description": "{{nickname:c10}}’s movement speed is inversely related to {{possessive:c10}} health where every 1% of health missing from max will increase {{possessive:c10}} movement speed by +1%. Skill damage will increase by each percentage of crit rate over 100% at a 1-to-1 rate. Whenever {{nickname:c10}} damages an opponent with an uninfused skill, {{subject:c10}} applies <b class=\"claw-mark\">[Claw Mark]</b> effect on them.",
     "additional": [
       {"text": "{{effect:claw-mark}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -124,11 +124,11 @@
         "style": {"paddingTop": 7}},
 
       {"level": 1, 
-      "text": "Every 200 points of attack stat Kiara has will increase her crit rate by +1%. Her piercing stat increases by +1% for every 5% of crit rate.",
+      "text": "Every 200 points of attack stat {{nickname:c10}} has will increase {{possessive:c10}} crit rate by +1%. {{Possessive:c10}} piercing stat increases by +1% for every 5% of crit rate.",
         "style": {"paddingTop": 5}},
 
       {"level": 2, 
-      "text": "The power meter from Special Skill: Lightning God Mode will start with 150 points. Each point missing from the meter when a Basic Skill is used will increase damage by +1%. Her attack speed increases by +0.2% per point on the meter.",
+      "text": "The power meter from Special Skill: Lightning God Mode will start with 150 points. Each point missing from the meter when a Basic Skill is used will increase damage by +1%. {{Possessive}} attack speed increases by +0.2% per point on the meter.",
         "style": {"paddingTop": 5}},
 
       {"level": 3, 
@@ -138,7 +138,7 @@
       {"level": 4, 
       "text": "Opponent’s resistance to <b class=\"wind\">[Wind]</b> and <b class=\"water\">[Water]</b> elements are further reduced by an additional -25% for the party consisting of only those affinities.",
         "style": {"paddingTop": 5}},
-      {"text": "<u>Extra Life</u>: When Kiara would be defeated by a lethal attack, she gains immunity and restores 9% of her health. She additionally gains the effect <b class=\"invincibility\">[Invincibility]</b>. This effect occurs only once per battle.",
+      {"text": "<u>Extra Life</u>: When {{nickname:c10}} would be defeated by a lethal attack, {{subject:c10}} gains immunity and restores 9% of {{possessive:c10}} health. {{Subject:c10}} additionally gains the effect <b class=\"invincibility\">[Invincibility]</b>. This effect occurs only once per battle.",
         "style": {"paddingTop": 5}},
       {"text": "{{effect:invincibility}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -146,7 +146,7 @@
       {"level": 5, 
       "text": "Increase <b class=\"lightning\">[Lightning Element]</b> damage for self and allies by +40%.",
         "style": {"paddingTop": 5}},
-      {"text": "The Technical Skill: Lightning Discharge is improved: Having <b class=\"lightning\">[Lightning Element]</b> aura and next damaged by <b class=\"water\">[Water]</b> attacks will increase the instance of hits by +1 for each party member of the inflictor with an element aura on themselves on the battlefield (each element and person is counted once). Having <b class=\"water\">[Water]</b> aura and being hit by <b class=\"lightning\">[Lightning Element]</b> attack will increase instances based on Kiara’s power meter where every 10 points missing increases the hit instance by +1.",
+      {"text": "The Technical Skill: Lightning Discharge is improved: Having <b class=\"lightning\">[Lightning Element]</b> aura and next damaged by <b class=\"water\">[Water]</b> attacks will increase the instance of hits by +1 for each party member of the inflictor with an element aura on themselves on the battlefield (each element and person is counted once). Having <b class=\"water\">[Water]</b> aura and being hit by <b class=\"lightning\">[Lightning Element]</b> attack will increase instances based on {{nickname:c10}}’s power meter where every 10 points missing increases the hit instance by +1.",
         "style": {"paddingTop": 5}}
     ]
   }

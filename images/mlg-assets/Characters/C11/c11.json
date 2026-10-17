@@ -1,9 +1,9 @@
 {
 
   "B1-1": {
-    "name": "Fighting For His Boss (Earth Discharge)",
+    "name": "Fighting For {{Possessive}} Boss (Earth Discharge)",
     "type": "Basic Skill",
-    "description": "Tony Smith unleashes his hammer of rock and pounds around, dealing <b class=\"earth\">[Earth]</b> damage and <b class=\"knockback\">[Knockback]</b>.",
+    "description": "{{nickname}} unleashes {{possessive}} hammer of rock and pounds around, dealing <b class=\"earth\">[Earth]</b> damage and <b class=\"knockback\">[Knockback]</b>.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -34,7 +34,7 @@
   "B1-2": {
     "name": "Lightning Rondo (Electricity Discharge)",
     "type": "Basic Skill",
-    "description": "Ellie Tracey coats her body in lightning and charges forward, dealing <b class=\"fire\">[Fire]</b> damage and applying <b class=\"electrocute\">[Electrocute]</b> per hit.",
+    "description": "{{nickname}} coats {{possessive}} body in lightning and charges forward, dealing <b class=\"fire\">[Fire]</b> damage and applying <b class=\"electrocute\">[Electrocute]</b> per hit.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -67,7 +67,7 @@
   "B1-3": {
     "name": "Tornado Engulfment (Wind Discharge)",
     "type": "Basic Skill",
-    "description": "Tom Nado conjures wind around him that bends to his will, dealing <b class=\"wind\">[Wind]</b> damage.",
+    "description": "{{nickname}} conjures wind around {{object}} that bends to {{possessive}} will, dealing <b class=\"wind\">[Wind]</b> damage.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -98,7 +98,7 @@
   "S1-1": {
     "name": "Mound Defense",
     "type": "Special Skill",
-    "description": "Tony Smith becomes fired up (only temporarily as he is lazy often, but chooses to act for his boss). He grants a <b class=\"shield\">[Shield]</b> to allies and self equal to <b><span data-dmg=\"shield\"></span>%</b> of max health if any ally has their health at or below 30%.",
+    "description": "{{nickname}} becomes fired up (only temporarily as {{subject}} is lazy often, but chooses to act for {{possessive}} boss). {{Subject}} grants a <b class=\"shield\">[Shield]</b> to allies and self equal to <b><span data-dmg=\"shield\"></span>%</b> of max health if any ally has their health at or below 30%.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "{{effect:shield}}",
@@ -118,10 +118,10 @@
   "S1-2": {
     "name": "Mana Zone - Eletrostep Overdrive",
     "type": "Special Skill",
-    "description": "Gathering the surrounding mana, Ellie will gain an enhanced electricity state that will increase her Basic Skill damage by <b><span data-dmg=\"bonus\"></span>%</b> for 15 seconds. Her steps become a blur of lightning, increasing movement speed by an additional +1% for each extra point of movement speed above 100.",
+    "description": "Gathering the surrounding mana, {{nickname}} will gain an enhanced electricity state that will increase {{possessive}} Basic Skill damage by <b><span data-dmg=\"bonus\"></span>%</b> for 15 seconds. {{Possessive}} steps become a blur of lightning, increasing movement speed by an additional +1% for each extra point of movement speed above 100.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "In the state, her interruption resistance will increase and she can pass through opponents, inflicting <b class=\"electrocute\">[Electrocute]</b>.",
+      {"text": "In the state, {{possessive}} interruption resistance will increase and {{subject}} can pass through opponents, inflicting <b class=\"electrocute\">[Electrocute]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:electrocute}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -194,9 +194,9 @@
         "style": {"paddingTop": 7}},
       {"text": "<u>Ultimate Skill: Mountain Truck Rampage</u> - The other two subordinates arrive on the scene and the trio will hop into the newly summoned vehicle, a truck. The vehicle can be controlled and will deal active member’s elemental damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack when ramming any number of enemies. The vehicle gains +20% of speed stat and lasts for 13 seconds.",
         "style": {"paddingTop": 7}},
-      {"text": "During the duration, gain 15 combat rage points and other subordinates will perform their Stage 3 Basic Skill attacks per stack, depleting a stack per attack. If Pyrus Bourn is an ally, he will also join the ride and attack with his Stage 3 Basic Skill, consuming a stack. All who can attack will attack every 2 seconds.",
+      {"text": "During the duration, gain 15 combat rage points and other subordinates will perform their Stage 3 Basic Skill attacks per stack, depleting a stack per attack. If {{nickname:c7}} is an ally, {{subject:c7}} will also join the ride and attack with {{possessive:c7}} Stage 3 Basic Skill, consuming a stack. All who can attack will attack every 2 seconds.",
         "style": {"paddingTop": 7}},
-      {"text": "For self and Pyrus, heal <b>+<span data-dmg=\"heal\"></span>%</b> of health per second on the ride’s duration.",
+      {"text": "For self and {{nickname:c7}}, heal <b>+<span data-dmg=\"heal\"></span>%</b> of health per second on the ride’s duration.",
         "style": {"paddingTop": 7}},
       {"text": "Energy Gauge: 130% (Requires overflow energy as indicated by a secondary gauge on the Ultimate Skill button)",
         "style": {"paddingTop": 15, "fontSize": 7}}
@@ -213,7 +213,7 @@
   "T1": {
     "name": "Attack Unison - All for One!",
     "type": "Technical Skill",
-    "description": "When stamina is reduced to less than 5%, rotate to the next subordinate in the order: Tony Smith, Tom Nado, Ellie Tracey (Cooldown: 20 seconds). Restore 30% stamina upon switching.",
+    "description": "When stamina is reduced to less than 5%, rotate to the next subordinate in the order: {{nickname:c11:0}}, {{nickname:c11:2}}, {{nickname:c11:1}} (Cooldown: 20 seconds). Restore 30% stamina upon switching.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "When switching, the next character will come in and deal 350% of attack as their respective elemental damage and apply a -15% resistance reduction to that element to hit opponents for 25 seconds.",
@@ -230,7 +230,7 @@
 
 
   "Dupes": {
-    "description": "Tony Smith will receive a defense bonus of +30%, Tom Nado gains +50% piercing, and Ellie Tracey receives +20% attack speed and movement speed. The subordinates’ energy gauge accumulation is -20% less effective as other characters but they can gain a max of 200% of energy instead of 100%.",
+    "description": "{{nickname:c11:0}} will receive a defense bonus of +30%, {{nickname:c11:2}} gains +50% piercing, and {{nickname:c11:1}} receives +20% attack speed and movement speed. The subordinates’ energy gauge accumulation is -20% less effective as other characters but they can gain a max of 200% of energy instead of 100%.",
     "additional": [
       {"text": "A main individual can be chosen out of the trio to be the first summoned when in a party selection.",
         "style": {"paddingTop": 7}},

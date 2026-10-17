@@ -3,7 +3,7 @@
   "B1": {
     "name": "Sword Play",
     "type": "Basic Skill",
-    "description": "Pyrus Bourn shows the sheer skill of the greatest swordsman to exist, dealing <b class=\"normal\">normal</b> damage.",
+    "description": "{{nickname}} shows the sheer skill of the greatest swordsman to exist, dealing <b class=\"normal\">normal</b> damage.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -34,10 +34,10 @@
   "S1": {
     "name": "Fire Increaser",
     "type": "Special Skill",
-    "description": "Pyrus Bourn takes his customized Fire Increaser and releases the built-up chemicals as fire, dealing AoE <b class=\"fire\">[Fire]</b> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
+    "description": "{{nickname}} takes {{possessive}} customized Fire Increaser and releases the built-up chemicals as fire, dealing AoE <b class=\"fire\">[Fire]</b> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of attack.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "This attack can be used by paying stamina when Pyrus has no base MP.",
+      {"text": "This attack can be used by paying stamina when {{nickname}} has no base MP.",
         "style": {"paddingTop": 7}},
       {"text": "When the <b class=\"inferno\">[Inferno]</b> effect is active, AoE damage becomes massive and deals +100% more damage.",
         "style": {"paddingTop": 7}},
@@ -65,9 +65,9 @@
     "additional": [
       {"text": "When holding skill, consume a portion of mana to deal the same damage but shoot a single fireball as ranged damage.",
         "style": {"paddingTop": 7}},
-      {"text": "After gaining <b class=\"inferno\">[Inferno]</b> for the first time, instead, Pyrus will sacrifice all of his health, reducing to 1 health and gaining <b class=\"indestructible\">[Indestructible]</b>, and change Ultimate Skill slot to Ultimate Skill: Hellflame Meteor which has a single use.",
+      {"text": "After gaining <b class=\"inferno\">[Inferno]</b> for the first time, instead, {{nickname}} will sacrifice all of {{possessive}} health, reducing to 1 health and gaining <b class=\"indestructible\">[Indestructible]</b>, and change Ultimate Skill slot to Ultimate Skill: Hellflame Meteor which has a single use.",
         "style": {"paddingTop": 7}},
-      {"text": "<u>Ultimate Skill: Hellflame Meteor</u> - Mustering mana, a ginormous meteor of gigantic proportions is summed and hurled towards the field directly before Pyrus, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> large AoE damage plus the value of <b class=\"shield\">[Shield]</b> on self added to base damage. This Skill requires a filled meter of “Fighting Spirit” to additionally activate. Every hit from attacks by the team (on-field or off-field) contributes to filling the meter.",
+      {"text": "<u>Ultimate Skill: Hellflame Meteor</u> - Mustering mana, a ginormous meteor of gigantic proportions is summed and hurled towards the field directly before {{nickname}}, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of attack as <b class=\"fire\">[Fire]</b> large AoE damage plus the value of <b class=\"shield\">[Shield]</b> on self added to base damage. This Skill requires a filled meter of “Fighting Spirit” to additionally activate. Every hit from attacks by the team (on-field or off-field) contributes to filling the meter.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"text": "{{effect:indestructible}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -116,10 +116,10 @@
   "T1": {
     "name": "Flame Reincarnation",
     "type": "Technical Skill",
-    "description": "<u>Ability</u>: Even weaknesses can be overcome by sheer unwavering will. Pyrus Bourn reduces the opponent’s attack potency.",
+    "description": "<u>Ability</u>: Even weaknesses can be overcome by sheer unwavering will. {{nickname}} reduces the opponent’s attack potency.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Pyrus slashes with a deadly blow, dealing <b class=\"normal\">normal</b> damage equal to 330% of attack that ignores all of the opponent's defense, inflicting <b class=\"weakened\">[Weakened]</b>. The damage increases by the value of <b class=\"shield\">[Shield]</b> on Pyrus, added to base damage. Skill’s damage will increase by +10% for each level of equipped Basic Skill.",
+      {"text": "{{nickname}} slashes with a deadly blow, dealing <b class=\"normal\">normal</b> damage equal to 330% of attack that ignores all of the opponent's defense, inflicting <b class=\"weakened\">[Weakened]</b>. The damage increases by the value of <b class=\"shield\">[Shield]</b> on {{nickname}}, added to base damage. Skill’s damage will increase by +10% for each level of equipped Basic Skill.",
         "style": {"paddingTop": 7}},
       {"text": "A certain power lies dormant.",
         "style": {"paddingTop": 7}},
@@ -138,7 +138,7 @@
   "Dupes": {
     "description": "When health reaches below 30%, permanently gain the <b class=\"inferno\">[Inferno]</b> effect which cannot be removed and a <b class=\"shield\">[Shield]</b> equal to 33% of defense stat.",
     "additional": [
-        {"text": "Atlas gains +3% piercing for each percentage of damage increase from his skills or any buffs (any mentioned elemental damage increase does not apply towards the count).",
+        {"text": "{{nickname:c6}} gains +3% piercing for each percentage of damage increase from {{possessive:c6}} skills or any buffs (any mentioned elemental damage increase does not apply towards the count).",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:inferno}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -160,7 +160,7 @@
         "style": {"paddingTop": 5}},
 
         {"level": 4,
-        "text": "The Technical Skill: Flame Reincarnation will automatically bring Pyrus’ health down to 30% and activate the <b class=\"inferno\">[Inferno]</b> and <b class=\"bandage\">[Bandage]</b> effects.",
+        "text": "The Technical Skill: Flame Reincarnation will automatically bring {{nickname}}’ health down to 30% and activate the <b class=\"inferno\">[Inferno]</b> and <b class=\"bandage\">[Bandage]</b> effects.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:bandage}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},

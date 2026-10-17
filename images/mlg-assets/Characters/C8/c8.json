@@ -3,7 +3,7 @@
   "B1": {
     "name": "Dancing Purple Flame",
     "type": "Basic Skill",
-    "description": "Charlotte lights her hands with bright flames, dealing <b class=\"fire\">[Fire]</b> damage and inflicting <b>[Life Drain]</b> every other hit.",
+    "description": "{{nickname}} lights {{possessive}} hands with bright flames, dealing <b class=\"fire\">[Fire]</b> damage and inflicting <b>[Life Drain]</b> every other hit.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1", "text": "Blows fluttering butterfly flames at opponents, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
@@ -35,7 +35,7 @@
     "additional": [
       {"text": "Applies 2 stacks of the <b class=\"life-drain\">[Life Drain]</b> effect on each trapped opponent upon the first instance of damage.",
         "style": {"paddingTop": 7}},
-      {"text": "The attack can be active while she is off-field and will deal the same damage per second to opponents that touch the cage. There is then a <b><span data-dmg=\"chance\"></span>%</b> chance for the <b class=\"life-drain\">[Life Drain]</b> effect to apply per hit (amount above 100% counts chance for extra stacks).",
+      {"text": "The attack can be active while {{subject}} is off-field and will deal the same damage per second to opponents that touch the cage. There is then a <b><span data-dmg=\"chance\"></span>%</b> chance for the <b class=\"life-drain\">[Life Drain]</b> effect to apply per hit (amount above 100% counts chance for extra stacks).",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:life-drain}}",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
@@ -56,7 +56,7 @@
   "S2": {
     "name": "Magic Absorption",
     "type": "Special Skill",
-    "description": "Charlotte summons a spiral of flames in front of her that sucks incoming attacks and converts them into mana proportional to the mana cost of that attack. For every attack sucked, <b><span data-dmg=\"mp1\"></span>%</b> of the mana cost of the attack becomes her own. The field effect will last for 4 seconds starting.",
+    "description": "{{nickname}} summons a spiral of flames in front of {{object}} that sucks incoming attacks and converts them into mana proportional to the mana cost of that attack. For every attack sucked, <b><span data-dmg=\"mp1\"></span>%</b> of the mana cost of the attack becomes {{possessive}} own. The field effect will last for 4 seconds starting.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "Opponents hit in the vortex also get a single instance of the effects <b class=\"mana-drain\">[Mana Drain]</b> and <b class=\"life-drain\">[Life Drain]</b>.",
@@ -108,7 +108,7 @@
     "additional": [
       {"text": "Energy Gauge: 25%",
         "style": {"paddingTop": 7, "fontSize": 7}},
-      {"text": "The other <span class=\"undim\">members of the cohort in party will have all their Special, Basic, and Ultimate Skill levels increased by +1 from current level</span> (can exceed max level cap). Each time they use a Special or Ultimate Skill, Charlotte’s skills’ field duration increases by +50% from original duration (stacking infinitely).",
+      {"text": "The other <span class=\"undim\">members of the cohort in party will have all their Special, Basic, and Ultimate Skill levels increased by +1 from current level</span> (can exceed max level cap). Each time they use a Special or Ultimate Skill, {{nickname}}’s skills’ field duration increases by +50% from original duration (stacking infinitely).",
         "style": {"paddingTop": 15}},
       {"text": "<b>Resonance</b>: No additional effects.",
         "style": {"paddingTop": 15}}
@@ -117,13 +117,13 @@
 
 
   "Dupes": {
-    "description": "When opponents with <b class=\"life-drain\">[Life Drain]</b> effect attack Charlotte, their attack stat is decreased by the percentage value missing from their max health, up to 99.9% attack reduction.",
+    "description": "When opponents with <b class=\"life-drain\">[Life Drain]</b> effect attack {{nickname}}, their attack stat is decreased by the percentage value missing from their max health, up to 99.9% attack reduction.",
     "additional": [
-      {"text": "When skills inflict damage on opponents with <b class=\"life-drain\">[Life Drain]</b> effect, Charlotte’s skills does <b class=\"dark\">[Dark]</b> element damage in addition, adding its aura as well. Excess gained health from the effect will be evenly distributed among allies as a healing effect.",
+      {"text": "When skills inflict damage on opponents with <b class=\"life-drain\">[Life Drain]</b> effect, {{nickname}}’s skills does <b class=\"dark\">[Dark]</b> element damage in addition, adding its aura as well. Excess gained health from the effect will be evenly distributed among allies as a healing effect.",
         "style": {"paddingTop": 7}},
 
       {"level": 1, 
-      "text": "Every Basic Skill hit on opponents will consume 0.3% of Charlotte’s health but will increase Basic Skill damage by +15%, only when above 50% max health.",
+      "text": "Every Basic Skill hit on opponents will consume 0.3% of {{nickname}}’s health but will increase Basic Skill damage by +15%, only when above 50% max health.",
         "style": {"paddingTop": 5}},
 
       {"level": 2, 
@@ -141,7 +141,7 @@
       {"level": 5, 
       "text": "MP gain from all sources increases by +100%, including Mana Regen, for self.",
         "style": {"paddingTop": 5}},
-      {"text": "<span class=\"undim\">If she would gain mana that goes above max MP, give the extra to allies split equally.</span> If allies have max MP, store the extra MP as a surplus that increases <b class=\"fire\">[Fire]</b> elemental damage for the team by each percentage of MP above her max MP.",
+      {"text": "<span class=\"undim\">If {{subject}} would gain mana that goes above max MP, give the extra to allies split equally.</span> If allies have max MP, store the extra MP as a surplus that increases <b class=\"fire\">[Fire]</b> elemental damage for the team by each percentage of MP above {{possessive}} max MP.",
         "style": {"paddingTop": 5}},
       {"text": "A special purple meter covers part of each character’s MP bar to display active stored percentage. A number above will indicate the elemental damage increase accumulated. The active character that consumes the most MP from the bar while it is active will be prioritized and the elemental damage increase will be converted to the element damage dealt in their skills.",
         "style": {"paddingTop": 5}},

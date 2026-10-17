@@ -3,11 +3,11 @@
   "B1": {
     "name": "Water Manipulation",
     "type": "Basic Skill",
-    "description": "River utilizes water around and within herself, dealing <b class=\"water\">[Water]</b> damage.",
+    "description": "{{nickname}} utilizes water around and within {{reflexive}}, dealing <b class=\"water\">[Water]</b> damage.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
-        "text": "Spray water from her fists, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
+        "text": "Spray water from {{possessive}} fists, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 2",
         "text": "Throws a sphere of water at opponents, dealing AoE damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack.",
@@ -33,10 +33,10 @@
   "S1": {
     "name": "Bubble Barrier",
     "type": "Special Skill",
-    "description": "Form a large bubble barrier around River that protects herself and party members. The bubble appears for 10 seconds, and allies who stand within it will take no damage from opponents and heal for <b><span data-dmg=\"heal\"></span>%</b> of River’s health per second; however, they cannot damage opponents though Special Skill activation or Basic Skills (activated damage over time and off-field attacks that triggered before entry still function without interruption).",
+    "description": "Form a large bubble barrier around {{nickname}} that protects {{reflexive}} and party members. The bubble appears for 10 seconds, and allies who stand within it will take no damage from opponents and heal for <b><span data-dmg=\"heal\"></span>%</b> of {{nickname}}’s health per second; however, they cannot damage opponents though Special Skill activation or Basic Skills (activated damage over time and off-field attacks that triggered before entry still function without interruption).",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "If River is outside of the active barrier, increase her damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> during the barrier’s duration and passively heal the rest of the party by <b>+<span data-dmg=\"heal2\"></span>%</b> of her health per half-second.",
+      {"text": "If {{nickname}} is outside of the active barrier, increase {{possessive}} damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> during the barrier’s duration and passively heal the rest of the party by <b>+<span data-dmg=\"heal2\"></span>%</b> of {{possessive}} health per half-second.",
         "style": {"paddingTop": 7}},
       {"text": "After the barrier dissipates, gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>.",
         "style": {"paddingTop": 7}},
@@ -61,7 +61,7 @@
   "S2": {
     "name": "Water Ball",
     "type": "Special Skill",
-    "description": "River forms a giant vortex of water, forming into a sphere, that she launches towards her enemies, dealing <b class=\"water\">[Water]</b> damage.",
+    "description": "{{nickname}} forms a giant vortex of water, forming into a sphere, that {{subject}} launches towards {{possessive}} enemies, dealing <b class=\"water\">[Water]</b> damage.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The water ball implodes on opponents and deals <b><span data-dmg=\"dmg1\"></span>%</b> of attack as small AoE damage.",
@@ -83,10 +83,10 @@
   "S3": {
     "name": "True Water Spirit Release",
     "type": "Special Skill",
-    "description": "River creates a spiritual field in which her attacks are enhanced, lasting 15 seconds. She will periodically produce \"Spirit Song\" stacks, up to 10, once per second (indicated in a special meter next to her). Each stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> gained while in the field also gives a stack of \"Spirit Song.\"",
+    "description": "{{nickname}} creates a spiritual field in which {{possessive}} attacks are enhanced, lasting 15 seconds. {{Subject}} will periodically produce \"Spirit Song\" stacks, up to 10, once per second (indicated in a special meter next to {{possessive}}). Each stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> gained while in the field also gives a stack of \"Spirit Song.\"",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Per stack produced, her field grows and the strength of her Special Skill damage is increased by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> per stack. At a max of 10 stacks, the next Special Skill damage dealt will increase damage by an additional <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>, then removes all stacks.",
+      {"text": "Per stack produced, {{possessive}} field grows and the strength of {{possessive}} Special Skill damage is increased by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> per stack. At a max of 10 stacks, the next Special Skill damage dealt will increase damage by an additional <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>, then removes all stacks.",
         "style": {"paddingTop": 7}},
       {"text": "The field will undergo an elemental change based on the absorbed elements from Technical Skill: A Fox’s Tale, where the active character gains +70% resistance to that element and <b class=\"water\">[Water]</b> element while in the field.",
         "style": {"paddingTop": 7}},
@@ -108,10 +108,10 @@
   "U1": {
     "name": "Transformation",
     "type": "Ultimate Skill",
-    "description": "Sprays a wide area of water on the field that slows the advance of opponents and aides with allies' movement, lasting 12 seconds. Opponents in the water get the debuff <b class=\"slowness\">[Slowness]</b> and allies and self get <b class=\"speed-up\">[Speed Up]</b>. River’s movement speed will additionally increase by <b>+<span data-dmg=\"speed\"></span>%</b> for each stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> owned while on the field.",
+    "description": "Sprays a wide area of water on the field that slows the advance of opponents and aides with allies' movement, lasting 12 seconds. Opponents in the water get the debuff <b class=\"slowness\">[Slowness]</b> and allies and self get <b class=\"speed-up\">[Speed Up]</b>. {{nickname}}’s movement speed will additionally increase by <b>+<span data-dmg=\"speed\"></span>%</b> for each stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> owned while on the field.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "River gains an aquatic state which will make her immune to non-elemental, <b class=\"fire\">[Fire]</b>, and <b class=\"wind\">[Wind]</b> attacks, lasting the duration of the field effect. Her water attacks will absorb any incoming attack’s element, changing color, and return it as the same elemental attack in addition to her own. Multiple elements can be mixed and returned.",
+      {"text": "{{nickname}} gains an aquatic state which will make {{possessive}} immune to non-elemental, <b class=\"fire\">[Fire]</b>, and <b class=\"wind\">[Wind]</b> attacks, lasting the duration of the field effect. {{Possessive}} water attacks will absorb any incoming attack’s element, changing color, and return it as the same elemental attack in addition to {{possessive}} own. Multiple elements can be mixed and returned.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:slowness}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -132,17 +132,17 @@
   "T1": {
     "name": "A Fox's Tale",
     "type": "Technical Skill",
-    "description": "River’s Special Skills can absorb incoming elemental attacks of opponents (this does not get rid of the incoming attack), converting to a different color.",
+    "description": "{{nickname}}’s Special Skills can absorb incoming elemental attacks of opponents (this does not get rid of the incoming attack), converting to a different color.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The absorbed elements will increase that <span class=\"undim\">element’s damage for allies and self by +20% for 10 seconds.</span> Opponents hit by the water ball will have their <span class=\"undim\">resistance to absorbed elements be reduced by -20% for 10 seconds.</span>",
         "style": {"paddingTop": 7}},
-      {"text": "<b class=\"water\">[Water]</b> damage will increase automatically as that is River’s innate magical affinity.",
+      {"text": "<b class=\"water\">[Water]</b> damage will increase automatically as that is {{nickname}}’s innate magical affinity.",
         "style": {"paddingTop": 7}},
       {"text": "These effects additionally increase by +1% per stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>. Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> when mixing at least two other elements at once (Cooldown: 3 seconds).",
         "style": {"paddingTop": 7}},
 
-      {"text": "<b>Resonance</b>: No additional effects. Exclusive to River.",
+      {"text": "<b>Resonance</b>: No additional effects. Exclusive to {{nickname}}.",
         "style": {"paddingTop": 15}}
     ]
   },
@@ -172,30 +172,30 @@
       {"text": "{{effect:noir}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
-      {"text": "If River is the active character, she only has a 1 second cooldown per bean consumption. When she gains all bean effects, she will switch to an alternate outfit donning a hero’s mark. In this state, all the radiant beans circle around the active character for the remainder of the battle. River’s water attacks from Basic Skill and Special Skills will be infused with the mixed element affinities of the entire party, inflicting their auras on opponents, and triggers element conditions from her other skills if equipped. She gains the effect <b class=\"infinity-beans\">[Infinity Beans]</b>.",
+      {"text": "If {{nickname}} is the active character, {{subject}} only has a 1 second cooldown per bean consumption. When {{subject}} gains all bean effects, {{subject}} will switch to an alternate outfit donning a hero’s mark. In this state, all the radiant beans circle around the active character for the remainder of the battle. {{nickname}}’s water attacks from Basic Skill and Special Skills will be infused with the mixed element affinities of the entire party, inflicting their auras on opponents, and triggers element conditions from {{possessive}} other skills if equipped. {{Subject}} gains the effect <b class=\"infinity-beans\">[Infinity Beans]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:infinity-beans}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
       {"text": "Cooldown: 15 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
-      {"text": "Cooldown: 1 second if River is active character",
+      {"text": "Cooldown: 1 second if {{nickname}} is active character",
         "style": {"paddingTop": 2, "fontSize": 7}},
       {"text": "Condition: Adds +5 seconds to Special Skills and putting them in cooldown",
         "style": {"paddingTop": 2, "fontSize": 7}},
 
-      {"text": "<b>Resonance</b>: Other <b class=\"mystical-legends\">Mystical Legends</b> allies can also use the direct buffs of the Technical Skill. Kiara Katzol may also gain the 1 second bean consumption cooldown and the effect <b class=\"infinity-beans\">[Infinity Beans]</b> after consumption of all the beans.",
+      {"text": "<b>Resonance</b>: Other <b class=\"mystical-legends\">Mystical Legends</b> allies can also use the direct buffs of the Technical Skill. {{nickname:c10}} may also gain the 1 second bean consumption cooldown and the effect <b class=\"infinity-beans\">[Infinity Beans]</b> after consumption of all the beans.",
         "style": {"paddingTop": 15}}
     ]
   },
 
 
   "Dupes": {
-    "description": "Can obtain infinite stacks of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> and <span class=\"undim\">each stack gained will heal self and allies for 5% of her max health.</span> For every 5 stacks, <span class=\"undim\">increase crit rate and damage for self and allies by +5% but increase mana consumption by +5%.</span> When 50 stacks are gained, increase self’s damage of all skills by +50%.",
+    "description": "Can obtain infinite stacks of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> and <span class=\"undim\">each stack gained will heal self and allies for 5% of {{possessive}} max health.</span> For every 5 stacks, <span class=\"undim\">increase crit rate and damage for self and allies by +5% but increase mana consumption by +5%.</span> When 50 stacks are gained, increase self’s damage of all skills by +50%.",
     "additional": [
         {"text": "Gain a stack of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> every 5 seconds (Unconditional). All effect conditions that depend on gaining a stack will trigger automatically when obtaining these passive stacks.",
         "style": {"paddingTop": 5}},
-        {"text": "Using the Dash Skill will enable her to enter into a water transformed state called Aquia Mode, negating damage completely and moving quickly, creating a water trail behind her. Stamina will be continuously consumed. She will take +50% more damage from an attack with <b class=\"knockback\">[Knockback]</b>, ending the state.",
+        {"text": "Using the Dash Skill will enable {{object}} to enter into a water transformed state called Aquia Mode, negating damage completely and moving quickly, creating a water trail behind {{object}}. Stamina will be continuously consumed. {{Subject}} will take +50% more damage from an attack with <b class=\"knockback\">[Knockback]</b>, ending the state.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:overwhelming-mana}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -209,7 +209,7 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 2,
-        "text": "When obtaining <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>, gain two instances instead of one. <span class=\"undim\">Gaining a stack increases her and allies’ MP regen by +1%, up to +50%.</span> Effect scales proportionally to the number of stacks she has and is infinite so long as she has a stack.",
+        "text": "When obtaining <b class=\"overwhelming-mana\">[Overwhelming Mana]</b>, gain two instances instead of one. <span class=\"undim\">Gaining a stack increases {{possessive}} and allies’ MP regen by +1%, up to +50%.</span> Effect scales proportionally to the number of stacks {{subject}} has and is infinite so long as {{subject}} has a stack.",
         "style": {"paddingTop": 5}},
 
         {"level": 3,
@@ -217,11 +217,11 @@
         "style": {"paddingTop": 5}},
 
         {"level": 4,
-        "text": "River’s Special Skill cooldowns are permanently decreased by 3 seconds. The Special Skill: Water Ball consumes a single instance of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> which increases the size of the AoE to a larger field range and self gains +10% damage increase. The rate continues to increase incrementally when the skill is used repeatedly in short succession and resets when ending repeated skill use and having mana depleted.",
+        "text": "{{nickname}}’s Special Skill cooldowns are permanently decreased by 3 seconds. The Special Skill: Water Ball consumes a single instance of <b class=\"overwhelming-mana\">[Overwhelming Mana]</b> which increases the size of the AoE to a larger field range and self gains +10% damage increase. The rate continues to increase incrementally when the skill is used repeatedly in short succession and resets when ending repeated skill use and having mana depleted.",
         "style": {"paddingTop": 5}},
 
         {"level": 5,
-        "text": "<b class=\"overwhelming-mana\">[Overwhelming Mana]</b> gain enhances even further, up to three stacks are gained instead of one. Each stack will increase River’s Basic Skill damage by +2%. Whenever one is consumed, heal 2% of max health and recover 17 MP for self and all allies.",
+        "text": "<b class=\"overwhelming-mana\">[Overwhelming Mana]</b> gain enhances even further, up to three stacks are gained instead of one. Each stack will increase {{nickname}}’s Basic Skill damage by +2%. Whenever one is consumed, heal 2% of max health and recover 17 MP for self and all allies.",
         "style": {"paddingTop": 5}}
 
     ]

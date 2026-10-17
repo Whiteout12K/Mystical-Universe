@@ -53,9 +53,17 @@ body{
 .skills-heading-row:has(.skill-variant-selector:not([hidden])){display:flex;align-items:center;flex-wrap:wrap;gap:20px}
 .skills-heading-row:has(.skill-variant-selector:not([hidden])) h3{margin:0}
 .skill-variant-selector:not([hidden]){display:flex;flex-wrap:wrap;gap:16px;margin:0;padding:4px 8px}
-.skill-variant-selector button{border:0;border-bottom:1px solid rgba(214,170,69,.16);border-radius:0;padding:3px 0;background:transparent;color:var(--fantasy-text);font:400 12px/1.5 Arial,sans-serif;cursor:pointer}
+.skill-variant-selector button,.skill-variant-selector a{border:0;border-bottom:1px solid rgba(214,170,69,.16);border-radius:0;padding:3px 0;background:transparent;color:var(--fantasy-text);font:400 12px/1.5 Arial,sans-serif;cursor:pointer}
 .skill-variant-selector button:hover,.skill-variant-selector button[aria-pressed="true"]{border-bottom-color:rgba(240,202,105,.4);color:var(--fantasy-gold2)}
-.skill-variant-selector button:focus-visible{outline:2px solid var(--fantasy-gold2);outline-offset:3px}
+.skill-variant-selector a[aria-current="true"],.skill-variant-selector a:hover{border-bottom-color:rgba(240,202,105,.4);color:var(--fantasy-gold2)}
+#character-form-selector{justify-content:center;align-items:center;text-align:center;margin-bottom:28px;gap:10px}
+#character-form-selector a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;border:0;border-radius:10px;text-decoration:none;font:700 1rem/1.5 Arial,sans-serif;letter-spacing:.02em;color:#a99c85;background:transparent;transition:background .18s ease,color .18s ease,box-shadow .18s ease}
+#character-form-selector a:hover{color:#f0dfbc;background:rgba(240,202,105,.06)}
+#character-form-selector a[aria-current="true"]{color:#f0ca69;background:linear-gradient(135deg,rgba(240,202,105,.13),rgba(240,202,105,.04));box-shadow:inset 0 0 0 1px rgba(240,202,105,.14),0 3px 12px rgba(0,0,0,.12)}
+@media(prefers-reduced-motion:reduce){#character-form-selector a{transition:none}}
+#character-form-selector a>div{font-size:inherit!important}
+#character-form-selector .alter{display:inline-block;vertical-align:middle;margin-left:3px;padding:1px 5px;background:#ec7b43;border-color:#ec7b43;border-radius:4px;color:#ffdfcf;font-size:.75rem;font-weight:400;line-height:1.2;text-shadow:none}
+.skill-variant-selector a:focus-visible,.skill-variant-selector button:focus-visible{outline:2px solid var(--fantasy-gold2);outline-offset:3px}
 
 /* Page heading */
 
@@ -473,6 +481,7 @@ hr.my-4{
 <h1 id="page-heading">Mystical Legends Game - Loading Character</h1>
 
 <div class="container py-4">
+  <nav id="character-form-selector" class="skill-variant-selector" aria-label="Choose character form" hidden></nav>
   <section class="character-summary row g-4 align-items-center">
     <div class="col-12 col-md-5">
       <img id="character-splash" class="splash-art" src="" alt="Character Splash">
@@ -551,12 +560,48 @@ hr.my-4{
 "use strict";
 
 let activeSkillVariant=0;
+let characterRoster=null;
 let characterData=null,skills=[],activeSkillIndex=-1,skillLoadToken=0,skillResizeObserver=null;
 const TRANSITION_DURATION=250,MIN_SKILL_HEIGHT=120,SKILL_VIEW_PATH="/ml-game/apps/skill.html";
 const $=id=>document.getElementById(id);
 
 function getCharacterId(){
-  return(new URLSearchParams(location.search).get("char")||"c1").toLowerCase();
+  const id=(new URLSearchParams(location.search).get("char")||"c1").toLowerCase();
+  return id==="c1b"?"c1":id;
+}
+
+function getSelectedCharacterId(){
+  return getCharacterId()==="c1"&&location.hash==="#b"?"c1b":getCharacterId();
+}
+
+// Explicit skill lists take priority; forms without one inherit the base kit.
+function resolveCharacter(id){
+  const character=characterRoster[id];
+  if(!character?.base_character)return character;
+  const base=characterRoster[character.base_character];
+  const overrides=character.skill_overrides||{};
+  const inherited=(base.skills||[]).map(skill=>overrides[skill]||skill);
+  // Costumes belong to each form, even when its skills are inherited.
+  const shared=Object.fromEntries(Object.entries(base).filter(([key])=>!/^costume_\d+$/.test(key)));
+  return {...shared,...character,skills:Array.isArray(character.skills)?character.skills:[...new Set([...inherited,...(character.additional_skills||[])])]};
+}
+
+function createCharacterFormSelector(){
+  const selector=$("character-form-selector");
+  selector.replaceChildren();
+  const baseId=getCharacterId();
+  const forms=Object.keys(characterRoster).filter(id=>id===baseId||characterRoster[id].base_character===baseId);
+  selector.hidden=forms.length<2;
+  forms.forEach(id=>{
+    const link=document.createElement("a");
+    const form=characterRoster[id];
+    if(form.formatted_name)link.innerHTML=form.formatted_name;
+    else link.textContent=form.name;
+    link.setAttribute("aria-label",form.name);
+    link.href=id===baseId?"#a":"#"+id.slice(baseId.length);
+    if(id===getSelectedCharacterId())link.setAttribute("aria-current","true");
+    selector.appendChild(link);
+  });
 }
 
 function speciesClassName(species){
@@ -588,7 +633,7 @@ function getSkillIcon(skill,path){
 
 function getSkillFile(skill,charId){
   const id=skill==="Dupes"?16:1;
-  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}&style=rich-3`;
+  return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}&style=rich-3&form=${encodeURIComponent(getSelectedCharacterId())}&variant=${activeSkillVariant}`;
 }
 
 function createSkillButtons(character){
@@ -819,7 +864,7 @@ async function showSkill(index){
   if(!characterData||!skills[index])return;
 
   const panel=$("skillPanel");
-  const charId=getCharacterId();
+  const charId=characterData.base_character||getSelectedCharacterId();
   const skill=skills[index];
   const url=getSkillFile(skill,charId);
 
@@ -1019,6 +1064,8 @@ function loadCharacterStyles(character){
 
 function setupCharacter(character){
   characterData=character;
+  activeSkillIndex=-1;
+  createCharacterFormSelector();
   document.title=`MLG - ${character.name}`;
   $("page-heading").textContent=" ";
 
@@ -1078,7 +1125,14 @@ async function loadCharacter(){
       throw new Error(`Failed to load character data: ${response.status}`);
 
     const data=await response.json();
-    const character=data[charId];
+    characterRoster=data;
+    if((new URLSearchParams(location.search).get("char")||"").toLowerCase()==="c1b"){
+      const url=new URL(location.href);
+      url.searchParams.set("char","c1");
+      url.hash="b";
+      history.replaceState(null,"",url);
+    }
+    const character=resolveCharacter(getSelectedCharacterId());
 
     if(!character)
       throw new Error(`Character "${charId}" was not found in data-character.json`);
@@ -1096,6 +1150,11 @@ async function loadCharacter(){
   }
 }
 
+window.addEventListener("hashchange",()=>{
+  if(!characterRoster)return;
+  const character=resolveCharacter(getSelectedCharacterId());
+  if(character)setupCharacter(character);
+});
 loadCharacter();
 </script>
 

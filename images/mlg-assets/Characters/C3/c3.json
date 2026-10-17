@@ -3,7 +3,7 @@
   "B1": {
     "name": "Meteor Bash",
     "type": "Basic Skill",
-    "description": "Ted sends heavy kicks of metal-enhanced moves against opponents, dealing <b class=\"earth\">[Earth]</b> damage. The damage dealt becomes <b class=\"shield\">[Shield]</b> for self equal to <b><span data-dmg=\"shield\"></span>%</b> of its value dealt.",
+    "description": "{{nickname}} sends heavy kicks of metal-enhanced moves against opponents, dealing <b class=\"earth\">[Earth]</b> damage. The damage dealt becomes <b class=\"shield\">[Shield]</b> for self equal to <b><span data-dmg=\"shield\"></span>%</b> of its value dealt.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -34,10 +34,10 @@
   "S1": {
     "name": "Metal Barrier",
     "type": "Special Skill",
-    "description": "Ted creates a large destructible metal barrier in front of him with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of his own defense stat for its toughness to deflect incoming attacks and endure damage. He then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
+    "description": "{{nickname}} creates a large destructible metal barrier in front of {{object}} with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of {{possessive}} own defense stat for its toughness to deflect incoming attacks and endure damage. {{Subject}} then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice his defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
+      {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice {{possessive}} defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:shield}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
@@ -84,16 +84,16 @@
   "S3": {
     "name": "Overloaded",
     "type": "Special Skill",
-    "description": "Stands still for 5 seconds to load and charge a firearm cannon, absorbing the element affinities in the party into charged shells. Once cannon is loaded, it will be a summon with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of Ted’s defense stat.",
+    "description": "Stands still for 5 seconds to load and charge a firearm cannon, absorbing the element affinities in the party into charged shells. Once cannon is loaded, it will be a summon with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of {{nickname}}’s defense stat.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "While Ted is on-field, he can ride the cannon, gaining +50% damage reduction, and hold this skill to charge up <span class=\"empowered\">empowered</span> shots. When holding, a stack of <b class=\"letm-cook\">[Let’m Cook]</b> is consumed every half-second, up to a max of 6. Up to 3 of these shots can be fired. Releasing skill will trigger the following conditions:",
+      {"text": "While {{nickname}} is on-field, {{subject}} can ride the cannon, gaining +50% damage reduction, and hold this skill to charge up <span class=\"empowered\">empowered</span> shots. When holding, a stack of <b class=\"letm-cook\">[Let’m Cook]</b> is consumed every half-second, up to a max of 6. Up to 3 of these shots can be fired. Releasing skill will trigger the following conditions:",
         "style": {"paddingTop": 7}},
       {"text": "Less than 6 stacks - Shoot a compiled bullet at aimed direction, dealing <b class=\"earth\">[Earth]</b> AoE <span class=\"empowered\">empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense multiplied by the number of each consumed stack.",
         "style": {"paddingTop": 7, "paddingLeft": 15}},
       {"text": "At 6 stacks - Shoot an overpowering bullet at aimed direction, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as a large AoE <span class=\"empowered\">super empowered</span> <b class=\"earth\">[Earth]</b> element, and the encompassing elements of the team, damage, applying all auras at once. If <b class=\"invention\">[Invention]</b> is active, consume a stack and a secondary shell is quickly fired, dealing 120% of the previous’ damage.",
         "style": {"paddingTop": 7, "paddingLeft": 15}},
-      {"text": "When Ted is off-field, the cannon will aim and periodically shoot mixed-element bullets, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage. Cannon shoots every 2 seconds. 50% chance of the bullet being infused with one other element of the team. If a <b class=\"mystical-legends\">Mystical Legends</b> ally is on-field, the interval of attack decreases to 1 second and an element is always infused.",
+      {"text": "When {{nickname}} is off-field, the cannon will aim and periodically shoot mixed-element bullets, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage. Cannon shoots every 2 seconds. 50% chance of the bullet being infused with one other element of the team. If a <b class=\"mystical-legends\">Mystical Legends</b> ally is on-field, the interval of attack decreases to 1 second and an element is always infused.",
         "style": {"paddingTop": 7}},
       {"text": "If the skill is used while a summon is present, its health will be restored and no charging is necessary. New shells are also provided.",
         "style": {"paddingTop": 7}},
@@ -117,12 +117,12 @@
   "U1": {
     "name": "Metal Mode",
     "type": "Ultimate Skill",
-    "description": "Ted will encase metal armor around himself to gain extra defense and outward fighting power, lasting for 16 seconds.",
+    "description": "{{nickname}} will encase metal armor around {{reflexive}} to gain extra defense and outward fighting power, lasting for 16 seconds.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Upon activation, Ted will gain +100% movement speed and +20% damage reduction.",
+      {"text": "Upon activation, {{nickname}} will gain +100% movement speed and +20% damage reduction.",
         "style": {"paddingTop": 7}},
-      {"text": "<b>Model A</b>: Charge forward and deal <b class=\"earth\">[Earth]</b> <span class=\"empowered\">super empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense to any opponent in his path. Any skills used in conjunction with this Ultimate’s effect will deal <b>+<span data-dmg=\"dmg_increase\"></span>%</b> more damage.",
+      {"text": "<b>Model A</b>: Charge forward and deal <b class=\"earth\">[Earth]</b> <span class=\"empowered\">super empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense to any opponent in {{possessive}} path. Any skills used in conjunction with this Ultimate’s effect will deal <b>+<span data-dmg=\"dmg_increase\"></span>%</b> more damage.",
         "style": {"paddingTop": 7}},
       {"text": "<b>Model B</b>: If off-field, the metal armor will dissipate and form into 2 hovering robotic turret drones that will blast energy pulses towards nearby opponents, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage per blast.",
         "style": {"paddingTop": 7}},
@@ -155,13 +155,13 @@
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "{{effect:tinkering}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
-      {"text": "<u>Special Skill: Hoverboard</u> - Ted jumps onto a hoverboard, hovers in the air for a moment with short invulnerability, and crashes his way through his opponents, dealing 325% of attack and 275% of defense as <b class=\"fire\">[Fire]</b> and <b class=\"earth\">[Earth]</b> AoE damage. The damage scales by +10% for each level of the equipped Basic Skill.",
+      {"text": "<u>Special Skill: Hoverboard</u> - {{nickname}} jumps onto a hoverboard, hovers in the air for a moment with short invulnerability, and crashes {{possessive}} way through {{possessive}} opponents, dealing 325% of attack and 275% of defense as <b class=\"fire\">[Fire]</b> and <b class=\"earth\">[Earth]</b> AoE damage. The damage scales by +10% for each level of the equipped Basic Skill.",
         "style": {"paddingLeft": 20, "paddingTop": 12}},
 
       {"text": "Cooldown: 15 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
 
-      {"text": "<b>Resonance</b>: No additional effects. Exclusive to Ted.",
+      {"text": "<b>Resonance</b>: No additional effects. Exclusive to {{nickname}}.",
         "style": {"paddingTop": 15}}
     ]
   },
@@ -169,7 +169,7 @@
 
 
   "Dupes": {
-    "description": "For every opponent hit, Ted will gain a stack of <b class=\"letm-cook\">[Let'm Cook]</b> which lasts indefinitely. He inflicts <b class=\"attack-down\">[Attack Down I]</b> on nearby opponents every 5 stacks gained.",
+    "description": "For every opponent hit, {{nickname}} will gain a stack of <b class=\"letm-cook\">[Let'm Cook]</b> which lasts indefinitely. {{Subject}} inflicts <b class=\"attack-down\">[Attack Down I]</b> on nearby opponents every 5 stacks gained.",
     "additional": [
         {"text": "{{effect:letm-cook}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -181,7 +181,7 @@
         {"level": 1,
         "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25% and <span class=\"undim\">gained <b class=\"shield\">[Shield]</b> on self will also apply to allies as well.</span>",
         "style": {"paddingTop": 5}},
-        {"text": "<span class=\"undim\">Ted’s Technical Skill effects will also be applied to the party for the same duration.</span>",
+        {"text": "<span class=\"undim\">{{nickname}}’s Technical Skill effects will also be applied to the party for the same duration.</span>",
         "style": {"paddingTop": 5}},
 
         {"level": 2,
@@ -201,11 +201,11 @@
         "style": {"paddingTop": 5}},
 
         {"level": 4,
-        "text": "Charge energy gauge by +10% per stack of <b class=\"invention\">[Invention]</b> gained. When Ultimate Skill: Metal Mode is used, each stack of <b class=\"invention\">[Invention]</b> present before being cleared will increase Ted’s overall damage by an additional +30% per stack for the duration of the Ultimate.",
+        "text": "Charge energy gauge by +10% per stack of <b class=\"invention\">[Invention]</b> gained. When Ultimate Skill: Metal Mode is used, each stack of <b class=\"invention\">[Invention]</b> present before being cleared will increase {{nickname}}’s overall damage by an additional +30% per stack for the duration of the Ultimate.",
         "style": {"paddingTop": 5}},
 
         {"level": 5,
-        "text": "Rapidly consuming all Dash Skills will automatically give Ted the effect <b class=\"gamer\">[Gamer]</b> and <b class=\"tinkering\">[Tinkering]</b>. These effects are considered effects from a Technical Skill. Whenever either of these effects end, Ted’s Special Skill cooldowns will reset and he gains 2 stacks of <b class=\"invention\">[Invention]</b>. He gains twice as many stacks of <b class=\"letm-cook\">[Let’m Cook]</b>.",
+        "text": "Rapidly consuming all Dash Skills will automatically give {{nickname}} the effect <b class=\"gamer\">[Gamer]</b> and <b class=\"tinkering\">[Tinkering]</b>. These effects are considered effects from a Technical Skill. Whenever either of these effects end, {{nickname}}’s Special Skill cooldowns will reset and {{subject}} gains 2 stacks of <b class=\"invention\">[Invention]</b>. {{Subject}} gains twice as many stacks of <b class=\"letm-cook\">[Let’m Cook]</b>.",
         "style": {"paddingTop": 5}},
         {"text": "{{effect:gamer}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},

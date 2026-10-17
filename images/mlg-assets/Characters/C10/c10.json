@@ -3,7 +3,7 @@
   "B1": {
     "name": "Feline Fury",
     "type": "Basic Skill",
-    "description": "Kiara swipes attacks in close range, her quick swoops dealing normal damage.",
+    "description": "{{nickname}} swipes attacks in close range, {{possessive}} quick swoops dealing normal damage.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1", "text": "Swipes two lightning claws forward, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",
@@ -30,10 +30,10 @@
   "S1": {
     "name": "Lightning God Mode",
     "type": "Special Skill",
-    "description": "Kiara infuses her basic attacks with yellow lightning that stuns all who come in close vicinity. She gains a power meter with 100 points which remains until all points are consumed.",
+    "description": "{{nickname}} infuses {{possessive}} basic attacks with yellow lightning that stuns all who come in close vicinity. {{Subject}} gains a power meter with 100 points which remains until all points are consumed.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Her Basic Skill is infused with <b class=\"wind\">[Wind]</b> damage, her attack speed increasing by <b>+<span data-dmg=\"attack_speed\"></span>%</b>. Each stage of her Basic Skill used will deplete 2 points and the cost increases by +2 points per stage increment, but resetting when Stage 1 is used again.",
+      {"text": "{{Possessive}} Basic Skill is infused with <b class=\"wind\">[Wind]</b> damage, {{possessive}} attack speed increasing by <b>+<span data-dmg=\"attack_speed\"></span>%</b>. Each stage of {{possessive}} Basic Skill used will deplete 2 points and the cost increases by +2 points per stage increment, but resetting when Stage 1 is used again.",
         "style": {"paddingTop": 7}},
       {"text": "Every 15 points depleted will send an AoE <b class=\"wind\">[Wind]</b> shockwave equal to <b><span data-dmg=\"dmg_increase\"></span>%</b> of the value of the last damage dealt (after crits) and inflicting <b class=\"electrocute\">[Electrocute]</b>.",
         "style": {"paddingTop": 7}},
@@ -56,12 +56,12 @@
   "S2": {
     "name": "Lynx Prowl",
     "type": "Special Skill",
-    "description": "Kiara quickens her pace so she strikes before any refute. This skill has 9 charges which can be used anytime.",
+    "description": "{{nickname}} quickens {{possessive}} pace so {{subject}} strikes before any refute. This skill has 9 charges which can be used anytime.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "A charge consumed will enable Kiara’s <b>Golden Flash</b> state for 9 seconds if she has it inactive. Each charge used (including first) will increase her movement speed by +20% and all damage from Skills by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> during the state, stackable. Each stage of her Basic Skill unleashed will phase her forward rapidly before dealing the Basic Skill stage’s damage.",
+      {"text": "A charge consumed will enable {{nickname}}’s <b>Golden Flash</b> state for 9 seconds if {{subject}} has it inactive. Each charge used (including first) will increase {{possessive}} movement speed by +20% and all damage from Skills by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> during the state, stackable. Each stage of {{possessive}} Basic Skill unleashed will phase {{possessive}} forward rapidly before dealing the Basic Skill stage’s damage.",
         "style": {"paddingTop": 7}},
-      {"text": "Whenever a charge is consumed, Kiara’s health will decrease by -8% and her defense will decrease by -5% for the duration of her Golden Flash state, stacking per charge.",
+      {"text": "Whenever a charge is consumed, {{nickname}}’s health will decrease by -8% and {{possessive}} defense will decrease by -5% for the duration of {{possessive}} Golden Flash state, stacking per charge.",
         "style": {"paddingTop": 7}},
       {"text": "Cooldown: 4 seconds per charge",
         "style": {"paddingTop": 15, "fontSize": 7}},
@@ -79,12 +79,12 @@
   "U1": {
     "name": "Electrostasis Pulse",
     "type": "Ultimate Skill",
-    "description": "Kiara gathers lightning into her palm and lets it free to implode the space around her.",
+    "description": "{{nickname}} gathers lightning into {{possessive}} palm and lets it free to implode the space around {{object}}.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "The lightning will send a high current in a wide AoE, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"wind\">[Wind]</b> damage.",
         "style": {"paddingTop": 7}},
-      {"text": "If she has an active power meter, consumes 9 points and the AoE is increased further and, upon use, gains 30% of energy gauge back.",
+      {"text": "If {{subject}} has an active power meter, consumes 9 points and the AoE is increased further and, upon use, gains 30% of energy gauge back.",
         "style": {"paddingTop": 7}},
       {"text": "Energy Gauge: 100%",
         "style": {"paddingTop": 15, "fontSize": 7}}
@@ -118,7 +118,7 @@
   "T2": {
     "name": "Contamination",
     "type": "Technical Skill",
-    "description": "One of the Eight Forces, now wielded by Kiara herself. If Kiara has unlocked up to 2 unique Special Skills that infuse her Basic Skill with two unique elements, then any Special Skill that has infusion will apply both elements simultaneously to Basic Skill, allowing simultaneous aura application. Only one of these Special Skills need to be equipped.",
+    "description": "One of the Eight Forces, now wielded by {{nickname}} {{reflexive}}. If {{nickname}} has unlocked up to 2 unique Special Skills that infuse {{possessive}} Basic Skill with two unique elements, then any Special Skill that has infusion will apply both elements simultaneously to Basic Skill, allowing simultaneous aura application. Only one of these Special Skills need to be equipped.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "<b>Resonance</b>: No additional effects. Condition remains the same for lightning-based attack requirements.",
@@ -128,7 +128,7 @@
 
 
   "Dupes": {
-    "description": "Kiara’s movement speed is inversely related to her health where every 1% of health missing from max will increase her movement speed by +1%. Skill damage will increase by each percentage of crit rate over 100% at a 1-to-1 rate. Whenever Kiara damages an opponent with an uninfused skill, she applies <b class=\"claw-mark\">[Claw Mark]</b> effect on them.",
+    "description": "{{nickname}}’s movement speed is inversely related to {{possessive}} health where every 1% of health missing from max will increase {{possessive}} movement speed by +1%. Skill damage will increase by each percentage of crit rate over 100% at a 1-to-1 rate. Whenever {{nickname}} damages an opponent with an uninfused skill, {{subject}} applies <b class=\"claw-mark\">[Claw Mark]</b> effect on them.",
     "additional": [
       {"text": "{{effect:claw-mark}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -136,11 +136,11 @@
         "style": {"paddingTop": 7}},
 
       {"level": 1, 
-      "text": "Every 200 points of attack stat Kiara has will increase her crit rate by +1%. Her piercing stat increases by +1% for every 5% of crit rate.",
+      "text": "Every 200 points of attack stat {{nickname}} has will increase {{possessive}} crit rate by +1%. {{Possessive}} piercing stat increases by +1% for every 5% of crit rate.",
         "style": {"paddingTop": 5}},
 
       {"level": 2, 
-      "text": "The power meter from Special Skill: Lightning God Mode will start with 150 points. Each point missing from the meter when a Basic Skill is used will increase damage by +1%. Her attack speed increases by +0.2% per point on the meter.",
+      "text": "The power meter from Special Skill: Lightning God Mode will start with 150 points. Each point missing from the meter when a Basic Skill is used will increase damage by +1%. {{Possessive}} attack speed increases by +0.2% per point on the meter.",
         "style": {"paddingTop": 5}},
 
       {"level": 3, 
@@ -150,7 +150,7 @@
       {"level": 4, 
       "text": "Opponent’s resistance to <b class=\"wind\">[Wind]</b> and <b class=\"water\">[Water]</b> elements are further reduced by an additional -25% for the party consisting of only those affinities.",
         "style": {"paddingTop": 5}},
-      {"text": "<u>Extra Life</u>: When Kiara would be defeated by a lethal attack, she gains immunity and restores 9% of her health. She additionally gains the effect <b class=\"invincibility\">[Invincibility]</b>. This effect occurs only once per battle.",
+      {"text": "<u>Extra Life</u>: When {{nickname}} would be defeated by a lethal attack, {{subject}} gains immunity and restores 9% of {{possessive}} health. {{Subject}} additionally gains the effect <b class=\"invincibility\">[Invincibility]</b>. This effect occurs only once per battle.",
         "style": {"paddingTop": 5}},
       {"text": "{{effect:invincibility}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
@@ -158,7 +158,7 @@
       {"level": 5, 
       "text": "Increase <b class=\"lightning\">[Lightning Element]</b> damage for self and allies by +40%.",
         "style": {"paddingTop": 5}},
-      {"text": "The Technical Skill: Lightning Discharge is improved: Having <b class=\"lightning\">[Lightning Element]</b> aura and next damaged by <b class=\"water\">[Water]</b> attacks will increase the instance of hits by +1 for each party member of the inflictor with an element aura on themselves on the battlefield (each element and person is counted once). Having <b class=\"water\">[Water]</b> aura and being hit by <b class=\"lightning\">[Lightning Element]</b> attack will increase instances based on Kiara’s power meter where every 10 points missing increases the hit instance by +1.",
+      {"text": "The Technical Skill: Lightning Discharge is improved: Having <b class=\"lightning\">[Lightning Element]</b> aura and next damaged by <b class=\"water\">[Water]</b> attacks will increase the instance of hits by +1 for each party member of the inflictor with an element aura on themselves on the battlefield (each element and person is counted once). Having <b class=\"water\">[Water]</b> aura and being hit by <b class=\"lightning\">[Lightning Element]</b> attack will increase instances based on {{nickname}}’s power meter where every 10 points missing increases the hit instance by +1.",
         "style": {"paddingTop": 5}}
     ]
   }

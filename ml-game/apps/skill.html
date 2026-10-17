@@ -35,23 +35,62 @@ document.addEventListener("DOMContentLoaded",async()=>{
   const skillParam=params.get("skill")||"B1";
   const skill=skillParam.toLowerCase()==="dupes"?"Dupes":skillParam.toUpperCase();
   const isTechnical=/^T\d+$/i.test(skill);
-  const isDupe=skill==="Dupes";
+  const isDupe=/^Dupes\d*$/i.test(skill);
 
   let level=parseInt(params.get("id"),10);
   level=Number.isFinite(level)?level:(isDupe?5:1);
 
   try{
+    const rosterResponse=await fetch("/images/mlg-assets/data-character.json");
+    if(!rosterResponse.ok)throw new Error("Unable to load character nicknames");
+    const roster=await rosterResponse.json();
+    const selectedId=(params.get("form")||character).toLowerCase();
+    const selected=roster[selectedId]||roster[character];
+    const source=roster[character]?.base_character||character;
+    const variantIndex=Number(params.get("variant")??(character==="c11"?Number(skill.match(/-(\d+)$/)?.[1]||1)-1:0));
+    const variant=selected?.skill_variants?.[variantIndex];
+    const escapeHTML=value=>String(value).replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    const nickname=(id,index)=>{
+      const entry=roster[id];
+      const person=index===undefined?null:entry?.skill_variants?.[index];
+      return person?.nickname||person?.name?.split(" ")[0]||entry?.nickname||entry?.name||"Character";
+    };
+    const currentNickname=variant?.nickname||variant?.name?.split(" ")[0]||selected?.nickname||selected?.name||"Character";
+    function fillNicknames(value){
+      if(typeof value==="string"){
+        const personFor=(id,index)=>id?(index===undefined?roster[id]:roster[id]?.skill_variants?.[index]):(variant||selected);
+        const pronounsFor=person=>{
+          const gender=String(person?.gender||"neutral").toLowerCase();
+          if(gender==="male")return {subject:"he",object:"him",possessive:"his",possessive_pronoun:"his",reflexive:"himself"};
+          if(gender==="female")return {subject:"she",object:"her",possessive:"her",possessive_pronoun:"hers",reflexive:"herself"};
+          return {subject:"they",object:"them",possessive:"their",possessive_pronoun:"theirs",reflexive:"themself"};
+        };
+        // Singular they takes plural verb forms; preserve the original forms for he/she.
+        const verbs={is:"are",has:"have",does:"do",gains:"gain",loses:"lose",controls:"control",launches:"launch",strikes:"strike",applies:"apply",hurls:"hurl",surfs:"surf",reveals:"reveal",shoots:"shoot",lets:"let",gets:"get",uses:"use"};
+        value=value.replace(/(\{\{[Ss]ubject(?::(c\d+[a-z]?)(?::(\d+))?)?\}\}\s+(?:(?:also|instead|additionally|only|periodically)\s+)?)([a-z]+)\b/g,(match,prefix,id,index,verb)=>pronounsFor(personFor(id,index)).subject==="they"&&verbs[verb]?prefix+verbs[verb]:match);
+        return value.replace(/\{\{(nickname|[Ss]ubject|[Oo]bject|[Pp]ossessive_pronoun|[Pp]ossessive|[Rr]eflexive)(?::(c\d+[a-z]?)(?::(\d+))?)?\}\}/g,(_,kind,id,index)=>{
+          if(kind==="nickname")return escapeHTML(id?nickname(id,index):currentNickname);
+          let text=pronounsFor(personFor(id,index))[kind.toLowerCase()];
+          if(kind[0]===kind[0].toUpperCase())text=text[0].toUpperCase()+text.slice(1);
+          return escapeHTML(text);
+        });
+      }
+      if(Array.isArray(value))return value.map(fillNicknames);
+      if(value&&typeof value==="object")return Object.fromEntries(Object.entries(value).map(([key,item])=>[key,fillNicknames(item)]));
+      return value;
+    }
     const [charResponse,effectResponse]=await Promise.all([
-      fetch(`${CHAR_PATH}${character.toUpperCase()}/${character}.json`),
+      fetch(`${CHAR_PATH}${source.toUpperCase()}/${source}.json`),
       fetch(EFFECT_PATH)
     ]);
 
     if(!charResponse.ok)throw new Error(`Unable to load ${character}.json`);
     if(!effectResponse.ok)throw new Error("Unable to load data-effects.json");
 
-    const charData=await charResponse.json();
+    const charData=fillNicknames(await charResponse.json());
     const effects=await effectResponse.json();
-    const data=charData?.[skill]||(character==="c11"?charData?.[`${skill}-1`]:null);
+    const key=Object.keys(charData).find(key=>key.toLowerCase()===skill.toLowerCase());
+    const data=charData[key]||(character==="c11"?charData?.[`${skill}-1`]:null);
 
     if(!data)throw new Error(`"${skill}" was not found in ${character}.json.`);
 
