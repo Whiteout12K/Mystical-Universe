@@ -1,4 +1,4 @@
-import styles from '../images/mlg-assets/account-styles.json' with {type:'json'};
+import styles from './_account-styles.js';
 
 export function accountResponse(body,status=200){return new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json','Cache-Control':'no-store','Vary':'Cookie'}});}
 export function accountUsername(request){

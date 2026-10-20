@@ -1,6 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import bundledCatalogue from '../functions/_account-styles.js';
 import {onRequestGet,onRequestPost} from '../functions/api/account.js';
 import {effectiveWikiTheme} from '../js/account-preferences.js';
 const catalogue=JSON.parse(fs.readFileSync(new URL('../images/mlg-assets/account-styles.json',import.meta.url),'utf8'));
@@ -14,3 +15,5 @@ test('account preferences persist per user and never replace game saves',async()
 test('invalid styles, unknown account fields and cross-origin writes are rejected',async()=>{const f=fixture();for(const body of [{avatar:999999},{avatar:'5'},{wiki_theme:'invalid'},{background:-1},{username:'two'},{}])assert.equal((await onRequestPost(f.context(body))).status,400);assert.equal((await onRequestPost(f.context({wiki_theme:'dark'},null))).status,401);assert.equal((await onRequestPost(f.context({wiki_theme:'dark'},'one','https://other.test'))).status,403);assert.equal(f.preferences.size,0);});
 test('account wiki theme overrides the cookie only when explicitly selected and signed in',()=>{globalThis.document={cookie:'wiki_theme=light'};assert.equal(effectiveWikiTheme({authenticated:true,preferences:{wiki_theme:'dark'}}),'dark');assert.equal(effectiveWikiTheme({authenticated:true,preferences:{wiki_theme:'cookie'}}),'light');assert.equal(effectiveWikiTheme({authenticated:false,preferences:{wiki_theme:'dark'}}),'light');document.cookie='wiki_theme=dark';assert.equal(effectiveWikiTheme({authenticated:true,preferences:{wiki_theme:'light'}}),'light');assert.equal(effectiveWikiTheme({authenticated:false}),'dark');});
 test('every catalogue asset exists and the default torch and legacy IDs remain valid',()=>{assert.equal(catalogue.avatar.img_1,'/images/website/torch_full.png');assert.equal(catalogue.background.img_1,'');assert.equal(catalogue.background.img_2,'/images/character_art/Backgrounds/bag-og.png');for(const [group,items]of Object.entries(catalogue)){if(!['avatar','background'].includes(group))continue;for(const [key,path]of Object.entries(items)){if(path)assert(fs.existsSync(new URL('..'+path,import.meta.url)),path);if(key.startsWith('img_'))assert(catalogue.labels[group][key]);}}});
+
+test('Pages account catalogue matches the browser catalogue',()=>{assert.deepEqual(bundledCatalogue,catalogue);});
