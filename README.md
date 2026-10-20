@@ -52,3 +52,7 @@ The sitemap generator only needs to run when page URLs or article inventory chan
 - [Game engine guide](ml-game/README.md)
 
 Finder metadata and Python bytecode are ignored. The root cleanup's original files, generated metadata, and move manifest were saved in a separate local backup for rollback.
+
+## Asset updates
+
+Use plain asset URLs without manual version query parameters. The root `_headers` file tells Cloudflare Pages to revalidate static pages and assets on each load, allowing unchanged files to use conditional responses while checking for new deployments. Publish your changes through the normal deployment process, then reload the page to load the latest deployed files.

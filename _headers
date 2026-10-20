@@ -1,0 +1,3 @@
+# Revalidate static pages and assets on every load; no manual ?v= tags needed.
+/*
+  Cache-Control: no-cache, max-age=0, must-revalidate

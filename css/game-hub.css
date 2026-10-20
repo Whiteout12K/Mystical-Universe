@@ -1141,7 +1141,7 @@
     position:absolute;
     width:var(--hub-ornament-size);
     height:var(--hub-ornament-size);
-    background:url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+    background:url('../images/ornaments/square-embroidery-corner.svg') center / contain no-repeat;
     pointer-events:none;
     z-index:4;
     opacity:.85;

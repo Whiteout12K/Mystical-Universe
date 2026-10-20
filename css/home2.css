@@ -152,7 +152,7 @@
   position: absolute;
   width: 76px;
   height: 76px;
-  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+  background: url('../images/ornaments/square-embroidery-corner.svg') center / contain no-repeat;
   pointer-events: none;
   z-index: 2;
 }
@@ -166,7 +166,7 @@
 .home-ornaments .hero-bottom-decoration {
   width: min(560px, 100%);
   height: 42px;
-  background: url('../images/ornaments/merged-wing-bracket.svg?v=2') left center / contain no-repeat;
+  background: url('../images/ornaments/merged-wing-bracket.svg') left center / contain no-repeat;
 }
 .home-ornaments .hero-bottom-decoration > * { display: none; }
 .home-ornaments #characters .heading-decoration {
@@ -207,7 +207,7 @@
   left: 50%;
   width: 100%;
   height: 34px;
-  background: url('../images/ornaments/merged-wing-bracket.svg?v=3') center / 100% 100% no-repeat;
+  background: url('../images/ornaments/merged-wing-bracket.svg') center / 100% 100% no-repeat;
   transform: translate(-50%, 50%);
   pointer-events: none;
   opacity: .85;

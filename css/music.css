@@ -118,7 +118,7 @@
   position: absolute;
   width: 76px;
   height: 76px;
-  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+  background: url('../images/ornaments/square-embroidery-corner.svg') center / contain no-repeat;
   pointer-events: none;
   z-index: 2;
 }
@@ -134,7 +134,7 @@
   left: 50%;
   width: min(70%, 420px);
   height: 28px;
-  background: url('../images/ornaments/merged-wing-bracket.svg?v=3') center / 100% 100% no-repeat;
+  background: url('../images/ornaments/merged-wing-bracket.svg') center / 100% 100% no-repeat;
   pointer-events: none;
   z-index: 2;
   opacity: .85;

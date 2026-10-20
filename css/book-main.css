@@ -247,7 +247,7 @@ body {
   position: absolute;
   width: 64px;
   height: 64px;
-  background: url('../images/ornaments/square-embroidery-corner.svg?v=10') center / contain no-repeat;
+  background: url('../images/ornaments/square-embroidery-corner.svg') center / contain no-repeat;
   pointer-events: none;
   z-index: 1;
 }
