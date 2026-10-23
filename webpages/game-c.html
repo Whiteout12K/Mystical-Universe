@@ -449,14 +449,23 @@ hr.my-4{
   background:linear-gradient(180deg,rgba(116,27,34,.12),transparent);
 }
 
-.pixel-portrait{
+.style-card .pixel-portrait{
   display:block;
-  width:200px;
+  align-self:center;
+  flex-shrink:0;
+  width:100%;
+  max-width:200px;
   height:200px;
   margin:.75rem auto 0;
   object-fit:contain;
+  object-position:center center;
   image-rendering:pixelated;
   filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
+}
+
+/* The cultivator sprite has more transparent space to the right of its figure. */
+.style-card img[src$="/c1_costume/costume_3.png"]{
+  object-position:65% center;
 }
 
 /* Mobile */

@@ -33,11 +33,15 @@
         "name": "Default",
         "preview_path": "/images/mlg-animation/c1_idle.mp4"
     },
-
     "costume_2": {
         "id": "2",
         "name": "True Transformation",
-        "preview_path": "/images/mlg-assets/Characters/C1/costume/costume_2.png"
+        "preview_path": "/images/character_art/pixel_art/c1_costume/costume_2.png"
+    },
+    "costume_3": {
+        "id": "3",
+        "name": "Cultivator",
+        "preview_path": "/images/character_art/pixel_art/c1_costume/costume_3.png"
     },
 
     "base_stats": {
@@ -152,7 +156,12 @@
     "costume_1": {
         "id": "1",
         "name": "Default",
-        "preview_path": "/images/mlg-assets/Characters/C2/costume/costume_1.png"
+        "preview_path": "/images/character_art/pixel_art/c2_costume/costume_1.png"
+    },
+    "costume_2": {
+        "id": "2",
+        "name": "Cultivator",
+        "preview_path": "/images/character_art/pixel_art/c2_costume/costume_2.png"
     },
 
     "base_stats": {
@@ -224,6 +233,12 @@
 
     "skills": ["B1", "S1", "S2", "S3", "U1", "T1", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C3",
+    
+    "costume_1": {
+      "id": "1",
+      "name": "Default",
+      "preview_path": "/images/character_art/pixel_art/c3_costume/costume_1.png"
+    },
 
     "base_stats": {
         "health": 930,
