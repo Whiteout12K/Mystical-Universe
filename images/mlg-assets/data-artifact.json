@@ -1,151 +1,7 @@
 {
-  "o1": {
-    "artifact_id": 1,
-    "name": "Mistywood Armor",
-    "type": "Artifact",
-    "piece_num_1_name": "",
-    "piece_num_1_img": "",
-    "piece_num_2_name": "Core Sprout of Origin",
-    "piece_num_2_img": "",
-    "piece_num_3_name": "",
-    "piece_num_3_img": "",
-    "piece_num_4_name": "",
-    "piece_num_4_img": "",
-    "quantity": false,
-    "rarity": "SSR",
-    "level": 20,
-    "xp_level": 0,
-    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
-    "rarities": ["SSR", "SR"],
-    "reference_sections": [
-      {"title": "Description", "paragraphs": ["A legendary Tier 5 artifact with a core for its latent plant powers. Spreading to form a suit, the extent of plant-based magic is enhanced substantially, but just beware of fire though."]}
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "artifact_img": "",
-    "set_bonuses": [
-      {
-        "pieces": 2,
-        "description": ["Increase <b class=\"earth\">[Earth]</b> elemental damage by +25%."]
-      },
-      {
-        "pieces": 4,
-        "description": ["Hitting an opponent with a Special Skill will apply the <b class=\"plant-tether\">[Plant Tether]</b> effect on self and opponents in a radius. If the Special Skill is either <b class=\"water\">[Water]</b> or <b class=\"earth\">[Earth]</b> element, the duration increases to max.", "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "{{effect:plant-tether}}"]
-      }
-    ]
-  },
-
-
-  "o2": {
-    "artifact_id": 2,
-    "name": "ITA Armor",
-    "type": "Artifact",
-    "rarities": ["SSR", "SR"],
-    "rarity": "SSR",
-    "reference_sections": [
-      {"title": "Description", "paragraphs": ["A prototype armor based on a more secret design. The armor can amplify the physical extent of one’s attacks but may not channel magic well. When fused with more power (harder to come by) the potential is amplified."]}
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 20,
-    "xp_level": 0,
-    "piece_num_1_name": "Sensory Unit and Visor",
-    "piece_num_1_img": "",
-    "piece_num_2_name": "Core and Gauntlets",
-    "piece_num_2_img": "",
-    "piece_num_3_name": "Integrated Flex Guard",
-    "piece_num_3_img": "",
-    "piece_num_4_name": "Thrust Heavy Stompers",
-    "piece_num_4_img": "",
-    "artifact_img": "",
-    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
-    "set_bonuses": [
-      {
-        "pieces": 2,
-        "description": ["The equipping character does not deal any elemental damage on their own Skills, instead, outgoing <span class=\"normal\">normal</span> damage is buffed by +50%.", "Opponents’ resistance to <span class=\"normal\">normal</span> attacks will automatically be ineffective when the equipping character attacks."]
-      },
-      {
-        "pieces": 4,
-        "description": ["Increases defense by +20% and gained <b class=\"shield\">[Shield]</b> effect from sources will additionally heal 5% of max health. Any gained <b class=\"shield\">[Shield]</b> will contribute to an even more increased <span class=\"normal\">normal</span> damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max."]
-      }
-    ]
-  },
-
-
-  "o3": {
-    "artifact_id": 3,
-    "name": "The Angel’s Gown",
-    "type": "Artifact",
-    "piece_num_1_name": "Crown of Divinity",
-    "piece_num_1_img": "",
-    "piece_num_2_name": "Serenity Cloak",
-    "piece_num_2_img": "",
-    "piece_num_3_name": "Enlightenment Dress",
-    "piece_num_3_img": "",
-    "piece_num_4_name": "A Spirit’s Descent",
-    "piece_num_4_img": "",
-    "quantity": false,
-    "rarity": "SSR",
-    "level": 20,
-    "xp_level": 0,
-    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
-    "rarities": ["SSR", "SR"],
-    "reference_sections": [
-
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "artifact_img": "",
-    "set_bonuses": [
-      {
-        "pieces": 2,
-        "description": ["Every percentage of healing rate will increase the equipping character’s maximum health and defense by +0.3%. Increase healing rate by +10%."]
-      },
-      {
-        "pieces": 4,
-        "description": ["Gain an additional +0.3% health and defense increase for self per healing rate percentage.", "When applying a field effect from Special Skills, the health and defense boost will be applied to allies also for the duration of the field effect. In addition to the two stats increased, attack stat will be increased for allies and self by the same percentage based on healing rate. Only equipping character’s healing rate is considered for stat bonus."]
-      }
-    ]
-  },
-
-
-  "o4": {
-    "artifact_id": 4,
-    "name": "ITA Suit",
-    "type": "Artifact",
-    "piece_num_1_name": "Sunglasses",
-    "piece_num_1_img": "",
-    "piece_num_2_name": "Jacket, Tie, and Vest",
-    "piece_num_2_img": "",
-    "piece_num_3_name": "Suit Pants",
-    "piece_num_3_img": "",
-    "piece_num_4_name": "Slicky Slides",
-    "piece_num_4_img": "",
-    "quantity": false,
-    "rarity": "SSR",
-    "level": 20,
-    "xp_level": 0,
-    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
-    "rarities": ["SSR", "SR"],
-    "reference_sections": [
-
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "artifact_img": "",
-    "set_bonuses": [
-      {
-        "pieces": 2,
-        "description": ["Increases Basic Skill, Special Skill, and Ultimate Skill damage by +15%."]
-      },
-      {
-        "pieces": 4,
-        "description": ["If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a <b class=\"shield\">[Shield]</b> as well.", "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent."]
-      }
-    ]
-  },
-
-
-  "o5": {
-    "artifact_id": 5,
-    "name": "Guardian’s Tribute",
+  "o8": {
+    "artifact_id": 8,
+    "name": "Tournament Battler’s Avatar",
     "type": "Artifact",
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
@@ -156,64 +12,27 @@
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "piece_num_1_name": "Razor Helmet",
+    "piece_num_1_name": "District Helmet",
     "piece_num_1_img": "",
-    "piece_num_2_name": "Resolving Plating",
+    "piece_num_2_name": "Golden Chestplate",
     "piece_num_2_img": "",
-    "piece_num_3_name": "Shattering Shins",
+    "piece_num_3_name": "Gilded Shins",
     "piece_num_3_img": "",
-    "piece_num_4_name": "Stepping Severity",
+    "piece_num_4_name": "Boots of Valor",
     "piece_num_4_img": "",
     "artifact_img": "",
     "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
     "set_bonuses": [
       {
         "pieces": 2,
-        "description": ["Defense is increased by +20%."]
+        "description": ["Increases attack stat by +20%."]
       },
       {
         "pieces": 4,
-        "description": ["When creating a <b class=\"shield\">[Shield]</b> or <b class=\"shield\">[Super Shield]</b>, the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing."]
+        "description": ["When the character dashes and maintains movement for at least 2 seconds, increase crit rate by +18%. When using a special skill, crit rate will increase by an additional +18% also. The mentioned buffs will last for 10 seconds and are stackable upon each other.", "If both effects are active, increase crit damage by +25%."]
       }
     ]
   },
-
-
-  "o6": {
-    "artifact_id": 6,
-    "name": "Cleric’s Gadgets",
-    "type": "Artifact",
-    "rarities": ["SSR", "SR"],
-    "rarity": "SSR",
-    "reference_sections": [
-
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 20,
-    "xp_level": 0,
-    "piece_num_1_name": "Goggle and Mask",
-    "piece_num_1_img": "",
-    "piece_num_2_name": "Lab Coat and Hanging Trinkets",
-    "piece_num_2_img": "",
-    "piece_num_3_name": "Stainless Pants in Style",
-    "piece_num_3_img": "",
-    "piece_num_4_name": "Closed-Toed Shoes",
-    "piece_num_4_img": "",
-    "artifact_img": "",
-    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
-    "set_bonuses": [
-      {
-        "pieces": 2,
-        "description": ["Increases healing rate by +25% and the duration of healing skills by +0.07 seconds for every percentage of health stat increase from equipped artifacts (combined substrate and main stat)."]
-      },
-      {
-        "pieces": 4,
-        "description": ["When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting <b class=\"invincibility\">[Invincibility]</b>, and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "{{effect:invincibility}}"]
-      }
-    ]
-  },
-
 
   "o7": {
     "artifact_id": 7,
@@ -250,10 +69,9 @@
     ]
   },
 
-
-  "o8": {
-    "artifact_id": 8,
-    "name": "Tournament Battler’s Avatar",
+  "o6": {
+    "artifact_id": 6,
+    "name": "Cleric’s Gadgets",
     "type": "Artifact",
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
@@ -264,24 +82,199 @@
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "piece_num_1_name": "District Helmet",
+    "piece_num_1_name": "Goggle and Mask",
     "piece_num_1_img": "",
-    "piece_num_2_name": "Golden Chestplate",
+    "piece_num_2_name": "Lab Coat and Hanging Trinkets",
     "piece_num_2_img": "",
-    "piece_num_3_name": "Gilded Shins",
+    "piece_num_3_name": "Stainless Pants in Style",
     "piece_num_3_img": "",
-    "piece_num_4_name": "Boots of Valor",
+    "piece_num_4_name": "Closed-Toed Shoes",
     "piece_num_4_img": "",
     "artifact_img": "",
     "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
     "set_bonuses": [
       {
         "pieces": 2,
-        "description": ["Increases attack stat by +20%."]
+        "description": ["Increases healing rate by +25% and the duration of healing skills by +0.07 seconds for every percentage of health stat increase from equipped artifacts (combined substrate and main stat)."]
       },
       {
         "pieces": 4,
-        "description": ["When the character dashes and maintains movement for at least 2 seconds, increase crit rate by +18%. When using a special skill, crit rate will increase by an additional +18% also. The mentioned buffs will last for 10 seconds and are stackable upon each other.", "If both effects are active, increase crit damage by +25%."]
+        "description": ["When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting <b class=\"invincibility\">[Invincibility]</b>, and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "{{effect:invincibility}}"]
+      }
+    ]
+  },
+
+  "o5": {
+    "artifact_id": 5,
+    "name": "Guardian’s Tribute",
+    "type": "Artifact",
+    "rarities": ["SSR", "SR"],
+    "rarity": "SSR",
+    "reference_sections": [
+
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 20,
+    "xp_level": 0,
+    "piece_num_1_name": "Razor Helmet",
+    "piece_num_1_img": "",
+    "piece_num_2_name": "Resolving Plating",
+    "piece_num_2_img": "",
+    "piece_num_3_name": "Shattering Shins",
+    "piece_num_3_img": "",
+    "piece_num_4_name": "Stepping Severity",
+    "piece_num_4_img": "",
+    "artifact_img": "",
+    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
+    "set_bonuses": [
+      {
+        "pieces": 2,
+        "description": ["Defense is increased by +20%."]
+      },
+      {
+        "pieces": 4,
+        "description": ["When creating a <b class=\"shield\">[Shield]</b> or <b class=\"shield\">[Super Shield]</b>, the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing."]
+      }
+    ]
+  },
+
+  "o4": {
+    "artifact_id": 4,
+    "name": "ITA Suit",
+    "type": "Artifact",
+    "piece_num_1_name": "Sunglasses",
+    "piece_num_1_img": "",
+    "piece_num_2_name": "Jacket, Tie, and Vest",
+    "piece_num_2_img": "",
+    "piece_num_3_name": "Suit Pants",
+    "piece_num_3_img": "",
+    "piece_num_4_name": "Slicky Slides",
+    "piece_num_4_img": "",
+    "quantity": false,
+    "rarity": "SSR",
+    "level": 20,
+    "xp_level": 0,
+    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
+    "rarities": ["SSR", "SR"],
+    "reference_sections": [
+
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "artifact_img": "",
+    "set_bonuses": [
+      {
+        "pieces": 2,
+        "description": ["Increases Basic Skill, Special Skill, and Ultimate Skill damage by +15%."]
+      },
+      {
+        "pieces": 4,
+        "description": ["If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a <b class=\"shield\">[Shield]</b> as well.", "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent."]
+      }
+    ]
+  },
+
+  "o3": {
+    "artifact_id": 3,
+    "name": "The Angel’s Gown",
+    "type": "Artifact",
+    "piece_num_1_name": "Crown of Divinity",
+    "piece_num_1_img": "",
+    "piece_num_2_name": "Serenity Cloak",
+    "piece_num_2_img": "",
+    "piece_num_3_name": "Enlightenment Dress",
+    "piece_num_3_img": "",
+    "piece_num_4_name": "A Spirit’s Descent",
+    "piece_num_4_img": "",
+    "quantity": false,
+    "rarity": "SSR",
+    "level": 20,
+    "xp_level": 0,
+    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
+    "rarities": ["SSR", "SR"],
+    "reference_sections": [
+
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "artifact_img": "",
+    "set_bonuses": [
+      {
+        "pieces": 2,
+        "description": ["Every percentage of healing rate will increase the equipping character’s maximum health and defense by +0.3%. Increase healing rate by +10%."]
+      },
+      {
+        "pieces": 4,
+        "description": ["Gain an additional +0.3% health and defense increase for self per healing rate percentage.", "When applying a field effect from Special Skills, the health and defense boost will be applied to allies also for the duration of the field effect. In addition to the two stats increased, attack stat will be increased for allies and self by the same percentage based on healing rate. Only equipping character’s healing rate is considered for stat bonus."]
+      }
+    ]
+  },
+
+  "o2": {
+    "artifact_id": 2,
+    "name": "ITA Armor",
+    "type": "Artifact",
+    "rarities": ["SSR", "SR"],
+    "rarity": "SSR",
+    "reference_sections": [
+      {"title": "Description", "paragraphs": ["A prototype armor based on a more secret design. The armor can amplify the physical extent of one’s attacks but may not channel magic well. When fused with more power (harder to come by) the potential is amplified."]}
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 20,
+    "xp_level": 0,
+    "piece_num_1_name": "Sensory Unit and Visor",
+    "piece_num_1_img": "",
+    "piece_num_2_name": "Core and Gauntlets",
+    "piece_num_2_img": "",
+    "piece_num_3_name": "Integrated Flex Guard",
+    "piece_num_3_img": "",
+    "piece_num_4_name": "Thrust Heavy Stompers",
+    "piece_num_4_img": "",
+    "artifact_img": "",
+    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
+    "set_bonuses": [
+      {
+        "pieces": 2,
+        "description": ["The equipping character does not deal any elemental damage on their own Skills, instead, outgoing <span class=\"normal\">normal</span> damage is buffed by +50%.", "Opponents’ resistance to <span class=\"normal\">normal</span> attacks will automatically be ineffective when the equipping character attacks."]
+      },
+      {
+        "pieces": 4,
+        "description": ["Increases defense by +20% and gained <b class=\"shield\">[Shield]</b> effect from sources will additionally heal 5% of max health. Any gained <b class=\"shield\">[Shield]</b> will contribute to an even more increased <span class=\"normal\">normal</span> damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max."]
+      }
+    ]
+  },
+
+  "o1": {
+    "artifact_id": 1,
+    "name": "Mistywood Armor",
+    "type": "Artifact",
+    "piece_num_1_name": "",
+    "piece_num_1_img": "",
+    "piece_num_2_name": "Core Sprout of Origin",
+    "piece_num_2_img": "",
+    "piece_num_3_name": "",
+    "piece_num_3_img": "",
+    "piece_num_4_name": "",
+    "piece_num_4_img": "",
+    "quantity": false,
+    "rarity": "SSR",
+    "level": 20,
+    "xp_level": 0,
+    "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
+    "rarities": ["SSR", "SR"],
+    "reference_sections": [
+      {"title": "Description", "paragraphs": ["A legendary Tier 5 artifact with a core for its latent plant powers. Spreading to form a suit, the extent of plant-based magic is enhanced substantially, but just beware of fire though."]}
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "artifact_img": "",
+    "set_bonuses": [
+      {
+        "pieces": 2,
+        "description": ["Increase <b class=\"earth\">[Earth]</b> elemental damage by +25%."]
+      },
+      {
+        "pieces": 4,
+        "description": ["Hitting an opponent with a Special Skill will apply the <b class=\"plant-tether\">[Plant Tether]</b> effect on self and opponents in a radius. If the Special Skill is either <b class=\"water\">[Water]</b> or <b class=\"earth\">[Earth]</b> element, the duration increases to max.", "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "{{effect:plant-tether}}"]
       }
     ]
   }

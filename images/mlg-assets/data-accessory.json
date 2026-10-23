@@ -1,59 +1,134 @@
 {
-  "a1": {
-    "id": 1,
-    "name": "Rune of the Spellcaster",
+  "a8": {
+    "id": 8,
+    "name": "Dark Runestone",
     "type": "Accessory",
-    "accessory_img": "",
-    "quantity": false,
-    "rarity": "SSR",
-    "star_level": 0,
-    "level": 100,
-    "xp_level": 0,
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "health", "main_1_value": 185.0, "main_2": "healing_rate", "main_2_value": 4.0},
-    "rarities": ["SSR"],
+    "rarities": ["SR"],
+    "rarity": "SR",
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at <b class=\"codex-value\">100%</b> its value.", "The rune will float above the equipping character’s head and provide an unremovable buff <b class=\"holy-aura\">[Holy Aura]</b>. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of <b class=\"codex-value\">-15%</b> matching the equipping character’s affinity. In trade, 5 MP will drain every <b class=\"codex-value\">2</b> seconds to maintain effect.", "Magnitude: The amount of <b class=\"shield\">[Shield]</b> gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).", "{{effect:holy-aura}}"]
+        "paragraphs": ["Increases <b class=\"dark\">[Dark]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "reference_stats": [
-      {"name": "Health", "level_1": 185.0, "level_100": 1480.0, "unit": ""},
-      {"name": "Healing Rate", "level_1": 4.0, "level_100": 32.0, "unit": "%"}
-    ],
-    "seal_ring_name": "Coronation Ring of Magnitude",
-    "restriction": ""
-  },
-
-
-  "a2": {
-    "id": 2,
-    "name": "Water Spirit Rune",
-    "type": "Accessory",
-    "accessory_img": "",
     "quantity": false,
-    "rarity": "SSR",
-    "star_level": 0,
     "level": 100,
     "xp_level": 0,
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "defense", "main_1_value": 105.0, "main_2": "mana", "main_2_value": 60.0},
-    "previous_name": "Water Spirit Stone",
-    "rarities": ["SSR"],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
+      {"name": "Attack", "level_1": 16.0, "level_100": 128.0, "unit": ""}
+    ],
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "attack", "main_2_value": 16.0},
+    "restriction": "",
+    "reference_notes": ["Both stat entries are listed as Attack in the current design document."]
+  },
+
+  "a7": {
+    "id": 7,
+    "name": "Light Runestone",
+    "type": "Accessory",
+    "rarities": ["SR"],
+    "rarity": "SR",
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": []
+        "paragraphs": ["Increases <b class=\"light\">[Light]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "accessory_img": "",
+    "star_level": 0,
     "reference_stats": [
-      {"name": "Defense", "level_1": 105.0, "level_100": 840.0, "unit": ""},
-      {"name": "MP", "level_1": 60.0, "level_100": 480.0, "unit": ""}
+      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
+      {"name": "Piercing", "level_1": 6.0, "level_100": 48.0, "unit": ""}
     ],
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "piercing", "main_2_value": 6.0},
     "restriction": ""
   },
 
+  "a6": {
+    "id": 6,
+    "name": "Earth Runestone",
+    "type": "Accessory",
+    "rarities": ["SR"],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": ["Increases <b class=\"earth\">[Earth]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+      }
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {"name": "Defense", "level_1": 65.0, "level_100": 520.0, "unit": ""},
+      {"name": "Piercing", "level_1": 6.0, "level_100": 48.0, "unit": ""}
+    ],
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "defense", "main_1_value": 65.0, "main_2": "piercing", "main_2_value": 6.0},
+    "restriction": ""
+  },
+
+  "a5": {
+    "id": 5,
+    "name": "Wind Runestone",
+    "type": "Accessory",
+    "rarities": ["SR"],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": ["Increases <b class=\"wind\">[Wind]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+      }
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {"name": "Piercing", "level_1": 8.0, "level_100": 64.0, "unit": ""},
+      {"name": "Cooldown Reduction", "level_1": 2.0, "level_100": 16.0, "unit": "%"}
+    ],
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "piercing", "main_1_value": 8.0, "main_2": "cooldown_red", "main_2_value": 2.0},
+    "restriction": ""
+  },
+
+  "a4": {
+    "id": 4,
+    "name": "Water Runestone",
+    "type": "Accessory",
+    "rarities": ["SR"],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": ["Increases <b class=\"water\">[Water]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+      }
+    ],
+    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
+      {"name": "Health", "level_1": 125.0, "level_100": 1000.0, "unit": ""}
+    ],
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "health", "main_2_value": 125.0},
+    "restriction": ""
+  },
 
   "a3": {
     "id": 3,
@@ -82,139 +157,58 @@
     "reference_notes": ["Both stat entries are listed as Attack in the current design document."]
   },
 
-
-  "a4": {
-    "id": 4,
-    "name": "Water Runestone",
+  "a2": {
+    "id": 2,
+    "name": "Water Spirit Rune",
     "type": "Accessory",
-    "rarities": ["SR"],
-    "rarity": "SR",
+    "accessory_img": "",
+    "quantity": false,
+    "rarity": "SSR",
+    "star_level": 0,
+    "level": 100,
+    "xp_level": 0,
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "defense", "main_1_value": 105.0, "main_2": "mana", "main_2_value": 60.0},
+    "previous_name": "Water Spirit Stone",
+    "rarities": ["SSR"],
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases <b class=\"water\">[Water]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": []
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 100,
-    "xp_level": 0,
-    "accessory_img": "",
-    "star_level": 0,
     "reference_stats": [
-      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
-      {"name": "Health", "level_1": 125.0, "level_100": 1000.0, "unit": ""}
+      {"name": "Defense", "level_1": 105.0, "level_100": 840.0, "unit": ""},
+      {"name": "MP", "level_1": 60.0, "level_100": 480.0, "unit": ""}
     ],
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "health", "main_2_value": 125.0},
     "restriction": ""
   },
 
-
-  "a5": {
-    "id": 5,
-    "name": "Wind Runestone",
+  "a1": {
+    "id": 1,
+    "name": "Rune of the Spellcaster",
     "type": "Accessory",
-    "rarities": ["SR"],
-    "rarity": "SR",
+    "accessory_img": "",
+    "quantity": false,
+    "rarity": "SSR",
+    "star_level": 0,
+    "level": 100,
+    "xp_level": 0,
+    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "health", "main_1_value": 185.0, "main_2": "healing_rate", "main_2_value": 4.0},
+    "rarities": ["SSR"],
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases <b class=\"wind\">[Wind]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at <b class=\"codex-value\">100%</b> its value.", "The rune will float above the equipping character’s head and provide an unremovable buff <b class=\"holy-aura\">[Holy Aura]</b>. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of <b class=\"codex-value\">-15%</b> matching the equipping character’s affinity. In trade, 5 MP will drain every <b class=\"codex-value\">2</b> seconds to maintain effect.",
+        "<u>Magnitude</u>: The amount of <b class=\"shield\">[Shield]</b> gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).", "{{effect:holy-aura}}"]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 100,
-    "xp_level": 0,
-    "accessory_img": "",
-    "star_level": 0,
     "reference_stats": [
-      {"name": "Piercing", "level_1": 8.0, "level_100": 64.0, "unit": ""},
-      {"name": "Cooldown Reduction", "level_1": 2.0, "level_100": 16.0, "unit": "%"}
+      {"name": "Health", "level_1": 185.0, "level_100": 1480.0, "unit": ""},
+      {"name": "Healing Rate", "level_1": 4.0, "level_100": 32.0, "unit": "%"}
     ],
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "piercing", "main_1_value": 8.0, "main_2": "cooldown_red", "main_2_value": 2.0},
+    "seal_ring_name": "Coronation Ring of Magnitude",
     "restriction": ""
-  },
-
-
-  "a6": {
-    "id": 6,
-    "name": "Earth Runestone",
-    "type": "Accessory",
-    "rarities": ["SR"],
-    "rarity": "SR",
-    "reference_sections": [
-      {
-        "title": "Passives",
-        "paragraphs": ["Increases <b class=\"earth\">[Earth]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
-      }
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 100,
-    "xp_level": 0,
-    "accessory_img": "",
-    "star_level": 0,
-    "reference_stats": [
-      {"name": "Defense", "level_1": 65.0, "level_100": 520.0, "unit": ""},
-      {"name": "Piercing", "level_1": 6.0, "level_100": 48.0, "unit": ""}
-    ],
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "defense", "main_1_value": 65.0, "main_2": "piercing", "main_2_value": 6.0},
-    "restriction": ""
-  },
-
-
-  "a7": {
-    "id": 7,
-    "name": "Light Runestone",
-    "type": "Accessory",
-    "rarities": ["SR"],
-    "rarity": "SR",
-    "reference_sections": [
-      {
-        "title": "Passives",
-        "paragraphs": ["Increases <b class=\"light\">[Light]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
-      }
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 100,
-    "xp_level": 0,
-    "accessory_img": "",
-    "star_level": 0,
-    "reference_stats": [
-      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
-      {"name": "Piercing", "level_1": 6.0, "level_100": 48.0, "unit": ""}
-    ],
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "piercing", "main_2_value": 6.0},
-    "restriction": ""
-  },
-
-
-  "a8": {
-    "id": 8,
-    "name": "Dark Runestone",
-    "type": "Accessory",
-    "rarities": ["SR"],
-    "rarity": "SR",
-    "reference_sections": [
-      {
-        "title": "Passives",
-        "paragraphs": ["Increases <b class=\"dark\">[Dark]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
-      }
-    ],
-    "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
-    "quantity": false,
-    "level": 100,
-    "xp_level": 0,
-    "accessory_img": "",
-    "star_level": 0,
-    "reference_stats": [
-      {"name": "Attack", "level_1": 34.0, "level_100": 272.0, "unit": ""},
-      {"name": "Attack", "level_1": 16.0, "level_100": 128.0, "unit": ""}
-    ],
-    "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 34.0, "main_2": "attack", "main_2_value": 16.0},
-    "restriction": "",
-    "reference_notes": ["Both stat entries are listed as Attack in the current design document."]
   }
 }
