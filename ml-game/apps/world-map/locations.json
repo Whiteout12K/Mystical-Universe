@@ -1,0 +1,452 @@
+{
+  "districts": [
+    {
+      "id": "district1",
+      "name": "Paradise",
+      "kind": "district",
+      "view": "world",
+      "x": 1066.6666666666665,
+      "y": 216.66666666666669,
+      "subtitle": "District 1 · Near the Japanese islands",
+      "description": "An Icelorian and Dwarven homeland renowned for rare minerals and ores. The notes describe its destruction in Ioward Icelander’s past and a later effort by Kaden and his allies to reclaim and cleanse it.",
+      "details": {
+        "Location": "Near the Japanese islands",
+        "Known for": "Icelorians · Dwarves · rare ores"
+      },
+      "number": 1,
+      "label": [
+        -12,
+        -25
+      ],
+      "align": "end"
+    },
+    {
+      "id": "district2",
+      "name": "Aliorvia",
+      "kind": "district",
+      "view": "world",
+      "x": 606.6666666666666,
+      "y": 183.33333333333334,
+      "subtitle": "District 2 · France",
+      "description": "The sacred home of the Elven nation, its queen, and a wise supreme council. The notes associate Lucy Terner’s future with an Elven succession, while the series glossary establishes Aliorvia’s mainland location.",
+      "details": {
+        "Location": "France",
+        "Known for": "Elven nation · supreme council"
+      },
+      "number": 2,
+      "label": [
+        -18,
+        -22
+      ],
+      "align": "end"
+    },
+    {
+      "id": "district3",
+      "name": "Tris Bourna",
+      "kind": "district",
+      "view": "island",
+      "x": 625,
+      "y": 260,
+      "subtitle": "District 3 · Central volcano · Mystical Island",
+      "description": "Pyrus Bourn’s stronghold lies beneath the volcanic remnants of the island’s largest mountain. His Fire Increaser Co. operates here, with an armory at the snowcaps. The concealed forest entrance is described between Districts 7 and 13.",
+      "details": {
+        "Location": "Central volcano · Mystical Island",
+        "Known for": "Volcanic lair · factory · snowcap armory"
+      },
+      "number": 3,
+      "label": [
+        20,
+        -22
+      ],
+      "align": "start"
+    },
+    {
+      "id": "district4",
+      "name": "Silwastra",
+      "kind": "district",
+      "view": "island",
+      "x": 360,
+      "y": 305,
+      "subtitle": "District 4 · Mystical Island",
+      "description": "A home of Satyrs and Nymphs on the Mystical Island. Its position within this illustrated island is approximate; the glossary does not establish precise boundaries.",
+      "details": {
+        "Location": "Mystical Island",
+        "Known for": "Satyrs · Nymphs"
+      },
+      "number": 4,
+      "label": [
+        -22,
+        -23
+      ],
+      "align": "end"
+    },
+    {
+      "id": "district5",
+      "name": "Atalantia",
+      "kind": "district",
+      "view": "island",
+      "x": 915,
+      "y": 480,
+      "subtitle": "District 5 · Waters surrounding Mystical Island",
+      "description": "The Aquia kingdom lies beneath the waters along the island. Water Spirits, Naiads, and Nereids live here. Avery travels below the sea with Atlas and Alteria in The Messengers’ Return, discovering his own ability to breathe underwater.",
+      "details": {
+        "Location": "Waters surrounding Mystical Island",
+        "Known for": "Water Spirits · Naiads · Nereids"
+      },
+      "number": 5,
+      "label": [
+        45,
+        -35
+      ],
+      "align": "start"
+    },
+    {
+      "id": "district6",
+      "name": "Magnivicious United Empire",
+      "kind": "district",
+      "view": "world",
+      "x": 866.6666666666666,
+      "y": 140.0,
+      "subtitle": "District 6 · Russia",
+      "description": "Home of the strong martial Magnivirigentis clans. The notes connect District 6 and Imperium with the northern military buildup and later inter-district tensions.",
+      "details": {
+        "Location": "Russia",
+        "Known for": "Martial clans · military power"
+      },
+      "number": 6,
+      "label": [
+        0,
+        -25
+      ],
+      "align": "middle"
+    },
+    {
+      "id": "district7",
+      "name": "Lux Urbis",
+      "kind": "district",
+      "view": "island",
+      "x": 470,
+      "y": 445,
+      "subtitle": "District 7 · Mystical Island · Arctic region",
+      "description": "The first established district and central haven of the Mystical Beings. The most technologically advanced district contains Regnum Academy, IT’s operations, and the Mystical Council. Its city walls and protective dome stand apart from the island-wide mist barrier.",
+      "details": {
+        "Location": "Mystical Island · Arctic region",
+        "Known for": "Regnum Academy · IT · Mystical Council"
+      },
+      "number": 7,
+      "label": [
+        -22,
+        44
+      ],
+      "align": "end"
+    },
+    {
+      "id": "district8",
+      "name": "Longjing",
+      "kind": "district",
+      "view": "world",
+      "x": 960.0,
+      "y": 230.0,
+      "subtitle": "District 8 · China",
+      "description": "A homeland connected with the mythical dragons of the distant past and their descendants. The glossary describes its present inhabitants as elemental species, including Metalors, Herbovirs, and other Elementors.",
+      "details": {
+        "Location": "China",
+        "Known for": "Dragon heritage · elemental species"
+      },
+      "number": 8,
+      "label": [
+        -15,
+        40
+      ],
+      "align": "end"
+    },
+    {
+      "id": "district9",
+      "name": "District 9",
+      "kind": "district",
+      "view": "world",
+      "x": 1046.6666666666667,
+      "y": 423.3333333333333,
+      "subtitle": "District 9 · Australia",
+      "description": "A sheltered home for beast-like demihumans. The series glossary includes Satyrs, bird-like demihumans, and Merpeople among its inhabitants, but does not give this district a proper name.",
+      "details": {
+        "Location": "Australia",
+        "Known for": "Demihuman refuge"
+      },
+      "number": 9,
+      "label": [
+        0,
+        40
+      ],
+      "align": "middle"
+    },
+    {
+      "id": "district10",
+      "name": "Animusteria",
+      "kind": "district",
+      "view": "world",
+      "x": 676.6666666666666,
+      "y": 330.0,
+      "subtitle": "District 10 · Africa",
+      "description": "Magic-rich natural plains inhabited by beast-like predator species, with large undeveloped areas used for magical research. The glossary describes tribal factions and rotating sovereignty responsible for shared rules and diplomacy.",
+      "details": {
+        "Location": "Africa",
+        "Known for": "Magical plains · research · predator species"
+      },
+      "number": 10,
+      "label": [
+        0,
+        40
+      ],
+      "align": "middle"
+    },
+    {
+      "id": "district11",
+      "name": "Trinigear",
+      "kind": "district",
+      "view": "world",
+      "x": 250.0,
+      "y": 153.33333333333331,
+      "subtitle": "District 11 · Canada",
+      "description": "A Runigist homeland of craftsmanship, factories, shops, and locomotive machinery. Its technology combines organic and metal innovation, extending the magical world’s industry beyond IT and the Mystical Island.",
+      "details": {
+        "Location": "Canada",
+        "Known for": "Runigists · craftsmanship · locomotives"
+      },
+      "number": 11,
+      "label": [
+        0,
+        -25
+      ],
+      "align": "middle"
+    },
+    {
+      "id": "district12",
+      "name": "Luminia",
+      "kind": "district",
+      "view": "world",
+      "x": 643.3333333333333,
+      "y": 200.0,
+      "subtitle": "District 12 · Italy",
+      "description": "A kingdom ruled by the Magni Luminis and the Luces royal line. Founded by Zenith Luces, it is a home for demihumans, especially winged species, and has numerous trading ports. Lux speaks of her nation’s history and position in The Messengers’ Return.",
+      "details": {
+        "Location": "Italy",
+        "Known for": "Luces royal line · winged demihumans · ports"
+      },
+      "number": 12,
+      "label": [
+        18,
+        40
+      ],
+      "align": "start"
+    },
+    {
+      "id": "district13",
+      "name": "Noxdeus Axiom",
+      "kind": "district",
+      "view": "island",
+      "x": 745,
+      "y": 440,
+      "subtitle": "District 13 · Mystical Island",
+      "description": "Also known as the District of Doom: a populous, militaristic district with entertainment, advanced technology, and hidden dealings. Its black market becomes important in the notes’ continuation of the I.T.E.R. crisis.",
+      "details": {
+        "Location": "Mystical Island",
+        "Known for": "Military industry · entertainment · black market"
+      },
+      "number": 13,
+      "label": [
+        60,
+        -25
+      ],
+      "align": "start"
+    }
+  ],
+  "landmarks": [
+    {
+      "id": "mystical-island",
+      "name": "Mystical Island",
+      "kind": "landmark",
+      "view": "world",
+      "x": 506.6666666666667,
+      "y": 123.33333333333334,
+      "subtitle": "Hidden Arctic haven",
+      "description": "A concealed island between Greenland and Iceland. The Sustination Orb maintains a mist barrier that makes non-Mystical travelers pass through without discovering the island, while regulating the climate within. The central mountain and surrounding forest, beaches, harbor, and districts are described in Beginning.",
+      "details": {
+        "Location": "Between Greenland and Iceland",
+        "Protection": "Sustination Orb · mist barrier",
+        "Districts": "3 · 4 · 5 (offshore) · 7 · 13"
+      },
+      "label": [
+        -18,
+        -22
+      ],
+      "align": "end",
+      "openView": "island"
+    },
+    {
+      "id": "new-york",
+      "name": "New York",
+      "kind": "landmark",
+      "view": "world",
+      "x": 353.33333333333337,
+      "y": 203.33333333333331,
+      "subtitle": "Mainland beginnings",
+      "description": "Avery’s early home and the mainland setting for OSNYC, ATLAS, IT Tower, and the Sky House in Central Park’s Weeping Woods. Captain Levi’s cargo route brings Avery, Ted, and River from New York to the hidden island.",
+      "details": {
+        "Story": "Beginning",
+        "Sites": "OSNYC · ATLAS · Sky House · IT Tower"
+      },
+      "label": [
+        -18,
+        35
+      ],
+      "align": "end"
+    },
+    {
+      "id": "regnum",
+      "name": "Regnum Academy",
+      "kind": "academy",
+      "view": "island",
+      "x": 440,
+      "y": 392,
+      "subtitle": "Lux Urbis · District 7",
+      "description": "Avery, Ted, River, and Jane share Quad 44 at Regnum. The academy trains Mystical Beings, organizes cohorts, and hosts the lights celebration, flag competition, and Winter’s Dance.",
+      "details": {
+        "District": "7 · Lux Urbis",
+        "Community": "Quad 44 · academy cohorts"
+      },
+      "label": [
+        -22,
+        -24
+      ],
+      "align": "end",
+      "links": [
+        {
+          "name": "Explore the characters",
+          "url": "/webpages/search.html?q=Regnum"
+        },
+        {
+          "name": "Avery’s story",
+          "url": "/wiki/char/avery_obtainia.html"
+        }
+      ]
+    },
+    {
+      "id": "it-tower",
+      "name": "IT Tower",
+      "kind": "landmark",
+      "view": "island",
+      "x": 503,
+      "y": 435,
+      "subtitle": "Lux Urbis · District 7",
+      "description": "IT is the technological organization at the center of Kaden’s projects and the I.T.E.R. crisis. Its tower houses the agency’s work, research, and management; Avery joins as an intern.",
+      "details": {
+        "District": "7 · Lux Urbis",
+        "Associated with": "Kaden Icelander · I.T.E.R."
+      },
+      "label": [
+        14,
+        -24
+      ],
+      "align": "start",
+      "links": [
+        {
+          "name": "Kaden Icelander",
+          "url": "/wiki/char/kaden_icelander.html"
+        }
+      ]
+    },
+    {
+      "id": "aquia-estate",
+      "name": "Aquia Estate",
+      "kind": "landmark",
+      "view": "island",
+      "x": 377,
+      "y": 463,
+      "subtitle": "Lux Urbis · District 7",
+      "description": "The estate provides a base for Tempest Aquia and the setting for Avery’s early training encounter with Alteria. It is distinct from the Aquia family’s underwater kingdom in District 5.",
+      "details": {
+        "District": "7 · Lux Urbis",
+        "Cohort": "Tempest Aquia"
+      },
+      "label": [
+        -20,
+        26
+      ],
+      "align": "end",
+      "links": [
+        {
+          "name": "Atlas Aquia",
+          "url": "/wiki/char/atlas_aquia.html"
+        },
+        {
+          "name": "Alteria Aquia",
+          "url": "/wiki/char/alteria_aquia.html"
+        }
+      ]
+    },
+    {
+      "id": "harbor",
+      "name": "Island Harbor",
+      "kind": "landmark",
+      "view": "island",
+      "x": 535,
+      "y": 560,
+      "subtitle": "Arrival from the mainland",
+      "description": "A modern harbor of ships, repair shops, rentals, hotels, and busy trade. Avery first sees the island’s central mountain from here before Elmor guides the group toward Regnum Academy.",
+      "details": {
+        "Connection": "Mainland shipping · Captain Levi",
+        "Story": "Beginning · The Light of the City"
+      },
+      "label": [
+        -18,
+        35
+      ],
+      "align": "end"
+    },
+    {
+      "id": "forest-entrance",
+      "name": "Concealed Lair Entrance",
+      "kind": "landmark",
+      "view": "island",
+      "x": 645,
+      "y": 375,
+      "subtitle": "Forest between Districts 7 and 13",
+      "description": "The entrance to Pyrus Bourn’s lair is hidden in the forest between Lux Urbis and Noxdeus Axiom. The stronghold itself extends beneath the central volcanic mountain.",
+      "details": {
+        "Connects": "Forest → Tris Bourna",
+        "Story": "Awakening · Invasion by Fire"
+      },
+      "label": [
+        22,
+        -10
+      ],
+      "align": "start",
+      "links": [
+        {
+          "name": "Pyrus Bourn",
+          "url": "/wiki/char/pyrus_bourn.html"
+        }
+      ]
+    },
+    {
+      "id": "black-market",
+      "name": "District 13 Black Market",
+      "kind": "landmark",
+      "view": "island",
+      "x": 800,
+      "y": 485,
+      "subtitle": "Noxdeus Axiom · District 13",
+      "description": "The notes send Kaden’s fugitive group into the district’s nighttime bazaar to trace the network behind copied I.T.E.R. machines. This location belongs to the outlined continuation of the I.T.E.R. crisis.",
+      "details": {
+        "District": "13 · Noxdeus Axiom",
+        "Story": "I.T.E.R. continuation"
+      },
+      "label": [
+        18,
+        50
+      ],
+      "align": "start"
+    }
+  ]
+}
