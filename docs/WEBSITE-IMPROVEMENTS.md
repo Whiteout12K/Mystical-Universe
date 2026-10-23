@@ -12,13 +12,12 @@ python3 scripts/feature-control.py disable characterComparison
 python3 scripts/feature-control.py enable characterComparison
 ```
 
-Refresh open pages after a change. Disabling one feature preserves the other features and any saved reading/spoiler preferences. A disabled tool page shows an unavailable message; its menu link disappears. The original wiki search is retained as the fallback when `fastWikiSearch` is disabled.
+Refresh open pages after a change. Disabling one feature preserves the other features and any saved reading preferences. A disabled tool page shows an unavailable message; its menu link disappears. The original wiki search is retained as the fallback when `fastWikiSearch` is disabled.
 
 | Feature switch | Added behavior | Main implementation |
 | --- | --- | --- |
 | `unifiedSearch` | Header search dialog, Ctrl/Cmd+K, `/webpages/search.html`; filter characters, wiki, skills, effects, books | `js/site-enhancements/search.js` |
 | `characterConnections` | Wiki/game/book links and related characters on character pages | `js/site-enhancements/connections.js` |
-| `spoilerPreferences` | Browser-local reading progress and default spoiler disclosure | `js/site-enhancements/spoilers.js` |
 | `characterComparison` | Two-character base-stat, affinity, role, and skill comparison; shareable query parameters | `webpages/compare.html`, `js/site-enhancements/compare.js` |
 | `mobileNavigation` | Sticky horizontal skill selector, keyboard skill controls, character/skills shortcuts | `js/site-enhancements/mobile.js` |
 | `effectsGlossary` | Search/filter effect entries and follow effect links from skill descriptions | `webpages/game-codex.html`, `js/site-enhancements/game-codex.js`, `ml-game/apps/skill.html` |
@@ -51,15 +50,9 @@ Wiki search summaries exclude template contents, including nested spoilers. The 
 
 Only books with a local PDF get a reader/Continue Reading link. Other catalogue books keep their book-listing link. The reader's previous/next controls use actual PDF outline destinations, including front matter; books without an outline retain existing page navigation. Continue Reading is saved on this browser and does not require sign-in.
 
-## Spoiler book levels
+## Spoiler controls
 
-Existing `{{Spoiler|text}}` entries are unclassified and remain hidden for finite reading-progress settings. Their contents are never assigned a guessed book number. Authors can explicitly mark the first safe completed book:
-
-```text
-{{Spoiler|book=2|This detail becomes safe after finishing Book 2.}}
-```
-
-“Finished Book 2” automatically opens entries labeled book 1 or 2. “Hide all spoilers” closes entries; readers can still manually reveal an individual spoiler. “Show all spoilers” opens all entries, including unclassified ones. Settings apply across wiki pages in the same browser, including other open tabs.
+Spoilers use native disclosure buttons and start closed. Readers choose Show Spoiler or Hide Spoiler on each entry. There is no global preference, reading-progress rule, or saved spoiler setting. Legacy `book=` template metadata is ignored when rendering.
 
 ## Content audit and checks
 
@@ -81,13 +74,13 @@ Local baseline backup: `/Users/kennycalhoun/.codex/backups/mystical-universe/web
 
 ## Explore menu placement
 
-Search, Effects, Compare, and Spoiler settings appear inside Explore on the regular website and wiki. The separate tools strip was removed. Feature switches still control each entry independently. The original Story Characters, Game Characters, and World Timeline shortcuts were removed from Explore.
+Search, Game Codex, and Compare appear inside Explore on the regular website and wiki. The separate tools strip was removed. Feature switches still control each entry independently. The original Story Characters, Game Characters, and World Timeline shortcuts were removed from Explore.
 
 ## Account appearance and wiki theme
 
 Signed-in visitors can open **Account** from their user menu at `/webpages/account.html`. The page previews a profile image and profile background before Save changes. The selected profile image also appears in website and wiki navigation; saved appearance is used on the public ML Game Profile and player search results.
 
-`images/mlg-assets/account-styles.json` is the canonical catalogue. It contains the torch, all existing character-head PNGs, four background choices, and readable labels. IDs 1 and 2 retain the previous torch/default and scenery meanings. The singular `account-style.json` is retained as a populated compatibility copy; current profile/account pages use the plural filename. Existing avatar-frame support is preserved.
+`images/mlg-assets/account-styles.json` is the canonical catalogue. It contains the torch, all existing character-head PNGs, four background choices, and readable labels. IDs 1 and 2 retain the previous torch/default and scenery meanings. All profile/account pages, including the older profile viewer, use this shared catalogue; the duplicate singular filename has been removed. Existing avatar-frame support is preserved.
 
 Wiki appearance has three account choices: Use browser preference, Light, or Dark. A saved Light/Dark account choice takes priority over `wiki_theme` cookies. Use browser preference falls back to the cookie. Signed-out readers always use the cookie/default; the account override does not overwrite that cookie. The wiki's own mode toggle saves the theme to the signed-in account, or to the cookie for a signed-out visitor.
 

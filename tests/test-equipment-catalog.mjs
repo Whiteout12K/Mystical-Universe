@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {equipmentAnchor,equipmentImage,equipmentPieces,equipmentSections,catalogueSearchText} from '../js/site-enhancements/equipment-catalog.js';
+import {equipmentAnchor,equipmentImage,equipmentPieces,equipmentSections,catalogueSearchText,equipmentEffectDefinition,effectDescriptions} from '../js/site-enhancements/equipment-catalog.js';
 const root=new URL('../',import.meta.url),read=name=>JSON.parse(readFileSync(new URL('images/mlg-assets/'+name,root),'utf8'));
 const weapons=read('data-weapon.json'),accessories=read('data-accessory.json'),artifacts=read('data-artifact.json');
 test('complete equipment catalogue retains stable IDs and separate item-specific descriptions',()=>{
@@ -23,4 +23,34 @@ test('equipment hash routes and optional images are stable without unresolved sk
  assert.equal(equipmentAnchor('accessories','a1'),'accessory-a1');assert.equal(equipmentAnchor('artifacts','o1'),'artifact-o1');assert.equal(equipmentAnchor('weapons','w1'),'weapon-w1');
  for(const e of [...Object.values(weapons),...Object.values(accessories),...Object.values(artifacts)]){assert(!JSON.stringify(e.reference_sections).includes('data-dmg'));assert(e.source.url.startsWith('https://docs.google.com/'));const image=equipmentImage(e);if(image)assert(existsSync(new URL(image.slice(1),root)),image);}
  assert.equal(equipmentImage(accessories.a1),'');
+});
+test('equipment highlights only source-bold values and leaves fixed mechanics plain',()=>{
+ const gladius=equipmentSections(weapons.w1).flatMap(s=>s.paragraphs).join(' ');
+ assert.match(gladius,/<b class="codex-value">270%<\/b>/);
+ assert.match(gladius,/Summons 5 swirling blades/);
+ assert.match(gladius,/for 12 seconds/);
+ assert.match(gladius,/consume 15% of their health/);
+ assert.match(gladius,/Cooldown: 15 seconds/);
+ const rune=equipmentSections(accessories.a1)[0].paragraphs.join(' ');
+ assert.match(rune,/5 MP will drain every <b class="codex-value">2<\/b> seconds/);
+ assert.match(rune,/Increases all stats by \+3%/);
+ for(const item of Object.values(artifacts))assert(!JSON.stringify(item.reference_sections).includes('codex-value'));
+ assert(!catalogueSearchText(weapons.w1).includes('<b'));
+ assert(catalogueSearchText(weapons.w1).includes('deal 270% of attack'));
+});
+
+test('embedded equipment definitions use canonical effect descriptions and artwork',()=>{
+ const effects=read('data-effects.json');let count=0;
+ for(const item of [...Object.values(weapons),...Object.values(accessories),...Object.values(artifacts)])for(const section of equipmentSections(item))for(const text of section.paragraphs){
+  if(!/^\[[^\]]+\]\s+.*? - /.test(text))continue;
+  const result=equipmentEffectDefinition(text,effects);assert(result,text);assert.strictEqual(result.effect,effects[result.id]);assert(effectDescriptions(result.effect).length);count++;
+ }
+ assert.equal(count,6);
+ const invincibility=equipmentEffectDefinition('[Invincibility] Buff - Stale equipment copy.',effects);
+ assert.equal(invincibility.effect.icon,'/images/mlg-assets/Effect-Icons/indestructible.svg');
+ assert.deepEqual(effectDescriptions(invincibility.effect),['Become immune to incoming damage for 6 seconds.']);
+ assert(existsSync(new URL(invincibility.effect.icon.slice(1),root)));
+ assert.equal(equipmentEffectDefinition('Gain [Shield] for self.',effects),null);
+ effects.invincibility.description='Updated canonical description';
+ assert.deepEqual(effectDescriptions(equipmentEffectDefinition('[Invincibility] Buff - Stale copy.',effects).effect),['Updated canonical description']);
 });

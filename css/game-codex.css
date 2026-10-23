@@ -38,3 +38,18 @@
 #ml-game-codex .codex-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:1100px){#ml-game-codex .codex-grid[data-category=effects]{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:767px){#ml-game-codex .codex-grid{grid-template-columns:minmax(0,1fr)}}
+/* Shared effect artwork always reserves a slot, even before an icon is supplied. */
+#ml-game-codex .codex-effect-art{display:inline-flex;width:32px;height:32px;flex:0 0 32px;align-items:center;justify-content:center;border:1px solid #e4c57925;border-radius:5px;background:#e4c57905;overflow:hidden}
+#ml-game-codex .codex-effect-art img{display:block;width:25px;height:25px;object-fit:contain}
+/* Match character-skill effects: icon beside bracketed name, type and description. */
+#ml-game-codex .codex-embedded-effect{display:flex;align-items:flex-start;gap:10px;padding:10px 0 0 15px;margin:0;line-height:1.45}
+#ml-game-codex .codex-embedded-effect .codex-effect-art{width:20px;height:20px;flex-basis:20px;margin-top:3px;border:0;border-radius:0;background:transparent}
+#ml-game-codex .codex-embedded-effect .codex-effect-art:not(:has(img)){outline:1px solid #e4c57925;border-radius:3px}
+#ml-game-codex .codex-embedded-effect .codex-effect-art img{width:20px;height:20px}
+#ml-game-codex .codex-effect-text{min-width:0;font:400 .95rem/1.45 Arial,sans-serif;color:#d8cdb8}
+#ml-game-codex .codex-effect-text>.ml-effect-reference{font-weight:700}
+#ml-game-codex .codex-effect-text .codex-skill-copy{margin:3px 0 0;line-height:1.45}
+/* Give the final equipment description room above the card's bottom edge. */
+#ml-game-codex .codex-equipment-body{padding-bottom:18px}
+/* Match the faint effect-title underline used by character skills. */
+#ml-game-codex .codex-effect-text>.ml-effect-reference{text-decoration:underline;text-decoration-color:rgba(228,197,121,.15);text-decoration-thickness:1px;text-underline-offset:3px}

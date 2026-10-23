@@ -48,7 +48,7 @@
     let remaining=value;
     for(const t of templates(value).reverse()){
       if(t.name!=='spoiler')continue;
-      const d=make('details','wiki-spoiler'),s=make('summary');s.innerHTML='<span class="wiki-show-spoiler">Show Spoiler</span><span class="wiki-hide-spoiler">Hide Spoiler</span>';const c=make('div','wiki-inline-spoiler');const parts=[...t.parts],book=parts[0]?.match(/^book=(\d+)$/i);if(book){d.dataset.spoilerBook=book[1];parts.shift();}inline(c,parts.join('|'),allowExternal);d.append(s,c);remaining=remaining.slice(0,t.start)+slot(d)+remaining.slice(t.end);
+      const d=make('details','wiki-spoiler'),s=make('summary');s.innerHTML='<span class="wiki-show-spoiler">Show Spoiler</span><span class="wiki-hide-spoiler">Hide Spoiler</span>';const c=make('div','wiki-inline-spoiler');const parts=[...t.parts],book=parts[0]?.match(/^book=(\d+)$/i);if(book)parts.shift();inline(c,parts.join('|'),allowExternal);d.append(s,c);remaining=remaining.slice(0,t.start)+slot(d)+remaining.slice(t.end);
     }
     remaining=remaining.replace(/\[\[([^\]]+)\]\]/g,(_,inside)=>{const [target,label]=split(inside);if(/^File:/i.test(target))return slot(figure(target.slice(5),label)||make('span'));return slot(link(label||target.replace(/^fandom:/,''),target,allowExternal));});
     remaining=remaining.replace(/\[(https?:\/\/[^\s\]]+)\s+([^\]]+)\]/g,(_,url,label)=>slot(link(label,url,allowExternal)));

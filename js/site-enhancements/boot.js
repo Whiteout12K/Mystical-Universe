@@ -4,7 +4,6 @@ const stylesheet=el('link',{rel:'stylesheet',href:'/css/site-enhancements.css'})
 if(flags.visualConsistency)document.documentElement.classList.add('ml-visual-consistency');
 if(flags.mobileNavigation)import('./mobile.js').then(m=>m.init()).catch(console.error);
 if(flags.characterConnections)import('./connections.js').then(m=>m.init(flags)).catch(console.error);
-if(flags.spoilerPreferences)import('./spoilers.js').then(m=>m.init()).catch(console.error);
 if(flags.readingContinuity)import('./reading.js').then(m=>m.init()).catch(console.error);
 function populateExplore(menu){
  const wiki=menu.classList.contains('wiki-nav-tree');
@@ -21,7 +20,6 @@ function populateExplore(menu){
  if(flags.unifiedSearch)entry('Search','/webpages/search.html',async()=>{const {openSearch}=await import('./search.js');openSearch();});
  if(flags.effectsGlossary)entry('Game Codex','/webpages/game-codex.html');
  if(flags.characterComparison)entry('Compare','/webpages/compare.html');
- if(flags.spoilerPreferences)entry('Spoiler settings','#spoiler-settings',async()=>{const {openSettings}=await import('./spoilers.js');openSettings();});
 }
 readyWhen('#site-explore-menu',populateExplore);
 readyWhen('#wiki-nav-panel-0 > .wiki-nav-tree',populateExplore);
