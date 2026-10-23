@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/css/mlg.css">
 <script src="/js/bootstrap-bundle-min.js"></script>
 
+
 <script>
 const PRESET_TEAMS={
  "Mystical Legends 1":{team:["c1","c2","c3"],support:"c5",resonance:{id:"c1",skill:"T1"}},
@@ -186,6 +187,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
  .slot-info{padding-left:3px;padding-right:3px}.support-slot{width:68px}.resonance-button{width:58px;height:58px}.pick-character{flex-basis:67px}
 }
 </style>
+<link rel="stylesheet" href="/css/team-builder.css">
 </head>
 
 <body>
@@ -197,7 +199,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 <header class="builder-header">
 <h1>Team Builder</h1>
 <p>Assemble your mystical legends team</p>
-<select id="team-select" class="team-select">
+<select id="team-select" class="team-select" aria-label="Preset teams">
 <option value="">Custom Team</option>
 </select>
 </header>
@@ -205,7 +207,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 <section class="synergy">
  <div class="synergy-head">
   <span class="synergy-title">Synergy</span>
-  <span id="synergy-count" class="synergy-count">No active synergy</span>
+  <span id="synergy-count" class="synergy-count">No shared bonds</span>
  </div>
  <div id="synergy-list" class="synergy-list">
   <div class="synergy-empty">Select characters to activate synergies.</div>
@@ -247,7 +249,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 
 </main>
 
-<div id="character-picker" class="character-picker">
+<div id="character-picker" class="character-picker" role="region" aria-label="Choose a character" inert>
  <div class="picker-inner">
   <div class="picker-top">
    <div id="picker-title" class="picker-title">SELECT CHARACTER</div>
@@ -258,7 +260,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 </div>
 
 <div id="resonance-modal-popup">
- <div class="rb-dialog">
+ <div class="rb-dialog" role="dialog" aria-modal="true" aria-label="Select Resonance Skill">
   <div class="rb-header">
    <div class="rb-title">Select Resonance Skill</div>
    <button id="resonance-close-button" class="rb-close" type="button">Close</button>
@@ -271,6 +273,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
 
 <script>
 const DATA_PATH="/images/mlg-assets/data-character.json",SKILL_VIEW_PATH="/ml-game/apps/skill.html",$=s=>document.querySelector(s);
+let enhancements=null;
 let characters={},team=["","",""],support="",activeSlot=0,activeTarget="team",resonance=null;
 
 const rarityColors={c:"#777",un:"#83c76a",r:"#5555ff",sr:"#bb55ff",ssr:"#ffb733",ur:"#ff5555",lr:"#e8b9d2"};
@@ -305,6 +308,7 @@ function loadPresets(){
 function loadPreset(name){
  const p=PRESET_TEAMS[name];
  if(!p)return;
+ enhancements?.resetExtras();
  ({team,support}=cleanRoster(p.team,p.support));
  resonance=null;
 
@@ -318,7 +322,7 @@ function loadPreset(name){
 /* CARDS */
 function characterMarkup(c,i,sup=false){
  return `
- <button class="remove-slot" type="button" ${sup?"data-remove-support":`data-remove="${i}"`}>×</button>
+ <button class="remove-slot" type="button" aria-label="Remove ${esc(c.name)}" ${sup?"data-remove-support":`data-remove="${i}"`}>×</button>
  ${c.profile_image?`<img class="slot-image" src="${esc(c.profile_image)}" alt="${esc(c.name)}" draggable="false">`:""}
  <div class="slot-shade"></div>
  ${c.rarity_img?`<img class="rarity-img" src="${esc(c.rarity_img)}" alt="" draggable="false">`:""}
@@ -605,12 +609,12 @@ function renderSynergy(){
  const list=$("#synergy-list"),count=$("#synergy-count"),synergies=getSynergies();
 
  if(!synergies.length){
-  list.innerHTML=`<div class="synergy-empty">No active synergies yet.</div>`;
-  count.textContent="No active synergy";
+  list.innerHTML=`<div class="synergy-empty">No shared affiliations or character bonds yet.</div>`;
+  count.textContent="No shared bonds";
   return;
  }
 
- count.textContent=`${synergies.length} active ${synergies.length===1?"synergy":"synergies"}`;
+ count.textContent=`${synergies.length} shared ${synergies.length===1?"affiliation or bond":"affiliations / bonds"}`;
 
  list.innerHTML=synergies.map(s=>{
   const strong=s.type==="bond"||s.count>=3;
@@ -621,7 +625,7 @@ function renderSynergy(){
    <span class="synergy-dot"></span>
    <span class="synergy-name">${esc(s.name)}</span>
    ${s.type==="affiliation"
-    ?`<span class="synergy-value">${s.count}/4</span>`
+    ?`<span class="synergy-value">${s.count} members</span>`
     :`<span class="synergy-members">${esc(members)}</span>`}
    ${s.effect?`<span class="synergy-effect">${s.effect}</span>`:""}
   </div>`;
@@ -641,17 +645,18 @@ function renderResonanceList(){
 
  list.innerHTML=entries.map(({id,c,skills})=>`
   <div class="rb-character-group">
-   <div class="rb-character-name">${esc(c.name)}</div>
+   <div class="rb-character-name">${esc(c.name)} <small>${team.includes(id)?"In main team":"Outside main team"}</small></div>
    <div class="rb-skill-list">
     ${skills.map(s=>{
      const active=resonance?.id===id&&String(resonance.skill).toLowerCase()===String(s).toLowerCase();
-     return `<button class="rb-skill${active?" rb-selected":""}" type="button"
-      data-rb-character="${esc(id)}" data-rb-skill="${esc(s)}" title="${esc(skillLabel(s))}">
+     const fullName=enhancements?.skillData[id]?.[s]?.name||skillLabel(s);
+     return `<div class="rb-choice"><button class="rb-skill${active?" rb-selected":""}" type="button"
+      data-rb-character="${esc(id)}" data-rb-skill="${esc(s)}" title="${esc(fullName)}" aria-label="${esc(c.name+" — "+fullName)}">
       <img class="rb-skill-icon" src="${esc(skillIcon(s,c.skills_path))}" alt="" loading="lazy">
       <span class="rb-skill-number">${esc(String(s).replace(/^T/i,""))}</span>
       ${active?`<span class="rb-skill-check">✓</span>`:""}
       <span class="rb-skill-tooltip">${esc(skillLabel(s))}</span>
-     </button>`;
+     </button><span class="rb-choice-name">${esc(fullName)}</span></div>`;
     }).join("")}
    </div>
   </div>`).join("");
@@ -677,22 +682,29 @@ function updateResonanceButton(){
 
 /* PICKER */
 function openPicker(slot){
+ const query=document.querySelector("#team-character-search");if(query)query.value="";
  activeTarget="team";
  activeSlot=slot;
  $("#picker-title").textContent=`SELECT MAIN CHARACTER ${slot+1}`;
  renderCharacters();
+ $("#character-picker").inert=false;
  $("#character-picker").classList.add("open");
+ document.querySelector("#team-character-search")?.focus();
 }
 
 function openSupportPicker(){
+ const query=document.querySelector("#team-character-search");if(query)query.value="";
  activeTarget="support";
  $("#picker-title").textContent="SELECT SUPPORT CHARACTER";
  renderCharacters();
+ $("#character-picker").inert=false;
  $("#character-picker").classList.add("open");
+ document.querySelector("#team-character-search")?.focus();
 }
 
 function closePicker(){
  $("#character-picker").classList.remove("open");
+ $("#character-picker").inert=true;
 }
 
 function selectCharacter(id){
@@ -717,6 +729,7 @@ function refresh(){
  renderSynergy();
  renderAbilities();
  updateResonanceButton();
+ enhancements?.render();
 }
 
 /* EVENTS */
@@ -770,6 +783,7 @@ $("#abilities-inner").addEventListener("click",e=>{
 $("#resonance-button").addEventListener("click",()=>{
  renderResonanceList();
  $("#resonance-modal-popup").classList.add("rb-open");
+ $("#resonance-close-button").focus();
 });
 
 $("#resonance-close-button").addEventListener("click",()=>{
@@ -795,6 +809,10 @@ $("#resonance-modal-popup").addEventListener("click",e=>{
 });
 
 document.addEventListener("keydown",e=>{
+ if(e.key==="Tab"&&$("#resonance-modal-popup").classList.contains("rb-open")){
+  const nodes=[...$("#resonance-modal-popup").querySelectorAll("button:not(:disabled),a[href],select")],first=nodes[0],last=nodes.at(-1);
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}
+ }
  if(e.key==="Escape"){
   closePicker();
   $("#resonance-modal-popup").classList.remove("rb-open");
@@ -810,6 +828,9 @@ async function init(){
   characters=getCharacters(await r.json());
   loadPresets();
   ({team,support}=cleanRoster(team,support));
+  refresh();
+  const {setupTeamBuilder}=await import('/js/site-enhancements/team-builder.js');
+  enhancements=await setupTeamBuilder({roster:characters,getState:()=>({team:[...team],support,resonance:resonance?{...resonance}:null}),setState:plan=>{team=[...plan.team];support=plan.support;resonance=plan.resonance;},refresh,openPicker,openSupportPicker});
   refresh();
  }catch(e){
   console.error(e);
