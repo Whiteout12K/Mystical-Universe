@@ -1,21 +1,12 @@
 {
+
+
   "w1": {
     "id": 1,
     "name": "Gladius Lucis",
     "type": "Weapon",
     "weapon_type": "Sword",
     "weapon_img": "/images/character_art/Equipment/avery_obtainia_gladius_lucis.png",
-    "additional": [
-      {"text": "<b>Weapon Skill: Luminous Rainecutter</b>", "style": {"paddingTop": 20}},
-      {"text": "Summons 5 swirling blades of light that follow the active character for 12 seconds. The swords will deal 270% of attack and 4% of health of the equipping character as [Light] damage per hit and heal the active character for 3% of their max health per hit.", "style": {"paddingTop": 7}},
-      {"text": "At any time during this skill, using the equipping character’s Special Skill will consume a single sword to increase [Light] elemental damage by +15% for self, lasting 5 seconds. This is stackable, up to 2 times.", "style": {"paddingTop": 7}},
-      {"text": "Cooldown: 15 seconds", "style": {"paddingTop": 7}},
-      {"text": "Energy Gauge: 20%", "style": {"paddingTop": 7}},
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "The equipping character can activate two Technical Skills while this weapon is equipped.", "style": {"paddingTop": 7}},
-      {"text": "Increases health and attack by +30%. Whenever the equipping character’s [Shield] breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to 150% of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).", "style": {"paddingTop": 7}},
-      {"text": "Every point on the light meter will increase the party’s all elemental damage by +3% for the meter’s duration, capped at +30%.", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "star_level": 0,
@@ -26,11 +17,11 @@
     "reference_sections": [
       {
         "title": "Weapon Skill: Luminous Rainecutter",
-        "paragraphs": ["Summons 5 swirling blades of light that follow the active character for 12 seconds. The swords will deal <b class=\"codex-value\">270%</b> of attack and <b class=\"codex-value\">4%</b> of health of the equipping character as [Light] damage per hit and heal the active character for <b class=\"codex-value\">3%</b> of their max health per hit.", "At any time during this skill, using the equipping character’s Special Skill will consume a single sword to increase [Light] elemental damage by <b class=\"codex-value\">+15%</b> for self, lasting 5 seconds. This is stackable, up to 2 times.", "Cooldown: 15 seconds", "Energy Gauge: 20%"]
+        "paragraphs": ["Summons 5 swirling blades of light that follow the active character for 12 seconds. The swords will deal <b class=\"codex-value\">270%</b> of attack and <b class=\"codex-value\">4%</b> of health of the equipping character as <b class=\"light\">[Light]</b> damage per hit and heal the active character for <b class=\"codex-value\">3%</b> of their max health per hit.", "At any time during this skill, using the equipping character’s Special Skill will consume a single sword to increase <b class=\"light\">[Light]</b> elemental damage by <b class=\"codex-value\">+15%</b> for self, lasting 5 seconds. This is stackable, up to 2 times.", "Cooldown: 15 seconds", "Energy Gauge: 20%"]
       },
       {
         "title": "Passives",
-        "paragraphs": ["The equipping character can activate two Technical Skills while this weapon is equipped.", "Increases health and attack by <b class=\"codex-value\">+30%</b>. Whenever the equipping character’s [Shield] breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b class=\"codex-value\">150%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).", "Every point on the light meter will increase the party’s all elemental damage by <b class=\"codex-value\">+3%</b> for the meter’s duration, capped at <b class=\"codex-value\">+30%</b>."]
+        "paragraphs": ["The equipping character can activate two Technical Skills while this weapon is equipped.", "Increases health and attack by <b class=\"codex-value\">+30%</b>. Whenever the equipping character’s <b class=\"shield\">[Shield]</b> breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b class=\"codex-value\">150%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).", "Every point on the light meter will increase the party’s all elemental damage by <b class=\"codex-value\">+3%</b> for the meter’s duration, capped at <b class=\"codex-value\">+30%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
@@ -42,28 +33,14 @@
   },
 
 
+
+
   "w2": {
     "id": 2,
     "name": "Icelorian Blade",
     "type": "Weapon",
     "weapon_type": "Sword",
     "weapon_img": "/images/character_art/Equipment/kaden_icelander_seal_ring.png",
-    "additional": [
-      {"text": "<b>Weapon Skill: Night’s Bitter Edge</b>", "style": {"paddingTop": 20}},
-      {"text": "Oppression: Lift the sword up and send 3 separate arcs of condensed ice, each dealing 320% of attack as [Water] damage. The attacks will stagger and impede opponents, inflicting [Knockback] and [Slowness]. When switching to Suppression immediately after skill use, regain 3% of energy gauge every 2 seconds for 8 seconds.", "style": {"paddingTop": 7}},
-      {"text": "Suppression: Draws all nearby opponents within 50 meters towards self and apply a stack of [Freeze] to them. When switching to Oppression immediately after skill use, implode the [Freeze] on them equal to 4% of their health multiplied by the number of stacks they have. Clear the stacks.", "style": {"paddingTop": 7}},
-      {"text": "After using Skill, press a second time immediately to change the equipping character’s alignment without activating the Weapon Skill. Can change alignment 1 second after using Weapon Skill also, but costing energy.", "style": {"paddingTop": 7}},
-      {"text": "[Knockback] Debuff - Knocks target back by 5 meters.", "style": {"paddingTop": 7}},
-      {"text": "[Slowness] Debuff - Decreases target’s movement speed by -70% for 3 seconds.", "style": {"paddingTop": 7}},
-      {"text": "Cooldown: 10 seconds", "style": {"paddingTop": 7}},
-      {"text": "Energy Gauge: 15%", "style": {"paddingTop": 7}},
-      {"text": "> Immediate 2nd Press - Energy Gauge: 0%", "style": {"paddingTop": 7}},
-      {"text": "> 2nd Press after Skill - Energy Gauge: 15%", "style": {"paddingTop": 7}},
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Seal Ring (unlocked in the Seal Ritual): Allows the user to teleport forward via the first use of the Dash Skill. Additionally, in the inventory, place a consumable in this gear’s slot to be able to quickly use it in battle, even in modes which prevent item consumption, max 1 space (food, buffing item, debuffing item, etc…).", "style": {"paddingTop": 7}},
-      {"text": "The equipping character will change alignments when using this weapon: Oppression - change element of Basic Skill to [Dark] element, Suppression - change element of Basic Skill to character’s default. Applied [Freeze] effects last 2 seconds longer.", "style": {"paddingTop": 7}},
-      {"text": "Increase piercing by +20%. Every 10 stacks of [Flash] on self will increase attack speed by +3% and Basic Skill damage by +5% for the battle, up to max +30%.", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "star_level": 0,
@@ -74,11 +51,11 @@
     "reference_sections": [
       {
         "title": "Weapon Skill: Night’s Bitter Edge",
-        "paragraphs": ["Oppression: Lift the sword up and send 3 separate arcs of condensed ice, each dealing <b class=\"codex-value\">320%</b> of attack as [Water] damage. The attacks will stagger and impede opponents, inflicting [Knockback] and [Slowness]. When switching to Suppression immediately after skill use, regain <b class=\"codex-value\">3%</b> of energy gauge every 2 seconds for 8 seconds.", "Suppression: Draws all nearby opponents within 50 meters towards self and apply a stack of [Freeze] to them. When switching to Oppression immediately after skill use, implode the [Freeze] on them equal to <b class=\"codex-value\">4%</b> of their health multiplied by the number of stacks they have. Clear the stacks.", "After using Skill, press a second time immediately to change the equipping character’s alignment without activating the Weapon Skill. Can change alignment 1 second after using Weapon Skill also, but costing energy.", "[Knockback] Debuff - Knocks target back by 5 meters.", "[Slowness] Debuff - Decreases target’s movement speed by -70% for 3 seconds.", "Cooldown: 10 seconds", "Energy Gauge: 15%", "> Immediate 2nd Press - Energy Gauge: 0%", "> 2nd Press after Skill - Energy Gauge: 15%"]
+        "paragraphs": ["Oppression: Lift the sword up and send 3 separate arcs of condensed ice, each dealing <b class=\"codex-value\">320%</b> of attack as <b class=\"water\">[Water]</b> damage. The attacks will stagger and impede opponents, inflicting <b class=\"knockback\">[Knockback]</b> and <b class=\"slowness\">[Slowness]</b>. When switching to Suppression immediately after skill use, regain <b class=\"codex-value\">3%</b> of energy gauge every 2 seconds for 8 seconds.", "Suppression: Draws all nearby opponents within 50 meters towards self and apply a stack of <b class=\"freeze\">[Freeze]</b> to them. When switching to Oppression immediately after skill use, implode the <b class=\"freeze\">[Freeze]</b> on them equal to <b class=\"codex-value\">4%</b> of their health multiplied by the number of stacks they have. Clear the stacks.", "After using Skill, press a second time immediately to change the equipping character’s alignment without activating the Weapon Skill. Can change alignment 1 second after using Weapon Skill also, but costing energy.", "{{effect:knockback}}", "{{effect:slowness}}", "Cooldown: 10 seconds", "Energy Gauge: 15%", "> Immediate 2nd Press - Energy Gauge: 0%", "> 2nd Press after Skill - Energy Gauge: 15%"]
       },
       {
         "title": "Passives",
-        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): Allows the user to teleport forward via the first use of the Dash Skill. Additionally, in the inventory, place a consumable in this gear’s slot to be able to quickly use it in battle, even in modes which prevent item consumption, max 1 space (food, buffing item, debuffing item, etc…).", "The equipping character will change alignments when using this weapon: Oppression - change element of Basic Skill to [Dark] element, Suppression - change element of Basic Skill to character’s default. Applied [Freeze] effects last 2 seconds longer.", "Increase piercing by <b class=\"codex-value\">+20%</b>. Every 10 stacks of [Flash] on self will increase attack speed by <b class=\"codex-value\">+3%</b> and Basic Skill damage by <b class=\"codex-value\">+5%</b> for the battle, up to max <b class=\"codex-value\">+30%</b>."]
+        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): Allows the user to teleport forward via the first use of the Dash Skill. Additionally, in the inventory, place a consumable in this gear’s slot to be able to quickly use it in battle, even in modes which prevent item consumption, max 1 space (food, buffing item, debuffing item, etc…).", "The equipping character will change alignments when using this weapon: Oppression - change element of Basic Skill to <b class=\"dark\">[Dark]</b> element, Suppression - change element of Basic Skill to character’s default. Applied <b class=\"freeze\">[Freeze]</b> effects last 2 seconds longer.", "Increase piercing by <b class=\"codex-value\">+20%</b>. Every 10 stacks of <b class=\"flash\">[Flash]</b> on self will increase attack speed by <b class=\"codex-value\">+3%</b> and Basic Skill damage by <b class=\"codex-value\">+5%</b> for the battle, up to max <b class=\"codex-value\">+30%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
@@ -89,6 +66,8 @@
     "seal_ring_name": "Signet Ring of the Universe",
     "restriction": ""
   },
+
+
 
 
   "w3": {
@@ -111,12 +90,6 @@
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Weapon Skill</b>", "style": {"paddingTop": 20}},
-      {"text": "Energy Gauge: 20%", "style": {"paddingTop": 7}},
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Defense increases by +25%. The MP cost of skills reduces by -15%. Whenever a Special Skill is used, the max MP of equipping character is temporarily increased by +30%, scaling up whatever actual amount of MP equal to the percentage from max, before depleting the skill cost. The MP increase reverts back after 5 seconds, but does not decrease MP gained during the increase.", "style": {"paddingTop": 7}}
-    ],
     "weapon_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -127,6 +100,8 @@
     "restriction": "",
     "weapon_type": "Sword"
   },
+
+
 
 
   "w4": {
@@ -142,22 +117,13 @@
       },
       {
         "title": "Passives",
-        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): Hits on opponents have a 4% chance to apply [Severance]. Item pickup range increases while equipped.", "[Severance] Debuff - A space tearing ability that disables defense stat and makes the soul vulnerable."]
+        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): Hits on opponents have a 4% chance to apply <b class=\"severance\">[Severance]</b>. Item pickup range increases while equipped.", "{{effect:severance}}"]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Weapon Skill: Night’s Bitter Edge</b>", "style": {"paddingTop": 20}},
-      {"text": "When attacking air, creates a cut in space.", "style": {"paddingTop": 7}},
-      {"text": "Cooldown: 10 seconds", "style": {"paddingTop": 7}},
-      {"text": "Energy Gauge: 15%", "style": {"paddingTop": 7}},
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Seal Ring (unlocked in the Seal Ritual): Hits on opponents have a 4% chance to apply [Severance]. Item pickup range increases while equipped.", "style": {"paddingTop": 7}},
-      {"text": "[Severance] Debuff - A space tearing ability that disables defense stat and makes the soul vulnerable.", "style": {"paddingTop": 7}}
-    ],
     "weapon_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -167,6 +133,19 @@
     "stat_change_by_level": {"main_stat_formula": "base_stat * (weight * (level - 1))", "main_stat_weight": 0.07, "main_1": "attack", "main_1_value": 85.0, "main_2": "crit_dmg", "main_2_value": 11.0},
     "seal_ring_name": "Funeral Ring of Death",
     "restriction": "",
-    "weapon_type": "Sickle"
+    "weapon_type": "Spear"
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

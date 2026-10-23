@@ -11,16 +11,6 @@
     "piece_num_3_img": "",
     "piece_num_4_name": "",
     "piece_num_4_img": "",
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Increase [Earth] elemental damage by +25%.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Hitting an opponent with a Special Skill will apply the [Plant Tether] effect self and opponents in a radius. If the Special Skill is either [Water] or [Earth] element, the duration increases to max.", "style": {"paddingTop": 7}},
-      {"text": "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "style": {"paddingTop": 7}},
-      {"text": "[Plant Tether] Debuff/Buff - When hit with [Water] or [Earth] attacks, increase resistance to those elements by +75%, but lifedrain damage (health damage over time effects) from any source will increase by +150%  (Duration: 3 sec min, 10 sec max).", "style": {"paddingTop": 7}},
-      {"text": "<b>Description</b>", "style": {"paddingTop": 20}},
-      {"text": "A legendary Tier 5 artifact with a core for its latent plant powers. Spreading to form a suit, the extent of plant-based magic is enhanced substantially, but just beware of fire though.", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "level": 20,
@@ -28,29 +18,18 @@
     "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
     "rarities": ["SSR", "SR"],
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Increase [Earth] elemental damage by +25%."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["Hitting an opponent with a Special Skill will apply the [Plant Tether] effect self and opponents in a radius. If the Special Skill is either [Water] or [Earth] element, the duration increases to max.", "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "[Plant Tether] Debuff/Buff - When hit with [Water] or [Earth] attacks, increase resistance to those elements by +75%, but lifedrain damage (health damage over time effects) from any source will increase by +150%  (Duration: 3 sec min, 10 sec max)."]
-      },
-      {
-        "title": "Description",
-        "paragraphs": ["A legendary Tier 5 artifact with a core for its latent plant powers. Spreading to form a suit, the extent of plant-based magic is enhanced substantially, but just beware of fire though."]
-      }
+      {"title": "Description", "paragraphs": ["A legendary Tier 5 artifact with a core for its latent plant powers. Spreading to form a suit, the extent of plant-based magic is enhanced substantially, but just beware of fire though."]}
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "artifact_img": "",
     "set_bonuses": [
       {
         "pieces": 2,
-        "description": ["Increase [Earth] elemental damage by +25%."]
+        "description": ["Increase <b class=\"earth\">[Earth]</b> elemental damage by +25%."]
       },
       {
         "pieces": 4,
-        "description": ["Hitting an opponent with a Special Skill will apply the [Plant Tether] effect self and opponents in a radius. If the Special Skill is either [Water] or [Earth] element, the duration increases to max.", "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "[Plant Tether] Debuff/Buff - When hit with [Water] or [Earth] attacks, increase resistance to those elements by +75%, but lifedrain damage (health damage over time effects) from any source will increase by +150%  (Duration: 3 sec min, 10 sec max)."]
+        "description": ["Hitting an opponent with a Special Skill will apply the <b class=\"plant-tether\">[Plant Tether]</b> effect on self and opponents in a radius. If the Special Skill is either <b class=\"water\">[Water]</b> or <b class=\"earth\">[Earth]</b> element, the duration increases to max.", "The effect will also apply to nearby allying summons. Any damage dealt by them will be considered lifedrain damage while they possess the effect.", "{{effect:plant-tether}}"]
       }
     ]
   },
@@ -63,32 +42,12 @@
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["The equipping character does not deal any elemental damage on their own Skills, instead, outgoing normal damage is buffed by +50%.", "Opponents’ resistance to normal attacks will automatically be ineffective when the equipping character attacks."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["Increases defense by +20% and gained [Shield] effect from sources will additionally heal 5% of max health. Any gained [Shield] will contribute to an even more increased normal damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max."]
-      },
-      {
-        "title": "Description",
-        "paragraphs": ["A prototype armor based on a more secret design. The armor can amplify the physical extent of one’s attacks but may not channel magic well. When fused with more power (harder to come by) the potential is amplified."]
-      }
+      {"title": "Description", "paragraphs": ["A prototype armor based on a more secret design. The armor can amplify the physical extent of one’s attacks but may not channel magic well. When fused with more power (harder to come by) the potential is amplified."]}
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "The equipping character does not deal any elemental damage on their own Skills, instead, outgoing normal damage is buffed by +50%.", "style": {"paddingTop": 7}},
-      {"text": "Opponents’ resistance to normal attacks will automatically be ineffective when the equipping character attacks.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases defense by +20% and gained [Shield] effect from sources will additionally heal 5% of max health. Any gained [Shield] will contribute to an even more increased normal damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max.", "style": {"paddingTop": 7}},
-      {"text": "<b>Description</b>", "style": {"paddingTop": 20}},
-      {"text": "A prototype armor based on a more secret design. The armor can amplify the physical extent of one’s attacks but may not channel magic well. When fused with more power (harder to come by) the potential is amplified.", "style": {"paddingTop": 7}}
-    ],
     "piece_num_1_name": "Sensory Unit and Visor",
     "piece_num_1_img": "",
     "piece_num_2_name": "Core and Gauntlets",
@@ -102,11 +61,11 @@
     "set_bonuses": [
       {
         "pieces": 2,
-        "description": ["The equipping character does not deal any elemental damage on their own Skills, instead, outgoing normal damage is buffed by +50%.", "Opponents’ resistance to normal attacks will automatically be ineffective when the equipping character attacks."]
+        "description": ["The equipping character does not deal any elemental damage on their own Skills, instead, outgoing <span class=\"normal\">normal</span> damage is buffed by +50%.", "Opponents’ resistance to <span class=\"normal\">normal</span> attacks will automatically be ineffective when the equipping character attacks."]
       },
       {
         "pieces": 4,
-        "description": ["Increases defense by +20% and gained [Shield] effect from sources will additionally heal 5% of max health. Any gained [Shield] will contribute to an even more increased normal damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max."]
+        "description": ["Increases defense by +20% and gained <b class=\"shield\">[Shield]</b> effect from sources will additionally heal 5% of max health. Any gained <b class=\"shield\">[Shield]</b> will contribute to an even more increased <span class=\"normal\">normal</span> damage equivalent to each percentage gained in respect to equipping character’s max health, up to +100% max."]
       }
     ]
   },
@@ -124,13 +83,6 @@
     "piece_num_3_img": "",
     "piece_num_4_name": "A Spirit’s Descent",
     "piece_num_4_img": "",
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Every percentage of healing rate will increase the equipping character’s maximum health and defense by +0.3%. Increase healing rate by +10%.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Gain an additional +0.3% health and defense increase for self per healing rate percentage.", "style": {"paddingTop": 7}},
-      {"text": "When applying a field effect from Special Skills, the health and defense boost will be applied to allies also for the duration of the field effect. In addition to the two stats increased, attack stat will be increased for allies and self by the same percentage based on healing rate. Only equipping character’s healing rate is considered for stat bonus.", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "level": 20,
@@ -138,14 +90,7 @@
     "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
     "rarities": ["SSR", "SR"],
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Every percentage of healing rate will increase the equipping character’s maximum health and defense by +0.3%. Increase healing rate by +10%."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["Gain an additional +0.3% health and defense increase for self per healing rate percentage.", "When applying a field effect from Special Skills, the health and defense boost will be applied to allies also for the duration of the field effect. In addition to the two stats increased, attack stat will be increased for allies and self by the same percentage based on healing rate. Only equipping character’s healing rate is considered for stat bonus."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "artifact_img": "",
@@ -174,13 +119,6 @@
     "piece_num_3_img": "",
     "piece_num_4_name": "Slicky Slides",
     "piece_num_4_img": "",
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases Basic Skill, Special Skill, and Ultimate Skill damage by +15%.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a [Shield] as well.", "style": {"paddingTop": 7}},
-      {"text": "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent.", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "level": 20,
@@ -188,14 +126,7 @@
     "stat_change_by_level": {"main_stat_formula": "main * (weight * (level - 1))", "sub_stat_formula": "sub * (sub_rolls + 1)", "main_stat_weight": 1},
     "rarities": ["SSR", "SR"],
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Increases Basic Skill, Special Skill, and Ultimate Skill damage by +15%."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a [Shield] as well.", "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "artifact_img": "",
@@ -206,7 +137,7 @@
       },
       {
         "pieces": 4,
-        "description": ["If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a [Shield] as well.", "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent."]
+        "description": ["If the equipping character is a Fighter or Agent, all their pre-mentioned Skill damage will further be increased by +15%. Likewise, attack speed increases by +30% momentarily when taking a hit. The last effect can trigger while possessing a <b class=\"shield\">[Shield]</b> as well.", "Accumulate +30% more energy gauge and -3 seconds on active Ultimate Skill cooldown when landing a crit hit on the attack that generates energy and applying a debuff on opponent."]
       }
     ]
   },
@@ -219,25 +150,12 @@
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Defense is increased by +20%."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["When creating a [Shield] or [Super Shield], the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Defense is increased by +20%.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "When creating a [Shield] or [Super Shield], the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing.", "style": {"paddingTop": 7}}
-    ],
     "piece_num_1_name": "Razor Helmet",
     "piece_num_1_img": "",
     "piece_num_2_name": "Resolving Plating",
@@ -255,7 +173,7 @@
       },
       {
         "pieces": 4,
-        "description": ["When creating a [Shield] or [Super Shield], the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing."]
+        "description": ["When creating a <b class=\"shield\">[Shield]</b> or <b class=\"shield\">[Super Shield]</b>, the effect is doubled and defense is also increased by an additional +30% when active. Gain +30% chance to dodge attacks momentarily when dashing."]
       }
     ]
   },
@@ -268,26 +186,12 @@
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Increases healing rate by +25% and the duration of healing skills by +0.07 seconds for every percentage of health stat increase from equipped artifacts (combined substrate and main stat)."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting [Invincibility], and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "[Invincibility] Buff - Become immune to incoming damage for 6 seconds."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases healing rate by +25% and the duration of healing skills by +0.07 seconds for every percentage of health stat increase from equipped artifacts (combined substrate and main stat).", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting [Invincibility], and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "style": {"paddingTop": 7}},
-      {"text": "[Invincibility] Buff - Become immune to incoming damage for 6 seconds.", "style": {"paddingTop": 7}}
-    ],
     "piece_num_1_name": "Goggle and Mask",
     "piece_num_1_img": "",
     "piece_num_2_name": "Lab Coat and Hanging Trinkets",
@@ -305,7 +209,7 @@
       },
       {
         "pieces": 4,
-        "description": ["When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting [Invincibility], and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "[Invincibility] Buff - Become immune to incoming damage for 6 seconds."]
+        "description": ["When any ally goes below 10% of their max health, heal that ally for 10% of equipping character’s max health once, granting <b class=\"invincibility\">[Invincibility]</b>, and then decrease own health by -20% of max health. This effect can be activated once per 30 seconds and can be lethal to self if having less than the required amount of health remaining.", "{{effect:invincibility}}"]
       }
     ]
   },
@@ -318,25 +222,12 @@
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Debuffs applied to self last +50% longer but are -60% effective."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["The team and self gains +20% debuff resistance. This increases by an additional +20% per debuff already present on the equipped character, up to 4 additional times. Each additional instance lasts the duration of equipping character’s present debuffs. Movement and action restriction debuffs will not be increased in duration."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Debuffs applied to self last +50% longer but are -60% effective.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "The team and self gains +20% debuff resistance. This increases by an additional +20% per debuff already present on the equipped character, up to 4 additional times. Each additional instance lasts the duration of equipping character’s present debuffs. Movement and action restriction debuffs will not be increased in duration.", "style": {"paddingTop": 7}}
-    ],
     "piece_num_1_name": "Baseball Cap",
     "piece_num_1_img": "",
     "piece_num_2_name": "A Regular T-Shirt",
@@ -367,26 +258,12 @@
     "rarities": ["SSR", "SR"],
     "rarity": "SSR",
     "reference_sections": [
-      {
-        "title": "2-Piece Bonus",
-        "paragraphs": ["Increases attack stat by +20%."]
-      },
-      {
-        "title": "4-Piece Bonus",
-        "paragraphs": ["When the character dashes and maintains movement for at least 2 seconds, increase crit rate by +18%. When using a special skill, crit rate will increase by an additional +18% also. The mentioned buffs will last for 10 seconds and are stackable upon each other.", "If both effects are active, increase crit damage by +25%."]
-      }
+
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 20,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>2-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases attack stat by +20%.", "style": {"paddingTop": 7}},
-      {"text": "<b>4-Piece Bonus</b>", "style": {"paddingTop": 20}},
-      {"text": "When the character dashes and maintains movement for at least 2 seconds, increase crit rate by +18%. When using a special skill, crit rate will increase by an additional +18% also. The mentioned buffs will last for 10 seconds and are stackable upon each other.", "style": {"paddingTop": 7}},
-      {"text": "If both effects are active, increase crit damage by +25%.", "style": {"paddingTop": 7}}
-    ],
     "piece_num_1_name": "District Helmet",
     "piece_num_1_img": "",
     "piece_num_2_name": "Golden Chestplate",

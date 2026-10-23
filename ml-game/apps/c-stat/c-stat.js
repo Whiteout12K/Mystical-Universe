@@ -1,10 +1,11 @@
+import {getEquipmentStatEntries,getArtifactMainStat,getArtifactSubStats,equipmentStatKey} from './equipment-stats.js';
 const STAT_ORDER=[
  "health","attack","defense","mana","mana_regen","stamina","stamina_regen",
  "crit_rate","crit_dmg","speed","piercing","healing_rate","luck",
  "gauge_gain","cooldown_red"
 ];
 
-let characterDatabase={},weaponDatabase={},accessoryDatabase={},artifactDatabase={};
+let characterDatabase={},weaponDatabase={},accessoryDatabase={},artifactDatabase={},equipmentRules={};
 
 export async function loadJSON(path){
  try{
@@ -18,7 +19,7 @@ export async function loadJSON(path){
 }
 
 function normalizeKey(v){
- return String(v||"").toLowerCase().trim().replace(/\s+/g,"_").replace(/-/g,"_");
+ return equipmentStatKey(v);
 }
 
 function getCharacterInfo(id){
@@ -95,65 +96,9 @@ function getCharacterEquipment(p){
  };
 }
 
-function getEquipmentStatEntries(info,level){
- const r=[];
- if(!info)return r;
-
- const f=info?.stat_change_by_level||{};
- const weight=num(f.main_stat_weight);
-
- for(let i=1;i<=2;i++){
-  const name=f[`main_${i}`];
-  const base=Number(f[`main_${i}_value`]);
-
-  if(!name||!Number.isFinite(base))continue;
-
-  r.push({
-   name,
-   value:level>1?base+base*weight*(level-1):base,
-   type:f[`main_${i}_type`]||"+"
-  });
- }
-
- return r;
-}
-
 function getArtifactStatEntries(info,p,level){
- const r=[];
- if(!info&&!p)return r;
-
- const f=info?.stat_change_by_level||{};
- const mainName=p?.main??f.main;
- const mainBase=Number(p?.main_value??f.main_value);
- const mainType=p?.main_type??f.main_type??"";
- const weight=num(f.main_stat_weight);
-
- if(mainName&&Number.isFinite(mainBase)){
-  r.push({
-   name:mainName,
-   value:level>1?mainBase+mainBase*weight*(level-1):mainBase,
-   type:mainType,
-   source:"artifact"
-  });
- }
-
- for(let i=1;i<=4;i++){
-  const name=p?.[`sub_${i}`];
-  const base=Number(p?.[`sub_${i}_value`]);
-
-  if(!name||!Number.isFinite(base))continue;
-
-  const rolls=Math.min(5,Math.max(0,num(p?.[`sub_${i}_rolls`])));
-
-  r.push({
-   name,
-   value:base*(rolls+1),
-   type:p?.[`sub_${i}_type`]||"+",
-   source:"artifact"
-  });
- }
-
- return r;
+ const rules=equipmentRules.artifacts?.stat_scaling;
+ return [getArtifactMainStat(info,p,level,rules),...getArtifactSubStats(p,rules)].filter(Boolean);
 }
 
 function isPercentStat(type,name){
@@ -168,7 +113,7 @@ function isPercentStat(type,name){
 
 function isDirectAdditionalStat(name){
  const key=normalizeKey(name);
- return key==="gauge_gain"||key==="cooldown_red";
+ return ["gauge_gain","cooldown_red","crit_rate","crit_dmg","healing_rate"].includes(key);
 }
 
 function collectEquipmentStats(equipment){
@@ -305,18 +250,21 @@ export async function getCharacterStats(username,characterKey="c1",view="total")
   characterDB,
   weaponDB,
   accessoryDB,
-  artifactDB
+  artifactDB,
+  rulesDB
  ]=await Promise.all([
   loadJSON("/images/mlg-assets/data-character.json"),
   loadJSON("/images/mlg-assets/data-weapon.json"),
   loadJSON("/images/mlg-assets/data-accessory.json"),
-  loadJSON("/images/mlg-assets/data-artifact.json")
+  loadJSON("/images/mlg-assets/data-artifact.json"),
+  loadJSON("/images/mlg-assets/equipment-rules.json")
  ]);
 
  characterDatabase=characterDB;
  weaponDatabase=weaponDB;
  accessoryDatabase=accessoryDB;
  artifactDatabase=artifactDB;
+ equipmentRules=rulesDB;
 
  const response=await fetch(
   `/api/user/${encodeURIComponent(username)}`,

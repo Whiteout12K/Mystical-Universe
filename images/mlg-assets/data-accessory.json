@@ -4,13 +4,6 @@
     "name": "Rune of the Spellcaster",
     "type": "Accessory",
     "accessory_img": "",
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at 100% its value.", "style": {"paddingTop": 7}},
-      {"text": "The rune will float above the equipping character’s head and provide an unremovable buff [Holy Aura]. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of -15% matching the equipping character’s affinity. In trade, 5 MP will drain every 2 seconds to maintain effect.", "style": {"paddingTop": 7}},
-      {"text": "Magnitude: The amount of [Shield] gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).", "style": {"paddingTop": 7}},
-      {"text": "[Holy Aura] Unremovable Buff - Increases all stats by +3%, and an extra +0.5% for every 10 levels on the weapon. When the character attacks with Basic Attack, there is a 25% chance to dispel a buff on hit opponents (Duration: Infinite).", "style": {"paddingTop": 7}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "star_level": 0,
@@ -21,7 +14,7 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at <b class=\"codex-value\">100%</b> its value.", "The rune will float above the equipping character’s head and provide an unremovable buff [Holy Aura]. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of <b class=\"codex-value\">-15%</b> matching the equipping character’s affinity. In trade, 5 MP will drain every <b class=\"codex-value\">2</b> seconds to maintain effect.", "Magnitude: The amount of [Shield] gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).", "[Holy Aura] Unremovable Buff - Increases all stats by +3%, and an extra +0.5% for every 10 levels on the weapon. When the character attacks with Basic Attack, there is a 25% chance to dispel a buff on hit opponents (Duration: Infinite)."]
+        "paragraphs": ["Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at <b class=\"codex-value\">100%</b> its value.", "The rune will float above the equipping character’s head and provide an unremovable buff <b class=\"holy-aura\">[Holy Aura]</b>. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of <b class=\"codex-value\">-15%</b> matching the equipping character’s affinity. In trade, 5 MP will drain every <b class=\"codex-value\">2</b> seconds to maintain effect.", "Magnitude: The amount of <b class=\"shield\">[Shield]</b> gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).", "{{effect:holy-aura}}"]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
@@ -39,9 +32,6 @@
     "name": "Water Spirit Rune",
     "type": "Accessory",
     "accessory_img": "",
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}}
-    ],
     "quantity": false,
     "rarity": "SSR",
     "star_level": 0,
@@ -74,17 +64,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Fire] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"fire\">[Fire]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Fire] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -106,17 +92,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Water] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"water\">[Water]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Water] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -137,17 +119,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Wind] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"wind\">[Wind]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Wind] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -168,17 +146,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Earth] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"earth\">[Earth]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Earth] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -199,17 +173,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Light] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"light\">[Light]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Light] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [
@@ -230,17 +200,13 @@
     "reference_sections": [
       {
         "title": "Passives",
-        "paragraphs": ["Increases [Dark] element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
+        "paragraphs": ["Increases <b class=\"dark\">[Dark]</b> element damage by <b class=\"codex-value\">+20%</b>. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by <b class=\"codex-value\">+10%</b>."]
       }
     ],
     "source": {"title": "Mystical Legends Game Design", "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit", "section": "Equipment and Support", "modified": "2026-10-19"},
     "quantity": false,
     "level": 100,
     "xp_level": 0,
-    "additional": [
-      {"text": "<b>Passives</b>", "style": {"paddingTop": 20}},
-      {"text": "Increases [Dark] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.", "style": {"paddingTop": 7}}
-    ],
     "accessory_img": "",
     "star_level": 0,
     "reference_stats": [

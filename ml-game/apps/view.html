@@ -20,7 +20,7 @@
 <script>
 const pathParts=location.pathname.split("/").filter(Boolean),params=new URLSearchParams(location.search);
 let username=params.get("username")||pathParts.at(-1);
-let characterDatabase={},accountStyleDatabase={},weaponDatabase={},accessoryDatabase={},artifactDatabase={},currentPlayerData={},cStatModule;
+let characterDatabase={},accountStyleDatabase={},weaponDatabase={},accessoryDatabase={},artifactDatabase={},currentPlayerData={},cStatModule,equipmentStatModule,equipmentRules={};
 const premiumNames={diamond_core:"Diamond Core",sr_star_lv_frag:"SR Star Lv. Fragments",ssr_star_lv_frag:"SSR Star Lv. Fragments",ur_star_lv_frag:"UR Star Lv. Fragments"};
 const rarityClasses=["","c","un","r","sr","ssr","ur","lr"];
 const rarityNames=["","C","UN","R","SR","SSR","UR","LR"];
@@ -33,12 +33,14 @@ async function loadJSON(path){
  catch(e){console.error("JSON load failed:",path,e);return{}}
 }
 async function loadDatabases(){
- [characterDatabase,accountStyleDatabase,weaponDatabase,accessoryDatabase,artifactDatabase]=await Promise.all([
+ [characterDatabase,accountStyleDatabase,weaponDatabase,accessoryDatabase,artifactDatabase,equipmentRules,equipmentStatModule]=await Promise.all([
   loadJSON("/images/mlg-assets/data-character.json"),
   loadJSON("/images/mlg-assets/account-styles.json"),
   loadJSON("/images/mlg-assets/data-weapon.json"),
   loadJSON("/images/mlg-assets/data-accessory.json"),
-  loadJSON("/images/mlg-assets/data-artifact.json")
+  loadJSON("/images/mlg-assets/data-artifact.json"),
+  loadJSON("/images/mlg-assets/equipment-rules.json"),
+  import("/ml-game/apps/c-stat/equipment-stats.js")
  ])
 }
 async function loadCStat(){return cStatModule||(cStatModule=import("/ml-game/apps/c-stat/c-stat.js"))}
@@ -263,34 +265,12 @@ function handleEquipmentImageError(img){
  img.style.display="none";const w=img.parentElement;
  if(w&&!w.querySelector(".item-symbol")){const f=document.createElement("span");f.className="item-symbol";w.appendChild(f)}
 }
-function calculateEquipmentMainStats(info,level){
- const f=info?.stat_change_by_level||{},w=Number(f.main_stat_weight)||0,r=[];
- for(let i=1;i<=2;i++){
-  const name=f[`main_${i}`],base=Number(f[`main_${i}_value`]);
-  if(name&&Number.isFinite(base))r.push({name,base,value:level>1?base+base*w*(level-1):base,type:f[`main_${i}_type`]||""})
- }
- return r
-}
+function calculateEquipmentMainStats(info,level){return equipmentStatModule.getEquipmentStatEntries(info,level)}
 function createEquipmentMainStats(stats){
  return stats.length?`<div class="equipment-main-stats">${stats.map(s=>`<div class="equipment-main-stat"><span class="equipment-stat-name">${escapeHtml(pretty(s.name))}</span><span class="equipment-stat-value">: ${formatGearStat(s.name,s.value,s.type)}</span></div>`).join("")}</div>`:""
 }
-function calculateArtifactMainStat(info,p,level){
- const f=info?.stat_change_by_level||{},name=p.main||f.main,base=Number(p.main_value??f.main_value),type=p.main_type??f.main_type??"";
- if(!name||!Number.isFinite(base))return null;
- const w=Number(f.main_stat_weight)||0;
- return{name,base,value:level>1?base+base*w*(level-1):base,type}
-}
-function calculateArtifactSubStats(p){
- const r=[];
- for(let i=1;i<=4;i++){
-  const name=p[`sub_${i}`],base=Number(p[`sub_${i}_value`]);
-  if(name&&Number.isFinite(base)){
-   const rolls=Math.min(5,Math.max(0,Number(p[`sub_${i}_rolls`])||0));
-   r.push({name,value:base*(rolls+1),base,rolls,type:p[`sub_${i}_type`]||""})
-  }
- }
- return r
-}
+function calculateArtifactMainStat(info,p,level){return equipmentStatModule.getArtifactMainStat(info,p,level,equipmentRules.artifacts?.stat_scaling)}
+function calculateArtifactSubStats(p){return equipmentStatModule.getArtifactSubStats(p,equipmentRules.artifacts?.stat_scaling)}
 const getArtifactPieceName=n=>({1:"Headgear",2:"Chestplate",3:"Leggings",4:"Boots"})[Number(n)]||`Piece ${n}`;
 function formatGearStat(name,value,type=""){
  const s=normalizeStatKey(name);return`+${formatStat(value)}${percentStats.has(s)||String(type).trim()==="%"?"%":""}`

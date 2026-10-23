@@ -33,7 +33,8 @@ test('equipment highlights only source-bold values and leaves fixed mechanics pl
  assert.match(gladius,/Cooldown: 15 seconds/);
  const rune=equipmentSections(accessories.a1)[0].paragraphs.join(' ');
  assert.match(rune,/5 MP will drain every <b class="codex-value">2<\/b> seconds/);
- assert.match(rune,/Increases all stats by \+3%/);
+ assert.match(rune,/\{\{effect:holy-aura\}\}/);
+ assert.match(effectDescriptions(read('data-effects.json')['holy-aura']).join(' '),/Increases all stats by \+3%/);
  for(const item of Object.values(artifacts))assert(!JSON.stringify(item.reference_sections).includes('codex-value'));
  assert(!catalogueSearchText(weapons.w1).includes('<b'));
  assert(catalogueSearchText(weapons.w1).includes('deal 270% of attack'));
@@ -42,7 +43,7 @@ test('equipment highlights only source-bold values and leaves fixed mechanics pl
 test('embedded equipment definitions use canonical effect descriptions and artwork',()=>{
  const effects=read('data-effects.json');let count=0;
  for(const item of [...Object.values(weapons),...Object.values(accessories),...Object.values(artifacts)])for(const section of equipmentSections(item))for(const text of section.paragraphs){
-  if(!/^\[[^\]]+\]\s+.*? - /.test(text))continue;
+  if(!/^\{\{effect:[^}]+\}\}$/.test(text))continue;
   const result=equipmentEffectDefinition(text,effects);assert(result,text);assert.strictEqual(result.effect,effects[result.id]);assert(effectDescriptions(result.effect).length);count++;
  }
  assert.equal(count,6);
@@ -53,4 +54,33 @@ test('embedded equipment definitions use canonical effect descriptions and artwo
  assert.equal(equipmentEffectDefinition('Gain [Shield] for self.',effects),null);
  effects.invincibility.description='Updated canonical description';
  assert.deepEqual(effectDescriptions(equipmentEffectDefinition('[Invincibility] Buff - Stale copy.',effects).effect),['Updated canonical description']);
+});
+
+test('artifact bonus prose is stored once and shared by codex and team builder',()=>{
+ const strings=value=>typeof value==='string'?[value]:value&&typeof value==='object'?Object.values(value).flatMap(strings):[];
+ for(const item of Object.values(artifacts)){
+  assert.equal(item.additional,undefined);
+  assert(!item.reference_sections.some(s=>/^\d+-Piece Bonus$/.test(s.title)));
+  const sections=equipmentSections(item),all=strings(item);
+  for(const bonus of item.set_bonuses){
+   assert.deepEqual(sections.find(s=>s.title===bonus.pieces+'-Piece Bonus').paragraphs,bonus.description);
+   for(const text of bonus.description){assert.equal(all.filter(s=>s===text).length,1);assert(catalogueSearchText(item).includes(text.replace(/<[^>]*>/g,'')));}
+  }
+ }
+});
+
+test('all equipment uses skill-style effect tokens and explicit inline classes without duplicate descriptions',()=>{
+ const effects=read('data-effects.json'),byName=new Map(Object.entries(effects).map(([id,e])=>[e.name.toLowerCase(),e.class||id]));
+ for(const item of [...Object.values(weapons),...Object.values(accessories),...Object.values(artifacts)]){
+  assert.equal(item.additional,undefined);
+  for(const section of equipmentSections(item))for(const text of section.paragraphs){
+   for(const match of text.matchAll(/\{\{effect:([^}]+)\}\}/g))assert(effects[match[1]],match[1]);
+   const unstyled=text.replace(/<b\b[^>]*>.*?<\/b>/g,'');
+   for(const match of unstyled.matchAll(/\[([^\]]+)\]/g))assert(!byName.has(match[1].toLowerCase()),text);
+   assert(!/^\[[^\]]+\]\s+.*? - /.test(text));
+  }
+ }
+ assert.match(weapons.w2.reference_sections.flatMap(s=>s.paragraphs).join(' '),/<b class="freeze">\[Freeze\]<\/b>/);
+ assert(catalogueSearchText(accessories.a1,effects).includes('Holy Aura'));
+ assert(!catalogueSearchText(accessories.a1,effects).includes('{{effect:'));
 });

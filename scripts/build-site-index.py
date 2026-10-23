@@ -83,7 +83,9 @@ def build():
   records.append({'type':'Effect','title':e.get('name',eid),'path':'/webpages/game-codex.html#'+eid,'description':description,'search':e.get('name',eid)+' '+eid+' '+e.get('type','')+' '+description})
  for filename,kind,anchor in [('data-weapon.json','Weapon','weapon'),('data-accessory.json','Accessory','accessory'),('data-artifact.json','Artifact','artifact')]:
   for eid,item in read('images/mlg-assets/'+filename).items():
-   prose=' '.join(p for section in item.get('reference_sections',[]) for p in section.get('paragraphs',[]))
+   bonus_text=[p for bonus in item.get('set_bonuses',[]) for p in bonus.get('description',[])]
+   prose=' '.join(bonus_text+[p for section in item.get('reference_sections',[]) if not (bonus_text and re.fullmatch(r'\d+-Piece Bonus',section.get('title',''))) for p in section.get('paragraphs',[])])
+   prose=re.sub(r'\{\{effect:([^}]+)\}\}',lambda m:' '.join([effects.get(m[1],{}).get('name',m[1])]+[v for k,v in effects.get(m[1],{}).items() if re.fullmatch(r'description\d*',k) and isinstance(v,str)]),prose)
    pieces=' '.join(item.get(f'piece_num_{n}_name','') for n in range(1,5))
    records.append({'type':kind,'title':item['name'],'path':'/webpages/game-codex.html#'+anchor+'-'+eid,'description':plain(prose)[:230], 'search':' '.join([item['name'],item.get('previous_name',''),item.get('weapon_type',''),item.get('seal_ring_name',''),pieces,plain(prose)])})
  document=(ROOT/'books_main.html').read_text();books=[]

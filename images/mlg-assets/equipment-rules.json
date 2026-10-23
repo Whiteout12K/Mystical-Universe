@@ -20,37 +20,129 @@
   "artifacts": {
     "title": "Artifact stats and set rules",
     "paragraphs": [
-      "Artifact sets have four pieces, with bonuses for equipping two or four pieces. Each artifact has one main stat and four random substats. The main stat scales with artifact level; substats gain rolls every five levels. The ranges below are those recorded in the design document.",
+      "Artifact sets have four pieces, with bonuses for equipping two or four pieces. Each artifact has one main stat and four random substats. The main stat scales with artifact level; substats gain rolls every five levels. Substats start with one base value and can receive up to five additional rolls, reaching six times the base value.",
       "All of the stats below have an equal chance of being rolled. Mana related stats are not enhanced by artifacts.",
-      "* Health % (a, 1) : +6% (min) - +30% (max, times 5)",
-      "* Attack % (b, 2) : +5% (min) - +25% (max, times 5)",
-      "* Defense % (c, 3) : +5% (min) - +25% (max, times 5)",
-      "* Stamina % (d, 4) : +10% (min) - +50% (max, times 5)",
-      "* Stamina Regen + (e, 5) : +8% (min) - +40% (max, times 5)",
-      "* Crit Rate + (f, 6) : +5% (min) - +25% (max, times 5)",
-      "* Crit Damage + (g, 7) : +8% (min) - +40% (max, times 5)",
-      "* Speed + (h, 8) : +10 (min) - +50 (max, times 5)",
-      "* Piercing + (i, 9) : +3 (min) - +15 (max, times 5)",
-      "* Healing Rate + (j, 10) : +3% (min) - +15% (max, times 5)",
-      "* Cooldown Reduction + (k, 11) : +3% (min) - +15% (max, times 5)",
-      "* Gauge Gain + (l, 12) : +4% (min) - +20% (max, times 5)",
-      "* Luck + (m, 13) : +5 (min) - +25 (max, times 5)",
-      "* MP (not in artifact, n, 14)",
-      "* MP Regen (not in artifact, o, 15)",
+      "* Health % : +6% (min) - +36% (max, times 6)",
+      "* Attack % : +5% (min) - +30% (max, times 6)",
+      "* Defense % : +5% (min) - +30% (max, times 6)",
+      "* Stamina % : +10% (min) - +60% (max, times 6)",
+      "* Stamina Regen + : +8% (min) - +48% (max, times 6)",
+      "* Crit Rate + : +5% (min) - +30% (max, times 6)",
+      "* Crit Damage + : +8% (min) - +48% (max, times 6)",
+      "* Speed + : +10 (min) - +60 (max, times 6)",
+      "* Piercing + : +3 (min) - +18 (max, times 6)",
+      "* Healing Rate + : +3% (min) - +18% (max, times 6)",
+      "* Cooldown Reduction + : +3% (min) - +18% (max, times 6)",
+      "* Gauge Gain + : +4% (min) - +24% (max, times 6)",
+      "* Luck + : +5 (min) - +30 (max, times 6)",
+      "* MP (not in artifact)",
+      "* MP Regen (not in artifact)",
       "Each piece of artifact has a specific main stat which cannot be overridden. ",
       "* Headgear: ",
-      "   * Health % (a) : +3% (min) - +60% (max)",
-      "   * Mana % (n) : +1.5% (min) - +30% (max)",
+      "   * Health % : +3% (min) - +60% (max)",
+      "   * Mana % : +1.5% (min) - +30% (max)",
       "* Chestplate:",
-      "   * Defense % (c) : +3% (min) - +60% (max)",
-      "   * Piercing + (i) : +1.5 (min) - +30 (max)",
+      "   * Defense % : +3% (min) - +60% (max)",
+      "   * Piercing + : +1.5 (min) - +30 (max)",
       "* Leggings:",
-      "   * Attack % (b) : +2.5% (min) - +50% (max)",
-      "   * Speed % (h) : +1.5% (min) - +30% (max)",
+      "   * Attack % : +2.5% (min) - +50% (max)",
+      "   * Speed % : +1.5% (min) - +30% (max)",
       "* Boots:",
-      "   * Crit Damage + (g) : +3.5% (min) - +70% (max)",
-      "   * Crit Rate + (f) : +1.5% (min) - +30% (max)",
+      "   * Crit Damage + : +3.5% (min) - +70% (max)",
+      "   * Crit Rate + : +1.5% (min) - +30% (max)",
       "Custom artifact collections let a character swap between saved sets for different team compositions."
-    ]
+    ],
+    "stat_scaling": {
+      "max_level": 20,
+      "max_substat_upgrades": 5,
+      "main_stats": {
+        "health": {
+          "value": 3,
+          "type": "%"
+        },
+        "mana": {
+          "value": 1.5,
+          "type": "%"
+        },
+        "defense": {
+          "value": 3,
+          "type": "%"
+        },
+        "piercing": {
+          "value": 1.5,
+          "type": "+"
+        },
+        "attack": {
+          "value": 2.5,
+          "type": "%"
+        },
+        "speed": {
+          "value": 1.5,
+          "type": "%"
+        },
+        "crit_dmg": {
+          "value": 3.5,
+          "type": "+"
+        },
+        "crit_rate": {
+          "value": 1.5,
+          "type": "+"
+        }
+      },
+      "substats": {
+        "health": {
+          "value": 6,
+          "type": "%"
+        },
+        "attack": {
+          "value": 5,
+          "type": "%"
+        },
+        "defense": {
+          "value": 5,
+          "type": "%"
+        },
+        "stamina": {
+          "value": 10,
+          "type": "%"
+        },
+        "stamina_regen": {
+          "value": 8,
+          "type": "%"
+        },
+        "crit_rate": {
+          "value": 5,
+          "type": "+"
+        },
+        "crit_dmg": {
+          "value": 8,
+          "type": "+"
+        },
+        "speed": {
+          "value": 10,
+          "type": "+"
+        },
+        "piercing": {
+          "value": 3,
+          "type": "+"
+        },
+        "healing_rate": {
+          "value": 3,
+          "type": "+"
+        },
+        "cooldown_red": {
+          "value": 3,
+          "type": "+"
+        },
+        "gauge_gain": {
+          "value": 4,
+          "type": "+"
+        },
+        "luck": {
+          "value": 5,
+          "type": "+"
+        }
+      }
+    }
   }
 }
