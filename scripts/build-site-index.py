@@ -80,7 +80,12 @@ def build():
    records.append({'type':'Skill','title':title+' — '+(variant.get('name') if variant else c['name']),'path':url,'description':description[:230],'search':title+' '+c['name']+' '+key+' '+description})
  for eid,e in effects.items():
   description=plain(strip_templates(' '.join(v for k,v in e.items() if re.fullmatch(r'description\d*',k) and isinstance(v,str))))[:230]
-  records.append({'type':'Effect','title':e.get('name',eid),'path':'/webpages/effects.html#'+eid,'description':description,'search':e.get('name',eid)+' '+eid+' '+e.get('type','')+' '+description})
+  records.append({'type':'Effect','title':e.get('name',eid),'path':'/webpages/game-codex.html#'+eid,'description':description,'search':e.get('name',eid)+' '+eid+' '+e.get('type','')+' '+description})
+ for filename,kind,anchor in [('data-weapon.json','Weapon','weapon'),('data-accessory.json','Accessory','accessory'),('data-artifact.json','Artifact','artifact')]:
+  for eid,item in read('images/mlg-assets/'+filename).items():
+   prose=' '.join(p for section in item.get('reference_sections',[]) for p in section.get('paragraphs',[]))
+   pieces=' '.join(item.get(f'piece_num_{n}_name','') for n in range(1,5))
+   records.append({'type':kind,'title':item['name'],'path':'/webpages/game-codex.html#'+anchor+'-'+eid,'description':plain(prose)[:230], 'search':' '.join([item['name'],item.get('previous_name',''),item.get('weapon_type',''),item.get('seal_ring_name',''),pieces,plain(prose)])})
  document=(ROOT/'books_main.html').read_text();books=[]
  for item in re.findall(r'<article\b[^>]*id="book\d+"[\s\S]*?</article>',document):
   id=re.search(r'id="book(\d+)"',item)[1];title=plain(re.search(r'<h2>([\s\S]*?)</h2>',item)[1]);paragraph=re.search(r'<p>([\s\S]*?)</p>',item);available=(ROOT/f'books/pdf/Mystical Legends {id}.pdf').exists()

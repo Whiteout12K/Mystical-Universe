@@ -20,7 +20,7 @@ test('skill detail renderer links effects and substitutes the selected Alter nic
   if(url.includes('data-character'))return {ok:true,json:async()=>({c1:{nickname:'Avery',gender:'male'},c1b:{nickname:'Caela',gender:'female',base_character:'c1'}})};
   if(url.includes('data-effects'))return {ok:true,json:async()=>({shield:{name:'Shield',class:'shield',type:'Buff',description:'Protects the user.'}})};
   return {ok:true,json:async()=>({B1:{name:'Light Sword',type:'Basic Skill',description:'{{nickname}} raises {{possessive}} sword. {{Subject}} gains power. {{effect:shield}}',base_damage:{},max_level:10}})};
- }};vm.createContext(context);vm.runInContext(source,context);await callback();const html=get('skill-content').innerHTML;assert.match(html,/Caela raises her sword/);assert.match(html,/She gains power/);assert.match(html,/webpages\/effects.html#shield/);assert.doesNotMatch(html,/\{\{(?:nickname|possessive|Subject)/);
+ }};vm.createContext(context);vm.runInContext(source,context);await callback();const html=get('skill-content').innerHTML;assert.match(html,/Caela raises her sword/);assert.match(html,/She gains power/);assert.match(html,/webpages\/game-codex.html#shield/);assert.doesNotMatch(html,/\{\{(?:nickname|possessive|Subject)/);
 });
 
 test('enhancement modules and reader have valid JavaScript syntax',async()=>{

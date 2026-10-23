@@ -710,21 +710,47 @@
     "description": "Reduces incoming attacks’ chance to crit by -10% for 15 seconds, up to 5 stacks.",
     "stat_modifiers": [],
     "description_style": {"paddingTop": 3}
+  },
+  "holy-aura": {
+    "name": "Holy Aura",
+    "class": "holy-aura",
+    "icon": "",
+    "type": "Unremovable Buff",
+    "description": "Increases all stats by +3%, plus +0.5% for every 10 equipment levels. Basic attacks have a 25% chance to dispel a buff on hit opponents. Duration: infinite. Granted by the Rune of the Spellcaster.",
+    "stat_modifiers": [],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    }
+  },
+  "plant-tether": {
+    "name": "Plant Tether",
+    "class": "plant-tether",
+    "icon": "",
+    "type": "Debuff / Buff",
+    "description": "When hit with Water or Earth attacks, resistance to those elements increases by +75%, while lifedrain damage (health damage-over-time effects) from any source increases by +150%. Duration: 3 seconds minimum, 10 seconds maximum. Applied by the Mistywood Armor four-piece bonus.",
+    "stat_modifiers": [],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    }
+  },
+  "severance": {
+    "name": "Severance",
+    "class": "severance",
+    "icon": "",
+    "type": "Debuff",
+    "description": "A space-tearing ability that disables the defense stat and makes the soul vulnerable. The Gathering Sickle’s Seal Ritual passive has a 4% chance to apply it on a hit.",
+    "stat_modifiers": [],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    }
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-

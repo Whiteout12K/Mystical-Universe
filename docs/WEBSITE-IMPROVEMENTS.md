@@ -21,7 +21,7 @@ Refresh open pages after a change. Disabling one feature preserves the other fea
 | `spoilerPreferences` | Browser-local reading progress and default spoiler disclosure | `js/site-enhancements/spoilers.js` |
 | `characterComparison` | Two-character base-stat, affinity, role, and skill comparison; shareable query parameters | `webpages/compare.html`, `js/site-enhancements/compare.js` |
 | `mobileNavigation` | Sticky horizontal skill selector, keyboard skill controls, character/skills shortcuts | `js/site-enhancements/mobile.js` |
-| `effectsGlossary` | Search/filter effect entries and follow effect links from skill descriptions | `webpages/effects.html`, `js/site-enhancements/effects.js`, `ml-game/apps/skill.html` |
+| `effectsGlossary` | Search/filter effect entries and follow effect links from skill descriptions | `webpages/game-codex.html`, `js/site-enhancements/game-codex.js`, `ml-game/apps/skill.html` |
 | `readingContinuity` | Cross-site Continue Reading, saved position within a page, outline-based previous/next chapters or sections | `js/site-enhancements/reading.js`, `books/viewer.js` |
 | `visualConsistency` | Shared gold focus indicators and rounded existing buttons; shared tokens style all new controls | `css/site-enhancements.css` |
 | `contentChecks` | Check data, assets, local links, placeholders, damage values, missing skills/effects, stale indexes | `scripts/check-content.py`, GitHub Actions |

@@ -16,9 +16,9 @@ function lockBackgroundScroll(){
 async function records(){if(!indexPromise)indexPromise=json('/data/search-index.json').then(data=>data.records).catch(error=>{indexPromise=null;throw error;});return indexPromise;}
 export function mountSearch(host,initial=''){
  host.replaceChildren();
- const controls=el('div',{class:'ml-search-controls'});const input=el('input',{type:'search',id:host.id+'-query',placeholder:'Character, skill, effect, book, or article…',autocomplete:'off',value:initial});
+ const controls=el('div',{class:'ml-search-controls'});const input=el('input',{type:'search',id:host.id+'-query',placeholder:'Character, skill, effect, equipment, book, or article…',autocomplete:'off',value:initial});
  const searchLabel=el('label',{for:input.id},'Search Mystical Legends');const field=el('div');field.append(searchLabel,input);
- const filter=el('select',{id:host.id+'-type'});for(const type of ['Everything','Character','Wiki','Skill','Effect','Book'])filter.append(el('option',{value:type},type));const filterField=el('div');filterField.append(el('label',{for:filter.id},'Show'),filter);controls.append(field,filterField);
+ const filter=el('select',{id:host.id+'-type'});for(const type of ['Everything','Character','Wiki','Skill','Effect','Weapon','Accessory','Artifact','Book'])filter.append(el('option',{value:type},type));const filterField=el('div');filterField.append(el('label',{for:filter.id},'Show'),filter);controls.append(field,filterField);
  const message=el('p',{class:'ml-muted',role:'status','aria-live':'polite'}),list=el('ul',{class:'ml-search-results'}),more=el('button',{type:'button',hidden:''},'Show more results');host.append(controls,message,list,more);
  let token=0,limit=30;
  async function search(){const thisToken=++token;message.textContent='Loading search…';try{

@@ -1,107 +1,543 @@
 {
-
-    "a1": {
-        "id": 1,
-        "name": "Rune of the Spellcaster",
-        "type": "Accessory",
-
-        "accessory_img": "",
-
-        "additional": [
-            {"text": "<b>Passive</b>",
-            "style": {"paddingTop": 20}},
-            {"text": "Increases health and attack by <b>+<span data-dmg=\"stat1\"></span>%</b>. Whenever the equipping character’s <b class=\"shield\">[Shield]</b> breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b><span data-dmg=\"heal\"></span>%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).",
-            "style": {"paddingTop": 7}},
-            {"text": "Every point on the light meter will increase the party’s all elemental damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for the meter’s duration, capped at <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>.",
-            "style": {"paddingTop": 7}}
-        ],
-        "passive_skill_scale": {
-            "stat1": 30,
-            "heal": 150,
-            "dmg_increase": 3,
-            "dmg_increase2": 30
-        },
-        "max_passive_level": 16,
-        "passive_level_multiplier": 0.1,
-
-        "quantity": false,
-        "rarity": "SSR",
-        "star_level": 0,
-        "level": 100,
-        "xp_level": 0,
-        "stat_change_by_level": {
-            "main_stat_formula": "base_stat * (weight * (level - 1))",
-            "main_stat_weight": 0.07,
-
-            "main_1": "health",
-            "main_1_value": 185,
-
-            "main_2": "healing_rate",
-            "main_2_value": 4
+  "a1": {
+    "id": 1,
+    "name": "Rune of the Spellcaster",
+    "type": "Accessory",
+    "accessory_img": "",
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
         }
+      },
+      {
+        "text": "Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at 100% its value.",
+        "style": {
+          "paddingTop": 7
+        }
+      },
+      {
+        "text": "The rune will float above the equipping character’s head and provide an unremovable buff [Holy Aura]. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of -15% matching the equipping character’s affinity. In trade, 5 MP will drain every 2 seconds to maintain effect.",
+        "style": {
+          "paddingTop": 7
+        }
+      },
+      {
+        "text": "Magnitude: The amount of [Shield] gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).",
+        "style": {
+          "paddingTop": 7
+        }
+      },
+      {
+        "text": "[Holy Aura] Unremovable Buff - Increases all stats by +3%, and an extra +0.5% for every 10 levels on the weapon. When the character attacks with Basic Attack, there is a 25% chance to dispel a buff on hit opponents (Duration: Infinite).",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "quantity": false,
+    "rarity": "SSR",
+    "star_level": 0,
+    "level": 100,
+    "xp_level": 0,
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "health",
+      "main_1_value": 185.0,
+      "main_2": "healing_rate",
+      "main_2_value": 4.0
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "a2": {
-        "id": 2,
-        "name": "Water Spirit Stone",
-        "type": "Accessory",
-
-        "accessory_img": "",
-
-        "additional": [
-            {"text": "<b>Passive</b>",
-            "style": {"paddingTop": 20}},
-            {"text": "Increases health and attack by <b>+<span data-dmg=\"stat1\"></span>%</b>. Whenever the equipping character’s <b class=\"shield\">[Shield]</b> breaks or ends, they will consume 15% of their health. Each consumed instance will heal allies and self equal to <b><span data-dmg=\"heal\"></span>%</b> of the value of health consumed after a delay of 3 seconds. Between that time, the equipping character is immune to incoming damage (debuffs may still apply and activate).",
-            "style": {"paddingTop": 7}},
-            {"text": "Every point on the light meter will increase the party’s all elemental damage by <b>+<span data-dmg=\"dmg_increase\"></span>%</b> for the meter’s duration, capped at <b>+<span data-dmg=\"dmg_increase2\"></span>%</b>.",
-            "style": {"paddingTop": 7}}
-        ],
-        "passive_skill_scale": {
-            "stat1": 30,
-            "heal": 150,
-            "dmg_increase": 3,
-            "dmg_increase2": 30
-        },
-        "max_passive_level": 16,
-        "passive_level_multiplier": 0.1,
-
-        "quantity": false,
-        "rarity": "SSR",
-        "star_level": 0,
-        "level": 100,
-        "xp_level": 0,
-        "stat_change_by_level": {
-            "main_stat_formula": "base_stat * (weight * (level - 1))",
-            "main_stat_weight": 0.07,
-
-            "main_1": "defense",
-            "main_1_value": 155,
-
-            "main_2": "mana",
-            "main_2_value": 60
+    "rarities": [
+      "SSR"
+    ],
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Seal Ring (unlocked in the Seal Ritual): In the inventory, place a material into this gear’s slot to convert it in battle into a stat buff for the party (various rarity of materials give differing stat buffs to the party). The material’s stat begins at 100% its value.",
+          "The rune will float above the equipping character’s head and provide an unremovable buff [Holy Aura]. By sensing magic signatures, the rune’s power discerns weaknesses: nearby opponents will have an element resistance reduction of -15% matching the equipping character’s affinity. In trade, 5 MP will drain every 2 seconds to maintain effect.",
+          "Magnitude: The amount of [Shield] gain contributes to extending the duration of buffs on the party, +1 second whenever gaining an amount equal to or above 5% of the equipping character’s max health (Cooldown: 5 seconds).",
+          "[Holy Aura] Unremovable Buff - Increases all stats by +3%, and an extra +0.5% for every 10 levels on the weapon. When the character attacks with Basic Attack, there is a 25% chance to dispel a buff on hit opponents (Duration: Infinite)."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "reference_stats": [
+      {
+        "name": "Health",
+        "level_1": 185.0,
+        "level_100": 1480.0,
+        "unit": ""
+      },
+      {
+        "name": "Healing Rate",
+        "level_1": 4.0,
+        "level_100": 32.0,
+        "unit": "%"
+      }
+    ],
+    "seal_ring_name": "Coronation Ring of Magnitude",
+    "restriction": ""
+  },
+  "a2": {
+    "id": 2,
+    "name": "Water Spirit Rune",
+    "type": "Accessory",
+    "accessory_img": "",
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
         }
-    }
-
-
-
-
-
-
-
+      }
+    ],
+    "quantity": false,
+    "rarity": "SSR",
+    "star_level": 0,
+    "level": 100,
+    "xp_level": 0,
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "defense",
+      "main_1_value": 105.0,
+      "main_2": "mana",
+      "main_2_value": 60.0
+    },
+    "previous_name": "Water Spirit Stone",
+    "rarities": [
+      "SSR"
+    ],
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": []
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "reference_stats": [
+      {
+        "name": "Defense",
+        "level_1": 105.0,
+        "level_100": 840.0,
+        "unit": ""
+      },
+      {
+        "name": "MP",
+        "level_1": 60.0,
+        "level_100": 480.0,
+        "unit": ""
+      }
+    ],
+    "restriction": ""
+  },
+  "a3": {
+    "id": 3,
+    "name": "Fire Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Fire] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Fire] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Attack",
+        "level_1": 34.0,
+        "level_100": 272.0,
+        "unit": ""
+      },
+      {
+        "name": "Attack",
+        "level_1": 24.0,
+        "level_100": 192.0,
+        "unit": ""
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "attack",
+      "main_1_value": 34.0,
+      "main_2": "attack",
+      "main_2_value": 24.0
+    },
+    "restriction": "",
+    "reference_notes": [
+      "Both stat entries are listed as Attack in the current design document."
+    ]
+  },
+  "a4": {
+    "id": 4,
+    "name": "Water Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Water] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Water] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Attack",
+        "level_1": 34.0,
+        "level_100": 272.0,
+        "unit": ""
+      },
+      {
+        "name": "Health",
+        "level_1": 125.0,
+        "level_100": 1000.0,
+        "unit": ""
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "attack",
+      "main_1_value": 34.0,
+      "main_2": "health",
+      "main_2_value": 125.0
+    },
+    "restriction": ""
+  },
+  "a5": {
+    "id": 5,
+    "name": "Wind Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Wind] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Wind] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Piercing",
+        "level_1": 8.0,
+        "level_100": 64.0,
+        "unit": ""
+      },
+      {
+        "name": "Cooldown Reduction",
+        "level_1": 2.0,
+        "level_100": 16.0,
+        "unit": "%"
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "piercing",
+      "main_1_value": 8.0,
+      "main_2": "cooldown_red",
+      "main_2_value": 2.0
+    },
+    "restriction": ""
+  },
+  "a6": {
+    "id": 6,
+    "name": "Earth Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Earth] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Earth] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Defense",
+        "level_1": 65.0,
+        "level_100": 520.0,
+        "unit": ""
+      },
+      {
+        "name": "Piercing",
+        "level_1": 6.0,
+        "level_100": 48.0,
+        "unit": ""
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "defense",
+      "main_1_value": 65.0,
+      "main_2": "piercing",
+      "main_2_value": 6.0
+    },
+    "restriction": ""
+  },
+  "a7": {
+    "id": 7,
+    "name": "Light Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Light] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Light] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Attack",
+        "level_1": 34.0,
+        "level_100": 272.0,
+        "unit": ""
+      },
+      {
+        "name": "Piercing",
+        "level_1": 6.0,
+        "level_100": 48.0,
+        "unit": ""
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "attack",
+      "main_1_value": 34.0,
+      "main_2": "piercing",
+      "main_2_value": 6.0
+    },
+    "restriction": ""
+  },
+  "a8": {
+    "id": 8,
+    "name": "Dark Runestone",
+    "type": "Accessory",
+    "rarities": [
+      "SR"
+    ],
+    "rarity": "SR",
+    "reference_sections": [
+      {
+        "title": "Passives",
+        "paragraphs": [
+          "Increases [Dark] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%."
+        ]
+      }
+    ],
+    "source": {
+      "title": "Mystical Legends Game Design",
+      "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit",
+      "section": "Equipment and Support",
+      "modified": "2026-10-19"
+    },
+    "quantity": false,
+    "level": 100,
+    "xp_level": 0,
+    "additional": [
+      {
+        "text": "<b>Passives</b>",
+        "style": {
+          "paddingTop": 20
+        }
+      },
+      {
+        "text": "Increases [Dark] element damage by +20%. The energy gauge of Ultimate Skills only needs to be filled to 90% to be used. The damage of Ultimate Skills will be increased by +10%.",
+        "style": {
+          "paddingTop": 7
+        }
+      }
+    ],
+    "accessory_img": "",
+    "star_level": 0,
+    "reference_stats": [
+      {
+        "name": "Attack",
+        "level_1": 34.0,
+        "level_100": 272.0,
+        "unit": ""
+      },
+      {
+        "name": "Attack",
+        "level_1": 16.0,
+        "level_100": 128.0,
+        "unit": ""
+      }
+    ],
+    "stat_change_by_level": {
+      "main_stat_formula": "base_stat * (weight * (level - 1))",
+      "main_stat_weight": 0.07,
+      "main_1": "attack",
+      "main_1_value": 34.0,
+      "main_2": "attack",
+      "main_2_value": 16.0
+    },
+    "restriction": "",
+    "reference_notes": [
+      "Both stat entries are listed as Attack in the current design document."
+    ]
+  }
 }

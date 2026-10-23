@@ -19,7 +19,7 @@ function populateExplore(menu){
   row.append(item);menu.append(row);
  }
  if(flags.unifiedSearch)entry('Search','/webpages/search.html',async()=>{const {openSearch}=await import('./search.js');openSearch();});
- if(flags.effectsGlossary)entry('Effects','/webpages/effects.html');
+ if(flags.effectsGlossary)entry('Game Codex','/webpages/game-codex.html');
  if(flags.characterComparison)entry('Compare','/webpages/compare.html');
  if(flags.spoilerPreferences)entry('Spoiler settings','#spoiler-settings',async()=>{const {openSettings}=await import('./spoilers.js');openSettings();});
 }

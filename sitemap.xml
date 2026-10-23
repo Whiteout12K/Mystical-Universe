@@ -349,10 +349,14 @@
 
   <url><loc>https://mysticallegends.org/webpages/search</loc></url>
   <url><loc>https://mysticallegends.org/webpages/compare</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/effects</loc></url>
   <url>
     <loc>https://mysticallegends.org/news/2026-10-17</loc>
     <lastmod>2026-10-17</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-codex</loc>
+    <lastmod>2026-10-22</lastmod>
   </url>
 
 </urlset>

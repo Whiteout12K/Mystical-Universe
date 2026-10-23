@@ -1,0 +1,40 @@
+#ml-game-codex{margin-top:26px}.codex-tabs{display:flex;gap:28px;flex-wrap:wrap;border-bottom:1px solid #d6aa4530;margin-bottom:24px}.codex-tabs button{border:0;border-bottom:2px solid transparent;background:none;color:#b5ac99;padding:12px 0;font:14px Arial,sans-serif;min-height:48px;cursor:pointer}.codex-tabs button[aria-pressed=true]{color:#f1ce7b;border-bottom-color:#d6aa45}.codex-tab-count{font-size:10px;margin-left:8px;color:#a99c79}.codex-tabs button:disabled{opacity:.4;cursor:default}.codex-controls{display:grid;grid-template-columns:minmax(0,1fr) 160px 150px;gap:16px;margin:20px 0 12px}.codex-controls:not([data-category=weapons]){grid-template-columns:minmax(0,1fr) 160px}.codex-results{margin:12px 0 20px}.codex-rules{margin:8px 0 24px;border-block:1px solid #d6aa4528;padding:10px 0;color:#cbc4b3}.codex-rules summary{min-height:38px;cursor:pointer;color:#e4c579;font-size:13px;display:list-item;padding:6px 0}.codex-rule-body{font-size:13px;line-height:1.8;padding:12px 0}.codex-rule-body p{margin:8px 0}.codex-rule-body ul{margin:10px 0;padding-left:22px}#ml-game-codex .codex-grid{align-items:stretch;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr))}.codex-equipment{padding:0;overflow:hidden;scroll-margin-top:24px}.codex-card-header{padding:22px 22px 0}.codex-card-header h2{font-size:23px;margin:6px 0 14px;line-height:1.3}.codex-category{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#baa56c}.codex-art{height:155px;background:radial-gradient(ellipse at center,#e4c57908,transparent 70%);margin:0 20px 18px;border-bottom:1px solid #e4c57912;display:flex;align-items:center;justify-content:center}.codex-art img{display:block;width:100%;height:100%;object-fit:contain}.codex-restriction,.codex-seal{padding:0 22px;color:#d7bc7c!important}.codex-stat-table{border-collapse:collapse;width:calc(100% - 44px);margin:18px 22px;color:#dbd4bf;font-size:12px}.codex-stat-table caption{text-align:left;caption-side:top;color:#a99e8e;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px}.codex-stat-table th,.codex-stat-table td{padding:8px 0;border-bottom:1px solid #e4c57920;text-align:right;font-weight:400}.codex-stat-table th:first-child{text-align:left}.codex-stat-table thead{font-size:10px;color:#aa9f8a}.codex-item-section{padding:4px 22px 10px}.codex-item-section h3{font:700 13px/1.6 Arial,sans-serif;margin:12px 0 8px;color:#e4c579}.codex-item-section p{font-size:13px;line-height:1.8;margin:9px 0}.codex-pieces{padding:0 22px 12px;display:grid;gap:10px}.codex-piece{display:flex;align-items:center;gap:12px}.codex-piece-art{height:44px;width:44px;flex:0 0 44px;background:#e4c57905;border:1px solid #e4c57915;border-radius:4px}.codex-piece-art img{width:100%;height:100%;object-fit:contain}.codex-piece-slot,.codex-piece-name{display:block}.codex-piece-slot{font-size:9px;color:#a99e8e;letter-spacing:1px;text-transform:uppercase}.codex-piece-name{font-size:12px;color:#dbd4bf}.codex-source-detail{font-size:11px!important;color:#a99e8e!important;padding:8px 22px 18px}#ml-game-codex a{text-decoration:none}#ml-game-codex .ml-effect-reference{text-decoration:underline;text-underline-offset:3px}.codex-controls>div:has([hidden]){display:none}.codex-tabs button:focus-visible{outline:2px solid #e4c579;outline-offset:4px}
+@media(max-width:767px){.codex-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}.codex-tabs button{text-align:left;min-height:50px}.codex-controls{grid-template-columns:1fr 1fr;gap:12px}.codex-controls>div:first-child{grid-column:1/-1}.codex-controls input{font-size:16px!important}.codex-grid{grid-template-columns:minmax(0,1fr)}.codex-card-header{padding-top:20px}.codex-item-section p{font-size:14px}.codex-art{height:140px}.codex-rule-body{font-size:13px}.codex-stat-table{font-size:13px}}
+/* Override the shared tool button/card defaults without changing other pages. */
+#ml-game-codex .codex-tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;padding:12px 0;min-height:48px;display:inline-flex;justify-content:flex-start;gap:0;color:#b5ac99}
+#ml-game-codex .codex-tabs button[aria-pressed=true]{border-bottom-color:#d6aa45;color:#f1ce7b}
+#ml-game-codex .codex-tabs button:hover{background:transparent;color:#f1ce7b}
+#ml-game-codex .codex-controls input,#ml-game-codex .codex-controls select{width:100%}
+#ml-game-codex .codex-equipment{padding:0}
+#ml-game-codex .codex-card-header h2{font:700 23px/1.3 Georgia,serif;display:block;margin:6px 0 14px}
+/* Match game-c's rich skill typography while retaining shared MLG color classes. */
+#ml-game-codex .codex-equipment{position:relative;isolation:isolate}
+#ml-game-codex .codex-rarity-card{border:0;padding:2px}
+.codex-rarity-wash{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.codex-equipment-body{background:#20222e;border-radius:10px;overflow:hidden;min-width:0}
+#ml-game-codex .codex-rarity-card .codex-equipment-body{border-top:3px solid transparent}
+#ml-game-codex .codex-category .codex-rarity{font-weight:700;letter-spacing:1.2px}
+#ml-game-codex .codex-skill-copy{font:400 .95rem/1.55 Arial,sans-serif;color:#d8cdb8;margin:10px 0}
+:where(#ml-game-codex .codex-skill-copy) :is(b,strong){color:#f6dfa2;font-weight:700}
+/* Zero-specificity default above lets .light, .shield, etc. use mlg.css colors. */
+#ml-game-codex .codex-skill-copy .ml-effect-reference{color:inherit;text-decoration-color:#e4c57926}
+#ml-game-codex .codex-skill-title{font:700 1rem/1.45 Arial,sans-serif;color:#d6aa45;margin:15px 0 10px}
+#ml-game-codex .codex-skill-title:has(.skill-name){font:700 1.5rem/1.2 Georgia,serif;color:#f0ca69;margin:18px 0 14px}
+#ml-game-codex .codex-skill-title .skill-type{display:block;font:400 .75rem/1.45 Arial,sans-serif;color:#bba77e;margin-bottom:5px}
+#ml-game-codex .codex-skill-title .skill-name{display:block;font:inherit}
+#ml-game-codex .codex-skill-copy.skill-meta{font:400 .75rem/1.5 Arial,sans-serif;color:#bba77e;margin:5px 0}
+#ml-game-codex .codex-skill-copy u{text-decoration:none;color:#d6aa45;font-weight:700}
+#ml-game-codex .codex-skill-copy.skill-meta :is(b,strong,u,.codex-value){font-weight:400}
+@media(max-width:767px){#ml-game-codex .codex-skill-copy{font-size:.95rem;line-height:1.6}}
+/* Keep cooldowns, energy costs, and other small metadata visually uniform. */
+#ml-game-codex .codex-skill-copy.skill-meta :is(b,strong,span,a,u){font-weight:inherit;color:inherit}
+
+/* Align card edges within each row while allowing descriptions to flow naturally. */
+#ml-game-codex .codex-equipment{display:flex;flex-direction:column}
+#ml-game-codex .codex-equipment-body{flex:1}
+@media(max-width:767px){#ml-game-codex .codex-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Limit desktop rows by category; retain readable columns on smaller screens. */
+#ml-game-codex .codex-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:1100px){#ml-game-codex .codex-grid[data-category=effects]{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:767px){#ml-game-codex .codex-grid{grid-template-columns:minmax(0,1fr)}}

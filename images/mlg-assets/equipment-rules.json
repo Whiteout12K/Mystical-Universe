@@ -1,0 +1,56 @@
+{
+  "source": {
+    "title": "Mystical Legends Game Design",
+    "url": "https://docs.google.com/document/d/1-95tvkDwbZnsN_vPy7gM4aJgFCXnzDQ2go8kIhIyAaw/edit"
+  },
+  "weapons": {
+    "title": "Weapons and progression",
+    "paragraphs": [
+      "Weapons grant stats, passive abilities, and a Weapon Skill in addition to the equipping character’s own skills. Weapon-type compatibility and individual restrictions still apply. The Main Character can equip any weapon type, changing the Basic Skill accordingly.",
+      "The design specifies a +0.08 multiplier per level, reaching an eightfold increase at level 100. Individual item cards list the exact level 1 and level 100 values recorded in the document.",
+      "Each weapon star improves its Weapon Skill and passive values by +10%. Additional duplicates beyond the main star levels improve weapon stats by 0.5%, subject to a cap that has not yet been specified."
+    ]
+  },
+  "accessories": {
+    "title": "Accessories",
+    "paragraphs": [
+      "Accessories don’t have any distinct skills attached but have buffs and passives that additionally help to buff a character."
+    ]
+  },
+  "artifacts": {
+    "title": "Artifact stats and set rules",
+    "paragraphs": [
+      "Artifact sets have four pieces, with bonuses for equipping two or four pieces. Each artifact has one main stat and four random substats. The main stat scales with artifact level; substats gain rolls every five levels. The ranges below are those recorded in the design document.",
+      "All of the stats below have an equal chance of being rolled. Mana related stats are not enhanced by artifacts.",
+      "* Health % (a, 1) : +6% (min) - +30% (max, times 5)",
+      "* Attack % (b, 2) : +5% (min) - +25% (max, times 5)",
+      "* Defense % (c, 3) : +5% (min) - +25% (max, times 5)",
+      "* Stamina % (d, 4) : +10% (min) - +50% (max, times 5)",
+      "* Stamina Regen + (e, 5) : +8% (min) - +40% (max, times 5)",
+      "* Crit Rate + (f, 6) : +5% (min) - +25% (max, times 5)",
+      "* Crit Damage + (g, 7) : +8% (min) - +40% (max, times 5)",
+      "* Speed + (h, 8) : +10 (min) - +50 (max, times 5)",
+      "* Piercing + (i, 9) : +3 (min) - +15 (max, times 5)",
+      "* Healing Rate + (j, 10) : +3% (min) - +15% (max, times 5)",
+      "* Cooldown Reduction + (k, 11) : +3% (min) - +15% (max, times 5)",
+      "* Gauge Gain + (l, 12) : +4% (min) - +20% (max, times 5)",
+      "* Luck + (m, 13) : +5 (min) - +25 (max, times 5)",
+      "* MP (not in artifact, n, 14)",
+      "* MP Regen (not in artifact, o, 15)",
+      "Each piece of artifact has a specific main stat which cannot be overridden. ",
+      "* Headgear: ",
+      "   * Health % (a) : +3% (min) - +60% (max)",
+      "   * Mana % (n) : +1.5% (min) - +30% (max)",
+      "* Chestplate:",
+      "   * Defense % (c) : +3% (min) - +60% (max)",
+      "   * Piercing + (i) : +1.5 (min) - +30 (max)",
+      "* Leggings:",
+      "   * Attack % (b) : +2.5% (min) - +50% (max)",
+      "   * Speed % (h) : +1.5% (min) - +30% (max)",
+      "* Boots:",
+      "   * Crit Damage + (g) : +3.5% (min) - +70% (max)",
+      "   * Crit Rate + (f) : +1.5% (min) - +30% (max)",
+      "Custom artifact collections let a character swap between saved sets for different team compositions."
+    ]
+  }
+}
