@@ -5,7 +5,7 @@
   const bar = document.getElementById('tagBar');
   const search = document.getElementById('searchInput');
   const titleTags = {'mlg hub':'Game', 'mystical legends book series':'Series'};
-  const pageTag = Object.entries(titleTags).find(([key]) => document.title.toLowerCase().includes(key))?.[1];
+  const pageTag = container.dataset.newsTag || Object.entries(titleTags).find(([key]) => document.title.toLowerCase().includes(key))?.[1];
   let articles = [], count = 2, tag = pageTag || 'all', query = '', ready = false;
   const status = document.createElement('p');
   status.setAttribute('role', 'status'); container.before(status);
