@@ -1,0 +1,12 @@
+{
+  "1": {
+    "title": "Beginning",
+    "label": "Mystical Legends · Volume I",
+    "source": "/books/epub/vol-1.epub"
+  },
+  "2": {
+    "title": "Awakening",
+    "label": "Mystical Legends · Volume II",
+    "source": "/books/epub/vol-2.epub"
+  }
+}

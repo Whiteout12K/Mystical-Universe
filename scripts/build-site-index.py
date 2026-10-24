@@ -90,9 +90,9 @@ def build():
    records.append({'type':kind,'title':item['name'],'path':'/webpages/game-codex.html#'+anchor+'-'+eid,'description':plain(prose)[:230], 'search':' '.join([item['name'],item.get('previous_name',''),item.get('weapon_type',''),item.get('seal_ring_name',''),pieces,plain(prose)])})
  document=(ROOT/'books_main.html').read_text();books=[]
  for item in re.findall(r'<article\b[^>]*id="book\d+"[\s\S]*?</article>',document):
-  id=re.search(r'id="book(\d+)"',item)[1];title=plain(re.search(r'<h2>([\s\S]*?)</h2>',item)[1]);paragraph=re.search(r'<p>([\s\S]*?)</p>',item);available=(ROOT/f'books/pdf/Mystical Legends {id}.pdf').exists()
-  book={'id':id,'title':title,'available':available,'path':'/books/viewer.html?id='+id if available else '/books_main.html#book'+id};books.append(book)
-  records.append({'type':'Book','title':'Book '+id+': '+title,'path':book['path'],'description':plain(paragraph[1]) if paragraph else '', 'search':title+' book '+id})
+  id=re.search(r'id="book(\d+)"',item)[1];title=plain(re.search(r'<h2>([\s\S]*?)</h2>',item)[1]);paragraph=re.search(r'<p>([\s\S]*?)</p>',item);volume=json.loads((ROOT/'books/catalog.json').read_text()).get(id);available=bool(volume and (ROOT/volume['source'].lstrip('/')).is_file())
+  book={'id':id,'title':title,'available':available,'path':('/books/reader.html?id='+id) if available else '/books_main.html#book'+id};books.append(book)
+  records.append({'type':'Book','title':'Volume '+id+': '+title,'path':book['path'],'description':plain(paragraph[1]) if paragraph else '', 'search':title+' volume '+id})
  return {'data/search-index.json':{'version':1,'records':records},'data/wiki-search-index.json':{'version':1,'pages':wiki},'data/character-connections.json':{'profiles':profiles},'data/books.json':{'books':books}}
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--check',action='store_true');args=parser.parse_args();stale=[]
