@@ -1,4 +1,4 @@
-import {edgeDirection,wholeBookPage} from './page-navigation.js';
+import {edgeDirection,wholeBookPage,touchAction} from './page-navigation.js';
 const $=id=>document.getElementById(id);
 const volumeId=new URLSearchParams(location.search).get('id')||'1';
 const PREFS='ml-epub-preferences-v1',STATE='ml-epub-vol-'+encodeURIComponent(volumeId)+'-v1';
@@ -55,21 +55,38 @@ document.addEventListener('keydown',pageKey);
 $('resume').addEventListener('click',()=>{go(toc[0].href);$('resume').hidden=true;});
 // Use physical screen edges even when the book's iframe is centered or paged sideways.
 function edgeTap(event,sourceDocument,frame=null){
- if(event.defaultPrevented||event.detail>1||document.querySelector('dialog[open]')||sourceDocument.getSelection()?.toString()||rendition?.getContents().some(c=>c.document.getSelection()?.toString())||event.target.closest('a,button,input,select,textarea,[contenteditable=true]'))return;
+ if(event.defaultPrevented||event.pointerType!=='touch'&&event.detail>1||document.querySelector('dialog[open]')||sourceDocument.getSelection()?.toString()||rendition?.getContents().some(c=>c.document.getSelection()?.toString())||event.target.closest('a,button,input,select,textarea,[contenteditable=true]'))return;
  const frameBounds=frame?.getBoundingClientRect(),x=event.clientX+(frameBounds?.left||0),y=event.clientY+(frameBounds?.top||0),bounds=$('reader').getBoundingClientRect(),width=document.documentElement.clientWidth;
  if(y<bounds.top||y>bounds.bottom)return;
  const direction=edgeDirection(x,width);if(direction){event.preventDefault();turn(direction);}
 }
-document.addEventListener('click',event=>edgeTap(event,document));
-function connectContent(contents){applyContent(contents);const doc=contents.document;doc.addEventListener('keydown',pageKey);
+// Handle touch release directly: mobile EPUB views may suppress synthetic clicks.
+function connectPageInput(doc,frame=null){
  let pointer=null,ignoreClickUntil=0;
- doc.addEventListener('pointerdown',event=>{if(!event.target.closest('a,button,input,select'))pointer={x:event.clientX,y:event.clientY,time:Date.now(),type:event.pointerType};});
- doc.addEventListener('pointercancel',()=>{pointer=null;});
- doc.addEventListener('pointerup',event=>{if(!pointer)return;const dx=event.clientX-pointer.x,dy=event.clientY-pointer.y,elapsed=Date.now()-pointer.time,type=pointer.type;pointer=null;
-  if(Math.abs(dx)>8||Math.abs(dy)>8)ignoreClickUntil=Date.now()+500;
-  if(type==='touch'&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5&&elapsed<800&&!doc.getSelection()?.toString())turn(dx<0?1:-1);
- });
- doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap(event,doc,doc.defaultView.frameElement);});
+ const blocked=target=>target?.closest?.('a,button,input,select,textarea,[contenteditable=true]');
+ const begin=(point,event)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now()};};
+ const finish=(point,event)=>{
+  if(!pointer)return;
+  const start=pointer;pointer=null;ignoreClickUntil=Date.now()+700;
+  if(blocked(event.target)||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
+  const action=touchAction(point.clientX-start.x,point.clientY-start.y,Date.now()-start.time);
+  if(action==='next'||action==='previous'){event.preventDefault();turn(action==='next'?1:-1);}
+  else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,target:event.target,pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
+ };
+ if(doc.defaultView.PointerEvent){
+  doc.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')begin(event,event);});
+  doc.addEventListener('pointerup',event=>{if(event.pointerType==='touch')finish(event,event);});
+  doc.addEventListener('pointercancel',()=>{pointer=null;});
+ }else{
+  doc.addEventListener('touchstart',event=>{if(event.touches.length===1)begin(event.touches[0],event);else pointer=null;},{passive:true});
+  doc.addEventListener('touchend',event=>{if(event.changedTouches.length===1)finish(event.changedTouches[0],event);},{passive:false});
+  doc.addEventListener('touchcancel',()=>{pointer=null;});
+ }
+ doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap(event,doc,frame);});
+}
+connectPageInput(document);
+function connectContent(contents){applyContent(contents);const doc=contents.document;doc.addEventListener('keydown',pageKey);
+ connectPageInput(doc,doc.defaultView.frameElement);
  for(const a of doc.querySelectorAll('a[href]'))if(/^https?:/i.test(a.getAttribute('href'))){a.target='_blank';a.rel='noopener noreferrer';}
 }
 function layoutKey(){const box=$('reader').getBoundingClientRect();return JSON.stringify(['pages-v1',bookRevision,toc.length,Math.round(box.width),Math.round(box.height),settings.size,settings.font,settings.leading,devicePixelRatio]);}
