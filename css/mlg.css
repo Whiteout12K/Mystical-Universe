@@ -97,6 +97,23 @@
 .claw-mark { color: #498794; }
 
 
+.assassins-touch { color: #c29adc; }
+.marked { color: #df8c8c; }
+.valiant { color: #e5a16c; }
+.ultimate-shield { color: #7fcabf; }
+.swing { color: #dfc47c; }
+.armor-weakness { color: #dc9479; }
+.miss { color: #b1a9be; }
+.tactical-insight { color: #8ebcd9; }
+.stealth { color: #a7b3d1; }
+.pen-testing { color: #c790d4; }
+.system-infiltration { color: #7db1c9; }
+.skill-disable { color: #df879c; }
+.firewall { color: #e0ac70; }
+.holy-aura { color: #ecd39b; }
+.plant-tether { color: #97bf80; }
+.severance { color: #b89bd9; }
+
 /* Mystical Legends Faction */
 .mystical-legends { color: #ff0000; }
 .tempest-aquia { color: #466da8 }

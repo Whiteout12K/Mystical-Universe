@@ -35,3 +35,9 @@ html.ml-visual-consistency :is(#character-name,.timeline-title,.wiki-page-title)
 .game-character-page .ml-connections nav a{display:inline-flex;align-items:center;min-height:44px}
 .game-character-page .ml-connections a:hover{background:transparent;text-decoration:underline;text-underline-offset:3px}
 html.ml-mobile-navigation .game-character-page .skill-sidebar{background:transparent;border-radius:0}
+
+/* Keep reading continuity inside the homepage artwork. */
+.ml-reading-continue[hidden]{display:none}
+.hero #reading-continue{position:absolute;z-index:3;inset:auto 16px 24px;text-align:center}
+.hero .ml-continue{margin:0 auto;background:rgba(19,16,16,.65);backdrop-filter:blur(6px);border-color:rgba(201,168,76,.55);max-width:100%;text-align:center}
+@media(max-width:600px){.hero #reading-continue{bottom:18px}.hero .ml-continue{font-size:13px;padding:10px 14px}}

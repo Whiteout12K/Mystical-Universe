@@ -14,7 +14,7 @@ if(volumeId==='1'&&stored.layoutVersion!==2){
  const migrate=cfi=>cfi?.replace(/^(epubcfi\(\/6\/)(\d+)(\[reader-chapter-(\d+)\])?/,(_,prefix,n,assertion,chapter)=>Number(n)>=4?prefix+(Number(n)+2)+(chapter?'[reader-chapter-'+(Number(chapter)+1)+']':''):prefix+n+(assertion||''));
  saved.cfi=migrate(saved.cfi);saved.bookmarks=saved.bookmarks.map(b=>({...b,cfi:migrate(b.cfi)}));
 }
-let book,rendition,toc=[],current=null,index=0,loading=false,saveTimer,resizeTimer,settingsTimer,settingsAnchor=null,adjusting=false;
+let book,rendition,toc=[],current=null,index=0,loading=false,resizeTimer,settingsTimer,settingsAnchor=null,adjusting=false;
 let pageCounts=null,countedLayout='',countTimer,countGeneration=0,bookRevision='vol-1',pageCounter=null,countingLayout='';
 function status(message){$('status').textContent=message;}
 function applyContent(contents){const root=contents.document.documentElement,palette=palettes[settings.theme];root.dataset.readerMode='paginated';contents.document.body.style.touchAction='pan-y';root.style.setProperty('font-size',settings.size+'px','important');root.style.setProperty('--reader-font',families[settings.font]);root.style.setProperty('--reader-leading',settings.leading);root.style.setProperty('--reader-ink',palette.ink);root.style.setProperty('--reader-link',palette.link);root.style.setProperty('background-color',palette.paper,'important');contents.document.body.style.setProperty('background-color',palette.paper,'important');}
@@ -34,13 +34,18 @@ function updateBookmark(){const marked=saved.bookmarks.some(b=>b.cfi===current?.
 $('bookmark-button').addEventListener('click',()=>{const cfi=current?.start?.cfi;if(!cfi)return;const existing=saved.bookmarks.some(b=>b.cfi===cfi);if(existing)saved.bookmarks=saved.bookmarks.filter(b=>b.cfi!==cfi);else saved.bookmarks.push({cfi,title:toc[index]?.label||'Reading position'});write(STATE,saved);renderBookmarks();updateBookmark();$('saved-status').textContent=existing?'Bookmark removed':'Bookmark saved';});
 async function go(target){if(!rendition||loading)return;clearTimeout(settingsTimer);settingsAnchor=null;adjusting=false;loading=true;$('reader').setAttribute('aria-busy','true');try{await rendition.display(target);status('');}catch(error){console.error(error);status('This reading position could not be opened. Choose a chapter from Contents.');}finally{loading=false;$('reader').setAttribute('aria-busy','false');}}
 function chapterIndex(location){const href=location?.start?.href||'';const match=toc.findIndex(c=>href.endsWith(c.href.split('#')[0]));return match<0?Math.max(0,location?.start?.index||0):match;}
+function saveReadingPosition(){
+ if(!current?.start?.cfi)return;
+ saved.cfi=current.start.cfi;write(STATE,saved);
+ write('ml-reading-current',{id:volumeId,cfi:saved.cfi,chapter:toc[index]?.label||'',updatedAt:Date.now()});
+}
 function relocated(location){current=location;index=chapterIndex(location);$('chapter-name').textContent=toc[index]?.label||('Volume '+volumeId);
  const pages=location.start.displayed||{};
  if(pageCounts&&countedLayout===layoutKey())pageCounts[index]=pages.total||pageCounts[index];
  updatePageLabel();
  $('previous').disabled=!!location.atStart;$('next').disabled=!!location.atEnd;
  for(const [id,label]of [['previous','Previous'],['next','Next']]){$(id).setAttribute('aria-label',label+' page');$(id).querySelector('span').textContent=label+' page';}
- $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saved.cfi=location.start.cfi;write(STATE,saved);},350);schedulePageCount();
+ $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;saveReadingPosition();schedulePageCount();
 }
 async function turn(direction){if(!rendition||loading||adjusting||document.querySelector('dialog[open]'))return;
  if(direction<0&&current?.atStart||direction>0&&current?.atEnd)return;
@@ -151,6 +156,6 @@ async function start(){preferences();renderBookmarks();$('bookmark-button').disa
  status('');$('reader').setAttribute('aria-busy','false');
  schedulePageCount();
  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{rendition.resize();schedulePageCount();},160);});
- window.addEventListener('pagehide',()=>{if(current?.start?.cfi){saved.cfi=current.start.cfi;write(STATE,saved);}});
+ window.addEventListener('pagehide',saveReadingPosition);
  }catch(error){console.error(error);status(error.message+' Return to the Library or reload to try again.');$('reader').setAttribute('aria-busy','false');}}
 start();
