@@ -1,4 +1,5 @@
 import {edgeDirection,wholeBookPage,touchAction} from './page-navigation.js';
+import {resolveChapterLink} from './book-links.js';
 const $=id=>document.getElementById(id);
 const volumeId=new URLSearchParams(location.search).get('id')||'1';
 const PREFS='ml-epub-preferences-v1',STATE='ml-epub-vol-'+encodeURIComponent(volumeId)+'-v1';
@@ -15,45 +16,57 @@ if(volumeId==='1'&&stored.layoutVersion!==2){
  saved.cfi=migrate(saved.cfi);saved.bookmarks=saved.bookmarks.map(b=>({...b,cfi:migrate(b.cfi)}));
 }
 let book,rendition,toc=[],current=null,index=0,loading=false,resizeTimer,settingsTimer,settingsAnchor=null,adjusting=false;
-let pageCounts=null,countedLayout='',countTimer,countGeneration=0,bookRevision='vol-1',pageCounter=null,countingLayout='';
+let pageCounts=[],countedLayout='',bookRevision='';
+let contentsBuilt=false,activeContentsIndex=-1,savePositionTimer;
+let readerReady=false,preparing=null;
 function status(message){$('status').textContent=message;}
 function applyContent(contents){const root=contents.document.documentElement,palette=palettes[settings.theme];root.dataset.readerMode='paginated';contents.document.body.style.touchAction='pan-y';root.style.setProperty('font-size',settings.size+'px','important');root.style.setProperty('--reader-font',families[settings.font]);root.style.setProperty('--reader-leading',settings.leading);root.style.setProperty('--reader-ink',palette.ink);root.style.setProperty('--reader-link',palette.link);root.style.setProperty('background-color',palette.paper,'important');contents.document.body.style.setProperty('background-color',palette.paper,'important');}
 function preferences(){document.body.dataset.theme=settings.theme;$('font-size').value=settings.size;$('font-size-value').textContent=settings.size+'px';$('font-family').value=settings.font;$('line-spacing').value=settings.leading;for(const b of document.querySelectorAll('[data-theme-choice]'))b.setAttribute('aria-pressed',String(b.dataset.themeChoice===settings.theme));for(const contents of rendition?.getContents()||[])applyContent(contents);}
 function closeDialogs(){for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();}
 for(const [button,dialog]of [['contents-button','contents-dialog'],['settings-button','settings-dialog']])$(button).addEventListener('click',()=>{$(dialog).showModal();});
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('click',event=>{if(event.target===dialog||event.target.closest('[data-close]'))dialog.close();});}
-function savePreferences(){settingsAnchor=settingsAnchor||current?.start?.cfi;adjusting=true;preferences();write(PREFS,settings);clearTimeout(settingsTimer);settingsTimer=setTimeout(async()=>{const anchor=settingsAnchor;settingsAnchor=null;try{if(rendition&&!loading){rendition.resize();if(anchor)await rendition.display(anchor);}}catch{}finally{adjusting=false;if(current)relocated(current);schedulePageCount();}},220);}
+function savePreferences(){settingsAnchor=settingsAnchor||current?.start?.cfi;adjusting=true;preferences();write(PREFS,settings);clearTimeout(settingsTimer);settingsTimer=setTimeout(async()=>{const anchor=settingsAnchor;settingsAnchor=null;try{if(rendition&&!loading){rendition.resize();await prepareBook(anchor);}}catch{}finally{adjusting=false;if(current)relocated(current);updatePageLabel();}},220);}
 $('font-size').addEventListener('input',e=>{settings.size=Number(e.target.value);savePreferences();});
 for(const [id,key]of [['font-family','font'],['line-spacing','leading']])$(id).addEventListener('change',e=>{settings[key]=e.target.value;savePreferences();});
 for(const button of document.querySelectorAll('[data-theme-choice]'))button.addEventListener('click',()=>{settings.theme=button.dataset.themeChoice;savePreferences();});
 $('reset-settings').addEventListener('click',()=>{Object.assign(settings,defaults);savePreferences();});
 function flatten(entries){return entries.flatMap(e=>[{label:e.label.trim(),href:e.href},...flatten(e.subitems||[])]);}
-function renderContents(){const list=$('chapter-list');list.replaceChildren();toc.forEach((chapter,i)=>{const b=document.createElement('button');b.type='button';b.textContent=chapter.label;b.classList.toggle('current',i===index);if(i===index)b.setAttribute('aria-current','location');b.addEventListener('click',()=>{closeDialogs();go(chapter.href);});list.append(b);});}
+function renderContents(){
+ const list=$('chapter-list');
+ if(!contentsBuilt){
+  const fragment=document.createDocumentFragment();
+  toc.forEach(chapter=>{const button=document.createElement('button');button.type='button';button.textContent=chapter.label;button.addEventListener('click',()=>{closeDialogs();go(chapter.href);});fragment.append(button);});
+  list.replaceChildren(fragment);contentsBuilt=true;
+ }
+ if(activeContentsIndex===index)return;
+ const previous=list.children[activeContentsIndex],next=list.children[index];
+ previous?.classList.remove('current');previous?.removeAttribute('aria-current');next?.classList.add('current');next?.setAttribute('aria-current','location');activeContentsIndex=index;
+}
 function renderBookmarks(){const list=$('bookmarks');list.replaceChildren();if(!saved.bookmarks.length){const p=document.createElement('p');p.textContent='Mark a passage with ☆ while you read.';list.append(p);}for(const mark of saved.bookmarks){const row=document.createElement('div'),jump=document.createElement('button'),remove=document.createElement('button');jump.textContent=mark.title;jump.addEventListener('click',()=>{closeDialogs();go(mark.cfi);});remove.textContent='×';remove.setAttribute('aria-label','Remove bookmark for '+mark.title);remove.addEventListener('click',()=>{saved.bookmarks=saved.bookmarks.filter(b=>b.cfi!==mark.cfi);write(STATE,saved);renderBookmarks();updateBookmark();});row.append(jump,remove);list.append(row);}}
 function updateBookmark(){const marked=saved.bookmarks.some(b=>b.cfi===current?.start?.cfi);$('bookmark-button').textContent=marked?'★':'☆';$('bookmark-button').setAttribute('aria-pressed',String(marked));$('bookmark-button').setAttribute('aria-label',marked?'Remove bookmark at this position':'Bookmark this position');$('bookmark-button').disabled=!current;}
 $('bookmark-button').addEventListener('click',()=>{const cfi=current?.start?.cfi;if(!cfi)return;const existing=saved.bookmarks.some(b=>b.cfi===cfi);if(existing)saved.bookmarks=saved.bookmarks.filter(b=>b.cfi!==cfi);else saved.bookmarks.push({cfi,title:toc[index]?.label||'Reading position'});write(STATE,saved);renderBookmarks();updateBookmark();$('saved-status').textContent=existing?'Bookmark removed':'Bookmark saved';});
-async function go(target){if(!rendition||loading)return;clearTimeout(settingsTimer);settingsAnchor=null;adjusting=false;loading=true;$('reader').setAttribute('aria-busy','true');try{await rendition.display(target);status('');}catch(error){console.error(error);status('This reading position could not be opened. Choose a chapter from Contents.');}finally{loading=false;$('reader').setAttribute('aria-busy','false');}}
+async function go(target){if(!readerReady||!rendition||loading)return;clearTimeout(settingsTimer);settingsAnchor=null;adjusting=false;loading=true;$('reader').setAttribute('aria-busy','true');try{await rendition.display(target);status('');}catch(error){console.error(error);status('This reading position could not be opened. Choose a chapter from Contents.');}finally{loading=false;$('reader').setAttribute('aria-busy','false');}}
 function chapterIndex(location){const href=location?.start?.href||'';const match=toc.findIndex(c=>href.endsWith(c.href.split('#')[0]));return match<0?Math.max(0,location?.start?.index||0):match;}
 function saveReadingPosition(){
- if(!current?.start?.cfi)return;
+ if(!readerReady||!current?.start?.cfi)return;
  saved.cfi=current.start.cfi;write(STATE,saved);
  write('ml-reading-current',{id:volumeId,cfi:saved.cfi,chapter:toc[index]?.label||'',updatedAt:Date.now()});
 }
-function relocated(location){current=location;index=chapterIndex(location);$('chapter-name').textContent=toc[index]?.label||('Volume '+volumeId);
+function relocated(location){current=location;index=chapterIndex(location);if(!readerReady)return;$('chapter-name').textContent=toc[index]?.label||('Volume '+volumeId);
  const pages=location.start.displayed||{};
- if(pageCounts&&countedLayout===layoutKey())pageCounts[index]=pages.total||pageCounts[index];
+ rememberChapterPages(location.start.index,pages.total);
  updatePageLabel();
  $('previous').disabled=!!location.atStart;$('next').disabled=!!location.atEnd;
  for(const [id,label]of [['previous','Previous'],['next','Next']]){$(id).setAttribute('aria-label',label+' page');$(id).querySelector('span').textContent=label+' page';}
- $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;saveReadingPosition();schedulePageCount();
+ $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;clearTimeout(savePositionTimer);savePositionTimer=setTimeout(saveReadingPosition,180);
 }
-async function turn(direction){if(!rendition||loading||adjusting||document.querySelector('dialog[open]'))return;
+async function turn(direction){if(!readerReady||!rendition||loading||adjusting||document.querySelector('dialog[open]'))return;
  if(direction<0&&current?.atStart||direction>0&&current?.atEnd)return;
  loading=true;$('reader').setAttribute('aria-busy','true');
  try{await (direction>0?rendition.next():rendition.prev());status('');}catch(error){console.error(error);status('Could not turn this page. Select a chapter from Contents to continue.');}finally{loading=false;$('reader').setAttribute('aria-busy','false');}
 }
 $('previous').addEventListener('click',()=>turn(-1));$('next').addEventListener('click',()=>turn(1));$('edge-previous').addEventListener('click',()=>turn(-1));$('edge-next').addEventListener('click',()=>turn(1));
-function pageKey(event){if(document.querySelector('dialog[open]')||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||event.target.closest('input,select,textarea,[contenteditable=true]'))return;
+function pageKey(event){if(!readerReady||document.querySelector('dialog[open]')||event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||event.target.closest('input,select,textarea,[contenteditable=true]'))return;
  const direction=['ArrowRight','PageDown'].includes(event.key)?1:['ArrowLeft','PageUp'].includes(event.key)?-1:0;if(direction){event.preventDefault();turn(direction);}
 }
 document.addEventListener('keydown',pageKey);
@@ -100,47 +113,85 @@ function connectPageInput(doc,frame=null){
  doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap(event,doc,frame);});
 }
 connectPageInput(document);
-function connectContent(contents){applyContent(contents);const doc=contents.document;doc.addEventListener('keydown',pageKey);
+function connectContent(contents){
+ applyContent(contents);const doc=contents.document;doc.addEventListener('keydown',pageKey);
  connectPageInput(doc,doc.defaultView.frameElement);
- for(const a of doc.querySelectorAll('a[href]'))if(/^https?:/i.test(a.getAttribute('href'))){a.target='_blank';a.rel='noopener noreferrer';}
+ const section=book.spine.get(contents.sectionIndex);
+ document.querySelector('.reader-stage').dataset.contentsPage=String(!!doc.querySelector('.reader-contents')||[...doc.querySelectorAll('nav')].some(nav=>(nav.getAttributeNS('http://www.idpf.org/2007/ops','type')||'').split(/\s+/).includes('toc')));
+ doc.addEventListener('click',event=>{
+  const anchor=event.target.closest?.('a[href]');if(!anchor)return;
+  const href=anchor.getAttribute('href');
+  const target=resolveChapterLink(href,section.url,book.spine.spineItems,location.origin);
+  if(target){event.preventDefault();event.stopImmediatePropagation();go(target);}
+  else if(!/^(https?:|mailto:)/i.test(href)){event.preventDefault();event.stopImmediatePropagation();status('This link does not point to an available chapter. Choose a chapter from Contents.');}
+ },true);
+ for(const anchor of doc.querySelectorAll('a[href]'))if(/^https?:/i.test(anchor.getAttribute('href'))&&!resolveChapterLink(anchor.getAttribute('href'),section.url,book.spine.spineItems,location.origin)){anchor.target='_blank';anchor.rel='noopener noreferrer';}
 }
-function layoutKey(){const box=$('reader').getBoundingClientRect();return JSON.stringify(['pages-v1',bookRevision,toc.length,Math.round(box.width),Math.round(box.height),settings.size,settings.font,settings.leading,devicePixelRatio]);}
-function updatePageLabel(){if(!current)return;const local=current.start.displayed||{};
- const progress=countedLayout===layoutKey()?wholeBookPage(pageCounts,index,local.page):null;
- $('chapter-progress').textContent=progress?`Volume page ${progress.page} of ${progress.total}`:'Volume pages · calculating…';
- $('section-progress').textContent=`Chapter page ${local.page||1} of ${local.total||1} · Section ${index+1}/${toc.length}`;
+function layoutKey(){const box=$('reader').getBoundingClientRect();return JSON.stringify(['pages-v2',bookRevision,book.spine.spineItems.length,Math.round(box.width),Math.round(box.height),settings.size,settings.font,settings.leading,devicePixelRatio]);}
+function rememberChapterPages(section,total){
+ const key=layoutKey();
+ if(key!==countedLayout){
+  const cached=read('ml-epub-page-counts-v2',{})[key];
+  pageCounts=Array.isArray(cached)&&cached.length===book.spine.spineItems.length?cached:Array(book.spine.spineItems.length).fill(null);countedLayout=key;
+ }
+ if(!Number.isInteger(section)||!Number.isInteger(total)||total<1||pageCounts[section]===total)return;
+ pageCounts[section]=total;
+ const cache=read('ml-epub-page-counts-v2',{});delete cache[key];cache[key]=pageCounts;
+ write('ml-epub-page-counts-v2',Object.fromEntries(Object.entries(cache).slice(-4)));
 }
-function schedulePageCount(){if(!rendition)return;
- const key=layoutKey();if(key===countedLayout||key===countingLayout)return;
- clearTimeout(countTimer);countGeneration++;pageCounts=null;countedLayout='';updatePageLabel();countTimer=setTimeout(()=>countBookPages(key,countGeneration),350);
+function updatePageLabel(){
+ if(!current)return;const local=current.start.displayed||{};
+ const progress=countedLayout===layoutKey()?wholeBookPage(pageCounts,current.start.index,local.page):null;
+ $('chapter-progress').textContent=progress?`Volume page ${progress.page} of ${progress.total}`:`Chapter page ${local.page||1} of ${local.total||1}`;
+ $('section-progress').textContent=progress?`Chapter page ${local.page||1} of ${local.total||1} · Section ${index+1}/${toc.length}`:`Section ${index+1} of ${toc.length} · Calculating volume pages…`;
 }
-const nextPaint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
-async function countBookPages(key,generation){
- if(generation!==countGeneration)return;
- const cache=read('ml-epub-page-counts-v1',{}),cached=cache[key];
- if(Array.isArray(cached)&&cached.length===toc.length&&wholeBookPage(cached,0,1)){pageCounts=cached;countedLayout=key;updatePageLabel();return;}
- const box=$('reader').getBoundingClientRect(),host=document.createElement('div');host.className='page-measure';host.setAttribute('aria-hidden','true');host.inert=true;host.style.width=box.width+'px';host.style.height=box.height+'px';document.body.append(host);
- let meter;countingLayout=key;
+// Use the one real reader to paginate behind its loading screen, then restore
+// the reading position. Nothing continues rendering in the background afterward.
+async function waitForPage(){
+ let timeout;
  try{
-  meter=new window.ePub.Rendition(book,{width:box.width,height:box.height,flow:'paginated',spread:'none',manager:'default',allowScriptedContent:false,allowPopups:false});pageCounter=meter;
-  meter.hooks.content.register(applyContent);await meter.attachTo(host);const counts=[];
-  for(const chapter of toc){
-   if(generation!==countGeneration||key!==layoutKey())return;
-   await meter.display(chapter.href);
-   for(const contents of meter.getContents()){
-    if(contents.document.fonts)await contents.document.fonts.ready;
-    await Promise.all([...contents.document.images].map(img=>img.complete?Promise.resolve():new Promise(resolve=>{const finish=()=>{clearTimeout(timeout);img.removeEventListener('load',finish);img.removeEventListener('error',finish);resolve();};const timeout=setTimeout(finish,8000);img.addEventListener('load',finish,{once:true});img.addEventListener('error',finish,{once:true});})));
-   }
-   await nextPaint();const location=await meter.currentLocation(),count=location?.start?.displayed?.total;
-   if(!Number.isInteger(count)||count<1)throw Error('Chapter page measurement unavailable.');counts.push(count);
-  }
-  if(generation!==countGeneration||key!==layoutKey())return;
-  if(current?.start?.displayed?.total)counts[index]=current.start.displayed.total;
-  pageCounts=counts;countedLayout=key;const entries=Object.entries(cache).slice(-7);write('ml-epub-page-counts-v1',Object.fromEntries([...entries,[key,counts]]));updatePageLabel();
- }catch(error){console.warn('Volume page count:',error);if(generation===countGeneration)$('chapter-progress').textContent='Volume page count unavailable';}
- finally{meter?.destroy();host.remove();if(pageCounter===meter)pageCounter=null;if(countingLayout===key)countingLayout='';}
+  await Promise.race([
+   Promise.all(rendition.getContents().flatMap(contents=>[contents.document.fonts?.ready,...[...contents.document.images].map(img=>img.complete?Promise.resolve():new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true});}))])),
+   new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error('Book images or fonts did not finish loading. Please retry.')),10000);})
+  ]);
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ }finally{clearTimeout(timeout);}
 }
-async function start(){preferences();renderBookmarks();$('bookmark-button').disabled=true;
+function preparingUI(active){
+ document.querySelector('.reader-stage').dataset.loading=String(active);
+ $('reader').inert=active;$('reader').setAttribute('aria-busy',String(active));
+ for(const id of ['contents-button','settings-button','bookmark-button','previous','next','edge-previous','edge-next','resume'])$(id).disabled=active;
+}
+async function prepareBook(target){
+ if(preparing)return preparing;
+ readerReady=false;loading=true;preparingUI(true);$('pagination-retry').hidden=true;
+ preparing=(async()=>{
+  while(true){
+   const key=layoutKey();rememberChapterPages(-1,0);
+   let complete=pageCounts.filter(n=>Number.isInteger(n)&&n>0).length;
+   $('pagination-progress').max=book.spine.spineItems.length;$('pagination-progress').value=complete;
+   $('pagination-message').textContent=complete===pageCounts.length?'Opening your saved page…':`Preparing volume pages · ${complete} of ${pageCounts.length} sections`;
+   for(let section=0;section<pageCounts.length;section++){
+    if(key!==layoutKey())break;
+    if(Number.isInteger(pageCounts[section])&&pageCounts[section]>0)continue;
+    await rendition.display(book.spine.spineItems[section].href);await waitForPage();
+    if(key!==layoutKey())break;
+    const position=await rendition.currentLocation(),total=position?.start?.displayed?.total;
+    if(!Number.isInteger(total)||total<1)throw Error('The volume page count could not be calculated. Please retry.');
+    rememberChapterPages(section,total);complete++;
+    $('pagination-progress').value=complete;$('pagination-message').textContent=`Preparing volume pages · ${complete} of ${pageCounts.length} sections`;
+   }
+   if(key!==layoutKey())continue;
+   try{await rendition.display(target||toc[0].href);}catch{await rendition.display(toc[0].href);}
+   await waitForPage();if(key!==layoutKey())continue;
+   current=await rendition.currentLocation();break;
+  }
+  readerReady=true;loading=false;preparingUI(false);status('');relocated(current);
+ })();
+ try{await preparing;}catch(error){$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;throw error;}finally{preparing=null;}
+}
+$('pagination-retry').addEventListener('click',()=>{if(book&&rendition)prepareBook(saved.cfi||toc[0].href).catch(console.error);else location.reload();});
+async function start(){preferences();renderBookmarks();preparingUI(true);
  try{if(typeof window.ePub!=='function')throw Error('The local reading library could not load.');
  const catalogResponse=await fetch('/books/catalog.json');if(!catalogResponse.ok)throw Error('The volume catalog could not load.');
  const catalog=await catalogResponse.json(),volume=catalog[volumeId];if(!volume)throw Error('This volume is not available yet.');
@@ -148,14 +199,15 @@ async function start(){preferences();renderBookmarks();$('bookmark-button').disa
  document.title=volume.title+' · Mystical Legends Reader';document.querySelector('.identity h1').textContent=volume.title;document.querySelector('.identity small').textContent=volume.label||'Mystical Legends';document.querySelector('.back').href='/books_main.html#book'+encodeURIComponent(volumeId);
  const response=await fetch(source);if(!response.ok)throw Error('The EPUB file could not load.');const bytes=await response.arrayBuffer();
  bookRevision=volume.source+':'+Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
- book=window.ePub(bytes,{replacements:'blobUrl'});await book.ready;const navigation=await book.loaded.navigation;toc=flatten(navigation.toc);if(!toc.length)throw Error('No reading chapters were found.');renderContents();
+ book=window.ePub(bytes,{replacements:'blobUrl'});await book.ready;const navigation=await book.loaded.navigation;toc=flatten(navigation.toc).map(chapter=>({...chapter,href:resolveChapterLink(chapter.href,book.path.resolve(book.packaging.navPath||'nav.xhtml'),book.spine.spineItems,location.origin)||chapter.href}));if(!toc.length)throw Error('No reading chapters were found.');renderContents();
  rendition=book.renderTo('reader',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default',allowScriptedContent:false,allowPopups:true});rendition.hooks.content.register(connectContent);rendition.on('relocated',relocated);rendition.on('displayError',error=>{console.error(error);status('This chapter could not load. Please reload or select another chapter.');});
  const chapter=Number(new URLSearchParams(location.search).get('chapter'));let target=chapter>0&&chapter<=toc.length?toc[chapter-1].href:saved.cfi||toc[0].href;
- try{await rendition.display(target);}catch{await rendition.display(toc[0].href);}
+ status('');await prepareBook(target);
  if(saved.cfi){$('resume').textContent='Start over';$('resume').hidden=false;}
  status('');$('reader').setAttribute('aria-busy','false');
- schedulePageCount();
- window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{rendition.resize();schedulePageCount();},160);});
- window.addEventListener('pagehide',saveReadingPosition);
- }catch(error){console.error(error);status(error.message+' Return to the Library or reload to try again.');$('reader').setAttribute('aria-busy','false');}}
+ updatePageLabel();
+ window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const anchor=current?.start?.cfi;rendition.resize();if(readerReady)prepareBook(anchor).catch(console.error);},160);});
+ window.addEventListener('pagehide',()=>{clearTimeout(savePositionTimer);saveReadingPosition();});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(savePositionTimer);saveReadingPosition();}});
+ }catch(error){console.error(error);status(error.message+' Return to the Library or reload to try again.');$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;}}
 start();

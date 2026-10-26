@@ -17,4 +17,19 @@ html,body{touch-action:pan-y}
 }
 
 #section-progress{display:block;font-size:10px;min-height:15px}
-.page-measure{position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;overflow:hidden}
+
+
+/* Contents links take precedence over tap zones on the printed Contents page. */
+.reader-stage[data-contents-page="true"] .page-edge{pointer-events:none;opacity:0}
+
+
+
+.reader-loading{display:none;position:absolute;inset:0;z-index:8;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center;background:var(--paper);color:var(--ink)}
+.reader-stage[data-loading="true"] .reader-loading{display:flex}
+.reader-stage[data-loading="true"] #reader{visibility:hidden}
+.reader-stage[data-loading="true"] .page-edge{pointer-events:none;opacity:0}
+.reader-loading-title{font:24px Georgia,serif}.reader-loading p{font-size:13px;color:var(--muted);margin:0}
+.reader-loading progress{width:min(280px,85%);height:6px;accent-color:var(--accent)}
+
+/* Keep pagination dimensions identical before and after the resume control appears. */
+.chapter-heading{height:48px;min-height:48px;flex-shrink:0}
