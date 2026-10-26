@@ -1,5 +1,5 @@
 import {edgeDirection,wholeBookPage,touchAction} from './page-navigation.js';
-import {resolveChapterLink} from './book-links.js';
+import {resolveChapterLink,readerChapterURL} from './book-links.js';
 const $=id=>document.getElementById(id);
 const volumeId=new URLSearchParams(location.search).get('id')||'1';
 const PREFS='ml-epub-preferences-v1',STATE='ml-epub-vol-'+encodeURIComponent(volumeId)+'-v1';
@@ -20,7 +20,7 @@ let pageCounts=[],countedLayout='',bookRevision='';
 let contentsBuilt=false,activeContentsIndex=-1,savePositionTimer;
 let readerReady=false,preparing=null;
 function status(message){$('status').textContent=message;}
-function applyContent(contents){const root=contents.document.documentElement,palette=palettes[settings.theme];root.dataset.readerMode='paginated';contents.document.body.style.touchAction='pan-y';root.style.setProperty('font-size',settings.size+'px','important');root.style.setProperty('--reader-font',families[settings.font]);root.style.setProperty('--reader-leading',settings.leading);root.style.setProperty('--reader-ink',palette.ink);root.style.setProperty('--reader-link',palette.link);root.style.setProperty('background-color',palette.paper,'important');contents.document.body.style.setProperty('background-color',palette.paper,'important');}
+function applyContent(contents){const root=contents.document.documentElement,palette=palettes[settings.theme];root.dataset.readerMode='paginated';contents.document.body.style.touchAction='pan-y';contents.document.body.style.setProperty('user-select','text','important');contents.document.body.style.setProperty('-webkit-user-select','text','important');contents.document.body.style.setProperty('-webkit-touch-callout','default','important');root.style.setProperty('font-size',settings.size+'px','important');root.style.setProperty('--reader-font',families[settings.font]);root.style.setProperty('--reader-leading',settings.leading);root.style.setProperty('--reader-ink',palette.ink);root.style.setProperty('--reader-link',palette.link);root.style.setProperty('background-color',palette.paper,'important');contents.document.body.style.setProperty('background-color',palette.paper,'important');}
 function preferences(){document.body.dataset.theme=settings.theme;$('font-size').value=settings.size;$('font-size-value').textContent=settings.size+'px';$('font-family').value=settings.font;$('line-spacing').value=settings.leading;for(const b of document.querySelectorAll('[data-theme-choice]'))b.setAttribute('aria-pressed',String(b.dataset.themeChoice===settings.theme));for(const contents of rendition?.getContents()||[])applyContent(contents);}
 function closeDialogs(){for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();}
 for(const [button,dialog]of [['contents-button','contents-dialog'],['settings-button','settings-dialog']])$(button).addEventListener('click',()=>{$(dialog).showModal();});
@@ -92,21 +92,23 @@ function connectPageInput(doc,frame=null){
  preventReaderZoom(doc);
  let pointer=null,ignoreClickUntil=0;
  const blocked=target=>target?.closest?.('a,button,input,select,textarea,[contenteditable=true]');
- const begin=(point,event)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now()};};
+ const begin=(point,event)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now(),moved:0};};
  const finish=(point,event)=>{
   if(!pointer)return;
   const start=pointer;pointer=null;ignoreClickUntil=Date.now()+700;
   if(blocked(event.target)||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
   const action=touchAction(point.clientX-start.x,point.clientY-start.y,Date.now()-start.time);
+  if(action==='tap'&&start.moved>16)return;
   if(action==='next'||action==='previous'){event.preventDefault();turn(action==='next'?1:-1);}
   else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,target:event.target,pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
  };
- if(doc.defaultView.PointerEvent){
+ if(!('ontouchstart' in doc.defaultView)&&doc.defaultView.PointerEvent){
   doc.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')begin(event,event);});
   doc.addEventListener('pointerup',event=>{if(event.pointerType==='touch')finish(event,event);});
   doc.addEventListener('pointercancel',()=>{pointer=null;});
  }else{
   doc.addEventListener('touchstart',event=>{if(event.touches.length===1)begin(event.touches[0],event);else pointer=null;},{passive:true});
+  doc.addEventListener('touchmove',event=>{if(pointer&&event.touches.length===1)pointer.moved=Math.max(pointer.moved,Math.abs(event.touches[0].clientX-pointer.x),Math.abs(event.touches[0].clientY-pointer.y));else pointer=null;},{passive:true});
   doc.addEventListener('touchend',event=>{if(event.changedTouches.length===1)finish(event.changedTouches[0],event);},{passive:false});
   doc.addEventListener('touchcancel',()=>{pointer=null;});
  }
@@ -118,14 +120,20 @@ function connectContent(contents){
  connectPageInput(doc,doc.defaultView.frameElement);
  const section=book.spine.get(contents.sectionIndex);
  document.querySelector('.reader-stage').dataset.contentsPage=String(!!doc.querySelector('.reader-contents')||[...doc.querySelectorAll('nav')].some(nav=>(nav.getAttributeNS('http://www.idpf.org/2007/ops','type')||'').split(/\s+/).includes('toc')));
+ // Store the archive target separately from the real, shareable link address.
+ for(const anchor of doc.querySelectorAll('a[href]')){
+  const raw=anchor.getAttribute('href');
+  const target=anchor.dataset.epubTarget||resolveChapterLink(raw,section.url,book.spine.spineItems,location.origin);
+  if(target){anchor.onclick=null;anchor.dataset.epubTarget=target;anchor.href=readerChapterURL(target,volumeId,location.origin);anchor.target='_self';}
+  else if(/^https?:/i.test(raw)){anchor.target='_blank';anchor.rel='noopener noreferrer';}
+ }
  doc.addEventListener('click',event=>{
   const anchor=event.target.closest?.('a[href]');if(!anchor)return;
-  const href=anchor.getAttribute('href');
-  const target=resolveChapterLink(href,section.url,book.spine.spineItems,location.origin);
-  if(target){event.preventDefault();event.stopImmediatePropagation();go(target);}
-  else if(!/^(https?:|mailto:)/i.test(href)){event.preventDefault();event.stopImmediatePropagation();status('This link does not point to an available chapter. Choose a chapter from Contents.');}
+  if(anchor.dataset.epubTarget){
+   if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   event.preventDefault();event.stopImmediatePropagation();go(anchor.dataset.epubTarget);
+  }else if(!/^(https?:|mailto:)/i.test(anchor.getAttribute('href'))){event.preventDefault();event.stopImmediatePropagation();status('This link does not point to an available chapter. Choose a chapter from Contents.');}
  },true);
- for(const anchor of doc.querySelectorAll('a[href]'))if(/^https?:/i.test(anchor.getAttribute('href'))&&!resolveChapterLink(anchor.getAttribute('href'),section.url,book.spine.spineItems,location.origin)){anchor.target='_blank';anchor.rel='noopener noreferrer';}
 }
 function layoutKey(){const box=$('reader').getBoundingClientRect();return JSON.stringify(['pages-v2',bookRevision,book.spine.spineItems.length,Math.round(box.width),Math.round(box.height),settings.size,settings.font,settings.leading,devicePixelRatio]);}
 function rememberChapterPages(section,total){
@@ -201,7 +209,9 @@ async function start(){preferences();renderBookmarks();preparingUI(true);
  bookRevision=volume.source+':'+Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
  book=window.ePub(bytes,{replacements:'blobUrl'});await book.ready;const navigation=await book.loaded.navigation;toc=flatten(navigation.toc).map(chapter=>({...chapter,href:resolveChapterLink(chapter.href,book.path.resolve(book.packaging.navPath||'nav.xhtml'),book.spine.spineItems,location.origin)||chapter.href}));if(!toc.length)throw Error('No reading chapters were found.');renderContents();
  rendition=book.renderTo('reader',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default',allowScriptedContent:false,allowPopups:true});rendition.hooks.content.register(connectContent);rendition.on('relocated',relocated);rendition.on('displayError',error=>{console.error(error);status('This chapter could not load. Please reload or select another chapter.');});
- const chapter=Number(new URLSearchParams(location.search).get('chapter'));let target=chapter>0&&chapter<=toc.length?toc[chapter-1].href:saved.cfi||toc[0].href;
+ const params=new URLSearchParams(location.search),chapter=Number(params.get('chapter'));
+ const requested=book.spine.spineItems.find(section=>section.href===params.get('section'));
+ let target=requested?requested.href+location.hash:chapter>0&&chapter<=toc.length?toc[chapter-1].href:saved.cfi||toc[0].href;
  status('');await prepareBook(target);
  if(saved.cfi){$('resume').textContent='Start over';$('resume').hidden=false;}
  status('');$('reader').setAttribute('aria-busy','false');

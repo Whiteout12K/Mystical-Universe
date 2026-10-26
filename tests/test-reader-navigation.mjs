@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {edgeDirection,wholeBookPage,touchAction} from '../books/page-navigation.js';
-import {resolveChapterLink} from '../books/book-links.js';
+import {resolveChapterLink,readerChapterURL} from '../books/book-links.js';
 test('phone page-turn zones reach inward while the center stays available',()=>{
  assert.equal(edgeDirection(80,390),-1);assert.equal(edgeDirection(310,390),1);assert.equal(edgeDirection(195,390),0);
  assert.equal(edgeDirection(170,1280),-1);assert.equal(edgeDirection(1110,1280),1);assert.equal(edgeDirection(640,1280),0);assert.equal(edgeDirection(-1,390),0);assert.equal(edgeDirection(391,390),0);
@@ -58,4 +58,17 @@ print(json.dumps(out))
   assert.ok(fixture.links.length>0);
   for(const link of fixture.links)assert.ok(resolveChapterLink(link.href,link.from,fixture.sections,'https://mysticallegends.org'),fixture.file+': '+link.href);
  }
+});
+
+test('Contents link addresses reopen the reader on real domains and preserve the target section and fragment',()=>{
+ for(const origin of ['https://mysticallegends.org','https://mysticallegends.pages.dev','http://localhost:8765']){
+  const url=new URL(readerChapterURL('chapter-005.xhtml#h.scene','2',origin));
+  assert.equal(url.origin,origin);assert.equal(url.pathname,'/books/reader.html');assert.equal(url.searchParams.get('id'),'2');assert.equal(url.searchParams.get('section'),'chapter-005.xhtml');assert.equal(url.hash,'#h.scene');
+ }
+ const encoded=new URL(readerChapterURL('Text/chapter 2.xhtml#scene-2','1','https://mysticallegends.org'));
+ assert.equal(encoded.searchParams.get('section'),'Text/chapter 2.xhtml');
+});
+test('holding at an edge leaves native selection and the copy menu available',()=>{
+ assert.equal(touchAction(1,1,350),null);assert.equal(touchAction(1,1,500),null);assert.equal(touchAction(1,1,650),null);
+ assert.equal(touchAction(1,1,180),'tap');assert.equal(touchAction(0,0,900),null);
 });

@@ -9,3 +9,14 @@ export function resolveChapterLink(href,currentDocument,sections,origin){
   return section?section.href+target.hash:null;
  }catch{return null;}
 }
+
+// Native link actions (including Safari's Open Link and long-press menu) must
+// point to the reader, not to an unextracted chapter on the website's filesystem.
+export function readerChapterURL(target,volumeId,origin){
+ const url=new URL('/books/reader.html',origin);
+ const hash=target.indexOf('#');
+ url.searchParams.set('id',volumeId);
+ url.searchParams.set('section',hash<0?target:target.slice(0,hash));
+ if(hash>=0)url.hash=target.slice(hash);
+ return url.href;
+}

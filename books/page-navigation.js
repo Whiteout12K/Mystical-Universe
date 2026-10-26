@@ -12,7 +12,7 @@ export function wholeBookPage(counts,section,page){
 // Small finger movement is a tap; dragging vertically or holding selects text.
 export function touchAction(dx,dy,elapsed){
  if(elapsed<0||elapsed>650)return null;
- if(Math.abs(dx)<=16&&Math.abs(dy)<=16)return 'tap';
+ if(Math.abs(dx)<=16&&Math.abs(dy)<=16)return elapsed<=300?'tap':null;
  if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.5)return dx<0?'next':'previous';
  return null;
 }
