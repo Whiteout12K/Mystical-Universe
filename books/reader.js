@@ -73,9 +73,19 @@ document.addEventListener('keydown',pageKey);
 $('resume').addEventListener('click',()=>{go(toc[0].href);$('resume').hidden=true;});
 // Use physical screen edges even when the book's iframe is centered or paged sideways.
 function edgeTap(event,sourceDocument,frame=null){
- if(event.defaultPrevented||event.pointerType!=='touch'&&event.detail>1||document.querySelector('dialog[open]')||sourceDocument.getSelection()?.toString()||rendition?.getContents().some(c=>c.document.getSelection()?.toString())||event.target.closest('a,button,input,select,textarea,[contenteditable=true]'))return;
- const frameBounds=(sourceDocument===document?null:sourceDocument.defaultView?.frameElement||frame)?.getBoundingClientRect(),x=event.clientX+(frameBounds?.left||0),y=event.clientY+(frameBounds?.top||0),bounds=$('reader').getBoundingClientRect(),width=document.documentElement.clientWidth;
- if(y<bounds.top||y>bounds.bottom)return;
+ if(!readerReady||event.defaultPrevented||event.pointerType!=='touch'&&event.detail>1||document.querySelector('dialog[open]')||sourceDocument.getSelection()?.toString()||rendition?.getContents().some(c=>c.document.getSelection()?.toString())||event.target?.closest?.('a,button,input,select,textarea,[contenteditable=true]'))return;
+ const insideBook=sourceDocument!==document,frameBounds=(insideBook?sourceDocument.defaultView?.frameElement||frame:null)?.getBoundingClientRect();
+ const width=document.documentElement.clientWidth;
+ let x=event.clientX+(frameBounds?.left||0);
+ // Safari touch coordinates can already refer to the top-level viewport while
+ // the paginated iframe itself is translated off-screen. Screen X is stable.
+ if(insideBook&&event.pointerType==='touch'&&Number.isFinite(event.screenX)&&(event.screenX>0||event.clientX===0)){
+  const screenX=event.screenX-(window.screenX||0);
+  if(screenX>=0&&screenX<=width)x=screenX;
+ }
+ if((x<0||x>width)&&event.clientX>=0&&event.clientX<=width)x=event.clientX;
+ // An event from the book document is already inside the reading surface.
+ if(!insideBook){const bounds=$('reader').getBoundingClientRect();if(event.clientY<bounds.top||event.clientY>bounds.bottom)return;}
  const direction=edgeDirection(x,width);if(direction){event.preventDefault();turn(direction);}
 }
 // Handle touch release directly: mobile EPUB views may suppress synthetic clicks.
@@ -92,26 +102,27 @@ function connectPageInput(doc,frame=null){
  preventReaderZoom(doc);
  let pointer=null,ignoreClickUntil=0;
  const blocked=target=>target?.closest?.('a,button,input,select,textarea,[contenteditable=true]');
- const begin=(point,event)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now(),moved:0};};
- const finish=(point,event)=>{
-  if(!pointer)return;
+ const begin=(point,event,kind)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now(),moved:0,kind,selected:!!doc.getSelection()?.toString()};};
+ const move=point=>{if(pointer)pointer.moved=Math.max(pointer.moved,Math.abs(point.clientX-pointer.x),Math.abs(point.clientY-pointer.y));};
+ const finish=(point,event,kind)=>{
+  if(!pointer||pointer.kind!==kind)return;
   const start=pointer;pointer=null;ignoreClickUntil=Date.now()+700;
-  if(blocked(event.target)||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
+  if(start.selected||blocked(event.target)||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
   const action=touchAction(point.clientX-start.x,point.clientY-start.y,Date.now()-start.time);
   if(action==='tap'&&start.moved>16)return;
   if(action==='next'||action==='previous'){event.preventDefault();turn(action==='next'?1:-1);}
-  else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,target:event.target,pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
+  else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,screenX:point.screenX,target:event.target,pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
  };
- if(!('ontouchstart' in doc.defaultView)&&doc.defaultView.PointerEvent){
-  doc.addEventListener('pointerdown',event=>{if(event.pointerType==='touch')begin(event,event);});
-  doc.addEventListener('pointerup',event=>{if(event.pointerType==='touch')finish(event,event);});
-  doc.addEventListener('pointercancel',()=>{pointer=null;});
- }else{
-  doc.addEventListener('touchstart',event=>{if(event.touches.length===1)begin(event.touches[0],event);else pointer=null;},{passive:true});
-  doc.addEventListener('touchmove',event=>{if(pointer&&event.touches.length===1)pointer.moved=Math.max(pointer.moved,Math.abs(event.touches[0].clientX-pointer.x),Math.abs(event.touches[0].clientY-pointer.y));else pointer=null;},{passive:true});
-  doc.addEventListener('touchend',event=>{if(event.changedTouches.length===1)finish(event.changedTouches[0],event);},{passive:false});
-  doc.addEventListener('touchcancel',()=>{pointer=null;});
- }
+ // Listen to both APIs. A native touchstart takes ownership, so pointerup and
+ // the compatibility click cannot turn the page a second time.
+ doc.addEventListener('pointerdown',event=>{if(event.pointerType==='touch'){if(event.isPrimary===false)pointer=null;else if(pointer?.kind!=='touch')begin(event,event,'pointer');}},{passive:true,capture:true});
+ doc.addEventListener('pointermove',event=>{if(pointer?.kind==='pointer'&&event.pointerType==='touch')move(event);},{passive:true,capture:true});
+ doc.addEventListener('pointerup',event=>{if(event.pointerType==='touch')finish(event,event,'pointer');},{passive:false,capture:true});
+ doc.addEventListener('pointercancel',()=>{if(pointer?.kind==='pointer')pointer=null;},{passive:true,capture:true});
+ doc.addEventListener('touchstart',event=>{if(event.touches.length===1)begin(event.touches[0],event,'touch');else pointer=null;},{passive:true,capture:true});
+ doc.addEventListener('touchmove',event=>{if(event.touches.length===1)move(event.touches[0]);else pointer=null;},{passive:true,capture:true});
+ doc.addEventListener('touchend',event=>{if(event.touches.length===0&&event.changedTouches.length===1)finish(event.changedTouches[0],event,'touch');else pointer=null;},{passive:false,capture:true});
+ doc.addEventListener('touchcancel',()=>{pointer=null;},{passive:true,capture:true});
  doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap(event,doc,frame);});
 }
 connectPageInput(document);
@@ -124,13 +135,13 @@ function connectContent(contents){
  for(const anchor of doc.querySelectorAll('a[href]')){
   const raw=anchor.getAttribute('href');
   const target=anchor.dataset.epubTarget||resolveChapterLink(raw,section.url,book.spine.spineItems,location.origin);
-  if(target){anchor.onclick=null;anchor.dataset.epubTarget=target;anchor.href=readerChapterURL(target,volumeId,location.origin);anchor.target='_self';}
+  if(target){anchor.onclick=null;anchor.dataset.epubTarget=target;anchor.href=readerChapterURL(target,volumeId,location.origin);anchor.target='_top';}
   else if(/^https?:/i.test(raw)){anchor.target='_blank';anchor.rel='noopener noreferrer';}
  }
  doc.addEventListener('click',event=>{
   const anchor=event.target.closest?.('a[href]');if(!anchor)return;
   if(anchor.dataset.epubTarget){
-   if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+   if(event.button>0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
    event.preventDefault();event.stopImmediatePropagation();go(anchor.dataset.epubTarget);
   }else if(!/^(https?:|mailto:)/i.test(anchor.getAttribute('href'))){event.preventDefault();event.stopImmediatePropagation();status('This link does not point to an available chapter. Choose a chapter from Contents.');}
  },true);
@@ -199,6 +210,13 @@ async function prepareBook(target){
  try{await preparing;}catch(error){$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;throw error;}finally{preparing=null;}
 }
 $('pagination-retry').addEventListener('click',()=>{if(book&&rendition)prepareBook(saved.cfi||toc[0].href).catch(console.error);else location.reload();});
+// Give native chapter links a user-activated route out of the script-free
+// EPUB frame. Set this before loading srcdoc; book scripts remain disabled.
+function nativeNavigationView(BaseView){
+ return class extends BaseView{
+  create(){const frame=super.create();frame.sandbox.add('allow-top-navigation-by-user-activation');return frame;}
+ };
+}
 async function start(){preferences();renderBookmarks();preparingUI(true);
  try{if(typeof window.ePub!=='function')throw Error('The local reading library could not load.');
  const catalogResponse=await fetch('/books/catalog.json');if(!catalogResponse.ok)throw Error('The volume catalog could not load.');
@@ -208,7 +226,8 @@ async function start(){preferences();renderBookmarks();preparingUI(true);
  const response=await fetch(source);if(!response.ok)throw Error('The EPUB file could not load.');const bytes=await response.arrayBuffer();
  bookRevision=volume.source+':'+Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
  book=window.ePub(bytes,{replacements:'blobUrl'});await book.ready;const navigation=await book.loaded.navigation;toc=flatten(navigation.toc).map(chapter=>({...chapter,href:resolveChapterLink(chapter.href,book.path.resolve(book.packaging.navPath||'nav.xhtml'),book.spine.spineItems,location.origin)||chapter.href}));if(!toc.length)throw Error('No reading chapters were found.');renderContents();
- rendition=book.renderTo('reader',{width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default',allowScriptedContent:false,allowPopups:true});rendition.hooks.content.register(connectContent);rendition.on('relocated',relocated);rendition.on('displayError',error=>{console.error(error);status('This chapter could not load. Please reload or select another chapter.');});
+ const ReaderView=nativeNavigationView(window.ePub.Rendition.prototype.requireView('iframe'));
+ rendition=book.renderTo('reader',{view:ReaderView,width:'100%',height:'100%',flow:'paginated',spread:'none',manager:'default',allowScriptedContent:false,allowPopups:true});rendition.hooks.content.register(connectContent);rendition.on('relocated',relocated);rendition.on('displayError',error=>{console.error(error);status('This chapter could not load. Please reload or select another chapter.');});
  const params=new URLSearchParams(location.search),chapter=Number(params.get('chapter'));
  const requested=book.spine.spineItems.find(section=>section.href===params.get('section'));
  let target=requested?requested.href+location.hash:chapter>0&&chapter<=toc.length?toc[chapter-1].href:saved.cfi||toc[0].href;
