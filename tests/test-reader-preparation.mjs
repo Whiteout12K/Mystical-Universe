@@ -9,7 +9,7 @@ async function run(counts){
  const state={preparing:null,readerReady:true,loading:false,pageCounts:[...counts],current:null,
   $:id=>{if(!nodes.has(id))nodes.set(id,{});return nodes.get(id)},
   book:{spine:{spineItems:[{href:'a.xhtml'},{href:'b.xhtml'},{href:'c.xhtml'}]}},toc:[{href:'a.xhtml'}],
-  preparingUI:active=>locks.push(active),layoutKey:()=> 'fixed layout',
+  saveReadingPosition:()=>{},surface:{ready:async()=>{}},syncSurface:()=>{},preparingUI:active=>locks.push(active),layoutKey:()=> 'fixed layout',
   rememberChapterPages:(index,total)=>{if(index>=0)state.pageCounts[index]=total},
   rendition:{display:async href=>{calls.push(href);section=['a.xhtml','b.xhtml','c.xhtml'].indexOf(href)},currentLocation:async()=>({start:{index:section,displayed:{page:1,total:[3,4,5][section]}}})},
   waitForPage:async()=>{},status:()=>{},relocated:()=>{}};

@@ -1,5 +1,6 @@
 import {edgeDirection,wholeBookPage,touchAction} from './page-navigation.js';
 import {resolveChapterLink,readerChapterURL} from './book-links.js';
+import {ReaderSurface} from './reader-surface.js';
 const $=id=>document.getElementById(id);
 const volumeId=new URLSearchParams(location.search).get('id')||'1';
 const PREFS='ml-epub-preferences-v1',STATE='ml-epub-vol-'+encodeURIComponent(volumeId)+'-v1';
@@ -17,15 +18,21 @@ if(volumeId==='1'&&stored.layoutVersion!==2){
 }
 let book,rendition,toc=[],current=null,index=0,loading=false,resizeTimer,settingsTimer,settingsAnchor=null,adjusting=false;
 let pageCounts=[],countedLayout='',bookRevision='';
-let contentsBuilt=false,activeContentsIndex=-1,savePositionTimer;
+let contentsBuilt=false,activeContentsIndex=-1;
 let readerReady=false,preparing=null;
+const surface=new ReaderSurface($('reader-surface'),{navigate:target=>go(target)});
+function syncSurface(){
+ const all=rendition?.getContents()||[],contents=all.find(content=>content.sectionIndex===current?.start?.index)||all[0];
+ const frame=contents?.document.defaultView?.frameElement;
+ surface.sync(contents,frame,JSON.stringify(settings));
+}
 function status(message){$('status').textContent=message;}
 function applyContent(contents){const root=contents.document.documentElement,palette=palettes[settings.theme];root.dataset.readerMode='paginated';contents.document.body.style.touchAction='pan-y';contents.document.body.style.setProperty('user-select','text','important');contents.document.body.style.setProperty('-webkit-user-select','text','important');contents.document.body.style.setProperty('-webkit-touch-callout','default','important');root.style.setProperty('font-size',settings.size+'px','important');root.style.setProperty('--reader-font',families[settings.font]);root.style.setProperty('--reader-leading',settings.leading);root.style.setProperty('--reader-ink',palette.ink);root.style.setProperty('--reader-link',palette.link);root.style.setProperty('background-color',palette.paper,'important');contents.document.body.style.setProperty('background-color',palette.paper,'important');}
 function preferences(){document.body.dataset.theme=settings.theme;$('font-size').value=settings.size;$('font-size-value').textContent=settings.size+'px';$('font-family').value=settings.font;$('line-spacing').value=settings.leading;for(const b of document.querySelectorAll('[data-theme-choice]'))b.setAttribute('aria-pressed',String(b.dataset.themeChoice===settings.theme));for(const contents of rendition?.getContents()||[])applyContent(contents);}
 function closeDialogs(){for(const dialog of document.querySelectorAll('dialog[open]'))dialog.close();}
 for(const [button,dialog]of [['contents-button','contents-dialog'],['settings-button','settings-dialog']])$(button).addEventListener('click',()=>{$(dialog).showModal();});
 for(const dialog of document.querySelectorAll('dialog')){dialog.addEventListener('click',event=>{if(event.target===dialog||event.target.closest('[data-close]'))dialog.close();});}
-function savePreferences(){settingsAnchor=settingsAnchor||current?.start?.cfi;adjusting=true;preferences();write(PREFS,settings);clearTimeout(settingsTimer);settingsTimer=setTimeout(async()=>{const anchor=settingsAnchor;settingsAnchor=null;try{if(rendition&&!loading){rendition.resize();await prepareBook(anchor);}}catch{}finally{adjusting=false;if(current)relocated(current);updatePageLabel();}},220);}
+function savePreferences(){saveReadingPosition();settingsAnchor=settingsAnchor||current?.start?.cfi;adjusting=true;preferences();write(PREFS,settings);clearTimeout(settingsTimer);settingsTimer=setTimeout(async()=>{const anchor=settingsAnchor;settingsAnchor=null;try{if(rendition&&!loading){rendition.resize();await prepareBook(anchor);}}catch{}finally{adjusting=false;if(current)relocated(current);updatePageLabel();}},220);}
 $('font-size').addEventListener('input',e=>{settings.size=Number(e.target.value);savePreferences();});
 for(const [id,key]of [['font-family','font'],['line-spacing','leading']])$(id).addEventListener('change',e=>{settings[key]=e.target.value;savePreferences();});
 for(const button of document.querySelectorAll('[data-theme-choice]'))button.addEventListener('click',()=>{settings.theme=button.dataset.themeChoice;savePreferences();});
@@ -52,13 +59,13 @@ function saveReadingPosition(){
  saved.cfi=current.start.cfi;write(STATE,saved);
  write('ml-reading-current',{id:volumeId,cfi:saved.cfi,chapter:toc[index]?.label||'',updatedAt:Date.now()});
 }
-function relocated(location){current=location;index=chapterIndex(location);if(!readerReady)return;$('chapter-name').textContent=toc[index]?.label||('Volume '+volumeId);
+function relocated(location){current=location;index=chapterIndex(location);if(!readerReady)return;syncSurface();$('chapter-name').textContent=toc[index]?.label||('Volume '+volumeId);
  const pages=location.start.displayed||{};
  rememberChapterPages(location.start.index,pages.total);
  updatePageLabel();
  $('previous').disabled=!!location.atStart;$('next').disabled=!!location.atEnd;
  for(const [id,label]of [['previous','Previous'],['next','Next']]){$(id).setAttribute('aria-label',label+' page');$(id).querySelector('span').textContent=label+' page';}
- $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;clearTimeout(savePositionTimer);savePositionTimer=setTimeout(saveReadingPosition,180);
+ $('edge-previous').disabled=$('previous').disabled;$('edge-next').disabled=$('next').disabled;renderContents();updateBookmark();if(adjusting)return;saveReadingPosition();
 }
 async function turn(direction){if(!readerReady||!rendition||loading||adjusting||document.querySelector('dialog[open]'))return;
  if(direction<0&&current?.atStart||direction>0&&current?.atEnd)return;
@@ -101,17 +108,18 @@ function preventReaderZoom(doc){
 function connectPageInput(doc,frame=null){
  preventReaderZoom(doc);
  let pointer=null,ignoreClickUntil=0;
+ const inputTarget=event=>event.composedPath?.()[0]||event.target;
  const blocked=target=>target?.closest?.('a,button,input,select,textarea,[contenteditable=true]');
- const begin=(point,event,kind)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now(),moved:0,kind,selected:!!doc.getSelection()?.toString()};};
+ const begin=(point,event,kind)=>{pointer=blocked(inputTarget(event))?null:{x:point.clientX,y:point.clientY,time:Date.now(),moved:0,kind,selected:!!doc.getSelection()?.toString()};};
  const move=point=>{if(pointer)pointer.moved=Math.max(pointer.moved,Math.abs(point.clientX-pointer.x),Math.abs(point.clientY-pointer.y));};
  const finish=(point,event,kind)=>{
   if(!pointer||pointer.kind!==kind)return;
   const start=pointer;pointer=null;ignoreClickUntil=Date.now()+700;
-  if(start.selected||blocked(event.target)||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
+  if(start.selected||blocked(inputTarget(event))||doc.getSelection()?.toString()||document.querySelector('dialog[open]'))return;
   const action=touchAction(point.clientX-start.x,point.clientY-start.y,Date.now()-start.time);
   if(action==='tap'&&start.moved>16)return;
   if(action==='next'||action==='previous'){event.preventDefault();turn(action==='next'?1:-1);}
-  else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,screenX:point.screenX,target:event.target,pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
+  else if(action==='tap')edgeTap({clientX:point.clientX,clientY:point.clientY,screenX:point.screenX,target:inputTarget(event),pointerType:'touch',defaultPrevented:false,detail:1,preventDefault:()=>event.preventDefault()},doc,frame);
  };
  // Listen to both APIs. A native touchstart takes ownership, so pointerup and
  // the compatibility click cannot turn the page a second time.
@@ -123,12 +131,12 @@ function connectPageInput(doc,frame=null){
  doc.addEventListener('touchmove',event=>{if(event.touches.length===1)move(event.touches[0]);else pointer=null;},{passive:true,capture:true});
  doc.addEventListener('touchend',event=>{if(event.touches.length===0&&event.changedTouches.length===1)finish(event.changedTouches[0],event,'touch');else pointer=null;},{passive:false,capture:true});
  doc.addEventListener('touchcancel',()=>{pointer=null;},{passive:true,capture:true});
- doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap(event,doc,frame);});
+ doc.addEventListener('click',event=>{if(Date.now()<ignoreClickUntil)return;edgeTap({clientX:event.clientX,clientY:event.clientY,screenX:event.screenX,pointerType:event.pointerType,detail:event.detail,defaultPrevented:event.defaultPrevented,target:inputTarget(event),preventDefault:()=>event.preventDefault()},doc,frame);});
 }
 connectPageInput(document);
 function connectContent(contents){
  applyContent(contents);const doc=contents.document;doc.addEventListener('keydown',pageKey);
- connectPageInput(doc,doc.defaultView.frameElement);
+ // Touch and text selection are handled by the visible top-level surface.
  const section=book.spine.get(contents.sectionIndex);
  document.querySelector('.reader-stage').dataset.contentsPage=String(!!doc.querySelector('.reader-contents')||[...doc.querySelectorAll('nav')].some(nav=>(nav.getAttributeNS('http://www.idpf.org/2007/ops','type')||'').split(/\s+/).includes('toc')));
  // Store the archive target separately from the real, shareable link address.
@@ -178,12 +186,12 @@ async function waitForPage(){
 }
 function preparingUI(active){
  document.querySelector('.reader-stage').dataset.loading=String(active);
- $('reader').inert=active;$('reader').setAttribute('aria-busy',String(active));
+ $('reader').inert=true;$('reader-surface').inert=active;$('reader').setAttribute('aria-busy',String(active));
  for(const id of ['contents-button','settings-button','bookmark-button','previous','next','edge-previous','edge-next','resume'])$(id).disabled=active;
 }
 async function prepareBook(target){
  if(preparing)return preparing;
- readerReady=false;loading=true;preparingUI(true);$('pagination-retry').hidden=true;
+ saveReadingPosition();readerReady=false;loading=true;preparingUI(true);$('pagination-retry').hidden=true;
  preparing=(async()=>{
   while(true){
    const key=layoutKey();rememberChapterPages(-1,0);
@@ -205,6 +213,7 @@ async function prepareBook(target){
    await waitForPage();if(key!==layoutKey())continue;
    current=await rendition.currentLocation();break;
   }
+  syncSurface();await surface.ready();
   readerReady=true;loading=false;preparingUI(false);status('');relocated(current);
  })();
  try{await preparing;}catch(error){$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;throw error;}finally{preparing=null;}
@@ -236,7 +245,7 @@ async function start(){preferences();renderBookmarks();preparingUI(true);
  status('');$('reader').setAttribute('aria-busy','false');
  updatePageLabel();
  window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const anchor=current?.start?.cfi;rendition.resize();if(readerReady)prepareBook(anchor).catch(console.error);},160);});
- window.addEventListener('pagehide',()=>{clearTimeout(savePositionTimer);saveReadingPosition();});
- document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(savePositionTimer);saveReadingPosition();}});
+ window.addEventListener('pagehide',saveReadingPosition);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)saveReadingPosition();});
  }catch(error){console.error(error);status(error.message+' Return to the Library or reload to try again.');$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;}}
 start();

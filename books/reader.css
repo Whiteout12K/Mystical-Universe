@@ -27,3 +27,8 @@ html,body{touch-action:pan-y}
 
 /* Keep pagination dimensions identical before and after the resume control appears. */
 .chapter-heading{height:48px;min-height:48px;flex-shrink:0}
+
+/* All visible text and native gestures live above the pagination iframe. */
+#reader{opacity:0;pointer-events:none}
+#reader-surface{position:absolute;inset:0;margin:0;overflow:clip;touch-action:pan-y;-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+.reader-stage[data-loading="true"] #reader-surface{visibility:hidden}

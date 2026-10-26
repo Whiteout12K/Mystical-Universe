@@ -6,13 +6,15 @@ import {touchAction,edgeDirection} from '../books/page-navigation.js';
 const source=readFileSync(new URL('../books/reader.js',import.meta.url),'utf8');
 const input=source.slice(source.indexOf('function connectPageInput('),source.indexOf('connectPageInput(document);'));
 const edges=source.slice(source.indexOf('function edgeTap('),source.indexOf('// Handle touch release'));
-function gestures(){
+function gestures(topLevel=false){
  const listeners={},turns=[];let now=0,prevented=0,selection='';
  const frame={getBoundingClientRect:()=>({left:-780,top:-900})};
  const doc={defaultView:{ontouchstart:null,PointerEvent:class{},frameElement:frame},getSelection:()=>({toString:()=>selection}),addEventListener:(name,handler)=>listeners[name]=handler};
  const parent={documentElement:{clientWidth:390},querySelector:()=>null,getSelection:()=>({toString:()=>''})};
+ if(topLevel)Object.assign(parent,doc);
+ const inputDocument=topLevel?parent:doc;
  const target={closest:()=>null};
- const context={readerReady:true,rendition:{getContents:()=>[]},window:{screenX:0},preventReaderZoom:()=>{},bookDoc:doc,frame,document:parent,Date:{now:()=>now},touchAction,edgeDirection,turn:direction=>turns.push(direction),$:()=>({getBoundingClientRect:()=>({top:100,bottom:750})})};
+ const context={readerReady:true,rendition:{getContents:()=>[]},window:{screenX:0},preventReaderZoom:()=>{},bookDoc:inputDocument,frame,document:parent,Date:{now:()=>now},touchAction,edgeDirection,turn:direction=>turns.push(direction),$:()=>({getBoundingClientRect:()=>({top:100,bottom:750})})};
  runInNewContext(edges+input+'\nconnectPageInput(bookDoc,frame);',context);
  const point=(x,y,screenX=x)=>({clientX:x,clientY:y,screenX});
  const event=(x,y,end=false,screenX=x)=>({target,touches:end?[]:[point(x,y,screenX)],changedTouches:[point(x,y,screenX)],...point(x,y,screenX),pointerType:'touch',isPrimary:true,button:0,detail:1,preventDefault:()=>prevented++});
@@ -34,5 +36,12 @@ test('native selection holds, dragging and existing highlighted text never turn 
   const hold=gestures();hold.start(x);hold.end(550,x);hold.click(x);assert.deepEqual(hold.turns,[]);assert.equal(hold.prevented,0);
   const drag=gestures();drag.start(x);drag.move(x+30,220);drag.end(200,x);assert.deepEqual(drag.turns,[]);assert.equal(drag.prevented,0);
   const selection=gestures();selection.start(x);selection.select('Highlighted text');selection.end(180,x);assert.deepEqual(selection.turns,[]);assert.equal(selection.prevented,0);
+ }
+});
+
+test('top-level reader receives side taps directly and leaves native long presses alone',()=>{
+ for(const [x,direction] of [[30,-1],[350,1]]){
+  const tap=gestures(true);tap.start(x);tap.end(100,x);assert.deepEqual(tap.turns,[direction]);
+  const hold=gestures(true);hold.start(x);hold.end(550,x);assert.deepEqual(hold.turns,[]);assert.equal(hold.prevented,0);
  }
 });
