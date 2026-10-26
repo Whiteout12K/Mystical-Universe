@@ -4,7 +4,17 @@
 .page-edge-left{left:10px}.page-edge-right{right:10px}
 .page-edge:hover,.page-edge:focus-visible{opacity:1;background:var(--line)}
 .page-edge:disabled{opacity:.1}
-@media(max-width:960px){.page-edge{display:none}}
+/* Real controls sit above the EPUB iframe, so phone taps never depend on
+   the iframe forwarding a synthetic click to the parent document. */
+.reader-stage{position:relative;display:flex;flex:1;min-height:0;width:100%}
+html,body{touch-action:pan-y}
+@media(max-width:960px){
+ .page-edge{position:absolute;top:0;bottom:0;transform:none;width:24%;height:100%;z-index:5;border-radius:0;opacity:1;color:transparent;touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+ .page-edge-left{left:0}.page-edge-right{right:0}
+ .page-edge:hover,.page-edge:focus-visible{background:transparent}
+ .page-edge:disabled{opacity:0;pointer-events:none}
+ .page-edge:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+}
 
 #section-progress{display:block;font-size:10px;min-height:15px}
 .page-measure{position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none;overflow:hidden}

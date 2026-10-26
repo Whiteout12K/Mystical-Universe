@@ -11,7 +11,7 @@
     "name": "Avery Obtainia",
     "nickname": "Avery",
     "gender": "male",
-    "rarity": "SSR",
+    "rarity": "SSR", 
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c1_role.svg",
 
     "species": ["Angelor", "Water Spirit"],

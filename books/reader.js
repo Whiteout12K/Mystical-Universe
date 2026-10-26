@@ -56,12 +56,22 @@ $('resume').addEventListener('click',()=>{go(toc[0].href);$('resume').hidden=tru
 // Use physical screen edges even when the book's iframe is centered or paged sideways.
 function edgeTap(event,sourceDocument,frame=null){
  if(event.defaultPrevented||event.pointerType!=='touch'&&event.detail>1||document.querySelector('dialog[open]')||sourceDocument.getSelection()?.toString()||rendition?.getContents().some(c=>c.document.getSelection()?.toString())||event.target.closest('a,button,input,select,textarea,[contenteditable=true]'))return;
- const frameBounds=frame?.getBoundingClientRect(),x=event.clientX+(frameBounds?.left||0),y=event.clientY+(frameBounds?.top||0),bounds=$('reader').getBoundingClientRect(),width=document.documentElement.clientWidth;
+ const frameBounds=(sourceDocument===document?null:sourceDocument.defaultView?.frameElement||frame)?.getBoundingClientRect(),x=event.clientX+(frameBounds?.left||0),y=event.clientY+(frameBounds?.top||0),bounds=$('reader').getBoundingClientRect(),width=document.documentElement.clientWidth;
  if(y<bounds.top||y>bounds.bottom)return;
  const direction=edgeDirection(x,width);if(direction){event.preventDefault();turn(direction);}
 }
 // Handle touch release directly: mobile EPUB views may suppress synthetic clicks.
+function preventReaderZoom(doc){
+ let viewport=doc.querySelector('meta[name="viewport"]');
+ if(!viewport){viewport=doc.createElement('meta');viewport.name='viewport';doc.head.append(viewport);}
+ viewport.content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no';
+ doc.documentElement.style.touchAction='pan-y';
+ // Safari also exposes gesture events independently of Pointer Events.
+ for(const type of ['gesturestart','gesturechange','gestureend'])doc.addEventListener(type,event=>event.preventDefault(),{passive:false});
+ for(const type of ['touchstart','touchmove'])doc.addEventListener(type,event=>{if(event.touches.length>1)event.preventDefault();},{passive:false});
+}
 function connectPageInput(doc,frame=null){
+ preventReaderZoom(doc);
  let pointer=null,ignoreClickUntil=0;
  const blocked=target=>target?.closest?.('a,button,input,select,textarea,[contenteditable=true]');
  const begin=(point,event)=>{pointer=blocked(event.target)?null:{x:point.clientX,y:point.clientY,time:Date.now()};};
