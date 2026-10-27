@@ -2,7 +2,7 @@
 window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
   if(!count)return [];
   const boxes=Array.from({length:count},(_,i)=>bounds[i]||{x:-65,y:-38,width:130,height:108});
-  const target=edge=>edge.close?150:edge.former?365:edge.loveInterest?180:edge.type==='personal'?285:450;
+  const target=edge=>edge.close?185:edge.former?435:edge.loveInterest?220:edge.type==='personal'?340:535;
   const links=Array.from({length:count},()=>[]),distances=Array.from({length:count},(_,i)=>Array.from({length:count},(_,j)=>i===j?0:Infinity));
   for(const edge of edges){const length=target(edge);links[edge.i].push(edge);links[edge.j].push(edge);distances[edge.i][edge.j]=distances[edge.j][edge.i]=length;}
   // Graph distance keeps extended families together without pinning them to rings.
@@ -13,11 +13,11 @@ window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
   const order=Array.from({length:count},(_,i)=>i).sort((a,b)=>links[b].filter(e=>e.close).length-links[a].filter(e=>e.close).length||a-b);
   for(const root of order){
     if(seen.has(root))continue;
-    const angle=cluster*2.399963229728653,r=380*Math.sqrt(cluster++),origin={x:Math.cos(angle)*r,y:Math.sin(angle)*r};
+    const angle=cluster*2.399963229728653,r=450*Math.sqrt(cluster++),origin={x:Math.cos(angle)*r,y:Math.sin(angle)*r};
     const queue=[root];seen.add(root);points[root]={...origin};
     for(let cursor=0;cursor<queue.length;cursor++){
       const i=queue[cursor],children=links[i].filter(edge=>edge.close).map(edge=>edge.i===i?edge.j:edge.i).filter(j=>!seen.has(j));
-      children.forEach((j,k)=>{seen.add(j);const theta=angle+(k+.5)/Math.max(1,children.length)*Math.PI*2;points[j]={x:points[i].x+Math.cos(theta)*160,y:points[i].y+Math.sin(theta)*160};queue.push(j);});
+      children.forEach((j,k)=>{seen.add(j);const theta=angle+(k+.5)/Math.max(1,children.length)*Math.PI*2;points[j]={x:points[i].x+Math.cos(theta)*195,y:points[i].y+Math.sin(theta)*195};queue.push(j);});
     }
   }
   const weakDegree=links.map(list=>Math.max(1,list.filter(edge=>!edge.close).length));
@@ -46,7 +46,7 @@ window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
     for(let pass=0;pass<2;pass++)for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
       const a=boxes[i],b=boxes[j],p=points[i],q=points[j];
       const dx=(q.x+b.x+b.width/2)-(p.x+a.x+a.width/2),dy=(q.y+b.y+b.height/2)-(p.y+a.y+a.height/2);
-      const overlapX=(a.width+b.width)/2+18-Math.abs(dx),overlapY=(a.height+b.height)/2+18-Math.abs(dy);
+      const overlapX=(a.width+b.width)/2+28-Math.abs(dx),overlapY=(a.height+b.height)/2+28-Math.abs(dy);
       if(overlapX>0&&overlapY>0){if(overlapX<overlapY){const move=(Math.sign(dx)||1)*(overlapX+.1)/2;p.x-=move;q.x+=move;}else{const move=(Math.sign(dy)||1)*(overlapY+.1)/2;p.y-=move;q.y+=move;}}
     }
     if(step%12===11)await pause();
@@ -56,7 +56,7 @@ window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
     let moved=false;
     for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
       const a=boxes[i],b=boxes[j],p=points[i],q=points[j],dx=q.x+b.x+b.width/2-p.x-a.x-a.width/2,dy=q.y+b.y+b.height/2-p.y-a.y-a.height/2;
-      const x=(a.width+b.width)/2+18-Math.abs(dx),y=(a.height+b.height)/2+18-Math.abs(dy);
+      const x=(a.width+b.width)/2+28-Math.abs(dx),y=(a.height+b.height)/2+28-Math.abs(dy);
       if(x>0&&y>0){moved=true;if(x<y){const d=(Math.sign(dx)||1)*(x+.1)/2;p.x-=d;q.x+=d;}else{const d=(Math.sign(dy)||1)*(y+.1)/2;p.y-=d;q.y+=d;}}
     }
     if(!moved)break;

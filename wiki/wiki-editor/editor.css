@@ -37,3 +37,5 @@ label{display:block;color:#c0b4cb;font-size:12px}textarea,input{display:block;wi
 .visual-section-nav { display:flex; align-items:center; flex-wrap:wrap; gap:4px; width:100%; padding-top:5px; border-top:1px solid var(--line); }
 .visual-section-nav select { flex:1; min-width:120px; max-width:260px; border:1px solid var(--line); border-radius:4px; background:#18131e; color:#dfc99e; padding:5px 8px; font-size:11px; }
 .visual-section-nav button { font-size:11px; }
+
+.character-relations-reference{margin:0;padding:9px 14px;border-bottom:1px solid var(--line);color:var(--muted);font:12px/1.6 Arial,sans-serif}.character-relations-reference code{color:var(--gold);user-select:text;white-space:nowrap}

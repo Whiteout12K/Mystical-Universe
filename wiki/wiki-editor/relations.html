@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="robots" content="noindex,nofollow"><title>Relations Edit · Mystical Legends</title>
+ <link rel="stylesheet" href="/wiki/wiki-editor/relations.css">
+ <script type="module" src="/wiki/wiki-editor/relations.js"></script>
+</head>
+<body>
+ <header><div><h1>Relations Edit</h1><p>Character relationships &amp; affiliations</p></div><nav aria-label="Editor navigation"><a href="/wiki/home">Wiki Home</a><a href="/wiki/relationship">Relationship Map</a></nav><button id="open-folder" type="button">Open Wiki Folder</button><button id="discard-relations" type="button" disabled>Discard changes</button><button id="save-relations" type="button" disabled>Save relations</button></header>
+ <main>
+  <button id="recover-draft" type="button" hidden>Download older browser draft</button>
+  <p id="relations-status" role="status" aria-live="polite">Loading relationships…</p>
+  <p class="hint">Open a character’s bar in Wiki view, or edit the shared file in Source code. One entry per line, such as <code>[[Lux Luces]] (love interest)</code>. Edit affiliations in the same character bar, one per line. Links, role notes, and spoilers also work. Saving updates wiki profiles and the map together.</p>
+  <div class="relations-editor-menu"><div class="relations-view-tabs" role="tablist" aria-label="Relations editor view"><button id="wiki-mode" type="button" role="tab" aria-selected="true" aria-controls="relations-wiki-panel">Wiki view</button><button id="source-mode" type="button" role="tab" aria-selected="false" aria-controls="relations-source-panel">Source code</button></div><div id="relations-format-toolbar" role="toolbar" aria-label="Relationship and affiliation text formatting"><button type="button" data-insert="spoiler">Add spoiler</button><button type="button" data-insert="link">Add link</button><span>Double-tap a linked name to edit its destination.</span></div></div>
+  <section id="relations-wiki-panel" role="tabpanel" aria-labelledby="wiki-mode">
+  <section class="tools" aria-label="Character tools"><label>Find a character<input id="character-filter" type="search" placeholder="Character name…" autocomplete="off"></label><form id="new-character"><label>New character<input id="new-name" required placeholder="Character name" autocomplete="off" maxlength="150"></label><button type="submit">Add character</button></form><span id="character-count"></span></section>
+  <section id="character-list" aria-label="Editable character relationships"></section>
+  </section>
+  <section id="relations-source-panel" role="tabpanel" aria-labelledby="source-mode" hidden><div class="source-tools"><label for="relations-source">Shared relationships &amp; affiliations · relations.json</label><button id="format-source" type="button">Format JSON</button></div><textarea id="relations-source" spellcheck="false" aria-describedby="relations-source-help"></textarea><p class="hint" id="relations-source-help">Edit names, wiki paths, relationships, and affiliations here. JSON must be valid before switching to Wiki view or saving.</p></section>
+ </main>
+</body>
+</html>

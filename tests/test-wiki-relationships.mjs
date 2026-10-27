@@ -154,3 +154,76 @@ test('current love interests get near-family spacing while former interests do n
   assert.equal(edge.loveInterest,expected);assert.equal(edge.close,false);
  }
 });
+
+test('a love interest belongs only to its expressing character and points to its recipient',()=>{
+ const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] (love interest)'),profile('Second','/wiki/char/second')]);
+ assert.equal(edge.listLabels[0],'love interest');assert.equal(edge.listLabels[1],'');
+ assert.equal(edge.loveFromI,true);assert.equal(edge.loveFromJ,false);
+ assert.match(edge.label,/First has feelings for Second/);
+});
+test('reciprocal love interests require an expression recorded on each character',()=>{
+ const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] (love interest)'),profile('Second','/wiki/char/second','Relatives: [[First]] (crush)')]);
+ assert.equal(edge.loveFromI,true);assert.equal(edge.loveFromJ,true);
+ assert.equal(edge.listLabels[0],'love interest');assert.equal(edge.listLabels[1],'crush');
+});
+test('multiple personal roles and affiliations survive on one connection without inventing reciprocal feelings',()=>{
+ const first=profile('First','/wiki/char/first','Relatives: [[Second]] (cousin)\nRelatives: [[Second]] (rival)\nRelatives: [[Second]] (love interest)'),second=profile('Second','/wiki/char/second');
+ first.affiliations=second.affiliations=['Guild'];
+ const edges=relationships([first,second]),edge=edges[0];
+ assert.equal(edges.length,1);assert.equal(edge.listLabels[0],'cousin · rival · love interest');
+ assert.equal(edge.listLabels[1],'cousin · rival');
+ assert.equal(JSON.stringify(edge.shared),JSON.stringify(['Guild']));
+ for(const role of ['cousin','rival','has feelings'])assert.ok(edge.label.includes(role));
+});
+test('roles documented on opposite sides are combined and inverse family roles remain meaningful',()=>{
+ const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] (aunt)'),profile('Second','/wiki/char/second','Relatives: [[First]] (rival)')]);
+ assert.equal(edge.listLabels[0],'aunt · rival');assert.equal(edge.listLabels[1],'rival · niece/nephew');
+});
+
+test('combined roles do not repeat spiritual bond in Avery and Lynnhera breakdowns',()=>{
+ const [edge]=relationships([
+  profile('Avery Obtainia','/wiki/char/avery_obtainia','Relatives: [[char/lynnhera|Lynnhera]] (spiritual bond)'),
+  profile('Lynnhera','/wiki/char/lynnhera','Relatives: [[char/avery_obtainia|Avery Obtainia]] (spiritual bond, vessel, love interest)')
+ ]);
+ assert.equal(edge.listLabels[1],'spiritual bond · vessel · love interest');
+ assert.equal(edge.listLabels[0],'spiritual bond');
+ assert.equal(edge.loveFromI,false);assert.equal(edge.loveFromJ,true);
+ assert.equal((edge.listLabels[1].match(/spiritual bond/g)||[]).length,1);
+});
+test('repeated roles across combined entries, casing and spacing appear once',()=>{
+ const [edge]=relationships([
+  profile('First','/wiki/char/first','Relatives: [[Second]] (Spiritual   Bond, rival, spiritual bond)\nRelatives: [[Second]] (RIVAL)'),
+  profile('Second','/wiki/char/second','Relatives: [[First]] (spiritual bond)')
+ ]);
+ assert.equal(edge.listLabels[0],'spiritual bond · rival');
+ assert.equal(edge.listLabels[1],'spiritual bond · rival');
+});
+
+test('creator and creation form reciprocal personal relationships from either entry',()=>{
+ for(const [role,inverse] of [['creator','creation'],['creation','creator'],['creators','creation'],['creations','creator'],['former creator','former creation']]){
+  const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] ('+role+')'),profile('Second','/wiki/char/second')]);
+  assert.equal(edge.type,'personal');assert.equal(edge.listLabels[0],role);assert.equal(edge.listLabels[1],inverse);
+  assert.equal(edge.close,false);assert.equal(edge.family,false);assert.equal(edge.loveFromI,false);
+ }
+});
+test('creator relationships retain other roles without repeating reciprocal labels',()=>{
+ const [edge]=relationships([
+  profile('First','/wiki/char/first','Relatives: [[Second]] (creation, rival)'),
+  profile('Second','/wiki/char/second','Relatives: [[First]] (creator)')
+ ]);
+ assert.equal(edge.listLabels[0],'creation · rival');assert.equal(edge.listLabels[1],'creator · rival');
+});
+test('dedicated Creator and Creations fields are recognized for unpublished characters',()=>{
+ for(const [field,expected] of [['Creator','creation'],['Creations','creator']]){
+  const profiles=expand([profile('First','/wiki/char/first',field+': [[Second]]')]);
+  const [edge]=relationships(profiles);assert.equal(profiles[1].unpublished,true);assert.equal(edge.listLabels[1],expected);
+ }
+});
+
+test('IT Industries resolves to the canonical IT Industry affiliation without duplicate relationships',()=>{
+ assert.equal(JSON.stringify(wikiAffiliations.parse('IT Industries\nIT Industry\nIT INDUSTRIES (former employee)')),JSON.stringify(['IT Industry']));
+ assert.equal(JSON.stringify(wikiAffiliations.shared(['IT Industries'],['IT Industry'])),JSON.stringify(['IT Industry']));
+ const first=profile('First','/wiki/char/first'),second=profile('Second','/wiki/char/second');
+ first.affiliations=['IT Industries','IT Industry'];second.affiliations=['IT Industry'];
+ const [edge]=relationships([first,second]);assert.equal(JSON.stringify(edge.shared),JSON.stringify(['IT Industry']));
+});

@@ -40,3 +40,66 @@ test('love interests sit almost as close as family and closer than other persona
  const family=distance(p,0,1),love=distance(p,0,2),other=distance(p,0,3);
  assert.ok(love>family);assert.ok(love<family*1.4);assert.ok(love<other);
 });
+
+test('portrait sizes grow with distinct connections and stop at the maximum',()=>{
+ const script=readFileSync(new URL('../wiki/wiki-code/relationship.js',import.meta.url),'utf8');
+ const context={};runInNewContext(script.slice(0,script.indexOf('/* Capitalize')),context);
+ const edges=Array.from({length:19},(_,i)=>({i:0,j:i+1}));
+ const radii=context.wikiRelationshipRadii(21,[...edges,edges[0]]);
+ assert.equal(radii[20],38);assert.equal(radii[1],38);assert.equal(radii[0],62);
+ assert.ok(context.wikiRelationshipRadii(4,[{i:0,j:1},{i:0,j:2}])[0]>radii[1]);
+});
+
+test('relative circle sizes use 150 percent of the average as the floor even in dense maps',()=>{
+ const script=readFileSync(new URL('../wiki/wiki-code/relationship.js',import.meta.url),'utf8'),context={};
+ runInNewContext(script.slice(0,script.indexOf('/* Capitalize')),context);
+ const edges=Array.from({length:20},(_,i)=>({i,j:(i+1)%20}));
+ const uniform=context.wikiRelationshipRadii(20,edges);
+ assert.ok(uniform.every(radius=>radius===38),'equal connection counts stay at baseline');
+ for(let j=2;j<19;j++)edges.push({i:0,j});
+ const varied=context.wikiRelationshipRadii(20,edges);
+ assert.equal(varied[19],38);assert.equal(varied[0],62);
+ assert.equal(varied[2],38);
+ assert.equal(context.wikiRelationshipRadii(0,[]).length,0);
+});
+
+test('affiliation reach outweighs family and overlapping affiliations do not count people twice',()=>{
+ const script=readFileSync(new URL('../wiki/wiki-code/relationship.js',import.meta.url),'utf8'),context={};
+ runInNewContext(script.slice(0,script.indexOf('/* Capitalize')),context);
+ const family=[{i:0,j:1,type:'personal',family:true},{i:0,j:2,type:'personal',family:true}];
+ const affiliations=[{i:3,j:4,type:'affiliation',shared:['Guild']},{i:3,j:5,type:'affiliation',shared:['Guild']}];
+ const radii=context.wikiRelationshipRadii(7,[...family,...affiliations]);
+ assert.ok(radii[3]>radii[0]);assert.equal(radii[4],38);assert.equal(radii[1],38);
+ const overlapping=affiliations.map(edge=>({...edge,shared:['Guild','Academy']}));
+ assert.equal(JSON.stringify(context.wikiRelationshipRadii(7,[...family,...overlapping,{...overlapping[0],i:4,j:3}])),JSON.stringify(radii));
+ const more=context.wikiRelationshipRadii(7,[...family,...affiliations,{i:0,j:6,type:'affiliation',shared:['Academy']},{i:0,j:4,type:'affiliation',shared:['Academy']}]);
+ assert.ok(more[0]>radii[0],'another unique affiliation member increases reach');
+ assert.equal(Math.min(...more),38);assert.equal(Math.max(...more),62);
+});
+
+test('a low-connection outlier does not enlarge the rest of a dense cast',()=>{
+ const script=readFileSync(new URL('../wiki/wiki-code/relationship.js',import.meta.url),'utf8'),context={};
+ runInNewContext(script.slice(0,script.indexOf('/* Capitalize')),context);
+ const edges=[];
+ // Eight well-connected characters, one isolated character, and one larger hub.
+ for(let i=0;i<8;i++)for(let j=i+1;j<8;j++)edges.push({i,j,type:'affiliation'});
+ edges.push({i:0,j:8,type:'affiliation'});
+ const radii=context.wikiRelationshipRadii(10,edges);
+ // Scores: 8, seven 7s, 1, 0. Average 5.8; threshold 8.7 exceeds max 8.
+ assert.ok(radii.every(radius=>radius===38),'all scores below 150% of average remain at minimum');
+ const star=context.wikiRelationshipRadii(6,Array.from({length:5},(_,i)=>({i:0,j:i+1,type:'affiliation'})));
+ assert.equal(star[0],62);assert.ok(star.slice(1).every(radius=>radius===38));
+});
+
+test('only scores above 150 percent of the average scale up, with exact threshold at minimum',()=>{
+ const script=readFileSync(new URL('../wiki/wiki-code/relationship.js',import.meta.url),'utf8'),context={};
+ runInNewContext(script.slice(0,script.indexOf('/* Capitalize')),context);
+ // Degrees 4,3,2,1,1,1: mean 2, threshold 3. Only degree 4 grows.
+ const edges=[[0,1],[0,2],[0,3],[0,4],[1,2],[1,5]].map(([i,j])=>({i,j,type:'affiliation'}));
+ const radii=context.wikiRelationshipRadii(6,edges);
+ assert.equal(radii[0],62);assert.ok(radii.slice(1).every(radius=>radius===38));
+ // Adding empty records lowers the mean: degree 3 now lies between the floor and maximum.
+ const expanded=context.wikiRelationshipRadii(8,edges),floor=1.5*12/8;
+ assert.ok(Math.abs(expanded[1]-(38+24*(3-floor)/(4-floor)))<1e-9);
+ assert.ok(expanded.every(radius=>Number.isFinite(radius)&&radius>=38&&radius<=62));
+});

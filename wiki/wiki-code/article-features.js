@@ -8,6 +8,7 @@ window.wikiAffiliations=(()=>{
       let previous;
       do{previous=name;name=name.replace(/\([^()]*\)/g,'');}while(previous!==name);
       name=name.replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+      if(/^it industr(?:y|ies)$/i.test(name))name='IT Industry';
       if(name&&!/^(none|unknown|n\/a)$/i.test(name)&&!entries.has(key(name)))entries.set(key(name),name);
     }
     return [...entries.values()];
@@ -53,11 +54,11 @@ window.wikiAffiliations=(()=>{
       const profiles=[];let cursor=0;
       await Promise.all(Array.from({length:Math.min(4,paths.length)},async()=>{while(cursor<paths.length){const path=paths[cursor++];try{let r=await fetch(path);if(r.status===404)r=await fetch(path+'.html');if(!r.ok)continue;const doc=new DOMParser().parseFromString(await r.text(),'text/html');const source=doc.querySelector('#wiki-source')?.textContent;if(!source)continue;
         const field=name=>source.match(new RegExp('^\\|'+name+'=([^]*?)(?=^\\||^\\}\\})','m'))?.[1]?.trim()||'';
-        const clean=value=>value.replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g,'$1').replace(/fandom:/g,'').replace(/\{\{[^]*?\}\}/g,'').trim();
         const title=field('title'),base=field('image base')||'/images/character_art/',file=field('image').split(' :: ')[0];
         const image=file?new URL(file.startsWith('/')?file:base.replace(/\/?$/,'/')+file,location.origin).pathname:'';
-        const affiliations=window.wikiAffiliations.parse(field('Affiliation'));
-        profiles.push({title,path,source,image,affiliations,relations:['Relatives','Relationships',...['Love Interest','Love Interests','Crush','Girlfriend','Boyfriend','Partner','Spouse','Husband','Wife','Fiancé','Fiancée','Fiance','Fiancee','Betrothed','Lover','Rival','Rivals'].flatMap(kind=>[kind,'Former '+kind,'Ex-'+kind]),'Host','Vessel','Vessal','Anchored Spirit','Spiritual Bond','Deity Contract','Demon Contract','Leader','Subordinate','Subordinates'].flatMap(kind=>field(kind).split('\n').filter(Boolean).map(line=>kind+': '+line)).join('\n'),description:window.wikiArticleSummary(source)});
+        const central=window.wikiRelations?.find(path,title);
+        const affiliations=window.wikiAffiliations.parse(central?.affiliations??field('Affiliation'));
+        profiles.push({title:central?.name||title,path,source,image,affiliations,aliases:[title],relations:(central?.relatives||'').split('\n').filter(Boolean).map(line=>'Relatives: '+line).join('\n'),description:window.wikiArticleSummary(source)});
       }catch{}}}));const portraits=profiles.map(profile=>{profile.portraitReady=window.wikiPortraits.resolve(profile.title,profile.path,profile.image).then(portrait=>{profile.portrait=portrait;return portrait;});return profile.portraitReady;});if(!document.getElementById('wiki-relationship-map'))await Promise.all(portraits);return profiles.sort((a,b)=>a.title.localeCompare(b.title));
     }catch{return [];}
   })();

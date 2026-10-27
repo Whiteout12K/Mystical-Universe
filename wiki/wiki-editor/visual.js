@@ -28,6 +28,18 @@
     for(let i=2;i<value.length-2;i++){const pair=value.slice(i,i+2);if(pair==='{{'){depth++;i++;}else if(pair==='}}'){depth--;i++;}else if(pair==='[['){links++;i++;}else if(pair===']]'){links--;i++;}else if(value[i]==='|'&&!depth&&!links){result.push({start,end:i,value:value.slice(start,i)});start=i+1;}}
     result.push({start,end:value.length-2,value:value.slice(start,-2)});return result;
   }
+  function sharedCharacterSource(source,field,tag){
+    const template=templates(source).find(token=>/^(infobox|character)$/i.test(parts(token.value)[0].value.trim()));
+    if(!template)return {source,message:'Add an Infobox first, then insert {{'+tag+'}} into its '+field+' field.'};
+    const parameters=parts(template.value),existing=parameters.find(part=>new RegExp('^\\s*'+field+'\\s*=','i').test(part.value));
+    if(existing&&existing.value.slice(existing.value.indexOf('=')+1).trim())return {source,message:'The '+field+' field already has text. You can edit or paste the full {{'+tag+'}} tag there.'};
+    let value;
+    if(existing)value=template.value.slice(0,existing.start)+existing.value.slice(0,existing.value.indexOf('=')+1)+'{{'+tag+'}}\n'+template.value.slice(existing.end);
+    else{const after=parameters.find(part=>/^\s*English Name\s*=/i.test(part.value))||parameters.find(part=>/^\s*section\s*=/i.test(part.value));const offset=after?.end??template.value.length-2;value=template.value.slice(0,offset)+'|'+field+'={{'+tag+'}}\n'+template.value.slice(offset);}
+    return {source:source.slice(0,template.start)+value+source.slice(template.end),message:'Inserted |'+field+'={{'+tag+'}}. The full tag is editable and can be copied.'};
+  }
+  const characterRelationsSource=source=>sharedCharacterSource(source,'Relatives','CharacterRelations');
+  const characterAffiliationsSource=source=>sharedCharacterSource(source,'Affiliation','CharacterAffiliations');
   function focusLine(line){
     (line.closest('.visual-editable')||line).focus();const range=document.createRange();range.selectNodeContents(line);range.collapse(false);const selection=getSelection();selection.removeAllRanges();selection.addRange(range);
   }
@@ -48,6 +60,7 @@
         const template=templates(text.slice(match.index))[0];
         if(template?.start===0){end=match.index+template.end;const values=parts(template.value),name=values[0].value.trim().toLowerCase();
           if(name==='spoiler'){node=make('details','visual-spoiler');node.open=true;const label=make('summary','','Spoiler'),content=make('div');content.dataset.spoilerContent='';inline(content,values.slice(1).map(p=>p.value).join('|'),imageBase);const remove=make('button','inline-remove','×');remove.type='button';remove.contentEditable='false';remove.dataset.editorUi='';remove.setAttribute('aria-label','Remove inline spoiler');remove.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();const editor=node.closest('.visual-editable');node.remove();editor?.dispatchEvent(new Event('input',{bubbles:true}));});label.append(exitButton(node,'Continue after spoiler'),remove);label.contentEditable='false';node.append(label,content);}
+          else if(['characterrelations','characteraffiliations'].includes(name)){node=document.createTextNode(template.value);}
           else{node=make('span','visual-token',template.value);node.contentEditable='false';node.dataset.wikiToken=template.value;}
         }
       }else if(match[0]==='[['){
@@ -196,7 +209,9 @@
             if(name==='tabs'&&previous!==row.key){for(const other of blocks){if(/^\|tab\s*=/.test(other.value)&&other.value.replace(/^\|tab\s*=\s*/,'').trim()===previous){other.value='|tab='+row.key;const field=other.element?.querySelector('input');if(field)field.value=row.key;}}}
           });
           element.classList.toggle('visual-infobox-section',['infobox','character'].includes(name)&&row.key.toLowerCase()==='section');row.keyField=key;row.element=element;element.append(key);let content;
-          if(name==='tabs'||['image','image base','source'].includes(row.key.toLowerCase())||name==='characters'||name==='randomarticle'||name==='references'){
+          if(/^\s*\{\{Character(?:Relations|Affiliations)\}\}\s*$/.test(row.value)){
+            content=input(row.value,'Value for '+row.key,value=>{row.value=value.replace(/[\r\n]/g,'');row.named=true;row.raw=row.key+'='+row.value+'\n';commit();});
+          }else if(name==='tabs'||['image','image base','source'].includes(row.key.toLowerCase())||name==='characters'||name==='randomarticle'||name==='references'){
             content=input(row.value,name==='tabs'?'Tab destination (empty for an article tab)':'Field value',value=>{row.value=value.replace(/[\r\n|]/g,'');row.named=name!=='tabs'||Boolean(row.value);row.raw=row.key+(row.named?'='+row.value:'')+'\n';commit();});
           }else{content=make('div','visual-info-value');inline(content,row.value,imageBase);editable(content,()=>{row.value=serialize(content,{field:true}).trim();row.named=true;row.raw=row.key+'='+row.value+'\n';commit();},'Value for '+row.key);}
           const removeRow=button('×','Remove '+(row.key||'field')+' row',()=>{rows.splice(rows.indexOf(row),1);element.remove();commit();update(true);});removeRow.dataset.removeRow='';
@@ -249,5 +264,5 @@
     root.onclick=event=>{if(event.target.closest('a'))event.preventDefault();};
     root.ondblclick=event=>{const category=event.target.closest('[data-wiki-category]');if(category){const name=prompt('Category name:',category.dataset.wikiCategory);if(name===null)return;const clean=name.replace(/[|\[\]\r\n]/g,'').replace(/^Category:/i,'').trim();if(!clean)return;category.dataset.wikiToken='[[Category:'+clean+']]';category.dataset.wikiCategory=clean;category.firstElementChild.textContent=clean;category.querySelector('button').setAttribute('aria-label','Remove category '+clean);category.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));return;}const link=event.target.closest('a');if(!link)return;const target=prompt('Link destination:',link.dataset.wikiTarget);if(target===null)return;link.dataset.wikiTarget=target;link.closest('.visual-editable')?.dispatchEvent(new Event('input',{bubbles:true}));};
   }
-  window.WikiVisual={render,serialize,inline,selectParagraph,compactSource};
+  window.WikiVisual={render,serialize,inline,selectParagraph,compactSource,characterRelationsSource,characterAffiliationsSource};
 })();
