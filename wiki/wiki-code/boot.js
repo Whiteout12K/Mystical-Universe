@@ -3,7 +3,7 @@
   const theme = document.cookie.split(';').map(value => value.trim()).find(value => value.startsWith('wiki_theme='))?.split('=')[1];
   document.documentElement.dataset.wikiTheme = theme === 'light' ? 'light' : 'dark';
   try{const account=await import('/js/account-preferences.js');await account.loadAccountPreferences();account.applyWikiTheme();}catch{/* The cookie remains the fallback when account settings are unavailable. */}
-  const icon=document.createElement('link');icon.rel='icon';icon.href='/images/website/favicon.png';document.head.append(icon);
+  if(!document.querySelector('link[rel="icon"]')){const icon=document.createElement('link');icon.rel='icon';icon.href='/images/website/favicon.png';document.head.append(icon);}
   for (const href of ['/css/bootstrap-min.css','/css/home.css','/css/mlg.css','/wiki/wiki-code/wiki.css']) {
     const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link);
   }
