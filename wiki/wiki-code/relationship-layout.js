@@ -1,84 +1,66 @@
-/* Deterministic degree-aware layout: central hubs, nearby groups, peripheral isolates. */
-window.layoutWikiRelationships = (count, edges) => {
-  if (!count) return [];
-  const center={x:900,y:750},degree=Array(count).fill(0);
-  for(const {i,j} of edges){degree[i]++;degree[j]++;}
-  const order=Array.from({length:count},(_,i)=>i).sort((a,b)=>degree[b]-degree[a]||a-b);
-  const hub=order[0],maximum=Math.max(1,degree[hub]);
-  const radii=degree.map((d,i)=>i===hub&&d?0:d?170+395*Math.pow(1-d/maximum,.8):625);
-  // Close ties take priority over the usual degree-based outer rings.
-  for(let pass=0;pass<count;pass++)for(const {i,j,close} of edges)if(close){
-    radii[i]=Math.min(radii[i],radii[j]+160);
-    radii[j]=Math.min(radii[j],radii[i]+160);
+/* Bond distances are soft targets: labels and portraits always have room. */
+window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
+  if(!count)return [];
+  const boxes=Array.from({length:count},(_,i)=>bounds[i]||{x:-65,y:-38,width:130,height:108});
+  const target=edge=>edge.close?150:edge.former?365:edge.loveInterest?180:edge.type==='personal'?285:450;
+  const links=Array.from({length:count},()=>[]),distances=Array.from({length:count},(_,i)=>Array.from({length:count},(_,j)=>i===j?0:Infinity));
+  for(const edge of edges){const length=target(edge);links[edge.i].push(edge);links[edge.j].push(edge);distances[edge.i][edge.j]=distances[edge.j][edge.i]=length;}
+  // Graph distance keeps extended families together without pinning them to rings.
+  for(let k=0;k<count;k++)for(let i=0;i<count;i++)for(let j=0;j<count;j++)distances[i][j]=Math.min(distances[i][j],distances[i][k]+distances[k][j]);
+  const points=Array(count),seen=new Set();let cluster=0;
+  // Seed immediate family/spirit groups together, so collision resolution does
+  // not trap a parent on the far side of an unrelated cluster.
+  const order=Array.from({length:count},(_,i)=>i).sort((a,b)=>links[b].filter(e=>e.close).length-links[a].filter(e=>e.close).length||a-b);
+  for(const root of order){
+    if(seen.has(root))continue;
+    const angle=cluster*2.399963229728653,r=380*Math.sqrt(cluster++),origin={x:Math.cos(angle)*r,y:Math.sin(angle)*r};
+    const queue=[root];seen.add(root);points[root]={...origin};
+    for(let cursor=0;cursor<queue.length;cursor++){
+      const i=queue[cursor],children=links[i].filter(edge=>edge.close).map(edge=>edge.i===i?edge.j:edge.i).filter(j=>!seen.has(j));
+      children.forEach((j,k)=>{seen.add(j);const theta=angle+(k+.5)/Math.max(1,children.length)*Math.PI*2;points[j]={x:points[i].x+Math.cos(theta)*160,y:points[i].y+Math.sin(theta)*160};queue.push(j);});
+    }
   }
-  const points=Array(count);
-  // Allocate neighboring groups to nearby sectors before relaxing the layout.
-  const visited=new Set(),groups=[];
-  for(const first of order){if(visited.has(first))continue;const group=[],queue=[first];visited.add(first);while(queue.length){const i=queue.shift();group.push(i);for(const edge of edges){const j=edge.i===i?edge.j:edge.j===i?edge.i:-1;if(j>=0&&!visited.has(j)){visited.add(j);queue.push(j);}}}groups.push(group);}
-  let slot=0;
-  for(const group of groups)for(const i of group){const angle=slot++/count*Math.PI*2-.5*Math.PI;points[i]={x:center.x+Math.cos(angle)*radii[i],y:center.y+Math.sin(angle)*radii[i]};}
-  for(let step=0;step<480;step++){
+  const weakDegree=links.map(list=>Math.max(1,list.filter(edge=>!edge.close).length));
+  const pause=()=>new Promise(resolve=>setTimeout(resolve,0));
+  for(let step=0;step<260;step++){
     const forces=points.map(()=>({x:0,y:0}));
     for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
-      let dx=points[i].x-points[j].x,dy=points[i].y-points[j].y;
-      if(Math.abs(dx)+Math.abs(dy)<.01){dx=Math.cos(i*2.4);dy=Math.sin(i*2.4);}
-      const distance=Math.max(1,Math.hypot(dx,dy));
-      const force=10000/(distance*distance)+Math.max(0,190-distance)*.17;
-      forces[i].x+=dx/distance*force;forces[i].y+=dy/distance*force;forces[j].x-=dx/distance*force;forces[j].y-=dy/distance*force;
+      const a=points[i],b=points[j];let dx=b.x-a.x,dy=b.y-a.y;
+      if(Math.abs(dx)+Math.abs(dy)<.01){dx=Math.cos(i+j);dy=Math.sin(i+j);}
+      const length=Math.max(1,Math.hypot(dx,dy)),ideal=Number.isFinite(distances[i][j])?Math.min(1100,distances[i][j]):1250;
+      // Weak graph-wide stress separates unrelated groups, without overwhelming
+      // direct family/spiritual springs when many affiliations are documented.
+      const pull=(length-ideal)*.012*Math.pow(150/ideal,1.3)-1800/(length*length);
+      forces[i].x+=dx/length*pull;forces[i].y+=dy/length*pull;forces[j].x-=dx/length*pull;forces[j].y-=dy/length*pull;
     }
-    for(const {i,j,type,close} of edges){
-      const dx=points[j].x-points[i].x,dy=points[j].y-points[i].y,distance=Math.max(1,Math.hypot(dx,dy));
-      const ideal=close?160:type==='personal'?220:265;
-      const force=(distance-ideal)*(close?.3:type==='personal'?.027:.018)+Math.max(0,distance-420)*.035;
-      forces[i].x+=dx/distance*force;forces[i].y+=dy/distance*force;forces[j].x-=dx/distance*force;forces[j].y-=dy/distance*force;
-    }
-    points.forEach((point,i)=>{
-      if(i===hub&&degree[i]){point.x=center.x;point.y=center.y;return;}
-      const dx=point.x-center.x,dy=point.y-center.y,distance=Math.max(1,Math.hypot(dx,dy));
-      const radial=(radii[i]-distance)*.065;
-      forces[i].x+=dx/distance*radial;forces[i].y+=dy/distance*radial;
-      const cooling=1-step/600;
-      point.x+=Math.max(-7,Math.min(7,forces[i].x))*cooling;point.y+=Math.max(-7,Math.min(7,forces[i].y))*cooling;
-      // Degree bands preserve the density hierarchy while allowing shorter links.
-      const x=point.x-center.x,y=point.y-center.y,r=Math.max(1,Math.hypot(x,y));
-      const lower=degree[i]?Math.max(150,radii[i]-65):580,upper=degree[i]?radii[i]+65:670;
-      const bounded=Math.max(lower,Math.min(upper,r));point.x=center.x+x/r*bounded;point.y=center.y+y/r*bounded;
-    });
-  }
-  return window.refineWikiRelationshipPositions(points, edges, radii, hub);
-};
-
-/* Move portraits instead of bending links. Penalize straight segments near other nodes. */
-window.refineWikiRelationshipPositions = (points, edges, radii, hub) => {
-  const center={x:900,y:750},minimum=56;
-  function clearance(point,a,b){const dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((point.x-a.x)*dx+(point.y-a.y)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(point.x-a.x-t*dx,point.y-a.y-t*dy);}
-  function cost(id){
-    let score=0;
-    const radius=Math.hypot(points[id].x-center.x,points[id].y-center.y);
-    score+=Math.pow(radius-radii[id],2)*.12;
-    for(let j=0;j<points.length;j++)if(j!==id)score+=Math.pow(Math.max(0,160-Math.hypot(points[id].x-points[j].x,points[id].y-points[j].y)),2)*4;
     for(const edge of edges){
-      const a=points[edge.i],b=points[edge.j];
-      if(edge.i===id||edge.j===id){const length=Math.hypot(a.x-b.x,a.y-b.y);score+=edge.close?Math.pow(length-160,2)*40:Math.pow(Math.max(0,length-360),2)*.05;
-        for(let k=0;k<points.length;k++)if(k!==edge.i&&k!==edge.j)score+=Math.pow(Math.max(0,minimum-clearance(points[k],a,b)),2)*1200;
-      }else score+=Math.pow(Math.max(0,minimum-clearance(points[id],a,b)),2)*1200;
+      const {i,j}=edge,dx=points[j].x-points[i].x,dy=points[j].y-points[i].y,length=Math.max(1,Math.hypot(dx,dy));
+      const strength=edge.close?.38:edge.loveInterest&&!edge.former?.28:(edge.type==='personal'?.08:.035)/Math.sqrt(Math.max(weakDegree[i],weakDegree[j]));
+      const pull=(length-target(edge))*strength;
+      forces[i].x+=dx/length*pull;forces[i].y+=dy/length*pull;forces[j].x-=dx/length*pull;forces[j].y-=dy/length*pull;
     }
-    return score;
+    const limit=step<180?12:Math.max(.6,12*(260-step)/80);
+    points.forEach((point,i)=>{point.x+=Math.max(-limit,Math.min(limit,forces[i].x));point.y+=Math.max(-limit,Math.min(limit,forces[i].y));});
+    // Resolve measured label rectangles locally; never enlarge the entire graph
+    // because one pair of names overlaps. Recheck after every relaxation step.
+    for(let pass=0;pass<2;pass++)for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
+      const a=boxes[i],b=boxes[j],p=points[i],q=points[j];
+      const dx=(q.x+b.x+b.width/2)-(p.x+a.x+a.width/2),dy=(q.y+b.y+b.height/2)-(p.y+a.y+a.height/2);
+      const overlapX=(a.width+b.width)/2+18-Math.abs(dx),overlapY=(a.height+b.height)/2+18-Math.abs(dy);
+      if(overlapX>0&&overlapY>0){if(overlapX<overlapY){const move=(Math.sign(dx)||1)*(overlapX+.1)/2;p.x-=move;q.x+=move;}else{const move=(Math.sign(dy)||1)*(overlapY+.1)/2;p.y-=move;q.y+=move;}}
+    }
+    if(step%12===11)await pause();
   }
-  const distances=[60,40,24,14,8,4,2];
-  for(const distance of distances)for(let sweep=0;sweep<35;sweep++){
+  // Finish collision resolution without introducing fresh spring movement.
+  for(let pass=0;pass<80;pass++){
     let moved=false;
-    for(let id=0;id<points.length;id++){
-      if(id===hub&&radii[id]===0)continue;
-      const original={...points[id]};let best={...original},bestCost=cost(id);
-      for(let direction=0;direction<16;direction++){
-        const angle=direction*Math.PI/8;
-        points[id]={x:Math.max(100,Math.min(1700,original.x+Math.cos(angle)*distance)),y:Math.max(100,Math.min(1400,original.y+Math.sin(angle)*distance))};
-        const candidate=cost(id);if(candidate<bestCost-.01){bestCost=candidate;best={...points[id]};}
-      }
-      points[id]=best;if(Math.hypot(best.x-original.x,best.y-original.y)>.1)moved=true;
+    for(let i=0;i<count;i++)for(let j=i+1;j<count;j++){
+      const a=boxes[i],b=boxes[j],p=points[i],q=points[j],dx=q.x+b.x+b.width/2-p.x-a.x-a.width/2,dy=q.y+b.y+b.height/2-p.y-a.y-a.height/2;
+      const x=(a.width+b.width)/2+18-Math.abs(dx),y=(a.height+b.height)/2+18-Math.abs(dy);
+      if(x>0&&y>0){moved=true;if(x<y){const d=(Math.sign(dx)||1)*(x+.1)/2;p.x-=d;q.x+=d;}else{const d=(Math.sign(dy)||1)*(y+.1)/2;p.y-=d;q.y+=d;}}
     }
     if(!moved)break;
+    if(pass%12===11)await pause();
   }
   return points;
 };

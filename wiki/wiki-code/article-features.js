@@ -1,3 +1,20 @@
+/* Affiliation identity ignores role notes, casing, and presentation markup. */
+window.wikiAffiliations=(()=>{
+  const key=value=>value.normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'");
+  function parse(value){
+    const text=value.replace(/\{\{Spoiler\|([\s\S]*?)\}\}/gi,'$1').replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g,'$1').replace(/fandom:/g,'').replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]*>/g,'');
+    const entries=new Map();
+    for(let name of text.split('\n')){
+      let previous;
+      do{previous=name;name=name.replace(/\([^()]*\)/g,'');}while(previous!==name);
+      name=name.replace(/&nbsp;/gi,' ').replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+      if(name&&!/^(none|unknown|n\/a)$/i.test(name)&&!entries.has(key(name)))entries.set(key(name),name);
+    }
+    return [...entries.values()];
+  }
+  function shared(a,b){const other=new Set(parse(b.join('\n')).map(key));return parse(a.join('\n')).filter(name=>other.has(key(name)));}
+  return {parse,shared};
+})();
 /* Shared article tools: mobile contents, gallery viewer, and related profiles. */
 (() => {
   const toc = document.querySelector('.wiki-toc');
@@ -39,15 +56,15 @@
         const clean=value=>value.replace(/\[\[(?:[^|\]]+\|)?([^\]]+)\]\]/g,'$1').replace(/fandom:/g,'').replace(/\{\{[^]*?\}\}/g,'').trim();
         const title=field('title'),base=field('image base')||'/images/character_art/',file=field('image').split(' :: ')[0];
         const image=file?new URL(file.startsWith('/')?file:base.replace(/\/?$/,'/')+file,location.origin).pathname:'';
-        const affiliations=clean(field('Affiliation')).split('\n').map(x=>x.replace(/\s*\([^)]*\)/g,'').trim()).filter(Boolean);
-        profiles.push({title,path,source,image,affiliations,relations:['Relatives','Relationships','Love Interest','Love Interests','Girlfriend','Boyfriend','Partner','Spouse','Husband','Wife','Fiancé','Fiancée','Host','Vessel','Vessal','Anchored Spirit','Spiritual Bond','Leader','Subordinates'].flatMap(kind=>field(kind).split('\n').filter(Boolean).map(line=>kind+': '+line)).join('\n'),description:window.wikiArticleSummary(source)});
-      }catch{}}}));await Promise.all(profiles.map(async profile=>{profile.portrait=await window.wikiPortraits.resolve(profile.title,profile.path,profile.image);}));return profiles.sort((a,b)=>a.title.localeCompare(b.title));
+        const affiliations=window.wikiAffiliations.parse(field('Affiliation'));
+        profiles.push({title,path,source,image,affiliations,relations:['Relatives','Relationships',...['Love Interest','Love Interests','Crush','Girlfriend','Boyfriend','Partner','Spouse','Husband','Wife','Fiancé','Fiancée','Fiance','Fiancee','Betrothed','Lover','Rival','Rivals'].flatMap(kind=>[kind,'Former '+kind,'Ex-'+kind]),'Host','Vessel','Vessal','Anchored Spirit','Spiritual Bond','Deity Contract','Demon Contract','Leader','Subordinate','Subordinates'].flatMap(kind=>field(kind).split('\n').filter(Boolean).map(line=>kind+': '+line)).join('\n'),description:window.wikiArticleSummary(source)});
+      }catch{}}}));const portraits=profiles.map(profile=>{profile.portraitReady=window.wikiPortraits.resolve(profile.title,profile.path,profile.image).then(portrait=>{profile.portrait=portrait;return portrait;});return profile.portraitReady;});if(!document.getElementById('wiki-relationship-map'))await Promise.all(portraits);return profiles.sort((a,b)=>a.title.localeCompare(b.title));
     }catch{return [];}
   })();
   window.wikiCharacterArchive.then(profiles=>{
     const path=location.pathname.replace(/\.html$/,'').replace(/\/$/,'');
     const current=profiles.find(p=>p.path.replace(/\.html$/,'')===path);if(!current)return;
-    const candidates=profiles.filter(p=>p!==current).map(p=>{const direct=current.source.includes(p.path.split('/').pop())||p.relations.includes(current.title)||current.relations.includes(p.title);const shared=p.affiliations.filter(a=>current.affiliations.includes(a));return {profile:p,score:(direct?10:0)+shared.length,reason:direct?'Connected in this article':shared[0]};}).filter(p=>p.score).sort((a,b)=>b.score-a.score||a.profile.title.localeCompare(b.profile.title)).slice(0,4);
+    const candidates=profiles.filter(p=>p!==current).map(p=>{const direct=current.source.includes(p.path.split('/').pop())||p.relations.includes(current.title)||current.relations.includes(p.title);const shared=window.wikiAffiliations.shared(p.affiliations,current.affiliations);return {profile:p,score:(direct?10:0)+shared.length,reason:direct?'Connected in this article':shared[0]};}).filter(p=>p.score).sort((a,b)=>b.score-a.score||a.profile.title.localeCompare(b.profile.title)).slice(0,4);
     if(!candidates.length)return;
     const section=document.createElement('section');section.className='wiki-related-articles';const heading=document.createElement('h2');heading.textContent='Related articles';const list=document.createElement('div');list.className='wiki-related-article-list';
     for(const {profile,reason} of candidates){const a=document.createElement('a');a.href=profile.path;if(profile.image){const img=document.createElement('img');img.src=profile.image;img.alt='';img.loading='lazy';const frame=document.createElement('span');frame.className='wiki-related-portrait';frame.append(img);a.append(frame);}const text=document.createElement('span');text.textContent=profile.title;const small=document.createElement('small');small.textContent=reason;text.append(small);a.append(text);list.append(a);}
