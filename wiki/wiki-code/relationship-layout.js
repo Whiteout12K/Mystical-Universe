@@ -2,7 +2,10 @@
 window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
   if(!count)return [];
   const boxes=Array.from({length:count},(_,i)=>bounds[i]||{x:-65,y:-38,width:130,height:108});
-  const target=edge=>edge.close?185:edge.former?435:edge.loveInterest?220:edge.type==='personal'?340:535;
+  // Extra shared memberships shorten a pair's target distance, with a cap.
+  // Family/spiritual and current love-interest spacing retain priority.
+  const affiliationWeight=edge=>Math.min(3,Math.max(0,new Set((edge.shared||[]).map(name=>name.trim().toLowerCase())).size-1))/3;
+  const target=edge=>edge.close?185:edge.former?435-45*affiliationWeight(edge):edge.loveInterest?220:edge.type==='personal'?340-60*affiliationWeight(edge):535-175*affiliationWeight(edge);
   const links=Array.from({length:count},()=>[]),distances=Array.from({length:count},(_,i)=>Array.from({length:count},(_,j)=>i===j?0:Infinity));
   for(const edge of edges){const length=target(edge);links[edge.i].push(edge);links[edge.j].push(edge);distances[edge.i][edge.j]=distances[edge.j][edge.i]=length;}
   // Graph distance keeps extended families together without pinning them to rings.
@@ -35,7 +38,7 @@ window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
     }
     for(const edge of edges){
       const {i,j}=edge,dx=points[j].x-points[i].x,dy=points[j].y-points[i].y,length=Math.max(1,Math.hypot(dx,dy));
-      const strength=edge.close?.38:edge.loveInterest&&!edge.former?.28:(edge.type==='personal'?.08:.035)/Math.sqrt(Math.max(weakDegree[i],weakDegree[j]));
+      const strength=edge.close?.38:edge.loveInterest&&!edge.former?.28:(edge.type==='personal'?.08:.035)*(1+.5*affiliationWeight(edge))/Math.sqrt(Math.max(weakDegree[i],weakDegree[j]));
       const pull=(length-target(edge))*strength;
       forces[i].x+=dx/length*pull;forces[i].y+=dy/length*pull;forces[j].x-=dx/length*pull;forces[j].y-=dy/length*pull;
     }

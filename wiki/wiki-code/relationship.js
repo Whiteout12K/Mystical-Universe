@@ -62,7 +62,7 @@ function expandWikiRelationshipProfiles(published){
   for(const control of [search,filter,minus,plus,reset])control.disabled=true;
   const pageActions=document.querySelector('.wiki-article-footer .wiki-actions');
   if(pageActions){pageActions.classList.add('wiki-map-page-actions');tools.append(pageActions);}
-  const guide=make('p','Drag to pan · Scroll or pinch to zoom · Solid: personal · Dashed: affiliations · Arrows: expresses love interest toward · Closest: family & spiritual bonds.');guide.className='wiki-map-guide';
+  const guide=make('p','Drag to pan · Scroll or pinch to zoom · Solid: personal · Dashed: affiliations · Arrows: expresses love interest toward · Closest: family & spiritual bonds · More shared affiliations pull characters closer.');guide.className='wiki-map-guide';
   const viewport=make('div');viewport.className='wiki-map-viewport';viewport.tabIndex=0;viewport.setAttribute('aria-label','Scrollable character relationship map');
   const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 1800 1500');svg.setAttribute('role','group');svg.setAttribute('aria-label','Character relationships');viewport.append(svg);
   const arranging=make('div','Arranging connections…');arranging.className='wiki-map-loading';arranging.setAttribute('role','status');viewport.append(arranging);
@@ -100,11 +100,13 @@ function expandWikiRelationshipProfiles(published){
   const family=role=>!former(role)&&(/\b(mother|father|parent|son|daughter|child|brother|sister|sibling|uncle|aunt|cousin|nephew|niece|grandmother|grandfather|grandparent|grandchild|ancestor|descendant|relative|family|husband|wife|spouse)\b/i.test(role)||engagement(role));
   const spiritual=role=>/\b(host|vess[ea]l|anchored spirit|spiritual bond|(?:deity|demon)[\s-]+contract)\b/i.test(role);
   const hierarchy=role=>/\b(leader|subordinates?)\b/i.test(role);
+  const familiar=role=>/\b(contractors?|masters?|familiars?)\b/i.test(role);
   const creative=role=>/\b(creators?|creations?)\b/i.test(role);
   const rival=role=>/\b(rivals?|rivalry)\b/i.test(role);
-  const recognized=role=>creative(role)||romantic(role)||family(role)||spiritual(role)||hierarchy(role)||rival(role)||/\b(friend|friends|friendship|ally|allies)\b/i.test(role);
+  const recognized=role=>familiar(role)||creative(role)||romantic(role)||family(role)||spiritual(role)||hierarchy(role)||rival(role)||/\b(friend|friends|friendship|ally|allies)\b/i.test(role);
   function inverseRole(other){
     const role=other.role.toLowerCase();
+    if(familiar(role))return (former(role)?'former ':'')+(/\bfamiliars?\b/.test(role)?'contractor':'familiar');
     if(creative(role))return (former(role)?'former ':'')+(/\bcreators?\b/.test(role)?'creation':'creator');
     if(hierarchy(role))return /subordinates?/.test(role)?'leader':'subordinate';
     const contract=role.match(/\b(deity|demon)[\s-]+contract\b/i);
@@ -129,7 +131,7 @@ function expandWikiRelationshipProfiles(published){
   }
   function roleGroup(role){
     const status=former(role)?'former:':'current:';
-    return status+(creative(role)?'creation':feelings(role)?'feelings':family(role)&&!romantic(role)?'family':romantic(role)?'romance':spiritual(role)?'spiritual':hierarchy(role)?'hierarchy':rival(role)?'rival':normalizeRole(role));
+    return status+(familiar(role)?'familiar':creative(role)?'creation':feelings(role)?'feelings':family(role)&&!romantic(role)?'family':romantic(role)?'romance':spiritual(role)?'spiritual':hierarchy(role)?'hierarchy':rival(role)?'rival':normalizeRole(role));
   }
   function listRoles(own,reverse){
     const direct=own.filter(t=>recognized(t.role)),groups=new Set(direct.map(t=>roleGroup(t.role)));
@@ -149,7 +151,7 @@ function expandWikiRelationshipProfiles(published){
       // Only an explicitly documented expression produces an outgoing arrow.
       loveFromI:ab.some(t=>feelings(t.role)),loveFromJ:ba.some(t=>feelings(t.role)),
       loveInterest:all.some(t=>feelings(t.role)&&!former(t.role)),type:personal?'personal':'affiliation',family:all.some(t=>family(t.role)),
-      former:!!personal&&all.length>0&&all.every(t=>former(t.role)),close:all.some(t=>family(t.role)||spiritual(t.role)),
+      former:!!personal&&all.length>0&&all.every(t=>former(t.role)),close:all.some(t=>family(t.role)||spiritual(t.role)||familiar(t.role)&&!former(t.role)),
       label:personal?personal+(shared.length?' · Shared affiliations: '+shared.join(', '):''):shared.join(', '),
       listLabels:{[i]:personal?listRoles(ab,ba):shared.join(', '),[j]:personal?listRoles(ba,ab):shared.join(', ')}});
   }
@@ -168,7 +170,7 @@ function expandWikiRelationshipProfiles(published){
   const bounds=nodes.map(node=>{const b=node.getBBox();return {x:b.x,y:b.y,width:b.width,height:b.height};});
   // Reuse only layouts whose character names, connections, and measured labels
   // still match. Editing a relationship automatically invalidates this cache.
-  const layoutKey=JSON.stringify(['bonds-v13',profiles.map(p=>p.title),edges.map(({i,j,type,close,former,loveInterest})=>[i,j,type,close,former,loveInterest]),bounds]);
+  const layoutKey=JSON.stringify(['bonds-v14',profiles.map(p=>p.title),edges.map(({i,j,type,close,former,loveInterest,shared})=>[i,j,type,close,former,loveInterest,shared||[]]),bounds]);
   let cached;
   try{cached=JSON.parse(localStorage.getItem('ml-wiki-relationship-layout'));}catch{}
   if(cached?.key===layoutKey&&Array.isArray(cached.points)&&cached.points.length===profiles.length&&cached.points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)))points=cached.points;

@@ -103,3 +103,22 @@ test('only scores above 150 percent of the average scale up, with exact threshol
  assert.ok(Math.abs(expanded[1]-(38+24*(3-floor)/(4-floor)))<1e-9);
  assert.ok(expanded.every(radius=>Number.isFinite(radius)&&radius>=38&&radius<=62));
 });
+
+test('more shared affiliations pull a pair closer, with bounded influence and no duplicate boost',async()=>{
+ const {layout}=setup();
+ const gap=async shared=>distance(await layout(2,[{i:0,j:1,type:'affiliation',shared}]),0,1);
+ const one=await gap(['Guild']),two=await gap(['Guild','Academy']),four=await gap(['Guild','Academy','District','Team']);
+ assert.ok(two<one);assert.ok(four<two);
+ assert.equal(await gap(['Guild','Academy','District','Team','Society','Order']),four,'extra memberships stop shrinking the target at the cap');
+ assert.equal(await gap(['Guild',' guild ','GUILD']),one,'duplicate memberships do not strengthen attraction');
+ const family=distance(await layout(2,[{i:0,j:1,type:'personal',close:true}]),0,1);
+ assert.ok(family<four,'even heavily affiliated pairs retain more distance than close family');
+});
+test('shared affiliations also prioritize personal pairs without changing close bonds',async()=>{
+ const {layout}=setup(),shared=['Guild','Academy','District','Team'];
+ const gap=async edge=>distance(await layout(2,[{i:0,j:1,type:'personal',...edge}]),0,1);
+ assert.ok(await gap({shared})<await gap({}));
+ assert.equal(await gap({close:true,shared}),await gap({close:true}));
+ assert.equal(await gap({loveInterest:true,shared}),await gap({loveInterest:true}));
+ assert.ok(await gap({former:true,shared})>await gap({shared}));
+});

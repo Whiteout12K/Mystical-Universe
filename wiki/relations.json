@@ -2,6 +2,13 @@
   "version": 1,
   "characters": [
     {
+      "id": "admora_odelpha",
+      "name": "Admora Odelpha",
+      "path": "/wiki/char/admora_odelpha",
+      "relatives": "Trisdain Leonard (love interest)",
+      "affiliations": "Black Knights (defected)"
+    },
+    {
       "id": "adominus_luces",
       "name": "Adominus Luces",
       "path": "",
@@ -12,8 +19,8 @@
       "id": "ainya_viole",
       "name": "Ainya Viole",
       "path": "",
-      "relatives": "",
-      "affiliations": ""
+      "relatives": "Lynn Kara-Reeyn (foster sister)\n[[char/kiara_katzol|Kiara Katzol]] (foster sister)\nPrince Aether (foster brother)",
+      "affiliations": "Demoness Trio"
     },
     {
       "id": "alisha_locks",
@@ -34,7 +41,14 @@
       "name": "Amos Black",
       "path": "/wiki/char/amos_black",
       "relatives": "[[Lily Black]] (Sister)",
-      "affiliations": "Mystical Legends\nIT Agency"
+      "affiliations": "Mystical Legends\nIT Agency\nTask Force (IT Agency Branch)\nDistrict 1\nDistrict 7\nLady of the Lake"
+    },
+    {
+      "id": "artiana",
+      "name": "Artiana",
+      "path": "/wiki/char/artiana",
+      "relatives": "",
+      "affiliations": "Deity\nLady of the Lake"
     },
     {
       "id": "atalantia_aquia",
@@ -54,29 +68,29 @@
       "id": "aurel_reeyn",
       "name": "Aurel Reeyn",
       "path": "",
-      "relatives": "",
+      "relatives": "Caela Obtainia (wife)\n[[char/avery_obtainia|Avery Obtainia]] (son)\nLynn Kara-Reeyn (niece)",
       "affiliations": ""
     },
     {
       "id": "avery_obtainia",
       "name": "Avery Obtainia",
       "path": "/wiki/char/avery_obtainia",
-      "relatives": "[[char/caela_obtainia|Caela Obtainia]] (mother)\nAurel Reeyn (father)\nLynn Kara-Reeyn (cousin)\n{{Spoiler|[[char/lux_luces|Lux Luces]] (love interest)<br>[[char/lynnhera|Lynnhera]] (spiritual bond)}}",
-      "affiliations": "[[mystical_legends|Mystical Legends]]\n[[fandom:Regnum Academy|Regnum Academy]]\n[[IT|IT Agency]] (intern)\n[[fandom:Tempest Aquia|Tempest Aquia]] Cohort\nQuad 44 / Team 44\n{{Spoiler|United District Association<br>[[fandom:District 7|District 7]] (Magni Mage)}}"
+      "relatives": "[[char/caela_obtainia|Caela Obtainia]] (mother)\nAurel Reeyn (father)\nLynn Kara-Reeyn (cousin)\n{{Spoiler|[[char/lux_luces|Lux Luces]] (love interest, contractor)<br>[[char/lynnhera|Lynnhera]] (spiritual bond)}}",
+      "affiliations": "[[mystical_legends|Mystical Legends]]\n[[fandom:Regnum Academy|Regnum Academy]]\n[[IT|IT Agency]] (intern)\n[[fandom:Tempest Aquia|Tempest Aquia]] Cohort\nQuad 44 (Team 44)\nLady of the Lake\n{{Spoiler|United District Association<br>[[fandom:District 7|District 7]] (Magni Mage)}}"
     },
     {
       "id": "ben_lock_burr",
       "name": "Ben Lock Burr",
       "path": "",
       "relatives": "",
-      "affiliations": ""
+      "affiliations": "Imperium School of the Technologicalized Military"
     },
     {
       "id": "caela_obtainia",
       "name": "Caela Obtainia",
       "path": "/wiki/char/caela_obtainia",
-      "relatives": "",
-      "affiliations": "Magni"
+      "relatives": "[[char/avery_obtainia|Avery Obtainia]] (son)\nAurel Reeyn (husband)\nLynn Kara-Reeyn (niece)",
+      "affiliations": "Magni (former)\nJourney of the Mystical Being Crew"
     },
     {
       "id": "carla_storm",
@@ -124,8 +138,8 @@
       "id": "elaina_terner",
       "name": "Elaina Terner",
       "path": "",
-      "relatives": "",
-      "affiliations": ""
+      "relatives": "[[char/lucy_terner|Lucy Terner]] (daughter)",
+      "affiliations": "Three Symbols (hope)"
     },
     {
       "id": "ellie_tracey",
@@ -160,7 +174,7 @@
       "name": "Irina Kim",
       "path": "",
       "relatives": "",
-      "affiliations": ""
+      "affiliations": "Imperium School of the Technologicalized Military"
     },
     {
       "id": "james_shera",
@@ -174,28 +188,42 @@
       "name": "Jane Tee",
       "path": "/wiki/char/jane_tee",
       "relatives": "",
-      "affiliations": "Black Rampart Cohort"
+      "affiliations": "Black Rampart Cohort\nRegnum Academy\nQuad 44 (Team 44)"
+    },
+    {
+      "id": "jay_neomo",
+      "name": "Jay Neomo",
+      "path": "/wiki/char/jay_neomo",
+      "relatives": "",
+      "affiliations": "Nuntios\nIT Agency"
     },
     {
       "id": "josh_picard",
       "name": "Josh Picard",
-      "path": "",
+      "path": "/wiki/char/josh_picard",
       "relatives": "",
-      "affiliations": ""
+      "affiliations": "Nuntios\nIT Agency"
     },
     {
       "id": "kaden_icelander",
       "name": "Kaden Icelander",
       "path": "/wiki/char/kaden_icelander",
       "relatives": "[[char/ioward_icelander|Ioward Icelander]] (father)\nSarah Icelander (mother)\n[[fandom:Irina Kim|Irina Kim]] (cousin)\n[[char/iter|I.T.E.R.]] (creation)",
-      "affiliations": "[[mystical_legends|Mystical Legends]] (co-leader)\n[[IT|IT Agency]] (leader)\nIT Industry\n[[fandom:Blue Legion|Blue Legion]] Cohort\n[[fandom:Regnum Academy|Regnum Academy]]\n[[fandom:District 1|District 1]]\n[[district_7|District 7]]"
+      "affiliations": "[[mystical_legends|Mystical Legends]] (co-leader)\n[[IT|IT Agency]] (leader)\nIntelligence Force (IT Agency Branch)\nTask Force (IT Agency Branch)\nAftermath Force (IT Agency Branch)\n[[fandom:Blue Legion|Blue Legion]] Cohort\n[[fandom:Regnum Academy|Regnum Academy]]\n[[fandom:District 1|District 1]]\n[[district_7|District 7]]"
     },
     {
       "id": "kiara_katzol",
       "name": "Kiara Katzol",
       "path": "/wiki/char/kiara_katzol",
       "relatives": "Unnamed father\nUnnamed mother\n[[char/raymond_valoris|Raymond Valoris]] (love interest)\n[[char/zekron|Zekron]] (deity contract)\nAinya Viole (foster sister)\nLynn Kara-Reeyn (foster sister)\nPrince Aether (foster brother)",
-      "affiliations": "[[mystical_legends|Mystical Legends]]\n[[fandom:Regnum Academy|Regnum Academy]] (Class 1A)\n[[fandom:Black Rampart|Black Rampart]] Cohort\nDemihuman resistance\n[[fandom:District 10|District 10]]"
+      "affiliations": "[[mystical_legends|Mystical Legends]]\n[[fandom:Regnum Academy|Regnum Academy]] (Class 1A)\n[[fandom:Black Rampart|Black Rampart]] Cohort\nDemihuman resistance\n[[fandom:District 10|District 10]]\nLady of the Lake"
+    },
+    {
+      "id": "len_hiyama",
+      "name": "Len Hiyama",
+      "path": "/wiki/char/len_hiyama",
+      "relatives": "",
+      "affiliations": "Dai-Battalion Cohort (Captain)\nRegnum Academy"
     },
     {
       "id": "lily_black",
@@ -216,7 +244,7 @@
       "name": "Lucy Terner",
       "path": "/wiki/char/lucy_terner",
       "relatives": "[[The White Assassin|The White Assassin]] (sister)\nElaina Terner (mother)\n[[char/kaden_icelander|Kaden Icelander]] (love interest)",
-      "affiliations": "Mystical Legends\nIT Agency"
+      "affiliations": "Mystical Legends\nIT Agency\nIntelligence Force (IT Agency Branch)\nDistrict 1\nDistrict 7"
     },
     {
       "id": "lumen_luces",
@@ -229,7 +257,7 @@
       "id": "lux_luces",
       "name": "Lux Luces",
       "path": "/wiki/char/lux_luces",
-      "relatives": "[[fandom:Zenith Luces|Zenith Luces]] (ancestor)\n[[fandom:Lumen Luces|Lumen Luces]] (father)\nUnnamed mother (deceased)\n[[fandom:Adominus Luces|Adominus Luces]] (brother)\n[[fandom:Prance Luces|Prance Luces]] (brother)\n[[char/avery_obtainia|Avery Obtainia]] (love interest)\n{{Spoiler|Prince Aether (former fiancé)}}",
+      "relatives": "[[fandom:Zenith Luces|Zenith Luces]] (ancestor)\n[[fandom:Lumen Luces|Lumen Luces]] (father)\nUnnamed mother (deceased)\n[[fandom:Adominus Luces|Adominus Luces]] (brother)\n[[fandom:Prance Luces|Prance Luces]] (brother)\n[[char/avery_obtainia|Avery Obtainia]] (love interest, familiar)\n{{Spoiler|Prince Aether (former fiancé)}}",
       "affiliations": "[[fandom:District 12|District 12]]\n[[fandom:Nuntios|Nuntios]]\n[[fandom:IT|IT Agency]]\n[[fandom:Regnum Academy|Regnum Academy]] (substitute teacher)\nDemoness Trio\n{{Spoiler|[[fandom:District 7|District 7]] (Magni's assistance)}}"
     },
     {
@@ -237,7 +265,7 @@
       "name": "Lynn Kara-Reeyn",
       "path": "",
       "relatives": "Ainya Viole (foster sister)\n[[char/kiara_katzol|Kiara Katzol]] (foster sister)\nPrince Aether (foster brother)\nAurel Reeyn (uncle)\n[[char/avery_obtainia|Avery Obtainia]] (cousin)\n[[char/caela_obtainia|Caela Obtainia]] (aunt)",
-      "affiliations": ""
+      "affiliations": "Demoness Trio"
     },
     {
       "id": "lynnhera",
@@ -247,6 +275,13 @@
       "affiliations": "Deity"
     },
     {
+      "id": "marinette_kne",
+      "name": "Marinette Kne",
+      "path": "/wiki/char/marin_kne",
+      "relatives": "",
+      "affiliations": "Nuntios\nIT Agency"
+    },
+    {
       "id": "miona_tech",
       "name": "Miona Tech",
       "path": "",
@@ -254,11 +289,18 @@
       "affiliations": ""
     },
     {
+      "id": "montgomery_devereaux",
+      "name": "Montgomery Devereaux",
+      "path": "/wiki/char/montgomery_devereaux",
+      "relatives": "",
+      "affiliations": "Imperium School of the Technologicalized Military (acting co-dean)"
+    },
+    {
       "id": "oceanus_aquia",
       "name": "Oceanus Aquia",
       "path": "",
-      "relatives": "",
-      "affiliations": ""
+      "relatives": "[[char/river_grantia|River Grant]] (niece)\n[[char/alteria_aquia|Alteria Aquia]] (niece)\nAtlas Aquia (nephew)\nAtalantia Aquia (sister)",
+      "affiliations": "Three Symbols (peace)"
     },
     {
       "id": "prance_luces",
@@ -279,7 +321,7 @@
       "name": "Pyrus Bourn",
       "path": "/wiki/char/pyrus_bourn",
       "relatives": "[[char/zenith_luces|Zenith Luces]] (rival)\n[[char/kaden_icelander|Kaden Icelander ]](rival)\nBen Lock Burr (rival)\n[[char/tom_nado|Tom Nado]] (subordinate)\n[[char/tony_smith|Tony Smith]] (subordinate)\n[[char/ellie_tracey|Ellie Tracey]] (subordinate)",
-      "affiliations": "Villain\nDistrict 3 (unofficial Magni title)"
+      "affiliations": "Villain\nDistrict 3 (unofficial Magni title)\nJourney of the Mystical Being Crew"
     },
     {
       "id": "raymond_valoris",
@@ -300,7 +342,14 @@
       "name": "River Grant",
       "path": "/wiki/char/river_grantia",
       "relatives": "[[char/atlas_aquia|Atlas Aquia]] (half-brother)\n[[char/alteria_aquia|Alteria Aquia]] (half-sister)\nAtalantia Aquia (mother)\nOceanus Aquia (uncle)\nJosh Picard (love interest)",
-      "affiliations": "Mystical Legends\nMystic Cohort"
+      "affiliations": "Mystical Legends\nMystic Cohort\nRegnum Academy\nQuad 44 (Team 44)"
+    },
+    {
+      "id": "sabastian_levi",
+      "name": "Sabastian Levi",
+      "path": "/wiki/char/sabastian_levi",
+      "relatives": "",
+      "affiliations": "Three Symbols (strength)"
     },
     {
       "id": "sarah_icelander",
@@ -321,7 +370,7 @@
       "name": "Teddric Tech",
       "path": "/wiki/char/teddric_tech",
       "relatives": "[[Timothy Tech|Timothy Tech]] (father)\n[[Sarah Tech|Sarah Tech]] (mother)\n[[Miona Tech|Miona Tech]] (sister)\n{{Spoiler|[[char/jane_tee|Jane Tee]] (love interest)}}",
-      "affiliations": "Mystical Legends\nDai-Battalion Cohort"
+      "affiliations": "Mystical Legends\nDai-Battalion Cohort\nRegnum Academy\nQuad 44 (Team 44)"
     },
     {
       "id": "the_white_assassin",
@@ -342,14 +391,21 @@
       "name": "Tom Nado",
       "path": "/wiki/char/tom_nado",
       "relatives": "[[char/pyrus_bourn|Pyrus Bourn]] (leader)",
-      "affiliations": "District 3"
+      "affiliations": "District 3\nJourney of the Mystical Being Crew"
     },
     {
       "id": "tony_smith",
       "name": "Tony Smith",
       "path": "/wiki/char/tony_smith",
       "relatives": "[[char/pyrus_bourn|Pyrus Bourn]] (leader)",
-      "affiliations": "District 3"
+      "affiliations": "District 3\nJourney of the Mystical Being Crew"
+    },
+    {
+      "id": "trisdain_leonard",
+      "name": "Trisdain Leonard",
+      "path": "/wiki/char/trisdain_leonard",
+      "relatives": "Admora Odelpha (love interest)",
+      "affiliations": "Black Knights (former)\nLady of the Lake"
     },
     {
       "id": "zekron",
@@ -362,8 +418,8 @@
       "id": "zenith_luces",
       "name": "Zenith Luces",
       "path": "",
-      "relatives": "",
-      "affiliations": ""
+      "relatives": "[[fandom:Lumen Luces|Lumen Luces]] (descendant)\n[[fandom:Adominus Luces|Adominus Luces]] (descendant)\n[[fandom:Prance Luces|Prance Luces]] (descendant)\n[[char/lux_luces|Lux Luces]] (descendant)",
+      "affiliations": "Journey of the Mystical Being Crew"
     }
   ]
 }

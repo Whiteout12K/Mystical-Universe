@@ -227,3 +227,29 @@ test('IT Industries resolves to the canonical IT Industry affiliation without du
  first.affiliations=['IT Industries','IT Industry'];second.affiliations=['IT Industry'];
  const [edge]=relationships([first,second]);assert.equal(JSON.stringify(edge.shared),JSON.stringify(['IT Industry']));
 });
+
+test('master and familiar roles supply reciprocal labels and close bonds',()=>{
+ for(const [role,inverse,close] of [['master','familiar',true],['familiar','contractor',true],['familiars','contractor',true],['former master','former familiar',false],['former familiar','former contractor',false]]){
+  const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] ('+role+')'),profile('Second','/wiki/char/second')]);
+  assert.equal(edge.type,'personal');assert.equal(edge.listLabels[0],role);assert.equal(edge.listLabels[1],inverse);assert.equal(edge.close,close);assert.equal(edge.family,false);
+ }
+});
+test('familiar bonds preserve other roles without repeating reciprocal familiar labels',()=>{
+ const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] (familiar, spiritual bond)'),profile('Second','/wiki/char/second','Relatives: [[First]] (master)')]);
+ assert.equal(edge.listLabels[0],'familiar · spiritual bond');assert.equal(edge.listLabels[1],'master · spiritual bond');
+});
+test('master and familiar fields also work for characters without wiki pages',()=>{
+ for(const [field,inverse] of [['Master','familiar'],['Familiar','contractor']]){
+  const profiles=expand([profile('First','/wiki/char/first',field+': [[Second]]')]);const [edge]=relationships(profiles);
+  assert.equal(profiles[1].unpublished,true);assert.equal(edge.listLabels[1],inverse);
+ }
+});
+
+test('contractor and familiar roles are reciprocal, including plurals and former contracts',()=>{
+ for(const [role,inverse,close] of [['contractor','familiar',true],['contractors','familiar',true],['former contractor','former familiar',false],['familiar','contractor',true]]){
+  const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] ('+role+')'),profile('Second','/wiki/char/second')]);
+  assert.equal(edge.listLabels[0],role);assert.equal(edge.listLabels[1],inverse);assert.equal(edge.close,close);
+ }
+ const [edge]=relationships([profile('First','/wiki/char/first','Relatives: [[Second]] (familiar)'),profile('Second','/wiki/char/second','Relatives: [[First]] (contractor)')]);
+ assert.equal(edge.listLabels[0],'familiar');assert.equal(edge.listLabels[1],'contractor');
+});
