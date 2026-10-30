@@ -1,3 +1,4 @@
+import {isLocalReader,exportReaderPDF} from './reader-pdf.js';
 import {edgeDirection,wholeBookPage,touchAction} from './page-navigation.js';
 import {resolveChapterLink,readerChapterURL} from './book-links.js';
 import {ReaderSurface} from './reader-surface.js';
@@ -19,7 +20,8 @@ if(volumeId==='1'&&stored.layoutVersion!==2){
 let book,rendition,toc=[],current=null,index=0,loading=false,resizeTimer,settingsTimer,settingsAnchor=null,adjusting=false;
 let pageCounts=[],countedLayout='',bookRevision='';
 let contentsBuilt=false,activeContentsIndex=-1;
-let readerReady=false,preparing=null;
+let readerReady=false,preparing=null,exporting=false,exportCancelled=false;
+$('pdf-export-section').hidden=!isLocalReader(location.hostname);
 const surface=new ReaderSurface($('reader-surface'),{navigate:target=>go(target)});
 function syncSurface(){
  const all=rendition?.getContents()||[],contents=all.find(content=>content.sectionIndex===current?.start?.index)||all[0];
@@ -187,6 +189,7 @@ async function waitForPage(){
 function preparingUI(active){
  document.querySelector('.reader-stage').dataset.loading=String(active);
  $('reader').inert=true;$('reader-surface').inert=active;$('reader').setAttribute('aria-busy',String(active));
+ $('export-pdf').disabled=active||!readerReady;
  for(const id of ['contents-button','settings-button','bookmark-button','previous','next','edge-previous','edge-next','resume'])$(id).disabled=active;
 }
 async function prepareBook(target){
@@ -244,8 +247,35 @@ async function start(){preferences();renderBookmarks();preparingUI(true);
  if(saved.cfi){$('resume').textContent='Start over';$('resume').hidden=false;}
  status('');$('reader').setAttribute('aria-busy','false');
  updatePageLabel();
- window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{const anchor=current?.start?.cfi;rendition.resize();if(readerReady)prepareBook(anchor).catch(console.error);},160);});
+ window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(exporting)return;const anchor=current?.start?.cfi;rendition.resize();if(readerReady)prepareBook(anchor).catch(console.error);},160);});
  window.addEventListener('pagehide',saveReadingPosition);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)saveReadingPosition();});
  }catch(error){console.error(error);status(error.message+' Return to the Library or reload to try again.');$('pagination-message').textContent=error.message;$('pagination-retry').hidden=false;}}
 start();
+
+$('cancel-pdf').addEventListener('click',()=>{exportCancelled=true;$('cancel-pdf').disabled=true;$('pagination-message').textContent='Cancelling export…';});
+$('export-pdf').addEventListener('click',async()=>{
+ if(!isLocalReader(location.hostname)||!readerReady||loading||adjusting||exporting)return;
+ const anchor=current.start.cfi,key=layoutKey();saveReadingPosition();closeDialogs();
+ document.querySelector('.reader-stage').dataset.exporting='true';
+ exportCancelled=false;$('cancel-pdf').hidden=false;$('cancel-pdf').disabled=false;
+ exporting=true;readerReady=false;loading=true;preparingUI(true);$('pagination-retry').hidden=true;
+ try{
+  const exported=await exportReaderPDF({
+   hostname:location.hostname,title:document.title.replace(' · Mystical Legends Reader',''),
+   book,fontFamily:families[settings.font],
+   checkLayout:()=>{if(exportCancelled)throw Error('Export cancelled.');if(layoutKey()!==key)throw Error('The window size changed. Please export again without resizing.');},
+   progress:(page,total,phase='Exporting PDF')=>{$('pagination-message').textContent=phase.startsWith('Typesetting')?`${phase} · section ${page} of ${total}`:`${phase} · page ${page} of ${total}`;$('pagination-progress').max=total;$('pagination-progress').value=page;}
+  });
+  $('pdf-export-status').textContent=`Your A6 book PDF has been downloaded (${exported.pages} pages · ${(exported.bytes/1_000_000).toFixed(2)} MB).`;
+ }catch(error){console.error(error);$('pdf-export-status').textContent=exportCancelled?'Export cancelled.':'PDF export failed: '+error.message;}
+ finally{
+  try{
+   // The independent print rendition has already restored the shared font size.
+   syncSurface();await surface.ready();
+  }
+  finally{$('cancel-pdf').hidden=true;delete document.querySelector('.reader-stage').dataset.exporting;exporting=false;loading=false;readerReady=true;preparingUI(false);relocated(current);}
+  if(layoutKey()!==key){rendition.resize();await prepareBook(anchor);}
+  $('contents-dialog').showModal();
+ }
+});
