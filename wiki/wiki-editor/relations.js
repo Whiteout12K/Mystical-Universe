@@ -1,5 +1,5 @@
 import './visual.js';
-import {validateRelations,characterKey,serializeRelations,writeRelationsFile,parseRelationsSource} from '/wiki/wiki-code/relations-data.js';
+import {validateRelations,characterKey,serializeRelations,writeRelationsFile,parseRelationsSource,autoLinkRelations} from '/wiki/wiki-code/relations-data.js';
 const $=id=>document.getElementById(id),local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname),draftKey='ml-relations-editor-draft-v1';
 let activeRich=null,selectedRange=null;
 let data,baseline='',folder=null,remembered=null,busy=false,olderDraft=null,mode='wiki',rawSource='';
@@ -42,7 +42,7 @@ function card(entry){
   rich.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.isComposing){event.preventDefault();document.execCommand('insertLineBreak',false);}});
   label.append(legend,rich);return label;
  };
- fields.append(metadata,richField('Relationships','relatives'),richField('Affiliations','affiliations'),make('p','One affiliation per line. Links, role notes, and spoilers work in both fields. Characters without wiki pages also appear on the map.'));
+ fields.append(metadata,richField('Relationships','relatives'),richField('Affiliations','affiliations'),make('p','One name or affiliation per line, followed by optional role notes. Saving automatically links unlinked names to char/ and affiliations to location/. Existing links and spoilers are preserved. Characters without wiki pages also appear on the map.'));
  panel.append(summary,fields);return panel;
 }
 function rememberRelationSelection(){
@@ -132,8 +132,10 @@ $('save-relations').addEventListener('click',async()=>{
   if(!folder)await openFolder();
   if(await folder.queryPermission({mode:'readwrite'})!=='granted'&&await folder.requestPermission({mode:'readwrite'})!=='granted')throw Error('Allow wiki folder access to save relations.');
   busy=true;controls();
-  const handle=await folder.getFileHandle('relations.json'),content=await writeRelationsFile(handle,data,baseline);
-  baseline=rawSource=content;if(mode==='source')$('relations-source').value=rawSource;try{localStorage.removeItem(draftKey);}catch{}
+  const saved=autoLinkRelations(data);
+  const handle=await folder.getFileHandle('relations.json'),content=await writeRelationsFile(handle,saved,baseline);
+  data=saved;
+  baseline=rawSource=content;render();try{localStorage.removeItem(draftKey);}catch{}
   status('Saved wiki/relations.json. Refresh wiki pages to see changes; your normal Git push publishes them.');
  }catch(error){if(error.name!=='AbortError')status(error.message,true);}finally{busy=false;controls();}
 });

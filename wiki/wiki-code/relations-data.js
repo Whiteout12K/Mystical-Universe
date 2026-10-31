@@ -41,3 +41,31 @@ export async function writeRelationsFile(handle,data,baseline){
 }
 
 export function parseRelationsSource(source){return validateRelations(JSON.parse(source));}
+
+// Each relationship/affiliation line starts with its subject, followed by optional
+// role notes. Existing wiki links and other markup remain author-controlled.
+export function autoLinkRelations(data){
+ validateRelations(data);
+ function lineLink(line,route){
+  const spoiler=line.match(/^(\s*)\{\{Spoiler\|/i);
+  if(spoiler){
+   let depth=1,end=spoiler[0].length;
+   for(;end<line.length&&depth;end++){
+    if(line.slice(end,end+2)==='{{'){depth++;end++;}
+    else if(line.slice(end,end+2)==='}}'){depth--;if(depth)end++;else break;}
+   }
+   if(depth)return line; // Leave incomplete markup for the author to correct.
+   return spoiler[0]+lineLink(line.slice(spoiler[0].length,end),route)+line.slice(end);
+  }
+  const match=line.match(/^(\s*(?:[-*]\s+)?)([^\[\]{}()<>\n]+?)(\s*)(?=\(|\[|\{|$)/);
+  if(!match)return line;
+  const name=match[2].trim();
+  if(!/[\p{L}\p{N}]/u.test(name)||/https?:|www\.|\|/i.test(name))return line;
+  const slug=name.normalize('NFKC').toLowerCase().replace(/\s+/g,'_');
+  return match[1]+'[['+route+'/'+slug+'|'+name+']]'+match[3]+line.slice(match[0].length);
+ }
+ return {...data,characters:data.characters.map(entry=>({...entry,
+  relatives:entry.relatives.split('\n').map(line=>lineLink(line,'char')).join('\n'),
+  ...(entry.affiliations===undefined?{}:{affiliations:entry.affiliations.split('\n').map(line=>lineLink(line,'location')).join('\n')})
+ }))};
+}

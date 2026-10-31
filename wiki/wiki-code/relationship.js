@@ -55,7 +55,7 @@ function expandWikiRelationshipProfiles(published){
   const tools=make('div');tools.className='wiki-map-tools';
   const search=make('select');search.setAttribute('aria-label','Jump to a character');search.append(new Option('Choose a character',''));profiles.forEach((p,i)=>search.append(new Option(p.title,String(i))));
   const minus=make('button','−'),plus=make('button','+'),reset=make('button','Reset view');for(const b of [minus,plus,reset])b.type='button';minus.setAttribute('aria-label','Zoom out');plus.setAttribute('aria-label','Zoom in');
-  const filter=make('select');filter.setAttribute('aria-label','Relationship type');filter.append(new Option('All connections','all'),new Option('Personal relationships','personal'),new Option('Shared affiliations','affiliation'));
+  const filter=make('select');filter.setAttribute('aria-label','Relationship type');filter.append(new Option('All connections','all'),new Option('Family & personal relationships','personal'),new Option('Shared affiliations','affiliation'));
   const selectors=make('div');selectors.className='wiki-map-selectors';selectors.append(search,filter);
   const zoomControls=make('div');zoomControls.className='wiki-map-zoom';zoomControls.setAttribute('role','group');zoomControls.setAttribute('aria-label','Map view controls');reset.textContent='Reset';reset.setAttribute('aria-label','Reset view');zoomControls.append(minus,plus,reset);
   tools.append(selectors,zoomControls);
@@ -168,46 +168,68 @@ function expandWikiRelationshipProfiles(published){
   // Measure the actual names, including loaded fonts, before reserving space.
   await document.fonts.ready;
   const bounds=nodes.map(node=>{const b=node.getBBox();return {x:b.x,y:b.y,width:b.width,height:b.height};});
-  // Reuse only layouts whose character names, connections, and measured labels
-  // still match. Editing a relationship automatically invalidates this cache.
-  const layoutKey=JSON.stringify(['bonds-v14',profiles.map(p=>p.title),edges.map(({i,j,type,close,former,loveInterest,shared})=>[i,j,type,close,former,loveInterest,shared||[]]),bounds]);
-  let cached;
-  try{cached=JSON.parse(localStorage.getItem('ml-wiki-relationship-layout'));}catch{}
-  if(cached?.key===layoutKey&&Array.isArray(cached.points)&&cached.points.length===profiles.length&&cached.points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)))points=cached.points;
-  else{
-    await new Promise(resolve=>requestAnimationFrame(resolve));
-    points=await window.layoutWikiRelationships(profiles.length,edges,bounds);
-    try{localStorage.setItem('ml-wiki-relationship-layout',JSON.stringify({key:layoutKey,points}));}catch{}
+  // Cache unshifted positions independently for each connection priority.
+  const layouts=new Map();let layoutRevision=0,layoutBusy=false,mapWidth=600,mapHeight=500,active=-1,zoom=.7;
+  async function modePoints(mode){
+    if(layouts.has(mode))return layouts.get(mode);
+    const request=(async()=>{
+      const graph=window.wikiRelationshipLayoutEdges(edges,mode);
+      const key=JSON.stringify(['bonds-v15',mode,profiles.map(p=>p.title),graph.map(({i,j,type,close,former,loveInterest,shared})=>[i,j,type,close,former,loveInterest,shared||[]]),bounds]);
+      const storageKey='ml-wiki-relationship-layout:'+mode;let cached;
+      try{cached=JSON.parse(localStorage.getItem(storageKey));}catch{}
+      if(cached?.key===key&&Array.isArray(cached.points)&&cached.points.length===profiles.length&&cached.points.every(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)))return cached.points;
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      const positions=await window.layoutWikiRelationships(profiles.length,graph,bounds);
+      try{localStorage.setItem(storageKey,JSON.stringify({key,points:positions}));}catch{}
+      return positions;
+    })();
+    layouts.set(mode,request);try{return await request;}catch(error){layouts.delete(mode);throw error;}
   }
-  const shiftX=80-Math.min(...points.map((point,i)=>point.x+bounds[i].x));
-  const shiftY=80-Math.min(...points.map((point,i)=>point.y+bounds[i].y));
-  points.forEach((point,i)=>{point.x+=shiftX;point.y+=shiftY;nodes[i].setAttribute('transform',`translate(${point.x} ${point.y})`);});
-  const mapWidth=Math.max(600,...points.map((point,i)=>point.x+bounds[i].x+bounds[i].width+80));
-  const mapHeight=Math.max(500,...points.map((point,i)=>point.y+bounds[i].y+bounds[i].height+80));
-  svg.setAttribute('viewBox',`0 0 ${mapWidth} ${mapHeight}`);
-  edges.forEach(edge=>{
-    const a=points[edge.i],b=points[edge.j],length=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y)),dx=(b.x-a.x)/length,dy=(b.y-a.y)/length;
-    const start=radii[edge.i]+8,end=radii[edge.j]+8;
-    for(const [key,value] of Object.entries({x1:a.x+dx*start,y1:a.y+dy*start,x2:b.x-dx*end,y2:b.y-dy*end}))edge.element.setAttribute(key,value);
-  });
-  let active=-1,zoom=.7;
+  function positionMap(positions){
+    points=positions.map(point=>({...point}));
+    const shiftX=80-Math.min(...points.map((point,i)=>point.x+bounds[i].x)),shiftY=80-Math.min(...points.map((point,i)=>point.y+bounds[i].y));
+    points.forEach((point,i)=>{point.x+=shiftX;point.y+=shiftY;nodes[i].setAttribute('transform',`translate(${point.x} ${point.y})`);});
+    mapWidth=Math.max(600,...points.map((point,i)=>point.x+bounds[i].x+bounds[i].width+80));
+    mapHeight=Math.max(500,...points.map((point,i)=>point.y+bounds[i].y+bounds[i].height+80));
+    svg.setAttribute('viewBox',`0 0 ${mapWidth} ${mapHeight}`);
+    edges.forEach(edge=>{
+      const a=points[edge.i],b=points[edge.j],length=Math.max(1,Math.hypot(b.x-a.x,b.y-a.y)),dx=(b.x-a.x)/length,dy=(b.y-a.y)/length;
+      const start=radii[edge.i]+8,end=radii[edge.j]+8;
+      for(const [key,value] of Object.entries({x1:a.x+dx*start,y1:a.y+dy*start,x2:b.x-dx*end,y2:b.y-dy*end}))edge.element.setAttribute(key,value);
+    });
+    size();
+  }
+  async function arrangeMode(){
+    const mode=filter.value,revision=++layoutRevision;layoutBusy=true;
+    viewport.setAttribute('aria-busy','true');arranging.textContent=mode==='personal'?'Arranging family & personal connections…':mode==='affiliation'?'Arranging shared affiliations…':'Arranging all connections…';arranging.hidden=false;svg.style.opacity='.35';svg.style.pointerEvents='none';
+    for(const control of [search,minus,plus,reset])control.disabled=true;
+    try{
+      const positions=await modePoints(mode);if(revision!==layoutRevision)return;
+      positionMap(positions);svg.dataset.layoutMode=mode;refresh();if(active>=0)select(active);
+      svg.style.visibility='';
+      viewport.scrollLeft=active>=0?points[active].x*zoom-viewport.clientWidth/2:(mapWidth*zoom-viewport.clientWidth)/2;
+      viewport.scrollTop=active>=0?points[active].y*zoom-viewport.clientHeight/2:(mapHeight*zoom-viewport.clientHeight)/2;
+    }catch(error){if(revision===layoutRevision){arranging.textContent='Could not arrange this view. Choose a view to retry.';console.error(error);}}
+    finally{if(revision===layoutRevision){layoutBusy=false;viewport.setAttribute('aria-busy','false');svg.style.opacity='';svg.style.pointerEvents='';arranging.hidden=svg.dataset.layoutMode===mode;for(const control of [search,minus,plus,reset])control.disabled=false;}}
+  }
   function matchesFilter(edge){return filter.value==='all'||filter.value===edge.type||filter.value==='affiliation'&&edge.shared.length>0;}
-  function refresh(){edges.forEach(e=>{e.element.style.display=matchesFilter(e)?'':'none';e.element.classList.toggle('affiliation',e.type==='affiliation'||filter.value==='affiliation');e.element.classList.toggle('active',active===e.i||active===e.j);});nodes.forEach((n,i)=>{n.classList.toggle('active',i===active);n.setAttribute('aria-pressed',String(i===active));n.classList.toggle('muted',active>=0&&i!==active&&!edges.some(e=>(matchesFilter(e))&&(e.i===active&&e.j===i||e.j===active&&e.i===i)));});}
+  function refresh(){edges.forEach(e=>{e.element.style.display=matchesFilter(e)?'':'none';e.element.classList.toggle('affiliation',e.type==='affiliation'||filter.value==='affiliation');e.element.classList.toggle('active',active===e.i||active===e.j);e.element.querySelector('title').textContent=profiles[e.i].title+' — '+profiles[e.j].title+': '+(filter.value==='affiliation'?e.shared.join(', '):filter.value==='personal'?e.label.split(' · Shared affiliations: ')[0]:e.label);if(e.loveFromI){if(filter.value==='affiliation')e.element.removeAttribute('marker-end');else e.element.setAttribute('marker-end','url(#wiki-love-arrow)');}if(e.loveFromJ){if(filter.value==='affiliation')e.element.removeAttribute('marker-start');else e.element.setAttribute('marker-start','url(#wiki-love-arrow)');}});nodes.forEach((n,i)=>{n.classList.toggle('active',i===active);n.setAttribute('aria-pressed',String(i===active));n.classList.toggle('muted',active>=0&&i!==active&&!edges.some(e=>(matchesFilter(e))&&(e.i===active&&e.j===i||e.j===active&&e.i===i)));});}
   function clearSelection(){active=-1;search.value='';refresh();drawer.open=false;drawer.hidden=true;details.replaceChildren();}
   function profileLink(profile){const node=make(profile.unpublished?'span':'a',profile.title);if(profile.unpublished){node.className='wiki-map-unpublished';node.title='Wiki page not yet available';node.setAttribute('aria-disabled','true');}else node.href=profile.path;return node;}
-  function select(i,toggle=false){if(toggle&&active===i){clearSelection();return;}active=i;search.value=String(i);refresh();drawer.hidden=false;details.replaceChildren();const link=profileLink(profiles[i]);const list=make('ul');for(const e of edges.filter(e=>(e.i===i||e.j===i)&&matchesFilter(e)&&(filter.value==='affiliation'?e.shared.length:e.listLabels[i]||e.shared.length)).sort((a,b)=>(a.type==='personal'?0:1)-(b.type==='personal'?0:1)||profiles[a.i===i?a.j:a.i].title.localeCompare(profiles[b.i===i?b.j:b.i].title))){const other=profiles[e.i===i?e.j:e.i],item=make('li'),a=profileLink(other);item.append(a,document.createTextNode(': '+(filter.value==='affiliation'||e.type==='affiliation'?e.shared.join(', '):[formatWikiRelationshipLabel(e.listLabels[i]),...e.shared].filter(Boolean).join(' · '))));list.append(item);}details.append(link,list.children.length?list:make('p','No documented connections to the other listed characters yet.'));tabHint.textContent=list.children.length+' connection'+(list.children.length===1?'':'s');}
+  function select(i,toggle=false){if(toggle&&active===i){clearSelection();return;}active=i;search.value=String(i);refresh();drawer.hidden=false;details.replaceChildren();const link=profileLink(profiles[i]);const list=make('ul');for(const e of edges.filter(e=>(e.i===i||e.j===i)&&matchesFilter(e)&&(filter.value==='affiliation'?e.shared.length:filter.value==='personal'?e.listLabels[i]:e.listLabels[i]||e.shared.length)).sort((a,b)=>(a.type==='personal'?0:1)-(b.type==='personal'?0:1)||profiles[a.i===i?a.j:a.i].title.localeCompare(profiles[b.i===i?b.j:b.i].title))){const other=profiles[e.i===i?e.j:e.i],item=make('li'),a=profileLink(other);item.append(a,document.createTextNode(': '+(filter.value==='affiliation'||e.type==='affiliation'?e.shared.join(', '):[formatWikiRelationshipLabel(e.listLabels[i]),...(filter.value==='personal'?[]:e.shared)].filter(Boolean).join(' · '))));list.append(item);}details.append(link,list.children.length?list:make('p','No documented connections to the other listed characters yet.'));tabHint.textContent=list.children.length+' connection'+(list.children.length===1?'':'s');}
   drawer.addEventListener('toggle',()=>{if(active>=0){viewport.scrollLeft=points[active].x*zoom-viewport.clientWidth/2;viewport.scrollTop=points[active].y*zoom-viewport.clientHeight/2;}});
   function size(){svg.style.width=mapWidth*zoom+'px';svg.style.height=mapHeight*zoom+'px';}
   function scale(value,anchorX=viewport.clientWidth/2,anchorY=viewport.clientHeight/2){const old=zoom;const x=(viewport.scrollLeft+anchorX)/old,y=(viewport.scrollTop+anchorY)/old;zoom=Math.max(.35,Math.min(1.6,value));size();viewport.scrollLeft=x*zoom-anchorX;viewport.scrollTop=y*zoom-anchorY;}
   const localPoint=(x,y)=>{const rect=viewport.getBoundingClientRect();return {x:x-rect.left-viewport.clientLeft,y:y-rect.top-viewport.clientTop};};
   let gesturing=false;
-  viewport.addEventListener('wheel',event=>{event.preventDefault();if(gesturing)return;const point=localPoint(event.clientX,event.clientY);const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?viewport.clientHeight:1);scale(zoom*Math.exp(-Math.max(-150,Math.min(150,delta))*.003),point.x,point.y);},{passive:false});
+  viewport.addEventListener('wheel',event=>{event.preventDefault();if(gesturing||layoutBusy)return;const point=localPoint(event.clientX,event.clientY);const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?viewport.clientHeight:1);scale(zoom*Math.exp(-Math.max(-150,Math.min(150,delta))*.003),point.x,point.y);},{passive:false});
   plus.addEventListener('click',()=>scale(zoom+.15));minus.addEventListener('click',()=>scale(zoom-.15));reset.addEventListener('click',()=>{clearSelection();zoom=.7;size();viewport.scrollLeft=(mapWidth*zoom-viewport.clientWidth)/2;viewport.scrollTop=(mapHeight*zoom-viewport.clientHeight)/2;details.replaceChildren();});
-  search.addEventListener('change',()=>{if(search.value===''){clearSelection();return;}const i=Number(search.value);select(i);viewport.scrollLeft=points[i].x*zoom-viewport.clientWidth/2;viewport.scrollTop=points[i].y*zoom-viewport.clientHeight/2;});filter.addEventListener('change',()=>{refresh();if(active>=0)select(active);});
+  search.addEventListener('change',()=>{if(search.value===''){clearSelection();return;}const i=Number(search.value);select(i);viewport.scrollLeft=points[i].x*zoom-viewport.clientWidth/2;viewport.scrollTop=points[i].y*zoom-viewport.clientHeight/2;});filter.addEventListener('change',()=>{void arrangeMode();});
   viewport.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();clearSelection();}});
   const pointers=new Map();let drag=null,pinch=null,suppressClick=false,tapNode=null;
   const beginPinch=()=>{const [a,b]=[...pointers.values()];const point=localPoint((a.x+b.x)/2,(a.y+b.y)/2);pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),zoom,x:(viewport.scrollLeft+point.x)/zoom,y:(viewport.scrollTop+point.y)/zoom};drag=null;suppressClick=true;};
   viewport.addEventListener('pointerdown',event=>{
+    if(layoutBusy)return;
     if(event.pointerType==='mouse'&&(event.button!==0||event.target.closest('.wiki-map-node')))return;
     if(!pointers.size){suppressClick=false;tapNode=event.pointerType==='mouse'?null:event.target.closest('.wiki-map-node');}
     pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});viewport.setPointerCapture(event.pointerId);
@@ -215,6 +237,7 @@ function expandWikiRelationshipProfiles(published){
     else if(pointers.size===1)drag={id:event.pointerId,x:event.clientX,y:event.clientY,left:viewport.scrollLeft,top:viewport.scrollTop};
   });
   viewport.addEventListener('pointermove',event=>{
+    if(layoutBusy)return;
     if(!pointers.has(event.pointerId))return;pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
     if(pinch&&pointers.size>=2){const [a,b]=[...pointers.values()];const point=localPoint((a.x+b.x)/2,(a.y+b.y)/2);zoom=Math.max(.35,Math.min(1.6,pinch.zoom*Math.hypot(a.x-b.x,a.y-b.y)/pinch.distance));size();viewport.scrollLeft=pinch.x*zoom-point.x;viewport.scrollTop=pinch.y*zoom-point.y;}
     else if(drag&&drag.id===event.pointerId){const dx=drag.x-event.clientX,dy=drag.y-event.clientY;if(Math.hypot(dx,dy)>6)suppressClick=true;viewport.scrollLeft=drag.left+dx;viewport.scrollTop=drag.top+dy;}
@@ -224,9 +247,9 @@ function expandWikiRelationshipProfiles(published){
   viewport.addEventListener('click',event=>{if(suppressClick){event.preventDefault();event.stopImmediatePropagation();suppressClick=false;}},true);
   // Safari trackpads can report gesture events instead of wheel events.
   let gestureZoom=zoom;
-  viewport.addEventListener('gesturestart',event=>{event.preventDefault();gesturing=true;gestureZoom=zoom;},{passive:false});
-  viewport.addEventListener('gesturechange',event=>{event.preventDefault();if(pointers.size>=2)return;const point=localPoint(event.clientX,event.clientY);scale(gestureZoom*event.scale,point.x,point.y);},{passive:false});
+  viewport.addEventListener('gesturestart',event=>{event.preventDefault();if(layoutBusy)return;gesturing=true;gestureZoom=zoom;},{passive:false});
+  viewport.addEventListener('gesturechange',event=>{event.preventDefault();if(layoutBusy||pointers.size>=2)return;const point=localPoint(event.clientX,event.clientY);scale(gestureZoom*event.scale,point.x,point.y);},{passive:false});
   viewport.addEventListener('gestureend',event=>{event.preventDefault();gesturing=false;},{passive:false});
-  for(const control of [search,filter,minus,plus,reset])control.disabled=false;
-  size();refresh();arranging.remove();svg.style.visibility='';viewport.setAttribute('aria-busy','false');details.replaceChildren();requestAnimationFrame(()=>{viewport.scrollLeft=(mapWidth*zoom-viewport.clientWidth)/2;viewport.scrollTop=(mapHeight*zoom-viewport.clientHeight)/2;});
+  filter.disabled=false;await arrangeMode();
+
 })();

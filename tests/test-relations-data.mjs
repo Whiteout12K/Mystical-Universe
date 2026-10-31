@@ -18,7 +18,7 @@ test('the central store resolves routes and titles and includes characters with 
  const profiles=store.mapProfiles([{title:'Lux Luces',path:'/wiki/char/lux_luces'}]);
  assert.equal(profiles.filter(p=>p.title==='Lux Luces').length,1);
  assert.equal(profiles.find(p=>p.title==='Prince Aether').unpublished,true);
- assert.match(store.find('','Lux Luces').relatives,/Prince Aether \(former fiancé\)/);
+ assert.match(store.find('','Lux Luces').relatives,/Prince Aether(?:\]\])? \(former fiancé\)/);
  assert.match(relationLines(store.find('','Pyrus Bourn').relatives),/Relatives: .*\(subordinate\)/);
 });
 test('new characters can hold relationships before a wiki page exists',()=>{

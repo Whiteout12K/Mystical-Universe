@@ -1,3 +1,9 @@
+/* Each view gets its own graph: hidden relationship types do not pull nodes. */
+window.wikiRelationshipLayoutEdges=(edges,mode='all')=>{
+ if(mode==='personal')return edges.filter(edge=>edge.type==='personal').map(edge=>({...edge,shared:[]}));
+ if(mode==='affiliation')return edges.filter(edge=>edge.shared?.length>0||edge.type==='affiliation').map(edge=>({...edge,type:'affiliation',close:false,former:false,loveInterest:false}));
+ return edges.map(edge=>({...edge}));
+};
 /* Bond distances are soft targets: labels and portraits always have room. */
 window.layoutWikiRelationships = async (count, edges, bounds=[]) => {
   if(!count)return [];

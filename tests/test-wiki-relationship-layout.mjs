@@ -122,3 +122,16 @@ test('shared affiliations also prioritize personal pairs without changing close 
  assert.equal(await gap({loveInterest:true,shared}),await gap({loveInterest:true}));
  assert.ok(await gap({former:true,shared})>await gap({shared}));
 });
+
+test('each mode uses only its own connection priorities without modifying the shared graph',async()=>{
+ const window={};runInNewContext(source,{window,setTimeout:resolve=>resolve()});
+ const edges=[{i:0,j:1,type:'personal',close:true,shared:['Guild']},{i:0,j:2,type:'affiliation',shared:['Guild','Academy','Team','District']}];
+ const original=JSON.stringify(edges),family=window.wikiRelationshipLayoutEdges(edges,'personal'),affiliations=window.wikiRelationshipLayoutEdges(edges,'affiliation');
+ assert.equal(family.length,1);assert.equal(family[0].close,true);assert.equal(family[0].shared.length,0);
+ assert.equal(affiliations.length,2);assert.ok(affiliations.every(e=>e.type==='affiliation'&&!e.close&&!e.former&&!e.loveInterest));
+ const familyPoints=await window.layoutWikiRelationships(3,family),affiliationPoints=await window.layoutWikiRelationships(3,affiliations),allPoints=await window.layoutWikiRelationships(3,window.wikiRelationshipLayoutEdges(edges,'all'));
+ assert.ok(distance(familyPoints,0,1)<distance(affiliationPoints,0,1),'family view gives family connection priority');
+ assert.ok(distance(affiliationPoints,0,2)<distance(familyPoints,0,2),'affiliation view groups shared memberships');
+ assert.notEqual(JSON.stringify(familyPoints),JSON.stringify(allPoints));assert.notEqual(JSON.stringify(affiliationPoints),JSON.stringify(allPoints));
+ assert.equal(JSON.stringify(edges),original);
+});
