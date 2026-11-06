@@ -317,12 +317,14 @@ hr.my-4{
     box-shadow .2s ease;
 }
 
+@media(hover:hover) and (pointer:fine){
 .skill-btn:hover{
   transform:translateY(-3px) scale(1.04);
   border-color:var(--fantasy-gold);
   box-shadow:
     0 6px 15px rgba(0,0,0,.55),
     0 0 14px rgba(214,170,69,.18);
+}
 }
 
 .skill-btn.active{
@@ -370,7 +372,7 @@ hr.my-4{
   box-shadow:
     0 8px 25px rgba(0,0,0,.55),
     inset 0 1px 0 rgba(240,202,105,.08);
-  overflow:visible;
+  overflow:hidden;
   transition:height var(--skill-transition);
 }
 
@@ -408,6 +410,16 @@ hr.my-4{
   opacity:1;
   transition:opacity var(--skill-transition);
 }
+
+/* Keep the previous skill visible while its replacement loads. */
+.skill-frame-pending,.skill-frame-outgoing{position:absolute;top:17px;left:17px;width:calc(100% - 34px);pointer-events:none}
+.skill-frame-pending{visibility:hidden;opacity:0}
+@media(max-width:767px){
+  html.ml-mobile-navigation .game-character-page .skill-sidebar{position:static;top:auto;z-index:auto}
+  .skill-frame-pending,.skill-frame-outgoing{top:10px;left:10px;width:calc(100% - 20px)}
+}
+@media(hover:none),(pointer:coarse){.skill-btn:hover,.skill-btn.active{transform:none}}
+@media(prefers-reduced-motion:reduce){.skill-btn,.skill-frame,.skill-panel{transition:none!important}}
 
 /* Character styles */
 
@@ -468,10 +480,12 @@ hr.my-4{
   filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
 }
 
-/* The cultivator sprite has more transparent space to the right of its figure. */
-.style-card img[src$="/c1_costume/costume_3.png"]{
-  object-position:65% center;
+.style-card .pixel-portrait.pixel-sized{
+  width:var(--sprite-width);
+  height:var(--sprite-height);
+  margin-bottom:calc(200px - var(--sprite-height));
 }
+
 
 /* Mobile */
 
@@ -575,7 +589,7 @@ hr.my-4{
 
 let activeSkillVariant=0;
 let characterRoster=null;
-let characterData=null,skills=[],activeSkillIndex=-1,skillLoadToken=0,skillResizeObserver=null;
+let characterData=null,skills=[],activeSkillIndex=-1,skillLoadToken=0,skillResizeObserver=null,pendingSkillIframe=null,requestedSkillIndex=-1;
 const TRANSITION_DURATION=250,MIN_SKILL_HEIGHT=120,SKILL_VIEW_PATH="/ml-game/apps/skill.html";
 const $=id=>document.getElementById(id);
 
@@ -668,7 +682,8 @@ function createSkillButtons(character){
       sidebar.appendChild(divider);
     }
 
-    const button=document.createElement("div");
+    const button=document.createElement("button");
+    button.type="button";
     button.className=`skill-btn${index===0?" active":""}`;
     button.dataset.index=index;
     button.addEventListener("click",()=>showSkill(index));
@@ -717,6 +732,7 @@ function createSkillVariantSelector(character){
 function setActiveButton(index){
   document.querySelectorAll(".skill-btn").forEach((button,i)=>{
     button.classList.toggle("active",i===index);
+    button.setAttribute("aria-pressed",String(i===index));
   });
 }
 
@@ -815,7 +831,7 @@ function getIframeHeight(iframe){
 */
 async function waitForStableHeight(iframe){
   let previous=-1,stable=0,height=MIN_SKILL_HEIGHT;
-  const deadline=performance.now()+1500;
+  const deadline=performance.now()+3000;
 
   while(performance.now()<deadline){
     await new Promise(resolve=>requestAnimationFrame(resolve));
@@ -827,7 +843,10 @@ async function waitForStableHeight(iframe){
 
     previous=height;
 
-    if(stable>=2)break;
+    if(!iframe.isConnected)return MIN_SKILL_HEIGHT;
+    const content=iframe.contentDocument?.querySelector("#skill-content");
+    const ready=!content||content.childElementCount>0||content.textContent.trim().length>0;
+    if(ready&&stable>=2)break;
   }
 
   await new Promise(resolve=>requestAnimationFrame(resolve));
@@ -845,6 +864,9 @@ function observeIframeHeight(iframe,panel,token){
     if(Math.abs(height-lastHeight)<2)return;
     lastHeight=height;
     iframe.style.height=`${height}px`;
+    const style=getComputedStyle(panel);
+    const extra=[style.paddingTop,style.paddingBottom,style.borderTopWidth,style.borderBottomWidth].reduce((sum,value)=>sum+(parseFloat(value)||0),0);
+    panel.style.height=`${height+extra}px`;
   };
   const schedule=()=>{
     if(!frame)frame=requestAnimationFrame(update);
@@ -876,131 +898,43 @@ function observeIframeHeight(iframe,panel,token){
 
 async function showSkill(index){
   if(!characterData||!skills[index])return;
-
-  const panel=$("skillPanel");
-  const charId=characterData.base_character||getSelectedCharacterId();
-  const skill=skills[index];
-  const url=getSkillFile(skill,charId);
-
-  if(index===activeSkillIndex&&panel.querySelector(".skill-frame"))
-    return;
-
+  const panel=$("skillPanel"),oldIframe=panel.querySelector(".skill-frame:not(.skill-frame-pending):not(.skill-frame-outgoing)");
+  if(oldIframe)oldIframe.style.opacity="1";
+  if(index===requestedSkillIndex&&pendingSkillIframe)return;
   const token=++skillLoadToken;
-
-  /*
-    Only one iframe is allowed to exist in the panel at any time.
-    The old iframe is removed before the new one is created.
-
-    The panel keeps its current height while the new iframe loads.
-    It only changes height after the new iframe has been measured,
-    and only when the new skill actually has a different height.
-    This prevents the panel from shrinking on every skill switch
-    while still allowing long skills to shrink to shorter ones.
-    Rapid clicking remains protected by the skill load token.
-  */
-
-  if(skillResizeObserver){
-    skillResizeObserver.disconnect();
-    skillResizeObserver=null;
+  if(pendingSkillIframe){pendingSkillIframe.remove();pendingSkillIframe=null;}
+  panel.querySelectorAll(".skill-frame-outgoing").forEach(frame=>frame.remove());
+  if(index===activeSkillIndex&&oldIframe){
+    requestedSkillIndex=-1;setActiveButton(index);panel.setAttribute("aria-busy","false");
+    skillResizeObserver?.disconnect();skillResizeObserver=observeIframeHeight(oldIframe,panel,token);return;
   }
-
-  const oldIframe=panel.querySelector(".skill-frame");
-  const currentPanelHeight=panel.getBoundingClientRect().height;
-
-  if(currentPanelHeight>0)
-    panel.style.height=`${currentPanelHeight}px`;
-
-  if(oldIframe){
-    oldIframe.remove();
-    activeSkillIndex=-1;
-  }
-
-  const newIframe=createSkillIframe();
-  newIframe.style.height=`${MIN_SKILL_HEIGHT}px`;
-
-  // Subscribe before navigation/insertion, including cached loads.
-  const loaded=loadSkillIframe(newIframe,url);
-  panel.appendChild(newIframe);
-  await loaded;
-
-  if(token!==skillLoadToken){
-    newIframe.remove();
-    return;
-  }
-
-  await prepareIframe(newIframe);
-
-  if(token!==skillLoadToken){
-    newIframe.remove();
-    return;
-  }
-
-  const height=await waitForStableHeight(newIframe);
-
-  if(token!==skillLoadToken){
-    newIframe.remove();
-    return;
-  }
-
-  /*
-    Account for the panel padding and borders because the panel uses
-    border-box sizing. This keeps the iframe completely inside the
-    panel while still allowing the panel to resize to the new skill.
-  */
-  const panelStyle=getComputedStyle(panel);
-  const panelExtraHeight=
-    parseFloat(panelStyle.paddingTop||0)+
-    parseFloat(panelStyle.paddingBottom||0)+
-    parseFloat(panelStyle.borderTopWidth||0)+
-    parseFloat(panelStyle.borderBottomWidth||0);
-
-  const finalPanelHeight=Math.max(
-    MIN_SKILL_HEIGHT,
-    height+panelExtraHeight
-  );
-
-  newIframe.style.height=`${height}px`;
-
-  /*
-    Keep the current panel height when the new iframe is the same
-    shape/height as the previous one. Only animate the panel when
-    the new iframe actually requires a different height.
-  */
-  const panelHeightForComparison=
-    currentPanelHeight>0
-      ? currentPanelHeight
-      : panel.getBoundingClientRect().height;
-
-  const heightIsDifferent=
-    Math.abs(finalPanelHeight-panelHeightForComparison)>2;
-
-  if(heightIsDifferent){
-    panel.style.height=`${panelHeightForComparison}px`;
-
-    requestAnimationFrame(()=>{
-      if(token!==skillLoadToken)return;
-      panel.style.height=`${finalPanelHeight}px`;
-    });
-  }else{
-    panel.style.height=`${finalPanelHeight}px`;
-  }
-
-  newIframe.style.opacity="1";
-  newIframe.style.pointerEvents="auto";
-
-  activeSkillIndex=index;
-  setActiveButton(index);
-
-  if(heightIsDifferent){
-    setTimeout(()=>{
-      if(token===skillLoadToken)
-        panel.style.height="auto";
-    },TRANSITION_DURATION+20);
-  }else{
-    panel.style.height="auto";
-  }
-
-  skillResizeObserver=observeIframeHeight(newIframe,panel,token);
+  requestedSkillIndex=index;setActiveButton(index);panel.setAttribute("aria-busy","true");
+  const currentHeight=panel.getBoundingClientRect().height;
+  if(currentHeight>0)panel.style.height=`${currentHeight}px`;
+  const next=createSkillIframe();pendingSkillIframe=next;
+  next.classList.add("skill-frame-pending");next.setAttribute("aria-hidden","true");next.style.height=`${MIN_SKILL_HEIGHT}px`;
+  const url=getSkillFile(skills[index],characterData.base_character||getSelectedCharacterId());
+  const loaded=loadSkillIframe(next,url);panel.appendChild(next);await loaded;
+  if(token!==skillLoadToken){next.remove();return;}
+  await prepareIframe(next);
+  const height=await waitForStableHeight(next);
+  if(token!==skillLoadToken){next.remove();return;}
+  skillResizeObserver?.disconnect();
+  const style=getComputedStyle(panel),extra=[style.paddingTop,style.paddingBottom,style.borderTopWidth,style.borderBottomWidth].reduce((sum,value)=>sum+(parseFloat(value)||0),0);
+  const duration=window.matchMedia("(prefers-reduced-motion: reduce)").matches?0:TRANSITION_DURATION;
+  next.style.height=`${height}px`;next.style.opacity="0";
+  next.classList.remove("skill-frame-pending");next.removeAttribute("aria-hidden");
+  if(oldIframe){oldIframe.classList.add("skill-frame-outgoing");oldIframe.setAttribute("aria-hidden","true");oldIframe.style.pointerEvents="none";}
+  activeSkillIndex=index;requestedSkillIndex=-1;pendingSkillIframe=null;
+  // Commit only the most recent request; no blank panel between skills.
+  requestAnimationFrame(()=>{
+    if(token!==skillLoadToken)return;
+    panel.style.height=`${height+extra}px`;next.style.opacity="1";
+    if(oldIframe)oldIframe.style.opacity="0";
+  });
+  if(oldIframe){if(duration)setTimeout(()=>oldIframe.remove(),duration+20);else oldIframe.remove();}
+  panel.setAttribute("aria-busy","false");
+  skillResizeObserver=observeIframeHeight(next,panel,token);
 }
 
 
@@ -1032,6 +966,16 @@ function createCostumePreview(costume){
 
   image.src=costume.preview_path;
   image.className="card-img-top pixel-portrait";
+  // Optional source dimensions keep GIF and PNG pixel art at a crisp integer scale.
+  const [width,height]=Array.isArray(costume.preview_size)?costume.preview_size:[];
+  if(Number.isInteger(width)&&width>0&&Number.isInteger(height)&&height>0){
+    const fit=Math.min(200/width,200/height),scale=fit>=1?Math.floor(fit):fit;
+    image.width=width;
+    image.height=height;
+    image.className+=" pixel-sized";
+    image.style.setProperty("--sprite-width",`${width*scale}px`);
+    image.style.setProperty("--sprite-height",`${height*scale}px`);
+  }
   image.alt=costume.name||"Character Style";
   image.loading="lazy";
   image.decoding="async";

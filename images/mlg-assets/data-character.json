@@ -31,7 +31,8 @@
     "costume_1": {
         "id": "1",
         "name": "Default",
-        "preview_path": "/images/mlg-animation/c1_idle.mp4"
+        "preview_path": "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif",
+        "preview_size": [24, 48]
     },
     "costume_2": {
         "id": "2",
@@ -156,12 +157,14 @@
     "costume_1": {
         "id": "1",
         "name": "Default",
-        "preview_path": "/images/character_art/pixel_art/c2_costume/costume_1.png"
+        "preview_path": "/images/character_art/pixel_art/c2_costume/costume1_idle1.gif",
+        "preview_size": [24, 48]
     },
     "costume_2": {
         "id": "2",
         "name": "Cultivator",
-        "preview_path": "/images/character_art/pixel_art/c2_costume/costume_2.png"
+        "preview_path": "/images/character_art/pixel_art/c2_costume/costume2_idle1.gif",
+        "preview_size": [24, 48]
     },
 
     "base_stats": {
