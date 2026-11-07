@@ -39,3 +39,5 @@ label{display:block;color:#c0b4cb;font-size:12px}textarea,input{display:block;wi
 .visual-section-nav button { font-size:11px; }
 
 .character-relations-reference{margin:0;padding:9px 14px;border-bottom:1px solid var(--line);color:var(--muted);font:12px/1.6 Arial,sans-serif}.character-relations-reference code{color:var(--gold);user-select:text;white-space:nowrap}
+
+.visual-body li>:is(h2,h3,h4,h5,h6){display:inline;font:700 1em/1.6 Georgia,serif;margin:0;padding:0;border:0}

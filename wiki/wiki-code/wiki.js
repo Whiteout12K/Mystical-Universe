@@ -5,7 +5,7 @@
   const toc = document.getElementById('wiki-toc-links');
   if (toc) {
     const used = new Set([...document.querySelectorAll('[id]')].map(node => node.id));
-    for (const heading of document.querySelectorAll('#wiki-body .wiki-section > :is(h2,h3,h4,h5):not([data-wiki-toc-exclude])')) {
+    for (const heading of document.querySelectorAll('#wiki-body .wiki-section > :is(h2,h3,h4,h5,h6):not([data-wiki-toc-exclude]), #wiki-body li > [data-wiki-list-heading]:not([data-wiki-toc-exclude])')) {
       if (!heading.id && heading.textContent==='Mystical Rank and Heritage') heading.id='heritage';
       if (!heading.id && heading.textContent==='Tools and Equipment') heading.id='equipment';
       if (!heading.id) {
@@ -14,7 +14,7 @@
         heading.id = id; used.add(id);
       }
       const a = document.createElement('a'); a.href = `#${heading.id}`; a.textContent = heading.textContent;
-      const depth = Number(heading.tagName.slice(1)) - 2;
+      const depth = heading.dataset.wikiTocDepth===undefined?Number(heading.tagName.slice(1))-2:Number(heading.dataset.wikiTocDepth);
       a.dataset.headingLevel = heading.tagName.slice(1);
       a.style.setProperty('--wiki-toc-depth', String(depth));
       if (depth > 0) a.className = 'wiki-toc-child';

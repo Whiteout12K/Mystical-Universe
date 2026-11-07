@@ -125,7 +125,8 @@
       else if(list){
         flush();const markers=list[1];let shared=0;while(shared<listStack.length&&shared<markers.length&&listStack[shared].marker===markers[shared])shared++;listStack=listStack.slice(0,shared);
         for(let depth=shared;depth<markers.length;depth++){const ul=make(markers[depth]==='*'?'ul':'ol');if(depth){let li=listStack[depth-1].node.lastElementChild;if(!li){li=make('li');listStack[depth-1].node.append(li);}li.append(ul);}else parent.append(ul);listStack.push({marker:markers[depth],node:ul});}
-        const li=make('li');inline(li,list[2],imageBase);listStack.at(-1).node.append(li);
+        const li=make('li'),listHeading=/^(={2,6})\s*(.*?)\s*\1\s*$/.exec(list[2]);
+        if(listHeading){const h=make('h'+listHeading[1].length);inline(h,listHeading[2],imageBase);li.append(h);}else inline(li,list[2],imageBase);listStack.at(-1).node.append(li);
       }else{listStack=[];paragraph.push(line);}
     }flush();
   }

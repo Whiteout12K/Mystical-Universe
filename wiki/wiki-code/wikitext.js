@@ -100,13 +100,17 @@
         listStack.push({marker,list,item:null});
       }
       const entry=listStack[depth];
-      if(depth===markers.length-1){const li=make('li');inline(li,value);entry.list.append(li);entry.item=li;}
+      if(depth===markers.length-1){
+        const li=make('li'),heading=value.match(/^(={2,6})\s*(.*?)\s*\1\s*$/);
+        if(heading){const h=make('h'+heading[1].length,'wiki-list-heading');h.dataset.wikiListHeading='';h.dataset.wikiTocDepth=String(Math.max(heading[1].length-2,markers.length));if(nested)h.dataset.wikiTocExclude='';inline(h,heading[2]);li.append(h);}else inline(li,value);
+        entry.list.append(li);entry.item=li;
+      }
       else if(!entry.item){entry.item=make('li','wiki-list-placeholder');entry.list.append(entry.item);}
     }
   }
   // Keep multiline spoiler templates as one paragraph token.
   text=text.replace(/\{\{Spoiler\|([\s\S]*?)\}\}/gi,(_,v)=>'{{Spoiler|'+v.replace(/\n/g,' ')+'}}');
-  for(const line of text.trim().split('\n')){const collapse=line.match(/^WIKI_COLLAPSE_(\d+)$/);if(collapse){flush();const settings=Object.fromEntries(params(collapses[Number(collapse[1])].parts)),details=make('details','wiki-disclosure'),summary=make('summary','',settings.title||'Read more'),body=make('div');details.append(summary,body);parent.append(details);renderText(settings.content||'',body,true);continue;}const tab=line.match(/^\|tab\s*=\s*(.+)$/);if(tab){flush();stack.length=0;const group=make('div','wiki-tab-content');group.id=tabID(tab[1]);group.dataset.wikiTab=tab[1].trim();root.append(group);bodyRoot=group;parent=group;continue;}const match=line.match(/^(={2,5})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);if(nested)h.dataset.wikiTocExclude='';s.append(h);(stack.at(-1)?.s||bodyRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#]+)\s*(.*)$/);if(bullet){if(paragraph.length)flush();appendList(bullet[1],bullet[2]);continue;}paragraph.push(line.trim());}flush();
+  for(const line of text.trim().split('\n')){const collapse=line.match(/^WIKI_COLLAPSE_(\d+)$/);if(collapse){flush();const settings=Object.fromEntries(params(collapses[Number(collapse[1])].parts)),details=make('details','wiki-disclosure'),summary=make('summary','',settings.title||'Read more'),body=make('div');details.append(summary,body);parent.append(details);renderText(settings.content||'',body,true);continue;}const tab=line.match(/^\|tab\s*=\s*(.+)$/);if(tab){flush();stack.length=0;const group=make('div','wiki-tab-content');group.id=tabID(tab[1]);group.dataset.wikiTab=tab[1].trim();root.append(group);bodyRoot=group;parent=group;continue;}const match=line.match(/^(={2,6})\s*(.*?)\s*\1\s*$/);if(match){flush();const depth=match[1].length;while(stack.length&&stack.at(-1).depth>=depth)stack.pop();const s=make('section','wiki-section'),h=make('h'+depth);s.dataset.headingLevel=String(depth);s.style.setProperty('--wiki-section-indent',String(Math.max(0,depth-(stack.at(-1)?.depth||2))));inline(h,match[2]);if(nested)h.dataset.wikiTocExclude='';s.append(h);(stack.at(-1)?.s||bodyRoot).append(s);stack.push({depth,s});parent=s;continue;}if(!line.trim()){flush();continue;}const bullet=line.match(/^([*#]+)\s*(.*)$/);if(bullet){if(paragraph.length)flush();appendList(bullet[1],bullet[2]);continue;}paragraph.push(line.trim());}flush();
   }
   renderText(text,sectionRoot);
   window.addEventListener('hashchange',()=>{let target;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)));}catch{}const details=target?.closest('.wiki-disclosure');if(details){details.open=true;requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));}});

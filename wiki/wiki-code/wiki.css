@@ -266,3 +266,6 @@ html[data-wiki-theme=light] .wiki-map-drawer{background:#f5efdf}
  .wiki-map-drawer .wiki-map-details{padding:0 16px 12px;max-height:40dvh}
  .wiki-map-drawer .wiki-map-details ul{columns:1}
 }
+
+/* Headings may label list items without breaking their bullet indentation. */
+.wiki-article li>.wiki-list-heading{display:inline;font:700 1em/1.6 Georgia,serif;color:var(--wiki-gold);border:0;padding:0;margin:0;scroll-margin-top:110px}.wiki-list-heading a{font:inherit}.wiki-section h6{font:700 18px/1.4 Georgia,serif;color:var(--wiki-gold);scroll-margin-top:100px}
