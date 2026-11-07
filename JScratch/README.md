@@ -6,7 +6,7 @@ This document is the starting reference for AI assistants and developers working
 
 JScratch is a browser canvas game engine with JavaScript functions that compose Scratch-style command blocks and reporters. There is no visual block editor or build step. The user's game is authored in `program/begin.js`. Its unfinished Gacha scene is intentional; do not classify missing game content as an engine bug or implement it without a request.
 
-The entry page is `/JScratch/canvas.html` (capitalization matters). The engine previously lived at `/ml-game/`; root `_redirects` preserves old URLs. Website tools such as the team builder, map, and profile viewer are separate and live in `/webpages/apps/`. Their shared skill stylesheet is `/css/mlg-skill.css`.
+The entry page is `/JScratch/canvas.html` (capitalization matters). The engine previously lived at `/ml-game/`; root `_redirects` preserves old URLs. Website tools such as the team builder, map, and profile viewer are separate and live in `/webpages/apps/`. Their shared skill stylesheet is `/assets/css/mlg-skill.css`.
 
 ## Files and loading
 

@@ -1,6 +1,6 @@
 /* Account preferences override the cookie for signed-in readers. */
 (async () => {
-  const account=await import('/js/account-preferences.js');
+  const account=await import('/assets/js/account-preferences.js');
   try{await account.loadAccountPreferences();}catch{}
   const toggle=document.createElement('button');toggle.type='button';toggle.className='wiki-theme-toggle';
   const message=document.createElement('span');message.className='wiki-theme-status';message.setAttribute('role','status');

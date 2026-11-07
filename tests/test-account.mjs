@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import bundledCatalogue from '../functions/_account-styles.js';
 import {onRequestGet,onRequestPost} from '../functions/api/account.js';
-import {effectiveWikiTheme} from '../js/account-preferences.js';
+import {effectiveWikiTheme} from '../assets/js/account-preferences.js';
 const catalogue=JSON.parse(fs.readFileSync(new URL('../images/mlg-assets/account-styles.json',import.meta.url),'utf8'));
 function fixture(){
  const users=new Map([['one',{id:1,username:'one',save_data:JSON.stringify({avatar:1,bg:2,silver_coin:456,c_owned:[1,0,1]})}],['two',{id:2,username:'two',save_data:'{}'}]]),preferences=new Map();

@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {normalizePlan,planHash,parsePlanHash,artifactBonuses,resonanceAssessment,equipmentInteractions} from '../js/site-enhancements/team-builder-model.js';
+import {normalizePlan,planHash,parsePlanHash,artifactBonuses,resonanceAssessment,equipmentInteractions} from '../assets/js/site-enhancements/team-builder-model.js';
 const read=p=>JSON.parse(readFileSync(new URL('../'+p,import.meta.url),'utf8'));
 const roster=Object.fromEntries(Object.entries(read('images/mlg-assets/data-character.json')).filter(([id])=>/^c\d+$/.test(id)));
 const catalogues=Object.fromEntries(['weapons','accessories','artifacts'].map((kind,i)=>[kind,read('images/mlg-assets/data-'+['weapon','accessory','artifact'][i]+'.json')]));

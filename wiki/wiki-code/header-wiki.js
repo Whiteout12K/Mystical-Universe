@@ -3,7 +3,7 @@
   const host = document.getElementById('wiki-header-placeholder');
   if (!host) return;
   // Reuse the website's existing account initialization without changing it.
-  await loadComponent('wiki-header-placeholder', '/index/header-wiki.html');
+  await loadComponent('wiki-header-placeholder', '/includes/header-wiki.html');
   window.initializeWikiSearch?.();
   const navigation = document.getElementById('wiki-navigation');
   if (!navigation) return;

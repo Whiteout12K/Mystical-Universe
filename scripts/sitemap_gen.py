@@ -8,6 +8,8 @@ import html
 import json
 import re
 
+# Use python3 scripts/sitemap_gen.py to generate sitemap.xml and wiki/article-index.json
+
 # ============================================================
 # CONFIG
 # ============================================================

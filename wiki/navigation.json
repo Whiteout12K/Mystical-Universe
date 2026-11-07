@@ -13,11 +13,11 @@
         },
         {
           "label": "Book Series",
-          "href": "/books_main.html"
+          "href": "/books/series.html"
         },
         {
           "label": "Game Hub",
-          "href": "/game-hub.html"
+          "href": "/webpages/game-hub.html"
         },
         {
           "label": "Music",

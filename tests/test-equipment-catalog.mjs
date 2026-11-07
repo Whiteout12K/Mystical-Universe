@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {equipmentAnchor,equipmentImage,equipmentPieces,equipmentSections,catalogueSearchText,equipmentEffectDefinition,effectDescriptions} from '../js/site-enhancements/equipment-catalog.js';
+import {equipmentAnchor,equipmentImage,equipmentPieces,equipmentSections,catalogueSearchText,equipmentEffectDefinition,effectDescriptions} from '../assets/js/site-enhancements/equipment-catalog.js';
 const root=new URL('../',import.meta.url),read=name=>JSON.parse(readFileSync(new URL('images/mlg-assets/'+name,root),'utf8'));
 const weapons=read('data-weapon.json'),accessories=read('data-accessory.json'),artifacts=read('data-artifact.json');
 test('complete equipment catalogue retains stable IDs and separate item-specific descriptions',()=>{

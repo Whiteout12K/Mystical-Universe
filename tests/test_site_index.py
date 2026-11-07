@@ -15,7 +15,7 @@ class SearchSafetyTests(unittest.TestCase):
   books=index.build()['data/books.json']['books']
   for book in books:
    if book['available']:self.assertTrue((index.ROOT/json.loads((index.ROOT/'books/catalog.json').read_text())[book['id']]['source'].lstrip('/')).exists())
-   else:self.assertTrue(book['path'].startswith('/books_main.html#'))
+   else:self.assertTrue(book['path'].startswith('/books/series.html#'))
  def test_disabled_characters_stay_out_of_public_game_index(self):
   roster=json.loads((index.ROOT/'images/mlg-assets/data-character.json').read_text());records=index.build()['data/search-index.json']['records']
   for cid,character in roster.items():

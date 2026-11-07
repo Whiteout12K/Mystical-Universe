@@ -88,10 +88,10 @@ def build():
    prose=re.sub(r'\{\{effect:([^}]+)\}\}',lambda m:' '.join([effects.get(m[1],{}).get('name',m[1])]+[v for k,v in effects.get(m[1],{}).items() if re.fullmatch(r'description\d*',k) and isinstance(v,str)]),prose)
    pieces=' '.join(item.get(f'piece_num_{n}_name','') for n in range(1,5))
    records.append({'type':kind,'title':item['name'],'path':'/webpages/game-codex.html#'+anchor+'-'+eid,'description':plain(prose)[:230], 'search':' '.join([item['name'],item.get('previous_name',''),item.get('weapon_type',''),item.get('seal_ring_name',''),pieces,plain(prose)])})
- document=(ROOT/'books_main.html').read_text();books=[]
+ document=(ROOT/'books/series.html').read_text();books=[]
  for item in re.findall(r'<article\b[^>]*id="book\d+"[\s\S]*?</article>',document):
   id=re.search(r'id="book(\d+)"',item)[1];title=plain(re.search(r'<h2>([\s\S]*?)</h2>',item)[1]);paragraph=re.search(r'<p>([\s\S]*?)</p>',item);volume=json.loads((ROOT/'books/catalog.json').read_text()).get(id);available=bool(volume and (ROOT/volume['source'].lstrip('/')).is_file())
-  book={'id':id,'title':title,'available':available,'path':('/books/reader.html?id='+id) if available else '/books_main.html#book'+id};books.append(book)
+  book={'id':id,'title':title,'available':available,'path':('/books/reader.html?id='+id) if available else '/books/series.html#book'+id};books.append(book)
   records.append({'type':'Book','title':'Volume '+id+': '+title,'path':book['path'],'description':plain(paragraph[1]) if paragraph else '', 'search':title+' volume '+id})
  return {'data/search-index.json':{'version':1,'records':records},'data/wiki-search-index.json':{'version':1,'pages':wiki},'data/character-connections.json':{'profiles':profiles},'data/books.json':{'books':books}}
 def main():

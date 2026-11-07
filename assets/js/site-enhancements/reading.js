@@ -1,7 +1,7 @@
 import {el,link,json,saved,readyWhen} from './core.js';
 export async function init(){
  const homepage=['/','/index','/index.html'].includes(location.pathname);
- if(!homepage&&!['/books_main','/books_main.html'].includes(location.pathname))return;
+ if(!homepage&&!['/books/series','/books/series.html'].includes(location.pathname))return;
  const {books}=await json('/data/books.json');
  const row=el('aside',{'aria-label':'Continue reading',class:'ml-reading-continue'});
  function refresh(){

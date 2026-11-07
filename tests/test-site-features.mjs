@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import {fileURLToPath} from 'node:url';
-const coreSource=fs.readFileSync(new URL('../js/site-enhancements/core.js',import.meta.url),'utf8');
+const coreSource=fs.readFileSync(new URL('../assets/js/site-enhancements/core.js',import.meta.url),'utf8');
 // Core has no DOM side effects. Use a harmless config response in this test process.
 globalThis.fetch=async()=>({ok:true,json:async()=>({})});
 const coreURL='data:text/javascript;base64,'+Buffer.from(coreSource).toString('base64');
@@ -22,7 +22,7 @@ test('skill detail renderer links effects and substitutes the selected Alter nic
 
 test('enhancement modules and reader have valid JavaScript syntax',async()=>{
  const {spawnSync}=await import('node:child_process');
- const folder=new URL('../js/site-enhancements/',import.meta.url);
+ const folder=new URL('../assets/js/site-enhancements/',import.meta.url);
  for(const file of [...fs.readdirSync(folder).filter(name=>name.endsWith('.js')).map(name=>new URL(name,folder)),new URL('../books/viewer.js',import.meta.url)]){
   const result=spawnSync(process.execPath,['--check',fileURLToPath(file)],{encoding:'utf8'});assert.equal(result.status,0,result.stderr);
  }

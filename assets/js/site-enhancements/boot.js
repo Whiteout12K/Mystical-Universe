@@ -1,6 +1,6 @@
 import {flagsReady,el,link,readyWhen} from './core.js';
 const flags=await flagsReady;
-const stylesheet=el('link',{rel:'stylesheet',href:'/css/site-enhancements.css'});document.head.append(stylesheet);
+const stylesheet=el('link',{rel:'stylesheet',href:'/assets/css/site-enhancements.css'});document.head.append(stylesheet);
 if(flags.visualConsistency)document.documentElement.classList.add('ml-visual-consistency');
 if(flags.mobileNavigation)import('./mobile.js').then(m=>m.init()).catch(console.error);
 if(flags.characterConnections)import('./connections.js').then(m=>m.init(flags)).catch(console.error);

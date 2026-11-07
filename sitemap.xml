@@ -3,7 +3,7 @@
 
   <url>
     <loc>https://mysticallegends.org/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -13,17 +13,22 @@
 
   <url>
     <loc>https://mysticallegends.org/books/reader</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/books/reader?id=1</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/books/reader?id=2</loc>
-    <lastmod>2026-11-06</lastmod>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books/series</loc>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -32,18 +37,8 @@
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/books_main</loc>
-    <lastmod>2026-11-06</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/game-hub</loc>
-    <lastmod>2026-11-07</lastmod>
-  </url>
-
-  <url>
     <loc>https://mysticallegends.org/news/2026-01-31</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -53,12 +48,12 @@
 
   <url>
     <loc>https://mysticallegends.org/news/2026-03-05</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/news/2026-10-17</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -478,7 +473,7 @@
 
   <url>
     <loc>https://mysticallegends.org/webpages/apps/tcg/card_maker</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -488,7 +483,7 @@
 
   <url>
     <loc>https://mysticallegends.org/webpages/apps/tierlist</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -513,17 +508,17 @@
 
   <url>
     <loc>https://mysticallegends.org/webpages/author</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/webpages/compare</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/webpages/compare?left=</loc>
-    <lastmod>2026-10-20</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -643,7 +638,12 @@
 
   <url>
     <loc>https://mysticallegends.org/webpages/game-codex</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-hub</loc>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -658,12 +658,12 @@
 
   <url>
     <loc>https://mysticallegends.org/webpages/music</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/webpages/search</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -678,57 +678,57 @@
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/alteria_aquia</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/amos_black</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/atlas_aquia</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/avery_obtainia</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/caela_obtainia</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/carla_storm</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/cedric_paine</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/charlotte_levy</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/ellie_tracey</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/elmor_locks</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/ioward_icelander</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -738,17 +738,17 @@
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/james_shera</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/jane_tee</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/kaden_icelander</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -758,7 +758,7 @@
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/lucy_terner</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
@@ -768,42 +768,42 @@
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/lynnhera</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/pyrus_bourn</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/raymond_valoris</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/river_grantia</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/teddric_tech</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/tom_nado</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/char/tony_smith</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/wiki/home</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-11-07</lastmod>
   </url>
 
   <url>

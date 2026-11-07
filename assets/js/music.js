@@ -185,7 +185,7 @@
     controls.forEach(id => el(id).disabled = true);
     message('Loading soundtrack…');
     try {
-      const response = await fetch('/index/songs.json');
+      const response = await fetch('/data/music-catalog.json');
       if (!response.ok) throw new Error('Database unavailable');
       const data = await response.json();
       if (!Array.isArray(data)) throw new Error('Invalid database');

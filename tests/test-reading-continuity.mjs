@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
-const source=readFileSync(new URL('../js/site-enhancements/reading.js',import.meta.url),'utf8').replace(/^import[^\n]+\n/,'').replace('export async function init','async function init');
+const source=readFileSync(new URL('../assets/js/site-enhancements/reading.js',import.meta.url),'utf8').replace(/^import[^\n]+\n/,'').replace('export async function init','async function init');
 function setup(path,initial){
  let entry=initial,selector,row;const events={};
  const node=()=>({children:[],append(child){this.children.push(child)},replaceChildren(){this.children=[]}});
@@ -19,6 +19,6 @@ test('homepage continuation accepts EPUB CFIs without obsolete PDF page numbers 
  app.setEntry({id:'unknown'});app.events.pageshow();assert.equal(app.row.hidden,true);
 });
 test('books page refreshes latest viewed volume on browser back and supports older progress records',async()=>{
- const app=setup('/books_main.html',{id:'1',page:20});await app.init();assert.equal(app.selector,'main,.news-section');
+ const app=setup('/books/series.html',{id:'1',page:20});await app.init();assert.equal(app.selector,'main,.news-section');
  app.setEntry({id:'2',cfi:'epubcfi(...)'});app.events.pageshow();assert.equal(app.row.children[0].href,'/books/reader.html?id=2');
 });

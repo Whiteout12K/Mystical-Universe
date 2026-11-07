@@ -27,7 +27,7 @@ if(profileImage)profileImage.style.display="none";
 };
 
 try{
-const {loadAccountPreferences}=await import("/js/account-preferences.js");
+const {loadAccountPreferences}=await import("/assets/js/account-preferences.js");
 const data=await loadAccountPreferences();
 const user=data.user||data;
 
@@ -94,15 +94,15 @@ window.location.reload();
 }
 
 function loadPageComponents(){
-loadComponent("header-placeholder","/index/header.html");
-loadComponent("footer-placeholder","/index/footer.html");
-loadComponent("subheader-placeholder","/index/header.html");
-loadComponent("subfooter-placeholder","/index/footer.html");
-loadComponent("sub4header-placeholder","/index/header.html");
-loadComponent("sub4footer-placeholder","/index/footer.html");
+loadComponent("header-placeholder","/includes/header.html");
+loadComponent("footer-placeholder","/includes/footer.html");
+loadComponent("subheader-placeholder","/includes/header.html");
+loadComponent("subfooter-placeholder","/includes/footer.html");
+loadComponent("sub4header-placeholder","/includes/header.html");
+loadComponent("sub4footer-placeholder","/includes/footer.html");
 
-loadComponent("homeheader-placeholder","/index/header.html");
-loadComponent("homefooter-placeholder","/index/footer.html");
+loadComponent("homeheader-placeholder","/includes/header.html");
+loadComponent("homefooter-placeholder","/includes/footer.html");
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",loadPageComponents,{once:true});else loadPageComponents();
 
@@ -130,7 +130,7 @@ update();
 
 // Optional website improvements have independent switches in data/site-features.json.
 if(!document.querySelector('script[data-ml-site-features]')){
- const enhancements=document.createElement('script');enhancements.type='module';enhancements.src='/js/site-enhancements/boot.js';enhancements.dataset.mlSiteFeatures='';document.head.append(enhancements);
+ const enhancements=document.createElement('script');enhancements.type='module';enhancements.src='/assets/js/site-enhancements/boot.js';enhancements.dataset.mlSiteFeatures='';document.head.append(enhancements);
 }
 
 if(!window.mlAccountHeaderListener){window.mlAccountHeaderListener=true;document.addEventListener('ml-account-change',()=>loadLoggedInUser());}

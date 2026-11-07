@@ -1,4 +1,14 @@
 /ml-game/apps/* /webpages/apps/:splat 301
-/ml-game/css/mlg-skill.css /css/mlg-skill.css 301
+/ml-game/css/mlg-skill.css /assets/css/mlg-skill.css 301
 /ml-game /JScratch/canvas.html 301
 /ml-game/* /JScratch/:splat 301
+/books_main /books/series.html 301
+/books_main.html /books/series.html 301
+/game-hub /webpages/game-hub.html 301
+/game-hub.html /webpages/game-hub.html 301
+/css/* /assets/css/:splat 301
+/js/* /assets/js/:splat 301
+/index/songs.json /data/music-catalog.json 301
+/index/* /includes/:splat 301
+/webpages/mlg/game-hub /webpages/game-hub.html 301
+/webpages/mlg/game-hub.html /webpages/game-hub.html 301
