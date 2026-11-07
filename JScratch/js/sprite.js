@@ -60,7 +60,7 @@ registerBlock("spriteEffect",async(block,c)=>{
     else if(effect==="ghost"||effect==="color")
         s.effects[effect]=Math.max(0,Math.min(100,num(block.value,0,c)));
 
-    s.effectCacheKey=null;
+    // The pixel cache key includes brightness/color; ghost affects draw opacity only.
 });
 
 registerBlock("spriteChangeEffect",async(block,c)=>{
@@ -80,7 +80,7 @@ registerBlock("spriteChangeEffect",async(block,c)=>{
             num(s.effects[effect],0)+amount
         ));
 
-    s.effectCacheKey=null;
+    // The pixel cache key includes brightness/color; ghost affects draw opacity only.
 });
 
 registerReporter("costumeOfSprite",(value,c)=>
@@ -119,10 +119,9 @@ registerBlock("goFront",async(block,c)=>{
     const s=sprite(block.name,c);
     if(!s)return;
 
-    s.layer=Math.max(
-        ...getAllSprites().map(x=>x.layer),
-        0
-    )+1;
+    let highest=0;
+    for(const item of getAllSprites())highest=Math.max(highest,item.layer);
+    s.layer=highest+1;
 
     ENGINE.spriteOrderDirty=true;
 });
@@ -131,10 +130,9 @@ registerBlock("goBack",async(block,c)=>{
     const s=sprite(block.name,c);
     if(!s)return;
 
-    s.layer=Math.min(
-        ...getAllSprites().map(x=>x.layer),
-        0
-    )-1;
+    let lowest=0;
+    for(const item of getAllSprites())lowest=Math.min(lowest,item.layer);
+    s.layer=lowest-1;
 
     ENGINE.spriteOrderDirty=true;
 });
@@ -179,9 +177,10 @@ registerBlock("deleteAllSprites",async()=>{
             Object.keys(ENGINE.clones).forEach(k=>delete ENGINE.clones[k]);
     }
 
-    ENGINE.sprites={};
+    ENGINE.sprites=Object.create(null);
     ENGINE.spriteOrder=[];
     ENGINE.spriteOrderDirty=true;
+    releaseInactiveWaiters();
 });
 
 
@@ -212,50 +211,18 @@ async function phaseSprites(block,c,direction){
     let time=num(block.time,1,c);
     if(time<0)time=0;
 
-    const steps=25;
-
-    for(const s of sprites){
-        if(!s||s.deleted)continue;
-
-        if(!s.effects)s.effects={};
-
-        s.effects.ghost=direction==="in"?100:0;
-        s.effectCacheKey=null;
-    }
-
-    if(!time){
+    const start=runtimeClock(c),duration=time*1000;
+    while(contextActive(c)){
+        const progress=duration?Math.min(1,(runtimeClock(c)-start)/duration):1;
         for(const s of sprites){
             if(!s||s.deleted)continue;
-
-            if(!s.effects)s.effects={};
-
-            s.effects.ghost=0;
-            s.effectCacheKey=null;
+            s.effects.ghost=direction==="in"?100*(1-progress):100*progress;
         }
-
-        return;
+        if(progress>=1)break;
+        // During a debugger step complete the selected timed command immediately.
+        await runtimeWait(c?.stepping?duration:0,c,true);
     }
 
-    const stepTime=time*1000/steps;
-
-    for(let i=0;i<steps;i++){
-        if(!contextActive(c))break;
-
-        await runtimeWait(stepTime,c);
-        if(!contextActive(c))break;
-
-        for(const s of sprites){
-            if(!s||s.deleted)continue;
-
-            if(!s.effects)s.effects={};
-
-            s.effects.ghost=direction==="in"
-                ?Math.max(0,100-(i+1)*4)
-                :Math.min(100,(i+1)*4);
-
-            s.effectCacheKey=null;
-        }
-    }
 }
 
 registerBlock("phaseIn",async(block,c)=>{

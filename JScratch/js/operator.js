@@ -22,8 +22,8 @@ function makeVar(name){
     return recordVarBlock("makeVar",{name});
 }
 
-registerBlock("makeVar",async b=>{
-    const n=String(resolveValue(b.name));
+registerBlock("makeVar",async(b,c)=>{
+    const n=String(resolveValue(b.name,c));
     if(n&&!hasOwn(ENGINE.variables,n))ENGINE.variables[n]=0;
 });
 
@@ -46,7 +46,7 @@ registerBlock("deleteVar",async(b,c)=>{
 });
 
 function getVar(name){
-    return{type:"variable",name:String(resolveValue(name))};
+    return{type:"variable",name};
 }
 
 function changeVarBy(name,value){
@@ -73,8 +73,8 @@ registerBlock("makeSpriteVar",async(b,c)=>{
 function getSpriteVar(spriteName,varName){
     return{
         type:"spriteVariable",
-        spriteName:String(resolveValue(spriteName)),
-        varName:String(resolveValue(varName))
+        spriteName,
+        varName
     };
 }
 
@@ -157,8 +157,8 @@ function equal(value,value2){
 const boolBinary=(type,fn)=>
     (a,b)=>operator(type,c=>fn(Boolean(resolveValue(a,c)),Boolean(resolveValue(b,c))));
 
-const and=boolBinary("and",(a,b)=>a&&b);
-const or=boolBinary("or",(a,b)=>a||b);
+const and=(a,b)=>operator("and",c=>Boolean(resolveValue(a,c))&&Boolean(resolveValue(b,c)));
+const or=(a,b)=>operator("or",c=>Boolean(resolveValue(a,c))||Boolean(resolveValue(b,c)));
 
 function not(value){
     return operator("not",c=>{

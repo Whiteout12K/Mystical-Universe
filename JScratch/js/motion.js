@@ -114,9 +114,9 @@ async function glideSprite(s,x,y,time,context){
         return;
     }
 
-    const sx=s.x,sy=s.y,start=ENGINE.clock,duration=time*1000;
+    const sx=s.x,sy=s.y,start=runtimeClock(context),duration=time*1000;
     while(contextActive(context)){
-        const progress=Math.min(1,(ENGINE.clock-start)/duration);s.x=sx+(x-sx)*progress;s.y=sy+(y-sy)*progress;
+        const progress=context?.stepping?1:Math.min(1,(runtimeClock(context)-start)/duration);s.x=sx+(x-sx)*progress;s.y=sy+(y-sy)*progress;
         if(progress>=1)break;await runtimeWait(0,context,true);
     }
 }

@@ -3,7 +3,9 @@
 
 // Main Menu
 
+// These three listeners share a name and run concurrently.
 whenBroadcast("Main Menu",
+    setVar("Menu Ready", false),
     canvasColor("hsl(0, 0%, 0%)"), canvasCostume("", 1),
     createSprite("BG"), spriteCostume("BG", "images/menu/BG1-1.svg", 4),
     createSprite("Heroes"), spriteCostume("Heroes", "images/menu/BG1-3.svg", 2.2), goFront("Heroes"),
@@ -23,6 +25,7 @@ whenBroadcast("Main Menu",
     ),
 
     phaseIn(0.3),
+    setVar("Menu Ready", true),
 
     makeSound("mlt", "/images/mlg-assets/Music/ML-Theme.mp3"),
     setPitch("mlt", 5),
@@ -40,16 +43,15 @@ whenBroadcast("Main Menu",
 );
 
 whenBroadcast("Main Menu",
-    wait(1),
+    waitUntil(getVar("Menu Ready")),
+    wait(0.7),
     repeatUntil( not( equal(getVar("Scene"), "Main Menu") ),
         ifBlock( equal(touchingMouse("Start Button"), true),
             spriteEffect("Start Button", "brightness", 60),
             spriteSetSize("Start Button", 0.9),
             ifBlock( equal(keyPressed("leftclick"), true), 
-                setVar("Scene", "Gacha"),
-                phaseOut(0.3),
-                stopSound("mlt"),
-                deleteAllSprites(),
+                setVar("Scene", "World"),
+                broadcast("Leave Main Menu"),
             ),
             "else",
             spriteEffect("Start Button", "brightness", 0),
@@ -64,45 +66,58 @@ whenBroadcast("Main Menu",
     moveTo("Line", -400, -400),
     makeSpriteVar("Line", "Size"),
     setSpriteVar("Line", "Size", 0),
+    waitUntil(getVar("Menu Ready")),
     repeatUntil( not( equal(getVar("Scene"), "Main Menu") ),
-        repeat(25, 
+        withoutScreenRefresh(repeat(25,
             changeSpriteVarBy("Line", "Size", 0.02),
             wait(0.08),
             makeClone("Line"),
-        ),
-        repeat(25, 
+        )),
+        withoutScreenRefresh(repeat(25,
             changeSpriteVarBy("Line", "Size", -0.02),
             wait(0.08),
             makeClone("Line"),
-        ),
+        )),
     ),
 );
 
+// Transition from a separate listener so cancelling Main Menu does not cancel
+// the fade and cleanup themselves. Stop particles before taking the fade snapshot.
+whenBroadcast("Leave Main Menu",
+    stopScripts("Main Menu"),
+    stopScripts("Line"),
+    setVar("Menu Ready", false),
+    phaseOut(0.3),
+    stopSound("mlt"),
+    deleteAllSprites(),
+    broadcast("World"),
+);
+
 whenClone("Line",
-    moveTo("Line", -300, mult(round(randomNum(-35, 3)), 10)),
-    setSpriteVar("Line", "Size", add(getSpriteVar("Line", "Size"), randomNum(0, 0.2))),
-    spriteSetSize("Line", getSpriteVar("Line", "Size")),
-    ifBlock( gEqThan(spriteY("Line"), -200),
-        spriteEffect("Line", "brightness", mult( div( abs(spriteY("Line")), 100), 15) ),
+    moveTo("self", -300, mult(round(randomNum(-35, 3)), 10)),
+    setSpriteVar("self", "Size", add(getSpriteVar("self", "Size"), randomNum(0, 0.2))),
+    spriteSetSize("self", getSpriteVar("self", "Size")),
+    ifBlock(gEqThan(spriteY("self"), -200),
+        spriteEffect("self", "brightness", mult(div(abs(spriteY("self")), 100), 15)),
         "else",
-        ifBlock( lEqThan(spriteY("Line"), -200 ),
-            spriteEffect("Line", "brightness", mult( div( abs(spriteY("Line")), -100), 15) ),
+        spriteEffect("self", "brightness", mult(div(abs(spriteY("self")), -100), 15)),
+    ),
+    direction("self", 335),
+    // Preserve the intended 17 units per 0.02 seconds, independent of frame rate.
+    repeatUntil( or(gThan(spriteX("self"), 280), not(equal(getVar("Scene"), "Main Menu"))),
+        moveBy("self",
+            mult(mult(div(17, 0.02), deltaTime()), cos(20)),
+            mult(mult(div(17, 0.02), deltaTime()), sin(20)),
         ),
     ),
-    direction("Line", 335),
-    repeat(80,
-        moveBy("Line", mult(17, cos(20)), mult(17, sin(20))),
-        ifBlock( or( gThan(spriteX("Line"), 280), not(equal(getVar("Scene"), "Main Menu")) ),
-            deleteClone("Line"),
-        ),
-        wait(0.02),
-    ),
-    deleteClone("Line"),
+    deleteClone(),
 );
 
 
 loadPlayerData();
 
+makeVar("Menu Ready");
+setVar("Menu Ready", false);
 makeVar("Scene");
 setVar("Scene", "Main Menu");
 createSprite("Torch"); spriteCostume("Torch", "images/menu/torch_full.png", 0.5);
@@ -111,13 +126,4 @@ phaseIn(0.3);
 wait(1);     
 phaseOut(0.3); deleteSprite("Torch");
 broadcast("Main Menu");
-
-
-
-
-
-
-// Gacha
-
-
 

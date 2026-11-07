@@ -86,9 +86,9 @@ function parseJsonResult(v){
     return String(v);
 }
 
-async function loadJsonFile(name,path){
-    name=String(resolveValue(name)??"").trim();
-    path=String(resolveValue(path)??"").trim();
+async function loadJsonFile(name,path,c=createScriptContext()){
+    name=String(resolveValue(name,c)??"").trim();
+    path=String(resolveValue(path,c)??"").trim();
 
     if(!name){
         console.error("Unable to load JSON: JSON name is required.");
@@ -101,12 +101,8 @@ async function loadJsonFile(name,path){
     }
 
     try{
-        const r=await fetch(path,{cache:"no-store"});
-
-        if(!r.ok)
-            throw Error(`HTTP ${r.status}`);
-
-        const data=await r.json();
+        const data=await runtimeFetchJson(path,{cache:"no-store"},c);
+        if(!contextActive(c))return false;
 
         if(!validJsonObj(data)){
             console.error("Unable to load JSON: file must contain a JSON object or array.");
@@ -121,12 +117,12 @@ async function loadJsonFile(name,path){
     }
 }
 
-registerBlock("getJson",async b=>{
-    return await loadJsonFile(b.name,b.path);
+registerBlock("getJson",async(b,c)=>{
+    return await loadJsonFile(b.name,b.path,c);
 });
 
-registerBlock("removeJson",async b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerBlock("removeJson",async(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!name)return false;
 
@@ -139,18 +135,18 @@ registerBlock("removeJson",async b=>{
 
 /* REPORTERS */
 
-registerReporter("jsonLoaded",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonLoaded",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
     return Object.prototype.hasOwnProperty.call(JSON_DATA,name);
 });
 
-registerReporter("jsonValue",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonValue",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!Object.prototype.hasOwnProperty.call(JSON_DATA,name))
         return 0;
 
-    const path=resolveValue(b.path);
+    const path=resolveValue(b.path,c);
 
     if(path==null||String(path).trim()==="")
         return formatJsonResult(JSON_DATA[name]);
@@ -163,13 +159,13 @@ registerReporter("jsonValue",b=>{
     return formatJsonResult(value);
 });
 
-registerReporter("jsonExists",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonExists",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!Object.prototype.hasOwnProperty.call(JSON_DATA,name))
         return false;
 
-    const path=resolveValue(b.path);
+    const path=resolveValue(b.path,c);
 
     if(path==null||String(path).trim()==="")
         return true;
@@ -180,13 +176,13 @@ registerReporter("jsonExists",b=>{
     )!==undefined;
 });
 
-registerReporter("jsonKeys",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonKeys",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!Object.prototype.hasOwnProperty.call(JSON_DATA,name))
         return "";
 
-    const path=resolveValue(b.path);
+    const path=resolveValue(b.path,c);
     const value=
         path==null||String(path).trim()===""
             ?JSON_DATA[name]
@@ -198,13 +194,13 @@ registerReporter("jsonKeys",b=>{
     return Object.keys(value).join(",");
 });
 
-registerReporter("jsonLength",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonLength",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!Object.prototype.hasOwnProperty.call(JSON_DATA,name))
         return 0;
 
-    const path=resolveValue(b.path);
+    const path=resolveValue(b.path,c);
     const value=
         path==null||String(path).trim()===""
             ?JSON_DATA[name]
@@ -219,13 +215,13 @@ registerReporter("jsonLength",b=>{
     return 0;
 });
 
-registerReporter("jsonType",b=>{
-    const name=String(resolveValue(b.name)??"").trim();
+registerReporter("jsonType",(b,c)=>{
+    const name=String(resolveValue(b.name,c)??"").trim();
 
     if(!Object.prototype.hasOwnProperty.call(JSON_DATA,name))
         return "";
 
-    const path=resolveValue(b.path);
+    const path=resolveValue(b.path,c);
     const value=
         path==null||String(path).trim()===""
             ?JSON_DATA[name]

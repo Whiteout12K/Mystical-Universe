@@ -1,30 +1,31 @@
+// API reference snippets, not a complete game. Do not load alongside begin.js.
 
 // <----- Canvas Blocks ----->
 
 canvasColor("#686565"); // Sets the canvas color if no image. Parameter: color_hex
 
-canvasCostume("images/sample_canvas.png", 2); // Sets the canvas costume. Parameter: costume_path. Can be blank for no image.
+canvasCostume("images/menu/BG1-5.png", 2); // Sets the canvas costume. Parameter: costume_path. Can be blank for no image.
 
-canvasSize(2); // Sets scale without modifying costume of canvas.
+// Set the scale using canvasCostume(path, scale); there is no canvasSize() block. // Sets scale without modifying costume of canvas.
 
-canvasChangeSize(0.1); // Cahgnes the canvas' scale by value, can both be negative or positive to shrink or grow size.
+// Background scale is supplied to canvasCostume(). // Cahgnes the canvas' scale by value, can both be negative or positive to shrink or grow size.
 
-canvasEffect("brightness", 0); // Changes the canvas' effect, where 0 is none and 100 is 100% effect.
+// Background effects currently have no public command constructor. // Changes the canvas' effect, where 0 is none and 100 is 100% effect.
 //  Effect List: 
 //    brightness: changes sprite costume brightness, from 0-100%, where max is bright white.
 //    ghost: changes the sprite's opacity, from 0-100%.
 //    color: changes the sprite's color, from 0-100. 0 is default, and 100 is also default. In between, the sprite goes through the color spectrum.
 //           This basically changes the hue of the colors.
 
-costumeOfCanvas(); // Returns the current costume path of canvas.
-sizeOfCanvas(); // Returns the current canvas size.
+// Current background path: MLGame.ENGINE.backgroundCostume (developer API). // Returns the current costume path of canvas.
+// Current background scale: MLGame.ENGINE.backgroundScale (developer API). // Returns the current canvas size.
 
 
 // <----- Sprite Blocks ----->
 
 createSprite("Player1"); // Creates a sprite. Parameter: sprite_name
 
-spriteCostume("Player1", "images/sample_sprite.png", 1); // Sets the sprite's costume. The image scale sets the image width, where 1 = 160 canvas pixels.
+spriteCostume("Player1", "images/menu/torch_full.png", 1); // Sets the sprite's costume. The image scale sets the image width, where 1 = 160 canvas pixels.
 //   Parameter: sprite_name, costume_path, scale
 
 spriteSetSize("Player1", 1); // Sets scale without modifying costume.
@@ -138,7 +139,7 @@ setSpriteVar("Player1", "health", 1);
 changeSpriteVarBy("Player1", "health", 3); 
 getSpriteVar("Player1", "health"); 
 
-deleteVar("var1")/ // Deletes a variable.
+deleteVar("var1"); // Deletes a variable.
 
 
 // <----- Sensing Blocks ----->
@@ -147,7 +148,7 @@ touchingMouse("Player1"); // Checks if sprite is touching the mouse and returns 
 
 touchingSprite("Player1", "Enemy1"); // Checks if sprite is touching another sprite, namely, if first is touching the second and vice versa.
 
-touchingColor("Player1", "#000000"); // Checks if sprite is touching a particular color.
+touchingColor("Player1", "#000000"); // Checks whether the own costume contains this color (cached).
 
 distanceMouse("Player1"); // Checks mouse pointer distance from sprite in game units and returns value.
 
@@ -183,19 +184,19 @@ repeat(100,
 
 // Conditional if block that checks of if a conditonal is true and then executes.
 //  Also can use "else" which is optional to run if conditonal is false.
-ifBlock( equalThan(getVar("Var1"), 1),
+ifBlock( equal(getVar("Var1"), 1),
     //field,
     "else",
     //field,
 );
 
 // Runs inside code until conditional is true.
-repeatUntil( equalThan(getVar("Var1"), 2),
+repeatUntil( equal(getVar("Var1"), 2),
     //field,
 );
 
 // Runs the inside code until conditional is not true. Can also hold simply "True" to keep it running.
-whileBlock( equalThan(getVar("Var1"), 1),
+whileBlock( equal(getVar("Var1"), 1),
     //field,
 );
 
@@ -204,16 +205,16 @@ forever(
     //field,
 );
 
-endScript(); // Ends whatever looping or repeating code this block is inside.
+endScript(); // Ends the entire current script, including all enclosing loops.
 
 
 // <----- Event Blocks ----->
 
-broadcast("Start Menu"); // Starts a broadcast to a seperate code sequence and continues code. Takes a unique broadcast name.
+broadcast("Start Menu"); // Starts every listener with this name independently and continues.
 
 broadcastAndWait("Start Menu"); // Same broadcast but will wait for broadcast code to finish.
 
-// Broadcast reciever of the same unique broadcast name.
+// Register a listener; more than one listener can use the same name.
 whenBroadcast("Start Menu",
     //field;
 );
@@ -228,7 +229,7 @@ whenClone("Player1",
     //field;
 )
 
-deleteClone("Player1"); // When used inside whenClone(), it deletes that clone.
+deleteClone(); // When used inside whenClone(), it deletes that clone.
 
 getCloneName(); // When used inside whenClone(), it gets the clone's own name.
 
@@ -268,13 +269,13 @@ getJson("data1", ""); // Loads a JSON file and stores it in memory. Parameter: j
 
 removeJson("data1"); // Removes a JSON file from memory. Parameter: json_name
 
-jsonLoeaded("data1"); // Returns true if JSON file is loaded in memory, else false. Parameter: json_name
+jsonLoaded("data1"); // Returns true if JSON file is loaded in memory, else false. Parameter: json_name
 
 jsonValue("data1", "c1.name"); // Returns the value of a key in a JSON file. Parameter: json_name, key_name
 
 jsonExists("data1", "c1.name"); // Returns true if a key exists in a JSON file, else false. Parameter: json_name, key_name
 
-jsonKeys("data1", "c1.base_stats"); // Returns an array of all keys in a JSON file. Parameter: json_name
+jsonKeys("data1", "c1.base_stats"); // Returns comma-separated keys in a JSON file. Parameter: json_name
 
 jsonLength("data1", "c1.base_stats"); // Returns the length of a JSON file or key. Parameter: json_name, key_name
 

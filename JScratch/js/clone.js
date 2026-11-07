@@ -28,8 +28,8 @@ function copySpriteState(source,clone){
     clone.velocityY=source.velocityY;
     clone.edgeLock=source.edgeLock?{...source.edgeLock}:null;
     clone.costume=source.costume||"";
-    clone.variables={...source.variables};
-    clone.privateVariables={...source.privateVariables};
+    clone.variables=Object.assign(Object.create(null),source.variables);
+    clone.privateVariables=Object.assign(Object.create(null),source.privateVariables);
     clone.cloneOf=source.isClone?source.cloneOf:source.name;
     clone.cloneName=source.isClone?source.cloneName:source.name;
 
@@ -67,13 +67,11 @@ function createClone(source){
     ENGINE.spriteOrderDirty=true;
 
     const listeners=ENGINE.cloneBroadcasts?.[clone.cloneName]||[];
-    if(listeners.length){
-        for(const script of listeners){
-            const context=createScriptContext(clone);
-            Promise.resolve()
-                .then(()=>executeBlocks(script.blocks,context))
-                .catch(e=>console.error("Clone script error:",e));
-        }
+    for(const [index,script] of listeners.entries()){
+        const context=createScriptContext(clone);
+        context.scriptName="Clone "+clone.cloneName+" ["+(index+1)+"]";
+        context.group=clone.cloneName;
+        launchScript(script.blocks,context);
     }
 
     return clone;
@@ -101,6 +99,7 @@ registerBlock("deleteClone",async(b,c)=>{
     ENGINE.spriteOrderDirty=true;
 
     c.ended=true;
+    releaseInactiveWaiters();
 });
 
 registerBlock("deleteClonesOf",async(b,c)=>{
@@ -115,6 +114,7 @@ registerBlock("deleteClonesOf",async(b,c)=>{
     });
 
     ENGINE.clones=ENGINE.clones.filter(x=>!x.deleted);
+    releaseInactiveWaiters();
     ENGINE.spriteOrderDirty=true;
 });
 
@@ -123,7 +123,7 @@ registerBlock("deleteClonesOf",async(b,c)=>{
 
 function whenClone(name,...blocks){
     const key=String(resolveValue(name));
-    ENGINE.cloneBroadcasts??={};
+    ENGINE.cloneBroadcasts??=Object.create(null);
     ENGINE.cloneBroadcasts[key]??=[];
 
     const script={name:key,blocks:Array.isArray(blocks)?blocks:[]};

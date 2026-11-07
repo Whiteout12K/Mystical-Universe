@@ -70,3 +70,12 @@ function whenBroadcast(message,...blocks){
     ENGINE.removeTopLevelBlock(block);
     return block;
 }
+// Optional controls for the innermost loop and named script groups.
+function breakLoop(){return createControlBlock("breakLoop");}
+function continueLoop(){return createControlBlock("continueLoop");}
+function stopScripts(message){return createControlBlock("stopScripts",{message});}
+registerBlock("stopScripts",(b,c)=>cancelScripts(String(resolveValue(b.message,c))));
+
+// Scratch-style fast computation, still yielding when the shared budget is used.
+function withoutScreenRefresh(...blocks){return control("withoutScreenRefresh",{blocks});}
+registerBlock("withoutScreenRefresh",(b,c)=>executeBlocks(b.blocks,c));

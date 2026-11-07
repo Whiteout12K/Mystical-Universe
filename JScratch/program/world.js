@@ -1,0 +1,50 @@
+// World: an empty stage with c1 (Avery) in the default costume.
+// This listener starts after the menu has faded out and cleaned up its sprites.
+whenBroadcast("World",
+    setVar("Scene", "World"),
+    canvasCostume("", 1),
+    canvasColor("#202833"),
+    createSprite("Player"),
+    spriteCostume("Player", "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif", 0.3),
+    moveTo("Player", 0, 0),
+    setSpriteVar("Player", "Speed", 160), // Game units per second.
+    phaseIn(0.3),
+
+    whileBlock(equal(getVar("Scene"), "World"),
+        withoutScreenRefresh(
+            setSpriteVar("Player", "Input X", 0),
+            setSpriteVar("Player", "Input Y", 0),
+            ifBlock( or(keyPressed("a"), keyPressed("leftarrow")),
+                changeSpriteVarBy("Player", "Input X", -1),
+            ),
+            ifBlock( or(keyPressed("d"), keyPressed("rightarrow")),
+                changeSpriteVarBy("Player", "Input X", 1),
+            ),
+            ifBlock( or(keyPressed("w"), keyPressed("uparrow")),
+                changeSpriteVarBy("Player", "Input Y", 1),
+            ),
+            ifBlock( or(keyPressed("s"), keyPressed("downarrow")),
+                changeSpriteVarBy("Player", "Input Y", -1),
+            ),
+            setSpriteVar("Player", "Move Step", mult(getSpriteVar("Player", "Speed"), deltaTime())),
+            // Normalize diagonal movement; opposite keys cancel each other out.
+            ifBlock(and(
+                not(equal(getSpriteVar("Player", "Input X"), 0)),
+                not(equal(getSpriteVar("Player", "Input Y"), 0)),
+            ),
+                setSpriteVar("Player", "Move Step", mult(getSpriteVar("Player", "Move Step"), 0.7071067811865476)),
+            ),
+            ifBlock(lThan(getSpriteVar("Player", "Input X"), 0),
+                facing("Player", "left"),
+                "else",
+                ifBlock(gThan(getSpriteVar("Player", "Input X"), 0), facing("Player", "right")),
+            ),
+            moveBy("Player",
+                mult(getSpriteVar("Player", "Input X"), getSpriteVar("Player", "Move Step")),
+                mult(getSpriteVar("Player", "Input Y"), getSpriteVar("Player", "Move Step")),
+            ),
+            // Empty edge names clamp both axes without pinning the player to an edge.
+            moveToEdge("Player", "", 0, "", 0),
+        ),
+    ),
+);

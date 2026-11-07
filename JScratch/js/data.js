@@ -12,67 +12,42 @@ const createDataBlock=(type,data={})=>{
     return b;
 };
 
-async function _loadPlayerData(){
-    if(PLAYER.loading)return PLAYER.loading;
-
-    PLAYER.loading=(async()=>{
-        const reset=()=>PLAYER={
-            username:"",password:"",loggedIn:false,data:{},loaded:true,loading:null
-        };
-
+let playerLoadRun=-1;
+async function _loadPlayerData(c=createScriptContext()){
+    if(PLAYER.loading&&playerLoadRun===c.runId)return PLAYER.loading;
+    playerLoadRun=c.runId;
+    const load=(async()=>{
+        const snapshot={username:"",password:"",loggedIn:false,data:{},loaded:true,loading:null};
         try{
-            const r=await fetch("/api/me",{cache:"no-store"});
-            if(!r.ok)throw Error(`HTTP ${r.status}`);
-
-            const result=await r.json(),user=result?.user||result;
-            if(!(result?.authenticated&&user?.username))return reset();
-
-            PLAYER.username=String(user.username);
-            PLAYER.password=String(user.password??result.password??"");
-            PLAYER.loggedIn=true;
-
-            let data=parsePlayerData(
-                user.data??result.data??user.save_data??result.save_data
-            );
-
-            if(!validObj(data)||!Object.keys(data).length){
-                try{
-                    const p=await fetch(
-                        `/api/user/${encodeURIComponent(PLAYER.username)}`,
-                        {cache:"no-store"}
-                    );
-                    if(p.ok){
-                        const pr=await p.json();
-                        data=parsePlayerData(
-                            pr?.data??pr?.save_data??
-                            pr?.user?.data??pr?.user?.save_data
-                        );
-                    }
-                }catch(e){console.error("Unable to load player profile data:",e);}
+            const result=await runtimeFetchJson("/api/me",{cache:"no-store"},c),user=result?.user||result;
+            if(result?.authenticated&&user?.username){
+                snapshot.username=String(user.username);
+                snapshot.password=String(user.password??result.password??"");
+                snapshot.loggedIn=true;
+                let data=parsePlayerData(user.data??result.data??user.save_data??result.save_data);
+                if(!validObj(data)||!Object.keys(data).length){
+                    try{
+                        const profile=await runtimeFetchJson(`/api/user/${encodeURIComponent(snapshot.username)}`,{cache:"no-store"},c);
+                        data=parsePlayerData(profile?.data??profile?.save_data??profile?.user?.data??profile?.user?.save_data);
+                    }catch(error){if(contextActive(c))console.warn("Unable to load player profile:",error);}
+                }
+                snapshot.data=validObj(data)?data:{};
             }
-
-            PLAYER.data=validObj(data)?data:{};
-        }catch(e){
-            console.error("Unable to load player data:",e);
-            return reset();
-        }
-
-        PLAYER.loaded=true;
-        PLAYER.loading=null;
-        return PLAYER;
+        }catch(error){if(contextActive(c))console.warn("Unable to load player data:",error);}
+        if(contextActive(c))PLAYER=snapshot;
+        return snapshot;
     })();
-
-    return PLAYER.loading;
+    PLAYER.loading=load;
+    try{return await load;}finally{if(PLAYER.loading===load)PLAYER.loading=null;}
 }
-
-registerBlock("loadPlayerData",async()=>{await _loadPlayerData();});
+registerBlock("loadPlayerData",async(b,c)=>{await _loadPlayerData(c);});
 
 registerReporter("getUsername",()=>PLAYER.loaded?PLAYER.username:"");
 registerReporter("getLoggedIn",()=>PLAYER.loaded?PLAYER.loggedIn:false);
 
-registerReporter("getData",b=>{
+registerReporter("getData",(b,c)=>{
     if(!PLAYER.loaded)return 0;
-    const key=resolveValue(b.key);
+    const key=resolveValue(b.key,c);
     if(key==null||key==="")return formatDataResult(PLAYER.data);
     const v=getNestedData(PLAYER.data,String(key).trim());
     return v==null?0:formatDataResult(v);
@@ -150,6 +125,7 @@ function getNestedData(data,path){
 function setNestedData(data,path,value){
     const parts=parseDataPath(path);
     if(!parts.length)return;
+    if(parts.some(k=>["__proto__","prototype","constructor"].includes(k)))throw new Error("Unsafe data path");
 
     let v=data;
     for(let i=0;i<parts.length-1;i++){
@@ -177,7 +153,7 @@ function playerAuthError(action){
     return true;
 }
 
-async function editPlayerData(path,value){
+async function editPlayerData(path,value,c){
     const params=new URLSearchParams({password:PLAYER.password});
     params.set(
         path,
@@ -185,21 +161,11 @@ async function editPlayerData(path,value){
     );
 
     try{
-        const r=await fetch(
+        const result=await runtimeFetchJson(
             `/edit/${encodeURIComponent(PLAYER.username)}?${params}`,
-            {method:"GET",cache:"no-store"}
+            {method:"GET",cache:"no-store"},c
         );
-
-        let result={};
-        try{result=await r.json()}catch{}
-
-        if(!r.ok||result.success===false){
-            console.error(
-                "Unable to update player data:",
-                result?.error||`HTTP ${r.status}`
-            );
-            return null;
-        }
+        if(!contextActive(c)||result.success===false)return null;
 
         return result;
     }catch(e){
@@ -208,18 +174,33 @@ async function editPlayerData(path,value){
     }
 }
 
-registerBlock("updateData",async b=>{
+// Save operations are ordered within a run so concurrent increments cannot overwrite
+// one another. Other gameplay scripts keep running while the request is pending.
+const playerWriteQueues=new Map();
+function registerPlayerWrite(type,handler){
+    registerBlock(type,(b,c)=>{
+        const data={...b,data:resolveValue(b.data,c)};
+        if("value" in b)data.value=resolveValue(b.value,c);
+        if("amount" in b)data.amount=resolveValue(b.amount,c);
+        const previous=playerWriteQueues.get(c.runId)||Promise.resolve();
+        const pending=previous.catch(()=>{}).then(()=>contextActive(c)?handler(data,c):false);
+        playerWriteQueues.set(c.runId,pending);
+        return pending.finally(()=>{if(playerWriteQueues.get(c.runId)===pending)playerWriteQueues.delete(c.runId);});
+    });
+}
+
+registerPlayerWrite("updateData",async(b,c)=>{
     if(!playerAuthError("update data"))return false;
 
-    const path=String(resolveValue(b.data)).trim();
+    const path=String(resolveValue(b.data,c)).trim();
     if(!path){
         console.error("Unable to update data: data name is required.");
         return false;
     }
 
-    const value=parseDataValue(resolveValue(b.value));
-    const result=await editPlayerData(path,value);
-    if(!result)return false;
+    const value=parseDataValue(resolveValue(b.value,c));
+    const result=await editPlayerData(path,value,c);
+    if(!result||!contextActive(c))return false;
 
     if(validObj(result.data))PLAYER.data=result.data;
     else setNestedData(PLAYER.data,path,value);
@@ -227,16 +208,16 @@ registerBlock("updateData",async b=>{
     return true;
 });
 
-registerBlock("changeDataBy",async b=>{
+registerPlayerWrite("changeDataBy",async(b,c)=>{
     if(!playerAuthError("change data"))return false;
 
-    const path=String(resolveValue(b.data)).trim();
+    const path=String(resolveValue(b.data,c)).trim();
     if(!path){
         console.error("Unable to change data: data name is required.");
         return false;
     }
 
-    const amount=Number(resolveValue(b.amount));
+    const amount=Number(resolveValue(b.amount,c));
     if(!Number.isFinite(amount)){
         console.error("Unable to change data: amount must be a number.");
         return false;
@@ -244,9 +225,9 @@ registerBlock("changeDataBy",async b=>{
 
     const current=Number(getNestedData(PLAYER.data,path));
     const value=(Number.isFinite(current)?current:0)+amount;
-    const result=await editPlayerData(path,value);
+    const result=await editPlayerData(path,value,c);
 
-    if(!result)return false;
+    if(!result||!contextActive(c))return false;
 
     if(validObj(result.data))PLAYER.data=result.data;
     else setNestedData(PLAYER.data,path,value);

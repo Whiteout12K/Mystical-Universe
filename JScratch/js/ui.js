@@ -3,7 +3,7 @@
    ========================================================= */
 
 const ML_UI={
-    elements:{},
+    elements:Object.create(null),
     order:[],
     nextId:1
 };
@@ -107,8 +107,8 @@ function uiDeleteElement(id){
 }
 
 function uiClearElements(){
-    ML_UI.elements={};
-    ML_UI.order=[];
+    for(const id of Object.keys(ML_UI.elements))delete ML_UI.elements[id];
+    ML_UI.order.length=0;
 }
 
 function uiSortElements(){
@@ -406,15 +406,12 @@ function uiDrawImage(e){
     const path=uiString(e.path);
     if(!path)return;
 
-    if(!e.image){
-        e.image=new Image();
-        e.image.src=path;
+    if(e.imagePath!==path){
+        const asset=loadImageAsset(path);e.image=asset.image;e.imagePath=path;
+        asset.ready.catch(error=>console.warn("Could not load UI image:",error.message));
     }
-
-    if(e.image.src!==path)
-        e.image.src=path;
-
     if(!e.image.complete||!e.image.naturalWidth)return;
+    const frame=getImageFrame(e.image);
 
     const w=uiWidth(e.width);
     const h=uiHeight(e.height);
@@ -429,7 +426,7 @@ function uiDrawImage(e){
 
     uiShadow(e);
 
-    ctx.drawImage(e.image,-w/2,-h/2,w,h);
+    ctx.drawImage(frame.source,-w/2,-h/2,w,h);
 
     uiClearShadow();
     ctx.restore();
@@ -513,29 +510,26 @@ function renderUI(){
 ENGINE.renderUI=renderUI;
 
 
-/* If render is exposed globally, wrap it once.
-   back-process.js uses the same global render function. */
-
-if(typeof window!=="undefined"&&typeof window.render==="function"){
-    const baseRender=window.render;
-
-    if(!baseRender._mlUI){
-        const wrappedRender=function(){
-            baseRender();
-            renderUI();
-        };
-
-        wrappedRender._mlUI=true;
-        window.render=wrappedRender;
-    }
-}
-
-
 /* =========================================================
    BLOCK REGISTRATION
    ========================================================= */
 
-registerBlock("uiText",b=>uiCreateElement(b.id,"text",{
+// Resolve arguments when the command runs, including clone-scoped reporters.
+function uiArguments(value,c){
+    if(!value||typeof value!=="object")return value;
+    if(value.type)return resolveValue(value,c);
+    if(Array.isArray(value))return value.map(v=>uiArguments(v,c));
+    return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,uiArguments(v,c)]));
+}
+function uiBlockArguments(b,c){
+    return Object.fromEntries(Object.entries(b).map(([key,value])=>[
+        key,key==="type"?value:uiArguments(value,c)
+    ]));
+}
+function registerUIBlock(type,handler){registerBlock(type,(b,c)=>handler(uiBlockArguments(b,c),c));}
+function registerUIReporter(type,handler){registerReporter(type,(b,c)=>handler(uiBlockArguments(b,c),c));}
+
+registerUIBlock("uiText",b=>uiCreateElement(b.id,"text",{
     text:b.text,x:b.x??0,y:b.y??0,size:b.size??24,
     color:b.color??"#fff",font:b.font??"Arial",
     weight:b.weight??"normal",style:b.style??"normal",
@@ -545,7 +539,7 @@ registerBlock("uiText",b=>uiCreateElement(b.id,"text",{
     opacity:b.opacity??1,layer:b.layer??0,shadow:b.shadow
 }));
 
-registerBlock("uiPanel",b=>uiCreateElement(b.id,"panel",{
+registerUIBlock("uiPanel",b=>uiCreateElement(b.id,"panel",{
     x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??100,
     color:b.color??"rgba(0,0,0,.7)",radius:b.radius??10,
     outlineWidth:b.outlineWidth??0,
@@ -555,7 +549,7 @@ registerBlock("uiPanel",b=>uiCreateElement(b.id,"panel",{
     rotation:b.rotation??0,scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiBox",b=>uiCreateElement(b.id,"box",{
+registerUIBlock("uiBox",b=>uiCreateElement(b.id,"box",{
     x:b.x??0,y:b.y??0,width:b.width??100,height:b.height??100,
     color:b.color??"#fff",radius:b.radius??0,
     outlineWidth:b.outlineWidth??0,
@@ -565,14 +559,14 @@ registerBlock("uiBox",b=>uiCreateElement(b.id,"box",{
     rotation:b.rotation??0,scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiLine",b=>uiCreateElement(b.id,"line",{
+registerUIBlock("uiLine",b=>uiCreateElement(b.id,"line",{
     x:b.x??0,y:b.y??0,toX:b.toX??100,toY:b.toY??0,
     width:b.width??2,color:b.color??"#fff",
     cap:b.cap??"round",opacity:b.opacity??1,
     shadow:b.shadow,layer:b.layer??0
 }));
 
-registerBlock("uiCircle",b=>uiCreateElement(b.id,"circle",{
+registerUIBlock("uiCircle",b=>uiCreateElement(b.id,"circle",{
     x:b.x??0,y:b.y??0,radius:b.radius??20,
     color:b.color??"#fff",outlineWidth:b.outlineWidth??0,
     outlineColor:b.outlineColor??"#000",shadow:b.shadow,
@@ -580,7 +574,7 @@ registerBlock("uiCircle",b=>uiCreateElement(b.id,"circle",{
     scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiProgressBar",b=>uiCreateElement(b.id,"progress",{
+registerUIBlock("uiProgressBar",b=>uiCreateElement(b.id,"progress",{
     x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??20,
     value:b.value??0,max:b.max??100,
     background:b.background??"rgba(255,255,255,.2)",
@@ -592,7 +586,7 @@ registerBlock("uiProgressBar",b=>uiCreateElement(b.id,"progress",{
     scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiBar",b=>uiCreateElement(b.id,"bar",{
+registerUIBlock("uiBar",b=>uiCreateElement(b.id,"bar",{
     x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??20,
     value:b.value??0,max:b.max??100,
     background:b.background??"rgba(255,255,255,.2)",
@@ -604,7 +598,7 @@ registerBlock("uiBar",b=>uiCreateElement(b.id,"bar",{
     scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiButton",b=>uiCreateElement(b.id,"button",{
+registerUIBlock("uiButton",b=>uiCreateElement(b.id,"button",{
     x:b.x??0,y:b.y??0,width:b.width??140,height:b.height??45,
     color:b.color??"#444",radius:b.radius??8,
     outlineWidth:b.outlineWidth??1,
@@ -621,7 +615,7 @@ registerBlock("uiButton",b=>uiCreateElement(b.id,"button",{
     scale:b.scale??1,layer:b.layer??0
 }));
 
-registerBlock("uiImage",b=>uiCreateElement(b.id,"image",{
+registerUIBlock("uiImage",b=>uiCreateElement(b.id,"image",{
     path:b.path,x:b.x??0,y:b.y??0,
     width:b.width??100,height:b.height??100,
     opacity:b.opacity??1,anchor:b.anchor??"center",
@@ -634,35 +628,35 @@ registerBlock("uiImage",b=>uiCreateElement(b.id,"image",{
    MODIFY BLOCKS
    ========================================================= */
 
-registerBlock("uiDelete",b=>uiDeleteElement(b.id));
-registerBlock("uiClear",()=>uiClearElements());
+registerUIBlock("uiDelete",b=>uiDeleteElement(b.id));
+registerUIBlock("uiClear",()=>uiClearElements());
 
-registerBlock("uiShow",b=>{
+registerUIBlock("uiShow",b=>{
     const e=uiGetElement(b.id);
     if(e)e.visible=true;
 });
 
-registerBlock("uiHide",b=>{
+registerUIBlock("uiHide",b=>{
     const e=uiGetElement(b.id);
     if(e)e.visible=false;
 });
 
-registerBlock("uiSetVisible",b=>{
+registerUIBlock("uiSetVisible",b=>{
     const e=uiGetElement(b.id);
     if(e)e.visible=b.visible;
 });
 
-registerBlock("uiSetOpacity",b=>{
+registerUIBlock("uiSetOpacity",b=>{
     const e=uiGetElement(b.id);
     if(e)e.opacity=b.opacity;
 });
 
-registerBlock("uiSetText",b=>{
+registerUIBlock("uiSetText",b=>{
     const e=uiGetElement(b.id);
     if(e)e.text=b.text;
 });
 
-registerBlock("uiSetPosition",b=>{
+registerUIBlock("uiSetPosition",b=>{
     const e=uiGetElement(b.id);
     if(e){
         e.x=b.x;
@@ -670,7 +664,7 @@ registerBlock("uiSetPosition",b=>{
     }
 });
 
-registerBlock("uiMove",b=>{
+registerUIBlock("uiMove",b=>{
     const e=uiGetElement(b.id);
     if(e){
         e.x=uiNumber(e.x)+uiNumber(b.dx);
@@ -678,7 +672,7 @@ registerBlock("uiMove",b=>{
     }
 });
 
-registerBlock("uiSetSize",b=>{
+registerUIBlock("uiSetSize",b=>{
     const e=uiGetElement(b.id);
     if(e){
         e.width=b.width;
@@ -686,7 +680,7 @@ registerBlock("uiSetSize",b=>{
     }
 });
 
-registerBlock("uiSetColor",b=>{
+registerUIBlock("uiSetColor",b=>{
     const e=uiGetElement(b.id);
     if(e){
         if(b.color!==undefined)e.color=b.color;
@@ -695,22 +689,22 @@ registerBlock("uiSetColor",b=>{
     }
 });
 
-registerBlock("uiSetLayer",b=>{
+registerUIBlock("uiSetLayer",b=>{
     const e=uiGetElement(b.id);
     if(e)e.layer=b.layer;
 });
 
-registerBlock("uiSetRotation",b=>{
+registerUIBlock("uiSetRotation",b=>{
     const e=uiGetElement(b.id);
     if(e)e.rotation=b.rotation;
 });
 
-registerBlock("uiSetScale",b=>{
+registerUIBlock("uiSetScale",b=>{
     const e=uiGetElement(b.id);
     if(e)e.scale=b.scale;
 });
 
-registerBlock("uiBringToFront",b=>{
+registerUIBlock("uiBringToFront",b=>{
     const e=uiGetElement(b.id);
     if(!e)return;
 
@@ -724,7 +718,7 @@ registerBlock("uiBringToFront",b=>{
     e.layer=highest+1;
 });
 
-registerBlock("uiSendToBack",b=>{
+registerUIBlock("uiSendToBack",b=>{
     const e=uiGetElement(b.id);
     if(!e)return;
 
@@ -743,9 +737,9 @@ registerBlock("uiSendToBack",b=>{
    REPORTERS
    ========================================================= */
 
-registerReporter("uiExists",b=>Boolean(uiGetElement(b.id)));
+registerUIReporter("uiExists",b=>Boolean(uiGetElement(b.id)));
 
-registerReporter("uiGet",b=>{
+registerUIReporter("uiGet",b=>{
     const e=uiGetElement(b.id);
     if(!e)return"";
     return resolveValue(e[uiString(b.property)]);
@@ -757,15 +751,7 @@ registerReporter("uiGet",b=>{
    ========================================================= */
 
 function uiRun(type,data={}){
-    const block=createBlock(type,data);
-    const registered=ENGINE.blocks[type];
-
-    if(registered?.execute)
-        Promise.resolve(
-            registered.execute(block,createScriptContext())
-        ).catch(e=>console.error("UI block error:",e));
-
-    return block;
+    return ENGINE.recordBlock(createBlock(type,data));
 }
 
 function uiText(id,text,x=0,y=0,size=24,color="#fff"){
@@ -876,8 +862,8 @@ function uiSendToBack(id){
 window.MLGame=window.MLGame||{};
 
 window.MLGame.UI={
-    elements:ML_UI.elements,
-    order:ML_UI.order,
+    get elements(){return ML_UI.elements;},
+    get order(){return ML_UI.order;},
     create:uiCreateElement,
     get:uiGetElement,
     delete:uiDeleteElement,
