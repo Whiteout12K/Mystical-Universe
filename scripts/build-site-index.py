@@ -76,7 +76,7 @@ def build():
     if key in v.get('skill_overrides',{}).values():variant=v;variant_index=vi;break
    title=plain(nickname_text(skill.get('name',key),roster,cid,variant));description=plain(strip_templates(nickname_text(skill.get('description',''),roster,cid,variant,skill.get('base_damage',{}))))
    from urllib.parse import urlencode
-   url='/ml-game/apps/skill.html?'+urlencode({'char':source,'form':cid,'skill':key,'variant':variant_index,'id':5 if key.lower().startswith('dupes') else 1})
+   url='/webpages/apps/skill.html?'+urlencode({'char':source,'form':cid,'skill':key,'variant':variant_index,'id':5 if key.lower().startswith('dupes') else 1})
    records.append({'type':'Skill','title':title+' — '+(variant.get('name') if variant else c['name']),'path':url,'description':description[:230],'search':title+' '+c['name']+' '+key+' '+description})
  for eid,e in effects.items():
   description=plain(strip_templates(' '.join(v for k,v in e.items() if re.fullmatch(r'description\d*',k) and isinstance(v,str))))[:230]

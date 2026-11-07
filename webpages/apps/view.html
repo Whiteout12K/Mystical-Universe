@@ -45,10 +45,10 @@ async function loadDatabases(){
   loadJSON("/images/mlg-assets/data-accessory.json"),
   loadJSON("/images/mlg-assets/data-artifact.json"),
   loadJSON("/images/mlg-assets/equipment-rules.json"),
-  import("/ml-game/apps/c-stat/equipment-stats.js")
+  import("/webpages/apps/c-stat/equipment-stats.js")
  ])
 }
-async function loadCStat(){return cStatModule||(cStatModule=import("/ml-game/apps/c-stat/c-stat.js"))}
+async function loadCStat(){return cStatModule||(cStatModule=import("/webpages/apps/c-stat/c-stat.js"))}
 async function getCStats(key,views=["total","base","equipment","artifact"]){
  const m=await loadCStat(),r=await Promise.all(views.map(v=>m.getCharacterStats(username,key,v).catch(e=>({error:e?.message||"Could not calculate stats."}))));
  return Object.fromEntries(views.map((v,i)=>[v,r[i]]))

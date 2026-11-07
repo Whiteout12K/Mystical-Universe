@@ -10,7 +10,7 @@ const coreURL='data:text/javascript;base64,'+Buffer.from(coreSource).toString('b
 const core=await import(coreURL);
 test('Alter comparison preserves own skills and costumes while sharing base stats',()=>{const roster={c1:{skills:['B1','S1'],base_stats:{health:100},costume_1:{name:'Avery'}},c1b:{base_character:'c1',skills:['B1','S1b'],costume_2:{name:'Caela'}}};const alter=core.resolveCharacter(roster,'c1b');assert.deepEqual(alter.skills,['B1','S1b']);assert.deepEqual(alter.base_stats,{health:100});assert.equal(alter.costume_1,undefined);assert.equal(alter.costume_2.name,'Caela');assert.equal(core.formURL('c1b'),'/webpages/game-c.html?char=c1#b');});
 test('skill detail renderer links effects and substitutes the selected Alter nickname and gender',async()=>{
- const source=fs.readFileSync(new URL('../ml-game/apps/skill.html',import.meta.url),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
+ const source=fs.readFileSync(new URL('../webpages/apps/skill.html',import.meta.url),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
  const nodes=new Map();const get=id=>{if(!nodes.has(id))nodes.set(id,{style:{},innerHTML:'',textContent:''});return nodes.get(id);};let callback;
  const context={URLSearchParams,location:{search:'?char=c1&form=c1b&skill=B1&id=1'},console,document:{addEventListener:(name,fn)=>{callback=fn;},getElementById:get,querySelectorAll:()=>[]},fetch:async url=>{
   if(url.includes('site-features'))return {ok:true,json:async()=>({effectsGlossary:true})};

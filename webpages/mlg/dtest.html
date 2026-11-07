@@ -83,7 +83,7 @@ body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -10%,#4a
   <header class="damage-test-header">
    <h1>Damage Test</h1>
    <p>Choose a character to begin testing</p>
-   <a class="damage-test-button" href="/ml-game/apps/damage_test.html">Enter Damage Test</a>
+   <a class="damage-test-button" href="/webpages/apps/damage_test.html">Enter Damage Test</a>
   </header>
 
   <section class="character-section">
@@ -184,7 +184,7 @@ async function load(){
    const image=asset(info.profile_image||info.head_image||info.image||"");
 
    return`
-    <a class="character-card ${rarity}" href="/ml-game/apps/damage_test.html?username=${encodeURIComponent(username)}&c=${key}">
+    <a class="character-card ${rarity}" href="/webpages/apps/damage_test.html?username=${encodeURIComponent(username)}&c=${key}">
      <span class="rarity-label">${rarityName(rarity)}</span>
      <div class="character-art">
       ${image?`<img class="character-image" src="${esc(image)}" alt="${esc(name)}" loading="lazy">`:""}

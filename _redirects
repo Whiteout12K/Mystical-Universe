@@ -1,0 +1,4 @@
+/ml-game/apps/* /webpages/apps/:splat 301
+/ml-game/css/mlg-skill.css /css/mlg-skill.css 301
+/ml-game /JScratch/canvas.html 301
+/ml-game/* /JScratch/:splat 301

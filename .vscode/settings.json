@@ -1,0 +1,4 @@
+{
+  "python.useEnvironmentsExtension": false,
+  "python.terminal.shellIntegration.enabled": false
+}

@@ -35,7 +35,7 @@ if(data.authenticated&&user.username){
 if(usernameText)usernameText.textContent=user.username;
 
 if(mlGameProfile){
-mlGameProfile.href="/ml-game/apps/view.html?username="+encodeURIComponent(user.username);
+mlGameProfile.href="/webpages/apps/view.html?username="+encodeURIComponent(user.username);
 }
 
 loginMenu.style.display="none";

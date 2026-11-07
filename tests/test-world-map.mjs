@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 const root=new URL('../',import.meta.url);
-const data=JSON.parse(readFileSync(new URL('ml-game/apps/world-map/locations.json',root),'utf8'));
+const data=JSON.parse(readFileSync(new URL('webpages/apps/world-map/locations.json',root),'utf8'));
 const all=[...data.districts,...data.landmarks];
 test('atlas includes every district once and keeps Regnum in Lux Urbis',()=>{
  assert.deepEqual(data.districts.map(d=>d.number).sort((a,b)=>a-b),Array.from({length:13},(_,i)=>i+1));

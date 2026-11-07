@@ -9,7 +9,7 @@ function signIn(){
 async function start(){
  try{const account=await loadAccountPreferences();if(!account.authenticated){signIn();return;}
  const styles=await json('/images/mlg-assets/account-styles.json');let preferences={...account.preferences};
- const form=el('form'),preview=el('section',{class:'account-preview','aria-label':'Profile preview'}),avatar=el('img',{alt:'Selected profile image',width:'112',height:'112'}),heading=el('div');heading.append(el('h2',{},account.username),el('p',{},'Your profile preview'),link('View ML Game Profile','/ml-game/apps/view.html?username='+encodeURIComponent(account.username)));preview.append(avatar,heading);form.append(preview);
+ const form=el('form'),preview=el('section',{class:'account-preview','aria-label':'Profile preview'}),avatar=el('img',{alt:'Selected profile image',width:'112',height:'112'}),heading=el('div');heading.append(el('h2',{},account.username),el('p',{},'Your profile preview'),link('View ML Game Profile','/webpages/apps/view.html?username='+encodeURIComponent(account.username)));preview.append(avatar,heading);form.append(preview);
  const submit=el('button',{type:'submit'},'Save changes'),message=el('p',{role:'status','aria-live':'polite'});
  const updatePreview=()=>{avatar.src=styles.avatar['img_'+preferences.avatar];const background=styles.background['img_'+preferences.background];preview.style.backgroundImage=background?`url("${background}")`:'';};
  const fieldset=(title,description)=>{const section=el('fieldset',{class:'account-fieldset'});section.append(el('legend',{},title),el('p',{class:'account-help'},description));form.append(section);return section;};

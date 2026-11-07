@@ -234,7 +234,7 @@ function createProfilePreview(){
  const frame=getAvatarFrame(num(d.avatar_frame,1));
 
  return`
- <a class="profile-box" href="/ml-game/apps/view?username=${encodeURIComponent(loggedInUsername)}" aria-label="View ${escapeAttribute(loggedInUsername)} profile">
+ <a class="profile-box" href="/webpages/apps/view?username=${encodeURIComponent(loggedInUsername)}" aria-label="View ${escapeAttribute(loggedInUsername)} profile">
   <div class="profile-box-inner">
    <div class="profile-heading">
     <div class="avatar-wrap">
@@ -306,7 +306,7 @@ function handleSearch(){
 }
 
 function openProfile(name){
- location.href=`/ml-game/apps/view?username=${encodeURIComponent(name)}`;
+ location.href=`/webpages/apps/view?username=${encodeURIComponent(name)}`;
 }
 
 function closeSearch(){

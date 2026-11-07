@@ -3,370 +3,817 @@
 
   <url>
     <loc>https://mysticallegends.org/</loc>
-    <lastmod>2026-10-05</lastmod>
+    <lastmod>2026-10-30</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/books/viewer</loc>
-    <lastmod>2026-10-01</lastmod>
+    <loc>https://mysticallegends.org/JScratch/canvas</loc>
+    <lastmod>2026-10-30</lastmod>
   </url>
 
   <url>
-    <loc>https://mysticallegends.org/books/viewer?id=1</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/books_main</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/game-hub</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/c-stat/c-stat</loc>
-    <lastmod>2026-09-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/damage_test</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/damage_test?username=%24%7BencodeURIComponent%28username%29%7D&amp;c=%24%7Bkey%7D</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/map</loc>
-    <lastmod>2026-09-11</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/skill</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/skill_tree_path</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/tcg/card_maker</loc>
-    <lastmod>2026-09-16</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/team_builder</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/tierlist</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/view</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/view?username=</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/view?username=%24%7BencodeURIComponent%28loggedInUsername%29%7D</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/view?username=USERNAME</loc>
-    <lastmod>2026-10-05</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/canvas</loc>
-    <lastmod>2026-09-06</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/ml-game/apps/effect</loc>
-    <lastmod>2026-08-21</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/news/2026-01-31</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/news/2026-02-14</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/news/2026-03-05</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/author</loc>
-    <lastmod>2026-10-01</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/create-user</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c1</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c10</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c17</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c1b</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c2</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c20</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c3</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c4</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c5</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c6</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c7</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c8</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-c?char=c9</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/mlg/cviewer</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/mlg/dtest</loc>
-    <lastmod>2026-09-12</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/music</loc>
-    <lastmod>2026-10-03</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/category/mystical_being</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/alteria_aquia</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/amos_black</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/atlas_aquia</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/avery_obtainia</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/caela_obtainia</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/carla_storm</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/cedric_paine</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/charlotte_levy</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/ellie_tracey</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/elmor_locks</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/iter</loc>
-    <lastmod>2026-10-27</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/james_shera</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/jane_tee</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/kaden_icelander</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/kiara_katzol</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/lucy_terner</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/lux_luces</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/lynnhera</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/pyrus_bourn</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/raymond_valoris</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/river_grantia</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/teddric_tech</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/tom_nado</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/char/tony_smith</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/home</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/relationship</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/wiki/timeline</loc>
-    <lastmod>2026-10-07</lastmod>
-  </url>
-
-
-  <url><loc>https://mysticallegends.org/webpages/search</loc></url>
-  <url><loc>https://mysticallegends.org/webpages/compare</loc></url>
-  <url>
-    <loc>https://mysticallegends.org/news/2026-10-17</loc>
-    <lastmod>2026-10-17</lastmod>
-  </url>
-
-  <url>
-    <loc>https://mysticallegends.org/webpages/game-codex</loc>
-    <lastmod>2026-10-22</lastmod>
+    <loc>https://mysticallegends.org/books/reader</loc>
+    <lastmod>2026-10-30</lastmod>
   </url>
 
   <url>
     <loc>https://mysticallegends.org/books/reader?id=1</loc>
+    <lastmod>2026-11-06</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books/reader?id=2</loc>
+    <lastmod>2026-11-06</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books/viewer</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/books_main</loc>
+    <lastmod>2026-11-06</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/game-hub</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-01-31</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-02-14</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-03-05</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/news/2026-10-17</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/c-stat/c-stat</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/damage_test</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/damage_test?username=%24%7BencodeURIComponent%28username%29%7D&amp;c=%24%7Bkey%7D</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/effect</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/effect?effect=</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/map</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=B2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=S3&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=T2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=T3&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c1&amp;form=c1&amp;skill=U2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=T2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c10&amp;form=c10&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=B1-1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=B1-2&amp;variant=1&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=B1-3&amp;variant=2&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=S1-1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=S1-2&amp;variant=1&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=S1-3&amp;variant=2&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c11&amp;form=c11&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=S3&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c2&amp;form=c2&amp;skill=U2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=S3&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c3&amp;form=c3&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=S3&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=T2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c5&amp;form=c5&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c6&amp;form=c6&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c7&amp;form=c7&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c8&amp;form=c8&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=B1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=Dupes&amp;variant=0&amp;id=5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=S1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=S2&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=T1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill?char=c9&amp;form=c9&amp;skill=U1&amp;variant=0&amp;id=1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/skill_tree_path</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/tcg/card_maker</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/team_builder</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/tierlist</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/view</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/view?username=</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/view?username=%24%7BencodeURIComponent%28loggedInUsername%29%7D</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/apps/view?username=USERNAME</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/author</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/compare</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/compare?left=</loc>
+    <lastmod>2026-10-20</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/create-user</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=</loc>
     <lastmod>2026-10-23</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c1</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c10</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c11</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c12</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c13</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c14</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c15</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c16</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c17</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c18</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c19</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c2</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c20</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c3</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c4</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c5</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c6</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c7</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c8</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-c?char=c9</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/game-codex</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/mlg/cviewer</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/mlg/dtest</loc>
+    <lastmod>2026-11-07</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/music</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/search</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/webpages/search?q=Regnum</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/category/mystical_being</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/alteria_aquia</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/amos_black</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/atlas_aquia</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/avery_obtainia</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/caela_obtainia</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/carla_storm</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/cedric_paine</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/charlotte_levy</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/ellie_tracey</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/elmor_locks</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/ioward_icelander</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/iter</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/james_shera</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/jane_tee</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/kaden_icelander</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/kiara_katzol</loc>
+    <lastmod>2026-11-06</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/lucy_terner</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/lux_luces</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/lynnhera</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/pyrus_bourn</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/raymond_valoris</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/river_grantia</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/teddric_tech</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/tom_nado</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/char/tony_smith</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/home</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/relationship</loc>
+    <lastmod>2026-10-30</lastmod>
+  </url>
+
+  <url>
+    <loc>https://mysticallegends.org/wiki/timeline</loc>
+    <lastmod>2026-10-30</lastmod>
   </url>
 
 </urlset>

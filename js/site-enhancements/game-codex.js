@@ -41,7 +41,7 @@ async function start(){
  const card=el(embedded?'section':'article',{class:embedded?'codex-embedded-effect':'ml-effect-card',...(embedded?{'data-effect':id}:{id})}),heading=el(embedded?'h4':'h2'),label=link(item.name,'#'+id);
  label.className=item.class||id;heading.append(imageFrame(item.icon,'codex-effect-art'),label);card.append(heading,el('p',{class:'ml-muted codex-effect-type'},item.type||'Mechanic'));
  for(const text of effectDescriptions(item)){const p=el('p',{class:'codex-skill-copy'});p.append(formatted(text,!embedded));card.append(p);}
- if(!embedded)card.append(link('Open effect details','/ml-game/apps/effect.html?effect='+encodeURIComponent(id)));return card;
+ if(!embedded)card.append(link('Open effect details','/webpages/apps/effect.html?effect='+encodeURIComponent(id)));return card;
  }
  function gearCard(id,item){const anchor=equipmentAnchor(category,id),card=el('article',{class:'ml-effect-card codex-equipment',id:anchor}),header=el('div',{class:'codex-card-header'}),heading=el('h2');heading.append(link(item.name,'#'+anchor));const rarityLine=el('span',{class:'codex-category'}),rarities=(item.rarities||[item.rarity]).filter(Boolean);rarities.forEach((r,index)=>{if(index)rarityLine.append(' / ');rarityLine.append(el('span',{class:'codex-rarity '+rarityClass(r)},r));});rarityLine.append(' · '+(item.weapon_type||item.type));header.append(rarityLine,heading);
  const content=el('div',{class:'codex-equipment-body'}),tone=rarityClass(item.rarity);if(category!=='artifacts'&&tone){card.classList.add('codex-rarity-card');card.append(el('span',{class:'codex-rarity-wash rarity-'+tone,'aria-hidden':'true'}));}card.append(content);content.append(header);

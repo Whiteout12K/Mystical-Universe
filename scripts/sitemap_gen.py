@@ -420,7 +420,7 @@ def extract_source_urls(text: str):
 
         const x="/page?c=c1"
 
-        "/ml-game/apps/map.html"
+        "/webpages/apps/map.html"
 
     This is what allows JavaScript objects such as
     characterLinks to be discovered.

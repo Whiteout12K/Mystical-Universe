@@ -521,7 +521,7 @@ async function loadCharacterFromUrl(){
  setAPIStatus("Loading character stats...");
 
  try{
-  const module=await import("/ml-game/apps/c-stat/c-stat.js");
+  const module=await import("/webpages/apps/c-stat/c-stat.js");
 
   if(typeof module.getCharacterStats!=="function")
    throw new Error("c-stat.js does not provide getCharacterStats().");

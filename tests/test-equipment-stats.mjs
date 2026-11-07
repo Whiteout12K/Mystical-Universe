@@ -2,8 +2,8 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import {getEquipmentStatEntries,getArtifactMainStat,getArtifactSubStats,equipmentStatKey} from '../ml-game/apps/c-stat/equipment-stats.js';
-import {getCharacterStats} from '../ml-game/apps/c-stat/c-stat.js';
+import {getEquipmentStatEntries,getArtifactMainStat,getArtifactSubStats,equipmentStatKey} from '../webpages/apps/c-stat/equipment-stats.js';
+import {getCharacterStats} from '../webpages/apps/c-stat/c-stat.js';
 const read=name=>JSON.parse(readFileSync(new URL('../images/mlg-assets/'+name+'.json',import.meta.url),'utf8'));
 const rules=read('equipment-rules').artifacts.stat_scaling;
 test('every weapon and accessory matches both codex endpoints and interpolates intermediate levels',()=>{
@@ -32,4 +32,4 @@ test('profile totals use the same card values and add artifact crit points direc
  globalThis.fetch=async path=>({ok:true,json:async()=>databases[path]||{username:'Test',data:{c1:{level:1,equip:{weapon:{id:1,level:100},accessory:{id:1,level:100},artifact1:{id:1,level:20,main:'health',main_value:3,main_type:'%'},artifact4:{id:1,level:20,main:'crit_rate',main_value:1.5,main_type:'%',sub_1:'crit_rate',sub_1_value:5,sub_1_rolls:5,sub_1_type:'%'}}}}}});
  try{const result=await getCharacterStats('Test');assert.equal(result.character.stats.attack,490);assert.equal(result.character.stats.health,4048);assert.equal(result.character.stats.crit_rate,102);}finally{globalThis.fetch=original;}
 });
-test('profile viewer inline scripts remain valid and use the shared module',()=>{const html=readFileSync(new URL('../ml-game/apps/view.html',import.meta.url),'utf8');for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);assert(html.includes('equipmentStatModule.getEquipmentStatEntries'));assert(html.includes('equipmentStatModule.getArtifactMainStat'));assert(html.includes('equipmentStatModule.getArtifactSubStats'));});
+test('profile viewer inline scripts remain valid and use the shared module',()=>{const html=readFileSync(new URL('../webpages/apps/view.html',import.meta.url),'utf8');for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);assert(html.includes('equipmentStatModule.getEquipmentStatEntries'));assert(html.includes('equipmentStatModule.getArtifactMainStat'));assert(html.includes('equipmentStatModule.getArtifactSubStats'));});
