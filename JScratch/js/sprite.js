@@ -144,43 +144,13 @@ registerBlock("deleteSprite",async(block,c)=>{
     const s=ENGINE.sprites[name];
     if(!s)return;
 
-    delete ENGINE.sprites[name];
-
-    s.deleted=true;
-    s.visible=false;
-
-    ENGINE.spriteOrder=ENGINE.spriteOrder.filter(x=>x!==s);
-    ENGINE.spriteOrderDirty=true;
+    removeSpriteObject(s);
 });
 
 registerBlock("deleteAllSprites",async()=>{
-    const sprites=Object.values(ENGINE.sprites||{});
-
-    for(const s of sprites){
-        if(!s)continue;
-        s.deleted=true;
-        s.visible=false;
-        s.touchable=false;
-    }
-
-    if(ENGINE.clones&&typeof ENGINE.clones==="object"){
-        for(const c of Object.values(ENGINE.clones)){
-            if(!c)continue;
-            c.deleted=true;
-            c.visible=false;
-            c.touchable=false;
-        }
-
-        if(Array.isArray(ENGINE.clones))
-            ENGINE.clones.length=0;
-        else
-            Object.keys(ENGINE.clones).forEach(k=>delete ENGINE.clones[k]);
-    }
-
-    ENGINE.sprites=Object.create(null);
-    ENGINE.spriteOrder=[];
-    ENGINE.spriteOrderDirty=true;
-    releaseInactiveWaiters();
+    for(const s of getAllSprites())markSpriteDeleted(s);
+    ENGINE.sprites=Object.create(null);ENGINE.clones.length=0;
+    ENGINE.spriteOrder=[];ENGINE.spriteOrderDirty=true;releaseInactiveWaiters();
 });
 
 

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JScratch · Editor</title>
+<link rel="icon" href="/images/website/icons/torch.svg" type="image/svg+xml">
+<link rel="stylesheet" href="editor/editor.css">
+</head>
+<body>
+<header>
+    <a class="brand" href="editor.html">JScratch <span>Editor</span></a>
+    <select id="files" aria-label="Program file"></select>
+    <button id="new-file" title="Create a program file">＋ New</button>
+    <span class="spacer"></span>
+    <span id="status" role="status">Loading…</span>
+    <button id="connect">Open program folder</button>
+    <button id="import">Import .js</button>
+    <button id="download">Download .js</button>
+    <button id="source-toggle" aria-pressed="false">Code</button>
+    <a id="run-game" class="run" title="Run saved program files" href="canvas.html" target="_blank" rel="noopener">▶ Run</a>
+</header>
+<div id="notice" hidden><span id="notice-text"></span><button id="restore" hidden>Restore draft</button><button id="dismiss-notice" aria-label="Dismiss notice">×</button></div>
+<main>
+    <section id="visual" aria-label="Visual program editor">
+        <div class="workspace-top"><input id="search" type="search" placeholder="Find a block…" aria-label="Find a block"><span>Drag blocks · snap to connect · scroll to zoom</span><button id="undo" title="Undo (Ctrl/Cmd Z)">↶</button><button id="redo" title="Redo">↷</button><button id="fit">Fit</button></div>
+        <div id="workspace"></div>
+    </section>
+    <aside id="source-panel" hidden><div class="code-top"><strong id="source-name">JavaScript</strong><button id="apply-source">Apply to blocks</button></div><textarea id="source" spellcheck="false" aria-label="Program JavaScript"></textarea><p>Values accept JavaScript: <code>"text"</code>, <code>30</code>, <code>true</code>, or <code>["Wall"]</code>. Save occurs after applying code.</p></aside>
+</main>
+<footer><span id="storage-mode">Browser draft</span><span>Right-click for duplicate, collapse, disable, and delete. Drag values into rounded inputs.</span></footer>
+<dialog id="new-dialog"><form method="dialog"><h2>New program</h2><label>File name <input id="new-name" value="scene.js" required pattern="[A-Za-z0-9_-]+\.js"></label><p>New files start with a whenStart block. Add the file to canvas.html to run it with the game.</p><div><button value="cancel">Cancel</button><button id="create-file" value="create">Create</button></div></form></dialog>
+<script src="editor/vendor/blockly_compressed.js"></script>
+<script src="editor/vendor/blockly-en.js"></script>
+<script type="module" src="editor/app.mjs"></script>
+</body>
+</html>

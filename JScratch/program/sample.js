@@ -1,4 +1,5 @@
-// API reference snippets, not a complete game. Do not load alongside begin.js.
+// Code block examples. Copy the blocks you need into your program.
+// This is a reference, not a complete game. Do not load alongside begin.js.
 
 // <----- Canvas Blocks ----->
 
@@ -6,26 +7,26 @@ canvasColor("#686565"); // Sets the canvas color if no image. Parameter: color_h
 
 canvasCostume("images/menu/BG1-5.png", 2); // Sets the canvas costume. Parameter: costume_path. Can be blank for no image.
 
-// Set the scale using canvasCostume(path, scale); there is no canvasSize() block. // Sets scale without modifying costume of canvas.
+// Set the background scale with canvasCostume(path, scale).
 
-// Background scale is supplied to canvasCostume(). // Cahgnes the canvas' scale by value, can both be negative or positive to shrink or grow size.
+// There is no separate canvasChangeSize() command.
 
-// Background effects currently have no public command constructor. // Changes the canvas' effect, where 0 is none and 100 is 100% effect.
+// Background effects currently have no public command constructor.
 //  Effect List: 
 //    brightness: changes sprite costume brightness, from 0-100%, where max is bright white.
 //    ghost: changes the sprite's opacity, from 0-100%.
 //    color: changes the sprite's color, from 0-100. 0 is default, and 100 is also default. In between, the sprite goes through the color spectrum.
 //           This basically changes the hue of the colors.
 
-// Current background path: MLGame.ENGINE.backgroundCostume (developer API). // Returns the current costume path of canvas.
-// Current background scale: MLGame.ENGINE.backgroundScale (developer API). // Returns the current canvas size.
+// MLGame.ENGINE.backgroundCostume gives the current background path (developer API).
+// MLGame.ENGINE.backgroundScale gives the current background scale (developer API).
 
 
 // <----- Sprite Blocks ----->
 
 createSprite("Player1"); // Creates a sprite. Parameter: sprite_name
 
-spriteCostume("Player1", "images/menu/torch_full.png", 1); // Sets the sprite's costume. The image scale sets the image width, where 1 = 160 canvas pixels.
+spriteCostume("Player1", "images/menu/torch_full.png", 1); // Sets the sprite's costume. The image scale sets the image width, where 1 = 160 game units.
 //   Parameter: sprite_name, costume_path, scale
 
 spriteSetSize("Player1", 1); // Sets scale without modifying costume.
@@ -52,6 +53,10 @@ goBack("Player1"); // Moves to back layer
 costumeOfSprite("Player1"); // Returns the current costume path of sprite.
 sizeOfSprite("Player1"); // Returns the current sprite size.
 
+spriteCostume("Player1"); // One-argument reporter alias for costumeOfSprite().
+
+spriteSetSize("Player1"); // One-argument reporter alias for sizeOfSprite().
+
 deleteSprite("Player1"); // Completely removes sprite.
 
 deleteAllSprites(); // Completely removes all current sprites and clones from canvas.
@@ -67,7 +72,8 @@ spriteX("Player1"); // Gives x of sprite
 spriteY("Player1"); // Gives y of sprite
 spriteDirection("Player1"); // Gives degree direction of sprite
 
-moveToEdge("Player1", "left", 30, "top", 30); // Moves to a flex coordinate, always some distance from edge.
+coordinatePlane("Button", "right", "bottom"); // Browser pixel axes: choose left/right and top/bottom.
+moveTo("Button", 30, 40); // Center stays 30 pixels from right, 40 from bottom, including on resize.
 //   Parameter: sprite_name, horizontal_side, distance_x, vertical_side, distance_y
 
 moveTo("Player1", 0, 0); // Moves a sprite to coordinate. Parameter: sprite_name, x, y
@@ -89,19 +95,94 @@ glideTo("Player1", 100, 100, 5); // Makes sprite take some time to glide to coor
 glideToSprite("Player1", "Enemy", 5); // Makes first sprite glide to second sprite. Parameter: sprite_name, target_sprite_name, time
 
 
+spriteCoordinateMode("Player1", "world"); // Default: centered world coordinates, y upward; moves/zooms with camera.
+
+spriteCoordinateMode("Button", "canvas"); // Fixed browser CSS pixels from canvas top-left, y downward; ignores camera and zoom.
+// true is an alias for canvas, false for world; "screen" is another alias for canvas.
+// Positions still describe the sprite's CENTER; (0,0) centers it on the top-left corner.
+// Changing modes keeps numeric x/y and size; moveTo() then sets its position in the chosen mode.
+
+coordinateModeOfSprite("Button"); // Reports "world" or "canvas".
+
+
+// <----- Camera Blocks ----->
+
+cameraTo(0, 0); // Center the view here; stops following. Default is (0,0).
+
+cameraTo(spriteX("Player1"), spriteY("Player1")); // Uses the live sprite coordinates.
+
+cameraBy(30, -10); // Pan by world units; also stops following.
+
+cameraToSprite("Player1"); // Capture a sprite position once; "self" works for clones.
+
+cameraFollow("Player1", 0, 20); // Track the sprite continuously, with optional x/y offsets.
+
+cameraStopFollowing(); // Keep current camera position without tracking.
+
+cameraZoom(2); // 2 = twice as close; .5 = twice as much world. Sprite sizes do not change.
+
+cameraX(); // World x at the view center.
+
+cameraY(); // World y at the view center.
+
+cameraZoom(); // No argument reports the current zoom multiplier.
+
+cameraReset(); // Restore defaults from /JScratch/camera.json, including optional follow.
+// UI defaults to world space like sprites. Use spriteCoordinateMode(id, "canvas") for fixed HUDs.
+// Off-screen culling skips drawing only; scripts, collisions and animation timelines stay active.
+
+
+// <----- Solid Collision Blocks ----->
+
+makeList("World Solids", ["Wall", "Rock"]); // Names of obstacles; originals and their clone families match.
+
+spriteCollisionTargets("Player1", getList("World Solids")); // Retain a LIVE list reporter.
+
+spriteSolid("Player1", true); // Enable collision response for Player's own movement.
+
+moveBy("Player1", 1000, 0); // Swept costume-alpha collision prevents jumping through thin walls.
+
+solidBlocked("Player1"); // Was its last movement obstructed?
+
+solidContacts("Player1"); // Array of names/clone IDs hit by that movement.
+
+solidEnabled("Player1"); // Is this sprite's own response enabled?
+
+solidTargets("Player1"); // Current resolved target-name array.
+
+addToList("World Solids", "Door"); // Future moves now include Door, without reassigning targets.
+
+deleteFromList("World Solids", 1); // Remove the first obstacle name from future interactions.
+
+spriteCollisionTargets("Enemy1", ["Fence"]); // Literal arrays or an array-valued getVar/getSpriteVar also work.
+
+spriteSolid("Enemy1", true); // Enemy checks Fence, not Player or every other enabled sprite.
+
+spriteSolid("Player1", false); // Turn off Player's response without deleting its target selection.
+// Directional rules: Player listing Wall blocks Player even if Wall does not list Player.
+// Wall's own movement checks ONLY Wall's enabled flag + Wall's own target list.
+// For mutual blocking, enable both sprites and put each in the other's target list.
+// Disabling Wall's response does not remove Wall from Player's selected obstacles.
+// A name matches its original + clones; use "Wall#42" to select only that clone.
+// Invisible/untouchable/unloaded targets are excluded; fully ghosted targets still block.
+// Solids slide along free surfaces. They do not push bodies, apply gravity, bounce, or depenetrate.
+// To teleport through obstacles, disable response, moveTo(...), then enable it again.
+// Rotation/size/costume changes do not push sprites apart; existing overlaps can escape but not move deeper.
+
+
 // <----- Operator Blocks ----->
 
 // Below are the basic operators.
-add(1, 2); // example, to get 3
-sub(5, 4); // example, to get 1
-mult(2, 2); // example, to get 4
-div(10, 2); // example, to get 5
-mod(5, 2); // example, to get 1, remainder
-round(0.6); // example, to get 1, round
-abs(-3); // example, to get 3, absolute value
+add(1, 2); // Example, to get 3
+sub(5, 4); // Example, to get 1
+mult(2, 2); // Example, to get 4
+div(10, 2); // Example, to get 5
+mod(5, 2); // Example, to get 1, remainder
+round(0.6); // Example, to get 1, round
+abs(-3); // Example, to get 3, absolute value
 sin(30); 
 cos(30); 
-randomNum(1, 10); // to get a random number between 1 and 10
+randomNum(1, 10); // To get a random number between 1 and 10
 
 // These are boolean conditions which can compare values. Can support variables as well.
 gThan(3, 5); // If 3 > 5
@@ -115,7 +196,7 @@ or(true, true); // If either of the boolean conditons are true, return true.
 not(true); // If boolean condition is the opposite, then return true.
 
 join("images/", "sample_sprite.png"); // Joins two variables or fields into one. Parameter: field_1, field_2
-createSprite(join("Enemy", "1")); // example.
+createSprite(join("Enemy", "1")); // Example.
 
 letter(2, "images"); // Gets the letter num in string or variable string. In example, 2 is the "m"
 
@@ -132,7 +213,7 @@ setVar("var1", 1);
 changeVarBy("var1", 3); // Adds number_value to variable
 changeVarBy("var1", -3); // Removes number_value
 
-getVar("Var1"); // Gets the value of variable. Parameter: variable_name.
+getVar("var1"); // Gets the value of variable. Parameter: variable_name.
 
 makeSpriteVar("Player1", "health"); // Set private variables to sprites.
 setSpriteVar("Player1", "health", 1);
@@ -140,6 +221,35 @@ changeSpriteVarBy("Player1", "health", 3);
 getSpriteVar("Player1", "health"); 
 
 deleteVar("var1"); // Deletes a variable.
+
+
+// <----- List Blocks ----->
+
+makeList("Obstacles", ["Wall", "Rock"]); // Create if missing; starts with the supplied array.
+
+setList("Obstacles", ["Wall", "Fence"]); // Replace the items with a copy of an array/reporter.
+
+addToList("Obstacles", "Door"); // Append an item; creates a missing list.
+
+insertInList("Obstacles", 2, "Crate"); // Insert BEFORE item 2; positions are 1-based.
+
+replaceInList("Obstacles", "last", "Gate"); // Replace an item; last/random/any are supported.
+
+deleteFromList("Obstacles", 1); // Remove one item; "all" removes every item.
+
+getList("Obstacles"); // Live array, not a comma-separated string.
+
+listItem("Obstacles", 1); // Item by 1-based position; invalid positions return "".
+
+listLength("Obstacles"); // Number of items, 0 for missing lists.
+
+listContains("Obstacles", "Wall"); // Strict-equality item membership.
+
+clearList("Obstacles"); // Empty it while preserving the named list.
+
+deleteList("Obstacles"); // Remove the entire list. getList() then reports an empty array.
+// Collision getList reporters remain live across setList, clearList, deleteList and recreation.
+// Lists reset when the game restarts; they do not automatically save to player data.
 
 
 // <----- Sensing Blocks ----->
@@ -165,6 +275,14 @@ keyPressed("space"); // Checks event key pressed and returns true if so.
 mouseX(); // Gets current mouse coordinate location in game units.
 mouseY();
 
+spriteHasColor("Player1", "#ff0000"); // Checks the source costume for a color, same as touchingColor().
+
+touchingStageColor("Player1", "#ff0000"); // Checks contact with a stage/sprite color, excluding HUD elements.
+
+deltaTime(); // Seconds in the latest simulation frame; use with movement for consistent speed.
+// Example inside a normal frame-yielding loop: moveBy("Player1", mult(160, deltaTime()), 0).
+// Fully transparent costume pixels do not collide. Ghost 100 still collides; hidden sprites do not.
+
 currentYear(); // Gets value of current year.
 currentMonth(); // Gets value of current month, in value (e.g. Jan = 1).
 currentDay(); // Gets current day in month, in value.
@@ -184,19 +302,19 @@ repeat(100,
 
 // Conditional if block that checks of if a conditonal is true and then executes.
 //  Also can use "else" which is optional to run if conditonal is false.
-ifBlock( equal(getVar("Var1"), 1),
+ifBlock( equal(getVar("var1"), 1),
     //field,
     "else",
     //field,
 );
 
 // Runs inside code until conditional is true.
-repeatUntil( equal(getVar("Var1"), 2),
+repeatUntil( equal(getVar("var1"), 2),
     //field,
 );
 
 // Runs the inside code until conditional is not true. Can also hold simply "True" to keep it running.
-whileBlock( equal(getVar("Var1"), 1),
+whileBlock( equal(getVar("var1"), 1),
     //field,
 );
 
@@ -206,6 +324,20 @@ forever(
 );
 
 endScript(); // Ends the entire current script, including all enclosing loops.
+
+
+waitUntil(equal(getVar("Ready"), true)); // Waits until a live reporter condition becomes true.
+
+withoutScreenRefresh(
+    repeat(1000, changeVarBy("Total", 1)),
+); // Runs computation loops without the iteration-frame delay; still shares the execution budget.
+
+repeat(10,
+    ifBlock(equal(getVar("Skip"), true), continueLoop()), // Skips the rest of the current iteration.
+    ifBlock(equal(getVar("Done"), true), breakLoop()), // Exits only the innermost loop.
+    changeVarBy("Processed", 1),
+);
+// EndScript() ends the entire current script, including every enclosing loop.
 
 
 // <----- Event Blocks ----->
@@ -218,6 +350,11 @@ broadcastAndWait("Start Menu"); // Same broadcast but will wait for broadcast co
 whenBroadcast("Start Menu",
     //field;
 );
+
+
+stopScripts("Start Menu"); // Cancels active scripts registered under this broadcast name, including nested waits.
+// Two whenBroadcast() listeners with the same name run concurrently on each broadcast.
+// Cancelling your own broadcast group also ends the script doing the cancellation.
 
 
 // <----- Clone Blocks ----->
@@ -236,6 +373,17 @@ getCloneName(); // When used inside whenClone(), it gets the clone's own name.
 getCloneId(); // When used inside whenClone(), it gets the clone's own id.
 
 
+deleteClonesOf("Player1"); // Deletes every clone of this source, preserving the original sprite.
+
+deleteClonesOf("all"); // Deletes all clones, preserving all original sprites.
+
+cloneName(); // Alias for getCloneName(), evaluated in the current clone context.
+
+cloneId(); // Alias for getCloneId().
+
+isClone(); // Returns true only in a clone context.
+
+
 // <----- Sound Blocks -----> // Must intereact with screen to begin any sound on a project start.
 
 makeSound("Sound", "sound/play.mp3"); // Creates and store sound by name and its path.
@@ -252,6 +400,8 @@ changePitch("Sound", 1); // Changes the pitch by an amount, either positive or n
 
 setPan("Sound", 0); // Sets the pan left/right of sound, from -100 to 100.
 
+changePan("Sound", 10); // Changes pan by an amount; clamped to -100..100.
+
 setVolume("Sound", 100); // Sets the sound's volume, where 100 is the sound's regular volume and 0 is no sound.
 
 changeVolume("Sound", 1); // Changes sound's volume by an amount, either positive or negative.
@@ -259,6 +409,95 @@ changeVolume("Sound", 1); // Changes sound's volume by an amount, either positiv
 volumeOfSound("Sound"); // Returns the volume of a particular sound.
 
 
+
+
+// <----- UI Blocks ----->
+// UI creates procedural sprites with no costume required. World space is the default.
+// Use ordinary sprite blocks with these IDs; canvas mode keeps an element browser-fixed.
+
+uiText("Title", "World", 0, 120, 24, "#fff"); // Id, text, x, y, font size, color.
+
+uiPanel("Panel", 0, 0, 220, 100, "rgba(0,0,0,.6)", 10); // Id, x, y, width, height, fill, radius.
+
+uiBox("Box", 0, 0, 40, 40, "#a33", 4); // Rectangular panel with the same parameter order.
+
+uiLine("Line", -30, 0, 30, 0, 2, "#fff"); // Id, center x/y, local line vector x/y, stroke width, color.
+
+uiCircle("Circle", 0, 0, 20, "#fff"); // Id, center x/y, radius, color.
+
+uiProgressBar("HP", 0, -100, 200, 20, 75, 100, "#333", "#2b5"); // Id, x/y, width/height, value/max, background/foreground.
+
+uiBar("Mana", 0, -125, 200, 20, 40, 100, "#333", "#58f"); // Equivalent progress-bar constructor.
+
+uiButton("Start", 0, -50, 140, 45, "Start", "#444", "#fff"); // Id, x/y, width/height, label, fill, text color.
+// Use touchingMouse("Start") and keyPressed("leftclick") for input, just like a sprite.
+uiImage("Portrait", "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif", 0, 0, 48, 96); // Id, path, x/y, width/height.
+
+uiSetText("Title", join("Score: ", getVar("Score"))); // Set text using current reporter values.
+
+uiSetPosition("Title", 0, 100); // Position in this object's coordinate mode.
+
+uiMove("Title", 5, 0); // Add x/y offsets.
+
+uiSetSize("Panel", 240, 110); // Width, height.
+
+uiSetColor("Box", "#35a"); // Fill/color (advanced foreground/background fields use uiRun()).
+
+uiSetOpacity("Panel", .8); // Visual opacity 0..1.
+
+uiSetVisible("Panel", true); // Boolean visibility.
+
+uiShow("Title"); // Visible=true.
+
+uiHide("Title"); // Visible=false.
+
+uiSetLayer("Title", 5); // Shared sprite layer; UI and ordinary sprites use the same ordering.
+
+uiSetRotation("Title", 10); // Degrees.
+
+uiSetScale("Title", 1.2); // Generated sprite scale; world-mode UI also follows camera zoom.
+
+uiBringToFront("Title"); // Above other sprites and UI elements.
+
+uiSendToBack("Panel"); // Below other sprites and UI elements in the shared layer order.
+
+uiExists("Title"); // Does this UI id exist?
+
+uiGet("Title", "text"); // Get one current UI property.
+
+uiRun("uiSetColor", {id:"HP", foreground:"#f44", background:"#222"}); // Advanced constructor: registered UI type + fields.
+
+// UI objects are real Sprite subclasses and need no image costume.
+// Visual reporter inputs stay live: score/health changes update the generated pixels automatically.
+uiText("Scoreboard", join("Score: ", getVar("Score")), 0, 120, 24, "#fff");
+
+uiProgressBar("Health", 0, 100, 200, 20, getVar("Health"), getVar("Max Health"), "#333", "#2b5");
+
+uiSetValue("Health", getVar("Health")); // Sets or rebinds a bar's live numeric value.
+
+uiSetMax("Health", getVar("Max Health")); // Sets or rebinds its live maximum.
+
+uiSet("Scoreboard", "weight", "bold"); // Generic UI style/property setter.
+
+uiBind("Scoreboard", "x", spriteX("Player1")); // Binds a shared sprite property to a live reporter.
+
+uiUnbind("Scoreboard", "x"); // Keeps the current value and removes the live binding.
+// Use uiUnbind(id,"text"/"value") to freeze a constructor's live visual value too.
+
+moveBy("Health", 10, 0); // Standard sprite movement also targets UI names.
+
+spriteEffect("Scoreboard", "ghost", 50); // UI gets ordinary sprite effects, rotation, flips and scale.
+
+setSpriteVar("Health", "Owner", "Player1"); // UI objects have their own sprite variables.
+
+spriteCoordinateMode("Scoreboard", "canvas"); // Opt into a browser-fixed scoreboard.
+
+moveTo("Scoreboard", 100, 30); // Center at 100 CSS pixels from left, 30 from top, independent of camera.
+
+uiDelete("Title"); // Remove one UI element.
+
+uiClear(); // Remove all UI elements.
+// UI is generated sprite scenery; the same sprite motion, effects, variables, clones and opt-in solids work.
 
 
 // Others
@@ -294,3 +533,57 @@ getData("silver_coin"); // Gets value in dictionary.
 
 updateData("silver_coin", 100); // Updates value in dictionary.
 
+changeDataBy("silver_coin", 5); // Adds a number to a saved value; concurrent writes are ordered.
+
+refreshPlayerData(); // Loads signed-in player data again.
+// UpdateData() and changeDataBy() write authenticated website save data; use only when intended.
+
+
+// <----- Media Blocks ----->
+
+setPixelCrisp(true); // Legacy block accepted for compatibility; crisp pixels are always enabled.
+
+setGifAutoPlay(true); // Legacy block; GIF autoplay is always enabled (game pause still freezes playback).
+// Passing false does not turn these features off. There is no settings button.
+
+
+// <----- Custom Blocks ----->
+
+registerBlock("sampleAwardPoints", (block, context)=>{ // Registration: executes when this block is reached.
+    const amount=Number(resolveValue(block.amount, context))||0;
+    ENGINE.variables.Score=(Number(ENGINE.variables.Score)||0)+amount;
+});
+ENGINE.recordBlock(createBlock("sampleAwardPoints", {amount:5})); // Construct + record the custom command.
+
+registerReporter("sampleScoreValue", ()=>ENGINE.variables.Score??0); // Register a live value reporter.
+
+createReporter("sampleScoreValue"); // Construct that reporter.
+
+operator("sampleDouble", context=>Number(resolveValue(getVar("Score"), context))*2);
+// Operator(type, evaluate) makes a reporter backed by a JS function; keep evaluation short.
+
+
+/* Developer API (immediate calls; use from tools/console, not as nested commands):
+ * MLGame.start() / restart() — reset the runtime and execute the constructed program.
+ * MLGame.stop(), pause(), resume(), step() — lifecycle/debugger controls.
+ * MLGame.broadcast(name), broadcastAndWait(name), cancelScripts(name) — immediate event APIs.
+ * MLGame.inspect() — variables, scripts, errors, camera, draw/culling counts.
+ * MLGame.configure({budgetLimit:500,budgetMs:6,maxClones:Infinity,requestTimeout:30000}).
+ * MLGame.preloadAssets([url, ...]) — Promise for shared image/GIF decoding readiness.
+ * MLGame.getSprites() / global getSprites() — visible original names and clone ID names.
+ * MLGame.getAllSprites() / getAllSprites() — actual sprite objects, including hidden sprites.
+ * MLGame.resolveValue(reporter, context) — explicitly evaluate a reporter outside a block.
+ * MLGame.createScriptContext(), executeBlock(), executeBlocks() — custom execution helpers.
+ * MLGame.validateBlocks(array), registerBlock(), registerReporter(), createBlock(), createReporter().
+ * MLGame.runtimeWait(ms, context), contextActive(context), reportError(error, block, context).
+ * MLGame.resolveSpriteName(name, context), getContextSprite(name, context) — clone-aware lookups.
+ * MLGame.UI.create/get/delete/clear/render — immediate HUD helpers (different from deferred ui* blocks).
+ * Advanced UI fields: uiRun("uiText",{id:"label",text:"Hello",font:"Arial",weight:"bold",...}).
+ * Custom JavaScript must yield; cooperative scheduling cannot interrupt a blocking native loop.
+ */
+
+// <----- Startup Event ----->
+
+whenStart(
+    setVar("Score", 0), // Runs on start/restart; separate startup hats run concurrently.
+);

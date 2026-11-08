@@ -43,8 +43,6 @@ whenBroadcast("World",
                 mult(getSpriteVar("Player", "Input X"), getSpriteVar("Player", "Move Step")),
                 mult(getSpriteVar("Player", "Input Y"), getSpriteVar("Player", "Move Step")),
             ),
-            // Empty edge names clamp both axes without pinning the player to an edge.
-            moveToEdge("Player", "", 0, "", 0),
         ),
     ),
 );

@@ -31,8 +31,9 @@ function sensingSprite(name,c=null){
 
 /* TOUCHING */
 
-function sensingTarget(s){return s&&!s.deleted&&s.loaded&&s.visible&&s.touchable!==false;}
+function sensingTarget(s){s?.prepareFrame?.();return s&&!s.deleted&&s.loaded&&s.visible&&s.touchable!==false;}
 function spriteCorners(s){
+    s=getSpriteWorldGeometry(s);
     const angle=s.rotation*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle);
     return [[-1,-1],[1,-1],[1,1],[-1,1]].map(([x,y])=>{
         const dx=x*s.width/2,dy=y*s.height/2;
@@ -40,6 +41,7 @@ function spriteCorners(s){
     });
 }
 function spritePointToPixel(s,point,mask){
+    s=getSpriteWorldGeometry(s);
     const angle=s.rotation*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle);
     const dx=point.x-s.x,dy=point.y-s.y;
     return {
@@ -60,13 +62,14 @@ function touchingMouse(sprite){
 const collisionGeometry=new WeakMap();
 function spriteCollisionGeometry(s){
     const mask=getImagePixels(s.image);if(!mask)return null;
-    const key=[s.x,s.y,s.width,s.height,s.rotation,s.flipX,s.flipY].join("|");
+    const geometrySprite=getSpriteWorldGeometry(s);
+    const key=[geometrySprite.x,geometrySprite.y,geometrySprite.width,geometrySprite.height,geometrySprite.rotation,geometrySprite.flipX,geometrySprite.flipY].join("|");
     const cached=collisionGeometry.get(s);
     if(cached?.mask===mask&&cached.key===key)return cached;
-    const angle=s.rotation*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle);
+    const angle=geometrySprite.rotation*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle);
     const transform=(x,y)=>{
-        const dx=(x/mask.width-.5)*s.width*s.flipX,dy=(.5-y/mask.height)*s.height*s.flipY;
-        return {x:s.x+dx*cos+dy*sin,y:s.y-dx*sin+dy*cos};
+        const dx=(x/mask.width-.5)*geometrySprite.width*geometrySprite.flipX,dy=(.5-y/mask.height)*geometrySprite.height*geometrySprite.flipY;
+        return {x:geometrySprite.x+dx*cos+dy*sin,y:geometrySprite.y-dx*sin+dy*cos};
     };
     const rectangles=mask.rectangles.map(r=>{
         const points=[transform(r.x,r.y),transform(r.x+r.width,r.y),transform(r.x+r.width,r.y+r.height),transform(r.x,r.y+r.height)];
@@ -135,13 +138,14 @@ function touchingStageColor(sprite,color_hex){
         sc.fillStyle=ENGINE.background;sc.fillRect(0,0,width,height);
         if(ENGINE.backgroundLoaded){
             const effect=applyCanvasEffects(),w=640*ENGINE.backgroundScale,h=w*ENGINE.backgroundImage.naturalHeight/ENGINE.backgroundImage.naturalWidth;
-            if(effect){sc.globalAlpha=1-effect.ghost/100;sc.drawImage(effect.source,ENGINE.camera.x-w/2-left,top-ENGINE.camera.y-h/2,w,h);sc.globalAlpha=1;}
+            if(effect){sc.globalAlpha=1-effect.ghost/100;sc.drawImage(effect.source,-w/2-left,top-h/2,w,h);sc.globalAlpha=1;}
         }
         const paint=(context,s)=>{
             const effect=applySpriteEffects(s);if(!effect)return;
             context.save();context.globalAlpha=1;context.imageSmoothingEnabled=false;
-            context.translate(s.x-left,top-s.y);context.rotate(s.rotation*Math.PI/180);context.scale(s.flipX,s.flipY);
-            context.drawImage(effect.source,-s.width/2,-s.height/2,s.width,s.height);context.restore();
+            const geometry=getSpriteWorldGeometry(s);
+            context.translate(geometry.x-left,top-geometry.y);context.rotate(geometry.rotation*Math.PI/180);context.scale(geometry.flipX,geometry.flipY);
+            context.drawImage(effect.source,-geometry.width/2,-geometry.height/2,geometry.width,geometry.height);context.restore();
         };
         updateSpriteOrder();
         for(const s of ENGINE.spriteOrder)if(s!==target&&!s.deleted&&s.visible&&s.loaded)paint(sc,s);
@@ -177,7 +181,7 @@ function distanceMouse(sprite){
         const targetSprite=sensingSprite(sprite,c);
         if(!targetSprite||targetSprite.deleted)return 0;
 
-        const mouse=getCanvasPoint();
+        const mouseWorld=getCanvasPoint(),mouse=worldPointForSprite(targetSprite,mouseWorld.x,mouseWorld.y);
 
         return Math.hypot(
             targetSprite.x-mouse.x,
@@ -191,7 +195,8 @@ function distanceSprite(sprite,sprite2){
         const a=sensingSprite(sprite,c),b=sensingSprite(sprite2,c);
         if(!a||!b||a.deleted||b.deleted)return 0;
 
-        return Math.hypot(a.x-b.x,a.y-b.y);
+        const position=spriteTargetPosition(a,b);
+        return Math.hypot(a.x-position.x,a.y-position.y);
     });
 }
 

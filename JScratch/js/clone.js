@@ -24,16 +24,20 @@ function copySpriteState(source,clone){
     clone.effects={...source.effects};
     clone.layer=source.layer;
     clone.touchable=source.touchable;
+    clone.coordinateMode=source.coordinateMode;
+    clone.solidCollision={enabled:source.solidCollision.enabled,targets:Array.isArray(source.solidCollision.targets)?[...source.solidCollision.targets]:source.solidCollision.targets,blocked:false,contacts:[]};
     clone.velocityX=source.velocityX;
     clone.velocityY=source.velocityY;
-    clone.edgeLock=source.edgeLock?{...source.edgeLock}:null;
+    clone.coordinateHorizontal=source.coordinateHorizontal;
+    clone.coordinateVertical=source.coordinateVertical;
     clone.costume=source.costume||"";
     clone.variables=Object.assign(Object.create(null),source.variables);
     clone.privateVariables=Object.assign(Object.create(null),source.privateVariables);
     clone.cloneOf=source.isClone?source.cloneOf:source.name;
     clone.cloneName=source.isClone?source.cloneName:source.name;
 
-    if(clone.costume){
+    if(source.isUI)source.copyUIStateTo(clone);
+    else if(clone.costume){
         clone.setCostume(clone.costume,clone.scale);
         if(source.image){
             clone.image=source.image;
@@ -60,7 +64,8 @@ function createClone(source){
     if(!source||source.deleted)return null;
     if(ENGINE.clones.length>=ENGINE.maxClones){reportRuntimeError(new Error("Clone limit reached ("+ENGINE.maxClones+")"),null,null);return null;}
 
-    const clone=new Sprite(source.isClone?source.cloneName:source.name,true);
+    const CloneType=source.isUI?UISprite:Sprite;
+    const clone=new CloneType(source.isClone?source.cloneName:source.name,true);
     copySpriteState(source,clone);
 
     ENGINE.clones.push(clone);
@@ -89,14 +94,7 @@ registerBlock("deleteClone",async(b,c)=>{
     const clone=c?.clone?.isClone?c.clone:null;
     if(!clone)return;
 
-    clone.deleted=true;
-    clone.visible=false;
-
-    const i=ENGINE.clones.indexOf(clone);
-    if(i>=0)ENGINE.clones.splice(i,1);
-
-    ENGINE.spriteOrder=ENGINE.spriteOrder.filter(s=>s!==clone);
-    ENGINE.spriteOrderDirty=true;
+    removeSpriteObject(clone);
 
     c.ended=true;
     releaseInactiveWaiters();
@@ -109,8 +107,7 @@ registerBlock("deleteClonesOf",async(b,c)=>{
     );
 
     targets.forEach(clone=>{
-        clone.deleted=true;
-        clone.visible=false;
+        markSpriteDeleted(clone);
     });
 
     ENGINE.clones=ENGINE.clones.filter(x=>!x.deleted);

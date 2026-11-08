@@ -15,7 +15,7 @@ const recordVarBlock=(type,data)=>{
     return block;
 };
 
-const spriteBy=(name,c)=>getContextSprite(name,c);
+const spriteBy=(name,c)=>getContextSprite(name,c,false);
 const cloneBy=c=>c?.clone?.isClone?c.clone:null;
 
 function makeVar(name){

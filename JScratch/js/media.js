@@ -93,6 +93,7 @@ function createGifAnimation(gif){
     }};
 }
 function getImageFrame(image){
+    const provider=imageMedia.get(image)?.frameProvider;if(provider)return provider();
     const animation=imageMedia.get(image)?.animation;
     if(animation){
         try{return animation.frame(ENGINE.animationClock);}

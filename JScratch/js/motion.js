@@ -11,52 +11,14 @@ const recordMotionBlock=(type,data)=>ENGINE.recordBlock(createBlock(type,data));
 registerBlock("moveTo",async(block,c)=>{
     const s=motionSprite(block.name,c);
     if(!s)return;
-    s.edgeLock=null;
-    s.x=motionNum(block.x,0,c);
-    s.y=motionNum(block.y,0,c);
+    moveSpriteWithSolids(s,motionNum(block.x,0,c),motionNum(block.y,0,c),c);
 });
 
 registerBlock("move",async(block,c)=>{
     const s=motionSprite(block.name,c);
     if(!s)return;
-    s.edgeLock=null;
-    s.x+=motionNum(block.x,0,c);
-    s.y+=motionNum(block.y,0,c);
+    moveSpriteWithSolids(s,s.x+motionNum(block.x,0,c),s.y+motionNum(block.y,0,c),c);
 });
-
-function setupEdgeLock(s,horizontal,hDistance,vertical,vDistance){
-    if(!s)return;
-
-    horizontal=String(horizontal??"").toLowerCase();
-    vertical=String(vertical??"").toLowerCase();
-
-    hDistance=Math.max(0,Number(hDistance)||0);
-    vDistance=Math.max(0,Number(vDistance)||0);
-
-    s.edgeLock={
-        horizontal,
-        horizontalDistance:hDistance,
-        vertical,
-        verticalDistance:vDistance,
-        mobile:false
-    };
-
-    updateEdgeSprite(s);
-}
-
-registerBlock("moveToEdge",async(block,c)=>{
-    const s=motionSprite(block.name,c);
-    if(!s)return;
-
-    setupEdgeLock(
-        s,
-        String(resolveValue(block.horizontalEdge,c)??"").toLowerCase(),
-        Math.max(0,motionNum(block.x,0,c)),
-        String(resolveValue(block.verticalEdge,c)??"").toLowerCase(),
-        Math.max(0,motionNum(block.y,0,c))
-    );
-});
-
 
 /* REPORTERS */
 
@@ -68,9 +30,8 @@ registerReporter("isMobile",()=>ENGINE.mobile===true);
 registerBlock("moveToSprite",async(block,c)=>{
     const s=motionSprite(block.name,c),t=motionSprite(block.target,c);
     if(!s||!t)return;
-    s.edgeLock=null;
-    s.x=t.x;
-    s.y=t.y;
+    const position=spriteTargetPosition(s,t);
+    moveSpriteWithSolids(s,position.x,position.y,c);
 });
 
 registerBlock("facing",async(block,c)=>{
@@ -106,17 +67,15 @@ async function glideSprite(s,x,y,time,context){
     if(!Number.isFinite(x)||!Number.isFinite(y))return;
     if(!Number.isFinite(time)||time<0)time=0;
 
-    s.edgeLock=null;
 
     if(!time){
-        s.x=x;
-        s.y=y;
+        moveSpriteWithSolids(s,x,y,context);
         return;
     }
 
     const sx=s.x,sy=s.y,start=runtimeClock(context),duration=time*1000;
     while(contextActive(context)){
-        const progress=context?.stepping?1:Math.min(1,(runtimeClock(context)-start)/duration);s.x=sx+(x-sx)*progress;s.y=sy+(y-sy)*progress;
+        const progress=context?.stepping?1:Math.min(1,(runtimeClock(context)-start)/duration);moveSpriteWithSolids(s,sx+(x-sx)*progress,sy+(y-sy)*progress,context);
         if(progress>=1)break;await runtimeWait(0,context,true);
     }
 }
@@ -129,7 +88,8 @@ registerBlock("glideTo",async(block,c)=>{
 registerBlock("glideToSprite",async(block,c)=>{
     const s=motionSprite(block.name,c),t=motionSprite(block.target,c);
     if(!s||!t)return;
-    await glideSprite(s,t.x,t.y,block.time,c);
+    const position=spriteTargetPosition(s,t);
+    await glideSprite(s,position.x,position.y,block.time,c);
 });
 
 
@@ -141,10 +101,6 @@ function moveTo(name,x,y){
 
 function moveBy(name,x,y){
     return recordMotionBlock("move",{name,x,y});
-}
-
-function moveToEdge(name,horizontalEdge,x,verticalEdge,y){
-    return recordMotionBlock("moveToEdge",{name,horizontalEdge,x,verticalEdge,y});
 }
 
 function spriteX(name){
@@ -186,3 +142,29 @@ function glideTo(name,x,y,time){
 function glideToSprite(name,target,time){
     return recordMotionBlock("glideToSprite",{name,target,time});
 }
+// World (default) or browser canvas CSS pixels, independent of camera/zoom.
+function spriteCoordinateMode(name,mode){return recordMotionBlock("spriteCoordinateMode",{name,mode});}
+function coordinateModeOfSprite(name){return createReporter("coordinateModeOfSprite",{name});}
+function setSpriteCoordinateMode(sprite,mode){
+    const value=mode===true?"canvas":mode===false?"world":String(mode).toLowerCase();
+    const normalized=value==="screen"?"canvas":value;
+    if(!["world","canvas"].includes(normalized))throw new Error("Coordinate mode must be world or canvas");
+    sprite.coordinateMode=normalized;
+    if(normalized==="canvas"&&(ENGINE.camera.follow===sprite||(!sprite.isClone&&ENGINE.camera.follow===sprite.name)))ENGINE.camera.follow=null;
+}
+registerBlock("spriteCoordinateMode",(b,c)=>{const s=getContextSprite(b.name,c);if(s)setSpriteCoordinateMode(s,resolveValue(b.mode,c));});
+registerReporter("coordinateModeOfSprite",(b,c)=>getContextSprite(b.name,c)?.coordinateMode||"world");
+
+// Select browser-pixel axes; x/y are inward distances from the chosen sides.
+function coordinatePlane(name,horizontal="left",vertical="top"){
+    return recordMotionBlock("coordinatePlane",{name,horizontal,vertical});
+}
+registerBlock("coordinatePlane",(b,c)=>{
+    const s=motionSprite(b.name,c);if(!s)return;
+    const horizontal=String(resolveValue(b.horizontal,c)).toLowerCase();
+    const vertical=String(resolveValue(b.vertical,c)).toLowerCase();
+    if(!["left","right"].includes(horizontal)||!["top","bottom"].includes(vertical))
+        throw new Error("Coordinate plane requires left/right and top/bottom");
+    setSpriteCoordinateMode(s,"canvas");
+    s.coordinateHorizontal=horizontal;s.coordinateVertical=vertical;
+});

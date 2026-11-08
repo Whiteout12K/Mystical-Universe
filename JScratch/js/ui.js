@@ -1,754 +1,212 @@
-/* =========================================================
-   MYSTICAL LEGENDS GAME ENGINE - UI SYSTEM
-   ========================================================= */
-
-const ML_UI={
-    elements:Object.create(null),
-    order:[],
-    nextId:1
-};
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function uiValue(v,f=""){
-    v=resolveValue(v);
-    return v===null||v===undefined?f:v;
-}
-
-function uiNumber(v,f=0){
-    v=Number(uiValue(v));
-    return Number.isFinite(v)?v:f;
-}
-
-function uiString(v,f=""){
-    v=uiValue(v);
-    return v===null||v===undefined?f:String(v);
-}
-
-function uiBool(v,f=false){
-    v=uiValue(v);
-    if(typeof v==="boolean")return v;
-    if(v==="true"||v==="1")return true;
-    if(v==="false"||v==="0"||v==="")return false;
-    return v===null||v===undefined?f:Boolean(v);
-}
-
-function uiScale(){
-    return ENGINE.unitScale||1;
-}
-
-/* Same screen/world positioning convention as sprites.
-   X: right is positive.
-   Y: up is positive. */
-
-function uiX(x){
-    return canvas.width/2+uiNumber(x)*uiScale();
-}
-
-function uiY(y){
-    return canvas.height/2-uiNumber(y)*uiScale();
-}
-
-function uiWidth(v){
-    return uiNumber(v)*uiScale();
-}
-
-function uiHeight(v){
-    return uiNumber(v)*uiScale();
-}
-
-
-/* =========================================================
-   ELEMENTS
-   ========================================================= */
-
-function uiCreateElement(id,type="box",data={}){
-    id=uiString(id);
-
-    if(!id)id="ui_"+ML_UI.nextId++;
-
-    let e=ML_UI.elements[id];
-
-    if(e){
-        e.type=type||e.type;
-        Object.assign(e,data);
-        return e;
-    }
-
-    e={
-        id,type,
-        visible:true,opacity:1,
-        x:0,y:0,width:100,height:40,
-        rotation:0,scale:1,layer:0,
-        anchor:"center",
-        ...data
-    };
-
-    ML_UI.elements[id]=e;
-    ML_UI.order.push(id);
-    return e;
-}
-
-function uiGetElement(id){
-    return ML_UI.elements[uiString(id)]||null;
-}
-
-function uiDeleteElement(id){
-    id=uiString(id);
-    if(!ML_UI.elements[id])return;
-
-    delete ML_UI.elements[id];
-
-    const i=ML_UI.order.indexOf(id);
-    if(i>=0)ML_UI.order.splice(i,1);
-}
-
-function uiClearElements(){
-    for(const id of Object.keys(ML_UI.elements))delete ML_UI.elements[id];
-    ML_UI.order.length=0;
-}
-
-function uiSortElements(){
-    ML_UI.order.sort((a,b)=>{
-        const A=ML_UI.elements[a],B=ML_UI.elements[b];
-        return uiNumber(A?.layer)-uiNumber(B?.layer);
-    });
-}
-
-
-/* =========================================================
-   POSITIONING
-   ========================================================= */
-
-function uiAnchorOffset(w,h,anchor){
-    w=uiWidth(w);
-    h=uiHeight(h);
-
-    switch(uiString(anchor,"center").toLowerCase()){
-        case"topleft":return[0,0];
-        case"top":return[-w/2,0];
-        case"topright":return[-w,0];
-        case"left":return[0,-h/2];
-        case"right":return[-w,-h/2];
-        case"bottomleft":return[0,-h];
-        case"bottom":return[-w/2,-h];
-        case"bottomright":return[-w,-h];
-        default:return[-w/2,-h/2];
-    }
-}
-
-function uiPosition(e){
-    const o=uiAnchorOffset(e.width,e.height,e.anchor);
-    return[uiX(e.x)+o[0],uiY(e.y)+o[1]];
-}
-
-
-/* =========================================================
-   DRAW HELPERS
-   ========================================================= */
-
-function uiRoundRect(x,y,w,h,r){
-    r=Math.max(0,Math.min(uiNumber(r)*uiScale(),Math.abs(w)/2,Math.abs(h)/2));
-
-    ctx.beginPath();
-
-    if(ctx.roundRect){
-        ctx.roundRect(x,y,w,h,r);
-        return;
-    }
-
-    ctx.moveTo(x+r,y);
-    ctx.lineTo(x+w-r,y);
-    ctx.quadraticCurveTo(x+w,y,x+w,y+r);
-    ctx.lineTo(x+w,y+h-r);
-    ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
-    ctx.lineTo(x+r,y+h);
-    ctx.quadraticCurveTo(x,y+h,x,y+h-r);
-    ctx.lineTo(x,y+r);
-    ctx.quadraticCurveTo(x,y,x+r,y);
-    ctx.closePath();
-}
-
-function uiGradient(e,x,y,w,h){
-    if(!e.gradient)return uiString(e.color,"#fff");
-
-    const g=e.gradient;
-    const d=uiString(g.direction,"vertical").toLowerCase();
-
-    let gradient;
-
-    if(d==="horizontal")
-        gradient=ctx.createLinearGradient(x,y,x+w,y);
-    else if(d==="diagonal")
-        gradient=ctx.createLinearGradient(x,y,x+w,y+h);
-    else
-        gradient=ctx.createLinearGradient(x,y,x,y+h);
-
-    const color=uiString(e.color,"#fff");
-
-    gradient.addColorStop(0,uiString(g.from,color));
-    gradient.addColorStop(1,uiString(g.to,color));
-
-    return gradient;
-}
-
-function uiShadow(e){
-    if(!e.shadow)return;
-
-    ctx.shadowColor=uiString(e.shadow.color,"rgba(0,0,0,.5)");
-    ctx.shadowBlur=uiNumber(e.shadow.blur)*uiScale();
-    ctx.shadowOffsetX=uiNumber(e.shadow.x)*uiScale();
-    ctx.shadowOffsetY=uiNumber(e.shadow.y)*uiScale();
-}
-
-function uiClearShadow(){
-    ctx.shadowColor="transparent";
-    ctx.shadowBlur=0;
-    ctx.shadowOffsetX=0;
-    ctx.shadowOffsetY=0;
-}
-
-
-/* =========================================================
-   TEXT
-   ========================================================= */
-
-function uiDrawText(e){
-    const text=uiString(e.text);
-    const size=Math.max(1,uiNumber(e.size,24))*uiScale();
-
-    ctx.font=
-        `${uiString(e.style,"normal")} `+
-        `${uiString(e.weight,"normal")} `+
-        `${size}px ${uiString(e.font,"Arial")}`;
-
-    ctx.textAlign=uiString(e.align,"center");
-    ctx.textBaseline=uiString(e.baseline,"middle");
-    ctx.fillStyle=uiString(e.color,"#fff");
-
-    uiShadow(e);
-
-    const x=uiX(e.x);
-    const y=uiY(e.y);
-    const outline=uiNumber(e.outlineWidth);
-
-    if(outline>0){
-        ctx.lineWidth=outline*uiScale();
-        ctx.strokeStyle=uiString(e.outlineColor,"#000");
-        ctx.strokeText(text,x,y);
-    }
-
-    ctx.fillText(text,x,y);
-    uiClearShadow();
-}
-
-
-/* =========================================================
-   BOX
-   ========================================================= */
-
-function uiDrawBox(e){
-    const w=uiWidth(e.width);
-    const h=uiHeight(e.height);
-    const p=uiPosition(e);
-
-    ctx.save();
-    ctx.translate(p[0]+w/2,p[1]+h/2);
-    ctx.rotate(uiNumber(e.rotation)*Math.PI/180);
-    ctx.scale(Math.max(.001,uiNumber(e.scale,1)),Math.max(.001,uiNumber(e.scale,1)));
-
-    const x=-w/2,y=-h/2;
-
-    uiRoundRect(x,y,w,h,e.radius);
-    uiShadow(e);
-    ctx.fillStyle=uiGradient(e,x,y,w,h);
-    ctx.fill();
-
-    const outline=uiNumber(e.outlineWidth);
-
-    if(outline>0){
-        ctx.lineWidth=outline*uiScale();
-        ctx.strokeStyle=uiString(e.outlineColor,"#fff");
-        ctx.stroke();
-    }
-
-    uiClearShadow();
-    ctx.restore();
-}
-
-
-/* =========================================================
-   LINE
-   ========================================================= */
-
-function uiDrawLine(e){
-    const x1=uiX(e.x);
-    const y1=uiY(e.y);
-    const x2=uiX(uiNumber(e.x)+uiNumber(e.toX,100));
-    const y2=uiY(uiNumber(e.y)+uiNumber(e.toY));
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(x1,y1);
-    ctx.lineTo(x2,y2);
-
-    ctx.lineWidth=Math.max(1,uiNumber(e.width,2)*uiScale());
-    ctx.strokeStyle=uiString(e.color,"#fff");
-    ctx.lineCap=uiString(e.cap,"round");
-
-    uiShadow(e);
-    ctx.stroke();
-    uiClearShadow();
-    ctx.restore();
-}
-
-
-/* =========================================================
-   CIRCLE
-   ========================================================= */
-
-function uiDrawCircle(e){
-    const r=Math.max(0,uiNumber(e.radius,20)*uiScale());
-
-    ctx.save();
-    ctx.translate(uiX(e.x),uiY(e.y));
-    ctx.rotate(uiNumber(e.rotation)*Math.PI/180);
-
-    const s=Math.max(.001,uiNumber(e.scale,1));
-    ctx.scale(s,s);
-
-    ctx.beginPath();
-    ctx.arc(0,0,r,0,Math.PI*2);
-
-    uiShadow(e);
-    ctx.fillStyle=uiString(e.color,"#fff");
-    ctx.fill();
-
-    const outline=uiNumber(e.outlineWidth);
-
-    if(outline>0){
-        ctx.lineWidth=outline*uiScale();
-        ctx.strokeStyle=uiString(e.outlineColor,"#000");
-        ctx.stroke();
-    }
-
-    uiClearShadow();
-    ctx.restore();
-}
-
-
-/* =========================================================
-   BAR
-   ========================================================= */
-
-function uiDrawBar(e){
-    const w=Math.max(0,uiWidth(e.width));
-    const h=Math.max(0,uiHeight(e.height));
-    const p=uiPosition(e);
-
-    const max=uiNumber(e.max,100);
-    const value=uiNumber(e.value);
-    const progress=max===0?0:Math.max(0,Math.min(1,value/max));
-
-    ctx.save();
-    ctx.translate(p[0]+w/2,p[1]+h/2);
-    ctx.rotate(uiNumber(e.rotation)*Math.PI/180);
-
-    const s=Math.max(.001,uiNumber(e.scale,1));
-    ctx.scale(s,s);
-
-    const x=-w/2,y=-h/2;
-
-    uiRoundRect(x,y,w,h,e.radius);
-    ctx.fillStyle=uiString(e.background,"rgba(255,255,255,.2)");
-    ctx.fill();
-
-    const fw=w*progress;
-
-    if(fw>0){
-        ctx.save();
-
-        uiRoundRect(x,y,fw,h,e.radius);
-        ctx.clip();
-
-        const gradient={
-            ...e,
-            color:uiString(e.foreground,"#fff")
-        };
-
-        ctx.fillStyle=uiGradient(gradient,x,y,w,h);
-        ctx.fillRect(x,y,fw,h);
-
-        ctx.restore();
-    }
-
-    const outline=uiNumber(e.outlineWidth);
-
-    if(outline>0){
-        uiRoundRect(x,y,w,h,e.radius);
-        ctx.lineWidth=outline*uiScale();
-        ctx.strokeStyle=uiString(e.outlineColor,"#fff");
-        ctx.stroke();
-    }
-
-    ctx.restore();
-}
-
-
-/* =========================================================
-   IMAGE
-   ========================================================= */
-
-function uiDrawImage(e){
-    const path=uiString(e.path);
-    if(!path)return;
-
-    if(e.imagePath!==path){
-        const asset=loadImageAsset(path);e.image=asset.image;e.imagePath=path;
-        asset.ready.catch(error=>console.warn("Could not load UI image:",error.message));
-    }
-    if(!e.image.complete||!e.image.naturalWidth)return;
-    const frame=getImageFrame(e.image);
-
-    const w=uiWidth(e.width);
-    const h=uiHeight(e.height);
-    const p=uiPosition(e);
-
-    ctx.save();
-    ctx.translate(p[0]+w/2,p[1]+h/2);
-    ctx.rotate(uiNumber(e.rotation)*Math.PI/180);
-
-    const s=Math.max(.001,uiNumber(e.scale,1));
-    ctx.scale(s,s);
-
-    uiShadow(e);
-
-    ctx.drawImage(frame.source,-w/2,-h/2,w,h);
-
-    uiClearShadow();
-    ctx.restore();
-}
-
-
-/* =========================================================
-   BUTTON
-   ========================================================= */
-
-function uiDrawButton(e){
-    uiDrawBox(e);
-
-    uiDrawText({
-        text:e.text,
-        x:e.x,y:e.y,
-        size:e.textSize??20,
-        color:e.textColor??"#fff",
-        font:e.font??"Arial",
-        weight:e.textWeight??"bold",
-        align:"center",
-        baseline:"middle",
-        outlineWidth:e.textOutlineWidth??0,
-        outlineColor:e.textOutlineColor??"#000",
-        shadow:e.textShadow
-    });
-}
-
-
-/* =========================================================
-   RENDER
-   ========================================================= */
-
-function uiDrawElement(e){
-    if(!e||!uiBool(e.visible,true))return;
-
-    const opacity=Math.max(0,Math.min(1,uiNumber(e.opacity,1)));
-    if(opacity<=0)return;
-
-    ctx.save();
-    ctx.globalAlpha*=opacity;
-
-    switch(e.type){
-        case"text":uiDrawText(e);break;
-        case"box":
-        case"panel":uiDrawBox(e);break;
-        case"line":uiDrawLine(e);break;
-        case"circle":uiDrawCircle(e);break;
-        case"bar":
-        case"progress":uiDrawBar(e);break;
-        case"button":uiDrawButton(e);break;
-        case"image":uiDrawImage(e);break;
-    }
-
-    ctx.restore();
-}
-
-function renderUI(){
-    uiSortElements();
-
-    for(const id of ML_UI.order){
-        const e=ML_UI.elements[id];
-        if(e)uiDrawElement(e);
-    }
-
-    ctx.globalAlpha=1;
-}
-
-
-/* =========================================================
-   ENGINE RENDER HOOK
-   =========================================================
-
-   UI is drawn AFTER the normal engine render.
-
-   It does not clear the canvas.
-   It does not run its own animation loop.
-   Therefore the UI cannot race against the game renderer.
-   ========================================================= */
-
-ENGINE.renderUI=renderUI;
-
-
-/* =========================================================
-   BLOCK REGISTRATION
-   ========================================================= */
-
-// Resolve arguments when the command runs, including clone-scoped reporters.
-function uiArguments(value,c){
+/* Costume-free sprites. Their canvas image is generated only when visuals change. */
+const ML_UI={elements:Object.create(null),order:[],nextId:1};
+const UI_SHARED=new Set(["x","y","rotation","scale","layer","visible","opacity","flipX","flipY","touchable","coordinateMode"]);
+const UI_VISUAL_FIELDS=["text","value","max","color","foreground","background","radius","size","font","weight","style","align","baseline","outlineWidth","outlineColor","gradient","shadow","textSize","textColor","textWeight","textOutlineWidth","textOutlineColor","textShadow","toX","toY","strokeWidth","cap","path","anchor"];
+function uiValue(v,f="",c=null){const result=resolveValue(v,c);return result==null?f:result;}
+function uiNumber(v,f=0,c=null){const number=Number(uiValue(v,f,c));return Number.isFinite(number)?number:f;}
+function uiString(v,f="",c=null){return String(uiValue(v,f,c));}
+function uiBool(v,f=false,c=null){return v==null?f:mediaBoolean(v,c);}
+function uiScale(){return ENGINE.baseUnitScale||1;} // Legacy helper; coordinate modes are handled by Sprite.draw().
+function uiResolved(value,c){
     if(!value||typeof value!=="object")return value;
     if(value.type)return resolveValue(value,c);
-    if(Array.isArray(value))return value.map(v=>uiArguments(v,c));
-    return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,uiArguments(v,c)]));
+    if(Array.isArray(value))return value.map(v=>uiResolved(v,c));
+    return Object.fromEntries(Object.entries(value).map(([key,v])=>[key,uiResolved(v,c)]));
 }
-function uiBlockArguments(b,c){
-    return Object.fromEntries(Object.entries(b).map(([key,value])=>[
-        key,key==="type"?value:uiArguments(value,c)
-    ]));
+function uiDefaults(type){
+    const defaults={color:"#fff",outlineWidth:0,outlineColor:"#000",radius:0};
+    if(type==="text")return {...defaults,text:"",size:24,font:"Arial",weight:"normal",style:"normal",align:"center"};
+    if(type==="circle")return {...defaults,radius:20};
+    if(type==="line")return {...defaults,toX:100,toY:0,strokeWidth:2,cap:"round"};
+    if(type==="progress"||type==="bar")return {...defaults,width:200,height:20,value:0,max:100,background:"rgba(255,255,255,.2)",foreground:"#fff",radius:5};
+    if(type==="button")return {...defaults,width:140,height:45,text:"Button",textSize:20,textColor:"#fff",textWeight:"bold",color:"#444",radius:8};
+    return {...defaults,width:type==="panel"?200:100,height:type==="panel"?100:100};
 }
-function registerUIBlock(type,handler){registerBlock(type,(b,c)=>handler(uiBlockArguments(b,c),c));}
-function registerUIReporter(type,handler){registerReporter(type,(b,c)=>handler(uiBlockArguments(b,c),c));}
-
-registerUIBlock("uiText",b=>uiCreateElement(b.id,"text",{
-    text:b.text,x:b.x??0,y:b.y??0,size:b.size??24,
-    color:b.color??"#fff",font:b.font??"Arial",
-    weight:b.weight??"normal",style:b.style??"normal",
-    align:b.align??"center",baseline:b.baseline??"middle",
-    outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#000",
-    opacity:b.opacity??1,layer:b.layer??0,shadow:b.shadow
-}));
-
-registerUIBlock("uiPanel",b=>uiCreateElement(b.id,"panel",{
-    x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??100,
-    color:b.color??"rgba(0,0,0,.7)",radius:b.radius??10,
-    outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#fff",
-    gradient:b.gradient,shadow:b.shadow,
-    opacity:b.opacity??1,anchor:b.anchor??"center",
-    rotation:b.rotation??0,scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiBox",b=>uiCreateElement(b.id,"box",{
-    x:b.x??0,y:b.y??0,width:b.width??100,height:b.height??100,
-    color:b.color??"#fff",radius:b.radius??0,
-    outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#000",
-    gradient:b.gradient,shadow:b.shadow,
-    opacity:b.opacity??1,anchor:b.anchor??"center",
-    rotation:b.rotation??0,scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiLine",b=>uiCreateElement(b.id,"line",{
-    x:b.x??0,y:b.y??0,toX:b.toX??100,toY:b.toY??0,
-    width:b.width??2,color:b.color??"#fff",
-    cap:b.cap??"round",opacity:b.opacity??1,
-    shadow:b.shadow,layer:b.layer??0
-}));
-
-registerUIBlock("uiCircle",b=>uiCreateElement(b.id,"circle",{
-    x:b.x??0,y:b.y??0,radius:b.radius??20,
-    color:b.color??"#fff",outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#000",shadow:b.shadow,
-    opacity:b.opacity??1,rotation:b.rotation??0,
-    scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiProgressBar",b=>uiCreateElement(b.id,"progress",{
-    x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??20,
-    value:b.value??0,max:b.max??100,
-    background:b.background??"rgba(255,255,255,.2)",
-    foreground:b.foreground??"#fff",radius:b.radius??5,
-    outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#fff",
-    gradient:b.gradient,opacity:b.opacity??1,
-    anchor:b.anchor??"center",rotation:b.rotation??0,
-    scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiBar",b=>uiCreateElement(b.id,"bar",{
-    x:b.x??0,y:b.y??0,width:b.width??200,height:b.height??20,
-    value:b.value??0,max:b.max??100,
-    background:b.background??"rgba(255,255,255,.2)",
-    foreground:b.foreground??"#fff",radius:b.radius??5,
-    outlineWidth:b.outlineWidth??0,
-    outlineColor:b.outlineColor??"#fff",
-    gradient:b.gradient,opacity:b.opacity??1,
-    anchor:b.anchor??"center",rotation:b.rotation??0,
-    scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiButton",b=>uiCreateElement(b.id,"button",{
-    x:b.x??0,y:b.y??0,width:b.width??140,height:b.height??45,
-    color:b.color??"#444",radius:b.radius??8,
-    outlineWidth:b.outlineWidth??1,
-    outlineColor:b.outlineColor??"#fff",
-    gradient:b.gradient,shadow:b.shadow,
-    text:b.text??"Button",textSize:b.textSize??20,
-    textColor:b.textColor??"#fff",
-    textWeight:b.textWeight??"bold",
-    font:b.font??"Arial",
-    textOutlineWidth:b.textOutlineWidth??0,
-    textOutlineColor:b.textOutlineColor??"#000",
-    textShadow:b.textShadow,opacity:b.opacity??1,
-    anchor:b.anchor??"center",rotation:b.rotation??0,
-    scale:b.scale??1,layer:b.layer??0
-}));
-
-registerUIBlock("uiImage",b=>uiCreateElement(b.id,"image",{
-    path:b.path,x:b.x??0,y:b.y??0,
-    width:b.width??100,height:b.height??100,
-    opacity:b.opacity??1,anchor:b.anchor??"center",
-    rotation:b.rotation??0,scale:b.scale??1,
-    shadow:b.shadow,layer:b.layer??0
-}));
-
-
-/* =========================================================
-   MODIFY BLOCKS
-   ========================================================= */
-
-registerUIBlock("uiDelete",b=>uiDeleteElement(b.id));
-registerUIBlock("uiClear",()=>uiClearElements());
-
-registerUIBlock("uiShow",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.visible=true;
-});
-
-registerUIBlock("uiHide",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.visible=false;
-});
-
-registerUIBlock("uiSetVisible",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.visible=b.visible;
-});
-
-registerUIBlock("uiSetOpacity",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.opacity=b.opacity;
-});
-
-registerUIBlock("uiSetText",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.text=b.text;
-});
-
-registerUIBlock("uiSetPosition",b=>{
-    const e=uiGetElement(b.id);
-    if(e){
-        e.x=b.x;
-        e.y=b.y;
+function uiFont(v,size=v.size||24,weight=v.weight||"normal"){return `${v.style||"normal"} ${weight} ${Math.max(1,Number(size)||24)}px ${v.font||"Arial"}`;}
+function uiLayout(type,v,context){
+    if(type==="text"){
+        const size=Math.max(1,Number(v.size)||24),lines=String(v.text??"").split("\n");context.font=uiFont(v,size);
+        let width=1;for(const line of lines){const metrics=context.measureText(line);width=Math.max(width,metrics.width||0,(metrics.actualBoundingBoxLeft||0)+(metrics.actualBoundingBoxRight||0));}
+        const pad=2+Math.max(0,Number(v.outlineWidth)||0);
+        return {width:Math.max(1,Number(v.width)||width+pad*2),height:Math.max(1,Number(v.height)||lines.length*size*1.3+pad*2)};
     }
-});
-
-registerUIBlock("uiMove",b=>{
-    const e=uiGetElement(b.id);
-    if(e){
-        e.x=uiNumber(e.x)+uiNumber(b.dx);
-        e.y=uiNumber(e.y)+uiNumber(b.dy);
+    if(type==="line")return {width:Math.max(1,Number(v.width)||Math.abs(Number(v.toX)||0)+Math.max(1,Number(v.strokeWidth)||2)+2),height:Math.max(1,Number(v.height)||Math.abs(Number(v.toY)||0)+Math.max(1,Number(v.strokeWidth)||2)+2)};
+    if(type==="circle")return {width:Math.max(1,Number(v.width)||Math.max(0,Number(v.radius)||0)*2+Math.max(0,Number(v.outlineWidth)||0)),height:Math.max(1,Number(v.height)||Math.max(0,Number(v.radius)||0)*2+Math.max(0,Number(v.outlineWidth)||0))};
+    return {width:Math.max(1,Number(v.width)||1),height:Math.max(1,Number(v.height)||1)};
+}
+function uiRounded(context,x,y,w,h,r=0){
+    r=Math.max(0,Math.min(Number(r)||0,w/2,h/2));context.beginPath();
+    if(context.roundRect){context.roundRect(x,y,w,h,r);return;}
+    context.moveTo(x+r,y);context.lineTo(x+w-r,y);context.quadraticCurveTo(x+w,y,x+w,y+r);context.lineTo(x+w,y+h-r);context.quadraticCurveTo(x+w,y+h,x+w-r,y+h);context.lineTo(x+r,y+h);context.quadraticCurveTo(x,y+h,x,y+h-r);context.lineTo(x,y+r);context.quadraticCurveTo(x,y,x+r,y);context.closePath();
+}
+function uiFill(context,v,width,height,color=v.color||"#fff"){
+    if(!v.gradient)return color;
+    const g=v.gradient,direction=String(g.direction||"vertical").toLowerCase();
+    const gradient=context.createLinearGradient(0,0,direction==="vertical"?0:width,direction==="horizontal"?0:height);
+    gradient.addColorStop(0,g.from||color);gradient.addColorStop(1,g.to||color);return gradient;
+}
+function uiShadow(context,shadow){if(!shadow)return;context.shadowColor=shadow.color||"rgba(0,0,0,.5)";context.shadowBlur=Math.max(0,Number(shadow.blur)||0);context.shadowOffsetX=Number(shadow.x)||0;context.shadowOffsetY=Number(shadow.y)||0;}
+function uiPaint(context,type,v,w,h,imageFrame){
+    const outline=Math.max(0,Number(v.outlineWidth)||0),inset=outline/2;
+    context.save();uiShadow(context,v.shadow);
+    if(type==="text"||type==="button"){
+        if(type==="button"){
+            uiRounded(context,inset,inset,Math.max(0,w-outline),Math.max(0,h-outline),v.radius);context.fillStyle=uiFill(context,v,w,h);context.fill();
+            if(outline){context.lineWidth=outline;context.strokeStyle=v.outlineColor||"#000";context.stroke();}
+        }
+        context.shadowColor="transparent";uiShadow(context,type==="button"?v.textShadow:v.shadow);
+        const size=type==="button"?Number(v.textSize)||20:Number(v.size)||24,lines=String(v.text??"").split("\n");
+        context.font=uiFont(v,size,type==="button"?v.textWeight||"bold":v.weight||"normal");context.textBaseline="middle";context.textAlign=type==="button"?"center":v.align||"center";
+        context.fillStyle=type==="button"?v.textColor||"#fff":v.color||"#fff";
+        const pad=2+outline,x=context.textAlign==="left"?pad:context.textAlign==="right"?w-pad:w/2;
+        const textOutline=type==="button"?Number(v.textOutlineWidth)||0:outline;
+        for(let i=0;i<lines.length;i++){
+            const y=h/2+(i-(lines.length-1)/2)*size*1.3;
+            if(textOutline){context.lineWidth=textOutline;context.strokeStyle=type==="button"?v.textOutlineColor||"#000":v.outlineColor||"#000";context.strokeText(lines[i],x,y);}
+            context.fillText(lines[i],x,y);
+        }
+    }else if(type==="line"){
+        const stroke=Math.max(1,Number(v.strokeWidth)||2),dx=Math.sign(Number(v.toX)||0)*Math.max(0,w-stroke-2),dy=Math.sign(Number(v.toY)||0)*Math.max(0,h-stroke-2);context.beginPath();context.moveTo(w/2-dx/2,h/2+dy/2);context.lineTo(w/2+dx/2,h/2-dy/2);context.lineWidth=Math.max(1,Number(v.strokeWidth)||2);context.strokeStyle=v.color||"#fff";context.lineCap=v.cap||"round";context.stroke();
+    }else if(type==="circle"){
+        context.beginPath();context.ellipse(w/2,h/2,Math.max(0,(w-outline)/2),Math.max(0,(h-outline)/2),0,0,Math.PI*2);context.fillStyle=uiFill(context,v,w,h);context.fill();if(outline){context.lineWidth=outline;context.strokeStyle=v.outlineColor||"#000";context.stroke();}
+    }else if(type==="image"){
+        if(imageFrame)context.drawImage(imageFrame.source,0,0,w,h);
+    }else{
+        uiRounded(context,inset,inset,Math.max(0,w-outline),Math.max(0,h-outline),v.radius);
+        context.fillStyle=type==="bar"||type==="progress"?v.background??"rgba(255,255,255,.2)":uiFill(context,v,w,h);context.fill();
+        if(type==="bar"||type==="progress"){
+            const max=Number(v.max)||0,value=Number(v.value)||0,ratio=max>0?clamp(value/max,0,1):0;
+            context.save();context.clip();context.fillStyle=uiFill(context,v,w,h,v.foreground||"#fff");context.fillRect(0,0,w*ratio,h);context.restore();
+        }
+        if(outline){context.lineWidth=outline;context.strokeStyle=v.outlineColor||"#000";context.stroke();}
     }
-});
-
-registerUIBlock("uiSetSize",b=>{
-    const e=uiGetElement(b.id);
-    if(e){
-        e.width=b.width;
-        e.height=b.height;
+    context.restore();
+}
+class UISprite extends Sprite{
+    constructor(name,clone=false){
+        super(name,clone);this.costume="";this.isUI=true;this.uiType="box";this.uiData=uiDefaults("box");this.uiBindings=new Map();this.uiContexts=new Map();
+        this.uiContext=createScriptContext(clone?this:null);this.uiRevision=0;this.uiBaseWidth=100;this.uiBaseHeight=100;this._uiPreparing=false;this._uiKey=null;this._uiSnapshot=null;this._uiError="";
+        for(const [dimension,base] of [["width","uiBaseWidth"],["height","uiBaseHeight"]])Object.defineProperty(this,dimension,{
+            configurable:true,enumerable:true,get(){return this[base]*this.scale;},
+            set(value){const number=Number(value);if(!Number.isFinite(number))return;this[base]=Math.max(1,number/(this.scale||1));this.uiData[dimension]=this[base];}
+        });
+        this.image=document.createElement("canvas");this.image.width=this.image.height=1;this.loaded=true;
+        imageMedia.set(this.image,{frameProvider:()=>{this.ensureRaster();return {source:this.image,width:this.image.width,height:this.image.height,version:this.uiRevision};}});
     }
-});
-
-registerUIBlock("uiSetColor",b=>{
-    const e=uiGetElement(b.id);
-    if(e){
-        if(b.color!==undefined)e.color=b.color;
-        if(b.background!==undefined)e.background=b.background;
-        if(b.foreground!==undefined)e.foreground=b.foreground;
+    get id(){return this.isClone?this.cloneIdName:this.name;}
+    get type(){return this.uiType;}
+    get progress(){const max=Number(this.max)||0;return max>0?clamp((Number(this.value)||0)/max,0,1):0;}
+    readVisual(key){const preparing=this._uiPreparing;this._uiPreparing=true;try{return uiResolved(this.uiData[key],this.uiContexts.get(key)||this.uiContext);}finally{this._uiPreparing=preparing;}}
+    setUIProperty(key,value,c=this.uiContext,bind=false){
+        if(key==="id"||key==="name"||key==="type"||key==="image")throw new Error("UI property "+key+" is read-only");
+        if(key==="space")key="coordinateMode";
+        if(UI_SHARED.has(key)){
+            this.uiBindings.delete(key);
+            if(bind)this.uiBindings.set(key,{value,context:c});
+            else this.applyShared(key,resolveValue(value,c));
+        }else{this.uiData[key]=value;this.uiContexts.set(key,c);}
+        this.prepareFrame();
     }
-});
-
-registerUIBlock("uiSetLayer",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.layer=b.layer;
-});
-
-registerUIBlock("uiSetRotation",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.rotation=b.rotation;
-});
-
-registerUIBlock("uiSetScale",b=>{
-    const e=uiGetElement(b.id);
-    if(e)e.scale=b.scale;
-});
-
-registerUIBlock("uiBringToFront",b=>{
-    const e=uiGetElement(b.id);
-    if(!e)return;
-
-    let highest=-Infinity;
-
-    for(const id of ML_UI.order){
-        const item=ML_UI.elements[id];
-        if(item)highest=Math.max(highest,uiNumber(item.layer));
+    applyShared(key,value){
+        const previous=this[key];
+        if(key==="coordinateMode"){setSpriteCoordinateMode(this,value);return;}
+        if(key==="scale"){this.setScale(Math.max(.01,Number(value)||1));return;}
+        if(key==="visible"||key==="touchable")this[key]=mediaBoolean(value);
+        else if(key==="opacity")this.opacity=clamp(Number(value)||0,0,1);
+        else this[key]=Number.isFinite(Number(value))?Number(value):0;
+        if(key==="layer"&&previous!==this.layer)ENGINE.spriteOrderDirty=true;
     }
-
-    e.layer=highest+1;
-});
-
-registerUIBlock("uiSendToBack",b=>{
-    const e=uiGetElement(b.id);
-    if(!e)return;
-
-    let lowest=Infinity;
-
-    for(const id of ML_UI.order){
-        const item=ML_UI.elements[id];
-        if(item)lowest=Math.min(lowest,uiNumber(item.layer));
+    applyDefinition(type,data,c){
+        this.uiType=type;this.uiData={...uiDefaults(type)};this.uiContext=c||createScriptContext();
+        this.uiBindings.clear();this.uiContexts.clear();
+        for(const [key,value] of Object.entries(data)){
+            if(["id","type","_id","_handled"].includes(key)||value===undefined)continue;
+            if(UI_SHARED.has(key))this.applyShared(key,resolveValue(value,c));else this.uiData[key]=value;
+        }
+        this._uiKey=null;this.prepareFrame();ENGINE.spriteOrderDirty=true;return this;
     }
+    updateSize(){} // Width/height accessors combine generated dimensions with the shared scale.
+    setCostume(path,scale=1){this.uiType="image";this.costume=String(path||"");this.uiData.path=this.costume;this.setScale(scale);this._uiKey=null;this.prepareFrame();}
+    prepareFrame(){
+        if(this._uiPreparing||this.deleted)return;
+        this._uiPreparing=true;
+        try{
+            for(const [key,binding] of this.uiBindings)this.applyShared(key,resolveValue(binding.value,binding.context||this.uiContext));
+            const values=Object.fromEntries(Object.entries(this.uiData).map(([key,value])=>[key,uiResolved(value,this.uiContexts.get(key)||this.uiContext)]));
+            const dataKey=JSON.stringify([this.uiType,values],(_key,value)=>typeof value==="bigint"?String(value):typeof value==="number"&&!Number.isFinite(value)?String(value):value);
+            if(this._uiSnapshot?.key===dataKey){this.updateSize();return;}
+            const layout=uiLayout(this.uiType,values,this.image.getContext("2d"));
+            this.uiBaseWidth=layout.width;this.uiBaseHeight=layout.height;this.updateSize();
+            if(this.uiType==="image"&&String(values.path||"")!==this._uiAssetPath){
+                this._uiAssetPath=String(values.path||"");this._uiAsset=this._uiAssetPath?loadImageAsset(this._uiAssetPath):null;
+                this._uiAsset?.ready.then(()=>{this._uiKey=null;}).catch(error=>this.reportUIError(error));
+            }
+            this._uiSnapshot={values,...layout,key:dataKey};
+        }catch(error){this.reportUIError(error);}
+        finally{this._uiPreparing=false;}
+    }
+    reportUIError(error){const message=error.message||String(error);if(message!==this._uiError){this._uiError=message;reportRuntimeError(error,null,{...this.uiContext,scriptName:"UI "+this.id});}}
+    ensureRaster(){
+        this.prepareFrame();const snapshot=this._uiSnapshot;if(!snapshot||this.deleted)return;
+        try{
+            const asset=this._uiAsset,imageFrame=this.uiType==="image"&&asset?.image?.naturalWidth?getImageFrame(asset.image):null;
+            const key=snapshot.key+"|"+(imageFrame?imageFrame.version+":ready":"pending");if(key===this._uiKey)return;
+            const width=Math.max(1,Math.ceil(snapshot.width)),height=Math.max(1,Math.ceil(snapshot.height));
+            if(this.image.width!==width)this.image.width=width;if(this.image.height!==height)this.image.height=height;
+            const context=this.image.getContext("2d");context.setTransform(1,0,0,1,0,0);context.clearRect(0,0,width,height);context.imageSmoothingEnabled=false;
+            context.save();context.scale(width/snapshot.width,height/snapshot.height);uiPaint(context,this.uiType,snapshot.values,snapshot.width,snapshot.height,imageFrame);context.restore();
+            this.uiRevision++;this._uiKey=key;this._uiError="";
+        }catch(error){this.reportUIError(error);}
+    }
+    copyUIStateTo(clone){
+        clone.uiType=this.uiType;clone.uiData={...this.uiData};clone.uiContexts=new Map();clone.uiContext=createScriptContext(clone);clone.uiBindings=new Map([...this.uiBindings].map(([key,binding])=>[key,{value:binding.value,context:clone.uiContext}]));clone._uiKey=null;clone.prepareFrame();
+    }
+    onDelete(){if(ML_UI.elements[this.name]===this){delete ML_UI.elements[this.name];const i=ML_UI.order.indexOf(this.name);if(i>=0)ML_UI.order.splice(i,1);}}
+}
+for(const key of UI_VISUAL_FIELDS)Object.defineProperty(UISprite.prototype,key,{configurable:true,get(){return this.readVisual(key);},set(value){if(this.uiData){this.uiData[key]=value;this.uiContexts?.delete(key);}}});
+function uiCreateElement(id,type="box",data={},c=null){
+    id=uiString(id,"",c)||"ui_"+ML_UI.nextId++;
+    let e=getContextSprite(id,c);
+    if(e&&!e.isUI)throw new Error("UI name already belongs to a sprite: "+id);
+    if(!e){e=new UISprite(id);ENGINE.sprites[id]=e;ML_UI.elements[id]=e;ML_UI.order.push(id);}
+    return e.applyDefinition(type,data,c);
+}
+function uiGetElement(id,c=null){const e=getContextSprite(id,c);return e?.isUI&&!e.deleted?e:null;}
+function uiDeleteElement(id,c=null){const e=uiGetElement(id,c);if(e)removeSpriteObject(e);}
+function uiClearElements(){
+    for(const sprite of getAllSprites())if(sprite.isUI){markSpriteDeleted(sprite);if(!sprite.isClone&&ENGINE.sprites[sprite.name]===sprite)delete ENGINE.sprites[sprite.name];}
+    ENGINE.clones=ENGINE.clones.filter(sprite=>!sprite.deleted);ML_UI.order.length=0;ENGINE.spriteOrderDirty=true;releaseInactiveWaiters();
+}
+function renderUI(){for(const sprite of getAllSprites().filter(s=>s.isUI).sort((a,b)=>a.layer-b.layer))sprite.draw();} // Manual compatibility API only; normal render already draws UI once.
 
-    e.layer=lowest-1;
+/* Constructors keep their existing signatures. Visual reporters remain live. */
+const UI_KINDS={uiText:"text",uiPanel:"panel",uiBox:"box",uiLine:"line",uiCircle:"circle",uiProgressBar:"progress",uiBar:"bar",uiButton:"button",uiImage:"image"};
+for(const [type,kind] of Object.entries(UI_KINDS))registerBlock(type,(b,c)=>{
+    const data={...b};if(kind==="line"){data.strokeWidth=b.width;delete data.width;}
+    return uiCreateElement(b.id,kind,data,c);
 });
-
-
-/* =========================================================
-   REPORTERS
-   ========================================================= */
-
-registerUIReporter("uiExists",b=>Boolean(uiGetElement(b.id)));
-
-registerUIReporter("uiGet",b=>{
-    const e=uiGetElement(b.id);
-    if(!e)return"";
-    return resolveValue(e[uiString(b.property)]);
-});
-
-
-/* =========================================================
-   CONVENIENCE API
-   ========================================================= */
+function withUI(b,c,handler){const e=uiGetElement(b.id,c);if(e)return handler(e);}
+registerBlock("uiDelete",(b,c)=>uiDeleteElement(b.id,c));registerBlock("uiClear",uiClearElements);
+for(const [type,property] of Object.entries({uiSetVisible:"visible",uiSetOpacity:"opacity",uiSetText:"text",uiSetLayer:"layer",uiSetRotation:"rotation",uiSetScale:"scale",uiSetValue:"value",uiSetMax:"max"}))registerBlock(type,(b,c)=>withUI(b,c,e=>e.setUIProperty(property,b[property],c)));
+registerBlock("uiShow",(b,c)=>withUI(b,c,e=>{e.visible=true;}));registerBlock("uiHide",(b,c)=>withUI(b,c,e=>{e.visible=false;}));
+registerBlock("uiSetPosition",(b,c)=>withUI(b,c,()=>ENGINE.blocks.moveTo.execute({name:b.id,x:b.x,y:b.y},c)));
+registerBlock("uiMove",(b,c)=>withUI(b,c,()=>ENGINE.blocks.move.execute({name:b.id,x:b.dx,y:b.dy},c)));
+registerBlock("uiSetSize",(b,c)=>withUI(b,c,e=>{e.setUIProperty("width",b.width,c);e.setUIProperty("height",b.height,c);}));
+registerBlock("uiSetColor",(b,c)=>withUI(b,c,e=>{for(const key of ["color","foreground","background"])if(b[key]!==undefined)e.setUIProperty(key,b[key],c);}));
+registerBlock("uiBringToFront",(b,c)=>withUI(b,c,()=>ENGINE.blocks.goFront.execute({name:b.id},c)));
+registerBlock("uiSendToBack",(b,c)=>withUI(b,c,()=>ENGINE.blocks.goBack.execute({name:b.id},c)));
+registerBlock("uiSet",(b,c)=>withUI(b,c,e=>e.setUIProperty(String(resolveValue(b.property,c)),b.value,c)));
+registerBlock("uiBind",(b,c)=>withUI(b,c,e=>e.setUIProperty(String(resolveValue(b.property,c)),b.value,c,true)));
+registerBlock("uiUnbind",(b,c)=>withUI(b,c,e=>{const requested=String(resolveValue(b.property,c)),property=requested==="space"?"coordinateMode":requested;e.prepareFrame();if(UI_SHARED.has(property))e.uiBindings.delete(property);else e.uiData[property]=e.readVisual(property);e.prepareFrame();}));
+registerReporter("uiExists",(b,c)=>!!uiGetElement(b.id,c));
+registerReporter("uiGet",(b,c)=>{const e=uiGetElement(b.id,c);if(!e)return "";const property=String(resolveValue(b.property,c)),key=property==="space"?"coordinateMode":property;return e[key]??e.readVisual(key)??"";});
+function uiSet(id,property,value){return uiRun("uiSet",{id,property,value});}
+function uiBind(id,property,value){return uiRun("uiBind",{id,property,value});}
+function uiUnbind(id,property){return uiRun("uiUnbind",{id,property});}
+function uiSetValue(id,value){return uiRun("uiSetValue",{id,value});}
+function uiSetMax(id,max){return uiRun("uiSetMax",{id,max});}
+function uiExists(id){return createReporter("uiExists",{id});}
+function uiGet(id,property){return createReporter("uiGet",{id,property});}
 
 function uiRun(type,data={}){
     return ENGINE.recordBlock(createBlock(type,data));
@@ -855,18 +313,7 @@ function uiSendToBack(id){
 }
 
 
-/* =========================================================
-   PUBLIC API
-   ========================================================= */
-
-window.MLGame=window.MLGame||{};
-
 window.MLGame.UI={
-    get elements(){return ML_UI.elements;},
-    get order(){return ML_UI.order;},
-    create:uiCreateElement,
-    get:uiGetElement,
-    delete:uiDeleteElement,
-    clear:uiClearElements,
-    render:renderUI
+    get elements(){return ML_UI.elements;},get order(){return ML_UI.order;},
+    create:uiCreateElement,get:uiGetElement,delete:uiDeleteElement,clear:uiClearElements,render:renderUI
 };

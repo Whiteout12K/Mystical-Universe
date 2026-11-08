@@ -1,10 +1,10 @@
 // back-process.js
 
 const ENGINE={
-    width:640,height:360,centerX:0,centerY:0,viewWidth:640,viewHeight:360,unitScale:1,
+    width:640,height:360,centerX:0,centerY:0,viewWidth:640,viewHeight:360,unitScale:1,baseUnitScale:1,baseViewWidth:640,baseViewHeight:360,renderStats:{drawn:0,culled:0},pixelRatio:1,displayWidth:640,displayHeight:360,
     background:"#000000",backgroundImage:null,backgroundLoaded:false,backgroundScale:1,backgroundCostume:"",
-    backgroundEffects:{brightness:0,ghost:0,color:0},sprites:Object.create(null),clones:[],sounds:Object.create(null),variables:Object.create(null),
-    running:true,lastTime:0,deltaTime:0,camera:{x:0,y:0},scripts:[],program:[],broadcasts:Object.create(null),blocks:Object.create(null),
+    backgroundEffects:{brightness:0,ghost:0,color:0},sprites:Object.create(null),clones:[],sounds:Object.create(null),variables:Object.create(null),lists:Object.create(null),
+    running:true,lastTime:0,deltaTime:0,camera:{x:0,y:0},scripts:[],program:[],startScripts:[],broadcasts:Object.create(null),blocks:Object.create(null),
     mobile:false,buildingBlock:false,_blockId:0,audioContext:null,audioUnlocked:false,audioPending:[],
     masterGain:null,backgroundEffectCanvas:null,backgroundEffectCacheKey:null,fps:60,frameInterval:1000/60,
     lastRender:0,spriteOrderDirty:true,spriteOrder:[],resizeCanvas:null,resizeFrame:null,cloneId:0
@@ -41,7 +41,7 @@ function resolveValueInternal(v,c=null){
         case"privateVariable":
             return c?.privateVariables?.[String(resolveValue(v.name,c))]??"";
         case"spriteVariable":{
-            const s=getContextSprite(v.spriteName,c);
+            const s=getContextSprite(v.spriteName,c,false);
             return s?.variables?.[String(resolveValue(v.varName,c))]??"";
         }
         case"cloneVariable":{
@@ -75,10 +75,53 @@ function resolveSpriteName(name,c=null){
     return n;
 }
 
-function getContextSprite(name,c=null){
+function getContextSprite(name,c=null,prepare=true){
     const target=resolveSpriteName(name,c);
-    if(target?.isClone)return target;
-    return ENGINE.sprites[target]||null;
+    if(target?.isClone){if(prepare)target.prepareFrame?.();return target;}
+    const sprite=ENGINE.sprites[target]||(String(target).includes("#")?ENGINE.clones.find(s=>!s.deleted&&s.cloneIdName===target):null);
+    if(prepare)sprite?.prepareFrame?.();return sprite||null;
+}
+
+// Canvas mode uses CSS pixels, top-left origin, y downward. Geometry for
+// sensing/solids is projected into world coordinates so mixed modes can interact.
+function spriteCanvasPosition(sprite){
+    return {x:sprite.coordinateHorizontal==="right"?ENGINE.displayWidth-sprite.x:sprite.x,
+        y:sprite.coordinateVertical==="bottom"?ENGINE.displayHeight-sprite.y:sprite.y};
+}
+function getSpriteWorldGeometry(sprite){
+    sprite.prepareFrame?.();
+    if(sprite.coordinateMode!=="canvas")return sprite;
+    const factor=ENGINE.pixelRatio/ENGINE.unitScale,position=spriteCanvasPosition(sprite);
+    return {x:ENGINE.camera.x+(position.x*ENGINE.pixelRatio-canvas.width/2)/ENGINE.unitScale,
+        y:ENGINE.camera.y-(position.y*ENGINE.pixelRatio-canvas.height/2)/ENGINE.unitScale,
+        width:sprite.width*factor,height:sprite.height*factor,rotation:sprite.rotation,flipX:sprite.flipX,flipY:sprite.flipY};
+}
+function worldPointForSprite(sprite,x,y){
+    if(sprite.coordinateMode!=="canvas")return {x,y};
+    const px=((x-ENGINE.camera.x)*ENGINE.unitScale+canvas.width/2)/ENGINE.pixelRatio;
+    const py=(-(y-ENGINE.camera.y)*ENGINE.unitScale+canvas.height/2)/ENGINE.pixelRatio;
+    return {x:sprite.coordinateHorizontal==="right"?ENGINE.displayWidth-px:px,
+        y:sprite.coordinateVertical==="bottom"?ENGINE.displayHeight-py:py};
+}
+function spriteTargetPosition(sprite,target){const p=getSpriteWorldGeometry(target);return worldPointForSprite(sprite,p.x,p.y);}
+function spriteMotionToWorld(sprite,x,y){
+    const fixed=sprite.coordinateMode==="canvas",f=fixed?ENGINE.pixelRatio/ENGINE.unitScale:1;
+    return {x:x*f*(fixed&&sprite.coordinateHorizontal==="right"?-1:1),y:y*f*(fixed&&sprite.coordinateVertical!=="bottom"?-1:1)};
+}
+function spriteMotionFromWorld(sprite,x,y){
+    const fixed=sprite.coordinateMode==="canvas",f=fixed?ENGINE.unitScale/ENGINE.pixelRatio:1;
+    return {x:x*f*(fixed&&sprite.coordinateHorizontal==="right"?-1:1),y:y*f*(fixed&&sprite.coordinateVertical!=="bottom"?-1:1)};
+}
+function markSpriteDeleted(sprite){
+    if(!sprite||sprite.deleted)return;
+    sprite.deleted=true;sprite.visible=false;sprite.touchable=false;sprite.onDelete?.();
+}
+function removeSpriteObject(sprite){
+    if(!sprite||sprite.deleted)return;
+    markSpriteDeleted(sprite);
+    if(sprite.isClone){const index=ENGINE.clones.indexOf(sprite);if(index>=0)ENGINE.clones.splice(index,1);}
+    else if(ENGINE.sprites[sprite.name]===sprite)delete ENGINE.sprites[sprite.name];
+    ENGINE.spriteOrderDirty=true;releaseInactiveWaiters();
 }
 
 function getAllSprites(){
@@ -374,9 +417,10 @@ class Sprite{
         const cloneId=clone?getFreeCloneId():0;
         Object.assign(this,{
             name,x:0,y:0,visible:true,costume:null,image:null,scale:1,width:160,height:160,
-            loaded:false,opacity:1,rotation:0,flipX:1,flipY:1,
+            loaded:false,opacity:1,rotation:0,flipX:1,flipY:1,coordinateMode:"world",coordinateHorizontal:"left",coordinateVertical:"top",
+            solidCollision:{enabled:false,targets:[],blocked:false,contacts:[]},
             effects:{brightness:0,ghost:0,color:0},layer:0,variables:Object.create(null),
-            privateVariables:Object.create(null),velocityX:0,velocityY:0,edgeLock:null,
+            privateVariables:Object.create(null),velocityX:0,velocityY:0,
             imageCache:Object.create(null),costumeCacheOrder:[],effectCanvas:null,effectCacheKey:null,
             touchable:true,isClone:clone,cloneName:clone?name:"",cloneId,
             cloneIdName:clone?`${name}#${cloneId}`:"",cloneOf:clone?name:null,
@@ -409,7 +453,7 @@ class Sprite{
 
             if(this.loaded){
                 this.updateSize();
-                updateEdgeSprite(this);
+
             }
 
             return;
@@ -420,9 +464,9 @@ class Sprite{
         this.costumeCacheOrder.push(path);
         if(this.costumeCacheOrder.length>4){const old=this.costumeCacheOrder.shift();if(old!==path)delete this.imageCache[old];}
         this.image=image;this.loaded=image.complete&&image.naturalWidth>0;
-        if(this.loaded){this.updateSize();updateEdgeSprite(this);}
+        if(this.loaded){this.updateSize();}
         asset.ready.then(()=>{
-            if(this.image===image&&this.costume===path){this.loaded=true;this.effectCacheKey=null;this.updateSize();updateEdgeSprite(this);}
+            if(this.image===image&&this.costume===path){this.loaded=true;this.effectCacheKey=null;this.updateSize();}
         }).catch(()=>console.warn("Could not load costume:",path));
     }
 
@@ -459,6 +503,7 @@ class Sprite{
     }
 
     draw(){
+        this.prepareFrame?.();
         if(this.deleted||!this.visible||!this.image||this.opacity<=0||this.effects.ghost>=100)return;
 
         if(!this.loaded&&this.image.naturalWidth>0){
@@ -467,11 +512,13 @@ class Sprite{
         }
 
         if(!this.loaded)return;
+        if(ENGINE.camera.offscreenCulling&&!spriteInCameraView(this)){ENGINE.renderStats.culled++;return;}
 
         const effect=applySpriteEffects(this);
         if(!effect)return;
 
-        const s=ENGINE.unitScale;
+        const s=this.coordinateMode==="canvas"?ENGINE.pixelRatio:ENGINE.unitScale;
+        ENGINE.renderStats.drawn++;
 
         ctx.save();
         ctx.globalAlpha=clamp(Number(this.opacity)||0,0,1)*(1-effect.ghost/100);
@@ -481,8 +528,8 @@ class Sprite{
          * The costume expands equally in every direction.
          */
         ctx.translate(
-            (this.x-ENGINE.camera.x)*s+canvas.width/2,
-            -(this.y-ENGINE.camera.y)*s+canvas.height/2
+            this.coordinateMode==="canvas"?spriteCanvasPosition(this).x*s:(this.x-ENGINE.camera.x)*s+canvas.width/2,
+            this.coordinateMode==="canvas"?spriteCanvasPosition(this).y*s:-(this.y-ENGINE.camera.y)*s+canvas.height/2
         );
 
         ctx.rotate(this.rotation*Math.PI/180);
@@ -498,67 +545,6 @@ class Sprite{
 
         ctx.restore();
     }
-}
-
-
-/* SPRITE EDGE LOCKING */
-
-function updateEdgeSprite(sprite){
-    if(!sprite?.edgeLock||sprite.deleted)return;
-
-    const lock=sprite.edgeLock;
-    if(lock.mobile&&!ENGINE.mobile)return;
-
-    const cx=ENGINE.camera.x,cy=ENGINE.camera.y;
-
-    const canvasHalfWidth=ENGINE.width/2;
-    const canvasHalfHeight=ENGINE.height/2;
-
-    const canvasLeft=cx-canvasHalfWidth;
-    const canvasRight=cx+canvasHalfWidth;
-    const canvasBottom=cy-canvasHalfHeight;
-    const canvasTop=cy+canvasHalfHeight;
-
-    const viewHalfWidth=ENGINE.viewWidth/2;
-    const viewHalfHeight=ENGINE.viewHeight/2;
-
-    const screenLeft=cx-viewHalfWidth;
-    const screenRight=cx+viewHalfWidth;
-    const screenBottom=cy-viewHalfHeight;
-    const screenTop=cy+viewHalfHeight;
-
-    const left=Math.max(canvasLeft,screenLeft);
-    const right=Math.min(canvasRight,screenRight);
-    const bottom=Math.max(canvasBottom,screenBottom);
-    const top=Math.min(canvasTop,screenTop);
-
-    if(lock.horizontal==="left")
-        sprite.x=left+lock.horizontalDistance;
-    else if(lock.horizontal==="right")
-        sprite.x=right-lock.horizontalDistance;
-
-    if(lock.vertical==="top")
-        sprite.y=top-lock.verticalDistance;
-    else if(lock.vertical==="bottom")
-        sprite.y=bottom+lock.verticalDistance;
-
-    if(!lock.horizontal){
-        const hw=Math.max(0,sprite.width/2);
-        const minX=left+hw,maxX=right-hw;
-        if(minX<=maxX)sprite.x=clamp(sprite.x,minX,maxX);
-        else sprite.x=cx;
-    }
-
-    if(!lock.vertical){
-        const hh=Math.max(0,sprite.height/2);
-        const minY=bottom+hh,maxY=top-hh;
-        if(minY<=maxY)sprite.y=clamp(sprite.y,minY,maxY);
-        else sprite.y=cy;
-    }
-}
-
-function updateEdgeSprites(){
-    getAllSprites().forEach(updateEdgeSprite);
 }
 
 
@@ -777,7 +763,12 @@ async function executeProgram(){
 
     try{
         c.scriptName="Main program";
-        await launchScript(ENGINE.program,c)
+        const tasks=ENGINE.program.length?[launchScript(ENGINE.program,c)]:[];
+        for(const [index,blocks] of ENGINE.startScripts.entries()){
+            const context=createScriptContext();context.scriptName="When start "+(index+1);
+            tasks.push(launchScript(blocks,context));
+        }
+        await Promise.all(tasks)
     }catch(e){
         console.error("Main program error:",e)
     }
@@ -801,6 +792,7 @@ function resizeGame(){
     ENGINE.mobile=w<700;
 
     const pixelRatio=Math.min(3,window.devicePixelRatio||1);
+    ENGINE.pixelRatio=pixelRatio;ENGINE.displayWidth=w;ENGINE.displayHeight=h;
     const pw=Math.ceil(w*pixelRatio),ph=Math.ceil(h*pixelRatio);
 
     canvas.style.width=w+"px";
@@ -811,13 +803,13 @@ function resizeGame(){
         canvas.height=ph;
     }
 
-    ENGINE.viewHeight=getViewHeight(w);
-    ENGINE.unitScale=h*pixelRatio/ENGINE.viewHeight;
-    ENGINE.viewWidth=w*pixelRatio/ENGINE.unitScale;
+    ENGINE.baseViewHeight=getViewHeight(w);
+    ENGINE.baseUnitScale=h*pixelRatio/ENGINE.baseViewHeight;
+    ENGINE.baseViewWidth=w*pixelRatio/ENGINE.baseUnitScale;
+    updateCamera();
     applyRenderSettings();
     ENGINE.centerX=ENGINE.centerY=0;
 
-    updateEdgeSprites();
 }
 
 function requestResize(){
@@ -830,30 +822,17 @@ function requestResize(){
 }
 
 function drawBackground(){
+    ctx.globalAlpha=1;ctx.fillStyle=ENGINE.background;ctx.fillRect(0,0,canvas.width,canvas.height);
     const image=ENGINE.backgroundImage;
-
-    if(!ENGINE.backgroundLoaded||!image){
-        ctx.fillStyle=ENGINE.background;
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        return;
-    }
-
-    const unit=ENGINE.unitScale;
-    const width=640*(Number(ENGINE.backgroundScale)||1);
+    if(!ENGINE.backgroundLoaded||!image)return;
+    const unit=ENGINE.unitScale,width=640*(Number(ENGINE.backgroundScale)||1);
     const height=width*image.naturalHeight/image.naturalWidth;
-    const effect=applyCanvasEffects();
-
-    if(!effect)return;
-
+    const x=canvas.width/2-ENGINE.camera.x*unit-width*unit/2;
+    const y=canvas.height/2+ENGINE.camera.y*unit-height*unit/2;
+    if(x+width*unit<0||x>canvas.width||y+height*unit<0||y>canvas.height)return;
+    const effect=applyCanvasEffects();if(!effect)return;
     ctx.globalAlpha=1-effect.ghost/100;
-
-    ctx.drawImage(
-        effect.source,
-        canvas.width/2-width*unit/2,
-        canvas.height/2-height*unit/2,
-        width*unit,
-        height*unit
-    );
+    ctx.drawImage(effect.source,x,y,width*unit,height*unit);
 }
 
 function updateSpriteOrder(){
@@ -871,12 +850,15 @@ function updateSpriteOrder(){
 }
 
 function render(){
+    for(const sprite of Object.values(ENGINE.sprites))sprite.prepareFrame?.();
+    for(const sprite of ENGINE.clones)if(!sprite.deleted)sprite.prepareFrame?.();
+    updateCamera();
+    ENGINE.renderStats.drawn=0;ENGINE.renderStats.culled=0;
     applyRenderSettings();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.globalAlpha=1;
 
     drawBackground();
-    updateEdgeSprites();
     updateSpriteOrder();
 
     ENGINE.spriteOrder.forEach(sprite=>sprite.draw());
@@ -963,10 +945,12 @@ function stopRuntime(){
 function resetRuntime(){
     if(typeof ML_UI!=='undefined'){uiClearElements();ML_UI.nextId=1;}
     if(typeof SENSING!=='undefined'){SENSING.keys={};SENSING.leftClick=false;SENSING.rightClick=false;}
-    ENGINE.variables=Object.create(null);ENGINE.sprites=Object.create(null);ENGINE.clones=[];ENGINE.sounds=Object.create(null);ENGINE.spriteOrder=[];ENGINE.spriteOrderDirty=true;ENGINE.cloneId=0;
-    ENGINE.background='#000000';ENGINE.backgroundImage=null;ENGINE.backgroundLoaded=false;ENGINE.backgroundScale=1;ENGINE.backgroundCostume='';ENGINE.backgroundEffects={brightness:0,ghost:0,color:0};ENGINE.backgroundEffectCacheKey=null;ENGINE.camera={x:0,y:0};
+    ENGINE.variables=Object.create(null);ENGINE.lists=Object.create(null);ENGINE.sprites=Object.create(null);ENGINE.clones=[];ENGINE.sounds=Object.create(null);ENGINE.spriteOrder=[];ENGINE.spriteOrderDirty=true;ENGINE.cloneId=0;
+    ENGINE.background='#000000';ENGINE.backgroundImage=null;ENGINE.backgroundLoaded=false;ENGINE.backgroundScale=1;ENGINE.backgroundCostume='';ENGINE.backgroundEffects={brightness:0,ghost:0,color:0};ENGINE.backgroundEffectCacheKey=null;resetCamera();
 }
 async function startRuntime(){
+    const requestRun=ENGINE.runId;await loadCameraConfig();
+    if(requestRun!==ENGINE.runId)return;
     stopRuntime();resetRuntime();ENGINE.running=true;ENGINE.clock=0;ENGINE.animationClock=0;ENGINE.animationEpoch++;ENGINE.executedBlocks=0;ENGINE.errors=[];ENGINE.lastBlock=null;ENGINE.lastTime=0;ENGINE.budgetStarted=performance.now();ENGINE.budgetBlocks=0;
     if(ENGINE.loopHandle===null)ENGINE.loopHandle=requestAnimationFrame(gameLoop);
     window.dispatchEvent(new CustomEvent('mlgame-state',{detail:'running'}));return executeProgram();
@@ -1026,5 +1010,5 @@ window.MLGame={
     start:startRuntime,restart:startRuntime,stop:stopRuntime,pause:pauseRuntime,resume:resumeRuntime,step:stepRuntime,
     reportError:reportRuntimeError,contextActive,runtimeWait,preloadAssets,validateBlocks,cancelScripts,
     configure:options=>configureRuntime(options),
-    inspect:()=>({running:ENGINE.running,paused:ENGINE.paused,executedBlocks:ENGINE.executedBlocks,blockId:ENGINE.lastBlock?._id,blockType:ENGINE.lastBlock?.type,variables:{...ENGINE.variables},sprites:Object.keys(ENGINE.sprites),clones:ENGINE.clones.length,activeScripts:ENGINE.activeScripts.size,waiters:ENGINE.waiters.size,errors:ENGINE.errors.slice()})
+    inspect:()=>({running:ENGINE.running,paused:ENGINE.paused,executedBlocks:ENGINE.executedBlocks,blockId:ENGINE.lastBlock?._id,blockType:ENGINE.lastBlock?.type,variables:{...ENGINE.variables},sprites:Object.keys(ENGINE.sprites),clones:ENGINE.clones.length,activeScripts:ENGINE.activeScripts.size,camera:{x:ENGINE.camera.x,y:ENGINE.camera.y,zoom:ENGINE.camera.zoom},render:{...ENGINE.renderStats},waiters:ENGINE.waiters.size,errors:ENGINE.errors.slice()})
 };

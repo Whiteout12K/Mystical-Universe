@@ -1,0 +1,3113 @@
+[
+  {
+    "name": "resolveValue",
+    "category": "back-process",
+    "params": [
+      {
+        "name": "v",
+        "default": null
+      },
+      {
+        "name": "c",
+        "default": "null"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "registerBlock",
+    "category": "back-process",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "handler",
+        "default": null
+      },
+      {
+        "name": "options",
+        "default": "{}"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "registerReporter",
+    "category": "back-process",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "fn",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "createBlock",
+    "category": "back-process",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "data",
+        "default": "{}"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "createReporter",
+    "category": "back-process",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "data",
+        "default": "{}"
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "cameraTo",
+    "category": "camera",
+    "params": [
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraBy",
+    "category": "camera",
+    "params": [
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraToSprite",
+    "category": "camera",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraFollow",
+    "category": "camera",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "offsetX",
+        "default": "0"
+      },
+      {
+        "name": "offsetY",
+        "default": "0"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraStopFollowing",
+    "category": "camera",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraZoom",
+    "category": "camera",
+    "params": [
+      {
+        "name": "zoom",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraX",
+    "category": "camera",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "cameraY",
+    "category": "camera",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "cameraReset",
+    "category": "camera",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "canvasColor",
+    "category": "canvas",
+    "params": [
+      {
+        "name": "color",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "canvasCostume",
+    "category": "canvas",
+    "params": [
+      {
+        "name": "path",
+        "default": null
+      },
+      {
+        "name": "scale",
+        "default": "1"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "whenClone",
+    "category": "clone",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "cloneName",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "cloneId",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "isClone",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "makeClone",
+    "category": "clone",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteClone",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteClonesOf",
+    "category": "clone",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getCloneName",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "getCloneId",
+    "category": "clone",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "wait",
+    "category": "control",
+    "params": [
+      {
+        "name": "time",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "waitUntil",
+    "category": "control",
+    "params": [
+      {
+        "name": "condition",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "repeat",
+    "category": "control",
+    "params": [
+      {
+        "name": "times",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "forever",
+    "category": "control",
+    "params": [],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "ifBlock",
+    "category": "control",
+    "params": [
+      {
+        "name": "condition",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "repeatUntil",
+    "category": "control",
+    "params": [
+      {
+        "name": "condition",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "whileBlock",
+    "category": "control",
+    "params": [
+      {
+        "name": "condition",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "endScript",
+    "category": "control",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "broadcast",
+    "category": "control",
+    "params": [
+      {
+        "name": "message",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "broadcastAndWait",
+    "category": "control",
+    "params": [
+      {
+        "name": "message",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "whenBroadcast",
+    "category": "control",
+    "params": [
+      {
+        "name": "message",
+        "default": null
+      }
+    ],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "breakLoop",
+    "category": "control",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "continueLoop",
+    "category": "control",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "stopScripts",
+    "category": "control",
+    "params": [
+      {
+        "name": "message",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "withoutScreenRefresh",
+    "category": "control",
+    "params": [],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "whenStart",
+    "category": "control",
+    "params": [],
+    "rest": true,
+    "reporter": false,
+    "container": true
+  },
+  {
+    "name": "loadPlayerData",
+    "category": "data",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getUsername",
+    "category": "data",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "getLoggedIn",
+    "category": "data",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "getData",
+    "category": "data",
+    "params": [
+      {
+        "name": "key",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "updateData",
+    "category": "data",
+    "params": [
+      {
+        "name": "data",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "changeDataBy",
+    "category": "data",
+    "params": [
+      {
+        "name": "data",
+        "default": null
+      },
+      {
+        "name": "amount",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "refreshPlayerData",
+    "category": "data",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getJson",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "removeJson",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "jsonLoaded",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "jsonValue",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": "\"\""
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "jsonExists",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": "\"\""
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "jsonKeys",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": "\"\""
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "jsonLength",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": "\"\""
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "jsonType",
+    "category": "json",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": "\"\""
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "makeList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "items",
+        "default": "[]"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "items",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "addToList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "item",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "insertInList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "index",
+        "default": null
+      },
+      {
+        "name": "item",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "replaceInList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "index",
+        "default": null
+      },
+      {
+        "name": "item",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteFromList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "index",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "clearList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getList",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "listItem",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "index",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "listLength",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "listContains",
+    "category": "lists",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "item",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "setPixelCrisp",
+    "category": "media",
+    "params": [
+      {
+        "name": "enabled",
+        "default": "true"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setGifAutoPlay",
+    "category": "media",
+    "params": [
+      {
+        "name": "enabled",
+        "default": "true"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "moveTo",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "moveBy",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteX",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "spriteY",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "spriteDirection",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "isMobile",
+    "category": "motion",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "moveToSprite",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "target",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "facing",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "direction",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "turn",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "amount",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "glideTo",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      },
+      {
+        "name": "time",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "glideToSprite",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "target",
+        "default": null
+      },
+      {
+        "name": "time",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteCoordinateMode",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "mode",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "coordinateModeOfSprite",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "coordinatePlane",
+    "category": "motion",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "horizontal",
+        "default": "\"left\""
+      },
+      {
+        "name": "vertical",
+        "default": "\"top\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "makeVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "changeVarBy",
+    "category": "operator",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "makeSpriteVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "spriteName",
+        "default": null
+      },
+      {
+        "name": "varName",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "getSpriteVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "spriteName",
+        "default": null
+      },
+      {
+        "name": "varName",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "setSpriteVar",
+    "category": "operator",
+    "params": [
+      {
+        "name": "spriteName",
+        "default": null
+      },
+      {
+        "name": "varName",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "changeSpriteVarBy",
+    "category": "operator",
+    "params": [
+      {
+        "name": "spriteName",
+        "default": null
+      },
+      {
+        "name": "varName",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "operator",
+    "category": "operator",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "evaluate",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "add",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "sub",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "mult",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "div",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "mod",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "round",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "abs",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "cos",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "sin",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "randomNum",
+    "category": "operator",
+    "params": [
+      {
+        "name": "start_range",
+        "default": null
+      },
+      {
+        "name": "end_range",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "gThan",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "lThan",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "gEqThan",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "lEqThan",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "equal",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "and",
+    "category": "operator",
+    "params": [
+      {
+        "name": "a",
+        "default": null
+      },
+      {
+        "name": "b",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "or",
+    "category": "operator",
+    "params": [
+      {
+        "name": "a",
+        "default": null
+      },
+      {
+        "name": "b",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "not",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "join",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      },
+      {
+        "name": "value2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "letter",
+    "category": "operator",
+    "params": [
+      {
+        "name": "num",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "length",
+    "category": "operator",
+    "params": [
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "contain",
+    "category": "operator",
+    "params": [
+      {
+        "name": "val",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "touchingMouse",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "touchingSprite",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      },
+      {
+        "name": "sprite2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "spriteHasColor",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      },
+      {
+        "name": "color_hex",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "touchingStageColor",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      },
+      {
+        "name": "color_hex",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "distanceMouse",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "distanceSprite",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "sprite",
+        "default": null
+      },
+      {
+        "name": "sprite2",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "keyPressed",
+    "category": "sensing",
+    "params": [
+      {
+        "name": "key",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "mouseX",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "mouseY",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "currentYear",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "currentMonth",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "currentDay",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "currentHour",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "currentMin",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "deltaTime",
+    "category": "sensing",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "spriteSolid",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "enabled",
+        "default": "true"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteCollisionTargets",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "targets",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "solidEnabled",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "solidTargets",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "solidBlocked",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "solidContacts",
+    "category": "solid",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "makeSound",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "playSound",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "stopAllSound",
+    "category": "sound",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "stopSound",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setPitch",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "changePitch",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setPan",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "changePan",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "setVolume",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "changeVolume",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "volumeOfSound",
+    "category": "sound",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "createSprite",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteCostume",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": null
+      },
+      {
+        "name": "scale",
+        "default": "1"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteSetSize",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "scale",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteChangeSize",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "amount",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteEffect",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "effect",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteChangeEffect",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "effect",
+        "default": null
+      },
+      {
+        "name": "amount",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "costumeOfSprite",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "sizeOfSprite",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "spriteShow",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteHide",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "spriteLayer",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      },
+      {
+        "name": "layer",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "goFront",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "goBack",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteSprite",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "name",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "deleteAllSprites",
+    "category": "sprite",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "phaseIn",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "time",
+        "default": "1"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "phaseOut",
+    "category": "sprite",
+    "params": [
+      {
+        "name": "time",
+        "default": "1"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSet",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "property",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiBind",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "property",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiUnbind",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "property",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetValue",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "value",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetMax",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "max",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiExists",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "uiGet",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "property",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  },
+  {
+    "name": "uiRun",
+    "category": "ui",
+    "params": [
+      {
+        "name": "type",
+        "default": null
+      },
+      {
+        "name": "data",
+        "default": "{}"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiText",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "text",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "size",
+        "default": "24"
+      },
+      {
+        "name": "color",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiPanel",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "200"
+      },
+      {
+        "name": "height",
+        "default": "100"
+      },
+      {
+        "name": "color",
+        "default": "\"rgba(0,0,0,.7)\""
+      },
+      {
+        "name": "radius",
+        "default": "10"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiBox",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "100"
+      },
+      {
+        "name": "height",
+        "default": "100"
+      },
+      {
+        "name": "color",
+        "default": "\"#fff\""
+      },
+      {
+        "name": "radius",
+        "default": "0"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiLine",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "toX",
+        "default": "100"
+      },
+      {
+        "name": "toY",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "2"
+      },
+      {
+        "name": "color",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiCircle",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "radius",
+        "default": "20"
+      },
+      {
+        "name": "color",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiProgressBar",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "200"
+      },
+      {
+        "name": "height",
+        "default": "20"
+      },
+      {
+        "name": "value",
+        "default": "0"
+      },
+      {
+        "name": "max",
+        "default": "100"
+      },
+      {
+        "name": "background",
+        "default": "\"rgba(255,255,255,.2)\""
+      },
+      {
+        "name": "foreground",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiBar",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "200"
+      },
+      {
+        "name": "height",
+        "default": "20"
+      },
+      {
+        "name": "value",
+        "default": "0"
+      },
+      {
+        "name": "max",
+        "default": "100"
+      },
+      {
+        "name": "background",
+        "default": "\"rgba(255,255,255,.2)\""
+      },
+      {
+        "name": "foreground",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiButton",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "140"
+      },
+      {
+        "name": "height",
+        "default": "45"
+      },
+      {
+        "name": "text",
+        "default": "\"Button\""
+      },
+      {
+        "name": "color",
+        "default": "\"#444\""
+      },
+      {
+        "name": "textColor",
+        "default": "\"#fff\""
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiImage",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "path",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": "0"
+      },
+      {
+        "name": "y",
+        "default": "0"
+      },
+      {
+        "name": "width",
+        "default": "100"
+      },
+      {
+        "name": "height",
+        "default": "100"
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiDelete",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiClear",
+    "category": "ui",
+    "params": [],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiShow",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiHide",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetVisible",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "visible",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetOpacity",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "opacity",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetText",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "text",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetPosition",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "x",
+        "default": null
+      },
+      {
+        "name": "y",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiMove",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "dx",
+        "default": null
+      },
+      {
+        "name": "dy",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetSize",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "width",
+        "default": null
+      },
+      {
+        "name": "height",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetColor",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "color",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetLayer",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "layer",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetRotation",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "rotation",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSetScale",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      },
+      {
+        "name": "scale",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiBringToFront",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "uiSendToBack",
+    "category": "ui",
+    "params": [
+      {
+        "name": "id",
+        "default": null
+      }
+    ],
+    "rest": false,
+    "reporter": false,
+    "container": false
+  },
+  {
+    "name": "cameraZoom",
+    "category": "camera",
+    "params": [],
+    "rest": false,
+    "reporter": true,
+    "container": false
+  }
+]

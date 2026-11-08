@@ -9,15 +9,19 @@ whenBroadcast("Main Menu",
     canvasColor("hsl(0, 0%, 0%)"), canvasCostume("", 1),
     createSprite("BG"), spriteCostume("BG", "images/menu/BG1-1.svg", 4),
     createSprite("Heroes"), spriteCostume("Heroes", "images/menu/BG1-3.svg", 2.2), goFront("Heroes"),
-    createSprite("Logo"), spriteCostume("Logo", "/images/mlg-assets/mlg-logo.png", 0.8), goFront("Logo"),
+    createSprite("Logo"), spriteCostume("Logo", "/images/mlg-assets/mlg-logo.png", 2.2), goFront("Logo"),
     createSprite("Overlay"), spriteCostume("Overlay", "images/menu/BG1-2.svg", 4), goFront("Overlay"),
-    createSprite("Start Button"), spriteCostume("Start Button", "images/menu/BG1-5.png", 0.8), goFront("Start Button"),
+    createSprite("Start Button"), spriteCostume("Start Button", "images/menu/BG1-5.png", 2.5), goFront("Start Button"),
 
     moveTo("Heroes", 75, 0),
-    moveToEdge("Start Button", "left", 120, "bottom", 80),
-    moveToEdge("Logo", "left", 120, "top", 90),
+    coordinatePlane("Start Button", "left", "bottom"),
+    moveTo("Start Button", 250, 160),
+    coordinatePlane("Logo", "left", "top"),
+    moveTo("Logo", 250, 180),
 
     ifBlock(isMobile(),
+        spriteCoordinateMode("Logo", "world"),
+        spriteCoordinateMode("Start Button", "world"),
         moveTo("Logo", 0, 80),
         moveTo("Start Button", 0, -110),
         moveTo("Heroes", 0, -15),
@@ -48,14 +52,14 @@ whenBroadcast("Main Menu",
     repeatUntil( not( equal(getVar("Scene"), "Main Menu") ),
         ifBlock( equal(touchingMouse("Start Button"), true),
             spriteEffect("Start Button", "brightness", 60),
-            spriteSetSize("Start Button", 0.9),
+            spriteSetSize("Start Button", 2.6),
             ifBlock( equal(keyPressed("leftclick"), true), 
                 setVar("Scene", "World"),
                 broadcast("Leave Main Menu"),
             ),
             "else",
             spriteEffect("Start Button", "brightness", 0),
-            spriteSetSize("Start Button", 0.8),
+            spriteSetSize("Start Button", 2.5),
         ),
     ),
 );
@@ -103,7 +107,6 @@ whenClone("Line",
         spriteEffect("self", "brightness", mult(div(abs(spriteY("self")), -100), 15)),
     ),
     direction("self", 335),
-    // Preserve the intended 17 units per 0.02 seconds, independent of frame rate.
     repeatUntil( or(gThan(spriteX("self"), 280), not(equal(getVar("Scene"), "Main Menu"))),
         moveBy("self",
             mult(mult(div(17, 0.02), deltaTime()), cos(20)),
@@ -114,16 +117,20 @@ whenClone("Line",
 );
 
 
-loadPlayerData();
 
-makeVar("Menu Ready");
-setVar("Menu Ready", false);
-makeVar("Scene");
-setVar("Scene", "Main Menu");
-createSprite("Torch"); spriteCostume("Torch", "images/menu/torch_full.png", 0.5);
-spriteEffect("Torch", "ghost", 100);
-phaseIn(0.3);
-wait(1);     
-phaseOut(0.3); deleteSprite("Torch");
-broadcast("Main Menu");
 
+whenStart(
+    loadPlayerData(),
+    makeVar("Menu Ready"),
+    setVar("Menu Ready", false),
+    makeVar("Scene"),
+    setVar("Scene", "Main Menu"),
+    createSprite("Torch"),
+    spriteCostume("Torch", "images/menu/torch_full.png", 0.5),
+    spriteEffect("Torch", "ghost", 100),
+    phaseIn(0.3),
+    wait(1),
+    phaseOut(0.3),
+    deleteSprite("Torch"),
+    broadcast("Main Menu"),
+);

@@ -79,3 +79,10 @@ registerBlock("stopScripts",(b,c)=>cancelScripts(String(resolveValue(b.message,c
 // Scratch-style fast computation, still yielding when the shared budget is used.
 function withoutScreenRefresh(...blocks){return control("withoutScreenRefresh",{blocks});}
 registerBlock("withoutScreenRefresh",(b,c)=>executeBlocks(b.blocks,c));
+
+// Startup hats register once and run independently on every start/restart.
+function whenStart(...blocks){
+    ENGINE.absorbBlocks(blocks);
+    ENGINE.startScripts.push(blocks);
+    return createBlock("startScript",{blocks});
+}
