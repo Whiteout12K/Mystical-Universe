@@ -1,20 +1,22 @@
+import {accents} from './theme.mjs';
 import {validateExpression} from './model.mjs';
+import {blockTitle,argumentLabel} from './labels.mjs';
 export function installBlocks(Blockly,catalog){
-    const defs=new Map(),colours={control:"#c68b30",motion:"#527ec9",sprite:"#8a69bc",ui:"#3d9990",operator:"#559764",sensing:"#4296b3",clone:"#c68b30",camera:"#527ec9",lists:"#b66482",sound:"#a569b4",canvas:"#8a69bc",data:"#b66482",json:"#b66482",media:"#8a69bc",solid:"#b77d51"};
+    const defs=new Map(),colours=accents;
     const type=d=>'js_'+d.name+(d.reporter?'_value':'');
     const defaults=p=>p?.default??(/^(name|id|target|sprite|source)$/.test(p?.name)?'"Sprite"':/color/i.test(p?.name)?'"#ffffff"':/message/i.test(p?.name)?'"Play"':/text/i.test(p?.name)?'"Text"':'0');
     const hat=d=>['whenStart','whenBroadcast','whenClone'].includes(d.name);
-    Blockly.Blocks.js_expression={init(){this.appendDummyInput().appendField(new Blockly.FieldTextInput('0'),'VALUE');this.setOutput(true);this.setColour(135);this.setTooltip('A JavaScript value: "text", a number, true/false, an array, or an expression.');}};
-    Blockly.Blocks.js_code={init(){this.appendDummyInput().appendField('JavaScript').appendField(new Blockly.FieldTextInput(''),'CODE');this.setPreviousStatement(true);this.setNextStatement(true);this.setColour(220);this.setTooltip('Preserved JavaScript outside the visual block API.');}};
+    Blockly.Blocks.js_expression={init(){this.appendDummyInput().appendField(new Blockly.FieldTextInput('0'),'VALUE');this.setOutput(true);this.setStyle("js_value");this.setTooltip('A JavaScript value: "text", a number, true/false, an array, or an expression.');}};
+    Blockly.Blocks.js_code={init(){this.appendDummyInput('TITLE').appendField('JavaScript').appendField(new Blockly.FieldTextInput(''),'CODE');this.setPreviousStatement(true);this.setNextStatement(true);this.setStyle("js_code");this.setTooltip('Preserved JavaScript outside the visual block API.');}};
     for(const d of catalog){
         defs.set(type(d),d);
         Blockly.Blocks[type(d)]={init(){
-            this.appendDummyInput('TITLE').appendField(d.name);
-            this.setColour(colours[d.category]??215);
+            this.appendDummyInput('TITLE').appendField(blockTitle(d));
+            this.setStyle("js_"+(colours[d.category]?d.category:"custom"));
             if(d.reporter)this.setOutput(true);else if(!hat(d)){this.setPreviousStatement(true);this.setNextStatement(true);}
             this.updateArguments(d.params.length);
             if(d.container){this.appendStatementInput('BODY').appendField('do');if(d.name==='ifBlock')this.appendStatementInput('ELSE').appendField('else');}
-            this.setInputsInline(d.reporter||d.params.length<=3);
+            this.setInputsInline(true);
             this.setTooltip(d.name+'('+d.params.map(p=>p.name).join(', ')+(d.rest?', …':'')+')');
         },
         customContextMenu(options){
@@ -23,16 +25,16 @@ export function installBlocks(Blockly,catalog){
         updateArguments(n){
             this.argumentCount??=0;
             while(this.argumentCount>n)this.removeInput('ARG'+(--this.argumentCount));
-            while(this.argumentCount<n){const i=this.argumentCount++;this.appendValueInput('ARG'+i).appendField(d.params[i]?.name??'value '+(i+1));if(this.getInput('BODY'))this.moveInputBefore('ARG'+i,'BODY');else if(this.getInput('EXTRA'))this.moveInputBefore('ARG'+i,'EXTRA');}
+            while(this.argumentCount<n){const i=this.argumentCount++;const label=argumentLabel(d,i);const input=this.appendValueInput('ARG'+i);if(label)input.appendField(label);if(this.getInput('BODY'))this.moveInputBefore('ARG'+i,'BODY');else if(this.getInput('EXTRA'))this.moveInputBefore('ARG'+i,'EXTRA');}
         },
         changeArgumentCount(delta){if(d.container)return;Blockly.Events.setGroup(true);this.updateArguments(Math.max(0,this.argumentCount+delta));Blockly.Events.setGroup(false);},
         saveExtraState(){return {arguments:this.argumentCount};},loadExtraState(state){this.updateArguments(state.arguments??d.params.length);}};
     }
     function toolboxItem(d){return {kind:'block',type:type(d),inputs:Object.fromEntries(d.params.map((p,i)=>['ARG'+i,{shadow:{type:'js_expression',fields:{VALUE:defaults(p)}}}]))};}
     function toolbox(search=''){
-        const matched=catalog.filter(d=>!search||`${d.name} ${d.category}`.toLowerCase().includes(search.toLowerCase()));
+        const matched=catalog.filter(d=>!search||`${d.name} ${blockTitle(d)} ${d.category}`.toLowerCase().includes(search.toLowerCase()));
         if(search)return {kind:'categoryToolbox',contents:[{kind:'category',name:matched.length?'Results':'No matching blocks',colour:215,contents:matched.map(toolboxItem)}]};
-        const labels={control:'Events & loops',motion:'Movement',sprite:'Sprites',ui:'UI',operator:'Values & math',sensing:'Sensing',clone:'Clones',camera:'Camera',lists:'Lists',sound:'Sound',canvas:'Stage',data:'Player data',json:'JSON',media:'Media',solid:'Collision','back-process':'Game'};
+        const labels={control:'Events & loops',motion:'Movement',sprite:'Sprites',ui:'UI',operator:'Vars & math',sensing:'Sensing',clone:'Clones',camera:'Camera',lists:'Lists',sound:'Sound',canvas:'Stage',data:'Player data',json:'JSON',media:'Media',solid:'Collision','back-process':'Game'};
         return {kind:'categoryToolbox',contents:[...new Set(catalog.map(d=>d.category))].sort((a,b)=>a==='control'?-1:b==='control'?1:a.localeCompare(b)).map(category=>({kind:'category',name:labels[category]??category,colour:colours[category]??215,contents:matched.filter(d=>d.category===category).map(toolboxItem)})).concat([{kind:'category',name:'JavaScript',colour:220,contents:[{kind:'block',type:'js_expression'},{kind:'block',type:'js_code'}]}])};
     }
     function toBlock(node,workspace){
@@ -73,20 +75,18 @@ export function installBlocks(Blockly,catalog){
         let eventIndex=0;
         const tops=workspace.getTopBlocks(false),hasStart=tops.some(b=>b.type==='js_whenStart');
         for(const b of tops){
-            if(['js_whenBroadcast','js_whenClone'].includes(b.type)){b.setCollapsed(true);b.moveBy(hasStart?680:40,40+eventIndex++*90);}
+            if(['js_whenBroadcast','js_whenClone'].includes(b.type)){b.moveBy(hasStart?680:40,40+eventIndex++*90);}
             else b.moveBy(40,40);
             b.render?.();
         }
     }
+    function expandAll(workspace){for(const b of workspace.getAllBlocks(false)){if(b.isCollapsed())b.setCollapsed(false);if(defs.has(b.type))b.setInputsInline(true);}}
     function arrange(workspace){
-        const tops=workspace.getTopBlocks(false),start=tops.find(b=>b.type==='js_whenStart');
-        let eventY=40,otherY=40;
-        const eventX=start?Math.max(760,(start.getHeightWidth?.().width??600)+140):40;
+        const tops=workspace.getTopBlocks(false).sort((a,b)=>a.type==='js_whenStart'?-1:b.type==='js_whenStart'?1:(JSON.parse(a.data||'{}').order??0)-(JSON.parse(b.data||'{}').order??0));
+        let x=48;
         for(const b of tops){
-            const event=['js_whenBroadcast','js_whenClone'].includes(b.type),x=event?eventX:40,y=event?eventY:otherY;
-            const p=b.getRelativeToSurfaceXY();b.moveBy(x-p.x,y-p.y);
-            const height=b.getHeightWidth?.().height??60;
-            if(event)eventY+=height+36;else otherY+=height+60;
+            const p=b.getRelativeToSurfaceXY();b.moveBy(x-p.x,48-p.y);
+            x+=(b.getHeightWidth?.().width??600)+96;
         }
     }
     function read(workspace,footer=''){
@@ -97,5 +97,5 @@ export function installBlocks(Blockly,catalog){
         }
         return {blocks,footer};
     }
-    return {toolbox,load,read,fromBlock,arrange};
+    return {toolbox,load,read,fromBlock,arrange,expandAll};
 }

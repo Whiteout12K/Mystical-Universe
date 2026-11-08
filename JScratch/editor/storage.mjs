@@ -1,9 +1,13 @@
+import {validateProgramPath,folderHandle} from './project.mjs';
 // Browser file access keeps editing independent of the development server.
 export async function saveProgramFile(directory,name,source,expected){
+    validateProgramPath(name);
+    const parts=name.split('/'),filename=parts.pop();directory=await folderHandle(directory,parts.join('/'),true);
+    name=filename;
     let handle,existing=null;
     try{handle=await directory.getFileHandle(name);existing=await (await handle.getFile()).text();}
     catch(e){if(e.name!=='NotFoundError')throw e;}
-    if(existing!==expected)throw new Error(name+' changed on disk. Download your draft, then reopen the folder to merge changes.');
+    if(existing!==expected)throw new Error(name+' changed on disk. Copy your draft from Code, then reconnect the folder to merge changes.');
     handle??=await directory.getFileHandle(name,{create:true});
     const stream=await handle.createWritable();
     try{await stream.write(source);await stream.close();}catch(error){await stream.abort?.().catch(()=>{});throw error;}
@@ -20,4 +24,9 @@ export async function rememberDirectory(handle){
             transaction.oncomplete=()=>{db.close();resolve(result);};transaction.onerror=()=>{db.close();reject(transaction.error);};
         };
     });
+}
+
+export async function saveProjectManifest(directory,project){
+    const handle=await directory.getFileHandle('project.json',{create:true}),stream=await handle.createWritable();
+    try{await stream.write(JSON.stringify(project,null,2)+'\n');await stream.close();}catch(error){await stream.abort?.().catch(()=>{});throw error;}
 }

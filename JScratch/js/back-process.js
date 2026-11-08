@@ -949,7 +949,10 @@ function resetRuntime(){
     ENGINE.background='#000000';ENGINE.backgroundImage=null;ENGINE.backgroundLoaded=false;ENGINE.backgroundScale=1;ENGINE.backgroundCostume='';ENGINE.backgroundEffects={brightness:0,ghost:0,color:0};ENGINE.backgroundEffectCacheKey=null;resetCamera();
 }
 async function startRuntime(){
-    const requestRun=ENGINE.runId;await loadCameraConfig();
+    const requestRun=ENGINE.runId;
+    try{await ENGINE.programReady;}catch(error){reportRuntimeError(error);return;}
+    if(requestRun!==ENGINE.runId)return;
+    await loadCameraConfig();
     if(requestRun!==ENGINE.runId)return;
     stopRuntime();resetRuntime();ENGINE.running=true;ENGINE.clock=0;ENGINE.animationClock=0;ENGINE.animationEpoch++;ENGINE.executedBlocks=0;ENGINE.errors=[];ENGINE.lastBlock=null;ENGINE.lastTime=0;ENGINE.budgetStarted=performance.now();ENGINE.budgetBlocks=0;
     if(ENGINE.loopHandle===null)ENGINE.loopHandle=requestAnimationFrame(gameLoop);
@@ -1012,3 +1015,20 @@ window.MLGame={
     configure:options=>configureRuntime(options),
     inspect:()=>({running:ENGINE.running,paused:ENGINE.paused,executedBlocks:ENGINE.executedBlocks,blockId:ENGINE.lastBlock?._id,blockType:ENGINE.lastBlock?.type,variables:{...ENGINE.variables},sprites:Object.keys(ENGINE.sprites),clones:ENGINE.clones.length,activeScripts:ENGINE.activeScripts.size,camera:{x:ENGINE.camera.x,y:ENGINE.camera.y,zoom:ENGINE.camera.zoom},render:{...ENGINE.renderStats},waiters:ENGINE.waiters.size,errors:ENGINE.errors.slice()})
 };
+
+/* New public blocks: one definition supplies runtime construction + editor metadata. */
+function defineJScratchBlock(definition,execute){
+    const d=JScratchBlockAPI.normalize(definition);
+    if(typeof execute!=="function")throw new Error("A block needs an execution handler");
+    if(d.name in window||ENGINE.blocks[d.name])throw new Error("Block already exists: "+d.name);
+    const constructor=(...args)=>{
+        const data={};
+        for(const [index,param] of d.params.entries())data[param.name]=args[index]===undefined?param.default:args[index];
+        if(d.kind==="reporter")return createReporter(d.name,data);
+        if(d.kind==="container"){data.blocks=args.slice(d.params.length);ENGINE.absorbBlocks(data.blocks);}
+        return ENGINE.recordBlock(createBlock(d.name,data));
+    };
+    if(d.kind==="reporter")registerReporter(d.name,execute);else registerBlock(d.name,execute);
+    window[d.name]=constructor;
+    return constructor;
+}

@@ -7,28 +7,28 @@
 <link rel="stylesheet" href="editor/editor.css">
 </head>
 <body>
-<header>
-    <a class="brand" href="editor.html">JScratch <span>Editor</span></a>
-    <select id="files" aria-label="Program file"></select>
-    <button id="new-file" title="Create a program file">＋ New</button>
-    <span class="spacer"></span>
-    <span id="status" role="status">Loading…</span>
-    <button id="connect">Open program folder</button>
-    <button id="import">Import .js</button>
-    <button id="download">Download .js</button>
-    <button id="source-toggle" aria-pressed="false">Code</button>
-    <a id="run-game" class="run" title="Run saved program files" href="canvas.html" target="_blank" rel="noopener">▶ Run</a>
-</header>
-<div id="notice" hidden><span id="notice-text"></span><button id="restore" hidden>Restore draft</button><button id="dismiss-notice" aria-label="Dismiss notice">×</button></div>
 <main>
-    <section id="visual" aria-label="Visual program editor">
-        <div class="workspace-top"><input id="search" type="search" placeholder="Find a block…" aria-label="Find a block"><span>Drag blocks · snap to connect · scroll to zoom</span><button id="undo" title="Undo (Ctrl/Cmd Z)">↶</button><button id="redo" title="Redo">↷</button><button id="fit">Fit</button></div>
-        <div id="workspace"></div>
-    </section>
-    <aside id="source-panel" hidden><div class="code-top"><strong id="source-name">JavaScript</strong><button id="apply-source">Apply to blocks</button></div><textarea id="source" spellcheck="false" aria-label="Program JavaScript"></textarea><p>Values accept JavaScript: <code>"text"</code>, <code>30</code>, <code>true</code>, or <code>["Wall"]</code>. Save occurs after applying code.</p></aside>
+    <section id="visual" aria-label="Visual program editor"><div id="workspace"></div></section>
+    <div id="identity" class="island"><a class="brand" href="editor.html">JScratch</a><span id="current-path">program/</span></div>
+    <nav id="panel-controls" class="island" aria-label="Editor panels">
+        <button id="files-toggle" aria-controls="explorer" aria-expanded="false" title="Files">▱ <span>Files</span></button>
+        <button id="palette-toggle" aria-expanded="false" title="Block palette">▦ <span>Blocks</span></button>
+        <button id="search-toggle" title="Find a block (Ctrl/Cmd K)" aria-label="Find a block">⌕</button>
+    </nav>
+    <nav id="explorer" aria-label="Program files" hidden><div class="explorer-heading"><strong>program</strong><button id="new-file" title="New file" aria-label="New file">＋</button><button id="new-folder" title="New folder" aria-label="New folder">▱＋</button><button id="files-close" title="Close files" aria-label="Close files">×</button></div><div id="file-tree"></div></nav>
+    <div id="palette-search" hidden><input id="search" type="search" placeholder="Find a block…" aria-label="Find a block"><button id="palette-close" title="Close palette" aria-label="Close palette">×</button></div>
+    <div id="edit-controls" class="island control-grid" role="toolbar" aria-label="Workspace controls">
+        <button id="undo" title="Undo (Ctrl/Cmd Z)" aria-label="Undo">↶</button><button id="redo" title="Redo" aria-label="Redo">↷</button>
+        <button id="expand-all" title="Expand and arrange scripts" aria-label="Expand and arrange scripts">▤</button><button id="theme-toggle" title="Switch theme" aria-label="Switch theme" aria-pressed="true">☀</button>
+        <button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button><button id="zoom-in" title="Zoom in" aria-label="Zoom in">＋</button><button id="fit" title="Fit scripts" aria-label="Fit scripts">⊡</button><button id="home" title="Focus first script" aria-label="Focus first script">⌖</button>
+    </div>
+    <div id="run-controls" class="island" role="toolbar" aria-label="Code and run"><button id="source-toggle" aria-pressed="false">〈/〉 Code</button><a id="run-game" class="run" title="Run saved program files" href="canvas.html" target="_blank" rel="noopener">▶ Run</a></div>
+    <button id="save-state" class="island" title="Autosave status"><span id="status" role="status">Loading…</span><span id="storage-mode" hidden></span></button>
+    <aside id="source-panel" hidden><div class="code-top"><strong id="source-name">JavaScript</strong><button id="apply-source">Apply</button><button id="source-close" aria-label="Close code">×</button></div><textarea id="source" spellcheck="false" aria-label="Program JavaScript"></textarea></aside>
+    <div id="notice" class="island" hidden><span id="notice-text"></span><button id="restore" hidden>Restore draft</button><button id="dismiss-notice" aria-label="Dismiss notice">×</button></div>
 </main>
-<footer><span id="storage-mode">Browser draft</span><span>Right-click for duplicate, collapse, disable, and delete. Drag values into rounded inputs.</span></footer>
-<dialog id="new-dialog"><form method="dialog"><h2>New program</h2><label>File name <input id="new-name" value="scene.js" required pattern="[A-Za-z0-9_-]+\.js"></label><p>New files start with a whenStart block. Add the file to canvas.html to run it with the game.</p><div><button value="cancel">Cancel</button><button id="create-file" value="create">Create</button></div></form></dialog>
+<dialog id="new-dialog"><form method="dialog"><h2 id="new-title">New program</h2><label>Path <input id="new-name" value="scene.js" required></label><p id="new-description">New scripts join the game automatically when saved.</p><div><button value="cancel">Cancel</button><button id="create-file" value="create">Create</button></div></form></dialog>
+<dialog id="save-dialog"><h2>Enable autosave</h2><p>Select the <strong>JScratch/program</strong> folder once. Your browser needs this permission to write files; future edits save there automatically.</p><div class="dialog-actions"><button id="save-later">Keep draft</button><button id="enable-save">Enable autosave</button></div></dialog>
 <script src="editor/vendor/blockly_compressed.js"></script>
 <script src="editor/vendor/blockly-en.js"></script>
 <script type="module" src="editor/app.mjs"></script>

@@ -62,6 +62,11 @@ export function expressionCode(node){
     if(node.kind==='code')return node.text.replace(/;\s*$/,'');
     return `${node.name}(${node.args.map(expressionCode).join(', ')})`;
 }
+function commentText(text){
+    if(!text)return '';
+    try{if(parse(text,{ecmaVersion:'latest'}).body.length===0)return text;}catch{}
+    return text.split('\n').map(line=>'// '+line).join('\n');
+}
 function commandCode(node,depth=0){
     let text;
     if(node.kind==='code')text=node.text;
@@ -70,9 +75,9 @@ function commandCode(node,depth=0){
         lines.push(...node.body.map(n=>commandCode(n,depth+1)+','));
         if(node.elseBody.length||node.hasElse){lines.push(indent('"else",',depth+1));lines.push(...node.elseBody.map(n=>commandCode(n,depth+1)+','));}
         text=`${node.name}(\n${lines.join('\n')}\n${'    '.repeat(depth)})`;
-        return (node.comments?indent(node.comments,depth)+'\n':'')+'    '.repeat(depth)+text;
+        return (node.comments?indent(commentText(node.comments),depth)+'\n':'')+'    '.repeat(depth)+text;
     }else text=expressionCode(node);
-    return (node.comments?indent(node.comments,depth)+'\n':'')+indent(text,depth);
+    return (node.comments?indent(commentText(node.comments),depth)+'\n':'')+indent(text,depth);
 }
 export function generateProgram(model){
     const text=model.blocks.map(node=>commandCode(node)+';').join('\n\n')+(model.footer?'\n\n'+model.footer:'')+'\n';

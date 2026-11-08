@@ -21,7 +21,7 @@ function engine(overrides={}) {
     sandbox.window=sandbox;
     const context=vm.createContext(sandbox);
     vm.runInContext(fs.readFileSync(new URL('../JScratch/js/vendor/gifuct.js',import.meta.url),'utf8'),context);
-    for(const file of ['back-process','media','camera','ui','data','json','canvas','sensing','lists','solid','control','sprite','sound','motion','operator','clone'])
+    for(const file of ['block-api','back-process','media','camera','ui','data','json','canvas','sensing','lists','solid','control','sprite','sound','motion','operator','clone','extensions'])
         vm.runInContext(fs.readFileSync(new URL(`../JScratch/js/${file}.js`,import.meta.url),'utf8'),context,{filename:file+'.js'});
     const run=source=>vm.runInContext(source,context);
     let timestamp=0;
@@ -518,4 +518,18 @@ test('whenStart absorbs startup commands, runs hats concurrently, and replays on
     assert.equal(e.run('ENGINE.variables.started'),2);assert.equal(e.run('ENGINE.variables.finished'),undefined);
     await e.settle(pending);assert.equal(e.run('ENGINE.variables.finished'),2);
     await e.settle(e.run('startRuntime()'));assert.equal(e.run('ENGINE.variables.started'),2);assert.equal(e.run('ENGINE.variables.finished'),2);
+});
+
+test('declarative block definitions supply commands, reporters, containers and defaults',async()=>{
+    const e=engine();
+    e.run(`defineJScratchBlock({name:'gainPoints',kind:'command',category:'custom',params:[{name:'amount',default:2}]},(b,c)=>{ENGINE.variables.Points=(ENGINE.variables.Points||0)+Number(resolveValue(b.amount,c));});defineJScratchBlock({name:'pointsValue',kind:'reporter',params:[]},()=>ENGINE.variables.Points||0);defineJScratchBlock({name:'runGroup',kind:'container',params:[]},(b,c)=>executeBlocks(b.blocks,c));whenStart(runGroup(gainPoints(),gainPoints(3)),setVar('Result',pointsValue()));`);
+    await e.settle(e.run('startRuntime()'));assert.equal(e.run('ENGINE.variables.Result'),5);assert.equal(e.run('ENGINE.errors.length'),0);
+    assert.throws(()=>e.run(`defineJScratchBlock({name:'gainPoints',kind:'command'},()=>{})`),/already exists/);
+    assert.throws(()=>e.run(`defineJScratchBlock({name:'brokenBlock',kind:'command',params:[{name:'blocks'}]},()=>{})`),/Reserved/);
+});
+test('startup waits for program registration and stopping while loading cancels startup',async()=>{
+    const e=engine();e.run(`let finishLoading;ENGINE.programReady=new Promise(resolve=>finishLoading=resolve);whenStart(setVar('Started',true));`);
+    const pending=e.run('startRuntime()');await e.flush();assert.equal(e.run('ENGINE.variables.Started'),undefined);
+    e.run(`whenBroadcast('Late',setVar('Late Registered',true));finishLoading();`);await e.settle(pending);assert.equal(e.run('ENGINE.variables.Started'),true);
+    e.run(`ENGINE.programReady=new Promise(resolve=>finishLoading=resolve);`);const stopped=e.run('startRuntime()');e.run('stopRuntime();ENGINE.variables.Started=false;finishLoading()');await e.settle(stopped);assert.equal(e.run('ENGINE.variables.Started'),false);
 });

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "files": [
+    "begin.js",
+    "world.js"
+  ],
+  "references": [
+    "sample.js"
+  ],
+  "folders": [
+    "scenes",
+    "shared"
+  ]
+}

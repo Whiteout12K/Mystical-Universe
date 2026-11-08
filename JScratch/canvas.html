@@ -44,6 +44,7 @@ body{display:block;background:#000}
 
 
 <script src="js/vendor/gifuct.js"></script>
+<script src="js/block-api.js"></script>
 <script src="js/back-process.js"></script>
 <script src="js/media.js"></script>
 <script src="js/camera.js"></script>
@@ -64,10 +65,9 @@ body{display:block;background:#000}
 
 
 
-<!-- Main scripts start here in order. -->
-
-<script src="program/world.js"></script>
-<script src="program/begin.js"></script>
+<!-- The manifest loader registers every program file inside folder before startup. -->
+<script src="js/extensions.js"></script>
+<script src="js/program-loader.js"></script>
 
 <script>
 // Can be hidden with comments if no need. Panel disappears when all items are hidden.

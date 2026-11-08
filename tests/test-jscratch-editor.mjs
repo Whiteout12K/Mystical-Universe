@@ -65,3 +65,34 @@ test('raw object/function statements and comma expressions preserve their JavaSc
     const ws=new Blockly.Workspace(),model=parseProgram(source,catalog);
     try{bridge.load(model,ws);assert.deepEqual(syntax(generateProgram(bridge.read(ws,model.footer))),syntax(source));}finally{ws.dispose();}
 });
+
+test('all imported scripts and their children open expanded, including restored collapsed layouts',()=>{
+    const ws=new Blockly.Workspace(),source='whenStart(repeat(2,setVar("A",1)));whenBroadcast("Play",forever(ifBlock(true,broadcast("Next"))));whenClone("Player",wait(1));';
+    try{bridge.load(parseProgram(source,catalog),ws);assert.equal(ws.getAllBlocks(false).some(b=>b.isCollapsed()),false);
+        for(const b of ws.getAllBlocks(false))b.setCollapsed(true);bridge.expandAll(ws);assert.equal(ws.getAllBlocks(false).some(b=>b.isCollapsed()),false);
+        assert.deepEqual(syntax(generateProgram(bridge.read(ws))),syntax(source));
+    }finally{ws.dispose();}
+});
+
+test('new block metadata imports automatically without executing its handler',async()=>{
+    const {readBlockDefinitions,mergeDefinitions}=await import('../JScratch/editor/definitions.mjs');
+    const definitions=readBlockDefinitions(`defineJScratchBlock({name:'testPoints',label:'gain points',kind:'command',category:'custom',params:[{name:'amount',default:5}]},()=>{throw new Error('never execute');});defineJScratchBlock({name:'testPointsValue',kind:'reporter',params:[]},()=>0);defineJScratchBlock({name:'testGroup',kind:'container',params:[]},()=>{});`);
+    assert.equal(definitions[0].params[0].default,'5');assert.equal(definitions[0].label,'gain points');assert.equal(definitions[1].reporter,true);assert.equal(definitions[2].container,true);
+    const merged=mergeDefinitions(catalog,definitions),b=installBlocks(Blockly,merged),ws=new Blockly.Workspace();
+    try{const source='whenStart(testGroup(testPoints(8),setVar("Score",testPointsValue())));';b.load(parseProgram(source,merged),ws);assert.deepEqual(syntax(generateProgram(b.read(ws))),syntax(source));}finally{ws.dispose();}
+    assert.throws(()=>readBlockDefinitions('defineJScratchBlock(getMetadata(),()=>{});'),/literal/);
+});
+test('nested project paths, references and recursive folder saves stay inside the program folder',async()=>{
+    const {makeProject,validateProgramPath,validateFolderPath,readProgramDirectory}=await import('../JScratch/editor/project.mjs');
+    const {saveProgramFile,saveProjectManifest}=await import('../JScratch/editor/storage.mjs');
+    function directory(){const entries=new Map();return {kind:'directory',entries:async function*(){yield* entries;},async getDirectoryHandle(name,{create=false}={}){if(!entries.has(name)){if(!create)throw Object.assign(new Error('missing'),{name:'NotFoundError'});entries.set(name,directory());}return entries.get(name);},async getFileHandle(name,{create=false}={}){if(!entries.has(name)){if(!create)throw Object.assign(new Error('missing'),{name:'NotFoundError'});let text='';entries.set(name,{kind:'file',getFile:async()=>({text:async()=>text}),createWritable:async()=>({write:async v=>{text=v;},close:async()=>{}})});}return entries.get(name);}};}
+    const dir=directory();await saveProgramFile(dir,'scenes/world/player.js','whenStart();',null);await saveProgramFile(dir,'sample.js','// Reference',null);
+    const listing=await readProgramDirectory(dir);assert.deepEqual(listing.folders,['scenes','scenes/world']);assert.ok(listing.files.some(f=>f.name==='scenes/world/player.js'));
+    const project=makeProject(listing.files.map(f=>f.name),listing.folders);assert.deepEqual(project.files,['scenes/world/player.js']);assert.deepEqual(project.references,['sample.js']);await saveProjectManifest(dir,project);assert.deepEqual(JSON.parse(await(await(await dir.getFileHandle('project.json')).getFile()).text()),project);
+    for(const path of ['../escape.js','a/../../x.js','/absolute.js','bad//x.js'])assert.throws(()=>validateProgramPath(path));assert.throws(()=>validateFolderPath('../bad'));
+});
+
+test('visual comment text stays a comment and cannot turn into executable program code',()=>{
+    const ws=new Blockly.Workspace();
+    try{const source='whenStart(wait(1));';bridge.load(parseProgram(source,catalog),ws);ws.getTopBlocks(false)[0].setCommentText('A plain comment\nsetVar("Unexpected", 99);');const generated=generateProgram(bridge.read(ws));assert.deepEqual(syntax(generated),syntax(source));assert.ok(generated.includes('// A plain comment'));assert.ok(generated.includes('// setVar("Unexpected", 99);'));}finally{ws.dispose();}
+});
