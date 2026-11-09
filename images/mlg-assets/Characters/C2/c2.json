@@ -49,7 +49,9 @@
 
       {"text": "Cooldown: 16 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
-      {"text": "Mana Cost: 120 MP (30 MP per pillar)",
+      {"text": "Mana Cost: 120 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Mana Cost per Pillar: 30 MP",
         "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
@@ -78,6 +80,8 @@
       {"text": "Cooldown: 12 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
       {"text": "Mana Cost: 120 MP",
+        "style": {"paddingTop": 2, "fontSize": 7}},
+      {"text": "Javelin’ Dance Mana Cost: 150 MP",
         "style": {"paddingTop": 2, "fontSize": 7}}
     ],
     "base_damage": {
@@ -146,7 +150,7 @@
     "additional": [
       {"text": "An ice rink will form after the attack that will continuously apply <b class=\"freeze\">[Freeze]</b> to opponents when they are hit with <b class=\"water\">[Water]</b> element attacks from any source, lasting 16 seconds.",
         "style": {"paddingTop": 7}},
-      {"text": "During the effect, all other elements in the party will decrease in effectiveness by -100%. <b class=\"water\">[Water]</b> damage will, however, increase by +70%.",
+      {"text": "During the effect, all other elements in the party will decrease in effectiveness by -100%. <b class=\"water\">[Water]</b> and <b class=\"dark\">[Dark]</b> damage will, however, increase by +70%.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},

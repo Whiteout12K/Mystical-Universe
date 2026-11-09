@@ -1,18 +1,21 @@
 import {parseProgram,generateProgram} from './model.mjs';
 import {createEditorTheme} from './theme.mjs';
 import {installBlocks} from './blocks.mjs';
-import {saveProgramFile,saveProjectManifest,rememberDirectory} from './storage.mjs';
+import {saveProgramFile,saveProjectManifest,saveEditorData,readEditorData,rememberDirectory} from './storage.mjs';
 import {validateProgramPath,validateFolderPath,makeProject,projectFiles,readProgramDirectory,folderHandle} from './project.mjs';
 import {readBlockDefinitions,mergeDefinitions} from './definitions.mjs';
 import {renderExplorer} from './explorer.mjs';
 import {installRenderer} from './renderer.mjs';
 import {palettePlugins} from './palette.mjs';
+import {SymbolLibrary} from './symbols.mjs';
+import {previewWindows,inspectorSession} from './preview.mjs';
 const $=id=>document.getElementById(id),Blockly=window.Blockly;
 const baseCatalog=await fetch('editor/catalog.json').then(r=>{if(!r.ok)throw new Error('Block catalog unavailable');return r.json();});
 const extensionSource=await fetch('js/extensions.js',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Block extensions unavailable');return r.text();});
 const catalog=mergeDefinitions(baseCatalog,readBlockDefinitions(extensionSource));
 installRenderer(Blockly);
-const bridge=installBlocks(Blockly,catalog);
+let symbols=null;
+const bridge=installBlocks(Blockly,catalog,{library:()=>symbols});
 let dark=true;try{dark=localStorage.getItem('jscratch-editor-theme')!=='light';}catch{}
 const theme=createEditorTheme(Blockly,dark);
 document.documentElement.dataset.theme=dark?'dark':'light';
@@ -22,9 +25,26 @@ new ResizeObserver(()=>Blockly.svgResize(workspace)).observe($('workspace'));
 const docs=new Map(),folders=new Set();let selectedFolder='',newKind='file',projectDirty=false;let current=null,muting=false,directory=null,timer=null,captureTimer=null,codePending=false,noticeAction=null,savedDirectory=null;
 const draftIndex='jscratch-editor-files:'+location.pathname;
 const key=name=>'jscratch-editor-v1:'+location.pathname+':'+name;
+const symbolsKey='jscratch-symbols:'+location.pathname;let symbolsDirty=false,metadataTimer=null,metadataQueue=Promise.resolve();
+function symbolSources(){
+    const sources=[...docs.values()].map(doc=>({name:doc.name,source:doc.source}));
+    if(current){try{const source=generateProgram(bridge.read(workspace,current.footer)),entry=sources.find(d=>d.name===current.name);if(entry)entry.source=source;else sources.push({name:current.name,source});}catch{sources.push({name:'@incomplete-workspace.js',source:'('});}}
+    return sources;
+}
+async function saveMetadata(){
+    metadataQueue=metadataQueue.catch(()=>{}).then(async()=>{
+        if(!symbolsDirty||!directory)return;
+        const revision=symbols.revision;await saveEditorData(directory,symbols.export());if(symbols.revision===revision)symbolsDirty=false;
+    });return metadataQueue;
+}
+let symbolData=null;try{symbolData=JSON.parse(localStorage.getItem(symbolsKey));}catch{}
+symbols=new SymbolLibrary(catalog,{sources:symbolSources,data:symbolData,onChange:data=>{
+    symbolsDirty=true;try{localStorage.setItem(symbolsKey,JSON.stringify(data));}catch{}
+    clearTimeout(metadataTimer);metadataTimer=setTimeout(()=>saveMetadata().catch(error=>notice('Name library could not save: '+error.message)),500);
+}});
 function status(text,error=false){$('status').textContent=text;$('status').classList.toggle('error',error);$('status').title=text;}
 function notice(text,action=null,label='Restore draft'){$('notice').hidden=false;$('notice-text').textContent=text;noticeAction=action;$('restore').hidden=!action;$('restore').textContent=label;}
-$('dismiss-notice').onclick=()=>{if(current?.pendingDraft&&$('notice-text').textContent.includes('different browser draft')){current.pendingDraft=null;draft(current);}$('notice').hidden=true;};$('restore').onclick=()=>{noticeAction?.();$('notice').hidden=true;};
+$('dismiss-notice').onclick=()=>{if(current?.pendingDraft&&$('notice-text').textContent.includes('different browser draft')){current.pendingDraft=null;draft(current);}$('notice').hidden=true;};$('restore').onclick=()=>{const action=noticeAction;$('notice').hidden=true;action?.();};
 function storageMode(){
     $('storage-mode').textContent=directory?'Autosaving to program/':'Browser draft';
     $('save-state').classList.toggle('needs-access',!directory);
@@ -61,7 +81,7 @@ async function save(doc=current){
         await write(doc);
         if(doc===current)status(directory?'Saved':'Draft · enable saving');
     });
-    try{await doc.queue;return true;}catch(e){if(['NotAllowedError','SecurityError'].includes(e.name)){savedDirectory=directory;directory=null;storageMode();}status('Save blocked',true);notice(e.message+' Your browser draft is retained.');return false;}
+    try{await doc.queue;await saveMetadata();return true;}catch(e){if(['NotAllowedError','SecurityError'].includes(e.name)){savedDirectory=directory;directory=null;storageMode();}status('Save blocked',true);notice(e.message+' Your browser draft is retained.');return false;}
 }
 function schedule(){clearTimeout(timer);status('Unsaved changes');timer=setTimeout(()=>save(),600);}
 function updateFiles(){
@@ -177,14 +197,14 @@ async function connectFolder(){
         if(handle.requestPermission&&await handle.requestPermission({mode:'readwrite'})!=='granted')throw new Error('Folder write permission was not granted. Browser drafts are still available.');
         const listing=await readProgramDirectory(handle),entries=listing.files;
         if(!entries.length){notice('Select the program folder containing begin.js and world.js.');return;}
-        if(!applyCode())return;capture();await save();directory=handle;savedDirectory=null;await rememberDirectory(handle).catch(()=>{});
+        if(!applyCode())return;capture();await save();directory=handle;savedDirectory=null;symbols.merge(await readEditorData(handle));await rememberDirectory(handle).catch(()=>{});
         const pending=[...docs.values()].filter(d=>d.source!==d.base&&(!entries.some(e=>e.name===d.name)||entries.find(e=>e.name===d.name).source===d.base)),draftFolders=[...folders];
         docs.clear();folders.clear();for(const path of [...listing.folders,...draftFolders]){folders.add(path);await folderHandle(directory,path,true);}
         for(const entry of entries)docs.set(entry.name,{...entry,base:entry.source,dirty:false});
         projectDirty=false;
         for(const doc of pending){doc.dirty=true;docs.set(doc.name,doc);}
         for(const doc of pending)if(!await save(doc))throw new Error('Could not save recovered draft '+doc.name);
-        await saveProjectManifest(directory,makeProject([...docs.keys()],[...folders]));projectDirty=false;updateFiles();storageMode();openDoc(docs.get(activeName)??docs.get('begin.js')??docs.values().next().value);
+        await saveProjectManifest(directory,makeProject([...docs.keys()],[...folders]));projectDirty=false;updateFiles();storageMode();openDoc(docs.get(activeName)??docs.get('begin.js')??docs.values().next().value);symbols.refresh();await saveMetadata();
 
     }catch(e){if(e.name!=='AbortError')notice(e.message);}
 }
@@ -195,9 +215,19 @@ $('run-game').onclick=async event=>{
     if(!directory&&[...docs.values()].some(d=>d.source!==d.base)){
         requestSaveAccess();return;
     }
-    const preview=window.open('about:blank','jscratch-game');if(preview)preview.opener=null;
-    for(const doc of docs.values())if(!await save(doc)){preview?.close();return;}
-    if(preview)preview.location.href=new URL('canvas.html',location.href).href;
+    if($('restore').textContent==='Open inspector'){$('notice').hidden=true;noticeAction=null;}
+    const session=inspectorSession(crypto),placement=previewWindows(window.screen);
+    const gameUrl=new URL('canvas.html',location.href),inspectorUrl=new URL('inspector.html',location.href);
+    gameUrl.searchParams.set('inspect',session);inspectorUrl.searchParams.set('inspect',session);
+    const preview=window.open('about:blank','jscratch-game',placement.game);
+    const inspector=preview?window.open('about:blank','jscratch-inspector',placement.inspector):null;
+    if(preview)preview.opener=null;if(inspector)inspector.opener=null;
+    for(const doc of docs.values())if(!await save(doc)){preview?.close();inspector?.close();return;}
+    const openInspector=()=>{const popup=window.open(inspectorUrl.href,'jscratch-inspector',placement.inspector);if(popup)popup.opener=null;else notice('The browser blocked the inspector. Allow popups for this editor, then try again.',openInspector,'Open inspector');};
+    if(!preview){notice('The browser blocked the game window. Allow popups for this editor and press Run again.');return;}
+    preview.location.href=gameUrl.href;
+    if(inspector)inspector.location.href=inspectorUrl.href;
+    else notice('Game started. Open the live sprite inspector alongside it.',openInspector,'Open inspector');
 };
 window.addEventListener('keydown',e=>{
     const modifier=e.ctrlKey||e.metaKey;
@@ -210,6 +240,7 @@ window.addEventListener('keydown',e=>{
 window.addEventListener('beforeunload',e=>{if(codePending||[...docs.values()].some(d=>d.dirty&&directory)){e.preventDefault();e.returnValue='';}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&!codePending){try{capture();save();}catch{}}});
 try{
+    const savedNames=await fetch('program/editor-data.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null);symbols.merge(savedNames);
     const manifest=await fetch('program/project.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Project manifest unavailable');return r.json();});
     const names=projectFiles(manifest);for(const path of manifest.folders??[])folders.add(path);
     try{for(const path of JSON.parse(localStorage.getItem(draftIndex+':folders')||'[]'))folders.add(validateFolderPath(path));}catch{}
@@ -218,10 +249,10 @@ try{
     try{for(const name of JSON.parse(localStorage.getItem(draftIndex)||'[]'))if(!docs.has(name)){
         validateName(name);const stored=JSON.parse(localStorage.getItem(key(name)));if(stored?.source){parseProgram(stored.source,catalog);docs.set(name,{name,source:stored.source,base:null,dirty:false});}
     }}catch{}
-    updateFiles();storageMode();openDoc(docs.get('begin.js')??docs.values().next().value);
+    symbols.refresh();updateFiles();storageMode();openDoc(docs.get('begin.js')??docs.values().next().value);
 
     savedDirectory=await rememberDirectory().catch(()=>null);
     if(savedDirectory&&await savedDirectory.queryPermission({mode:'readwrite'})==='granted')await connectFolder();
 }catch(e){status('Could not open programs',true);notice(e.message);}
 // Expose the workspace for integrations and automated editor checks.
-window.JScratchEditor={workspace,bridge,catalog,docs,get current(){return current;},capture,save,loadDoc,setFiles,setPalette};
+window.JScratchEditor={workspace,bridge,catalog,docs,get current(){return current;},capture,save,loadDoc,setFiles,setPalette,symbols};

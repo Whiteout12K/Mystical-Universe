@@ -1,12 +1,14 @@
 import {accents} from './theme.mjs';
 import {validateExpression} from './model.mjs';
 import {blockTitle,argumentLabel} from './labels.mjs';
-export function installBlocks(Blockly,catalog){
+import {smartFieldClass} from './smart-fields.mjs';
+export function installBlocks(Blockly,catalog,options={}){
+    const ValueField=options.library?smartFieldClass(Blockly,catalog,options.library):Blockly.FieldTextInput;
     const defs=new Map(),colours=accents;
     const type=d=>'js_'+d.name+(d.reporter?'_value':'');
     const defaults=p=>p?.default??(/^(name|id|target|sprite|source)$/.test(p?.name)?'"Sprite"':/color/i.test(p?.name)?'"#ffffff"':/message/i.test(p?.name)?'"Play"':/text/i.test(p?.name)?'"Text"':'0');
     const hat=d=>['whenStart','whenBroadcast','whenClone'].includes(d.name);
-    Blockly.Blocks.js_expression={init(){this.appendDummyInput().appendField(new Blockly.FieldTextInput('0'),'VALUE');this.setOutput(true);this.setStyle("js_value");this.setTooltip('A JavaScript value: "text", a number, true/false, an array, or an expression.');}};
+    Blockly.Blocks.js_expression={init(){this.appendDummyInput().appendField(new ValueField('0'),'VALUE');this.setOutput(true);this.setStyle("js_value");this.setTooltip('A JavaScript value: "text", a number, true/false, an array, or an expression.');}};
     Blockly.Blocks.js_code={init(){this.appendDummyInput('TITLE').appendField('JavaScript').appendField(new Blockly.FieldTextInput(''),'CODE');this.setPreviousStatement(true);this.setNextStatement(true);this.setStyle("js_code");this.setTooltip('Preserved JavaScript outside the visual block API.');}};
     for(const d of catalog){
         defs.set(type(d),d);

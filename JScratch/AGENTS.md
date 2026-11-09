@@ -20,4 +20,10 @@ Keep block arguments inline, including UI and glide blocks, with automatic conti
 
 Palette preview scale is independent of canvas zoom. Preserve the getFlyoutScale override in editor/palette.mjs and Blockly’s native drag conversion; do not resize palette blocks when fitting or zooming the workspace.
 
-Compact editor wording belongs in editor/labels.mjs (var, v1/v2, w/h, etc.). Change display labels only; never rename public JavaScript functions, parameter keys, or user-authored strings to match visual abbreviations.
+Compact editor wording belongs in editor/labels.mjs (var, val/val2, width/height/radius, etc.). Change display labels only; never rename public JavaScript functions, parameter keys, or user-authored strings to match visual abbreviations.
+
+Keep the workspace full-window when the palette opens; palette.mjs positions its flyout below floating controls without creating an empty strip above the canvas.
+
+Run opens the game and inspector.html in separate windows linked by a random inspection session. Preserve the read-only snapshot boundary: never evaluate reporters/getters while inspecting, expose variable previews rather than engine/image objects, and include original sprites, UI and clones. Inspector selection IDs include runId. Keep list rendering virtualized and snapshots request-driven; ordinary game visits must not collect them. Do not add inspector mutation controls without a user request.
+
+Smart field roles live in editor/symbols.mjs and are rendered by editor/smart-fields.mjs; preserve raw JS VALUE serialization and reporter connections. Names are indexed across executable files and saved in program/editor-data.json plus browser drafts. Never permit deletion of referenced names; keep costume paths and sprite vars scoped to their owner/clone family. Color pickers must support opacity; numbers stay directly editable, and Expression… preserves computed arguments. Disable the yellow selection overlay rather than hiding drag-insertion feedback.

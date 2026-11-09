@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "items": {
+    "[\"broadcast\",\"\"]": [
+      "Leave Main Menu",
+      "Line",
+      "Main Menu",
+      "World"
+    ],
+    "[\"variable\",\"\"]": [
+      "Menu Ready",
+      "Scene"
+    ],
+    "[\"sprite\",\"\"]": [
+      "BG",
+      "Heroes",
+      "Line",
+      "Logo",
+      "Overlay",
+      "Player",
+      "Start Button",
+      "Torch",
+      "self"
+    ],
+    "[\"costume\",\"BG\"]": [
+      "images/menu/BG1-1.svg"
+    ],
+    "[\"costume\",\"Heroes\"]": [
+      "images/menu/BG1-3.svg"
+    ],
+    "[\"costume\",\"Logo\"]": [
+      "/images/mlg-assets/mlg-logo.png"
+    ],
+    "[\"costume\",\"Overlay\"]": [
+      "images/menu/BG1-2.svg"
+    ],
+    "[\"costume\",\"Start Button\"]": [
+      "images/menu/BG1-5.png"
+    ],
+    "[\"sound\",\"\"]": [
+      "mlt"
+    ],
+    "[\"costume\",\"Line\"]": [
+      "images/menu/BG1-4.svg"
+    ],
+    "[\"spriteVar\",\"Line\"]": [
+      "Size"
+    ],
+    "[\"costume\",\"Torch\"]": [
+      "images/menu/torch_full.png"
+    ],
+    "[\"costume\",\"Player\"]": [
+      "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif"
+    ],
+    "[\"spriteVar\",\"Player\"]": [
+      "Input X",
+      "Input Y",
+      "Move Step",
+      "Speed"
+    ]
+  }
+}

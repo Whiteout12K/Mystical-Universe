@@ -30,3 +30,12 @@ export async function saveProjectManifest(directory,project){
     const handle=await directory.getFileHandle('project.json',{create:true}),stream=await handle.createWritable();
     try{await stream.write(JSON.stringify(project,null,2)+'\n');await stream.close();}catch(error){await stream.abort?.().catch(()=>{});throw error;}
 }
+
+export async function saveEditorData(directory,data){
+    const handle=await directory.getFileHandle('editor-data.json',{create:true}),stream=await handle.createWritable();
+    try{await stream.write(JSON.stringify(data,null,2)+'\n');await stream.close();}catch(error){await stream.abort?.().catch(()=>{});throw error;}
+}
+export async function readEditorData(directory){
+    try{return JSON.parse(await(await(await directory.getFileHandle('editor-data.json')).getFile()).text());}
+    catch(error){if(error.name==='NotFoundError')return null;throw error;}
+}

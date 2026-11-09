@@ -77,4 +77,21 @@ In the browser, refresh the editor on Wrangler. Check its category, readable lab
 
 Block inputs use inline layout; the renderer wraps whole arguments at an 800 workspace-unit target rather than creating a vertical field list. Do not add row breaks or reorder parameters in constructors to force wrapping. A single oversized reporter/value stays intact.
 
-Use editor/labels.mjs for shared display abbreviations such as var, v1/v2, w/h, bg/fg and prop. Metadata/API parameter keys remain descriptive and unchanged. Labels and search may use abbreviations, but generated code and authored values must round-trip unchanged.
+Use editor/labels.mjs for shared display abbreviations such as var, val/val2, width/height/radius, bg/fg and prop. Metadata/API parameter keys remain descriptive and unchanged. Labels and search may use abbreviations, but generated code and authored values must round-trip unchanged.
+
+## Picker metadata
+
+New definitions can opt into smart fields directly in parameter metadata:
+
+```js
+params: [
+    {name: "actor", label: "sprite", default: "Player", picker: "sprite"},
+    {name: "costume", default: "idle.gif", picker: "costume", owner: "actor"},
+    {name: "tint", default: "#ffffff", picker: "color"},
+    {name: "mode", default: "world", options: ["world", "canvas"]},
+]
+```
+
+Picker kinds are `sprite`, `broadcast`, `variable` (global), `spriteVar`, `costume`, `color`, `boolean`, `list`, `sound`, and `json`. For `spriteVar`/`costume`, set `owner` to the sprite parameter name when it is not the first parameter. `options` supplies fixed string choices; use `picker: "boolean"` for actual true/false values. Metadata remains literal JSON and the handler receives the same normal JS values. Keep numeric parameters unmarked.
+
+The editor infers existing API roles centrally in symbols.mjs. Do not add a new custom Blockly field type per command or rename argument keys. SmartValueField extends the regular expression field: saved blocks still store raw JS under VALUE. Name and color selection must emit quoted string literals; booleans must remain booleans. Keep the Expression option and ordinary reporter connections available. The registry must use current workspace contents plus every executable file, preserve unused saved names, and refuse deletion if references or unresolved dynamic uses remain. Do not populate project choices from sample/reference examples. Changes to picker metadata should be tested through both runtime/schema validation and syntax-only editor import.

@@ -16,6 +16,9 @@
         if(definition.category!==undefined&&! /^[a-z][a-z0-9-]*$/.test(definition.category))throw new Error('Block category must be a simple lowercase key');
         const params=definition.params??[];
         if(!Array.isArray(params)||params.some(p=>!p||! /^[A-Za-z_$][\w$]*$/.test(p.name??''))||new Set(params.map(p=>p.name)).size!==params.length)throw new Error('Block parameters need unique valid names');
+        if(params.some(p=>p.picker!==undefined&&!['sprite','broadcast','variable','spriteVar','costume','color','boolean','list','sound','json'].includes(p.picker)))throw new Error('Unknown parameter picker');
+        if(params.some(p=>p.options!==undefined&&(!Array.isArray(p.options)||p.options.some(v=>typeof v!=='string'))))throw new Error('Parameter options must be text choices');
+        if(params.some(p=>p.owner!==undefined&&!params.some(owner=>owner.name===p.owner&&owner.name!==p.name)))throw new Error('Picker owner must name another parameter');
         if(params.some(p=>p.label!==undefined&&typeof p.label!=='string'))throw new Error('Parameter label must be text');
         if(params.some(p=>Object.hasOwn(p,'default')&&!jsonValue(p.default)))throw new Error('Parameter defaults must be literal JSON values');
         if(params.some(p=>['type','operator','blocks','_id','__proto__','constructor','prototype'].includes(p.name)))throw new Error('Reserved block parameter');
@@ -23,7 +26,7 @@
     }
     function editorDefinition(definition){
         const d=normalize(definition);
-        return {name:d.name,label:d.label??d.name,category:d.category,reporter:d.kind==='reporter',container:d.kind==='container',rest:d.kind==='container',params:d.params.map(p=>({name:p.name,label:p.label,default:Object.hasOwn(p,'default')?JSON.stringify(p.default):null}))};
+        return {name:d.name,label:d.label??d.name,category:d.category,reporter:d.kind==='reporter',container:d.kind==='container',rest:d.kind==='container',params:d.params.map(p=>({name:p.name,label:p.label,picker:p.picker,options:p.options,owner:p.owner,default:Object.hasOwn(p,'default')?JSON.stringify(p.default):null}))};
     }
     root.JScratchBlockAPI={normalize,editorDefinition};
 })(globalThis);
