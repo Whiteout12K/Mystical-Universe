@@ -3,7 +3,7 @@
   "B1": {
     "name": "Dancing Purple Flame",
     "type": "Basic Skill",
-    "description": "{{nickname}} lights {{possessive}} hands with bright flames, dealing <b class=\"fire\">[Fire]</b> damage and inflicting <b>[Life Drain]</b> every other hit.",
+    "description": "{{nickname}} lights {{possessive}} hands with bright flames, dealing <b class=\"fire\">[Fire]</b> damage and inflicting <b class=\"life-drain\">[Life Drain]</b> every other hit.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1", "text": "Blows fluttering butterfly flames at opponents, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of attack as damage.",

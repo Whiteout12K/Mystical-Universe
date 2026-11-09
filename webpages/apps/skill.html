@@ -35,6 +35,7 @@
 document.addEventListener("DOMContentLoaded",async()=>{
   const CHAR_PATH="/images/mlg-assets/Characters/";
   const EFFECT_PATH="/images/mlg-assets/data-effects.json";
+  const MAX_DUPE_LEVEL=16;
   const params=new URLSearchParams(location.search);
 
   const character=(params.get("char")||params.get("character")||"c1").toLowerCase();
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
   const isDupe=/^Dupes\d*$/i.test(skill);
 
   let level=parseInt(params.get("id"),10);
-  level=Number.isFinite(level)?level:(isDupe?5:1);
+  level=Number.isFinite(level)?level:(isDupe?MAX_DUPE_LEVEL:1);
 
   let effectsGlossaryEnabled=false;
   try{
@@ -106,7 +107,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
       document.getElementById("level-display").style.display="none";
 
     if(isDupe){
-      level=Math.min(5,Math.max(1,level));
+      level=Math.min(MAX_DUPE_LEVEL,Math.max(1,level));
       renderDupe(data,level,effects);
       return;
     }
@@ -114,6 +115,15 @@ document.addEventListener("DOMContentLoaded",async()=>{
     const maxLevel=data.max_level||10;
     level=Math.min(maxLevel,Math.max(1,level));
     renderSkill(data,level,effects);
+    // The character page can update this embedded view without reloading it.
+    // No shortcut button is rendered by the standalone skill page.
+    window.setMLSkillLevel=next=>{
+      if(!Number.isFinite(next))return;
+      level=Math.min(maxLevel,Math.max(1,Math.trunc(next)));
+      renderSkill(data,level,effects);
+      document.dispatchEvent(new Event("ml-skill-level-change"));
+    };
+    document.dispatchEvent(new Event("ml-skill-level-ready"));
 
   }catch(error){
     console.error(error);
@@ -152,6 +162,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
       });
 
     document.getElementById("skill-content").innerHTML=html;
+    prepareEffectIcons();
     updateDamageValues(data,level);
     document.getElementById("level").textContent=level;
   }
@@ -179,6 +190,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
         html+=renderContent(`<b>${star.label}:</b> ${star.text}`,effects,{paddingTop:7});
     }
     document.getElementById("skill-content").innerHTML=html;
+    prepareEffectIcons();
     updateDamageValues(data,level);
   }
 
@@ -192,7 +204,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
       if(hasLevel){
         const itemLevel=Number(item.level);
-        if(itemLevel<1||itemLevel>5)return;
+        if(!Number.isInteger(itemLevel)||itemLevel<1||itemLevel>MAX_DUPE_LEVEL)return;
 
         if(currentGroup&&currentLevel!==itemLevel){
           html+=renderDupeGroup(currentGroup,currentLevel,selectedLevel,effects);
@@ -406,12 +418,8 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
     return `
       <div class="icon-container" style="padding-left:15px;padding-top:10px">
-        <div class="effect-icon hidden">
-          <img
-            src="${effect.icon||""}"
-            alt="${effect.name||effectId} Icon"
-            style="width:20px;height:20px"
-          >
+        <div class="effect-icon${effect.icon?"":" effect-icon-empty"}"${effect.icon?"":' aria-hidden="true"'}>
+          ${effect.icon?`<img src="${effect.icon}" alt="${effect.name||effectId} Icon" width="20" height="20">`:""}
         </div>
 
         <div class="effect-text">
@@ -425,6 +433,14 @@ document.addEventListener("DOMContentLoaded",async()=>{
         </div>
       </div>
     `;
+  }
+
+  function prepareEffectIcons(){
+    document.querySelectorAll(".effect-icon img").forEach(image=>{
+      const empty=()=>{image.parentElement.classList.add("effect-icon-empty");image.parentElement.setAttribute("aria-hidden","true");image.remove();};
+      image.addEventListener("error",empty,{once:true});
+      if(image.complete&&image.naturalWidth===0)empty();
+    });
   }
 
   function updateDamageValues(data,level){

@@ -34,3 +34,8 @@ body {
 
 
 
+
+/* Keep effect descriptions aligned even while their artwork is unavailable. */
+.effect-icon{display:block;flex:0 0 20px;width:20px;height:20px;box-sizing:border-box;margin-top:3px}
+.effect-icon img{display:block;width:20px;height:20px;object-fit:contain}
+.effect-icon-empty{border:1px solid #e4c57935;border-radius:3px;background:#e4c57905}

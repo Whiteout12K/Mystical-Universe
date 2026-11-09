@@ -188,6 +188,37 @@
   },
 
 
+  "black-ice": {
+    "name": "Black Ice",
+    "class": "black-ice",
+    "icon": "",
+    "type": "Buff",
+    "description": "Attacks that deal <b class=\"water\">[Water]</b> damage will also deal <b class=\"dark\">[Dark]</b> damage. All attacks will have a 20% chance to apply <b class=\"midnight-frost\">[Midnight Frost]</b> on opponents, stacking up to 3 times. This effect remains active while <b class=\"icengon\">[Icengon]</b> is also active.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
+  "midnight-frost": {
+    "name": "Midnight Frost",
+    "class": "midnight-frost",
+    "icon": "",
+    "type": "Debuff",
+    "description": "Counts as a <b class=\"freeze\">[Freeze]</b> effect but especially impedes actions without actual feeling, including the following:",
+    "description2": "> At least one stack: deplete -4% of MP per second.",
+    "description3": "> At least two stacks: prevent the use of mana.",
+    "description4": "> At three stacks: depletes energy gauge by -5% per second; cannot gain anymore stacks.",
+    "description5": "Effect lasts for 4 seconds and resets cooldown when gaining a new stack. The statuses of each stack are stacked and can act simultaneously.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3},
+    "description2_style": {"paddingTop": 7, "paddingLeft": 15},
+    "description3_style": {"paddingTop": 7, "paddingLeft": 15},
+    "description4_style": {"paddingTop": 7, "paddingLeft": 15},
+    "description5_style": {"paddingTop": 7}
+  },
+
+
+
   "dazed": {
     "name": "Dazed",
     "class": "dazed",

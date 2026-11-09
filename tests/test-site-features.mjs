@@ -12,7 +12,7 @@ test('Alter comparison preserves own skills and costumes while sharing base stat
 test('skill detail renderer links effects and substitutes the selected Alter nickname and gender',async()=>{
  const source=fs.readFileSync(new URL('../webpages/apps/skill.html',import.meta.url),'utf8').match(/<script>([\s\S]*?)<\/script>/)[1];
  const nodes=new Map();const get=id=>{if(!nodes.has(id))nodes.set(id,{style:{},innerHTML:'',textContent:''});return nodes.get(id);};let callback;
- const context={URLSearchParams,location:{search:'?char=c1&form=c1b&skill=B1&id=1'},console,document:{addEventListener:(name,fn)=>{callback=fn;},getElementById:get,querySelectorAll:()=>[]},fetch:async url=>{
+ const context={URLSearchParams,window:{},Event,location:{search:'?char=c1&form=c1b&skill=B1&id=1'},console,document:{dispatchEvent:()=>true,addEventListener:(name,fn)=>{callback=fn;},getElementById:get,querySelectorAll:()=>[]},fetch:async url=>{
   if(url.includes('site-features'))return {ok:true,json:async()=>({effectsGlossary:true})};
   if(url.includes('data-character'))return {ok:true,json:async()=>({c1:{nickname:'Avery',gender:'male'},c1b:{nickname:'Caela',gender:'female',base_character:'c1'}})};
   if(url.includes('data-effects'))return {ok:true,json:async()=>({shield:{name:'Shield',class:'shield',type:'Buff',description:'Protects the user.'}})};

@@ -33,7 +33,9 @@
   const effect=effects[id];if(!effect||seen.has(id))return '';
   const trail=new Set(seen);trail.add(id);
   const container=make('div','icon-container');container.style.paddingLeft='15px';container.style.paddingTop='10px';
-  if(effect.icon){const icon=make('div','effect-icon');const image=document.createElement('img');image.src=effect.icon;image.alt=`${effect.name} Icon`;image.width=20;image.height=20;icon.append(image);container.append(icon);}
+  const icon=make('div',effect.icon?'effect-icon':'effect-icon effect-icon-empty');
+  if(effect.icon){const image=document.createElement('img');image.src=effect.icon;image.alt=`${effect.name} Icon`;image.width=20;image.height=20;icon.append(image);}else icon.setAttribute('aria-hidden','true');
+  container.append(icon);
   const text=make('div','effect-text'),name=make('b',effect.class||'',`[${effect.name||id}]`);text.append(name);
   const keys=Object.keys(effect).filter(k=>/^description\d*$/.test(k)).sort((a,b)=>(a==='description'?1:Number(a.slice(11)))-(b==='description'?1:Number(b.slice(11))));
   keys.forEach((key,i)=>{const line=make('div','');style(line,effect[`${key}_style`]||(key==='description2'?effect.descrption2_style:null)||{});if(i===0){line.append(make('span',String(effect.type).toLowerCase()==='buff'?'buff':'debuff',effect.type||''),document.createTextNode(': '));}const content=make('span','');content.innerHTML=embedded(effect[key],trail);line.append(content);text.append(line);});container.append(text);return container.outerHTML;

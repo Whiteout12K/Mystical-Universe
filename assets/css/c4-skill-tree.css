@@ -66,3 +66,6 @@
 .c4-simulating .c4-tree-node.c4-node-available { animation:c4-selectable-glow 1.7s ease-in-out infinite; }
 @keyframes c4-selectable-glow { 0%,100% { box-shadow:0 0 9px 2px #f0ca6944; } 50% { box-shadow:0 0 25px 6px #f0ca6999; } }
 @media(prefers-reduced-motion:reduce) { .c4-simulating .c4-tree-node.c4-node-available { animation:none; box-shadow:0 0 16px 3px #f0ca6977; } }
+
+:is(.c4-node-dialog,.c4-active-path) .effect-icon{flex:0 0 20px;width:20px;height:20px;box-sizing:border-box;margin-top:3px;padding-top:0}
+:is(.c4-node-dialog,.c4-active-path) .effect-icon-empty{border:1px solid #e4c57935;border-radius:3px;background:#e4c57905}

@@ -232,7 +232,15 @@
         "text": "Whenever this character gains <b class=\"fatigue\">[Fatigue]</b>, gain 1% of health as mana for self and <span class=\"undim\">heal allies for that percentage of health.</span> Deal an additional +5% more damage on opponents for each stack of <b class=\"freeze\">[Freeze]</b> applied.",
         "style": {"paddingTop": 5}},
         {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each Basic Skill stage, therefore increasing the rate of accumulation without a cooldown.",
-        "style": {"paddingTop": 5}}
+        "style": {"paddingTop": 5}},
+
+        {"level": 6,
+        "text": "While in the <b class=\"icengon\">[Icengon]</b> state, Kaden will gain the buff <b class=\"black-ice\">[Black Ice]</b> which lasts for the duration of <b class=\"fatigue\">[Fatigue]</b> present. The <b class=\"fatigue\">[Fatigue]</b> effect will deplete twice as slow.",
+        "style": {"paddingTop": 5}},
+        {"text": "{{effect:black-ice}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}},
+        {"text": "{{effect:midnight-frost}}",
+        "style": {"paddingLeft": 15, "paddingTop": 5}}
 
     ]
   }

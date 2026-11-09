@@ -769,6 +769,19 @@ function loadSkillIframe(iframe,url){
   });
 }
 
+// Only game-c supplies the shortcut; standalone skill.html keeps its original UI.
+function attachSkillLevelToggle(iframe){
+  const doc=iframe.contentDocument,win=iframe.contentWindow,display=doc?.getElementById("level-display");
+  if(!display||doc.getElementById("game-skill-level-toggle"))return;
+  const label=doc.createElement("span");label.className="game-skill-level-label";
+  while(display.firstChild)label.appendChild(display.firstChild);
+  const button=doc.createElement("button");button.id="game-skill-level-toggle";button.type="button";button.className="game-skill-level-toggle";
+  const sync=()=>{button.disabled=typeof win.setMLSkillLevel!=="function";button.textContent=Number(doc.getElementById("level")?.textContent)===10?"Initial Level":"Max Level";};
+  button.addEventListener("click",()=>{win.setMLSkillLevel?.(Number(doc.getElementById("level")?.textContent)===10?1:10);sync();});
+  doc.addEventListener("ml-skill-level-ready",sync);doc.addEventListener("ml-skill-level-change",sync);
+  display.append(label,button);sync();
+}
+
 async function prepareIframe(iframe){
   try{
     const doc=iframe.contentDocument||iframe.contentWindow.document;
@@ -793,15 +806,22 @@ async function prepareIframe(iframe){
       #skill-content u{text-decoration:none;color:#d6aa45;font-weight:700}
       :where(#skill-content) b{color:#f6dfa2;font-weight:700}
       .icon-container{gap:10px;line-height:1.45}
-      .effect-icon{flex:none;padding-top:3px}
+      .effect-icon{flex:0 0 20px;padding-top:0}
       .effect-text{min-width:0}
-      .level-display{margin-top:22px;padding-top:12px;border-top:1px solid #d6aa4526;font-size:.75rem;color:#bba77e}
+      .level-display{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-top:22px;padding-top:12px;border-top:1px solid #d6aa4526;font-size:.75rem;color:#bba77e}
+      .game-skill-level-label{white-space:nowrap}
+      .game-skill-level-toggle{min-height:32px;padding:5px 13px;border:1px solid #c9a34e;border-radius:5px;background:linear-gradient(145deg,#4a351c,#251a12);box-shadow:inset 0 0 0 2px #f0ca6910,0 2px 5px #0003;color:#f4d58d;font:600 12px/1.4 Georgia,serif;letter-spacing:.025em;cursor:pointer}
+      .game-skill-level-toggle:hover:not(:disabled){background:linear-gradient(145deg,#624724,#352315);border-color:#f0ca69;color:#fff0c1}
+      .game-skill-level-toggle:focus-visible{outline:2px solid #f0ca69;outline-offset:3px}
+      .game-skill-level-toggle:disabled{opacity:.5;cursor:default}
+      @media(pointer:coarse){.game-skill-level-toggle{min-height:44px}}
       .skill-meta{font-size:.75rem!important;line-height:1.5;color:#bba77e}
       .dupe-star{margin:14px 0 8px}
       @media(max-width:600px){body{padding:6px!important}}
     `;
 
     if(doc.head)doc.head.appendChild(style);
+    attachSkillLevelToggle(iframe);
 
   }catch(error){
     console.error("Skill iframe preparation error:",error);
