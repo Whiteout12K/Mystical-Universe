@@ -18,6 +18,7 @@
       "Logo",
       "Overlay",
       "Player",
+      "Sprite",
       "Start Button",
       "Torch",
       "self"
@@ -57,6 +58,17 @@
       "Input Y",
       "Move Step",
       "Speed"
+    ],
+    "[\"function\",\"\"]": [
+      "Damage Player",
+      "My block"
+    ],
+    "[\"functionLocal\",\"@dynamic\"]": [
+      "amount"
+    ],
+    "[\"functionLocal\",\"Damage Player\"]": [
+      "damage",
+      "rate"
     ]
   }
 }

@@ -31,3 +31,11 @@ export async function folderHandle(directory,path,create=false){
     if(path)for(const name of path.split('/')){if(!/^[A-Za-z0-9_-]+$/.test(name))throw new Error('Invalid folder');handle=await handle.getDirectoryHandle(name,{create});}
     return handle;
 }
+
+export async function projectDirectories(handle){
+    // Old program-only grants remain useful for source autosave. Metadata then
+    // stays in browser storage until the JScratch parent folder is selected.
+    if(handle.name==='program')return {program:handle,editor:null,root:null};
+    let program;try{program=await handle.getDirectoryHandle('program');}catch{throw new Error('Select the JScratch folder containing program/ and editor/.');}
+    return {program,editor:await handle.getDirectoryHandle('editor',{create:true}),root:handle};
+}

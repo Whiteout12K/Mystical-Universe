@@ -39,3 +39,13 @@ export async function readEditorData(directory){
     try{return JSON.parse(await(await(await directory.getFileHandle('editor-data.json')).getFile()).text());}
     catch(error){if(error.name==='NotFoundError')return null;throw error;}
 }
+
+// Positions/view only: executable program source stays in its .js files.
+export async function saveEditorLayouts(directory,data){
+    const handle=await directory.getFileHandle('editor-layouts.json',{create:true}),stream=await handle.createWritable();
+    try{await stream.write(JSON.stringify(data,null,2)+'\n');await stream.close();}catch(error){await stream.abort?.().catch(()=>{});throw error;}
+}
+export async function readEditorLayouts(directory){
+    try{return JSON.parse(await(await(await directory.getFileHandle('editor-layouts.json')).getFile()).text());}
+    catch(error){if(error.name==='NotFoundError')return null;throw error;}
+}

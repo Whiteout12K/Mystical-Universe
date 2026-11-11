@@ -142,20 +142,20 @@ function glideTo(name,x,y,time){
 function glideToSprite(name,target,time){
     return recordMotionBlock("glideToSprite",{name,target,time});
 }
-// World (default) or browser canvas CSS pixels, independent of camera/zoom.
+// World centers (default), or logical center distances from canvas/screen sides.
 function spriteCoordinateMode(name,mode){return recordMotionBlock("spriteCoordinateMode",{name,mode});}
 function coordinateModeOfSprite(name){return createReporter("coordinateModeOfSprite",{name});}
 function setSpriteCoordinateMode(sprite,mode){
     const value=mode===true?"canvas":mode===false?"world":String(mode).toLowerCase();
-    const normalized=value==="screen"?"canvas":value;
-    if(!["world","canvas"].includes(normalized))throw new Error("Coordinate mode must be world or canvas");
+    const normalized=value;
+    if(!["world","canvas","screen"].includes(normalized))throw new Error("Coordinate mode must be world, canvas or screen");
     sprite.coordinateMode=normalized;
-    if(normalized==="canvas"&&(ENGINE.camera.follow===sprite||(!sprite.isClone&&ENGINE.camera.follow===sprite.name)))ENGINE.camera.follow=null;
+    if(normalized!=="world"&&(ENGINE.camera.follow===sprite||(!sprite.isClone&&ENGINE.camera.follow===sprite.name)))ENGINE.camera.follow=null;
 }
 registerBlock("spriteCoordinateMode",(b,c)=>{const s=getContextSprite(b.name,c);if(s)setSpriteCoordinateMode(s,resolveValue(b.mode,c));});
 registerReporter("coordinateModeOfSprite",(b,c)=>getContextSprite(b.name,c)?.coordinateMode||"world");
 
-// Select browser-pixel axes; x/y are inward distances from the chosen sides.
+// Select logical axes; x/y measure from the selected sides to the sprite center.
 function coordinatePlane(name,horizontal="left",vertical="top"){
     return recordMotionBlock("coordinatePlane",{name,horizontal,vertical});
 }
@@ -165,6 +165,6 @@ registerBlock("coordinatePlane",(b,c)=>{
     const vertical=String(resolveValue(b.vertical,c)).toLowerCase();
     if(!["left","right"].includes(horizontal)||!["top","bottom"].includes(vertical))
         throw new Error("Coordinate plane requires left/right and top/bottom");
-    setSpriteCoordinateMode(s,"canvas");
+    setSpriteCoordinateMode(s,s.coordinateMode==="screen"?"screen":"canvas");
     s.coordinateHorizontal=horizontal;s.coordinateVertical=vertical;
 });

@@ -4,29 +4,33 @@ const element=(tag,className,text)=>{const node=document.createElement(tag);if(c
 export function smartFieldClass(Blockly,catalog,getLibrary){
     const definitions=new Map(catalog.map(d=>['js_'+d.name+(d.reporter?'_value':''),d]));
     function context(field){
-        const block=field.getSourceBlock(),parent=block?.getParent(),def=parent&&definitions.get(parent.type);if(!def)return null;
+        const block=field.getSourceBlock();if(block?.type==='js_boolean_expression')return {kind:'boolean'};
+        const parent=block?.getParent(),def=parent&&definitions.get(parent.type);if(!def)return null;
         const index=parent.inputList.findIndex(input=>input.name.startsWith('ARG')&&input.connection?.targetBlock()===block);
         const input=parent.inputList[index];if(!input)return null;const arg=Number(input.name.slice(3));
         const read=i=>{const child=parent.getInputTargetBlock('ARG'+i);return child?.type==='js_expression'?stringLiteral(child.getFieldValue('VALUE')):null;};
-        let owner=null;for(let ancestor=parent;ancestor;ancestor=ancestor.getParent())if(ancestor.type==='js_whenClone'){owner=stringLiteral(ancestor.getInputTargetBlock('ARG0')?.getFieldValue('VALUE')??'');break;}
-        const spec=argumentPicker(def,arg,read,owner);
+        let owner=null,method=null;for(let ancestor=parent;ancestor;ancestor=ancestor.getParent())if(ancestor.type==='js_whenClone'){owner=stringLiteral(ancestor.getInputTargetBlock('ARG0')?.getFieldValue('VALUE')??'');break;}
+        for(let ancestor=parent;ancestor;ancestor=ancestor.getParent())if(ancestor.type==='js_defineFunction'){method=stringLiteral(ancestor.getInputTargetBlock('ARG0')?.getFieldValue('VALUE')??'');break;}
+        const spec=argumentPicker(def,arg,read,owner,method);
         // Computed targets have no statically knowable private name collection.
-        return ['costume','spriteVar'].includes(spec?.kind)&&['@dynamic','@self'].includes(spec.scope)?null:spec;
+        return ['costume','spriteVar','functionLocal'].includes(spec?.kind)&&['@dynamic','@self'].includes(spec.scope)?null:spec;
     }
     return class SmartValueField extends Blockly.FieldTextInput{
-        getText(){const raw=String(this.getValue()??'');try{const spec=context(this),value=stringLiteral(raw);return spec&&value!==null?(value||'(none)')+' ▾':raw;}catch{return raw;}}
+        getText(){const raw=String(this.getValue()??'');try{const spec=context(this),value=stringLiteral(raw);if(spec?.kind==='boolean')return raw+' ▾';return spec&&value!==null?(value||'(none)')+' ▾':raw;}catch{return raw;}}
         showEditor_(){
             const spec=context(this);if(!spec){super.showEditor_();return;}
             Blockly.DropDownDiv.getContentDiv();Blockly.DropDownDiv.clearContent();const content=Blockly.DropDownDiv.getContentDiv();Blockly.DropDownDiv.setColour('#292b34','#414450');
+            content.classList.add('jscratch-smart-content');
             const panel=element('div','smart-field'),advanced=()=>{Blockly.DropDownDiv.hideIfOwner(this,true);super.showEditor_();};content.append(panel);
+            panel.style.maxHeight=Math.max(110,window.innerHeight-48)+'px';
             if(spec.kind==='color')this.colorPanel(panel,advanced);
             else this.choicePanel(panel,spec,advanced);
-            Blockly.DropDownDiv.showPositionedByField(this,()=>{if(this.colorGroup){Blockly.Events.setGroup(false);this.colorGroup=false;}});
+            Blockly.DropDownDiv.showPositionedByField(this,()=>{content.classList.remove('jscratch-smart-content');if(this.colorGroup){Blockly.Events.setGroup(false);this.colorGroup=false;}});
             panel.querySelector('input')?.focus({preventScroll:true});
         }
         choicePanel(panel,spec,advanced){
             const library=getLibrary(),named=namedPicker(spec),current=spec.kind==='boolean'?String(this.getValue()):stringLiteral(this.getValue());
-            panel.append(element('div','smart-heading',named?(spec.kind==='spriteVar'?'Sprite var':spec.kind[0].toUpperCase()+spec.kind.slice(1))+(spec.scope?' · '+(spec.scope==='@stage'?'Stage':spec.scope):''):'Choose value'));
+            panel.append(element('div','smart-heading',named?(({spriteVar:'Sprite var',function:'Custom block',functionLocal:'Parameter / local'})[spec.kind]??spec.kind[0].toUpperCase()+spec.kind.slice(1))+(spec.scope?' · '+(spec.scope==='@stage'?'Stage':spec.scope):''):'Choose value'));
             const search=element('input','smart-search');search.placeholder=named?'Find or add a name…':'Find a value…';search.setAttribute('aria-label','Find or add value');
             const list=element('div','smart-options'),footer=element('div','smart-footer'),add=element('button','smart-add',named?'+ Add new':'+ Use text'),code=element('button','smart-code','Expression…');footer.append(add,code);panel.append(search,list,footer);code.onclick=advanced;
             const choose=value=>{this.setValue(spec.kind==='boolean'?String(value):JSON.stringify(value));Blockly.DropDownDiv.hideIfOwner(this,true);this.forceRerender();};

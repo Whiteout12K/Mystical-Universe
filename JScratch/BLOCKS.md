@@ -1,6 +1,6 @@
 # Adding JScratch blocks
 
-Read README.md and AGENTS.md first. Preserve existing game behavior and the user's flat, commented sample.js style.
+Read README.md and AGENTS.md first. For visual integration, also read [editor/README.md](editor/README.md). Preserve existing game behavior and the user's flat, commented sample.js style.
 
 ## One definition for runtime and editor
 
@@ -95,3 +95,19 @@ params: [
 Picker kinds are `sprite`, `broadcast`, `variable` (global), `spriteVar`, `costume`, `color`, `boolean`, `list`, `sound`, and `json`. For `spriteVar`/`costume`, set `owner` to the sprite parameter name when it is not the first parameter. `options` supplies fixed string choices; use `picker: "boolean"` for actual true/false values. Metadata remains literal JSON and the handler receives the same normal JS values. Keep numeric parameters unmarked.
 
 The editor infers existing API roles centrally in symbols.mjs. Do not add a new custom Blockly field type per command or rename argument keys. SmartValueField extends the regular expression field: saved blocks still store raw JS under VALUE. Name and color selection must emit quoted string literals; booleans must remain booleans. Keep the Expression option and ordinary reporter connections available. The registry must use current workspace contents plus every executable file, preserve unused saved names, and refuse deletion if references or unresolved dynamic uses remain. Do not populate project choices from sample/reference examples. Changes to picker metadata should be tested through both runtime/schema validation and syntax-only editor import.
+
+## Custom methods and variadic commands
+
+User-authored custom methods belong in program files as top-level `defineFunction` hats, not in engine metadata. Their implementations and optional returns use the existing scheduler's explicit call frames. Do not implement asynchronous method reporters or recursive `executeBlocks` calls to simulate method invocation. See README for parameter/local/result semantics.
+
+A metadata command can specify `variadic: true`. Fixed parameters retain their normal fields and trailing argument descriptions are stored in `block._args`; resolve them in the execution context. `_args` is an engine-reserved parameter key. Containers already use rest arguments for their body and cannot also be variadic commands. The editor retains argument-count serialization and the extra-argument context menu. Function-call palette labels derive from syntax-only project definitions, not separately maintained signatures.
+
+## Optional editor boundary
+
+All editor-only files live under editor/, including index.html, the preview host, inspector, name/layout metadata and vendored parsing/visual libraries. canvas.html and runtime js/ cannot depend on that folder. Keep defineJScratchBlock and custom methods implemented in runtime files so raw program/*.js works without the editor. program/project.json is runtime configuration, not editor metadata; keep it in program/. Resolve editor project URLs from the module URL rather than the current page path. Folder autosave writes scripts to program/ and metadata to editor/ under a JScratch parent grant. The preview host owns inspection; do not add inspector imports back into canvas.html.
+
+## Boolean connection metadata
+
+Use `output: "boolean"` on reporter definitions that return Booleans. A parameter can specify `type: "boolean"` for a hexagonal Boolean socket or `type: "value"` for an ordinary value socket; `picker: "boolean"` also selects a Boolean input. Only Boolean/value hints are supported. These optional metadata attributes affect visual connections and field defaults, not execution or argument ordering. Example: `{name: "condition", type: "boolean", default: false}`. Existing predicates/condition/flag inputs are inferred centrally in `editor/types.mjs`; new predicates should declare their output explicitly.
+
+Keep visible infix notation in editor/labels.mjs rather than renaming functions such as add, div or equal. For saved-workspace migration and legacy truthiness handling, read editor/README.md before changing Boolean checks.

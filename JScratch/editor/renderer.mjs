@@ -6,10 +6,10 @@ export function installRenderer(Blockly){
     class RenderInfo extends Blockly.zelos.RenderInfo{
         shouldStartNewRow_(input,previous){
             if(super.shouldStartNewRow_(input,previous))return true;
-            if(!input.name.startsWith('ARG')||!this.block_.getInputsInline())return false;
+            if(!/^(ARG|PARAMETER|ADD_PARAMETER)/.test(input.name)||!this.block_.getInputsInline())return false;
             const row=this.inputRows.at(-1);if(!row?.elements.length)return false;
             const upcoming=input.fieldRow.map(field=>new Blockly.blockRendering.Field(this.constants_,field,input));
-            upcoming.push(new Blockly.blockRendering.InlineInput(this.constants_,input));
+            if(input.connection)upcoming.push(new Blockly.blockRendering.InlineInput(this.constants_,input));
             const elements=[...row.elements,...upcoming];let width=40,prior=null;
             for(const element of elements){width+=this.getInRowSpacing_(prior,element)+element.width;prior=element;}
             width+=this.getInRowSpacing_(prior,null);

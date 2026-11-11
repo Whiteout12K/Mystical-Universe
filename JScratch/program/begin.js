@@ -12,19 +12,21 @@ whenBroadcast(
     spriteCostume("Heroes", "images/menu/BG1-3.svg", 2.2),
     goFront("Heroes"),
     createSprite("Logo"),
-    spriteCostume("Logo", "/images/mlg-assets/mlg-logo.png", 2.2),
+    spriteCostume("Logo", "/images/mlg-assets/mlg-logo.png", 1),
     goFront("Logo"),
     createSprite("Overlay"),
     spriteCostume("Overlay", "images/menu/BG1-2.svg", 4),
     goFront("Overlay"),
     createSprite("Start Button"),
-    spriteCostume("Start Button", "images/menu/BG1-5.png", 2.5),
+    spriteCostume("Start Button", "images/menu/BG1-5.png", 1),
     goFront("Start Button"),
     moveTo("Heroes", 75, 0),
+    spriteCoordinateMode("Start Button", "screen"),
     coordinatePlane("Start Button", "left", "bottom"),
-    moveTo("Start Button", 250, 160),
+    moveTo("Start Button", 125, 60),
+    spriteCoordinateMode("Logo", "screen"),
     coordinatePlane("Logo", "left", "top"),
-    moveTo("Logo", 250, 180),
+    moveTo("Logo", 125, 75),
     ifBlock(
         isMobile(),
         spriteCoordinateMode("Logo", "world"),
@@ -61,7 +63,7 @@ whenBroadcast(
         ifBlock(
             equal(touchingMouse("Start Button"), true),
             spriteEffect("Start Button", "brightness", 60),
-            spriteSetSize("Start Button", 2.6),
+            spriteSetSize("Start Button", 1.1),
             ifBlock(
                 equal(keyPressed("leftclick"), true),
                 setVar("Scene", "World"),
@@ -69,7 +71,7 @@ whenBroadcast(
             ),
             "else",
             spriteEffect("Start Button", "brightness", 0),
-            spriteSetSize("Start Button", 2.5),
+            spriteSetSize("Start Button", 1),
         ),
     ),
 );
@@ -136,6 +138,7 @@ whenClone(
 );
 
 whenStart(
+    canvasSize(640, 360),
     loadPlayerData(),
     makeVar("Menu Ready"),
     setVar("Menu Ready", false),

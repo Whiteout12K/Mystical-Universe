@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {inspectorSnapshot,inspectorId,previewValue} from '../JScratch/js/inspector-model.mjs';
+import {inspectorSnapshot,inspectorId,previewValue} from '../JScratch/editor/inspector-model.mjs';
 import {previewWindows} from '../JScratch/editor/preview.mjs';
 function sprite(name,extra={}){return {name,x:10,y:-20,width:160,height:90,scale:1,rotation:0,visible:true,variables:{Score:7},privateVariables:{Secret:42},isClone:false,deleted:false,...extra};}
 function engine(){return {runId:4,running:true,paused:false,sprites:{Player:sprite('Player'),HUD:sprite('HUD',{isUI:true,uiType:'bar',uiBaseWidth:200,uiBaseHeight:20,scale:.5,visible:false})},clones:[sprite('Player',{isClone:true,cloneId:12,cloneIdName:'Player#12',cloneOf:'Player',variables:{Score:11},privateVariables:{Secret:'clone'}})]};}
@@ -26,4 +26,8 @@ test('inspecting variables does not call getters or execute functions and tolera
 test('game and inspector request separate adjacent popup bounds on the available screen',()=>{
     const features=previewWindows({availWidth:1440,availHeight:900,availLeft:0,availTop:25});
     assert.match(features.game,/popup=yes/);assert.match(features.inspector,/popup=yes/);assert.match(features.game,/left=0/);assert.match(features.inspector,/left=965/);assert.match(features.game,/top=25/);
+});
+
+test('preview host inspects Maps, Sets and Dates from the game iframe realm',async()=>{
+    const vm=await import('node:vm'),realm=vm.runInNewContext('({Date,Map,Set,values:{map:new Map([["HP",100]]),set:new Set(["Enemy"]),date:new Date("2026-01-01T00:00:00Z")}})'),e=engine();e.sprites.Player.variables=realm.values;const selected=inspectorSnapshot(e,inspectorId(e.sprites.Player,e.runId),realm).selected;assert.deepEqual(selected.variables.map,{type:'Map',entries:[['HP',100]]});assert.deepEqual(selected.variables.set,{type:'Set',entries:['Enemy']});assert.equal(selected.variables.date,'2026-01-01T00:00:00.000Z');
 });

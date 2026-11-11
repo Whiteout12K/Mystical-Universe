@@ -17,7 +17,7 @@ export function parseProgram(source,catalog){
     function command(n,nested=false){
         if(n.type==='CallExpression'&&n.callee.type==='Identifier'){
             const d=definitions.get(`${n.callee.name}:false`);
-            if(d&&!(nested&&['whenStart','whenBroadcast','whenClone'].includes(d.name))&&!n.arguments.some(a=>a.type==='SpreadElement'))return call(n,d);
+            if(d&&!(nested&&['whenStart','whenBroadcast','whenClone','defineFunction'].includes(d.name))&&!n.arguments.some(a=>a.type==='SpreadElement'))return call(n,d);
         }
         const result={kind:'code',text:source.slice(n.start,n.end),comments:''};commandNodes.push({start:n.start,result});return result;
     }
@@ -85,3 +85,9 @@ export function generateProgram(model){
     return text;
 }
 export function validateExpression(text){parse(`(${text}\n)`,{ecmaVersion:'latest'});return text;}
+
+// Primitive field defaults behave like Scratch inputs: replacing one does not
+// eject a loose literal. Computed expressions remain real, recoverable blocks.
+export function isLiteralField(source){
+    try{const node=parse('('+source+'\n)',{ecmaVersion:'latest'}).body[0].expression;return node.type==='Literal'&&!node.regex||node.type==='UnaryExpression'&&['+','-'].includes(node.operator)&&node.argument.type==='Literal'&&typeof node.argument.value==='number';}catch{return false;}
+}

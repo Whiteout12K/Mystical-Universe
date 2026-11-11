@@ -15,7 +15,7 @@
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
 body{display:block;background:#000}
 #game-window{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;background:#000}
-#game-canvas{position:absolute;left:0;top:0;width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+#game-canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
 #variable-monitor{
     position:fixed;
     left:8px;
@@ -68,7 +68,6 @@ body{display:block;background:#000}
 <!-- The manifest loader registers every program file inside folder before startup. -->
 <script src="js/extensions.js"></script>
 <script src="js/program-loader.js"></script>
-<script type="module" src="js/live-inspector.mjs"></script>
 
 <script>
 // Can be hidden with comments if no need. Panel disappears when all items are hidden.

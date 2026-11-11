@@ -26,7 +26,7 @@ function loadCameraConfig(){
         const controller=new AbortController();
         const timeout=Number.isFinite(ENGINE.requestTimeout)?setTimeout(()=>controller.abort(),ENGINE.requestTimeout):null;
         try{
-            const response=await fetch("/JScratch/camera.json",{signal:controller.signal,cache:"no-cache"});
+            const response=await fetch("camera.json",{signal:controller.signal,cache:"no-cache"});
             if(!response.ok)throw new Error("HTTP "+response.status);
             const data=await response.json();if(controller.signal.aborted)throw new Error("Camera config loading timed out");
             cameraDefaults=validateCameraConfig(data);
@@ -38,7 +38,7 @@ function loadCameraConfig(){
 function updateCameraMetrics(){
     const zoom=ENGINE.camera.zoom;
     ENGINE.unitScale=ENGINE.baseUnitScale*zoom;
-    ENGINE.viewWidth=ENGINE.baseViewWidth/zoom;
+    ENGINE.viewWidth=Math.min(ENGINE.baseViewWidth,ENGINE.width)/zoom;
     ENGINE.viewHeight=ENGINE.baseViewHeight/zoom;
 }
 function resetCamera(){
@@ -48,7 +48,7 @@ function updateCamera(){
     const camera=ENGINE.camera;
     const target=typeof camera.follow==="string"?ENGINE.sprites[camera.follow]:camera.follow;
     target?.prepareFrame?.();
-    if(target?.coordinateMode==="canvas")camera.follow=null;
+    if(target&&isCanvasSprite(target))camera.follow=null;
     else if(target&&!target.deleted){camera.x=target.x+camera.offsetX;camera.y=target.y+camera.offsetY;}
     else if(target?.deleted&&typeof camera.follow!=="string")camera.follow=null;
     updateCameraMetrics();
@@ -82,7 +82,7 @@ registerBlock("cameraToSprite",(b,c)=>{
 registerBlock("cameraFollow",(b,c)=>{
     const offsetX=cameraNumber(b.offsetX,c,"offsetX"),offsetY=cameraNumber(b.offsetY,c,"offsetY");
     const value=resolveValue(b.name,c),target=getContextSprite(value,c),name=String(value);
-    if(target?.coordinateMode==="canvas")throw new Error("Camera following requires a world-coordinate sprite");
+    if(target&&isCanvasSprite(target))throw new Error("Camera following requires a world-coordinate sprite");
     Object.assign(ENGINE.camera,{follow:target?.isClone?target:name,offsetX,offsetY});updateCamera();
 });
 registerBlock("cameraStopFollowing",()=>{updateCamera();ENGINE.camera.follow=null;});

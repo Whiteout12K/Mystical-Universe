@@ -4,13 +4,19 @@ const SENSING={
     mouseX:0,mouseY:0,leftClick:false,rightClick:false,keys:{}
 };
 
+let lastPointerClient=null;
 function getMousePosition(event){
+    lastPointerClient={x:event.clientX,y:event.clientY};refreshMousePosition();
+}
+function refreshMousePosition(){
+    if(!lastPointerClient)return;
     const rect=canvas.getBoundingClientRect();
+    if(rect.width<=0||rect.height<=0)return;
     const scaleX=canvas.width/rect.width;
     const scaleY=canvas.height/rect.height;
 
-    SENSING.mouseX=(event.clientX-rect.left)*scaleX;
-    SENSING.mouseY=(event.clientY-rect.top)*scaleY;
+    SENSING.mouseX=(lastPointerClient.x-rect.left)*scaleX;
+    SENSING.mouseY=(lastPointerClient.y-rect.top)*scaleY;
 }
 
 function getCanvasPoint(){
@@ -51,6 +57,8 @@ function spritePointToPixel(s,point,mask){
 }
 function touchingMouse(sprite){
     return sensingValue("touchingMouse",c=>{
+        const area=stageVisibleArea(),scale=ENGINE.baseUnitScale;
+        if(SENSING.mouseX<area.left*scale||SENSING.mouseX>=(area.left+area.width)*scale||SENSING.mouseY<0||SENSING.mouseY>=area.height*scale)return false;
         const target=sensingSprite(sprite,c);
         if(!sensingTarget(target))return false;
         const mask=getImagePixels(target.image);if(!mask)return false;

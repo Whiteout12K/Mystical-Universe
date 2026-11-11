@@ -72,8 +72,8 @@ spriteX("Player1"); // Gives x of sprite
 spriteY("Player1"); // Gives y of sprite
 spriteDirection("Player1"); // Gives degree direction of sprite
 
-coordinatePlane("Button", "right", "bottom"); // Browser pixel axes: choose left/right and top/bottom.
-moveTo("Button", 30, 40); // Center stays 30 pixels from right, 40 from bottom, including on resize.
+coordinatePlane("Button", "right", "bottom"); // Logical stage axes: choose left/right and top/bottom.
+moveTo("Button", 30, 40); // Sprite center stays 30 stage units from right, 40 from bottom; resizing/rotation keeps this center fixed.
 //   Parameter: sprite_name, horizontal_side, distance_x, vertical_side, distance_y
 
 moveTo("Player1", 0, 0); // Moves a sprite to coordinate. Parameter: sprite_name, x, y
@@ -97,12 +97,12 @@ glideToSprite("Player1", "Enemy", 5); // Makes first sprite glide to second spri
 
 spriteCoordinateMode("Player1", "world"); // Default: centered world coordinates, y upward; moves/zooms with camera.
 
-spriteCoordinateMode("Button", "canvas"); // Fixed browser CSS pixels from canvas top-left, y downward; ignores camera and zoom.
-// true is an alias for canvas, false for world; "screen" is another alias for canvas.
-// Positions still describe the sprite's CENTER; (0,0) centers it on the top-left corner.
+spriteCoordinateMode("Button", "canvas"); // Fixed logical stage units from canvas top-left, y downward; ignores camera and zoom.
+// true means canvas, false means world; "screen" anchors to the visible viewport instead of the full box.
+// Positions measure to the sprite CENTER; (0,0) centers it on the chosen corner.
 // Changing modes keeps numeric x/y and size; moveTo() then sets its position in the chosen mode.
 
-coordinateModeOfSprite("Button"); // Reports "world" or "canvas".
+coordinateModeOfSprite("Button"); // Reports "world", "canvas", or "screen".
 
 
 // <----- Camera Blocks ----->
@@ -492,7 +492,7 @@ setSpriteVar("Health", "Owner", "Player1"); // UI objects have their own sprite 
 
 spriteCoordinateMode("Scoreboard", "canvas"); // Opt into a browser-fixed scoreboard.
 
-moveTo("Scoreboard", 100, 30); // Center at 100 CSS pixels from left, 30 from top, independent of camera.
+moveTo("Scoreboard", 100, 30); // Sprite center at 100 logical stage units from left, 30 from top, independent of camera.
 
 uiDelete("Title"); // Remove one UI element.
 
@@ -587,3 +587,26 @@ operator("sampleDouble", context=>Number(resolveValue(getVar("Score"), context))
 whenStart(
     setVar("Score", 0), // Runs on start/restart; separate startup hats run concurrently.
 );
+
+// Custom blocks / methods. Define at top level; parameter values are private
+// to each call (including recursive and simultaneous calls). Calls wait for
+// their body. functionResult() reads this script's most recent call result.
+defineFunction("Add amounts", ["first", "second"],
+    setFunctionValue("total", add(functionValue("first"), functionValue("second"))),
+    returnFunction(functionValue("total")),
+);
+callFunction("Add amounts", 2, 3); // Pass arguments in parameter order.
+setVar("Answer", functionResult()); // 5; copy before another call replaces it.
+beginGameAtBroadcast("World"); // Development restart: reset, startup, then World.
+
+// Logical canvas dimensions. Put canvasSize first inside your whenStart script.
+canvasSize(540, 360); // Fixed stage units; height fills the screen; narrow screens crop the centered sides.
+canvasWidth(); // Declared logical width, independent of browser size and camera.
+canvasHeight(); // Declared logical height. Canvas-mode sizes and edge gaps scale with this stage.
+
+// Canvas anchors follow the full declared box; screen anchors follow visible edges.
+coordinatePlane("HUD", "right", "bottom"); // Select sides; starts in canvas mode.
+spriteCoordinateMode("HUD", "screen"); // Follow cropped screen edges, but never anchor beyond the declared box on widescreens.
+moveTo("HUD", 10, 12); // Gaps in stage units, scaled by screen height, independent of camera.
+screenWidth(); // Visible horizontal span in logical stage units, independent of camera zoom.
+screenHeight(); // Visible vertical span, equal to the declared canvas height.

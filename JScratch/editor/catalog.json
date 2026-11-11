@@ -3109,5 +3109,161 @@
     "rest": false,
     "reporter": true,
     "container": false
+  },
+  {
+    "name": "defineFunction",
+    "label": "define block",
+    "category": "custom",
+    "reporter": false,
+    "container": true,
+    "rest": true,
+    "params": [
+      {
+        "name": "name",
+        "default": "\"My block\""
+      },
+      {
+        "name": "parameters",
+        "default": "[]"
+      }
+    ]
+  },
+  {
+    "name": "callFunction",
+    "label": "call block",
+    "category": "custom",
+    "reporter": false,
+    "container": false,
+    "rest": true,
+    "params": [
+      {
+        "name": "name",
+        "default": "\"My block\""
+      }
+    ]
+  },
+  {
+    "name": "functionValue",
+    "label": "local / parameter",
+    "category": "custom",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": [
+      {
+        "name": "name",
+        "default": "\"amount\""
+      }
+    ]
+  },
+  {
+    "name": "setFunctionValue",
+    "label": "set local",
+    "category": "custom",
+    "reporter": false,
+    "container": false,
+    "rest": false,
+    "params": [
+      {
+        "name": "name",
+        "default": "\"amount\""
+      },
+      {
+        "name": "value",
+        "default": "0"
+      }
+    ]
+  },
+  {
+    "name": "returnFunction",
+    "label": "return",
+    "category": "custom",
+    "reporter": false,
+    "container": false,
+    "rest": false,
+    "params": [
+      {
+        "name": "value",
+        "default": "0"
+      }
+    ]
+  },
+  {
+    "name": "functionResult",
+    "label": "last block result",
+    "category": "custom",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": []
+  },
+  {
+    "name": "beginGameAtBroadcast",
+    "label": "restart at broadcast",
+    "category": "control",
+    "reporter": false,
+    "container": false,
+    "rest": false,
+    "params": [
+      {
+        "name": "message",
+        "picker": "broadcast",
+        "default": "\"World\""
+      }
+    ]
+  },
+  {
+    "name": "canvasSize",
+    "label": "set canvas size",
+    "category": "canvas",
+    "reporter": false,
+    "container": false,
+    "rest": false,
+    "params": [
+      {
+        "name": "width",
+        "default": "540"
+      },
+      {
+        "name": "height",
+        "default": "360"
+      }
+    ]
+  },
+  {
+    "name": "canvasWidth",
+    "label": "canvas width",
+    "category": "canvas",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": []
+  },
+  {
+    "name": "canvasHeight",
+    "label": "canvas height",
+    "category": "canvas",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": []
+  },
+  {
+    "name": "screenWidth",
+    "label": "visible screen width",
+    "category": "canvas",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": []
+  },
+  {
+    "name": "screenHeight",
+    "label": "visible screen height",
+    "category": "canvas",
+    "reporter": true,
+    "container": false,
+    "rest": false,
+    "params": []
   }
 ]

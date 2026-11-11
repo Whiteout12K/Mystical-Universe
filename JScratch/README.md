@@ -4,7 +4,7 @@ This document is the starting reference for AI assistants and developers working
 
 ## Purpose and project boundaries
 
-JScratch is a browser canvas game engine with JavaScript functions that compose Scratch-style command blocks and reporters. There is no visual block editor or build step. The user's game is authored in event scripts under `program/`, with startup/menu flow in `program/begin.js`. The Start button fades out the menu and broadcasts `World`; `program/world.js` defines an empty world with c1's default GIF costume and WASD/arrow movement. The player can move fully off stage; its position is not clamped to the visible canvas.
+JScratch is a browser canvas game engine with JavaScript functions that compose Scratch-style command blocks and reporters. The user's game is authored in event scripts under `program/`, with startup/menu flow in `program/begin.js`. The Start button fades out the menu and broadcasts `World`; `program/world.js` defines an empty world with c1's default GIF costume and WASD/arrow movement. The player can move fully off stage; its position is not clamped to the visible canvas.
 
 The entry page is `/JScratch/canvas.html` (capitalization matters). The engine previously lived at `/ml-game/`; root `_redirects` preserves old URLs. Website tools such as the team builder, map, and profile viewer are separate and live in `/webpages/apps/`. Their shared skill stylesheet is `/assets/css/mlg-skill.css`.
 
@@ -27,10 +27,8 @@ The entry page is `/JScratch/canvas.html` (capitalization matters). The engine p
 | `js/canvas.js` | Background color and costume blocks |
 | `js/json.js`, `js/data.js` | Named JSON documents and website player-data integration |
 | `js/ui.js` | Procedural Sprite subclass: text, bars, shapes, live bindings, and image UI |
-| `js/block-api.js`, `js/extensions.js` | Declarative custom block definitions, shared with the editor |
+| `js/block-api.js`, `js/extensions.js` | Declarative runtime block definitions and extension constructors |
 | `js/program-loader.js`, `program/project.json` | Recursive program discovery and startup registration barrier |
-| `inspector.html`, `editor/inspector.mjs` | Separate live sprite/clone inspector opened by Run |
-| `js/live-inspector.mjs`, `js/inspector-model.mjs` | Session-scoped, read-only inspection snapshots |
 | `BLOCKS.md` | AI/developer guidance for adding blocks safely |
 | `program/begin.js` | Startup, main menu, and transition into World |
 | `program/world.js` | World listener, player costume, and keyboard movement |
@@ -41,37 +39,24 @@ Keep script order in `canvas.html`: the bundled GIF decoder first, back-process 
 
 Serve the repository root over HTTP for local use, for example `python3 -m http.server 8000`, then visit `/JScratch/canvas.html`. Static serving does not provide the website's `/api/me` or player-save endpoints.
 
-## Visual editor
+## Running and exporting the game
 
-Open `/JScratch/editor.html` through the existing Wrangler development server (for example `http://localhost:8788/JScratch/editor.html`). No separate editor server or build step is needed. Dependencies are bundled locally and are not loaded by the game.
+Keep `canvas.html`, `camera.json`, `js/` (including its vendor files), `program/` (including `project.json`), and all assets referenced by your scripts. Serve these files over HTTP/static hosting and open `canvas.html`; fetching program files and configuration requires HTTP rather than opening the page with `file://`. The runtime executes raw JavaScript directly without a build step.
 
-The file explorer shows the program folder and all its subfolders. Empty `scenes/` and `shared/` folders are included for additional scene scripts and shared event code. Use its **New file** and **New folder** buttons to organize scripts, then click a file to edit it. New files join the game automatically when saved; there are no per-file script tags to maintain. `program/project.json` stores the executable file list, reference list, and folder structure. `sample.js` and `reference/` are editable examples excluded from execution.
+`program/project.json` explicitly lists executable files. For example:
 
-Use the small save-status chip (or Ctrl/Cmd S) to enable autosave and select local `JScratch/program` once in Chrome/Edge on localhost or HTTPS. There is no persistent folder-change menu. Wrangler serves files; the browser's folder permission grants disk writes. The editor remembers the directory and reconnects when permission remains granted. Without access, source/layout changes and newly created files/folders stay in browser drafts. A differing draft is offered for explicit recovery. Folder saves stop if another editor changed the same file.
+```json
+{
+  "version": 1,
+  "files": ["begin.js", "world.js", "scenes/battle.js"],
+  "references": ["sample.js"],
+  "folders": ["scenes"]
+}
+```
 
-The workspace fills the window. Files and the block palette/search open from a compact floating dock on the left and can be closed independently; Ctrl/Cmd K opens block search. Code/Run and undo/redo, zoom, Fit, and arrangement live in separate floating control groups. The default theme uses a dark gray workspace, bold colored blocks with white labels, and white fields with black text, with subtle darker outlines in each block’s own color. Comment bubbles have dark frames and black text on a neutral writing surface. Light/Dark remembers the chosen palette. Scripts, branches, loops and reporters open expanded, including older saved layouts. Expanded scripts occupy separate columns. **Expand all** also arranges them. Body labels align with the first child block's row. Arguments run horizontally and wrap between complete values at an 800-unit target (about 640 display pixels at default zoom); individual values and reporters stay intact. Palette blocks keep a fixed preview size regardless of canvas zoom or Fit; dragged copies use the destination workspace scale. Search the palette and drag commands into stacks/body inputs, or reporters into value inputs. Values use JavaScript syntax such as `"Player"`, `25`, `true`, and `["Wall"]`. Undo/redo, zoom and Fit are available; right-click offers duplication, deletion, disabling and argument controls.
+When adding scripts by hand, update `files`; a folder is not automatically scanned by the browser. Keep paths relative to `program/`. All executable files finish event/function registration before startup. Put game work inside event bodies and use explicit synchronization for dependencies. `sample.js` and `reference/` examples are excluded from execution.
 
-Valid edits autosave after a short debounce. Incomplete/disconnected value blocks and invalid expressions pause JavaScript saving while retaining the draft. **Code** shows the source; use **Apply to blocks** after editing it. Import parses syntax without running the code. Comments survive, and unsupported JavaScript remains in a JavaScript block. Pure layout changes preserve the original source formatting. **Run** saves pending files and opens the game plus a separate live inspector, requesting adjacent window positions. If the browser blocks the second popup, use **Open inspector** in the editor notice.
-
-The runtime waits for every executable file to finish registering its event hats before startup. Folder/manifest order does not decide whether a broadcast listener is available. Startup hats remain concurrent; use explicit broadcasts/waits to coordinate initialization that depends on another script. Ordinary JavaScript top-level dependencies still obey JavaScript evaluation rules; keep game work inside event hats.
-
-For new public blocks, read [BLOCKS.md](BLOCKS.md). A `defineJScratchBlock(metadata, handler)` call in `js/extensions.js` supplies the runtime constructor, parameter defaults, editor inputs and category. The editor reads this metadata automatically without executing handlers. To refresh legacy definitions or discover program files created outside the editor, run `node JScratch/editor/build-catalog.mjs`. Blockly 13.4.0 and Acorn 8.19.0 licenses/version notes are in `editor/vendor/`.
-
-## Smart block fields
-
-Click a broadcast, sprite, variable, list, sound, or JSON name field to choose a saved name. The popup supports search, plain-text **Add new**, and deletion of unused items. Existing names are discovered from executable project files, including closed files. Example/reference files do not seed the project name library. Sprite-local vars and costume paths are scoped to their sprite; `self` inside a named clone event uses that clone family's list. Stage costumes have a separate list. Computed sprite targets retain the text/expression editor because their private collection cannot be inferred before running. Choosing a name writes a properly quoted JavaScript string automatically.
-
-Delete stays disabled while a name is used, including references in other files and sprite targets stored in collision lists. Dynamic names, incomplete code, and recognized raw-code references are treated conservatively rather than removing an item that may still be referenced. Removing a library item never rewrites code. Unused names remain available until explicitly deleted. Choices persist in browser storage and, after folder permission, `program/editor-data.json`.
-
-Color fields open an HSV picker with a saturation/brightness plane, hue, saturation, brightness, and opacity sliders, and a live preview. It generates hex or rgba CSS automatically. Common fixed values (coordinate modes/sides, facing, effects, keys, UI properties, booleans) also have quick choices. Numeric fields remain directly editable. **Expression…** opens the original JavaScript field editor when a computed value is needed; reporter blocks can still be connected normally. Selection uses a subtle focus outline instead of a yellow glow. These controls change field presentation, not API names or parameter ordering.
-
-## Live sprite inspector
-
-The inspector opened by **Run** lists all currently existing sprites, procedural UI, and clones, including hidden objects. Click an item to inspect its position, scale, costume, effects, coordinate mode, collision settings, sprite-local variables, and private variables. A clone shows its source family and its own variable values. Sprite variables (`variables`, used by getSpriteVar) and internal private variables (`privateVariables`) have separate sections; global variables and unrelated broadcast-context variables are not falsely attributed to a sprite.
-
-Values refresh four times per second while the inspector is visible. The list renders only visible rows so a large clone population does not require thousands of DOM nodes. Search filters sprite/clone names and clone sources. Deleted objects disappear and a selected deleted object is marked unavailable. Restart identities include the run ID, so a newly created sprite does not inherit an old selection. Paused/stopped/closed game status is shown, and the inspector remains available if the game window closes.
-
-Inspection is read-only. It never runs reporters, getters, or variable functions and does not change costumes, position, scripts or variables. Large/deep values show explicit preview-limit markers; cyclic values and functions are safely represented. The game and inspector communicate through a random per-run BroadcastChannel, with no network service, disk writes, or editor server. Normal game visits without an inspection session do not collect snapshots. Closing the inspector stops polling. Browser window placement is requested rather than enforced by the web page.
+Keep `js/block-api.js` and `js/extensions.js`: both supply runtime behavior, including custom functions. Preserve script-tag loading order in `canvas.html`. Asset paths resolve against the game page, so root-relative images/audio and website player-save APIs must remain available on the host when your game uses them.
 
 ## Construction happens before execution
 
@@ -169,7 +154,7 @@ makeClone("Particle");
 
 ## Coordinates, assets, and reporters
 
-Sprite x/y are their center, with positive y upward. Scale 1 gives a sprite width of 160 game units, preserving image aspect ratio. The nominal canvas is 640 by 360 game units, with responsive view dimensions and a device-pixel-ratio backing canvas. Motion rotation is in degrees; `sin()` and `cos()` take degrees too. `glideTo()` and `glideToSprite()` use seconds and the runtime clock. The latter captures the target position at glide start.
+World-coordinate sprite x/y are their center, with positive y upward. Scale 1 gives a sprite width of 160 game units, preserving image aspect ratio. The default logical canvas is 540 by 360 stage units. Its declared box stays fixed while its height fills the container and its centered visible horizontal span responds to the screen aspect ratio; the backing buffer accounts for device pixel ratio. Motion rotation is in degrees; `sin()` and `cos()` take degrees too. `glideTo()` and `glideToSprite()` use seconds and the runtime clock. The latter captures the target position at glide start.
 
 Costume loading is asynchronous. Assigning a costume does not await image readiness. `MLGame.preloadAssets(paths)` can preload images through the developer API. Sound requires browser audio activation through user interaction.
 
@@ -211,20 +196,20 @@ Visual reporters such as text, bar value/max, color, and generated dimensions st
 
 For example, `uiBind("Health", "x", spriteX("Player"))` follows the player's x coordinate. A bound transform owns that property; unbind it before moving it independently. Clone-scoped values retain their context, and cloned UI rebinds `"self"`/family-name reporters to that UI clone's own variables. UI and ordinary sprites share unique names. Generic `deleteSprite()` and `deleteAllSprites()` also remove UI; `uiClear()` removes only UI originals and clones. `goFront()` / `goBack()` and `uiSetLayer()` use the common sprite layer order, so fixed HUDs can be brought above world objects explicitly.
 
-### Browser-fixed canvas coordinate mode
+### Canvas-fixed coordinate mode
 
-`spriteCoordinateMode(name, "canvas")` works for **any** sprite, including procedural UI. Canvas mode uses CSS/browser pixels from the canvas's top-left corner, x rightward and y downward. The sprite is still centered at its `(x, y)`; `(0, 0)` puts its center on that corner. Width/height are interpreted as CSS pixels and are unaffected by camera pan/zoom. Device-pixel-ratio scaling is applied internally.
+`spriteCoordinateMode(name, "canvas")` works for **any** sprite, including procedural UI. Canvas mode uses declared logical stage units from the canvas's top-left corner, x rightward and y downward. Positions measure the distance from the chosen canvas sides to the sprite's center. `(0, 0)` puts that center on the selected corner; the default sides are left/top. Width/height use the same logical stage units as edge gaps. Browser/container resizing scales the complete canvas, including sprite sizes and edge gaps, proportionally. Camera pan/zoom affects only world sprites; it does not resize canvas-mode sprites relative to the stage. Device-pixel-ratio scaling is applied internally.
 
 ```js
 spriteCoordinateMode("Scoreboard", "canvas");
-moveTo("Scoreboard", 100, 30); // Center 100 browser pixels from left, 30 from top.
+moveTo("Scoreboard", 100, 30); // Sprite center sits 100 stage units from left, 30 from top.
 goFront("Scoreboard");
 spriteCoordinateMode("Start Button", true); // true = canvas; false = world.
 coordinatePlane("Start Button", "right", "bottom");
-moveTo("Start Button", 80, 30); // Center 80 CSS pixels from right and 30 from bottom.
+moveTo("Start Button", 80, 30); // Sprite center sits 80 stage units from right, 30 from bottom.
 ```
 
-`"world"` restores normal world coordinates; `"screen"` is an alias for `"canvas"`. `coordinateModeOfSprite(name)` reports the normalized mode. Switching modes retains the numeric position/size and reinterprets them in the selected space; it does not automatically convert the previous on-screen position. `coordinatePlane(name, horizontal = "left", vertical = "top")` selects canvas mode and chooses left/right and top/bottom axes. Positions and x/y reporters become inward distances from those sides; positive movement increases that distance. Offsets survive resizing, cloning, and movement. Negative distances allow off-screen placement. Switching planes keeps the numeric distances. `moveToEdge` has been removed. Mouse hits, mixed-mode sprite contacts, and directional solid response use the same projected positions the renderer displays. `moveToSprite()` / `glideToSprite()` convert target centers between spaces; x/y reporters report the sprite's native mode, and distance reporters use the first sprite's units. Camera following is for world sprites; switching a followed sprite to canvas mode stops following it.
+`"world"` restores normal world coordinates. `"canvas"` anchors to the full declared box; `"screen"` anchors to the visible screen edges, bounded by the declared canvas box on wider screens. Screen mode is distinct from canvas mode, not an alias. `coordinateModeOfSprite(name)` reports the normalized mode. Switching modes retains the numeric position/size and reinterprets them in the selected space; it does not automatically convert the previous on-screen position. `coordinatePlane(name, horizontal = "left", vertical = "top")` chooses left/right and top/bottom axes. It selects canvas mode for world sprites and preserves screen mode for sprites already in screen mode. Positions and x/y reporters become inward distances from those sides to the sprite center; positive movement increases that distance. Offsets survive resizing, cloning, and movement. Negative distances allow off-screen placement. Switching planes keeps the numeric distances. `moveToEdge` has been removed. Mouse hits, mixed-mode sprite contacts, and directional solid response use the same projected positions the renderer displays. `moveToSprite()` / `glideToSprite()` convert target centers between spaces; x/y reporters report the sprite's native mode, and distance reporters use the first sprite's units. Camera following is for world sprites; switching a followed sprite to canvas or screen mode stops following it.
 
 ## Lists and directional solid collision
 
@@ -292,7 +277,7 @@ Lists are global within the runtime and reset on restart. Item positions are **1
 }
 ```
 
-Set `follow` to a sprite name such as `"Player"` to follow it as soon as it exists. Defaults do not enable following automatically. Coordinates are world units, with positive y upward. Zoom is a positive multiplier: `2` is twice as close, `.5` shows twice as much world. Neither zoom nor camera movement changes sprite positions, costume scales, dimensions, or collision shapes. Procedural UI defaults to world space and pans/zooms like sprites. Any sprite can opt into canvas mode to keep browser-pixel position and size fixed.
+Set `follow` to a sprite name such as `"Player"` to follow it as soon as it exists. Defaults do not enable following automatically. Coordinates are world units, with positive y upward. Zoom is a positive multiplier: `2` is twice as close, `.5` shows twice as much world. Neither zoom nor camera movement changes sprite positions, costume scales, dimensions, or collision shapes. Procedural UI defaults to world space and pans/zooms like sprites. Any sprite can opt into canvas mode to keep its logical stage-relative position and size independent of the camera.
 
 | Block / reporter | Behavior |
 | --- | --- |
@@ -341,25 +326,24 @@ Stopping invalidates existing contexts using a run ID and releases waiters. Rest
 
 ## Extending the engine
 
-Follow the existing constructor/handler/reporter pattern and preserve execution context when resolving values:
+Read [BLOCKS.md](BLOCKS.md) before adding public blocks. Declare them in `js/extensions.js` with `defineJScratchBlock(metadata, handler)`. The runtime helper creates the JavaScript constructor, records commands for later execution, and registers handlers. Reporters construct live value descriptions. Containers absorb their trailing child commands.
 
 ```js
-function addScore(amount) {
-    return ENGINE.recordBlock(createBlock("addScore", {amount}));
-}
-registerBlock("addScore", (b, c) => {
-    const amount = Number(resolveValue(b.amount, c));
+defineJScratchBlock({
+    name: "awardPoints",
+    kind: "command",
+    category: "operator",
+    params: [{name: "amount", default: 1}],
+}, (block, context) => {
+    const amount = Number(resolveValue(block.amount, context));
     if (Number.isFinite(amount)) {
-        ENGINE.variables.score = (Number(ENGINE.variables.score) || 0) + amount;
+        ENGINE.variables.Score = (Number(ENGINE.variables.Score) || 0) + amount;
     }
 });
-registerReporter("scoreValue", () => ENGINE.variables.score ?? 0);
-function scoreValue() {
-    return createReporter("scoreValue");
-}
+// In a game event: awardPoints(10)
 ```
 
-Async custom handlers should check `contextActive(c)` after awaiting external work and before applying results. Use `runtimeWait(..., c)` for pause-aware game timing. New containers must absorb their children and execute them with the existing context so nested `endScript()` and clone deletion propagate correctly. Custom containers that invoke `executeBlocks()` have their own call frame; `breakLoop()` / `continueLoop()` target loops in that invocation.
+Resolve reporter arguments with the current context. Async handlers must check `contextActive(context)` after external work before applying results. Use `runtimeWait(milliseconds, context)` for pause-aware timing. New ordinary containers execute their absorbed children with `executeBlocks(children, context)` so cancellation and clone context propagate. Custom containers have their own executor frame; break/continue target loops in that invocation. New loops and custom-method calls must integrate with the explicit execution stack rather than recursively calling JavaScript. Add examples to the flat `program/sample.js` reference.
 
 ## UI, cancellation, loading, and debugging
 
@@ -390,6 +374,84 @@ withoutScreenRefresh(
 
 This API remains Scratch-inspired rather than fully Scratch-compatible. Existing strict equality, arithmetic/random-number behavior, and global broadcast scope remain explicit differences.
 
+## Custom functions
+
+Use `defineFunction(name, parameters, ...body)` at the top level to define a reusable method. `callFunction(name, ...values)` waits for its body, resolves argument reporters in the caller's context, and retains the caller's clone context. Each call has private parameter/local values; recursive and simultaneous calls use independent scheduler frames.
+
+```js
+defineFunction("Damage", ["target", "amount"],
+    setSpriteVar(functionValue("target"), "HP",
+        sub(getSpriteVar(functionValue("target"), "HP"), functionValue("amount"))),
+    returnFunction(getSpriteVar(functionValue("target"), "HP")),
+);
+whenBroadcast("Hit",
+    callFunction("Damage", "Enemy", 10),
+    setVar("Remaining HP", functionResult()),
+);
+```
+
+`functionValue(name)` reads a parameter/local; `setFunctionValue(name, value)` writes one. `returnFunction(value)` exits the nearest custom call, including nested loops. A call that reaches the end returns an empty string. `functionResult()` reads this script's last completed call result; copy it before another call replaces it. Custom blocks are commands with optional return values, rather than asynchronous reporter expressions. Parameters are passed in declaration order and counts must match. Definitions register before startup regardless of file order; duplicate definitions produce a runtime error. Break/continue cannot escape a call into its caller's loop. Stop, restart, waits and debugger stepping retain the existing scheduler behavior.
+
+## Starting at a broadcast
+
+Open `canvas.html?startBroadcast=World`, call `MLGame.startAtBroadcast("World")`, or use `beginGameAtBroadcast("World")` in a game script to perform a clean reset and enter a chosen broadcast. The runtime completes all startup commands with broadcasts suppressed, then launches all matching listeners concurrently and restores ordinary broadcast behavior. Both broadcast and broadcast-and-wait are skipped during initialization. Setup errors or stopping the runtime prevent entry launch; a missing entry reports an error.
+
+Put shared sprite/variable setup in finite startup blocks. Setup hidden in a skipped scene listener cannot be inferred or replayed automatically. A startup loop or a wait depending on a suppressed listener prevents initialization from finishing; put ongoing behavior in scene listeners. Normal startup retains the game's existing behavior.
+
+`beginGameAtBroadcast("World")` provides the same clean development restart from a block, and `MLGame.startAtBroadcast("World")` is available to JavaScript integrations. During suppressed startup the restart block is skipped so replaying it cannot create a restart loop. This controls the first scene only; it does not permanently restrict later broadcasts.
+
 ## Verification
 
-Run `node --test tests/*.mjs` from the repository root for the existing website tests. `tests/test-jscratch-editor.mjs` verifies visual import/export, nested snapping, syntax preservation, incomplete block handling, and folder write conflicts. `tests/test-jscratch-engine.mjs` adds focused execution coverage, including simultaneous same-name listeners, nested control flow, frame budgets, clones beyond the former ceiling, UI, alpha-mask and solid collision, live lists, complete sample coverage, GIF frame timing/caches, media settings, cancellation, loading, and debugger stepping. For engine changes, additionally verify nested repeats and branches, live reporter conditions, broadcast concurrency, clone scope/deletion, waits, pause/resume, and stop/restart in the browser or a focused DOM-stubbed execution harness. Check the console and `MLGame.inspect()` for runtime errors. Verify relative images and scripts through `/JScratch/canvas.html` with the exact case.
+From the repository root, run `node --test tests/test-jscratch-engine.mjs` for focused runtime coverage or `node --test tests/*.mjs` for the complete repository suite. The engine harness covers concurrent broadcasts, deep nesting, clone scope, live reporters/lists, custom functions, GIFs, UI, camera/coordinate modes, collisions, cancellation, loading and debugger stepping.
+
+For runtime changes, check nested loops/branches, waits, pause/resume, stop/restart, same-name broadcast concurrency and clone deletion through `/JScratch/canvas.html` or the DOM-stubbed engine harness. Inspect `MLGame.inspect().errors` and the console. Verify relative asset URLs with the exact `JScratch` capitalization, and run `git diff --check` before finishing.
+
+### Declared canvas box and height-filled view
+
+Put `canvasSize(width, height)` first in `whenStart(...)`. The default declared box is **540 × 360**. `canvasWidth()` and `canvasHeight()` report that fixed logical box, not browser dimensions. Positive finite sizes are required. Clean restarts restore the default then replay startup declarations. Changing the box size does not move the camera or change its zoom.
+
+The declared height always fills the browser/container height. Horizontal visible span is `containerWidth / (containerHeight / declaredHeight)` stage units. The view stays centered on the current camera position (default `(0, 0)`): narrow portrait screens crop the box's sides; wide screens show the full box with black side bars beyond it. Neither case changes the declared 540 × 360 box. Rendering uses a viewport-sized backing buffer rather than stretching the logical box. The height is always filled; only wider-than-box screens have horizontal side bars. There is no horizontal scroll.
+
+For a 540 × 360 box, a 1080 × 720 browser shows 540 stage units across; a 360 × 720 phone shows the middle 180 units; a 1440 × 720 browser spans 720 logical screen units, of which the central 540 belong to the game box and the rest are side bars. The vertical span remains 360 at zoom 1. Camera zoom changes visible world extents, but never the declared box or HUD scale. `screenWidth()` and `screenHeight()` report the browser/container span in logical stage units before camera zoom (including any side bars), while canvasWidth/canvasHeight always report the declared box.
+
+| Sprite mode | Position and size behavior |
+| --- | --- |
+| `world` | Center coordinates relative to the camera, transformed by camera pan/zoom |
+| `canvas` | Edge gaps relative to the full declared box, centered within the view; box-edge HUDs may be cropped on phones |
+| `screen` | Edge gaps relative to the intersection of the visible viewport and declared box: follows portrait crops but stops at box edges on wider screens |
+
+Both fixed modes use logical stage units and scale with the height. An 80-unit-wide button is 160 display pixels wide when a 360-unit stage fills a 720-pixel-high browser. A 10-unit gap is then 20 display pixels. Browser width changes the edge reference for screen mode, not the button's native size. Camera pan/zoom affects neither fixed mode.
+
+```js
+whenStart(
+    canvasSize(540, 360),
+    uiBox("HUD", 0, 0, 80, 30, "#2d5"),
+    coordinatePlane("HUD", "right", "bottom"),
+    spriteCoordinateMode("HUD", "screen"),
+    moveTo("HUD", 10, 12),
+);
+```
+
+Use `"canvas"` instead of `"screen"` to keep those gaps relative to the full desktop-designed box. Chosen sides survive mode changes and cloning; selecting sides after screen mode preserves screen mode. All coordinates, go-to targets and distance reporters use sprite centers. Size and rotation changes do not move that center; the costume expands/contracts equally in all directions. World coordinates remain centered at `(0, 0)` when the camera is at its default; the fixed box and visible screen share that center.
+
+A ResizeObserver watches the container. Pointer mapping, hit tests, solids and culling use the visible viewport, including its page offset and DPI. Hidden containers keep valid metrics until shown. Source-alpha collision rules, intentional negative/excessive offsets, and off-stage world movement remain supported. Camera configuration remains page-relative.
+
+### Sprite detail and rendering resolution
+
+Declared canvas units control layout and camera behavior, not image resolution. The backing buffer matches the displayed canvas width/height multiplied by the actual device pixel ratio. World and fixed-mode sprites draw directly from their original-resolution image/GIF frame into that buffer; no low-resolution stage-sized image is enlarged afterward. Small logical canvas dimensions therefore do not impose a coarse pixel grid or discard source detail before display.
+
+Rendering remains nearest-neighbor/crisp, as requested for pixel art. Actual displayed size and source-asset resolution still determine how much detail can be visible; changing raster resolution does not change sprite dimensions, edge gaps, camera zoom, collisions or movement units.
+
+Screen-mode anchor width is `min(screenWidth(), canvasWidth())`, centered in the view. Thus a right-edge gap follows the phone's right edge while cropped, but follows the declared canvas right edge once the full box is visible. Left-edge gaps behave symmetrically. Top/bottom are shared because the declared height fills the view. The stored offsets, sprite sizes, rotation, camera behavior and rendering resolution are unchanged. `screenWidth()` still reports the full visible span, not this bounded anchoring width.
+
+### Center origin and resizing
+
+Every sprite's own `(0, 0)` is the center of its costume/UI rectangle, in every coordinate mode. Canvas/screen side offsets also measure to this center, not to the outer bounds. A sprite 40 units from the right edge stays centered 40 units from that edge when its width or rotation changes. Its outer-edge gap consequently changes as it grows or shrinks; an object whose center is very near a boundary may extend across that boundary.
+
+Screen mode still chooses the intersection of the visible screen and the declared canvas box for its reference edges. Canvas mode always uses the full box. At an exact-fit browser aspect ratio, their edges and center distances coincide. Portrait screen mode follows the cropped visible sides; widescreen screen mode stops at the declared box's sides. Go-to-sprite aligns centers even for different costume sizes or coordinate modes, and distance-to-sprite/mouse measures from the same center.
+
+### Exact screen offsets and visible box edges
+
+Screen-mode rendering and center-offset calculations share `stageVisibleArea()`: the intersection of the centered declared box and the logical browser viewport. All game drawing is clipped to that region, so oversized background sprites cannot move the apparent boundary where black bars begin. At `(50, 50)` on left/top axes, the sprite center is exactly 50 logical units inward from that same region's left/top edges. On narrow screens that region starts at the browser edge; on wide screens it starts at the canvas-box edge. Scale to display pixels by multiplying by `displayScale`; stored offsets and all width reporters remain logical units.
+
+The camera's drawable width/culling extent is capped by the declared box as well as the screen. Off-box sprites still run their scripts and collisions, but do not paint or receive pointer hits in black side bars.
