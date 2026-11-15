@@ -31,3 +31,24 @@ test('game and inspector request separate adjacent popup bounds on the available
 test('preview host inspects Maps, Sets and Dates from the game iframe realm',async()=>{
     const vm=await import('node:vm'),realm=vm.runInNewContext('({Date,Map,Set,values:{map:new Map([["HP",100]]),set:new Set(["Enemy"]),date:new Date("2026-01-01T00:00:00Z")}})'),e=engine();e.sprites.Player.variables=realm.values;const selected=inspectorSnapshot(e,inspectorId(e.sprites.Player,e.runId),realm).selected;assert.deepEqual(selected.variables.map,{type:'Map',entries:[['HP',100]]});assert.deepEqual(selected.variables.set,{type:'Set',entries:['Enemy']});assert.equal(selected.variables.date,'2026-01-01T00:00:00.000Z');
 });
+
+test('reporter click previews live Boolean and text values without running raw expressions or getters',async()=>{
+    const {reporterExpression}=await import('../JScratch/editor/reporter-click.mjs');
+    const {inspectReporter}=await import('../JScratch/editor/reporter-preview.mjs');
+    const expression=(name,...args)=>reporterExpression({kind:'call',reporter:true,name,args});
+    const raw=text=>({kind:'expression',text});
+    let mobile=true,username='Avery',calls=0;
+    const realm={...globalThis,Date,Map,Set,isMobile:()=>mobile,getUsername:()=>username,cameraZoom:()=>++calls};
+    const runtime={ENGINE:{variables:{}},resolveValue:value=>value};
+    Object.defineProperty(runtime.ENGINE.variables,'Unsafe',{get(){calls++;return 0;}});
+    assert.equal(inspectReporter(runtime,realm,expression('isMobile')),true);
+    mobile=false;
+    assert.equal(inspectReporter(runtime,realm,expression('isMobile')),false);
+    assert.equal(inspectReporter(runtime,realm,expression('getUsername')),'Avery');
+    assert.equal(inspectReporter(runtime,realm,expression('gThan',raw('-2'),raw('-3'))),true);
+    assert.throws(()=>expression('getData',raw('runSomething()')),/literal inputs/);
+    assert.throws(()=>inspectReporter(runtime,realm,expression('cameraZoom',raw('2'))),/zoom reporter/);
+    assert.throws(()=>inspectReporter(runtime,realm,expression('getVar',raw('"Unsafe"'))),/getter/);
+    assert.throws(()=>inspectReporter(runtime,realm,expression('randomNum',raw('1'),raw('3'))),/no live preview/);
+    assert.equal(calls,0);
+});

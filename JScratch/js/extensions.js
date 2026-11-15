@@ -24,3 +24,6 @@ defineJScratchBlock({name:"canvasHeight",kind:"reporter",label:"canvas height",c
 
 defineJScratchBlock({name:"screenWidth",kind:"reporter",label:"visible screen width",category:"canvas",params:[]},()=>ENGINE.baseViewWidth);
 defineJScratchBlock({name:"screenHeight",kind:"reporter",label:"visible screen height",category:"canvas",params:[]},()=>ENGINE.baseViewHeight);
+
+// Explicit cloud upload. Regular data writes only touch the browser save.
+defineJScratchBlock({name:"saveToD1",kind:"command",label:"save to D1",category:"data",params:[]},(_b,c)=>queuePlayerWrite(c,()=>uploadPlayerSave(c)));

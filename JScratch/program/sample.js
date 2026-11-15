@@ -523,7 +523,7 @@ jsonType("data1", "c1.name"); // Returns the type of a JSON file or key. Paramet
 
 // <----- Data Blocks ----->
 
-loadPlayerData();
+loadPlayerData(); // Loads the active local profile or signed-in website player.
 
 getUsername(); // Returns signed in username.
 
@@ -531,12 +531,13 @@ getLoggedIn(); // Returns whether a user is signed in.
 
 getData("silver_coin"); // Gets value in dictionary.
 
-updateData("silver_coin", 100); // Updates value in dictionary.
+updateData("silver_coin", 100); // Updates the value in this browser's player save.
 
 changeDataBy("silver_coin", 5); // Adds a number to a saved value; concurrent writes are ordered.
 
-refreshPlayerData(); // Loads signed-in player data again.
-// UpdateData() and changeDataBy() write authenticated website save data; use only when intended.
+refreshPlayerData(); // Reloads the active player and keeps pending browser changes.
+
+saveToD1(); // Uploads the full browser save for the signed-in website player.
 
 
 // <----- Media Blocks ----->

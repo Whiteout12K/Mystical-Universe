@@ -12,6 +12,7 @@ import {indexReferences,renameReferences,functionDefinitions} from './references
 import {capturePositions,statePositions,restorePositions,captureView,restoreView} from './layout.mjs';
 import {migrateWorkspaceTypes} from './types.mjs';
 import {projectPaths,migrateEditorStorage} from './paths.mjs';
+import {setupReporterClick} from './reporter-click.mjs';
 import {previewWindows,inspectorSession} from './preview.mjs';
 const $=id=>document.getElementById(id),Blockly=window.Blockly;
 const {url:projectUrl,storagePath}=projectPaths(import.meta.url);
@@ -26,6 +27,7 @@ let dark=true;try{dark=localStorage.getItem('jscratch-editor-theme')!=='light';}
 const theme=createEditorTheme(Blockly,dark);
 document.documentElement.dataset.theme=dark?'dark':'light';
 const workspace=Blockly.inject('workspace',{toolbox:bridge.toolbox(),plugins:palettePlugins(Blockly),theme,renderer:'jscratch',trashcan:false,grid:{spacing:24,length:2,colour:'#465571',snap:false},zoom:{controls:false,wheel:true,startScale:.8,maxScale:1.5,minScale:.2,scaleSpeed:1.12},move:{scrollbars:true,drag:true,wheel:true},sounds:false,collapse:true,comments:true,disable:true,maxInstances:{},media:projectUrl('editor/vendor/media/').href});
+const connectReporterPreview=setupReporterClick(Blockly,workspace,bridge,$('reporter-preview'));
 workspace.getToolbox().HtmlDiv.classList.add('jscratch-palette');
 new ResizeObserver(()=>Blockly.svgResize(workspace)).observe($('workspace'));
 const docs=new Map(),folders=new Set();let selectedFolder='',newKind='file',projectDirty=false;let current=null,muting=false,directory=null,editorDirectory=null,timer=null,captureTimer=null,codePending=false,noticeAction=null,savedDirectory=null;
@@ -328,6 +330,7 @@ $('run-game').onclick=async event=>{
     for(const doc of docs.values())if(!await save(doc)){preview?.close();inspector?.close();return;}
     const openInspector=()=>{const popup=window.open(inspectorUrl.href,'jscratch-inspector',placement.inspector);if(popup)popup.opener=null;else notice('The browser blocked the inspector. Allow popups for this editor, then try again.',openInspector,'Open inspector');};
     if(!preview){notice('The browser blocked the game window. Allow popups for this editor and press Run again.');return;}
+    connectReporterPreview(session);
     preview.location.href=gameUrl.href;
     if(inspector)inspector.location.href=inspectorUrl.href;
     else notice('Game started. Open the live sprite inspector alongside it.',openInspector,'Open inspector');

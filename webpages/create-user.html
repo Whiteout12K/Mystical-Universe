@@ -430,6 +430,7 @@ input:focus{
       <input
         type="text"
         id="username"
+        maxlength="32"
         placeholder="Enter your username"
         autocomplete="username"
         required
@@ -439,12 +440,12 @@ input:focus{
     <div class="form-group">
       <label for="password">4-Digit Password</label>
       <input
-        type="text"
+        type="password"
         id="password"
         placeholder="Enter 4 digits"
         maxlength="4"
         inputmode="numeric"
-        autocomplete="off"
+        autocomplete="new-password"
         required
       >
     </div>
@@ -452,12 +453,12 @@ input:focus{
     <div class="form-group">
       <label for="confirmPassword">Confirm Password</label>
       <input
-        type="text"
+        type="password"
         id="confirmPassword"
         placeholder="Enter the 4 digits again"
         maxlength="4"
         inputmode="numeric"
-        autocomplete="off"
+        autocomplete="new-password"
         required
       >
     </div>
@@ -466,21 +467,26 @@ input:focus{
 
   </form>
 
-  <p id="message"></p>
+  <p id="message" role="status" aria-live="polite"></p>
 
   <div class="warning">
-    Your account cannot be deleted once created. Please remember your Username and Password.
+    If D1 is unavailable, your new account and starting progress are saved in this browser. Keep your username and password.
   </div>
 
 </main>
 
-<script>
+<script type="module">
+import {registerPlayer} from "/assets/js/player-data.js";
+
 const form=document.getElementById("createForm"),
 username=document.getElementById("username"),
 password=document.getElementById("password"),
 confirmPassword=document.getElementById("confirmPassword"),
 button=document.getElementById("createButton"),
 message=document.getElementById("message");
+
+const requestedUsername=new URLSearchParams(location.search).get("username");
+if(requestedUsername)username.value=requestedUsername;
 
 function setMessage(text,type=""){
   message.textContent=text;
@@ -502,6 +508,7 @@ confirmPassword.addEventListener("input",()=>{
 
 form.addEventListener("submit",async e=>{
   e.preventDefault();
+  if(button.disabled)return;
 
   const user=username.value.trim(),
   pass=password.value.trim(),
@@ -530,40 +537,12 @@ form.addEventListener("submit",async e=>{
   setLoading(true);
 
   try{
-    const response=await fetch("/api/create-user",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        username:user,
-        password:pass
-      })
-    });
-
-    const text=await response.text();
-    let result={};
-
-    try{
-      result=text?JSON.parse(text):{};
-    }catch{
-      throw new Error("Server returned an invalid response.");
-    }
-
-    if(!response.ok){
-      setMessage(result.error||"Unable to create user.","error");
-      setLoading(false);
-      return;
-    }
-
-    setMessage("Your adventure begins!","success");
+    const result=await registerPlayer(user,pass);
+    setMessage(result.connected?"Your D1 account is ready.":"Your offline account is ready in this browser.","success");
     form.reset();
-
-    setTimeout(()=>{
-      window.location.href="/";
-    },1000);
-
+    window.location.href="/webpages/account.html";
   }catch(error){
-    console.error(error);
-    setMessage("Something went wrong. Please try again.","error");
+    setMessage(error.message||"Unable to create your account.","error");
     setLoading(false);
   }
 });

@@ -56,7 +56,7 @@ Keep `canvas.html`, `camera.json`, `js/` (including its vendor files), `program/
 
 When adding scripts by hand, update `files`; a folder is not automatically scanned by the browser. Keep paths relative to `program/`. All executable files finish event/function registration before startup. Put game work inside event bodies and use explicit synchronization for dependencies. `sample.js` and `reference/` examples are excluded from execution.
 
-Keep `js/block-api.js` and `js/extensions.js`: both supply runtime behavior, including custom functions. Preserve script-tag loading order in `canvas.html`. Asset paths resolve against the game page, so root-relative images/audio and website player-save APIs must remain available on the host when your game uses them.
+Keep `js/block-api.js` and `js/extensions.js`: both supply runtime behavior, including custom functions. Preserve script-tag loading order in `canvas.html`. The included game uses project-relative assets and runs from a subdirectory on a static host. Other projects should ship their referenced assets alongside the game or provide reachable URLs. The website player account integration is optional for gameplay.
 
 ## Construction happens before execution
 
@@ -323,6 +323,17 @@ The scheduler shares a configurable per-frame budget: by default 500 execution t
 The public API is currently named `window.MLGame`, despite the folder being named JScratch. Preserve this compatibility unless an API migration is explicitly requested. It exposes `start`, `restart`, `stop`, `pause`, `resume`, `step`, `inspect`, block/reporter registration, execution helpers, context helpers, broadcasts, and asset preloading. Runtime events are `mlgame-state` and `mlgame-error`; their names also remain unchanged.
 
 Stopping invalidates existing contexts using a run ID and releases waiters. Restart resets sprites, clones, variables, sounds, background, input, and UI before replaying the constructed program. It does not re-run the JavaScript source files or clear every external cache/store; broadcast registrations and JSON/player stores have separate lifetimes.
+
+## Player accounts and saves
+
+Sign in through the website or Account with your existing D1 username and password. The browser prepares a copy of that account for offline play after a successful sign-in. Local Wrangler uses the D1 binding configured for that server. The hosted website uses its own binding. Browser copies belong to the current hostname and port.
+
+- `loadPlayerData()` selects the signed-in account. `getUsername()`, `getLoggedIn()` and `getData(key)` read its working copy. `updateData(key, value)` and `changeDataBy(key, amount)` save in the browser. `refreshPlayerData()` pulls reachable updates while preserving pending changes.
+- The website tries D1 automatically. If D1 is unavailable, this browser can reopen a previously prepared account using the same credentials. The browser stores a salted verifier and reconnects with the current website session cookie. Create User registers with D1 when reachable. When D1 is unavailable, it creates a browser account with the same starting data and four-digit password rules. Later, use **Register with D1** in Account with the same username and password. If that username is already taken in D1, the browser account stays available.
+- **Account → Player saves** checks and restores local backups when offline. When connected, it exports the current D1 save and restores only original, unchanged exports issued for the signed-in account.
+- Website profile tools use the browser copy offline. Normal Account appearance edits save to D1 when connected, and edits made offline are sent when Account reconnects. Appearance preferences are separate from game progress.
+- Game loads and window focus pull the latest reachable D1 save. Changes to separate top-level save fields can be combined. If both sides changed the same field, an upload leaves both copies intact. Game progress uploads only through `saveToD1()`.
+- An unsuccessful upload or restore leaves the browser copy intact. Export any browser progress you want to keep before replacing your D1 save. Backups contain game progress and the username. Account credentials and website appearance preferences stay with the account.
 
 ## Extending the engine
 

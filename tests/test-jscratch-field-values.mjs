@@ -21,3 +21,9 @@ test('clearing fields emits blank strings or zero and remains valid JavaScript',
 test('displaying an empty string hides quotes without changing imported source',()=>{
     const bridge=installBlocks(Blockly,catalog),ws=new Blockly.Workspace();try{const source='whenStart(uiSetText("HUD",""));';bridge.load(parseProgram(source,catalog),ws);const field=ws.getAllBlocks(false).find(b=>b.type==='js_uiSetText').getInputTargetBlock('ARG1').getField('VALUE');assert.equal(field.getText(),'');assert.equal(field.getValue(),'""');assert.match(generateProgram(bridge.read(ws)),/uiSetText\("HUD", ""\)/);}finally{ws.dispose();}
 });
+
+test('profile picker lists addressable parents and nested array indices',async()=>{
+    const {playerDataKeys}=await import('../JScratch/editor/player-data-keys.mjs');
+    const data=JSON.parse('{"coins":2,"player":{"items":[{"qty":3}],"bad.key":1,"__proto__":{"test":2}}}');
+    assert.deepEqual(playerDataKeys(data),['coins','player','player.items','player.items.0','player.items.0.qty']);
+});

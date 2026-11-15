@@ -151,3 +151,9 @@ The Stage palette also exposes screenWidth/screenHeight (visible stage units bef
 Screen-mode edge anchors are capped by the declared box. Their horizontal region is min(visible width, declared width), centered on the view. Keep that shared forward/inverse rule for rendering, pointer/solid sensing and motion; the inspector still shows the user's native offsets. The mode picker tooltip should distinguish this from full-box canvas anchoring on portrait screens.
 
 All coordinate-plane offsets now measure from the chosen reference sides to the sprite center. Size/rotation edits keep the center fixed in world, canvas and screen modes. Keep this convention in movement/distance blocks, inspector values, tooltips and the shared forward/inverse geometry; do not compensate positions using costume half-extents. Screen reference edges remain bounded by the canvas box. Resizing changes the outer-edge gap naturally, not the configured center distance.
+
+### Inspect a reporter value
+
+Press **Run**, then click a value or Boolean reporter in the workspace. The editor asks the current preview for a one-time value and displays it beside the block. Click again to refresh. The input decoder accepts literal values and connected supported reporters. A raw JavaScript expression, random reporter, or a parameter that needs a particular script invocation has no live preview. Sprite and clone snapshots remain independent of reporter inspection. This feature lives entirely inside the editor folder.
+
+The key fields on `getData`, `updateData` and `changeDataBy` search the signed-in player's save, including nested objects and array indices. Pending browser changes take priority. Use **Use text** for a new key or **Expression…** for a computed key. These choices are loaded when the picker opens and stay out of project metadata.

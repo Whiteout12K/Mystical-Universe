@@ -6,7 +6,7 @@ whenBroadcast(
     canvasCostume("", 1),
     canvasColor("#202833"),
     createSprite("Player"),
-    spriteCostume("Player", "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif", 0.3),
+    spriteCostume("Player", "images/world/costume1_idle1.gif", 0.3),
     moveTo("Player", 0, 0),
     setSpriteVar("Player", "Speed", 160),
     // Game units per second.

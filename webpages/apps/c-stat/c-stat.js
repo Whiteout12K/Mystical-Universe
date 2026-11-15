@@ -1,3 +1,4 @@
+import {loadPlayerProfile} from '../../../assets/js/player-data.js';
 import {getEquipmentStatEntries,getArtifactMainStat,getArtifactSubStats,equipmentStatKey} from './equipment-stats.js';
 const STAT_ORDER=[
  "health","attack","defense","mana","mana_regen","stamina","stamina_regen",
@@ -266,14 +267,8 @@ export async function getCharacterStats(username,characterKey="c1",view="total")
  artifactDatabase=artifactDB;
  equipmentRules=rulesDB;
 
- const response=await fetch(
-  `/api/user/${encodeURIComponent(username)}`,
-  {cache:"no-cache"}
- );
-
- if(!response.ok)throw Error("Player Not Found.");
-
- const result=await response.json();
+ const result=await loadPlayerProfile(username);
+ if(!result)throw Error("Player Not Found.");
 
  const data=result?.data&&typeof result.data==="object"
   ?result.data
@@ -420,12 +415,7 @@ export async function renderCharacterStats(username,characterKey="c1"){
   Recalculate the detailed values for the visual page.
  */
 
- const dataResponse=await fetch(
-  `/api/user/${encodeURIComponent(username)}`,
-  {cache:"no-cache"}
- );
-
- const result=await dataResponse.json();
+ const result=await loadPlayerProfile(username);
  const data=result?.data||{};
  const playerCharacter=data[characterKey];
 

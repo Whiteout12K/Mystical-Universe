@@ -62,18 +62,12 @@ message.textContent="";
 message.classList.remove("show");
 
 try{
-const response=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username,password})});
-const result=await response.json();
-
-if(response.ok){window.location.reload();return;}
-
-message.textContent=result.error||"Username or password is incorrect.";
-message.classList.add("show");
-bootstrap.Dropdown.getOrCreateInstance(dropdown).show();
-
+const {signInPlayer}=await import("/assets/js/player-data.js");
+await signInPlayer(username,password);
+window.location.reload();
 }catch(error){
 console.error("Login failed:",error);
-message.textContent="Unable to connect to login service.";
+message.textContent=error.message||"Unable to connect to login service.";
 message.classList.add("show");
 bootstrap.Dropdown.getOrCreateInstance(dropdown).show();
 }
@@ -87,7 +81,7 @@ if(!logoutButton||logoutButton.dataset.logoutReady)return;
 logoutButton.dataset.logoutReady="true";
 
 logoutButton.addEventListener("click",async()=>{
-try{await fetch("/api/logout",{method:"POST"});}
+try{const {signOutPlayer}=await import("/assets/js/player-data.js");await signOutPlayer();}
 catch(error){console.error("Logout failed:",error);}
 window.location.reload();
 });

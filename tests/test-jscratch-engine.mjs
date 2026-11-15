@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {webcrypto} from 'node:crypto';
 
 function engine(overrides={}) {
-    const stats={reads:0,resizes:0,draws:0,measures:0},events=new Map();
+    const stats={reads:0,resizes:0,draws:0,measures:0},events=new Map(),storage=new Map();
     function makeCanvas(){
         const context=new Proxy({
             getImageData(_x,_y,w,h){stats.reads++;if(context._source?.testPixels)return {data:context._source.testPixels.slice()};const data=new Uint8ClampedArray(w*h*4);for(let i=0;i<data.length;i+=4){data[i]=255;data[i+3]=255;}return {data};},
@@ -14,7 +15,10 @@ function engine(overrides={}) {
     }
     const canvas=makeCanvas();
     const sandbox={console:{error(){},warn(){},log(){}},performance:{now:()=>0},setTimeout,clearTimeout,AbortController,
-        URLSearchParams,Uint8ClampedArray,CustomEvent:class {constructor(type,{detail}){this.type=type;this.detail=detail;}},
+        URLSearchParams,Uint8ClampedArray,TextEncoder,crypto:webcrypto,location:{hostname:'game.test'},
+        localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value),
+            removeItem:key=>storage.delete(key)},
+        CustomEvent:class {constructor(type,{detail}){this.type=type;this.detail=detail;}},
         requestAnimationFrame:()=>1,Image:class {constructor(){this.complete=true;this.naturalWidth=10;this.naturalHeight=10;}set src(v){this.path=v;queueMicrotask(()=>this.onload?.());}addEventListener(){}},
         document:{getElementById:()=>canvas,createElement:makeCanvas,addEventListener(){}},
         addEventListener(type,fn){events.set(type,fn);},dispatchEvent(){},innerWidth:640,innerHeight:360,devicePixelRatio:1,...overrides};
@@ -23,7 +27,7 @@ function engine(overrides={}) {
     sandbox.window=sandbox;
     const context=vm.createContext(sandbox);
     vm.runInContext(fs.readFileSync(new URL('../JScratch/js/vendor/gifuct.js',import.meta.url),'utf8'),context);
-    for(const file of ['block-api','back-process','media','camera','ui','data','json','canvas','sensing','lists','solid','control','sprite','sound','motion','operator','clone','extensions'])
+    for(const file of ['block-api','back-process','media','camera','ui','player-store','data','json','canvas','sensing','lists','solid','control','sprite','sound','motion','operator','clone','extensions'])
         vm.runInContext(fs.readFileSync(new URL(`../JScratch/js/${file}.js`,import.meta.url),'utf8'),context,{filename:file+'.js'});
     const run=source=>vm.runInContext(source,context);
     // Historical fixtures explicitly use 640x360; production startup defaults to 480x360.
@@ -196,10 +200,72 @@ test('withoutScreenRefresh accelerates computation while sharing the frame budge
     await e.settle(e.run('startRuntime()'),100);assert.equal(e.run('ENGINE.variables.fast'),1000);assert.equal(e.run('ENGINE.errors.length'),0);
 });
 
-test('concurrent player increments are saved in order without serializing other scripts',async()=>{
-    const saved=[];const e=engine({fetch:async url=>{const value=Number(new URL('http://example.test'+url).searchParams.get('coins'));saved.push(value);return {ok:true,json:async()=>({success:true})};}});
-    e.run(`PLAYER={loaded:true,loggedIn:true,username:'test',password:'test',data:{coins:0}};`);
-    await e.settle(e.run(`Promise.all([executeBlock(createBlock('changeDataBy',{data:'coins',amount:1}),createScriptContext()),executeBlock(createBlock('changeDataBy',{data:'coins',amount:1}),createScriptContext())])`));assert.deepEqual(saved,[1,2]);assert.equal(e.run('PLAYER.data.coins'),2);
+test('cached D1 accounts isolate offline saves and accept the original credentials',async()=>{
+    const e=engine({location:{hostname:'localhost'},fetch:()=>{throw Error('D1 unavailable');}});
+    await e.run(`PlayerStore.rememberCloudLogin({authenticated:true,username:"one",userId:1,data:{},revision:"one"},"1234")`);
+    await e.settle(e.run('executeBlock(loadPlayerData(),createScriptContext())'));
+    await e.settle(e.run(`Promise.all([1,1].map(amount=>executeBlock(changeDataBy("coins",amount),createScriptContext())))`));
+    assert.equal(e.run('resolveValue(getData("coins"))'),2);
+    e.run('PlayerStore.stage(PlayerStore.localAccount(),{coins:3})');
+    assert.equal(e.run('resolveValue(getData("coins"))'),3);
+
+    await e.run(`PlayerStore.rememberCloudLogin({authenticated:true,username:"two",userId:2,data:{},revision:"two"},"5678")`);
+    assert.equal(e.run('resolveValue(getLoggedIn())'),false);
+    await e.settle(e.run('executeBlock(refreshPlayerData(),createScriptContext())'));
+    assert.equal(e.run('resolveValue(getData("coins"))'),0);
+    await assert.rejects(e.run(`PlayerStore.signInOffline("one","wrong")`),/Incorrect/);
+    await e.run(`PlayerStore.signInOffline("one","1234")`);
+    await e.settle(e.run('executeBlock(refreshPlayerData(),createScriptContext())'));
+    assert.equal(e.run('resolveValue(getData("coins"))'),3);
+});
+
+test('hosted saves keep pending browser progress through refresh and D1 failure',async()=>{
+    let status=409;
+    const posts=[];
+    let remote={authenticated:true,username:'online',userId:7,data:{coins:10},revision:'old'};
+    const e=engine({fetch:async(url,options)=>{
+        assert.equal(url,'/api/save');
+        if(options.method!=='POST')return {ok:true,json:async()=>remote};
+        const body=JSON.parse(options.body);posts.push(body);
+        if(status!==200)return {ok:false,status};
+        remote={...remote,data:body.data,revision:'new'};
+        return {ok:true,json:async()=>({success:true,revision:'new'})};
+    }});
+    const execute=code=>e.settle(e.run(`executeBlock(${code},createScriptContext())`));
+    await execute('loadPlayerData()');
+    await execute('changeDataBy("coins",2)');
+    assert.equal(posts.length,0);
+    await execute('refreshPlayerData()');
+    assert.equal(e.run('resolveValue(getData("coins"))'),12);
+    await execute('saveToD1()');
+    assert.deepEqual(posts,[{userId:7,revision:'old',data:{coins:12}}]);
+    assert.equal(e.run('PlayerStore.record(PLAYER.account).dirty'),true);
+    status=200;
+    await execute('saveToD1()');
+    assert.equal(e.run('PlayerStore.record(PLAYER.account).dirty'),false);
+    assert.equal(remote.data.coins,12);
+});
+
+test('a localhost upload requires a matching D1 account and only posts on explicit save',async()=>{
+    let username='different';
+    const posts=[];
+    const e=engine({location:{hostname:'localhost'},fetch:async(_url,options)=>{
+        if(options.method==='POST'){
+            posts.push(JSON.parse(options.body));
+            return {ok:true,json:async()=>({success:true,revision:'after'})};
+        }
+        return {ok:true,json:async()=>({authenticated:true,userId:2,username,data:{},revision:'before'})};
+    }});
+    await e.run('PlayerStore.rememberCloudLogin({authenticated:true,userId:2,username:"offline",data:{},revision:"before"},"1234")');
+    const execute=code=>e.settle(e.run(`executeBlock(${code},createScriptContext())`));
+    await execute('loadPlayerData()');
+    await execute('updateData("coins",25)');
+    await execute('saveToD1()');
+    assert.equal(posts.length,0);
+    username='offline';
+    await execute('saveToD1()');
+    assert.deepEqual(posts,[{userId:2,revision:'before',data:{coins:25}}]);
+    assert.equal(e.run('PlayerStore.record(PLAYER.account).revision'),'after');
 });
 
 test('validation permits ordinary data objects with block-like field names',async()=>{
@@ -218,7 +284,7 @@ test('a debugger step across loop-frame boundaries still runs only one command',
 test('World uses c1 costume and supports normalized WASD/arrow movement off stage',async()=>{
     const e=engine();e.run(fs.readFileSync(new URL('../JScratch/program/world.js',import.meta.url),'utf8'));
     e.run('broadcastMessage("World")');await e.flush();for(let i=0;i<25;i++)await e.tick();
-    assert.equal(e.run('ENGINE.sprites.Player.costume'),'/images/character_art/pixel_art/c1_costume/costume1_idle1.gif');assert.equal(e.run('Object.keys(ENGINE.sprites).length'),1);
+    assert.equal(e.run('ENGINE.sprites.Player.costume'),'images/world/costume1_idle1.gif');assert.equal(e.run('Object.keys(ENGINE.sprites).length'),1);
     e.run(`SENSING.keys={d:true}`);for(let i=0;i<10;i++)await e.tick();const straight=e.run('ENGINE.sprites.Player.x');assert.ok(straight>0);
     e.run(`ENGINE.sprites.Player.x=0;ENGINE.sprites.Player.y=0;SENSING.keys={w:true,d:true}`);for(let i=0;i<10;i++)await e.tick();const diagonal=e.run('Math.hypot(ENGINE.sprites.Player.x,ENGINE.sprites.Player.y)');assert.ok(Math.abs(straight-diagonal)<.001);
     e.run(`SENSING.keys={a:true,d:true,w:true,s:true}`);const x=e.run('ENGINE.sprites.Player.x'),y=e.run('ENGINE.sprites.Player.y');for(let i=0;i<5;i++)await e.tick();assert.equal(e.run('ENGINE.sprites.Player.x'),x);assert.equal(e.run('ENGINE.sprites.Player.y'),y);
@@ -266,7 +332,7 @@ test('sprite collision rejects transparent margins and holes, and ignores ghost 
 });
 
 test('GIF frame timing, looping and restart use the decoded costume timeline',()=>{
-    const e=engine(),bytes=fs.readFileSync(new URL('../images/character_art/pixel_art/c1_costume/costume1_idle1.gif',import.meta.url));
+    const e=engine(),bytes=fs.readFileSync(new URL('../JScratch/images/world/costume1_idle1.gif',import.meta.url));
     e.sandbox.gifBytes=bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);
     e.run(`const animation=createGifAnimation(JScratchGIF.parseGIF(gifBytes));animation.frame(0)`);assert.equal(e.run('animation.index'),0);
     e.run('animation.frame(499)');assert.equal(e.run('animation.index'),0);e.run('animation.frame(500)');assert.equal(e.run('animation.index'),1);e.run('animation.frame(3000)');assert.equal(e.run('animation.index'),0);
@@ -284,7 +350,7 @@ test('animated alpha masks and effects refresh only when the decoded frame chang
 });
 
 test('GIF frame boundaries tolerate fractional game-clock values',()=>{
-    const e=engine(),bytes=fs.readFileSync(new URL('../images/character_art/pixel_art/c1_costume/costume1_idle1.gif',import.meta.url));
+    const e=engine(),bytes=fs.readFileSync(new URL('../JScratch/images/world/costume1_idle1.gif',import.meta.url));
     e.sandbox.gifBytes=bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength);
     e.run(`ENGINE.animationClock=56.400000000000006;const parsed=JScratchGIF.parseGIF(gifBytes);for(const f of parsed.frames)if(f.gce)f.gce.delay=10;const timed=createGifAnimation(parsed);timed.frame(ENGINE.animationClock+200)`);assert.equal(e.run('timed.index'),2);
 });
@@ -667,4 +733,50 @@ test('declared box clipping and screen center offsets share exactly the same log
 });
 test('black bars outside the declared box cannot hit hidden off-box sprites',async()=>{
     const e=engine({logicalWidth:540,innerWidth:2000,innerHeight:720});await e.settle(e.run(`executeBlock(uiBox('Outside',-400,0,40,40),createScriptContext())`));e.run('getMousePosition({clientX:200,clientY:360})');assert.equal(e.run(`resolveValue(touchingMouse('Outside'))`),false);assert.equal(e.run('spriteInCameraView(ENGINE.sprites.Outside)'),false);
+});
+
+test('website changes reach the game and disjoint browser fields publish only on Save to D1',async()=>{
+    let remote={authenticated:true,username:'online',userId:7,data:{coins:10,quests:0},revision:'first'};
+    const posts=[];
+    const e=engine({fetch:async(_url,options)=>{
+        if(options.method==='POST'){
+            const update=JSON.parse(options.body);
+            posts.push(update);
+            remote={...remote,data:update.data,revision:'published'};
+            return {ok:true,json:async()=>({success:true,revision:'published'})};
+        }
+        return {ok:true,json:async()=>remote};
+    }});
+    const execute=code=>e.settle(e.run(`executeBlock(${code},createScriptContext())`));
+    await execute('loadPlayerData()');
+    await execute('updateData("quests",1)');
+    remote={...remote,data:{coins:20,quests:0},revision:'website'};
+    e.events.get('focus')();
+    await e.flush();
+    assert.equal(e.run('resolveValue(getData("coins"))'),20);
+    assert.equal(e.run('resolveValue(getData("quests"))'),1);
+    assert.equal(posts.length,0);
+    await execute('saveToD1()');
+    assert.deepEqual(posts,[{userId:7,revision:'website',data:{coins:20,quests:1}}]);
+
+    await execute('updateData("coins",30)');
+    remote={...remote,data:{coins:25,quests:1},revision:'external-conflict'};
+    await execute('saveToD1()');
+    assert.equal(posts.length,1);
+    assert.equal(e.run('resolveValue(getData("coins"))'),30);
+    assert.equal(remote.data.coins,25);
+});
+
+test('an offline registration keeps its save when the same profile is registered in D1', async()=>{
+    const e=engine({location:{hostname:'hosted.test'}});
+    const snapshot='{authenticated:true,userId:42,username:"NewPlayer",revision:"starter",data:{coins:0,energy:100}}';
+    await e.run('PlayerStore.createOfflineAccount("NewPlayer","0420",{coins:0,energy:100})');
+    const localId=e.run('PlayerStore.localAccount().id');
+    e.run('PlayerStore.stage(PlayerStore.localAccount(),{coins:17,energy:100})');
+    assert.equal(e.run(`PlayerStore.activateCloud(${snapshot})`),null,'a pending registration needs explicit D1 sign-in');
+    await e.run(`PlayerStore.rememberCloudLogin(${snapshot},"0420")`);
+    assert.equal(e.run('PlayerStore.localAccount().id'),localId);
+    assert.equal(e.run('PlayerStore.isOfflineRegistration("NewPlayer")'),false);
+    assert.equal(e.run('PlayerStore.record(PlayerStore.localAccount()).data.coins'),17);
+    assert.equal(e.run('PlayerStore.record(PlayerStore.localAccount()).dirty'),true);
 });

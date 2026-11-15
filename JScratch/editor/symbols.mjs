@@ -12,6 +12,7 @@ export function argumentPicker(def,index,read,cloneOwner=null,functionOwner=null
     if(['functionValue','setFunctionValue'].includes(fn)&&index===0)return {kind:'functionLocal',scope:functionOwner??'@dynamic'};
     if(param?.options)return {kind:'choice',options:param.options};
     if(param?.picker)return {kind:param.picker,scope:['costume','spriteVar'].includes(param.picker)?owner??'@dynamic':''};
+    if(index===0&&['getData','updateData','changeDataBy'].includes(fn))return {kind:'playerKey',wholeProfile:fn==='getData'};
     if(ENUMS[fn]?.[index])return {kind:'choice',options:ENUMS[fn][index]};
     if(['uiSet','uiGet','uiBind','uiUnbind'].includes(fn)&&index===1)return {kind:'choice',options:['x','y','scale','rotation','visible','opacity','layer','text','value','max','width','height','radius','color','background','foreground','textColor','coordinateMode']};
     if(fn==='uiSet'&&index===2&&['color','background','foreground','textColor'].includes(read(1)))return {kind:'color'};
@@ -30,7 +31,7 @@ export function argumentPicker(def,index,read,cloneOwner=null,functionOwner=null
     if(def.category==='json'&&name==='name')return {kind:'json',scope:''};
     return null;
 }
-export const namedPicker=spec=>!!spec&&!['color','choice','boolean'].includes(spec.kind);
+export const namedPicker=spec=>!!spec&&!['color','choice','boolean','playerKey'].includes(spec.kind);
 const key=spec=>JSON.stringify([spec.kind,spec.scope??'']);
 export class SymbolLibrary{
     constructor(catalog,{sources=()=>[],onChange=()=>{},data=null}={}){this.catalog=new Map(catalog.map(d=>[d.name,d]));this.sources=sources;this.onChange=onChange;this.items=new Map();this.references=new Map();this.dynamic=new Set();this.unknown=new Map();this.revision=0;this.merge(data);}

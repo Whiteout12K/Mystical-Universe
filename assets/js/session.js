@@ -3,22 +3,10 @@ window.loggedIn = false;
 
 window.loadSession = async function () {
     try {
-        const response = await fetch("/api/me", {
-            method: "GET",
-            credentials: "include",
-            cache: "no-store"
-        });
+        const {loadPlayerSession} = await import("./player-data.js");
+        const user = await loadPlayerSession();
 
-        if (!response.ok) {
-            window.username = null;
-            window.loggedIn = false;
-            updateSessionElements();
-            return null;
-        }
-
-        const user = await response.json();
-
-        if (user.authenticated && user.username) {
+        if (user?.authenticated && user.username) {
             window.username = user.username;
             window.loggedIn = true;
         } else {
@@ -58,7 +46,7 @@ function updateSessionElements() {
             element.href = "#";
         } else {
             element.textContent = "Login";
-            element.href = "/mlg/login";
+            element.href = "/webpages/account.html";
         }
     });
 }

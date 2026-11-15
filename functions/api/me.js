@@ -1,35 +1,16 @@
-import { jsonResponse } from "../_utils.js";
+import {accountUsername} from "../_account.js";
+import {playerResponse} from "../_player-session.js";
 
-function getCookie(request,name){
-    const cookies=request.headers.get("Cookie")||"";
-    for(const cookie of cookies.split(";")){
-        const [key,...value]=cookie.trim().split("=");
-        if(key===name)return decodeURIComponent(value.join("="));
-    }
-    return null;
-}
+export async function onRequestGet({request, env}) {
+    const username = accountUsername(request);
+    if (!username) return playerResponse({authenticated: false}, 401);
 
-export async function onRequestGet(context){
-    const {request,env}=context;
-    const username=getCookie(request,"username");
-
-    if(!username){
-        return jsonResponse({authenticated:false},401);
-    }
-
-    const user=await env.DB.prepare(
-        "SELECT id,username,password,save_data FROM users WHERE username=?"
+    const user = await env.DB.prepare(
+        "SELECT id, username, save_data FROM users WHERE username = ?"
     ).bind(username).first();
+    if (!user) return playerResponse({authenticated: false}, 401);
 
-    if(!user){
-        return jsonResponse({authenticated:false},401);
-    }
-
-    return jsonResponse({
-        authenticated:true,
-        username:user.username,
-        userId:user.id,
-        password:user.password,
-        data:user.save_data
+    return playerResponse({
+        authenticated: true, username: user.username, userId: user.id, data: user.save_data
     });
 }

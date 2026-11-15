@@ -957,11 +957,11 @@ async function executionTurn(c){
     }
 }
 // Fetch and JSON decoding share one abortable deadline; Stop cancels in-flight work.
-async function runtimeFetchJson(url,options={},c=createScriptContext()){
+async function runtimeFetchJson(url,options={},c=createScriptContext(),timeoutMs=ENGINE.requestTimeout){
     c??=createScriptContext();
     const controller=new AbortController(),request={controller,c};
     ENGINE.requests.add(request);
-    const timeout=Number.isFinite(ENGINE.requestTimeout)&&ENGINE.requestTimeout>0?setTimeout(()=>controller.abort(),ENGINE.requestTimeout):null;
+    const timeout=Number.isFinite(timeoutMs)&&timeoutMs>0?setTimeout(()=>controller.abort(),timeoutMs):null;
     try{
         const response=await fetch(url,{...options,signal:controller.signal});
         if(!response.ok)throw new Error("HTTP "+response.status);

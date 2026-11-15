@@ -1,4 +1,5 @@
 import {argumentPicker,stringLiteral,namedPicker} from './symbols.mjs';
+import {cachedPlayerKeys,loadPlayerKeys} from './player-data-keys.mjs';
 import {parseColor,colorCss,hsvToRgb} from './color.mjs';
 const element=(tag,className,text)=>{const node=document.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 export function smartFieldClass(Blockly,catalog,getLibrary){
@@ -16,7 +17,7 @@ export function smartFieldClass(Blockly,catalog,getLibrary){
         return ['costume','spriteVar','functionLocal'].includes(spec?.kind)&&['@dynamic','@self'].includes(spec.scope)?null:spec;
     }
     return class SmartValueField extends Blockly.FieldTextInput{
-        getText(){const raw=String(this.getValue()??'');try{const spec=context(this),value=stringLiteral(raw);if(spec?.kind==='boolean')return raw+' ▾';return spec&&value!==null?(value||'(none)')+' ▾':raw;}catch{return raw;}}
+        getText(){const raw=String(this.getValue()??'');try{const spec=context(this),value=stringLiteral(raw);if(spec?.kind==='boolean')return raw+' ▾';if(spec?.kind==='playerKey'&&value!==null)return value?value+' ▾':'▾';return spec&&value!==null?(value||'(none)')+' ▾':raw;}catch{return raw;}}
         showEditor_(){
             const spec=context(this);if(!spec){super.showEditor_();return;}
             Blockly.DropDownDiv.getContentDiv();Blockly.DropDownDiv.clearContent();const content=Blockly.DropDownDiv.getContentDiv();Blockly.DropDownDiv.setColour('#292b34','#414450');
@@ -29,28 +30,38 @@ export function smartFieldClass(Blockly,catalog,getLibrary){
             panel.querySelector('input')?.focus({preventScroll:true});
         }
         choicePanel(panel,spec,advanced){
-            const library=getLibrary(),named=namedPicker(spec),current=spec.kind==='boolean'?String(this.getValue()):stringLiteral(this.getValue());
-            panel.append(element('div','smart-heading',named?(({spriteVar:'Sprite var',function:'Custom block',functionLocal:'Parameter / local'})[spec.kind]??spec.kind[0].toUpperCase()+spec.kind.slice(1))+(spec.scope?' · '+(spec.scope==='@stage'?'Stage':spec.scope):''):'Choose value'));
-            const search=element('input','smart-search');search.placeholder=named?'Find or add a name…':'Find a value…';search.setAttribute('aria-label','Find or add value');
+            const library=getLibrary(),named=namedPicker(spec),profile=spec.kind==='playerKey',current=spec.kind==='boolean'?String(this.getValue()):stringLiteral(this.getValue());
+            panel.append(element('div','smart-heading',named?(({spriteVar:'Sprite var',function:'Custom block',functionLocal:'Parameter / local'})[spec.kind]??spec.kind[0].toUpperCase()+spec.kind.slice(1))+(spec.scope?' · '+(spec.scope==='@stage'?'Stage':spec.scope):''):profile?'Player data key':'Choose value'));
+            const search=element('input','smart-search');search.placeholder=profile?'Find a profile key…':named?'Find or add a name…':'Find a value…';search.setAttribute('aria-label','Find or add value');
             const list=element('div','smart-options'),footer=element('div','smart-footer'),add=element('button','smart-add',named?'+ Add new':'+ Use text'),code=element('button','smart-code','Expression…');footer.append(add,code);panel.append(search,list,footer);code.onclick=advanced;
             const choose=value=>{this.setValue(spec.kind==='boolean'?String(value):JSON.stringify(value));Blockly.DropDownDiv.hideIfOwner(this,true);this.forceRerender();};
-            let cachedChoices=null;
+            let cachedChoices=null,profileKeys=[],loading=profile;
+            if(profile)try{profileKeys=cachedPlayerKeys().keys;}catch{}
+            const caption=value=>profile&&value===''&&spec.wholeProfile?'Whole profile':value||'(none)';
             const draw=(refresh=false)=>{
-                const choices=cachedChoices&&!refresh?[...cachedChoices]:spec.kind==='boolean'?['true','false']:spec.kind==='choice'?spec.options.map(String):library?.names(spec)??[];
-                if(spec.kind==='costume'&&!choices.includes(''))choices.unshift('');
+                const choices=cachedChoices&&!refresh?[...cachedChoices]:spec.kind==='boolean'?['true','false']:spec.kind==='choice'?spec.options.map(String):profile?[...profileKeys]:library?.names(spec)??[];
+                if((spec.kind==='costume'||profile&&spec.wholeProfile)&&!choices.includes(''))choices.unshift('');
                 cachedChoices=[...choices];
-                if(current!==null&&!choices.includes(current))choices.unshift(current);
+                if(current!==null&&(!profile||current)&&!choices.includes(current))choices.unshift(current);
                 const query=search.value.trim().toLowerCase();list.replaceChildren();
-                for(const value of choices.filter(value=>value.toLowerCase().includes(query))){
-                    const row=element('div','smart-option-row'),button=element('button','smart-option',value||'(none)');button.setAttribute('aria-pressed',String(value===current));button.onclick=()=>choose(value);row.append(button);
+                const matches=choices.filter(value=>caption(value).toLowerCase().includes(query));
+                for(const value of (profile?matches.slice(0,150):matches)){
+                    const row=element('div','smart-option-row'),button=element('button','smart-option',caption(value));button.setAttribute('aria-pressed',String(value===current));button.onclick=()=>choose(value);row.append(button);
                     if(named&&library&&value){const usage=library.uses(spec,value),remove=element('button','smart-remove','×');remove.setAttribute('aria-label','Delete '+value);remove.disabled=usage.count>0||usage.uncertain;remove.title=usage.uncertain?'Dynamic or incomplete code prevents safe deletion.':usage.count?`${usage.count} use(s). Remove all uses before deleting.`:'Delete unused item';remove.onclick=()=>{if(library.remove(spec,value))draw(true);};row.append(remove);}
                     list.append(row);
                 }
-                if(!list.childElementCount)list.append(element('p','smart-empty','No matching items.'));
+                if(profile&&!profileKeys.length&&!query){
+                    list.append(element('p','smart-empty',loading?'Loading profile keys…':'No profile keys available. Sign in or type a key.'));
+                }else if(!list.childElementCount)list.append(element('p','smart-empty','No matching items.'));
+                if(profile&&matches.length>150)list.append(element('p','smart-empty','Type to narrow the list.'));
                 add.hidden=spec.kind==='boolean';add.disabled=!search.value.trim();
             };
             const create=()=>{const value=search.value.trim();if(!value)return;if(named)library?.add(spec,value);choose(value);};
             search.oninput=()=>draw();search.onkeydown=event=>{if(event.key==='Enter'){event.preventDefault();create();}};add.onclick=create;draw();
+            if(profile)void loadPlayerKeys().catch(()=>[]).then(keys=>{
+                if(!panel.isConnected)return;
+                profileKeys=keys;loading=false;draw(true);
+            });
         }
         colorPanel(panel,advanced){
             const raw=stringLiteral(this.getValue())??'#ffffff';let hsv=parseColor(raw);

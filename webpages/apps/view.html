@@ -81,9 +81,9 @@ const imageAttrs=(loading="lazy",priority="low")=>` loading="${loading}" decodin
 async function loadProfile(){
  try{
   if(!username||username==="view.html")return showError("No Player","No username was provided.");
-  const r=await fetch(`/api/user/${encodeURIComponent(username)}`,{cache:"no-cache"});
-  if(!r.ok)return showError("Player Not Found","This profile does not exist.");
-  const result=await r.json();
+  const {loadPlayerProfile}=await import("/assets/js/player-data.js");
+  const result=await loadPlayerProfile(username);
+  if(!result)return showError("Player Not Found","This profile does not exist.");
   currentPlayerData=result?.data&&typeof result.data==="object"?result.data:{};
   renderProfile(result?.username||username,currentPlayerData)
  }catch(e){console.error("Profile loading error:",e);showError("Connection Error","Could not load this profile.")}
@@ -325,7 +325,7 @@ const escapeHtml=v=>String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;")
 const escapeAttribute=escapeHtml;
 const showError=(t,m)=>document.getElementById("app").innerHTML=`<div class="page"><div class="error"><h1>${escapeHtml(t)}</h1><p>${escapeHtml(m)}</p></div></div>`;
 
-loadDatabases().then(loadProfile);
+loadDatabases().then(()=>{loadProfile();window.addEventListener("focus",loadProfile);});
 </script>
 
 <script src="/assets/js/include.js"></script>

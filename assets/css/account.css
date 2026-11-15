@@ -8,3 +8,9 @@
 .account-save-bar{display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding:16px 0}.account-save-bar p{margin:0;color:#d3c5a8;font-size:14px}.account-signin{max-width:440px;border:1px solid #e4c57933;border-radius:14px;padding:24px;background:#1d1d28}.account-signin label{display:block;font-size:14px;margin-bottom:6px}.account-signin input{width:100%;padding:10px 12px;min-height:44px;border-radius:7px;border:1px solid #e4c57944;background:#12131b;color:#eee;margin-bottom:16px}.account-signin h2{font:700 24px Georgia,serif;color:#e4c579}.account-signin [role=status]{margin-top:12px}
 .wiki-theme-status{display:block;font:13px/1.5 Arial,sans-serif;color:#b76c42;margin-top:8px}
 @media(max-width:600px){.account-main{padding:28px 16px 40px}.account-preview{padding:20px;min-height:220px;gap:14px}.account-preview img{width:88px;height:88px}.account-preview h2{font-size:20px}.account-fieldset{padding:18px 14px}.account-avatar-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.account-style-option img{width:65px;height:65px}.account-background-options{grid-template-columns:1fr 1fr}.account-theme-options{flex-direction:column}}
+.account-backups h2{margin:0 0 12px;font:700 21px Georgia,serif;color:#e4c579;overflow-wrap:anywhere}
+.account-backups label{display:block;margin:18px 0 6px}
+.account-backups input[type=file]{display:block;width:100%;max-width:26rem;margin-bottom:12px;color:inherit}
+.account-backups input[type=file]::file-selector-button{margin-right:10px;padding:7px 12px;border:1px solid #e4c57955;border-radius:6px;background:#312b29;color:#f4e9cf}
+.account-backup-actions{display:flex;flex-wrap:wrap;gap:8px}
+.account-backups [role=status]{color:#d3c5a8;margin:12px 0 0;line-height:1.5}

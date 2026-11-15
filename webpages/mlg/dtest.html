@@ -144,23 +144,20 @@ function renderLoggedOut(){
 
 async function load(){
  try{
-  const me=await fetch("/api/me",{cache:"no-cache"});
-  if(!me.ok)return renderLoggedOut();
-
-  const meData=await me.json();
+  const {loadPlayerSession,loadPlayerProfile}=await import("/assets/js/player-data.js");
+  const meData=await loadPlayerSession();
   const username=String(meData?.username||meData?.user?.username||"").trim();
   if(!username)return renderLoggedOut();
 
-  const[userRes,db]=await Promise.all([
-   fetch(`/api/user/${encodeURIComponent(username)}`,{cache:"no-cache"}),
+  const[result,db]=await Promise.all([
+   loadPlayerProfile(username),
    loadJSON("/images/mlg-assets/data-character.json")
   ]);
 
-  if(!userRes.ok)throw Error("Could not load player data");
+  if(!result)throw Error("Could not load player data");
 
   characterDatabase=db;
 
-  const result=await userRes.json();
   const data=result?.data||result?.user?.data||{};
   const owned=Array.isArray(data.c_owned)?data.c_owned:[];
 

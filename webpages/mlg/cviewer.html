@@ -142,15 +142,8 @@ function getAvatarFrame(id){return getAccountStyleAsset("avatar",`frame_${id}`)}
 
 async function loadCurrentUser(){
  try{
-  const r=await fetch("/api/me",{cache:"no-cache"});
-
-  if(!r.ok){
-   renderViewer();
-   loadAllUsers();
-   return;
-  }
-
-  const me=await r.json();
+  const {loadPlayerSession,loadPlayerProfile}=await import("/assets/js/player-data.js");
+  const me=await loadPlayerSession();
   loggedInUsername=me?.username||me?.user?.username||"";
 
   if(!loggedInUsername){
@@ -159,10 +152,8 @@ async function loadCurrentUser(){
    return;
   }
 
-  const p=await fetch(`/api/user/${encodeURIComponent(loggedInUsername)}`,{cache:"no-cache"});
-
-  if(p.ok){
-   const result=await p.json();
+  const result=await loadPlayerProfile(loggedInUsername);
+  if(result){
    currentUserData=result?.data&&typeof result.data==="object"?result.data:{};
    loggedInUsername=result?.username||loggedInUsername;
   }

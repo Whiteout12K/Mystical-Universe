@@ -1,15 +1,18 @@
 import {loadAccountPreferences,saveAccountPreferences} from './account-preferences.js';
 import {el,link,json} from './site-enhancements/core.js';
+import {playerBackups} from './account-backups.js';
+import {loadPlayerSession,signInPlayer,signOutPlayer} from './player-data.js';
 const host=document.getElementById('account-settings');
 function signIn(){
  const form=el('form',{class:'account-signin'});form.append(el('h2',{},'Sign in to your account'),el('p',{},'Your profile choices and wiki theme will be saved to your account.'));
  const username=el('input',{id:'account-login-username',name:'username',autocomplete:'username',required:''}),password=el('input',{id:'account-login-password',name:'password',type:'password',autocomplete:'current-password',required:''}),button=el('button',{type:'submit'},'Sign in'),message=el('p',{role:'status'});
- form.append(el('label',{for:username.id},'Username'),username,el('label',{for:password.id},'Password'),password,button,message,link('Create an account','/webpages/create-user.html'));form.onsubmit=async event=>{event.preventDefault();button.disabled=true;message.textContent='Signing in…';try{const response=await fetch('/api/login',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:username.value.trim(),password:password.value})});const result=await response.json();if(!response.ok)throw Error(result.error||'Sign-in failed.');location.reload();}catch(error){message.textContent=error.message;button.disabled=false;}};host.replaceChildren(form);
+ form.append(el('label',{for:username.id},'Username'),username,el('label',{for:password.id},'Password'),password,button,message,link('Create an account','/webpages/create-user.html'));form.onsubmit=async event=>{event.preventDefault();button.disabled=true;message.textContent='Signing in…';try{await signInPlayer(username.value,password.value);location.reload();}catch(error){message.textContent=error.message;button.disabled=false;}};host.replaceChildren(form);
 }
 async function start(){
- try{const account=await loadAccountPreferences();if(!account.authenticated){signIn();return;}
- const styles=await json('/images/mlg-assets/account-styles.json');let preferences={...account.preferences};
- const form=el('form'),preview=el('section',{class:'account-preview','aria-label':'Profile preview'}),avatar=el('img',{alt:'Selected profile image',width:'112',height:'112'}),heading=el('div');heading.append(el('h2',{},account.username),el('p',{},'Your profile preview'),link('View ML Game Profile','/webpages/apps/view.html?username='+encodeURIComponent(account.username)));preview.append(avatar,heading);form.append(preview);
+ try{
+ const account=await loadAccountPreferences();if(!account.authenticated){signIn();return;}
+ const styles=await json('/images/mlg-assets/account-styles.json');let preferences={...account.preferences},editing=false;
+ const form=el('form'),preview=el('section',{class:'account-preview','aria-label':'Profile preview'}),avatar=el('img',{alt:'Selected profile image',width:'112',height:'112'}),heading=el('div');heading.append(el('h2',{},account.username),el('p',{},'Your profile preview'),link('View ML Game Profile','/webpages/apps/view.html?username='+encodeURIComponent(account.username)));const signOut=el('button',{type:'button'},'Sign out');signOut.onclick=async()=>{await signOutPlayer();location.reload();};heading.append(el('p',{},account.connected?'Connected to D1':'Using this browser’s offline copy'),signOut);if(!account.connected){const retry=el('button',{type:'button'},'Sign in again');retry.onclick=signIn;heading.append(retry);if(account.offlineRegistration)heading.append(link('Register with D1','/webpages/create-user.html?username='+encodeURIComponent(account.username)));}preview.append(avatar,heading);
  const submit=el('button',{type:'submit'},'Save changes'),message=el('p',{role:'status','aria-live':'polite'});
  const updatePreview=()=>{avatar.src=styles.avatar['img_'+preferences.avatar];const background=styles.background['img_'+preferences.background];preview.style.backgroundImage=background?`url("${background}")`:'';};
  const fieldset=(title,description)=>{const section=el('fieldset',{class:'account-fieldset'});section.append(el('legend',{},title),el('p',{class:'account-help'},description));form.append(section);return section;};
@@ -17,9 +20,20 @@ async function start(){
  for(const [value,title]of [['cookie','Use browser preference'],['light','Light'],['dark','Dark']]){const label=el('label',{class:'account-theme-option'}),radio=el('input',{type:'radio',name:'wiki_theme',value});radio.checked=preferences.wiki_theme===value;label.append(radio,document.createTextNode(title));themeOptions.append(label);}theme.append(themeOptions);
  function picker(group,title,description){const section=fieldset(title,description),options=el('div',{class:group==='avatar'?'account-avatar-options':'account-background-options'});for(const [key,path]of Object.entries(styles[group]).filter(([key])=>/^img_\d+$/.test(key))){const id=Number(key.slice(4)),label=el('label',{class:'account-style-option'}),radio=el('input',{type:'radio',name:group,value:String(id)});radio.checked=preferences[group]===id;const name=styles.labels?.[group]?.[key]||title+' '+id;radio.setAttribute('aria-label',name);label.append(radio);if(path)label.append(el('img',{src:path,alt:'',loading:'lazy',decoding:'async'}));else label.append(el('span',{class:'account-default-background','aria-hidden':'true'}));label.append(el('span',{},name));options.append(label);}section.append(options);}
  picker('avatar','Profile image','Choose the Mystical Legends torch or a character portrait. Your choice appears in the navigation and on your player profile.');picker('background','Profile background','Choose the artwork behind your profile.');
- const bar=el('div',{class:'account-save-bar'});bar.append(submit,message);form.append(bar);host.replaceChildren(form);updatePreview();
- form.addEventListener('change',()=>{const data=new FormData(form);preferences={wiki_theme:data.get('wiki_theme'),avatar:Number(data.get('avatar')),background:Number(data.get('background'))};updatePreview();message.textContent='You have unsaved changes.';});
- form.addEventListener('submit',async event=>{event.preventDefault();submit.disabled=true;message.textContent='Saving…';try{const result=await saveAccountPreferences(preferences);preferences={...result.preferences};message.textContent='Account preferences saved.';}catch(error){message.textContent=error.message;}finally{submit.disabled=false;}});
+ const bar=el('div',{class:'account-save-bar'});bar.append(submit,message);form.append(bar);host.replaceChildren(preview,playerBackups(account),form);updatePreview();
+ form.addEventListener('change',()=>{editing=true;const data=new FormData(form);preferences={wiki_theme:data.get('wiki_theme'),avatar:Number(data.get('avatar')),background:Number(data.get('background'))};updatePreview();message.textContent='You have unsaved changes.';});
+ form.addEventListener('submit',async event=>{event.preventDefault();submit.disabled=true;message.textContent='Saving…';try{const result=await saveAccountPreferences(preferences);preferences={...result.preferences};editing=false;message.textContent=result.pendingPreferences?'Account preferences saved in this browser.':'Account preferences saved.';}catch(error){message.textContent=error.message;}finally{submit.disabled=false;}});
+ const reconnect=async()=>{
+  if(!form.isConnected){window.removeEventListener('online',reconnect);window.removeEventListener('focus',reconnect);return;}
+  if(editing||submit.disabled)return;
+  try{
+   const session=await loadPlayerSession();
+   if(!form.isConnected||editing||submit.disabled||!session||session.connected===account.connected)return;
+   await loadAccountPreferences({refresh:true});
+   if(form.isConnected&&!editing)void start();
+  }catch{}
+ };
+ window.addEventListener('online',reconnect);window.addEventListener('focus',reconnect);
  }catch(error){const message=el('p',{role:'status'},error.message||'Account settings could not load.'),retry=el('button',{type:'button'},'Try again');retry.onclick=async()=>{host.replaceChildren(el('p',{role:'status'},'Loading your account…'));try{await loadAccountPreferences({refresh:true});}catch{}start();};host.replaceChildren(message,retry);}
 }
 if(host)start();
