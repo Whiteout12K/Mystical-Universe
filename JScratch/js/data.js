@@ -203,6 +203,16 @@ registerPlayerWrite("changeDataBy",b=>savePlayerChange(b,previous=>{
     return (Number.isFinite(current)?current:0)+amount;
 }));
 
+function addPlayerDataField(path,value){
+    const account=activePlayer();
+    if(!account)return false;
+    const saved=PlayerStore.record(account);
+    const data=JSON.parse(JSON.stringify(saved?.data??PLAYER.data));
+    if(!PlayerStore.addMissingField(data,path,value))return false;
+    PLAYER.data=PlayerStore.stage(account,data,saved).data;
+    return true;
+}
+
 async function uploadPlayerSave(c){
     try{
         const account=activePlayer();

@@ -537,6 +537,8 @@ changeDataBy("silver_coin", 5); // Adds a number to a saved value; concurrent wr
 
 refreshPlayerData(); // Reloads the active player and keeps pending browser changes.
 
+addField("current_team.members", []); // Adds a missing path to the browser save. Use saveToD1() to upload it.
+
 saveToD1(); // Uploads the full browser save for the signed-in website player.
 
 

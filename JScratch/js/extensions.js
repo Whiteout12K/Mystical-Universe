@@ -27,3 +27,8 @@ defineJScratchBlock({name:"screenHeight",kind:"reporter",label:"visible screen h
 
 // Explicit cloud upload. Regular data writes only touch the browser save.
 defineJScratchBlock({name:"saveToD1",kind:"command",label:"save to D1",category:"data",params:[]},(_b,c)=>queuePlayerWrite(c,()=>uploadPlayerSave(c)));
+
+defineJScratchBlock({name:"addField",kind:"command",label:"add field",category:"data",params:[{name:"path",default:""},{name:"value",default:0}]},(b,c)=>{
+    const path=String(resolveValue(b.path,c)).trim(),value=parseDataValue(resolveValue(b.value,c));
+    return queuePlayerWrite(c,()=>addPlayerDataField(path,value));
+});

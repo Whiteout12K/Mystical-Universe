@@ -12,7 +12,7 @@ export function argumentPicker(def,index,read,cloneOwner=null,functionOwner=null
     if(['functionValue','setFunctionValue'].includes(fn)&&index===0)return {kind:'functionLocal',scope:functionOwner??'@dynamic'};
     if(param?.options)return {kind:'choice',options:param.options};
     if(param?.picker)return {kind:param.picker,scope:['costume','spriteVar'].includes(param.picker)?owner??'@dynamic':''};
-    if(index===0&&['getData','updateData','changeDataBy'].includes(fn))return {kind:'playerKey',wholeProfile:fn==='getData'};
+    if(index===0&&['getData','updateData','changeDataBy','addField'].includes(fn))return {kind:'playerKey',wholeProfile:fn==='getData'};
     if(ENUMS[fn]?.[index])return {kind:'choice',options:ENUMS[fn][index]};
     if(['uiSet','uiGet','uiBind','uiUnbind'].includes(fn)&&index===1)return {kind:'choice',options:['x','y','scale','rotation','visible','opacity','layer','text','value','max','width','height','radius','color','background','foreground','textColor','coordinateMode']};
     if(fn==='uiSet'&&index===2&&['color','background','foreground','textColor'].includes(read(1)))return {kind:'color'};

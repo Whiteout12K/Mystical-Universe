@@ -123,6 +123,34 @@ const PlayerStore = (() => {
 
     const sameData = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
+    function fieldPath(path) {
+        if (typeof path !== "string" || path.length > 512) throw new Error("Enter a player data key path.");
+        const keys = path.replace(/\[["']?([^"'[\]]+)["']?\]/g, ".$1").split(".").map(key => key.trim());
+        if (keys.some(key => !key || /[\[\]]/.test(key) || ["__proto__", "prototype", "constructor"].includes(key))) {
+            throw new Error("Enter a safe, nonempty data key path.");
+        }
+        return keys;
+    }
+
+    function addMissingField(data, path, value) {
+        const keys = fieldPath(path);
+        let current = data;
+        for (const [index, key] of keys.entries()) {
+            if (!current || typeof current !== "object" ||
+                (Array.isArray(current) && (!/^(0|[1-9]\d*)$/.test(key) || Number(key) > current.length))) {
+                return false;
+            }
+            const last = index === keys.length - 1;
+            if (!Object.hasOwn(current, key)) {
+                current[key] = last ? value : keys[index + 1] === "0" ? [] : {};
+                if (last) return true;
+            } else if (last) {
+                return false;
+            }
+            current = current[key];
+        }
+    }
+
     function acceptCloud(snapshot, account = cloudAccount(snapshot)) {
         const saved = record(account);
         if (saved && saved.revision === snapshot.revision) {
@@ -188,7 +216,7 @@ const PlayerStore = (() => {
     return {isLocal, localAccount, signInOffline, verifyOfflineCredentials, isOfflineRegistration,
         createOfflineAccount, rememberCloudLogin, signOutLocal, activateCloud,
         isSignedOut: () => localStorage.getItem(signedOutKey) === "1", cloudAccount, matchesCloud,
-        acceptCloud, acceptRestore, isData, maxSaveBytes, record, stage, uploadBody, markUploaded};
+        acceptCloud, acceptRestore, addMissingField, isData, maxSaveBytes, record, stage, uploadBody, markUploaded};
 })();
 
 // Also available to the main website, which loads this script as a module.

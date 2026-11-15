@@ -780,3 +780,37 @@ test('an offline registration keeps its save when the same profile is registered
     assert.equal(e.run('PlayerStore.record(PlayerStore.localAccount()).data.coins'),17);
     assert.equal(e.run('PlayerStore.record(PlayerStore.localAccount()).dirty'),true);
 });
+
+test('add field stages locally and waits for saveToD1 alongside other changes',async()=>{
+    const posts=[];
+    let available=false;
+    let cloud={authenticated:true,username:'Avery',userId:5,data:{coins:2},revision:'before'};
+    const e=engine({fetch:async(_url,options)=>{
+        if(!available)throw new Error('Offline');
+        if(options.method==='POST'){
+            const body=JSON.parse(options.body);
+            posts.push(body);
+            cloud={...cloud,data:body.data,revision:'after'};
+            return {ok:true,json:async()=>({success:true,revision:'after'})};
+        }
+        return {ok:true,json:async()=>cloud};
+    }});
+    await e.run('PlayerStore.rememberCloudLogin({authenticated:true,username:"Avery",userId:5,data:{coins:2},revision:"before"},"1234")');
+    const execute=code=>e.settle(e.run(`executeBlock(${code},createScriptContext())`));
+    await execute('loadPlayerData()');
+    await execute('updateData("coins",99)');
+    await execute('addField("current_team.members[0].name","River")');
+    assert.equal(e.run('resolveValue(getData("current_team.members.0.name"))'),'River');
+    available=true;
+    e.events.get('online')();
+    await e.flush();
+    await execute('addField("current_team.members[0].name","Ted")');
+    await execute('addField("current_team.captain","Avery")');
+    assert.equal(posts.length,0);
+    assert.deepEqual(cloud.data,{coins:2});
+    await execute('saveToD1()');
+    assert.deepEqual(posts,[{userId:5,revision:'before',data:{
+        coins:99,current_team:{members:[{name:'River'}],captain:'Avery'}
+    }}]);
+    assert.equal(e.run('PlayerStore.record(PLAYER.account).dirty'),false);
+});
