@@ -13,6 +13,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Prepare EPUBs in the CI checkout
+        run: python3 books/epub/prepare-epub.py --scan
       - run: python3 scripts/check-content.py
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
       - run: node --test tests/test-*.mjs

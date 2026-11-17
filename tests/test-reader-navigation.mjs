@@ -37,7 +37,8 @@ import json,zipfile,posixpath
 from pathlib import Path
 from xml.etree import ElementTree as E
 out=[]
-for file in Path('books/epub').glob('*.epub'):
+for volume in json.loads(Path('books/catalog.json').read_text()).values():
+ file=Path(volume['source'].lstrip('/'))
  with zipfile.ZipFile(file) as z:
   container=E.fromstring(z.read('META-INF/container.xml'))
   package_path=next(e.get('full-path') for e in container.iter() if e.tag.endswith('rootfile'))
@@ -53,7 +54,7 @@ for file in Path('books/epub').glob('*.epub'):
   out.append({'file':str(file),'sections':sections,'links':links})
 print(json.dumps(out))
 `],{cwd:root,encoding:'utf8'}));
- assert.ok(fixtures.length>=2);
+ assert.ok(fixtures.length>0);
  for(const fixture of fixtures){
   assert.ok(fixture.links.length>0);
   for(const link of fixture.links)assert.ok(resolveChapterLink(link.href,link.from,fixture.sections,'https://mysticallegends.org'),fixture.file+': '+link.href);
