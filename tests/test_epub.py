@@ -6,27 +6,38 @@ ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('prepare_epub',ROOT/'books/epub/prepare-epub.py');module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 X='{http://www.w3.org/1999/xhtml}';O='{http://www.idpf.org/2007/opf}'
 class EpubTests(unittest.TestCase):
- def test_single_archive_contains_all_resources_and_contents(self):
+ def test_catalog_archives_contain_all_resources_and_contents(self):
   import posixpath
-  with zipfile.ZipFile(ROOT/'books/epub/vol-1.epub') as z:
-   self.assertEqual(z.infolist()[0].filename,'mimetype');self.assertEqual(z.infolist()[0].compress_type,zipfile.ZIP_STORED)
-   package=E.fromstring(z.read('GoogleDoc/package.opf'));manifest={e.get('id'):e.get('href') for e in package.find(O+'manifest')};spine=[manifest[e.get('idref')] for e in package.find(O+'spine')]
-   self.assertEqual(len(spine),17);self.assertEqual(spine[1],'contents.xhtml')
-   for href in manifest.values():self.assertIn('GoogleDoc/'+unquote(href),z.namelist())
-   images=[]
-   for href in spine:
-    root=E.fromstring(z.read('GoogleDoc/'+href))
-    for el in root.iter():
-     if el.tag==X+'img':
-      images.append(el.get('src'));self.assertIn('GoogleDoc/'+unquote(el.get('src')),z.namelist())
-     if el.tag==X+'a':
-      url=urlsplit(el.get('href',''))
-      if url.scheme or not url.path:continue
-      target=posixpath.normpath('GoogleDoc/'+unquote(url.path));self.assertIn(target,z.namelist())
-      if url.fragment:self.assertTrue(any(e.get('id')==unquote(url.fragment) for e in E.fromstring(z.read(target)).iter()))
-   self.assertEqual(len(images),10)
-   self.assertEqual(len(E.fromstring(z.read('GoogleDoc/contents.xhtml')).findall('.//'+X+'a')),16)
-   css=z.read('GoogleDoc/reader.css').decode();self.assertNotIn('@import',css);self.assertIn('height:auto!important',css)
+  catalog=json.loads((ROOT/'books/catalog.json').read_text())
+  self.assertTrue(catalog)
+  for volume in catalog.values():
+   with self.subTest(book=volume['title']), zipfile.ZipFile(ROOT/volume['source'].lstrip('/')) as z:
+    names=set(z.namelist())
+    self.assertEqual(z.infolist()[0].filename,'mimetype');self.assertEqual(z.infolist()[0].compress_type,zipfile.ZIP_STORED)
+    package=E.fromstring(z.read('GoogleDoc/package.opf'));manifest={e.get('id'):e.get('href') for e in package.find(O+'manifest')};spine=[manifest[e.get('idref')] for e in package.find(O+'spine')]
+    self.assertGreater(len(spine),2)
+    self.assertEqual(spine[1],'contents.xhtml')
+    for href in manifest.values():self.assertIn('GoogleDoc/'+unquote(href),names)
+    images=[]
+    for href in [*spine,'nav.xhtml']:
+     root=E.fromstring(z.read('GoogleDoc/'+unquote(href)))
+     for el in root.iter():
+      if el.tag==X+'img':
+       src=el.get('src')
+       images.append(src);self.assertIn('GoogleDoc/'+unquote(src),names)
+      if el.tag==X+'a':
+       url=urlsplit(el.get('href',''))
+       if url.scheme or url.netloc or (not url.path and not url.fragment):continue
+       target=posixpath.normpath('GoogleDoc/'+unquote(url.path or href));self.assertIn(target,names)
+       if url.fragment:self.assertTrue(any(e.get('id')==unquote(url.fragment) for e in E.fromstring(z.read(target)).iter()),el.get('href'))
+    self.assertTrue(images,'Expected illustrations in the packaged book')
+    def entries(document):
+     return [a.get('href') for a in E.fromstring(z.read('GoogleDoc/'+document)).findall('.//'+X+'a')]
+    navigation=entries('nav.xhtml')
+    contents=entries('contents.xhtml')
+    self.assertEqual([unquote(urlsplit(href).path) for href in navigation], [unquote(href) for href in spine])
+    self.assertEqual(contents,[href for href in navigation if href!='contents.xhtml'])
+    css=z.read('GoogleDoc/reader.css').decode();self.assertNotIn('@import',css);self.assertIn('height:auto!important',css)
  def test_prepare_preserves_text_emphasis_alignment_images_and_link_targets(self):
   with tempfile.TemporaryDirectory() as td:
    temp=Path(td);source=temp/'test.epub'
