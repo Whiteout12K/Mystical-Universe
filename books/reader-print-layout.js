@@ -53,7 +53,7 @@ export async function createPrintLayout(book,fontFamily){
   prepareIllustrations(doc);
  });
  try{await rendition.started;}catch(error){cleanup();throw error;}
- return {rendition,surface,width,height,
+ return {rendition,surface,width,height,margin,
   async wait(){await waitForAssets(rendition);},
   sync(){const content=rendition.getContents()[0];surface.sync(content,content.document.defaultView.frameElement,'print-a6-v1');},
   cleanup};
