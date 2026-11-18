@@ -142,7 +142,14 @@ export async function buildCompactPDF({pages,fonts,images,width,height,margin=12
    checkLayout();if(index)pdf.addPage(format,orientation);const page=pages[index];
    pdf.setFillColor(...color(page.background));pdf.rect(0,0,...format,'F');
    pdf.saveGraphicsState();pdf.rect(0,0,...format,null);pdf.clip();pdf.discardPath();
-   for(const image of page.images){const asset=assets.get(image.url);pdf.addImage(asset.data,'JPEG',image.x*.75,image.y*.75,image.width*.75,image.height*.75,asset.alias);}
+   // The prepared EPUB starts with a standalone cover. Fill the trim without
+   // cropping its lettering; other illustrations retain their typeset bounds.
+   const fullBleedCover=index===0&&page.images.length===1&&page.text.length===0;
+   for(const image of page.images){
+    const asset=assets.get(image.url);
+    const bounds=fullBleedCover?[0,0,...format]:[image.x*.75,image.y*.75,image.width*.75,image.height*.75];
+    pdf.addImage(asset.data,'JPEG',...bounds,asset.alias);
+   }
    addSelectableText(pdf,page.text,fonts);pdf.restoreGraphicsState();
    for(const heading of page.headings||[]){
     while(outline.length&&outline.at(-1).level>=heading.level)outline.pop();

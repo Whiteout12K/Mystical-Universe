@@ -77,3 +77,15 @@ test('PDF contents link to exported pages and fragments, with numbered footers a
  assert.equal(f.bookmarks[1].destination.pageNumber,2);
  assert.equal(f.bookmarks[2].parent,f.bookmarks[1]);
 });
+
+test('only a standalone cover on the first PDF page fills the trim',async()=>{
+ const f=builder([100]);
+ f.args.pages[1].images=[...f.args.pages[0].images];
+ await f.c.buildCompactPDF(f.args);
+ assert.deepEqual(f.drawn.map(args=>args.slice(2,6)),[[0,0,600,450],[7.5,15,75,150]]);
+
+ const mixed=builder([100]);
+ mixed.args.pages[0].text=[{text:'Title'}];
+ await mixed.c.buildCompactPDF(mixed.args);
+ assert.deepEqual(mixed.drawn[0].slice(2,6),[7.5,15,75,150]);
+});

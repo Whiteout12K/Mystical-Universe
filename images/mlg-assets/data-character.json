@@ -28,7 +28,7 @@
     "skills": ["B1", "B2", "S1", "S2", "S3", "U1", "U2", "T1", "T2", "T3", "Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C1",
 
-    "costume_1": {
+    "costume_1": { 
         "id": "1",
         "name": "Default",
         "preview_path": "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif",
