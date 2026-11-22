@@ -37,7 +37,7 @@
     "description": "{{nickname}} creates a large destructible metal barrier in front of {{object}} with health and defense equal to <b><span data-dmg=\"summon\"></span>%</b> of {{possessive}} own defense stat for its toughness to deflect incoming attacks and endure damage. {{Subject}} then gives <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield\"></span>%</b> of defense to self and allies.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice {{possessive}} defense instead. Clear a stack of <b class=\"invention\">[Invention]</b>.",
+      {"text": "If <b class=\"invention\">[Invention]</b> is active upon using this skill, instead, give <b class=\"shield\">[Shield]</b> equal to an additional <b><span data-dmg=\"shield2\"></span>%</b> of defense to self and allies and the metal barrier gains twice {{possessive}} defense instead. If an attack hits the barrier, the attacker has an all element resistance reduction of -20%. Clear a stack of <b class=\"invention\">[Invention]</b>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:shield}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
@@ -65,7 +65,11 @@
     "additional": [
       {"text": "If <b class=\"invention\">[Invention]</b> is active, several more beams (+3 more of them) will be shot out, dealing the same damage. Clear a stack of <b class=\"invention\">[Invention]</b>.",
         "style": {"paddingTop": 7}},
+      {"text": "If Ted’s Ultimate Skill: Metal Mode is active, the shot beams Nate much greater in size, AoE, and +100% damage. Inflicts <b class=\"knockback\">[Knockback III]</b> on hit and sending them airborne.",
+        "style": {"paddingTop": 7}},
       {"text": "{{effect:dazed}}",
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
+      {"text": "{{effect:knockback3}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
 
       {"text": "Cooldown: 10 seconds",
@@ -122,7 +126,7 @@
     "additional": [
       {"text": "Upon activation, {{nickname}} will gain +100% movement speed and +20% damage reduction.",
         "style": {"paddingTop": 7}},
-      {"text": "<b>Model A</b>: Charge forward and deal <b class=\"earth\">[Earth]</b> <span class=\"empowered\">super empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense to any opponent in {{possessive}} path. Any skills used in conjunction with this Ultimate’s effect will deal <b>+<span data-dmg=\"dmg_increase\"></span>%</b> more damage.",
+      {"text": "<b>Model A</b>: Charge forward and deal <b class=\"earth\">[Earth]</b> <span class=\"empowered\">super empowered</span> damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of defense to any opponent in {{possessive}} path. Any skills used in conjunction with this Ultimate’s effect will deal <b>+<span data-dmg=\"dmg_increase\"></span>%</b> more damage. Basic Skill’s attack speed increases by +30%.",
         "style": {"paddingTop": 7}},
       {"text": "<b>Model B</b>: If off-field, the metal armor will dissipate and form into 2 hovering robotic turret drones that will blast energy pulses towards nearby opponents, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as <b class=\"earth\">[Earth]</b> damage per blast.",
         "style": {"paddingTop": 7}},
@@ -179,7 +183,7 @@
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
         {"level": 1,
-        "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25% and <span class=\"undim\">gained <b class=\"shield\">[Shield]</b> on self will also apply to allies as well.</span>",
+        "text": "Each stack of <b class=\"letm-cook\">[Let'm Cook]</b> will increase defense by +0.25% permanently for the battle and <span class=\"undim\">gained <b class=\"shield\">[Shield]</b> on self will also apply to allies as well.</span>",
         "style": {"paddingTop": 5}},
         {"text": "<span class=\"undim\">{{nickname}}’s Technical Skill effects will also be applied to the party for the same duration.</span>",
         "style": {"paddingTop": 5}},

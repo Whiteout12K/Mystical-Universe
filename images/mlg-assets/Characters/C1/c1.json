@@ -372,7 +372,7 @@
         {"level": 5,
         "text": "After using stage 3 of the Basic Skill, convert the next Basic Skill attack into Basic Skill: Lotus Wildflare Beam. After using, reverts back to normal Basic Skill.",
         "style": {"paddingTop": 5}},
-        {"text": "10% of max health will also be added as additional basic damage numbers to all of {{nickname}}’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summmons).",
+        {"text": "10% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate and Technical, including summons).",
         "style": {"paddingTop": 5}},
         {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - {{nickname}} summons a concentration of light that blasts in a flower-like arch in front of {{object}}, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and <span class=\"undim\">gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies</span>. Special Skill cooldowns for self are reduced by 3 seconds and <span class=\"undim\">instantly restore 50 MP for self and allies</span>. Damage scales up by +10% for each level of the equipped Basic Skill.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}

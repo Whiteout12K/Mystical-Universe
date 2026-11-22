@@ -19,7 +19,7 @@
     "affinity": ["Light", "Water"],
     "role": ["Defense", "Healer"],
 
-    "affiliation": ["Mystical Legends", "Tempest Aquia Cohort", "IT Agency", "Spirit Vessel", "Deity Contract"],
+    "affiliation": ["Mystical Legends", "Tempest Aquia Cohort", "IT Agency", "Spirit Vessel", "Deity Contract", "Lifelink"],
     "attributes": ["Water Breathing", "Flight", "Charging"],
 
     "formatted_name": "<b>Avery Obtainia</b>",
@@ -87,6 +87,11 @@
         "with": ["c6", "c5"],
         "name": "Aqua Revolution",
         "effect": "+10% <b class=\"water\">[Water]</b> damage, +15% MP Regen"
+      },
+      {
+        "with": ["c20"],
+        "name": "Love Birds",
+        "effect": "+15% <b class=\"light\">[Light]</b> damage."
       }
     ]
 
@@ -681,7 +686,7 @@
 
     "species": ["Felior"],
     "specialty": ["DPS", "Single-Target Damage", "Whiteout", "Shredder", "Resonator"],
-    "affinity": ["Wind"],
+    "affinity": ["Wind", "Dark"],
     "role": ["Fighter"],
 
     "affiliation": ["Black Rampart Cohort", "Mystical Legends", "Deity Contract", "District 10", "Demoness Trio"],
@@ -1272,7 +1277,7 @@
     "species": ["Elementor"],
     "specialty": ["DPS", "Sub-DPS", "Enforcer", "Support", "Accuracy"],
     "affinity": ["Fire"],
-    "role": ["Healer"],
+    "role": ["Defense"],
 
     "affiliation": ["IT Agency"],
     "attributes": [],
@@ -1327,14 +1332,14 @@
     "nickname": "Lux",
     "gender": "female",
     "rarity": "SSR",
-    "rarity_img": "",
+    "rarity_img": "/images/mlg-assets/Characters/c-roles/c20_role.svg",
 
     "species": ["Angelor"],
     "specialty": ["Support", "Healing", "Crowd Controlling", "Single-Target Damage", "Debuffer", "Disrupter"],
     "affinity": ["Light", "Wind"],
     "role": ["Healer"],
 
-    "affiliation": ["Nuntios", "Demoness Trio"],
+    "affiliation": ["Nuntios", "Demoness Trio", "Lifelink"],
     "attributes": ["Flight"],
 
     "formatted_name": "<b>Lux Luces</b>",

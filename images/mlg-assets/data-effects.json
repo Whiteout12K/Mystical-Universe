@@ -12,6 +12,17 @@
   },
 
 
+  "knockback3": {
+    "name": "Knockback III",
+    "class": "knockback",
+    "icon": "/images/mlg-assets/Effect-Icons/knockback.svg",
+    "type": "Debuff",
+    "description": "Knocks opponents back 15 meters.",
+    "stat_modifiers": [],
+    "description_style": {"paddingTop": 3}
+  },
+
+
   "burn": {
     "name": "Burn",
     "class": "burn",
@@ -204,7 +215,7 @@
     "class": "midnight-frost",
     "icon": "",
     "type": "Debuff",
-    "description": "Counts as a <b class=\"freeze\">[Freeze]</b> effect but especially impedes actions without actual feeling, including the following:",
+    "description": "Counts as a <b class=\"freeze\">[Freeze]</b> effect but especially impedes actions without actual freezing, including the following:",
     "description2": "> At least one stack: deplete -4% of MP per second.",
     "description3": "> At least two stacks: prevent the use of mana.",
     "description4": "> At three stacks: depletes energy gauge by -5% per second; cannot gain anymore stacks.",
