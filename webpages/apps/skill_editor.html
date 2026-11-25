@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Character Skill Editor · Mystical Legends</title>
+<link rel="icon" type="image/svg+xml" href="/images/website/icons/torch.svg">
+<link rel="stylesheet" href="/assets/css/mlg.css">
+<link rel="stylesheet" href="/assets/css/skill-editor.css">
+<script type="module" src="/assets/js/skill-editor.js"></script>
+</head>
+<body>
+<header class="app-header">
+  <button id="toggle-characters" type="button" aria-controls="characters-panel" aria-expanded="true">Characters</button>
+  <h1>Skill Editor</h1><a href="#live-preview">Preview ↓</a>
+  <span id="change-state">Choose a character</span>
+  <div class="file-actions">
+    <button id="open-folder" type="button">Open Characters Folder</button>
+    <button id="save-file" type="button" disabled>Save JSON</button>
+    <button id="copy-character" type="button" disabled>Copy character JSON</button>
+    <button id="download" type="button" disabled>Download</button>
+    <button id="import" type="button" disabled>Import JSON</button>
+    <input id="import-file" type="file" accept=".json,application/json" hidden>
+  </div>
+</header>
+<div class="app-layout">
+  <aside id="characters-panel">
+    <label for="character-search">Find a character</label>
+    <input id="character-search" type="search" placeholder="Name or ID…">
+    <nav id="character-list" aria-label="Characters"></nav>
+  </aside>
+  <main id="editor-main">
+    <div class="editor-heading"><div><h2 id="character-title">Character skills</h2><p id="file-path"></p></div><a id="open-character" target="_blank" rel="noopener" hidden>View character ↗</a></div>
+    <p id="status" role="status" aria-live="polite">Loading characters…</p>
+    <div id="workspace" hidden>
+      <div class="editor-controls">
+        <label>Skill <select id="skill-select"></select></label>
+        <button id="new-skill" type="button">Add skill</button><button id="duplicate-skill" type="button">Duplicate</button><button id="rename-skill" type="button">Change ID</button><button id="delete-skill" type="button">Delete skill</button>
+      </div>
+      <div class="view-controls"><div role="tablist" aria-label="Editor view"><button id="visual-tab" type="button" role="tab" aria-selected="true">Visual editor</button><button id="source-tab" type="button" role="tab" aria-selected="false">JSON source</button></div><div><button id="undo" type="button" disabled>Undo</button><button id="redo" type="button" disabled>Redo</button><button id="copy-skill" type="button">Copy skill JSON</button><button id="paste-json" type="button">Paste JSON</button></div></div>
+      <section id="source-panel" hidden aria-label="Character JSON source">
+        <textarea id="source" spellcheck="false" aria-label="Character JSON"></textarea>
+        <button id="apply-source" type="button">Apply JSON</button>
+      </section>
+      <section id="visual-panel" aria-label="Visual skill editor">
+        <div id="format-toolbar" class="format-toolbar" role="toolbar" aria-label="Skill text formatting">
+          <button type="button" data-command="bold" title="Bold"><b>B</b></button><button type="button" data-command="italic" title="Italic"><i>I</i></button><button type="button" data-command="underline" title="Underline"><u>U</u></button><button type="button" data-command="removeFormat">Clear formatting</button>
+          <label>Text class <select id="text-class"><option value="">Choose color / style…</option></select></label>
+          <label>Color <input id="text-color" type="color" value="#f0ca69"></label><button id="apply-color" type="button">Apply color</button>
+          <label>Token <select id="token"><option value="nickname">Nickname</option><option value="subject">he / she / they</option><option value="Subject">He / She / They</option><option value="object">him / her / them</option><option value="Object">Him / Her / Them</option><option value="possessive">his / her / their</option><option value="Possessive">His / Her / Their</option><option value="possessive_pronoun">his / hers / theirs</option><option value="Possessive_pronoun">His / Hers / Theirs</option><option value="reflexive">himself / herself / themself</option><option value="Reflexive">Himself / Herself / Themself</option></select></label><button id="insert-token" type="button">Insert token</button>
+          <label>Character <select id="token-character"><option value="">Current character</option></select></label>
+          <label id="token-variant-control" hidden>Person <select id="token-variant"></select></label>
+          <label>Effect <select id="effect-select"></select></label><button id="effect-inline" type="button">Inline effect</button><button id="effect-block" type="button">Effect description</button>
+          <button id="insert-value" type="button">Dynamic value</button>
+        </div>
+        <div id="skill-fields"></div>
+      </section>
+      <details class="help"><summary>Formatting and JSON reference</summary><p>Bracketed terms such as [Water] and [Freeze] automatically receive their matching font-color classes from mlg.css. Select text in a paragraph to apply a custom color or text class. Insert a dynamic value for a number that scales with skill level. Keep durations and cooldowns as ordinary text. Small metadata uses the same plain formatting as the skill viewer.</p><p>Effect descriptions use <code>{{effect:freeze}}</code>. Inline names use <code>&lt;b class="freeze"&gt;[Freeze]&lt;/b&gt;</code>. Character tokens can refer to another ID, for example <code>{{nickname:c2}}</code>. A star level starts a new group in Dupes, and the following paragraphs continue that group until the next numbered entry.</p><p>Open the <code>images/mlg-assets/Characters</code> folder once to save directly. The editor remembers it for future visits, so use Save JSON for later changes. You can also copy/download the JSON into the displayed file. Local drafts are kept per character file in this browser. Changes to the skill list in <code>data-character.json</code> are made separately.</p></details>
+      <ul id="warnings" class="warnings" aria-label="Skill warnings"></ul>
+    </div>
+  </main>
+  <aside id="live-preview" class="preview-panel" aria-label="Live skill preview">
+    <div class="preview-top"><h2>Preview</h2><a href="#editor-main" class="preview-return">Editor ↑</a><label><span id="preview-level-label">Level</span> <input id="preview-level" type="number" min="1" max="10" value="1"></label><button id="preview-max" type="button">Max</button></div>
+    <label id="variant-control" hidden>Skill variant <select id="variant-select"></select></label>
+    <p id="preview-status" role="status">Choose a character to preview.</p>
+    <iframe id="preview" title="Skill preview" hidden></iframe>
+  </aside>
+</div>
+<dialog id="json-dialog" aria-labelledby="json-dialog-title"><form method="dialog" id="json-form"><h2 id="json-dialog-title">Paste JSON</h2><p>Paste keyed skills to merge by ID, or an unkeyed object to replace the selected skill. Import a file or use JSON source to replace the entire character document.</p><textarea id="json-input" spellcheck="false" aria-label="Pasted JSON"></textarea><p id="json-error" role="alert"></p><div class="dialog-actions"><button value="cancel" formnovalidate>Cancel</button><button id="json-confirm" type="button">Apply</button></div></form></dialog>
+<dialog id="skill-dialog" aria-labelledby="skill-dialog-title"><form id="skill-form"><h2 id="skill-dialog-title">Add skill</h2><label>Skill ID <input id="new-id" required pattern="[A-Za-z][A-Za-z0-9_-]*" placeholder="B1, S1, T1, Dupes…"></label><p id="skill-error" role="alert"></p><div class="dialog-actions"><button id="skill-cancel" type="button">Cancel</button><button type="submit">Apply</button></div></form></dialog>
+<dialog id="value-dialog" aria-labelledby="value-dialog-title"><form id="value-form"><h2 id="value-dialog-title">Insert dynamic value</h2><label>Value key <input id="value-key" required pattern="[A-Za-z][A-Za-z0-9_]*" value="dmg1" list="value-keys"></label><datalist id="value-keys"></datalist><label>Base value at level 1 <input id="value-base" type="number" step="any" required value="100"></label><label><input id="value-percent" type="checkbox" checked> Add % after the value</label><p>Uses this skill’s level multiplier. Reusing a key updates every occurrence of that value.</p><div class="dialog-actions"><button id="value-cancel" type="button">Cancel</button><button type="submit">Insert</button></div></form></dialog>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{
+  "B1": {
+    "name": "Compression Water Discharge",
+    "type": "Basic Skill",
+    "description": "{{nickname}} enforces {{possessive}} authority by bending the water around {{object}}, dealing <b class=\"water\">[Water]</b> damage.",
+    "description_style": {
+      "paddingTop": 7
+    },
+    "stages": [
+      {
+        "name": "Stage 1",
+        "text": "Water compresses into droplets and are hurled towards opponents, dealing <b><span data-dmg=\"dmg1\"></span>%</b> of defense as damage.",
+        "style": {
+          "paddingLeft": 15,
+          "paddingTop": 7
+        }
+      },
+      {
+        "name": "Stage 2",
+        "text": "A spiral of water that pinpoints on nearby opponents and strangles them, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of defense as damage and inflicting the <b class=\"slowness\">[Slowness]</b> effect.",
+        "style": {
+          "paddingLeft": 15,
+          "paddingTop": 7
+        }
+      },
+      {
+        "name": "Stage 3",
+        "text": "Slams an orb of water on the ground in front, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of defense as small AoE damage and inflicting <b class=\"dazed\">[Dazed]</b>.",
+        "style": {
+          "paddingLeft": 15,
+          "paddingTop": 7
+        }
+      }
+    ],
+    "additional": [
+      {
+        "text": "{{effect:slowness}}",
+        "style": {
+          "paddingLeft": 15,
+          "paddingTop": 5
+        }
+      },
+      {
+        "text": "{{effect:dazed}}",
+        "style": {
+          "paddingLeft": 15,
+          "paddingTop": 5
+        }
+      }
+    ],
+    "base_damage": {
+      "dmg1": 30,
+      "dmg2": 45,
+      "dmg3": 85
+    },
+    "max_level": 10,
+    "level_multiplier": 0.1
+  }
+}

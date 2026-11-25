@@ -31,14 +31,14 @@
 
 /* Mystical Legends Game Elements */
 .normal { color: #5d5d5d; }
-.light { color: #ea9999; }
+.light, .light-element { color: #ea9999; }
 .dark { color: #674ea7; }
 .fire { color: #cc0000; }
 .water { color: #6ea3ff; }
 .wind { color: #d5a106; }
 .earth { color: #6aa84f; }
-.lightning { color: #9173eb; }
-.plant { color: #06560e; }
+.lightning, .lightning-element { color: #9173eb; }
+.plant-element { color: #06560e; }
 
 /* Mystical Legends Game Effect Types */
 

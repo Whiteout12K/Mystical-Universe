@@ -89,15 +89,41 @@ document.addEventListener("DOMContentLoaded",async()=>{
       return value;
     }
     const [charResponse,effectResponse]=await Promise.all([
-      fetch(`${CHAR_PATH}${source.toUpperCase()}/${source}.json`),
+      params.get("editor")==="1"&&window.parent!==window?Promise.resolve(null):fetch(`${CHAR_PATH}${source.toUpperCase()}/${source}.json`),
       fetch(EFFECT_PATH)
     ]);
 
-    if(!charResponse.ok)throw new Error(`Unable to load ${character}.json`);
+    if(charResponse&&!charResponse.ok)throw new Error(`Unable to load ${character}.json`);
     if(!effectResponse.ok)throw new Error("Unable to load data-effects.json");
 
-    const charData=fillNicknames(await charResponse.json());
     const effects=await effectResponse.json();
+    if(params.get("editor")==="1"&&window.parent!==window){
+      const previewStyle=document.createElement("link");
+      previewStyle.rel="stylesheet";
+      previewStyle.href="/assets/css/skill-editor-preview.css";
+      document.head.append(previewStyle);
+      window.addEventListener("message",event=>{
+        if(event.origin!==location.origin||event.source!==window.parent||event.data?.type!=="ml-skill-preview")return;
+        try{
+          const message=event.data;
+          const data=fillNicknames(message.skills?.[message.skill]);
+          if(!data)throw Error("Choose a skill to preview.");
+          const dupe=/^Dupes/i.test(message.skill);
+          const maximum=dupe?MAX_DUPE_LEVEL:(data.max_level||10);
+          const selectedLevel=Math.min(maximum,Math.max(1,Math.trunc(Number(message.level))||1));
+          document.getElementById("level-display").style.display=dupe||/^T\d+/i.test(message.skill)?"none":"block";
+          if(dupe)renderDupe(data,selectedLevel,effects);
+          else renderSkill(data,selectedLevel,effects);
+          window.parent.postMessage({type:"ml-skill-preview-rendered"},location.origin);
+        }catch(error){
+          document.getElementById("skill-content").textContent=error.message;
+          window.parent.postMessage({type:"ml-skill-preview-error",message:error.message},location.origin);
+        }
+      });
+      window.parent.postMessage({type:"ml-skill-preview-ready"},location.origin);
+      return;
+    }
+    const charData=fillNicknames(await charResponse.json());
     const key=Object.keys(charData).find(key=>key.toLowerCase()===skill.toLowerCase());
     const data=charData[key]||(character==="c11"?charData?.[`${skill}-1`]:null);
 
@@ -127,6 +153,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
   }catch(error){
     console.error(error);
+    if(params.get("editor")==="1"&&window.parent!==window)window.parent.postMessage({type:"ml-skill-preview-error",message:error.message},location.origin);
     document.getElementById("skill-content").innerHTML=
       "<div>Unable to load skill information.</div>";
   }
@@ -445,7 +472,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
 
   function updateDamageValues(data,level){
     const multiplier=
-      1+(data.level_multiplier||0.1)*(level-1);
+      1+(data.level_multiplier??0.1)*(level-1);
 
     document.querySelectorAll("[data-dmg]").forEach(element=>{
       const damageId=element.dataset.dmg;
