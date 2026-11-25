@@ -613,7 +613,7 @@
         "text": "<span><u>Special Skill - Bridge of Fortitude</u>&nbsp;- Lynnhera summons a bridge, gaining 1.2% of her health multiplied by each percentage of healing rate, that only she and allies can stand on, elevating them and shielding them from damage until it is destroyed.</span>&nbsp;When standing on the bridge, she and her allies gain +25% mana regen.",
         "style": {
           "paddingLeft": 15,
-          "paddingTop": 3
+          "paddingTop": 8
         }
       },
       {
@@ -630,7 +630,7 @@
           "paddingLeft": 15,
           "fontSize": 8,
           "paddingTop": -3,
-          "paddingBottom": 7
+          "paddingBottom": 5
         }
       },
       {
@@ -654,7 +654,7 @@
           "fontSize": 8,
           "paddingTop": -3,
           "paddingLeft": 15,
-          "paddingBottom": 7
+          "paddingBottom": 5
         }
       },
       {

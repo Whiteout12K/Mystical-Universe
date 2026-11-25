@@ -1,4 +1,13 @@
 {
   "python.useEnvironmentsExtension": false,
-  "python.terminal.shellIntegration.enabled": false
+  "python.terminal.shellIntegration.enabled": false,
+  "terminal.integrated.env.osx": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "terminal.integrated.env.linux": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "terminal.integrated.env.windows": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  }
 }

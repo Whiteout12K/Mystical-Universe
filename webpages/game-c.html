@@ -505,7 +505,8 @@ hr.my-4{
 #characterTeamsSection{padding-top:16px}
 .character-team-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px}
 .character-team-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:12px;color:var(--fantasy-text);text-decoration:none;border:1px solid var(--fantasy-border);border-radius:10px;background:linear-gradient(145deg,#242021,#151314)}
-.character-team-card:hover,.character-team-card:focus-visible{color:var(--fantasy-text);border-color:var(--fantasy-gold);outline:2px solid var(--fantasy-gold);outline-offset:2px}
+.character-team-card:hover{color:var(--fantasy-text)}
+.character-team-card:focus-visible{outline:2px solid var(--fantasy-gold);outline-offset:2px}
 .character-team-card>strong{color:var(--fantasy-gold2);font-size:.85rem}
 .character-team-members{display:flex;align-items:flex-end;gap:6px}
 .character-team-member{display:block;flex:0 0 48px;width:48px;height:67px;overflow:hidden;border:1px solid #ffffff25;border-radius:7px;box-shadow:0 3px 8px #0006}
@@ -515,7 +516,6 @@ hr.my-4{
 .character-team-extra-label{color:#bdb2a4;font-size:.6rem;line-height:1.2}
 .character-team-extra .character-team-member{flex-basis:auto;width:36px;height:50px}
 .character-team-resonance{display:block;width:34px;height:34px;padding:3px;border:1px solid var(--fantasy-border);border-radius:50%;background:#151213}
-.character-team-name{position:absolute;z-index:2;left:10px;right:10px;bottom:calc(100% - 4px);padding:6px 10px;border:1px solid var(--fantasy-border);border-radius:6px;background:#171314;color:var(--fantasy-gold2);text-align:center;font-size:.8rem;pointer-events:none;box-shadow:0 3px 12px #0008}
 .character-team-member,.character-team-resonance{-webkit-touch-callout:none;user-select:none}
 .character-team-resonance img{display:block;width:100%;height:100%;object-fit:contain}
 </style>
@@ -1088,7 +1088,6 @@ async function loadCharacterTeams(){
         const character=characterRoster[id];
         const member=document.createElement("span");
         member.className="character-team-member rarity-"+String(character?.rarity||"c").toLowerCase();
-        member.title=character?.name||id;
         member.setAttribute("aria-label",character?.name||id);
         if(id===characterId)member.classList.add("is-current");
         if(character?.profile_image){
@@ -1117,8 +1116,7 @@ async function loadCharacterTeams(){
         const icon=document.createElement("span");
         icon.className="character-team-resonance";
         if(resonance.id===characterId)icon.classList.add("is-current");
-        icon.title=(owner?.name||resonance.id)+" · "+resonance.skill;
-        icon.setAttribute("aria-label",icon.title);
+        icon.setAttribute("aria-label",(owner?.name||resonance.id)+" · "+resonance.skill);
         if(owner?.skills_path){
           const image=document.createElement("img");
           image.src=owner.skills_path+"/skill_b/"+resonance.skill.toLowerCase()+".svg";
@@ -1129,52 +1127,6 @@ async function loadCharacterTeams(){
         extra("Resonance",icon);
       }
       card.append(members);
-      const tooltip=document.createElement("span");
-      tooltip.className="character-team-name";
-      tooltip.setAttribute("role","status");
-      tooltip.hidden=true;
-      card.append(tooltip);
-      let holdTimer,hideTimer,startX=0,startY=0,suppressClick=false;
-      function cancelHold(){
-        clearTimeout(holdTimer);
-      }
-      card.addEventListener("pointerdown",event=>{
-        cancelHold();
-        clearTimeout(hideTimer);
-        tooltip.hidden=true;
-        suppressClick=false;
-        const target=event.target.closest(".character-team-member,.character-team-resonance");
-        if(!target||event.button!==0)return;
-        startX=event.clientX;
-        startY=event.clientY;
-        holdTimer=setTimeout(()=>{
-          tooltip.textContent=target.title;
-          tooltip.hidden=false;
-          suppressClick=true;
-        },450);
-      });
-      card.addEventListener("pointermove",event=>{
-        if(Math.hypot(event.clientX-startX,event.clientY-startY)>10){
-          cancelHold();
-          tooltip.hidden=true;
-        }
-      });
-      card.addEventListener("pointerup",()=>{
-        cancelHold();
-        hideTimer=setTimeout(()=>{tooltip.hidden=true;},1500);
-      });
-      card.addEventListener("pointercancel",()=>{
-        cancelHold();
-        tooltip.hidden=true;
-      });
-      card.addEventListener("contextmenu",event=>{
-        if(event.target.closest(".character-team-member,.character-team-resonance"))event.preventDefault();
-      });
-      card.addEventListener("click",event=>{
-        if(!suppressClick)return;
-        event.preventDefault();
-        suppressClick=false;
-      });
       container.append(card);
     }
     if(!container.children.length)container.textContent="No preset teams include this character yet.";
