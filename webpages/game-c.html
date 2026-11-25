@@ -431,7 +431,8 @@ hr.my-4{
   padding:5px 4px 14px;
 }
 
-#characterStylesSection h5{
+#characterStylesSection h5,
+#characterTeamsSection h5{
   color:var(--fantasy-gold2);
   font:700 1rem Arial,sans-serif;
   letter-spacing:.07em;
@@ -500,6 +501,23 @@ hr.my-4{
   .skill-panel{padding:10px;min-height:120px}
   #page-heading{font-size:1rem;letter-spacing:.05em}
 }
+
+#characterTeamsSection{padding-top:16px}
+.character-team-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px}
+.character-team-card{position:relative;display:flex;flex-direction:column;gap:10px;padding:12px;color:var(--fantasy-text);text-decoration:none;border:1px solid var(--fantasy-border);border-radius:10px;background:linear-gradient(145deg,#242021,#151314)}
+.character-team-card:hover,.character-team-card:focus-visible{color:var(--fantasy-text);border-color:var(--fantasy-gold);outline:2px solid var(--fantasy-gold);outline-offset:2px}
+.character-team-card>strong{color:var(--fantasy-gold2);font-size:.85rem}
+.character-team-members{display:flex;align-items:flex-end;gap:6px}
+.character-team-member{display:block;flex:0 0 48px;width:48px;height:67px;overflow:hidden;border:1px solid #ffffff25;border-radius:7px;box-shadow:0 3px 8px #0006}
+.character-team-member.is-current,.character-team-resonance.is-current{border:2px solid var(--fantasy-gold2);box-shadow:0 0 0 2px #171314,0 0 0 3px #f0ca6970,0 0 12px #f0ca6945}
+.character-team-member img{display:block;width:100%;height:100%;object-fit:cover}
+.character-team-extra{display:flex;flex-direction:column;align-items:center;gap:4px;margin-left:4px}
+.character-team-extra-label{color:#bdb2a4;font-size:.6rem;line-height:1.2}
+.character-team-extra .character-team-member{flex-basis:auto;width:36px;height:50px}
+.character-team-resonance{display:block;width:34px;height:34px;padding:3px;border:1px solid var(--fantasy-border);border-radius:50%;background:#151213}
+.character-team-name{position:absolute;z-index:2;left:10px;right:10px;bottom:calc(100% - 4px);padding:6px 10px;border:1px solid var(--fantasy-border);border-radius:6px;background:#171314;color:var(--fantasy-gold2);text-align:center;font-size:.8rem;pointer-events:none;box-shadow:0 3px 12px #0008}
+.character-team-member,.character-team-resonance{-webkit-touch-callout:none;user-select:none}
+.character-team-resonance img{display:block;width:100%;height:100%;object-fit:contain}
 </style>
 </head>
 
@@ -582,6 +600,11 @@ hr.my-4{
 <section id="characterStylesSection" class="container my-4" style="display:none">
   <h5 class="mb-3">Character Styles</h5>
   <div id="characterStyles" class="character-style-row"></div>
+</section>
+
+<section id="characterTeamsSection" class="container my-4" aria-labelledby="characterTeamsHeading" hidden>
+  <h5 id="characterTeamsHeading" class="mb-3">Team Comp</h5>
+  <div id="characterTeams" class="character-team-list"></div>
 </section>
 
 <script>
@@ -1036,6 +1059,131 @@ function loadCharacterStyles(character){
   });
 }
 
+async function loadCharacterTeams(){
+  const section=$("characterTeamsSection");
+  const container=$("characterTeams");
+  const characterId=getSelectedCharacterId();
+  section.hidden=false;
+  container.textContent="Loading teams…";
+  try{
+    const [{PRESET_TEAMS},{planHash}]=await Promise.all([
+      import("/assets/js/site-enhancements/team-presets.js"),
+      import("/assets/js/site-enhancements/team-builder-model.js")
+    ]);
+    if(characterId!==getSelectedCharacterId())return;
+    container.replaceChildren();
+    const priority=plan=>plan.team.includes(characterId)?0:plan.support===characterId?1:2;
+    const teams=Object.entries(PRESET_TEAMS).sort((a,b)=>priority(a[1])-priority(b[1]));
+    for(const [name,plan] of teams){
+      if(![...plan.team,plan.support,plan.resonance?.id].includes(characterId))continue;
+      const card=document.createElement("a");
+      card.className="character-team-card";
+      card.href="/webpages/apps/team_builder.html"+planHash({version:1,...plan});
+      const title=document.createElement("strong");
+      title.textContent=name;
+      card.append(title);
+      const members=document.createElement("span");
+      members.className="character-team-members";
+      function portrait(id){
+        const character=characterRoster[id];
+        const member=document.createElement("span");
+        member.className="character-team-member rarity-"+String(character?.rarity||"c").toLowerCase();
+        member.title=character?.name||id;
+        member.setAttribute("aria-label",character?.name||id);
+        if(id===characterId)member.classList.add("is-current");
+        if(character?.profile_image){
+          const image=document.createElement("img");
+          image.src=character.profile_image;
+          image.alt="";
+          image.loading="lazy";
+          member.append(image);
+        }
+        return member;
+      }
+      for(const id of plan.team)members.append(portrait(id));
+      function extra(label,content){
+        const group=document.createElement("span");
+        group.className="character-team-extra";
+        const caption=document.createElement("span");
+        caption.className="character-team-extra-label";
+        caption.textContent=label;
+        group.append(caption,content);
+        members.append(group);
+      }
+      if(plan.support)extra("Support",portrait(plan.support));
+      if(plan.resonance){
+        const resonance=plan.resonance;
+        const owner=characterRoster[resonance.id];
+        const icon=document.createElement("span");
+        icon.className="character-team-resonance";
+        if(resonance.id===characterId)icon.classList.add("is-current");
+        icon.title=(owner?.name||resonance.id)+" · "+resonance.skill;
+        icon.setAttribute("aria-label",icon.title);
+        if(owner?.skills_path){
+          const image=document.createElement("img");
+          image.src=owner.skills_path+"/skill_b/"+resonance.skill.toLowerCase()+".svg";
+          image.alt="";
+          image.loading="lazy";
+          icon.append(image);
+        }
+        extra("Resonance",icon);
+      }
+      card.append(members);
+      const tooltip=document.createElement("span");
+      tooltip.className="character-team-name";
+      tooltip.setAttribute("role","status");
+      tooltip.hidden=true;
+      card.append(tooltip);
+      let holdTimer,hideTimer,startX=0,startY=0,suppressClick=false;
+      function cancelHold(){
+        clearTimeout(holdTimer);
+      }
+      card.addEventListener("pointerdown",event=>{
+        cancelHold();
+        clearTimeout(hideTimer);
+        tooltip.hidden=true;
+        suppressClick=false;
+        const target=event.target.closest(".character-team-member,.character-team-resonance");
+        if(!target||event.button!==0)return;
+        startX=event.clientX;
+        startY=event.clientY;
+        holdTimer=setTimeout(()=>{
+          tooltip.textContent=target.title;
+          tooltip.hidden=false;
+          suppressClick=true;
+        },450);
+      });
+      card.addEventListener("pointermove",event=>{
+        if(Math.hypot(event.clientX-startX,event.clientY-startY)>10){
+          cancelHold();
+          tooltip.hidden=true;
+        }
+      });
+      card.addEventListener("pointerup",()=>{
+        cancelHold();
+        hideTimer=setTimeout(()=>{tooltip.hidden=true;},1500);
+      });
+      card.addEventListener("pointercancel",()=>{
+        cancelHold();
+        tooltip.hidden=true;
+      });
+      card.addEventListener("contextmenu",event=>{
+        if(event.target.closest(".character-team-member,.character-team-resonance"))event.preventDefault();
+      });
+      card.addEventListener("click",event=>{
+        if(!suppressClick)return;
+        event.preventDefault();
+        suppressClick=false;
+      });
+      container.append(card);
+    }
+    if(!container.children.length)container.textContent="No preset teams include this character yet.";
+  }catch(error){
+    if(characterId===getSelectedCharacterId())container.textContent="Teams could not load. Please reload to try again.";
+    console.error("Character teams:",error);
+  }
+}
+
 /* ---------------------------------------------------------
    Character
 --------------------------------------------------------- */
@@ -1082,6 +1230,7 @@ function setupCharacter(character){
   createSkillVariantSelector(character);
   createSkillButtons(character);
   loadCharacterStyles(character);
+  loadCharacterTeams();
 
   if(skills.length)showSkill(0);
 }
@@ -1125,6 +1274,7 @@ async function loadCharacter(){
     $("character-name").textContent="Character Not Found";
     $("skillSidebar").style.display="none";
     $("characterStylesSection").style.display="none";
+    $("characterTeamsSection").hidden=true;
   }
 }
 
