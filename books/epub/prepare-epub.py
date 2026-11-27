@@ -45,6 +45,79 @@ html[data-reader-mode=paginated] .reader-image{break-inside:avoid;max-height:cal
 html[data-reader-mode=paginated] .reader-image img{max-height:calc(100vh - 72px)!important}
 @media(max-width:600px){body{padding:20px 18px 44px!important}}
 '''
+def enrich_metadata(files,opf_path):
+ """Derive library metadata from the book itself, preserving unrelated fields."""
+ package=ET.fromstring(files[opf_path]);folder=posixpath.dirname(opf_path)
+ metadata=package.find('{'+O+'}metadata')
+ if metadata is None:metadata=ET.SubElement(package,'{'+O+'}metadata')
+ manifest=package.find('{'+O+'}manifest');items={e.get('id'):e for e in manifest}
+ documents=[]
+ for ref in package.find('{'+O+'}spine'):
+  item=items[ref.get('idref')];path=posixpath.normpath(posixpath.join(folder,unquote(item.get('href'))))
+  documents.append((path,ET.fromstring(files[path])))
+ def replace(field,value):
+  for el in list(metadata):
+   if el.tag=='{'+DC+'}'+field:metadata.remove(el)
+  return ET.SubElement(metadata,'{'+DC+'}'+field)
+ if documents:
+  path,first=documents[0];body=first.find('{'+X+'}body')
+  for node in body:
+   credit=re.match(r'^(Author(?:\s*/\s*Illustrator)?|Written by|By)\s*[-:–—]?\s+(.+)$',text(node),re.I)
+   if credit:
+    creator=replace('creator',credit[2]);creator.set('id','reader-author')
+    for el in list(metadata):
+     if el.get('refines')=='#reader-author':metadata.remove(el)
+    ET.SubElement(metadata,'{'+O+'}meta',{'refines':'#reader-author','property':'role','scheme':'marc:relators'}).text='aut'
+    if 'illustrator' in credit[1].lower():
+     if not any(e.tag=='{'+DC+'}contributor' and text(e)==credit[2] for e in metadata):
+      contributor=ET.SubElement(metadata,'{'+DC+'}contributor',{'id':'reader-illustrator'});contributor.text=credit[2]
+      ET.SubElement(metadata,'{'+O+'}meta',{'refines':'#reader-illustrator','property':'role','scheme':'marc:relators'}).text='ill'
+    creator.text=credit[2];break
+  image=next((e for e in body.iter() if tag(e)=='img'),None)
+  if image is not None:
+   cover_path=posixpath.normpath(posixpath.join(posixpath.dirname(path),unquote(image.get('src',''))))
+   cover=next((e for e in manifest if posixpath.normpath(posixpath.join(folder,unquote(e.get('href',''))))==cover_path and e.get('media-type','').startswith('image/')),None)
+   if cover is not None:
+    for item in manifest:
+     properties=[v for v in item.get('properties','').split() if v!='cover-image']
+     if item is cover:properties.append('cover-image')
+     if properties:item.set('properties',' '.join(properties))
+     else:item.attrib.pop('properties',None)
+    for el in list(metadata):
+     if el.get('name')=='cover':metadata.remove(el)
+    ET.SubElement(metadata,'{'+O+'}meta',{'name':'cover','content':cover.get('id')})
+    guide=package.find('{'+O+'}guide')
+    if guide is None:guide=ET.SubElement(package,'{'+O+'}guide')
+    for el in list(guide):
+     if el.get('type')=='cover':guide.remove(el)
+    ET.SubElement(guide,'{'+O+'}reference',{'type':'cover','title':'Cover','href':posixpath.relpath(path,folder)})
+ # Intro may contain subheadings; include them until the next top-level section.
+ summary=[];in_intro=False
+ for _,document in documents:
+  for node in document.find('{'+X+'}body'):
+   value=text(node)
+   if tag(node) in {'h1','h2'}:
+    if re.fullmatch(r'intro(?:duction)?',value,re.I):in_intro=True;continue
+    if in_intro:in_intro=False;break
+   if in_intro and value:summary.append(value)
+  if summary and not in_intro:break
+ if summary:replace('description','').text='\n\n'.join(summary)
+ files[opf_path]=ET.tostring(package,encoding='utf-8',xml_declaration=True)
+
+def upgrade_metadata(source):
+ with zipfile.ZipFile(source) as z:files={n:z.read(n) for n in z.namelist() if not n.endswith('/')}
+ container=ET.fromstring(files['META-INF/container.xml'])
+ opf_path=next(e.get('full-path') for e in container.iter() if tag(e)=='rootfile')
+ enrich_metadata(files,opf_path)
+ files['META-INF/ml-reader.json']=json.dumps({'version':1,'metadata_version':1}).encode()
+ with tempfile.TemporaryDirectory(prefix='.epub-metadata-',dir=source.parent) as staging:
+  target=Path(staging)/'prepared.epub'
+  with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED) as z:
+   z.writestr('mimetype',b'application/epub+zip',compress_type=zipfile.ZIP_STORED)
+   for name,content in files.items():
+    if name!='mimetype':z.writestr(name,content)
+  os.chmod(target,source.stat().st_mode);os.replace(target,source)
+
 def prepare(source,output=None,archive=None):
  if output is None:
   if not archive:raise ValueError('Provide --archive for the single EPUB output.')
@@ -139,7 +212,8 @@ def prepare(source,output=None,archive=None):
  nav_html=ET.Element('{'+X+'}html',{'lang':'en'});nh=ET.SubElement(nav_html,'{'+X+'}head');ET.SubElement(nh,'{'+X+'}title').text='Contents';nb=ET.SubElement(nav_html,'{'+X+'}body');nn=ET.SubElement(nb,'{'+X+'}nav',{'{'+EPUB+'}type':'toc'});ol=ET.SubElement(nn,'{'+X+'}ol')
  for chunk in chunks:ET.SubElement(ET.SubElement(ol,'{'+X+'}li'),'{'+X+'}a',{'href':chunk['file']}).text=chunk['title']
  files[nav_path]=ET.tostring(nav_html,encoding='utf-8',xml_declaration=True);files[opf_path]=ET.tostring(package,encoding='utf-8',xml_declaration=True)
- files['META-INF/ml-reader.json']=json.dumps({'version':1}).encode()
+ enrich_metadata(files,opf_path)
+ files['META-INF/ml-reader.json']=json.dumps({'version':1,'metadata_version':1}).encode()
  # Writing known outputs only leaves user files in the output folder untouched.
  for name,content in files.items():
   target=output/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(content)
@@ -170,7 +244,12 @@ def scan_folder(folder=None):
   if not source.is_file() or source.suffix.lower()!='.epub':continue
   try:
    if is_adjusted(source):
-    print(f'Already adjusted: {source.name}');continue
+    with zipfile.ZipFile(source) as z:
+     marker=json.loads(z.read('META-INF/ml-reader.json')) if 'META-INF/ml-reader.json' in z.namelist() else {}
+    if marker.get('metadata_version')!=1:
+     upgrade_metadata(source);changed.append(source);print(f'Updated metadata: {source.name}')
+    else:print(f'Already adjusted: {source.name}')
+    continue
    # Build and validate beside the original, then replace only after success.
    with tempfile.TemporaryDirectory(prefix='.epub-adjust-',dir=source.parent) as staging:
     target=Path(staging)/'prepared.epub';prepare(source,archive=target)

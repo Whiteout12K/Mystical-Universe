@@ -50,6 +50,24 @@ class EpubTests(unittest.TestCase):
     self.assertEqual(list(dict.fromkeys(path for path,_ in navigation)),spine)
     for document,entries in contents.items():
      self.assertEqual(entries,[entry for entry in navigation if entry[0]!=document])
+ def test_metadata_uses_title_credit_intro_and_first_cover(self):
+  import posixpath
+  for number in (1,2):
+   with self.subTest(volume=number),zipfile.ZipFile(ROOT/f'books/epub/vol-{number}.epub') as z:
+    files={n:z.read(n) for n in z.namelist()}
+    opf='GoogleDoc/package.opf'
+    opf=next(n for n in files if n.endswith('.opf'))
+    module.enrich_metadata(files,opf)
+    first=files[opf];module.enrich_metadata(files,opf);self.assertEqual(first,files[opf])
+    package=E.fromstring(first);metadata=package.find(O+'metadata')
+    self.assertEqual(metadata.find('{'+module.DC+'}creator').text,'Kenneth Calhoun')
+    intro=E.fromstring(files['GoogleDoc/chapter-003.xhtml']).find(X+'body')
+    expected='\n\n'.join(module.text(n) for n in intro if module.text(n) and module.text(n).lower()!='intro')
+    self.assertEqual(metadata.find('{'+module.DC+'}description').text,expected)
+    cover=next(e for e in package.find(O+'manifest') if 'cover-image' in e.get('properties','').split())
+    title=E.fromstring(files['GoogleDoc/chapter-001.xhtml'])
+    self.assertEqual(cover.get('href'),title.find('.//'+X+'img').get('src'))
+    self.assertEqual(next(e for e in metadata if e.get('name')=='cover').get('content'),cover.get('id'))
  def test_prepare_preserves_text_emphasis_alignment_images_and_link_targets(self):
   with tempfile.TemporaryDirectory() as td:
    temp=Path(td);source=temp/'test.epub'
