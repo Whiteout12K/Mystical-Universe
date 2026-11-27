@@ -34,3 +34,11 @@ test('equipment interaction notes are conditional and source-specific',()=>{
  assert(equipmentInteractions('c1',{weapon:'w1',accessory:'a1',artifacts:Array(4).fill('o1')},roster,catalogues,data).some(n=>n.id==='w1'));
  assert(!equipmentInteractions('c1',{artifacts:['o1','o1','','']},roster,catalogues,data).some(n=>n.id==='o1'));
 });
+
+test('pasted team links retain complete builds and reject invalid links',async()=>{
+ const {parseTeamLink,planHash}=await import('../assets/js/site-enhancements/team-builder-model.js');
+ const plan={version:1,team:['c1','c2','c3'],support:'c5',resonance:{id:'c1',skill:'T2'},loadouts:{c1:{basic:['B2'],special:['S3','S2'],ultimate:['U2'],technical:['T2']}},equipment:{c1:{weapon:'w1',accessory:'a1',artifacts:['o1','o1','o1','o1']}}};
+ assert.deepEqual(parseTeamLink('  https://example.org/webpages/apps/team_builder.html'+planHash(plan)+'  '),plan);
+ assert.deepEqual(parseTeamLink(planHash(plan)),plan);
+ for(const invalid of ['', 'not a URL', 'https://example.org/', '#team=%7Bbad', '#team=null'])assert.throws(()=>parseTeamLink(invalid));
+});

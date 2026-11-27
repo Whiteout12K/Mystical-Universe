@@ -49,7 +49,7 @@ jobs:
             git fetch origin "$TARGET_BRANCH"
             git checkout -B index-sync FETCH_HEAD
             python3 scripts/build-site-index.py
-            git add -- data/search-index.json data/wiki-search-index.json data/character-connections.json data/books.json
+            git add -- data/search-index.json data/wiki-search-index.json data/character-connections.json data/books.json data/skill-catalog.json
             if git diff --cached --quiet; then exit 0; fi
             git commit -m 'Update generated website indexes'
             if git push origin "HEAD:refs/heads/$TARGET_BRANCH"; then exit 0; fi

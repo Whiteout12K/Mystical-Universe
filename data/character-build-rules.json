@@ -1,0 +1,250 @@
+{
+  "c1": {
+    "effect_targets": {
+      "B1": {
+        "knockback": [
+          "enemies"
+        ]
+      },
+      "B2": {
+        "blind": [
+          "enemies"
+        ],
+        "burn": [
+          "enemies"
+        ]
+      },
+      "S1": {
+        "blind": [
+          "enemies"
+        ]
+      },
+      "S2": {
+        "shield": [
+          "self",
+          "allies"
+        ]
+      },
+      "U1": {
+        "blind": [
+          "enemies"
+        ],
+        "enlightened": [
+          "self",
+          "allies"
+        ]
+      },
+      "T2": {
+        "embrace-goddess": [
+          "self",
+          "allies"
+        ]
+      },
+      "Dupes": {
+        "goddess-blessing": [
+          "self",
+          "allies"
+        ],
+        "shield": [
+          "self",
+          "allies"
+        ],
+        "angel-touch": [
+          "self",
+          "allies"
+        ],
+        "rapid-recovery": [
+          "self"
+        ],
+        "blind": [
+          "enemies"
+        ],
+        "knockback": [
+          "enemies"
+        ]
+      }
+    }
+  },
+  "c2": {
+    "effect_targets": {
+      "B1": {
+        "freeze": [
+          "enemies"
+        ]
+      },
+      "S1": {
+        "freeze": [
+          "enemies"
+        ],
+        "blind": [
+          "enemies"
+        ]
+      },
+      "S3": {
+        "ice-prince": [
+          "self"
+        ]
+      },
+      "U1": {
+        "freeze": [
+          "enemies"
+        ]
+      },
+      "U2": {
+        "freeze": [
+          "enemies"
+        ]
+      },
+      "T1": {
+        "shadow-miasma": [
+          "self",
+          "allies"
+        ]
+      },
+      "Dupes": {
+        "shield": [
+          "self"
+        ],
+        "flash": {
+          "self": 0,
+          "allies": 2
+        },
+        "freeze": [
+          "enemies"
+        ],
+        "fatigue": [
+          "self"
+        ],
+        "icengon": [
+          "self"
+        ],
+        "black-ice": [
+          "self"
+        ],
+        "midnight-frost": [
+          "enemies"
+        ],
+        "shadow-miasma": [
+          "self",
+          "allies"
+        ]
+      }
+    }
+  },
+  "c3": {
+    "effect_targets": {
+      "S1": {
+        "invention": [
+          "self"
+        ]
+      },
+      "S2": {
+        "invention": [
+          "self"
+        ]
+      },
+      "S3": {
+        "letm-cook": [
+          "self"
+        ],
+        "invention": [
+          "self"
+        ]
+      },
+      "U1": {
+        "invention": [
+          "self"
+        ]
+      },
+      "T1": {
+        "invention": [
+          "self"
+        ],
+        "gamer": [
+          "self"
+        ],
+        "tinkering": [
+          "self"
+        ]
+      },
+      "Dupes": {
+        "invention": [
+          "self"
+        ],
+        "letm-cook": [
+          "self"
+        ],
+        "gamer": [
+          "self"
+        ],
+        "tinkering": [
+          "self"
+        ],
+        "shield": {
+          "self": 1,
+          "allies": 1
+        },
+        "super-shield": {
+          "self": 2,
+          "allies": 2
+        },
+        "attack-down1": [
+          "enemies"
+        ],
+        "attack-down3": [
+          "enemies"
+        ],
+        "crit-down2": [
+          "enemies"
+        ]
+      }
+    }
+  },
+  "c4": {
+    "tree": true,
+    "effect_targets": {
+      "tree-n007": {
+        "rapid-recovery": [
+          "self",
+          "allies"
+        ],
+        "ultimate-shield": [
+          "self"
+        ]
+      },
+      "tree-n006": {
+        "flash": [
+          "self"
+        ]
+      }
+    }
+  },
+  "c6": {
+    "effect_targets": {
+      "T1": {
+        "resistance": [
+          "self",
+          "allies"
+        ],
+        "shield": [
+          "self",
+          "allies"
+        ]
+      },
+      "Dupes": {
+        "shield": [
+          "self"
+        ]
+      }
+    }
+  },
+  "c9": {
+    "effect_targets": {
+      "S2": {
+        "shield": [
+          "self"
+        ]
+      }
+    }
+  }
+}

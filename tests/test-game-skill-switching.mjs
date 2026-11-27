@@ -12,3 +12,8 @@ test('mobile styles disable sticky skill navigation and touch hover movement',()
 test('inline scripts parse after the transition changes',()=>{for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(match[1].trim())new vm.Script(match[1])});
 
 test('a new request keeps the committed frame visible before its first fade frame',async()=>{const h=harness(),queue=[];h.state.requestAnimationFrame=f=>queue.push(f);const a=h.state.showSkill(1);h.waiters[0].resolve();await a;const committed=h.waiters[0].f;assert.equal(committed.style.opacity,'0');const b=h.state.showSkill(2);assert.equal(committed.style.opacity,'1');h.waiters[1].resolve();await b;queue.forEach(f=>f());assert.equal(h.state.activeSkillIndex,2)});
+
+test('the Main Character opens the available skill tree without requesting an absent conventional skill file',async()=>{
+ const h=harness();let opened=0;h.state.characterData={id:4};h.state.document={getElementById:()=>({click:()=>opened++})};
+ await h.state.showSkill(0);assert.equal(opened,1);assert.equal(h.waiters.length,0);
+});

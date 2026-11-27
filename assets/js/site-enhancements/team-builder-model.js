@@ -1,3 +1,4 @@
+import {normalizeLoadout} from './character-build-model.js';
 // Validated, versioned team plans. These describe selections, not simulated combat.
 export const PLAN_VERSION=1;
 export const plain=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/\{\{effect:([^}]+)\}\}/g,(_,id)=>'['+id.replaceAll('-',' ')+']');
@@ -9,17 +10,27 @@ export function normalizePlan(raw,roster,catalogues,skillData={}){
  const support=valid(raw?.support)?raw.support:'';if(support)used.add(support);
  let resonance=null;const r=raw?.resonance;
  if(r&&Object.hasOwn(roster,r.id)&&roster[r.id].skills?.includes(r.skill)&&/^T\d+$/.test(r.skill))resonance={id:r.id,skill:r.skill};
- const equipment={},technical={};
+ const equipment={},technical={},loadouts={};
  for(const id of used){const input=raw?.equipment?.[id]||{},gear={weapon:'',accessory:'',artifacts:['','','','']};
   for(const [key,kind]of [['weapon','weapons'],['accessory','accessories']])if(Object.hasOwn(catalogues[kind]||{},input[key])&&canEquip(roster[id],catalogues[kind][input[key]]))gear[key]=input[key];
   gear.artifacts=Array.from({length:4},(_,i)=>Object.hasOwn(catalogues.artifacts||{},input.artifacts?.[i])?input.artifacts[i]:'');equipment[id]=gear;
-  const selected=raw?.technical?.[id],listed=roster[id].skills?.filter(s=>/^T\d+$/.test(s))||[],available=listed.filter(s=>skillData[id]?.[s]);
-  technical[id]=listed.includes(selected)?selected:(available[0]||'');
+  loadouts[id]=normalizeLoadout(raw?.loadouts?.[id],roster[id],skillData[id]||{},raw?.technical?.[id]);
+  technical[id]=loadouts[id].technical[0]||'';
  }
- return {version:PLAN_VERSION,team,support,resonance,equipment,technical};
+ return {version:PLAN_VERSION,team,support,resonance,equipment,technical,loadouts};
 }
 export function planHash(plan){return '#team='+encodeURIComponent(JSON.stringify(plan));}
 export function parsePlanHash(hash){if(!hash.startsWith('#team='))return null;if(hash.length>30000)throw Error('The team link is too large.');const value=JSON.parse(decodeURIComponent(hash.slice(6)));if(value.version!==PLAN_VERSION||!Array.isArray(value.team))throw Error('This team link uses an unsupported format.');return value;}
+export function parseTeamLink(value){
+ const text=String(value||'').trim();
+ if(!text)throw Error('Paste a team link first.');
+ let hash=text;
+ if(!text.startsWith('#team=')){
+  try{hash=new URL(text).hash;}catch{throw Error('Paste a complete team link or a #team= link.');}
+ }
+ try{const plan=parsePlanHash(hash);if(!plan)throw Error();return plan;}
+ catch{throw Error('This team link is invalid or unsupported. Your current team was kept.');}
+}
 export function artifactBonuses(gear,artifacts){const counts=new Map();for(const id of gear?.artifacts||[])if(artifacts[id])counts.set(id,(counts.get(id)||0)+1);return [...counts].flatMap(([id,count])=>(artifacts[id].set_bonuses||[]).filter(b=>count>=b.pieces).map(b=>({id,count,...b})));}
 export function resonanceAssessment(plan,roster,skillData){
  const r=plan.resonance;if(!r)return {status:'Choose a Resonance skill',notes:['One Technical Skill can be shared with the team.'],eligible:[]};

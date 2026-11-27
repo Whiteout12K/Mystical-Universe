@@ -243,10 +243,11 @@
     if(count&&(!node.position||!Number.isFinite(node.position.x)||!Number.isFinite(node.position.y)))throw Error();
    }
    graphEdges=[...edges.values()];
-   effects=definitions;data=result;draw();restorePath();updatePath();el('c4-tree-status').hidden=true;}
+   effects=definitions;data=result;draw();restorePath();updatePath();el('c4-tree-status').hidden=true;const requestedNode=new URLSearchParams(location.search).get('node');if(data.nodes[requestedNode])showNode(data.nodes[requestedNode]);}
   catch(error) {data=null;console.error('Unable to load c4 skill tree:',error);el('c4-tree-status').textContent='The skill tree could not be loaded. ';const retry=make('button','c4-tree-retry','Try again');retry.type='button';retry.onclick=load;el('c4-tree-status').append(retry);}
   finally {loading=false;view.setAttribute('aria-busy','false');}
  }
  function select(index) {tabs.forEach((t,i)=>{t.setAttribute('aria-selected',String(i===index));t.tabIndex=i===index?0:-1;});el('skills-view').hidden=index!==0;el('c4-tree-view').hidden=index!==1;if(index===1)load();}
+ if(new URLSearchParams(location.search).get('view')!=='skills')select(1);
  tabs.forEach((tab,i)=>{tab.onclick=()=>select(i);tab.onkeydown=e=>{const next=e.key==='Home'?0:e.key==='End'?1:e.key==='ArrowRight'||e.key==='ArrowLeft'?1-i:null;if(next!==null){e.preventDefault();select(next);tabs[next].focus();}};});
 })();

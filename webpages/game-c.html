@@ -683,7 +683,9 @@ function getSkillIcon(skill,path){
 }
 
 function getSkillFile(skill,charId){
-  const id=skill==="Dupes"?16:1;
+  const params=new URLSearchParams(location.search);
+  const requested=Number(params.get("level"));
+  const id=skill==="Dupes"?16:params.get("skill")===skill&&requested>0?Math.trunc(requested):1;
   return`${SKILL_VIEW_PATH}?char=${encodeURIComponent(charId)}&skill=${encodeURIComponent(skill)}&id=${id}&style=rich-3&form=${encodeURIComponent(getSelectedCharacterId())}&variant=${activeSkillVariant}`;
 }
 
@@ -733,12 +735,14 @@ function createSkillVariantSelector(character){
   selector.replaceChildren();
   const variants=character.skill_variants||[];
   selector.hidden=variants.length===0;
-  activeSkillVariant=0;
+  const query=new URLSearchParams(location.search);
+  const requestedVariant=Number(query.get("variant")??(Number(query.get("skill")?.match(/-(\d+)$/)?.[1]||1)-1));
+  activeSkillVariant=variants[requestedVariant]?requestedVariant:0;
   variants.forEach((variant,index)=>{
     const button=document.createElement("button");
     button.type="button";
     button.textContent=variant.name;
-    button.setAttribute("aria-pressed",String(index===0));
+    button.setAttribute("aria-pressed",String(index===activeSkillVariant));
     button.addEventListener("click",()=>{
       if(activeSkillVariant===index)return;
       const skillIndex=Math.max(0,activeSkillIndex);
@@ -940,6 +944,7 @@ function observeIframeHeight(iframe,panel,token){
 --------------------------------------------------------- */
 
 async function showSkill(index){
+  if(characterData?.id===4){document.getElementById("c4-tree-tab")?.click();return;}
   if(!characterData||!skills[index])return;
   const panel=$("skillPanel"),oldIframe=panel.querySelector(".skill-frame:not(.skill-frame-pending):not(.skill-frame-outgoing)");
   if(oldIframe)oldIframe.style.opacity="1";
@@ -1184,7 +1189,9 @@ function setupCharacter(character){
   loadCharacterStyles(character);
   loadCharacterTeams();
 
-  if(skills.length)showSkill(0);
+  const requestedSkill=new URLSearchParams(location.search).get("skill");
+  const requestedIndex=skills.indexOf(requestedSkill);
+  if(skills.length&&getCharacterId()!=="c4")showSkill(requestedIndex>=0?requestedIndex:0);
 }
 
 /* ---------------------------------------------------------

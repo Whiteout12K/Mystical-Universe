@@ -13,6 +13,7 @@
 <link href="/assets/css/bootstrap-min.css" rel="stylesheet">
 <link rel="stylesheet" href="/assets/css/home.css">
 <link rel="stylesheet" href="/assets/css/mlg.css">
+<link rel="stylesheet" href="/assets/css/character-builds.css">
 <script src="/assets/js/bootstrap-bundle-min.js"></script>
 
 
@@ -385,7 +386,7 @@ function renderCharacters(){
 /* SKILLS */
 const skillIcon=(s,p)=>String(s).toLowerCase()==="dupes"?"/images/mlg-assets/Stars/dupe.svg":`${p}/skill_b/${String(s).toLowerCase()}.svg`;
 const skillUrl=(s,id)=>`${SKILL_VIEW_PATH}?char=${encodeURIComponent(id)}&skill=${encodeURIComponent(s)}&id=${String(s).toLowerCase()==="dupes"?16:1}`;
-const skillLabel=s=>String(s).toLowerCase()==="dupes"?"Dupes":`Technical Skill ${String(s).replace(/^T/i,"")}`;
+const skillLabel=s=>String(s).toLowerCase()==="dupes"?"Star Level":`Technical Skill ${String(s).replace(/^T/i,"")}`;
 
 function abilitySkill(s,id,c){
  const label=skillLabel(s);
@@ -425,19 +426,19 @@ function renderAbilities(){
  }
 
  ids.forEach(id=>{
-  const c=characters[id],list=abilitySkills(c);
+  const c=characters[id],list=enhancements?.abilitySkills(id)||abilitySkills(c);
   if(id.toLowerCase()==="c4"){html+=abilityGroup(esc(c.name),`<div class="ability-skills">${list.map(s=>abilitySkill(s,id,c)).join("")}${skillTreeAbility()}</div>`);return;}
   html+=abilityGroup(esc(c.name),list.length
    ?`<div class="ability-skills">${list.map(s=>abilitySkill(s,id,c)).join("")}</div>`
-   :`<div class="ability-empty">No technical skills or dupes listed.</div>`);
+   :`<div class="ability-empty">No technical skills or star levels listed.</div>`);
  });
 
  if(support&&characters[support]){
-  const c=characters[support],list=dupeSkills(c);
+  const c=characters[support],list=enhancements?.abilitySkills(support)||abilitySkills(c);
   if(support.toLowerCase()==="c4")list.push("SkillTree");
   html+=abilityGroup(`Support — ${esc(c.name)}`,list.length
    ?`<div class="ability-skills">${list.map(s=>s==="SkillTree"?skillTreeAbility():abilitySkill(s,support,c)).join("")}</div>`
-   :`<div class="ability-empty">No dupes listed.</div>`,
+   :`<div class="ability-empty">No star levels listed.</div>`,
    'style="border-top-color:#d6aa4560"');
  }
 
