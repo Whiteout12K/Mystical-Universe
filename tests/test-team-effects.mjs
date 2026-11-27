@@ -25,3 +25,10 @@ test('support uses passives and resonance adds only its chosen skill',()=>{
  assert(rows.some(r=>r.id==='shadow-miasma'&&r.sources.some(s=>s.skill==='T1')));
  assert(!rows.some(r=>r.sources.some(s=>s.owner==='c2'&&s.skill==='Dupes')));
 });
+
+test('shared team star level zero overrides profile stars and excludes locked effects',()=>{
+ const plan={team:['c2'],support:'',loadouts:{c2:normalizeLoadout(null,roster.c2,sources.c2)},equipment:{},stars:{c2:0}};
+ const rows=scope.collectTeamEffects(context,plan,{c2:{stars:16}});
+ assert(!rows.some(r=>r.id==='black-ice'||r.id==='fatigue'));
+ assert(rows.some(r=>r.id==='flash'&&r.target==='self'));
+});

@@ -42,3 +42,23 @@ test('pasted team links retain complete builds and reject invalid links',async()
  assert.deepEqual(parseTeamLink(planHash(plan)),plan);
  for(const invalid of ['', 'not a URL', 'https://example.org/', '#team=%7Bbad', '#team=null'])assert.throws(()=>parseTeamLink(invalid));
 });
+
+test('star levels include zero, clamp to each authored maximum, and survive shared links for mains and support',()=>{
+ const plan=normalizePlan({team:['c1','c2','c3'],support:'c5',stars:{c1:0,c2:99,c3:-4,c5:7}},roster,catalogues,data);
+ assert.deepEqual(plan.stars,{c1:0,c2:6,c3:0,c5:5});
+ assert.deepEqual(normalizePlan(parsePlanHash(planHash(plan)),roster,catalogues,data).stars,plan.stars);
+ assert.equal(normalizePlan({team:['c1']},roster,catalogues,data).stars.c1,0);
+});
+
+test('editable JSON presets preserve their skills, equipment, and star levels when loaded or shared',()=>{
+ const presets=read('webpages/apps/team_presets.json');
+ for(const [name,preset] of Object.entries(presets)){
+  const plan=normalizePlan(preset,roster,catalogues,data);
+  assert.deepEqual(plan.team,preset.team,name);
+  assert.equal(plan.support,preset.support,name);
+  assert.deepEqual(plan.loadouts,preset.loadouts,name);
+  assert.deepEqual(plan.equipment,preset.equipment,name);
+  assert.deepEqual(plan.stars,preset.stars,name);
+  assert.deepEqual(normalizePlan(parsePlanHash(planHash(plan)),roster,catalogues,data),plan,name);
+ }
+});

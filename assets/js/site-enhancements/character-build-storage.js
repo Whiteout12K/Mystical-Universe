@@ -1,20 +1,20 @@
 import {loadPlayerSession} from '../player-data.js';
 const cookieKey = id => 'ml_build_' + id;
 let queue = Promise.resolve();
-export async function loadCharacterBuild(id) {
-  const account = await loadPlayerSession();
+export async function loadCharacterBuild(id, {mode='account'} = {}) {
+  const account = mode==='test'?null:await loadPlayerSession();
   if (account) return globalThis.PlayerStore.record(account)?.data?.character_builds?.[id] || {};
   try {
     const value = document.cookie.split(';').map(s => s.trim()).find(s => s.startsWith(cookieKey(id) + '='));
     return value ? JSON.parse(decodeURIComponent(value.slice(value.indexOf('=') + 1))) : {};
   } catch { return {}; }
 }
-export function saveCharacterBuild(id, changes) {
+export function saveCharacterBuild(id, changes, {mode='account'} = {}) {
   const task = queue.catch(() => {}).then(async () => {
     if (!/^c\d+$/.test(id)) throw new Error('Invalid character.');
-    const account = await loadPlayerSession(), store = globalThis.PlayerStore;
+    const account = mode==='test'?null:await loadPlayerSession(), store = globalThis.PlayerStore;
     if (!account) {
-      const value = {...await loadCharacterBuild(id), ...changes};
+      const value = {...await loadCharacterBuild(id,{mode}), ...changes};
       const encoded = encodeURIComponent(JSON.stringify(value));
       if (encoded.length > 3800) throw new Error('Build is too large for a cookie.');
       document.cookie = cookieKey(id) + '=' + encoded + '; Path=/; Max-Age=31536000; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');

@@ -67,3 +67,11 @@ test('target analysis reads numbered descriptions and keeps star-specific target
  const rows=effectReferences(character,sources.c3,effects,normalizeLoadout(null,character,sources.c3),1);
  assert(!rows.some(row=>row.id==='super-shield'));
 });
+
+test('each character star limit follows authored Dupes rather than the number of star images',async()=>{
+ const {maxCharacterStarLevel}=await import('../assets/js/site-enhancements/character-build-model.js');
+ assert.equal(maxCharacterStarLevel(sources.c1),5);
+ assert.equal(maxCharacterStarLevel(sources.c2),6);
+ assert.equal(maxCharacterStarLevel(sources.c4),0);
+ assert.equal(maxCharacterStarLevel({Dupes:{additional:[{level:1},{level:9},{level:'12'},{level:-3},{level:2.5}]}}),12);
+});

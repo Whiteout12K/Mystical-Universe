@@ -1,4 +1,5 @@
 import {el} from './core.js';
+import {equipmentImage, rarityClass} from './equipment-catalog.js';
 import {skillGroups, availableSkills, loadoutLimits, normalizeLoadout, legalEquipment} from './character-build-model.js';
 
 export function gameSkillURL(id, skill) { return '/webpages/game-c.html?' + new URLSearchParams(skill.startsWith('tree-')?{char:id,view:'tree',node:skill.slice(5)}:{char:id,skill}); }
@@ -12,17 +13,17 @@ function skillIconButton(character, definitions, key, caption) {
         } else button.append(el('span', {}, key || '+'));
         return button;
       }
-export function loadoutControls(character, definitions, loadout, onChange, {support = false} = {}) {
+export function loadoutControls(character, definitions, loadout, onChange, {support = false, allowedSkills = null} = {}) {
   const host = el('div', {class: 'build-skill-controls'}), limits = loadoutLimits(character);
   if (character.skill_variants?.length) {
-    const label=el('label',{},'Character variant'),select=el('select',{'aria-label':character.name+' variant'});
+    const label=el('label',{class:'build-character-variant'},'Character variant'),select=el('select',{'aria-label':character.name+' variant'});
     character.skill_variants.forEach((variant,index)=>select.append(el('option',{value:index},variant.name||variant.nickname)));
     select.value=loadout.variant||0;
     select.addEventListener('change',()=>onChange(normalizeLoadout({variant:Number(select.value)},character,definitions)));
     label.append(select);host.append(label);
   }
   for (const group of skillGroups) {
-    const options = availableSkills(character, definitions, group.prefix, loadout.variant);
+    const options = availableSkills(character, definitions, group.prefix, loadout.variant).filter(key=>!allowedSkills||allowedSkills[group.key]?.includes(key));
     for (let index = 0; index < limits[group.key]; index++) {
       const unavailable = support && group.key !== 'technical';
       const wrapper = el('fieldset', {class: 'build-skill-picker' + (unavailable ? ' build-skill-unavailable' : '')});
@@ -56,8 +57,7 @@ export function loadoutControls(character, definitions, loadout, onChange, {supp
       menu.append(clear);
       trigger.addEventListener('click', () => {
         const open = menu.hidden;
-        host.querySelectorAll('.build-skill-options').forEach(node => { node.hidden = true; });
-        host.querySelectorAll('[aria-expanded]').forEach(node => node.setAttribute('aria-expanded', 'false'));
+        closeBuildMenus();
         menu.hidden = !open;
         trigger.setAttribute('aria-expanded', String(open));
       });
@@ -68,22 +68,42 @@ export function loadoutControls(character, definitions, loadout, onChange, {supp
       host.append(wrapper);
     }
   }
+  enableOutsideDismiss();
   return host;
+}
+function equipmentButton(item, category, caption) {
+  const artifact=category==='artifacts',name=item?.name||'None';
+  const button=el('button',{type:'button',class:'build-equipment-choice'+(artifact?' build-artifact-choice':''),title:name,'aria-label':caption||name});
+  if(item){const tone=rarityClass(artifact?'SSR':item.rarity);if(tone)button.append(el('span',{class:'build-equipment-wash rarity-'+tone,'aria-hidden':'true'}));}
+  const art=el('span',{class:'build-equipment-art','aria-hidden':'true'}),path=item&&equipmentImage(item);
+  if(path){const image=el('img',{src:path,alt:'',loading:'lazy'});image.addEventListener('error',()=>{image.remove();art.append(el('span',{class:'build-equipment-placeholder'},'◇'));},{once:true});art.append(image);}
+  else art.append(el('span',{class:'build-equipment-placeholder'},item?'◇':'+'));
+  button.append(art);
+  button.append(el('span',{class:'build-equipment-name'},name));
+  return button;
 }
 export function equipmentControls(context, id, gear, onChange) {
-  const character = context.character(id), host = el('div', {class: 'build-equipment-controls'});
-  for (const [category, label, field] of [['weapons', 'Weapon', 'weapon'], ['accessories', 'Accessory', 'accessory'], ['artifacts', 'Artifact set', 'artifacts']]) {
-    const wrapper = el('label', {}, label), select = el('select', {'aria-label': character.name + ' ' + label});
-    select.append(el('option', {value: ''}, category === 'artifacts' ? 'No full set / mixed pieces' : 'None'));
-    for (const [key, item] of Object.entries(context.catalogs[category])) if (legalEquipment(character, item)) select.append(el('option', {value: key}, item.name));
-    select.value = category === 'artifacts' ? (gear.artifacts?.every(key => key === gear.artifacts[0]) ? gear.artifacts[0] : '') : gear[field] || '';
-    select.addEventListener('change', () => {
-      const next = structuredClone(gear);
-      next[field] = category === 'artifacts' ? Array(4).fill(select.value) : select.value;
-      onChange(next);
-    });
-    wrapper.append(select);
-    host.append(wrapper);
+  const character=context.character(id),host=el('div',{class:'build-equipment-controls'});
+  for(const [category,label,field] of [['weapons','Weapon','weapon'],['accessories','Accessory','accessory'],['artifacts','Artifact set','artifacts']]){
+    const wrapper=el('fieldset',{class:'build-skill-picker build-equipment-picker'});
+    wrapper.append(el('legend',{},label));
+    const selected=category==='artifacts'?(gear.artifacts?.every(key=>key===gear.artifacts[0])?gear.artifacts[0]:''):gear[field]||'';
+    const trigger=equipmentButton(context.catalogs[category][selected],category,'Choose '+character.name+' '+label);
+    const pickerId='build-equipment-'+id+'-'+field;
+    trigger.setAttribute('aria-expanded','false');trigger.setAttribute('aria-controls',pickerId);
+    const menu=el('div',{id:pickerId,class:'build-skill-options build-equipment-options',role:'group','aria-label':character.name+' '+label+' choices',hidden:''});
+    function choose(key){const next=structuredClone(gear);next[field]=category==='artifacts'?Array(4).fill(key):key;if(category==='artifacts')next.artifactRarity='SSR';onChange(next);}
+    for(const [key,item]of Object.entries(context.catalogs[category]))if(legalEquipment(character,item)){
+      const option=equipmentButton(item,category);option.setAttribute('aria-pressed',String(key===selected));option.addEventListener('click',()=>choose(key));menu.append(option);
+    }
+    const clear=el('button',{type:'button',class:'build-skill-clear'},'Clear');clear.addEventListener('click',()=>choose(''));menu.append(clear);
+    trigger.addEventListener('click',()=>{const open=menu.hidden;closeBuildMenus();menu.hidden=!open;trigger.setAttribute('aria-expanded',String(open));});
+    menu.addEventListener('keydown',event=>{if(event.key==='Escape'){menu.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.focus();}});
+    wrapper.append(trigger,menu);host.append(wrapper);
   }
+  enableOutsideDismiss();
   return host;
 }
+function closeBuildMenus(){document.querySelectorAll('.build-skill-options').forEach(node=>{node.hidden=true;});document.querySelectorAll('.build-skill-picker [aria-expanded]').forEach(node=>node.setAttribute('aria-expanded','false'));}
+let outsideDismissEnabled=false;
+function enableOutsideDismiss(){if(outsideDismissEnabled)return;outsideDismissEnabled=true;document.addEventListener('click',event=>{if(!event.target.closest('.build-skill-picker'))closeBuildMenus();});}

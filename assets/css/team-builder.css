@@ -39,3 +39,7 @@
 .team-link-import button{flex:none}
 .plan-toolbar #team-share-link{grid-column:1/-1}
 @media(max-width:480px){.plan-toolbar{grid-template-columns:minmax(0,1fr)}.plan-toolbar>button{width:100%}.team-link-import{grid-column:1/-1}}
+.team-build-mode{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;color:var(--muted)}.team-link-import .team-build-mode input{width:auto;flex:none;accent-color:var(--gold2)}.team-build-mode input:disabled{opacity:.4}.team-link-import{flex-wrap:wrap}.team-link-import #paste-team-link{flex:1 1 150px}.team-build-mode small{font-size:10px}
+@media(max-width:600px){.team-link-import #paste-team-link{flex-basis:100%}.team-link-import .team-build-mode{margin-left:4px}}
+.pick-character.account-unowned,.pick-character.account-unowned:hover{opacity:.25;filter:grayscale(.8)}
+.team-slot.account-unowned,.support-slot.account-unowned,.plan-member-portrait.account-unowned,.rb-character-group.account-unowned{opacity:.35;filter:grayscale(.8)}

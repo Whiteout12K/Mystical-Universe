@@ -27,3 +27,10 @@ test('failed D1 uploads preserve the offline profile, and queued edits preserve 
  const r=runtime({id:42,userId:42,connected:true},{fail:true});await Promise.all([r.context.saveCharacterBuild('c1',{stars:2}),r.context.saveCharacterBuild('c2',{level:7})]);
  assert.equal(r.record().dirty,true);assert.equal(r.record().data.character_builds.c1.stars,2);assert.equal(r.record().data.character_builds.c2.level,7);assert.equal(r.record().data.character_builds.c2.stars,6);
 });
+
+test('test kit mode uses cookies even when signed in and leaves the account profile untouched',async()=>{
+ const r=runtime({id:42,userId:42,connected:true});
+ await r.context.saveCharacterBuild('c1',{stars:9,gear:{weapon:'w1'}},{mode:'test'});
+ assert.equal((await r.context.loadCharacterBuild('c1',{mode:'test'})).stars,9);
+ assert.equal(r.record().data.character_builds.c1,undefined);assert.equal(r.sent(),undefined);assert.equal(r.cookies.size,1);
+});

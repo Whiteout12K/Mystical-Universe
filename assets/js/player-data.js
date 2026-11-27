@@ -1,3 +1,4 @@
+import {initializeOwnedCharacterBuilds} from '../../data/character-build-defaults.mjs';
 // Main-site adapter. JScratch itself depends only on its own runtime.
 import '../../JScratch/js/player-store.js';
 import {createInitialData, registrationError} from '../../data/player-registration.mjs';
@@ -90,9 +91,10 @@ export async function loadPlayerSession() {
     if (store.isSignedOut()) return null;
     const online = store.activateCloud(snapshot);
     const player = online?.account ?? store.localAccount();
+    if(player&&(!online||store.isLocal())){const saved=store.record(player),data=saved?.data||{},initialized=initializeOwnedCharacterBuilds(data);if(initialized!==data)store.stage(player,initialized);}
     return player ? {...player, authenticated: true, connected: Boolean(online),
         offlineRegistration: store.isOfflineRegistration(player.username),
-        userId: online ? snapshot.userId : undefined, data: (online?.saved ?? store.record(player))?.data ?? {}} : null;
+        userId: online ? snapshot.userId : undefined, data: store.record(player)?.data ?? {}} : null;
 }
 
 export async function loadPlayerProfile(username) {

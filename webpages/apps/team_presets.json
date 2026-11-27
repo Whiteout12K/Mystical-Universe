@@ -1,0 +1,167 @@
+{
+  "Mystical Legends 1": {
+    "version": 1,
+    "team": ["c1", "c2", "c3"],
+    "support": "c5",
+    "resonance": {"id": "c1", "skill": "T1"},
+    "equipment": {
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c2": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c3": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c5": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c2": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c3": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c5": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c1": 0,
+      "c2": 0,
+      "c3": 0,
+      "c5": 0
+    }
+  },
+  "Tempest Aquia (Water Premium)": {
+    "version": 1,
+    "team": ["c6", "c1", "c18"],
+    "support": "c20",
+    "resonance": {"id": "c1", "skill": "T2"},
+    "equipment": {
+      "c6": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c18": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c20": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c6": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c18": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c20": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c6": 0,
+      "c1": 0,
+      "c18": 0,
+      "c20": 0
+    }
+  },
+  "Tempest Aquia (Water)": {
+    "version": 1,
+    "team": ["c6", "c1", "c18"],
+    "support": "c5",
+    "resonance": {"id": "c1", "skill": "T2"},
+    "equipment": {
+      "c6": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c18": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c5": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c6": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c18": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c5": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c6": 0,
+      "c1": 0,
+      "c18": 0,
+      "c5": 0
+    }
+  },
+  "Blue Legion (Dark)": {
+    "version": 1,
+    "team": ["c8", "c2", "c1"],
+    "support": "c11",
+    "resonance": {"id": "c8", "skill": "T1"},
+    "equipment": {
+      "c8": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c2": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c11": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c8": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c2": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c11": {"variant": 0, "basic": ["B1-1"], "special": ["S1-1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c8": 0,
+      "c2": 0,
+      "c1": 0,
+      "c11": 0
+    }
+  },
+  "Black Rampart (Lighting/Glass)": {
+    "version": 1,
+    "team": ["c10", "c9", "c17"],
+    "support": "c1",
+    "resonance": {"id": "c1", "skill": "T2"},
+    "equipment": {
+      "c10": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c9": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c17": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c10": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c9": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c17": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c10": 0,
+      "c9": 0,
+      "c17": 0,
+      "c1": 0
+    }
+  },
+  "District 3 (Fire)": {
+    "version": 1,
+    "team": ["c7", "c11", "c8"],
+    "support": "c1",
+    "resonance": {"id": "c1", "skill": "T2"},
+    "equipment": {
+      "c7": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c11": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c8": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c1": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c7": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c11": {"variant": 0, "basic": ["B1-1"], "special": ["S1-1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c8": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c1": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c7": 0,
+      "c11": 0,
+      "c8": 0,
+      "c1": 0
+    }
+  },
+  "Starting": {
+    "version": 1,
+    "team": ["c4", "c5", "c3"],
+    "support": "",
+    "resonance": {"id": "c4", "skill": "T1"},
+    "equipment": {
+      "c4": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c5": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"},
+      "c3": {"weapon": "", "accessory": "", "artifacts": ["", "", "", ""], "artifactRarity": "SSR"}
+    },
+    "loadouts": {
+      "c4": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c5": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]},
+      "c3": {"basic": ["B1"], "special": ["S1", "S2"], "ultimate": ["U1"], "technical": ["T1"]}
+    },
+    "stars": {
+      "c4": 0,
+      "c5": 0,
+      "c3": 0
+    }
+  }
+}

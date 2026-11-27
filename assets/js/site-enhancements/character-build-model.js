@@ -34,6 +34,9 @@ export function normalizeLoadout(input, character, definitions = {}, legacyTechn
   }
   return result;
 }
+export function maxCharacterStarLevel(definitions = {}) {
+  return Math.max(0,...Object.entries(definitions).filter(([key])=>/^Dupes/i.test(key)).flatMap(([,skill])=>(skill.additional||[]).map(entry=>Number(entry?.level)).filter(level=>Number.isInteger(level)&&level>0)));
+}
 export function selectedSkills(loadout) { return skillGroups.flatMap(group => loadout?.[group.key] || []).filter(Boolean); }
 export function skillParagraphsWithStars(skill) {
   const rows = [];

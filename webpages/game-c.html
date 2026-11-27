@@ -1071,8 +1071,8 @@ async function loadCharacterTeams(){
   section.hidden=false;
   container.textContent="Loading teams…";
   try{
-    const [{PRESET_TEAMS},{planHash}]=await Promise.all([
-      import("/assets/js/site-enhancements/team-presets.js"),
+    const [PRESET_TEAMS,{planHash}]=await Promise.all([
+      fetch('/webpages/apps/team_presets.json',{cache:'no-cache'}).then(response=>{if(!response.ok)throw Error('Preset teams could not load.');return response.json();}),
       import("/assets/js/site-enhancements/team-builder-model.js")
     ]);
     if(characterId!==getSelectedCharacterId())return;

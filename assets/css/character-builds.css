@@ -18,3 +18,41 @@
 .team-effects h3{margin:12px 0 4px}.team-effects .team-effect-list{margin:0 0 12px;line-height:1.9}.team-effect-list a{text-decoration:none}.team-effect-list a:hover{text-decoration:underline}.team-effect-list b{border-bottom:1px solid #ffffff20}
 
 .build-skill-unavailable{opacity:.35;filter:grayscale(1)}.build-skill-unavailable button{cursor:default}
+
+.build-star-level{display:flex;align-items:center;gap:10px;margin:12px 0;font-size:13px;color:#bcae96}.build-star-level select{width:76px}
+@media(max-width:600px){
+ .builder-planning .build-skill-controls{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+ .builder-planning .build-skill-picker .build-skill-options{position:fixed;inset:auto 12px 12px;z-index:1000;box-sizing:border-box;width:auto;max-width:none;max-height:45dvh;overflow-y:auto;overscroll-behavior:contain;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));justify-items:center;gap:10px;padding:14px;background:#211b1c;box-shadow:0 0 0 100vmax #0006,0 9px 25px #0009}
+ .build-skill-options .build-skill-clear{width:100%}
+ .build-star-level select{font-size:16px}
+}
+
+.build-selection-layout{display:flex;align-items:center;justify-content:space-between;gap:24px;min-width:0}
+.builder-planning .build-selection-layout .build-skill-controls{display:grid;grid-template-columns:repeat(5,minmax(0,48px));gap:8px;flex:0 1 272px;min-width:0;margin:12px 0}
+.build-selection-layout .build-character-variant{grid-column:1/-1}
+.build-selection-layout .build-skill-picker legend{font-size:10px;white-space:nowrap;margin-bottom:6px}
+.build-selection-layout .build-skill-controls>.build-skill-picker>.build-skill-choice{width:100%;height:auto;aspect-ratio:1;padding:4px}
+.build-selection-layout .build-equipment-controls{display:flex;align-items:center;justify-content:center;gap:10px;flex:none;margin:12px 0}
+.build-equipment-picker{display:flex;flex-direction:column;align-items:center;text-align:center}
+.character-builds .build-equipment-choice{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;width:76px;height:88px;flex:none;padding:5px;overflow:hidden;border-radius:7px;border:1px solid #d6aa4540;background:#181415}
+.character-builds .build-equipment-choice[aria-pressed=true]{border-color:#e4c579;box-shadow:0 0 0 1px #e4c579}
+.build-equipment-wash{position:absolute;inset:0;z-index:-1;opacity:.35;pointer-events:none}
+.build-equipment-art{display:flex;align-items:center;justify-content:center;width:100%;flex:1;min-height:0}
+.build-equipment-art img{display:block;width:100%;height:100%;min-height:0;object-fit:contain}
+.build-equipment-placeholder{font-size:24px;opacity:.35}
+.build-equipment-rarity{font-size:9px;font-weight:bold;line-height:1.2;margin-top:3px}
+.build-equipment-name{display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px;line-height:1.4;margin-top:3px}
+.character-builds .build-artifact-choice{width:68px;height:68px}
+.build-equipment-options{grid-template-columns:repeat(3,76px);align-items:center;justify-items:center;max-height:360px;overflow-y:auto;overscroll-behavior:contain}
+.build-equipment-picker:last-child .build-equipment-options{right:0;left:auto}
+@media(max-width:700px){
+ .build-selection-layout{flex-direction:column;align-items:stretch;gap:0}
+ .builder-planning .build-selection-layout .build-skill-controls{grid-template-columns:repeat(5,minmax(0,1fr));flex:none;width:100%;gap:6px;justify-items:center}
+ .build-selection-layout .build-skill-controls>.build-skill-picker{width:100%;max-width:48px}
+ .build-selection-layout .build-equipment-controls{justify-content:center;width:100%;gap:14px;margin:4px 0 12px}
+}
+@media(max-width:600px){
+ .builder-planning .build-equipment-picker .build-equipment-options{grid-template-columns:repeat(auto-fit,minmax(76px,1fr));gap:12px;max-height:50dvh}
+}
+.builder-planning .build-star-level select{width:76px;flex:none}.build-star-level{white-space:nowrap}
+.build-equipment-name{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.2;font-size:10px;min-height:24px;overflow:hidden;overflow-wrap:anywhere}

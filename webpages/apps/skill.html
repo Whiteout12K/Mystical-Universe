@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
       document.getElementById("level-display").style.display="none";
 
     if(isDupe){
-      level=Math.min(MAX_DUPE_LEVEL,Math.max(1,level));
+      level=Math.min(MAX_DUPE_LEVEL,Math.max(0,level));
       renderDupe(data,level,effects);
       return;
     }

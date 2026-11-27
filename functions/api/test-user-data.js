@@ -1,5 +1,6 @@
+import {initializeOwnedCharacterBuilds} from '../../data/character-build-defaults.mjs';
 function createInitialData() {
-    return {
+    return initializeOwnedCharacterBuilds({
         silver_coin: 0, // Silver Coins, main currency
         ar_level: 1, // Adventure Rank Level
         ar_xp: 0, // Adventure Rank XP
@@ -636,5 +637,5 @@ function createInitialData() {
         },
 
         flags: {}
-    };
+    });
 }

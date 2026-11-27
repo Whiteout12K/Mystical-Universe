@@ -16,7 +16,7 @@ export function collectTeamEffects(context, plan, builds = {}) {
   for (const id of [...new Set([...plan.team, plan.support].filter(Boolean))]) {
     const character = context.character(id), definitions = context.skills(id);
     const loadout = id === plan.support ? {technical:plan.loadouts[id]?.technical || []} : plan.loadouts[id];
-    for (const row of effectReferences(character, definitions, context.effects, loadout, builds[id]?.stars ?? 16)) add(row,id);
+    for (const row of effectReferences(character, definitions, context.effects, loadout, plan.stars?.[id] ?? builds[id]?.stars ?? 0)) add(row,id);
     const gear = plan.equipment[id] || {};
     const items = [['weapons',gear.weapon],['accessories',gear.accessory],...Object.entries((gear.artifacts||[]).reduce((a,k)=>(k&&(a[k]=(a[k]||0)+1),a),{})).map(([k,n])=>['artifacts',k,n])];
     for (const [category,key,count] of items) {

@@ -1,4 +1,4 @@
-import {normalizeLoadout} from './character-build-model.js';
+import {normalizeLoadout,maxCharacterStarLevel} from './character-build-model.js';
 // Validated, versioned team plans. These describe selections, not simulated combat.
 export const PLAN_VERSION=1;
 export const plain=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/\{\{effect:([^}]+)\}\}/g,(_,id)=>'['+id.replaceAll('-',' ')+']');
@@ -10,14 +10,15 @@ export function normalizePlan(raw,roster,catalogues,skillData={}){
  const support=valid(raw?.support)?raw.support:'';if(support)used.add(support);
  let resonance=null;const r=raw?.resonance;
  if(r&&Object.hasOwn(roster,r.id)&&roster[r.id].skills?.includes(r.skill)&&/^T\d+$/.test(r.skill))resonance={id:r.id,skill:r.skill};
- const equipment={},technical={},loadouts={};
- for(const id of used){const input=raw?.equipment?.[id]||{},gear={weapon:'',accessory:'',artifacts:['','','','']};
+ const equipment={},technical={},loadouts={},stars={};
+ for(const id of used){const input=raw?.equipment?.[id]||{},gear={weapon:'',accessory:'',artifacts:['','','',''],artifactRarity:'SSR'};
   for(const [key,kind]of [['weapon','weapons'],['accessory','accessories']])if(Object.hasOwn(catalogues[kind]||{},input[key])&&canEquip(roster[id],catalogues[kind][input[key]]))gear[key]=input[key];
   gear.artifacts=Array.from({length:4},(_,i)=>Object.hasOwn(catalogues.artifacts||{},input.artifacts?.[i])?input.artifacts[i]:'');equipment[id]=gear;
   loadouts[id]=normalizeLoadout(raw?.loadouts?.[id],roster[id],skillData[id]||{},raw?.technical?.[id]);
   technical[id]=loadouts[id].technical[0]||'';
+  const star=raw?.stars?.[id];stars[id]=Number.isInteger(star)?Math.min(maxCharacterStarLevel(skillData[id]),Math.max(0,star)):0;
  }
- return {version:PLAN_VERSION,team,support,resonance,equipment,technical,loadouts};
+ return {version:PLAN_VERSION,team,support,resonance,equipment,technical,loadouts,stars};
 }
 export function planHash(plan){return '#team='+encodeURIComponent(JSON.stringify(plan));}
 export function parsePlanHash(hash){if(!hash.startsWith('#team='))return null;if(hash.length>30000)throw Error('The team link is too large.');const value=JSON.parse(decodeURIComponent(hash.slice(6)));if(value.version!==PLAN_VERSION||!Array.isArray(value.team))throw Error('This team link uses an unsupported format.');return value;}

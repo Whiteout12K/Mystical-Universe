@@ -1,3 +1,4 @@
+import {initializeOwnedCharacterBuilds} from './character-build-defaults.mjs';
 const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 const PASSWORD_REGEX = /^\d{4}$/;
 
@@ -10,7 +11,7 @@ export function registrationError(username, password) {
 }
 
 export function createInitialData() {
-    return {
+    return initializeOwnedCharacterBuilds({
         silver_coin: 0, // Silver Coins, main currency
         ar_level: 1, // Adventure Rank Level
         ar_xp: 0, // Adventure Rank XP
@@ -647,5 +648,5 @@ export function createInitialData() {
         },
 
         flags: {}
-    };
+    });
 }
