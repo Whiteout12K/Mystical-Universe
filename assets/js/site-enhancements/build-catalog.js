@@ -11,3 +11,23 @@ export function buildCatalog() {
   })).catch(error => { pending = null; throw error; });
   return pending;
 }
+
+// Refresh authored skill data when opening Used by; never require an index rebuild
+// for skill renames, descriptions, effect references, or star-level edits.
+let refreshingSkills;
+export function refreshBuildSkills(context) {
+  if(refreshingSkills)return refreshingSkills;
+  const sources=[...new Set(Object.keys(context.roster).filter(id=>!id.startsWith('#')&&Object.keys(context.skills(id)).length).map(id=>context.roster[id]?.base_character||id))];
+  refreshingSkills=Promise.all(sources.map(async id=>{
+    const path=context.character(id)?.skills_path||'/images/mlg-assets/Characters/'+id.toUpperCase();
+    const response=await fetch(path+(id==='c4'?'/skill-tree.json':'/'+id+'.json'),{cache:'no-cache'});
+    if(response.status===404)return [id,{}];
+    if(!response.ok)throw Error('Skill data could not refresh.');
+    const data=await response.json();
+    return [id,id==='c4'?Object.fromEntries(Object.entries(data.nodes||{}).map(([key,node])=>['tree-'+key,node])):data];
+  })).then(entries=>{
+    const live=Object.fromEntries(entries);
+    return {...context,skills:id=>live[context.roster[id]?.base_character||id]||{}};
+  }).finally(()=>{refreshingSkills=null;});
+  return refreshingSkills;
+}

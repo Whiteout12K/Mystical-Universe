@@ -1,7 +1,7 @@
 {
 
   "B1-1": {
-    "name": "Fighting For {{Possessive}} Boss (Earth Discharge)",
+    "name": "Fighting For His Boss (Earth Discharge)",
     "type": "Basic Skill",
     "description": "{{nickname}} unleashes {{possessive}} hammer of rock and pounds around, dealing <b class=\"earth\">[Earth]</b> damage and <b class=\"knockback\">[Knockback]</b>.",
     "description_style": {"paddingTop": 7},

@@ -1,3 +1,4 @@
+import {isLocalEditorHost,editorLinks} from './editor-navigation.js';
 import {flagsReady,el,link,readyWhen} from './core.js';
 const flags=await flagsReady;
 const stylesheet=el('link',{rel:'stylesheet',href:'/assets/css/site-enhancements.css'});document.head.append(stylesheet);
@@ -6,6 +7,7 @@ if(flags.mobileNavigation)import('./mobile.js').then(m=>m.init()).catch(console.
 if(flags.characterConnections)import('./connections.js').then(m=>m.init(flags)).catch(console.error);
 if(flags.readingContinuity)import('./reading.js').then(m=>m.init()).catch(console.error);
 function populateExplore(menu){
+ if(menu.dataset.exploreReady)return;menu.dataset.exploreReady='true';
  const wiki=menu.classList.contains('wiki-nav-tree');
  function entry(label,href,action){
   const row=el('li'),item=link(label,href);if(!wiki)item.className='dropdown-item';
@@ -20,6 +22,10 @@ function populateExplore(menu){
  if(flags.unifiedSearch)entry('Search','/webpages/search.html',async()=>{const {openSearch}=await import('./search.js');openSearch();});
  if(flags.effectsGlossary)entry('Game Codex','/webpages/game-codex.html');
  if(flags.characterComparison)entry('Compare','/webpages/compare.html');
+ if(isLocalEditorHost(location.hostname)){
+  const heading=el('li',{class:'ml-local-editors-heading'});heading.append(el('span',{},'Editors'));menu.append(heading);
+  for(const item of editorLinks)entry(item.label,item.href);
+ }
 }
 readyWhen('#site-explore-menu',populateExplore);
 readyWhen('#wiki-nav-panel-0 > .wiki-nav-tree',populateExplore);

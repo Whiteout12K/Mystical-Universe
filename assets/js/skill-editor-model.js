@@ -51,4 +51,45 @@ export function skillWarnings(document, effects) {
   }
   return [...new Set(warnings)];
 }
-export function serializeDocument(document) { return JSON.stringify(validateDocument(document), null, 2) + '\n'; }
+// Match the authored C5–C11 layout: inline styles, compact paragraph objects,
+// and a blank line between skills and numbered Star Level groups.
+export function serializeDocument(document) {
+  const data=validateDocument(document),pad=depth=>' '.repeat(depth);
+  // Render scalar maps explicitly so punctuation inside HTML/string values is untouched.
+  const style=value=>'{'+Object.entries(value).map(([key,item])=>JSON.stringify(key)+': '+JSON.stringify(item)).join(', ')+'}';
+  function valueText(value,depth,key=''){
+    if(value===null||typeof value!=='object')return JSON.stringify(value);
+    if(!Array.isArray(value)&&/(?:^|_)style$/.test(key)&&Object.values(value).every(item=>item===null||typeof item!=='object'))return style(value);
+    if(Array.isArray(value)){
+      if(!value.length)return '[]';
+      const paragraphs=key==='stages'||key==='additional';
+      const lines=value.map((item,index)=>{
+        const gap=paragraphs&&index>0&&item&&typeof item==='object'&&item.level!==undefined?'\n':'';
+        if(paragraphs&&isObject(item)){
+          const fields=Object.entries(item);
+          if(!fields.length)return gap+pad(depth+2)+'{}';
+          return gap+pad(depth+2)+'{'+fields.map(([name,entry],i)=>(i?'\n'+pad(depth+4):'')+JSON.stringify(name)+': '+valueText(entry,depth+4,name)+(i<fields.length-1?',':'')).join('')+'}';
+        }
+        return gap+pad(depth+2)+valueText(item,depth+2);
+      });
+      return '[\n'+lines.join(',\n')+'\n'+pad(depth)+']';
+    }
+    const entries=Object.entries(value);
+    if(!entries.length)return '{}';
+    return '{\n'+entries.map(([name,entry])=>pad(depth+2)+JSON.stringify(name)+': '+valueText(entry,depth+2,name)).join(',\n')+'\n'+pad(depth)+'}';
+  }
+  const skills=Object.entries(data);
+  if(!skills.length)return '{}\n';
+  return '{\n\n'+skills.map(([id,skill])=>'  '+JSON.stringify(id)+': '+valueText(skill,2)).join(',\n\n')+'\n\n}\n';
+}
+
+// Display groups preserve the flat authored array and its original indices.
+export function groupSkillParagraphs(entries = []) {
+  const groups=[];
+  for(const [index,entry] of entries.entries()){
+    const level=typeof entry==='object'&&entry!==null&&entry.level!==undefined?Number(entry.level):null;
+    if(!groups.length||level!==null&&groups.at(-1).level!==level)groups.push({level,entries:[]});
+    groups.at(-1).entries.push({entry,index});
+  }
+  return groups;
+}

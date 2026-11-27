@@ -59,3 +59,26 @@ test('preview accepts only the same-origin parent and renders successive drafts 
   assert.match(get('skill-content').innerHTML, /Last star/);
   assert.equal(sent.at(-1), 'ml-skill-preview-rendered');
 });
+
+test('visual Star Level groups keep continuation paragraphs and original JSON indices',async()=>{
+ const {groupSkillParagraphs}=await import('../assets/js/skill-editor-model.js');
+ const entries=['Base',{text:'Base effect'},{level:1,text:'First star'},'Continued',{text:'More first star'},{level:2,text:'Second star'},{text:'Second effect'}];
+ const before=structuredClone(entries),groups=groupSkillParagraphs(entries);
+ assert.deepEqual(groups.map(g=>g.level),[null,1,2]);
+ assert.deepEqual(groups.map(g=>g.entries.map(e=>e.index)),[[0,1],[2,3,4],[5,6]]);
+ assert.deepEqual(entries,before);
+ assert.deepEqual(groups.flatMap(g=>g.entries.map(e=>e.entry)),entries);
+});
+
+test('editor JSON uses the compact authored C5–C11 layout for styles, paragraphs and Star Levels',()=>{
+ const data={B1:{name:'Example',description:'Comma, colon: and <b class="water">[Water]</b>.',description_style:{paddingTop:7},stages:[{name:'Stage 1',text:'Hit.',style:{paddingLeft:15,paddingTop:7}}],additional:[{text:'Base.',style:{paddingTop:7}},{level:1,text:'Bonus.',style:{paddingTop:5}}]}};
+ const text=serializeDocument(data);
+ assert.match(text,/"description_style": \{"paddingTop": 7\}/);
+ assert.match(text,/      \{"name": "Stage 1",\n        "text": "Hit\.",\n        "style": \{"paddingLeft": 15, "paddingTop": 7\}\}/);
+ assert.match(text,/\},\n\n      \{"level": 1,/);
+ assert.deepEqual(parseDocument(text),data);
+ for(const id of ['c5','c6','c7','c8','c9','c10','c11']){
+  const original=JSON.parse(read(`images/mlg-assets/Characters/${id.toUpperCase()}/${id}.json`));
+  assert.deepEqual(parseDocument(serializeDocument(original)),original,id);
+ }
+});

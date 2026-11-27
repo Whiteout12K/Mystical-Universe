@@ -1,4 +1,4 @@
-import {clone, isObject, parseDocument, serializeDocument, validateDocument, skillWarnings} from './skill-editor-model.js';
+import {clone, isObject, parseDocument, serializeDocument, validateDocument, skillWarnings, groupSkillParagraphs} from './skill-editor-model.js';
 
 import {createBracketColorizer, colorSkillDocument, bracketClassMap, resolveBracketClass} from './skill-editor-colors.js';
 let colorHTML = html => html;
@@ -341,9 +341,10 @@ function renderBlock(host, label, get, set, options = {}) {
   const head = el('div', undefined, 'block-head');
   head.append(el('strong', label));
   const initial = get();
+  let starOptions;
   if (options.stage) head.append(inputField('Name', initial.name, value => change(() => set({...get(), name: value}))));
   if (options.dupe) {
-    const field = inputField('Star (blank = continue)', initial?.level, value => {
+    const field = inputField(initial?.level!==undefined?'Star Level':'New star (optional)', initial?.level, value => {
       if (value !== '' && (!Number.isInteger(value) || value < 1 || value > 16)) return;
       change(() => {
         const entry = typeof get() === 'string' ? {text: get()} : {...get()};
@@ -354,7 +355,7 @@ function renderBlock(host, label, get, set, options = {}) {
     }, 'number');
     field.querySelector('input').min = 1;
     field.querySelector('input').max = 16;
-    head.append(field);
+    if(initial?.level!==undefined)head.append(field);else{starOptions=el('details',undefined,'star-entry-options');starOptions.append(el('summary','Start a Star Level'),field);}
   }
   if (options.move) {
     for (const [delta, text] of [[-1, '↑'], [1, '↓']]) {
@@ -362,7 +363,8 @@ function renderBlock(host, label, get, set, options = {}) {
       move.disabled = delta < 0 ? options.first : options.last;
       head.append(move);
     }
-    head.append(button('Duplicate', options.duplicate), button('Remove', options.remove));
+    const actions=el('details',undefined,'action-menu block-actions');actions.append(el('summary','More'));
+    const menu=el('div',undefined,'action-menu-panel');menu.append(button('Duplicate',options.duplicate),button('Remove',options.remove));actions.append(menu);head.append(actions);
   }
   const editor = el('div', undefined, 'rich-text');
   editor.contentEditable = 'true';
@@ -431,7 +433,7 @@ function renderBlock(host, label, get, set, options = {}) {
   const grid = el('div', undefined, 'style-grid');
   for (const property of styleFields) {
     const value = initial?.[property] ?? initial?.style?.[property] ?? '';
-    grid.append(inputField(property, value, next => change(() => {
+    grid.append(inputField(property.replace(/([A-Z])/g,' $1').replace(/^./,letter=>letter.toUpperCase()), value, next => change(() => {
       const entry = typeof get() === 'string' ? {text: get()} : clone(get());
       const target = Object.hasOwn(entry, property) ? entry : (entry.style ||= {});
       if (next === '') delete target[property];
@@ -440,7 +442,8 @@ function renderBlock(host, label, get, set, options = {}) {
     })));
   }
   styles.append(grid);
-  box.append(head, editor, htmlDetails, styles);
+  const advanced=el('details',undefined,'block-advanced');advanced.append(el('summary','Paragraph options'),htmlDetails,styles);if(starOptions)advanced.append(starOptions);
+  box.append(head, editor, advanced);
   host.append(box);
 }
 function renderList(host, key, heading) {
@@ -451,21 +454,35 @@ function renderList(host, key, heading) {
   actions.append(button('Add paragraph', () => append(key === 'stages' ? {name: 'Stage ' + ((skill().stages?.length || 0) + 1), text: '', style: {paddingLeft: 15, paddingTop: 7}} : {text: '', style: {paddingTop: 7}})));
   if (key === 'additional') {
     actions.append(button('Add cooldown', () => append({text: 'Cooldown: 15 seconds', style: {paddingTop: 15, fontSize: 7}})));
-    if (/^Dupes/i.test(selectedSkill)) actions.append(button('Add star', () => {
+    if (/^Dupes/i.test(selectedSkill)) actions.append(button('Add Star Level', () => {
       const levels = (skill().additional || []).map(entry => Number(entry?.level) || 0);
       append({level: Math.min(16, Math.max(0, ...levels) + 1), text: '', style: {paddingTop: 5}});
     }));
   }
   top.append(actions);
   host.append(top);
-  (skill()[key] || []).forEach((entry, index, list) => {
-    renderBlock(host, key === 'stages' ? `Stage ${index + 1}` : `Paragraph ${index + 1}`, () => skill()[key][index], value => { skill()[key][index] = value; }, {
-      stage: key === 'stages', dupe: key === 'additional' && /^Dupes/i.test(selectedSkill), first: index === 0, last: index === list.length - 1,
-      move: delta => change(() => { const items = skill()[key]; [items[index], items[index + delta]] = [items[index + delta], items[index]]; }, true),
-      duplicate: () => change(() => { skill()[key].splice(index + 1, 0, clone(skill()[key][index])); }, true),
-      remove: () => change(() => { skill()[key].splice(index, 1); }, true)
-    });
-  });
+  const list=skill()[key]||[],starMode=key==='additional'&&/^Dupes/i.test(selectedSkill);
+  const groups=starMode?groupSkillParagraphs(list):[{level:null,entries:list.map((entry,index)=>({entry,index}))}];
+  for(const group of groups){
+    let target=host;
+    if(starMode){
+      const section=el('details',undefined,'star-level-group');section.open=true;
+      section.dataset.panel='star-'+(group.level??'base');
+      section.append(el('summary',group.level===null?'Base passive':'Star Level '+group.level));
+      target=el('div',undefined,'star-level-body');section.append(target);host.append(section);
+    }
+    for(const {entry,index}of group.entries){
+      renderBlock(target,key==='stages'?`Stage ${index+1}`:`Paragraph ${index+1}`,()=>skill()[key][index],value=>{skill()[key][index]=value;},{
+        stage:key==='stages',dupe:starMode,first:index===0,last:index===list.length-1,
+        move:delta=>change(()=>{const items=skill()[key];[items[index],items[index+delta]]=[items[index+delta],items[index]];},true),
+        duplicate:()=>change(()=>{skill()[key].splice(index+1,0,clone(skill()[key][index]));},true),
+        remove:()=>change(()=>{skill()[key].splice(index,1);},true)
+      });
+    }
+    if(starMode)target.append(button('Add paragraph',()=>change(()=>{
+      skill()[key].splice(group.entries.at(-1).index+1,0,{text:'',style:{paddingTop:7}});
+    },true)));
+  }
 }
 function renderScaling(host) {
   const box = el('section', undefined, 'block');
@@ -519,6 +536,7 @@ function renderTiers(host) {
   });
 }
 function renderEditor() {
+  const panelStates=new Map([...$('skill-fields').querySelectorAll('details[data-panel]')].map(node=>[node.dataset.panel,node.open]));
   const data = current().data;
   if (!Object.hasOwn(data, selectedSkill)) selectedSkill = Object.keys(data)[0] || '';
   $('skill-select').replaceChildren();
@@ -551,10 +569,11 @@ function renderEditor() {
       if (Object.keys(value.style || {}).length || Object.hasOwn(skill(), 'description_style')) skill().description_style = value.style;
     });
     if (!/^Dupes/i.test(selectedSkill)) renderList(host, 'stages', 'Stages');
-    renderList(host, 'additional', /^Dupes/i.test(selectedSkill) ? 'Base passives and star levels' : 'Additional paragraphs and effects');
-    renderScaling(host);
-    renderTiers(host);
+    renderList(host, 'additional', /^Dupes/i.test(selectedSkill) ? 'Star Levels' : 'Additional content');
+    const settings=el('details',undefined,'skill-settings');settings.dataset.panel='settings';settings.append(el('summary','Level scaling & advanced settings'));
+    const settingsBody=el('div',undefined,'skill-settings-body');renderScaling(settingsBody);renderTiers(settingsBody);settings.append(settingsBody);host.append(settings);
   } else host.append(el('p', 'Add a skill or paste a character JSON document to begin.'));
+  for(const node of host.querySelectorAll('details[data-panel]'))if(panelStates.has(node.dataset.panel))node.open=panelStates.get(node.dataset.panel);
   renderValueOutputs();
   refreshState();
 }
@@ -629,8 +648,13 @@ for (const node of document.querySelectorAll('[data-command]')) {
   node.addEventListener('mousedown', event => event.preventDefault());
   node.onclick = () => { if (restoreSelection()) { document.execCommand(node.dataset.command); activeEditor.dispatchEvent(new Event('input', {bubbles: true})); } };
 }
-$('text-class').onchange = () => { if ($('text-class').value) wrapSelection($('text-class').value); $('text-class').value = ''; };
-$('apply-color').onclick = () => wrapSelection('', $('text-color').value);
+for(const kind of ['effect','token','style']){
+  $('open-'+kind+'-menu').onclick=()=>{rememberSelection();$(kind+'-menu').showModal();};
+  $(kind+'-menu').addEventListener('click',event=>{if(event.target===$(kind+'-menu'))$(kind+'-menu').close();});
+}
+function closeInsertMenu(kind){$(kind+'-menu').close();}
+$('text-class').onchange = () => { if ($('text-class').value) {closeInsertMenu('style');wrapSelection($('text-class').value);} $('text-class').value = ''; };
+$('apply-color').onclick = () => {closeInsertMenu('style');wrapSelection('', $('text-color').value);};
 $('token-character').onchange = () => {
   const variants = roster[$('token-character').value]?.skill_variants || [];
   $('token-variant-control').hidden = !variants.length;
@@ -645,18 +669,20 @@ $('token-character').onchange = () => {
   });
 };
 $('insert-token').onclick = () => {
+  closeInsertMenu('token');
   const person = $('token-character').value;
   const variant = person && !$('token-variant-control').hidden ? $('token-variant').value : '';
   insertHTML('{{' + $('token').value + (person ? ':' + person + (variant !== '' ? ':' + variant : '') : '') + '}}');
 };
 $('effect-inline').onclick = () => {
+  closeInsertMenu('effect');
   const id = $('effect-select').value, effect = effects[id];
   if (!effect) return;
   const bold = el('b', '[' + effect.name + ']');
   bold.className = effect.class || '';
   insertHTML(bold.outerHTML);
 };
-$('effect-block').onclick = () => insertHTML('{{effect:' + $('effect-select').value + '}}');
+$('effect-block').onclick = () => {closeInsertMenu('effect');insertHTML('{{effect:' + $('effect-select').value + '}}');};
 $('insert-value').onclick = openValueDialog;
 
 async function copyJSON(selected = false) {
@@ -778,3 +804,15 @@ async function start() {
   } catch (error) { status(error.message, true); }
 }
 start();
+
+// Shared menu behavior avoids repeated dismissal handlers on every paragraph.
+document.addEventListener('toggle',event=>{
+ const menu=event.target;
+ if(!menu.matches?.('.action-menu')||!menu.open)return;
+ document.querySelectorAll('.action-menu[open]').forEach(other=>{if(other!==menu)other.open=false;});
+},true);
+document.addEventListener('click',event=>{
+ document.querySelectorAll('.action-menu[open]').forEach(menu=>{if(!menu.contains(event.target)||event.target.closest('button'))menu.open=false;});
+});
+const header=document.querySelector('.app-header');
+new ResizeObserver(()=>document.documentElement.style.setProperty('--header-height',header.offsetHeight+'px')).observe(header);

@@ -29,7 +29,6 @@
     "level_multiplier": 0.1
   },
 
-
   "S1": {
     "name": "Ice Pillars",
     "type": "Special Skill",
@@ -46,7 +45,6 @@
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 1}},
-
       {"text": "Cooldown: 16 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
       {"text": "Mana Cost: 120 MP",
@@ -63,7 +61,6 @@
     "level_multiplier": 0.1
   },
 
-
   "S2": {
     "name": "Arsenal of Ice",
     "type": "Special Skill",
@@ -76,7 +73,6 @@
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"text": "<u>Special Skill: Javelins’ Dance</u> - {{nickname}} summons a ring of <b><span data-dmg=\"javelin_count\"></span></b> (scales by level, rounded up) javelins around {{object}} that {{subject}} hurls to opponents, dealing AoE <b class=\"water\">[Water]</b> damage equal to <b><span data-dmg=\"dmg3\">160</span>%</b> of attack per javelin. When {{subject}} is off-field, the javelins will be thrusted in 1 second intervals until no javelins are left.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
-
       {"text": "Cooldown: 12 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
       {"text": "Mana Cost: 120 MP",
@@ -94,7 +90,6 @@
     "level_multiplier": 0.1
   },
 
-
   "S3": {
     "name": "Cubic Trinity",
     "type": "Special Skill",
@@ -102,10 +97,9 @@
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "For each cube imploded, {{subject}} will gain a stack, up to three stacks, of the buff <b class=\"ice-prince\">[Ice Prince]</b>. After each cube implodes, they remain for 10 seconds on-field, dealing <b><span data-dmg=\"dmg2\">180</span>%</b> of attack as AoE <b class=\"water\">[Water]</b> damage per second.",
-       "style": {"paddingTop": 7}},
+        "style": {"paddingTop": 7}},
       {"text": "{{effect:ice-prince}}",
-       "style": {"paddingLeft": 15, "paddingTop": 4}},
-
+        "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "Cooldown: 15 seconds",
         "style": {"paddingTop": 15, "fontSize": 7}},
       {"text": "Mana Cost: 110 MP",
@@ -119,7 +113,6 @@
     "level_multiplier": 0.1
   },
 
-
   "U1": {
     "name": "Limitless Ice Beam",
     "type": "Ultimate Skill",
@@ -130,7 +123,6 @@
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
-
       {"text": "Energy Gauge: 100%",
         "style": {"paddingTop": 15, "fontSize": 7}}
     ],
@@ -140,7 +132,6 @@
     "max_level": 10,
     "level_multiplier": 0.1
   },
-
 
   "U2": {
     "name": "Absolute Zero",
@@ -154,7 +145,6 @@
         "style": {"paddingTop": 7}},
       {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
-
       {"text": "Energy Gauge: 100%",
         "style": {"paddingTop": 15, "fontSize": 7}}
     ],
@@ -165,11 +155,10 @@
     "level_multiplier": 0.1
   },
 
-
   "T1": {
     "name": "Ice Travel",
     "type": "Technical Skill",
-    "description": "{{nickname}} will phase through the shadow realm with the creation of two ice portals. This mechanic works by synchronizing two portals, each placed separately by using this skill a total of two times. Portals will remain indefinitely while in a combat session. Use skill again after placing two portals to reset and remove them.",
+    "description": "{{nickname}} will phase through the shadow realm with the creation of two ice portals. This mechanic works by synchronizing two portals, each placed separately by using this skill twice. Portals will remain indefinitely while in a combat session. Use the skill again after placing two portals to reset and remove them.",
     "description_style": {"paddingTop": 7},
     "additional": [
       {"text": "<span class=\"undim\">The two portals will allow any character to travel between them rapidly. Upon a successful warp, the character gains the buff <b class=\"shadow-miasma\">[Shadow Miasma]</b>.</span> Standing within the portal after warping will maintain the effect.",
@@ -180,75 +169,65 @@
         "style": {"paddingLeft": 15, "paddingTop": 4}},
       {"text": "Energy Gauge: 8% per portal",
         "style": {"paddingTop": 15}},
-
       {"text": "<b>Resonance</b>: Other <b class=\"dark\">[Dark]</b> affinity characters in team who are Icelorian or Gostlynger can utilize this ability.",
         "style": {"paddingTop": 15}}
     ]
   },
 
-
-
   "Dupes": {
     "description": "{{nickname}} will gain a <b class=\"shield\">[Shield]</b> equal to 350% of {{possessive}} defense whenever {{possessive}} health reaches at or below 50% (Cooldown: 30 seconds). {{Subject}} will also accumulate stacks of <b class=\"flash\">[Flash]</b> upon successful Basic Skill attack hits with a cooldown of 1 second.",
     "additional": [
-        {"text": "{{Subject}} gains resonance within a party of more than 3 different affinities (dual affinity characters count both). <span class=\"undim\">Resonance will improve {{possessive}} and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.</span>",
+      {"text": "{{Subject}} gains resonance within a party of more than 3 different affinities (dual affinity characters count both). <span class=\"undim\">Resonance will improve {{possessive}} and the team’s damage reduction by +20% and each hit from an opponent has a 50% chance to remove a debuff on the active character who is hit.</span>",
         "style": {"paddingTop": 7}},
-        {"text": "<u>Ice Fowler</u>: While not in combat, {{nickname}}, when dashing, will create a trail of ice behind {{object}} as {{subject}} surfs on an ice field. After some time, the trail melts to water. This state increases {{possessive}} movement speed by +40% and reduces stamina consumption by -50%. {{Possessive}} movement across water is not reduced.",
+      {"text": "<u>Ice Fowler</u>: While not in combat, {{nickname}}, when dashing, will create a trail of ice behind {{object}} as {{subject}} surfs on an ice field. After some time, the trail melts to water. This state increases {{possessive}} movement speed by +40% and reduces stamina consumption by -50%. {{Possessive}} movement across water is not reduced.",
         "style": {"paddingTop": 7}},
-        {"text": "The secrets of District 1 are revealed when {{subject}} is present. As a genius, puzzles will reveal a hint as the prodigy sees solutions effortlessly.",
+      {"text": "The secrets of District 1 are revealed when {{subject}} is present. As a genius, puzzles will reveal a hint as the prodigy sees solutions effortlessly.",
         "style": {"paddingTop": 7}},
-        {"text": "<u>Alter Exclusive Rule</u>: Ion Mustard (Alter)’s Star Levels (except base) are deactivated while as {{nickname}}.",
+      {"text": "<u>Alter Exclusive Rule</u>: Ion Mustard (Alter)’s Star Levels (except base) are deactivated while as {{nickname}}.",
         "style": {"paddingTop": 7}},
-        {"text": "{{effect:shield}}",
+      {"text": "{{effect:shield}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
-        {"text": "{{effect:flash}}",
+      {"text": "{{effect:flash}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
-        {"level": 1,
+      {"level": 1,
         "text": "The <b class=\"freeze\">[Freeze]</b> effect can be stacked for the duration of attacks that add it. For each stack, {{nickname}}’s damage will increase by +5%.",
         "style": {"paddingTop": 5}},
-        {"text": "{{effect:freeze}}",
+      {"text": "{{effect:freeze}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
-        {"level": 2,
+      {"level": 2,
         "text": "<span class=\"undim\">The <b class=\"flash\">[Flash]</b> effect can be applied to allies also but at half the speed</span>, along with gaining continuous stacks of <b class=\"fatigue\">[Fatigue]</b> on self for every stack gained on self.",
         "style": {"paddingTop": 5}},
-        {"text": "The Technical Skill: Ice Travel will apply effect even if {{nickname}} stands within 10 meters of any portal. <span class=\"undim\">The range of <b class=\"shadow-miasma\">[Shadow Miasma]</b> will also increase by +100%.</span>",
+      {"text": "The Technical Skill: Ice Travel will apply effect even if {{nickname}} stands within 10 meters of any portal. <span class=\"undim\">The range of <b class=\"shadow-miasma\">[Shadow Miasma]</b> will also increase by +100%.</span>",
         "style": {"paddingTop": 5}},
-        {"text": "{{effect:fatigue}}",
+      {"text": "{{effect:fatigue}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
-        {"level": 3,
+      {"level": 3,
         "text": "Increases the damage of Special Skills by +15%.",
         "style": {"paddingTop": 5}},
 
-        {"level": 4,
+      {"level": 4,
         "text": "{{nickname}} will gain an awakened state upon reaching 30 stacks of <b class=\"fatigue\">[Fatigue]</b> in which {{possessive}} eye reveals a special power, gaining the buff <b class=\"icengon\">[Icengon]</b>.",
         "style": {"paddingTop": 5}},
-        {"text": "{{effect:icengon}}",
+      {"text": "{{effect:icengon}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
 
-        {"level": 5,
+      {"level": 5,
         "text": "Whenever this character gains <b class=\"fatigue\">[Fatigue]</b>, gain 1% of health as mana for self and <span class=\"undim\">heal allies for that percentage of health.</span> Deal an additional +5% more damage on opponents for each stack of <b class=\"freeze\">[Freeze]</b> applied.",
         "style": {"paddingTop": 5}},
-        {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each Basic Skill stage, therefore increasing the rate of accumulation without a cooldown.",
+      {"text": "The gaining of <b class=\"flash\">[Flash]</b> will now be as fast as each Basic Skill stage, therefore increasing the rate of accumulation without a cooldown.",
         "style": {"paddingTop": 5}},
 
-        {"level": 6,
+      {"level": 6,
         "text": "While in the <b class=\"icengon\">[Icengon]</b> state, Kaden will gain the buff <b class=\"black-ice\">[Black Ice]</b> which lasts for the duration of <b class=\"fatigue\">[Fatigue]</b> present. The <b class=\"fatigue\">[Fatigue]</b> effect will deplete twice as slow.",
         "style": {"paddingTop": 5}},
-        {"text": "{{effect:black-ice}}",
+      {"text": "{{effect:black-ice}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}},
-        {"text": "{{effect:midnight-frost}}",
+      {"text": "{{effect:midnight-frost}}",
         "style": {"paddingLeft": 15, "paddingTop": 5}}
-
     ]
   }
-
-
-
-
-
-
 
 }

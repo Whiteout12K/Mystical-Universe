@@ -18,9 +18,11 @@
   <div class="file-actions">
     <button id="open-folder" type="button">Open Characters Folder</button>
     <button id="save-file" type="button" disabled>Save JSON</button>
+    <details class="action-menu"><summary>File options</summary><div class="action-menu-panel">
     <button id="copy-character" type="button" disabled>Copy character JSON</button>
     <button id="download" type="button" disabled>Download</button>
     <button id="import" type="button" disabled>Import JSON</button>
+    </div></details>
     <input id="import-file" type="file" accept=".json,application/json" hidden>
   </div>
 </header>
@@ -36,7 +38,7 @@
     <div id="workspace" hidden>
       <div class="editor-controls">
         <label>Skill <select id="skill-select"></select></label>
-        <button id="new-skill" type="button">Add skill</button><button id="duplicate-skill" type="button">Duplicate</button><button id="rename-skill" type="button">Change ID</button><button id="delete-skill" type="button">Delete skill</button>
+        <button id="new-skill" type="button">Add skill</button><details class="action-menu"><summary>Skill options</summary><div class="action-menu-panel"><button id="duplicate-skill" type="button">Duplicate</button><button id="rename-skill" type="button">Change ID</button><button id="delete-skill" type="button">Delete skill</button></div></details>
       </div>
       <div class="view-controls"><div role="tablist" aria-label="Editor view"><button id="visual-tab" type="button" role="tab" aria-selected="true">Visual editor</button><button id="source-tab" type="button" role="tab" aria-selected="false">JSON source</button></div><div><button id="undo" type="button" disabled>Undo</button><button id="redo" type="button" disabled>Redo</button><button id="copy-skill" type="button">Copy skill JSON</button><button id="paste-json" type="button">Paste JSON</button></div></div>
       <section id="source-panel" hidden aria-label="Character JSON source">
@@ -45,14 +47,8 @@
       </section>
       <section id="visual-panel" aria-label="Visual skill editor">
         <div id="format-toolbar" class="format-toolbar" role="toolbar" aria-label="Skill text formatting">
-          <button type="button" data-command="bold" title="Bold"><b>B</b></button><button type="button" data-command="italic" title="Italic"><i>I</i></button><button type="button" data-command="underline" title="Underline"><u>U</u></button><button type="button" data-command="removeFormat">Clear formatting</button>
-          <label>Text class <select id="text-class"><option value="">Choose color / style…</option></select></label>
-          <label>Color <input id="text-color" type="color" value="#f0ca69"></label><button id="apply-color" type="button">Apply color</button>
-          <label>Token <select id="token"><option value="nickname">Nickname</option><option value="subject">he / she / they</option><option value="Subject">He / She / They</option><option value="object">him / her / them</option><option value="Object">Him / Her / Them</option><option value="possessive">his / her / their</option><option value="Possessive">His / Her / Their</option><option value="possessive_pronoun">his / hers / theirs</option><option value="Possessive_pronoun">His / Hers / Theirs</option><option value="reflexive">himself / herself / themself</option><option value="Reflexive">Himself / Herself / Themself</option></select></label><button id="insert-token" type="button">Insert token</button>
-          <label>Character <select id="token-character"><option value="">Current character</option></select></label>
-          <label id="token-variant-control" hidden>Person <select id="token-variant"></select></label>
-          <label>Effect <select id="effect-select"></select></label><button id="effect-inline" type="button">Inline effect</button><button id="effect-block" type="button">Effect description</button>
-          <button id="insert-value" type="button">Dynamic value</button>
+          <div class="toolbar-group"><button type="button" data-command="bold" title="Bold" aria-label="Bold"><b>B</b></button><button type="button" data-command="italic" title="Italic" aria-label="Italic"><i>I</i></button><button type="button" data-command="underline" title="Underline" aria-label="Underline"><u>U</u></button><button type="button" data-command="removeFormat">Clear format</button></div>
+          <div class="toolbar-group"><button id="open-effect-menu" type="button" aria-haspopup="dialog">Effects…</button><button id="open-token-menu" type="button" aria-haspopup="dialog">Tokens…</button><button id="insert-value" type="button">Dynamic value…</button><button id="open-style-menu" type="button" aria-haspopup="dialog">Text style…</button></div>
         </div>
         <div id="skill-fields"></div>
       </section>
@@ -70,5 +66,14 @@
 <dialog id="json-dialog" aria-labelledby="json-dialog-title"><form method="dialog" id="json-form"><h2 id="json-dialog-title">Paste JSON</h2><p>Paste keyed skills to merge by ID, or an unkeyed object to replace the selected skill. Import a file or use JSON source to replace the entire character document.</p><textarea id="json-input" spellcheck="false" aria-label="Pasted JSON"></textarea><p id="json-error" role="alert"></p><div class="dialog-actions"><button value="cancel" formnovalidate>Cancel</button><button id="json-confirm" type="button">Apply</button></div></form></dialog>
 <dialog id="skill-dialog" aria-labelledby="skill-dialog-title"><form id="skill-form"><h2 id="skill-dialog-title">Add skill</h2><label>Skill ID <input id="new-id" required pattern="[A-Za-z][A-Za-z0-9_-]*" placeholder="B1, S1, T1, Dupes…"></label><p id="skill-error" role="alert"></p><div class="dialog-actions"><button id="skill-cancel" type="button">Cancel</button><button type="submit">Apply</button></div></form></dialog>
 <dialog id="value-dialog" aria-labelledby="value-dialog-title"><form id="value-form"><h2 id="value-dialog-title">Insert dynamic value</h2><label>Value key <input id="value-key" required pattern="[A-Za-z][A-Za-z0-9_]*" value="dmg1" list="value-keys"></label><datalist id="value-keys"></datalist><label>Base value at level 1 <input id="value-base" type="number" step="any" required value="100"></label><label><input id="value-percent" type="checkbox" checked> Add % after the value</label><p>Uses this skill’s level multiplier. Reusing a key updates every occurrence of that value.</p><div class="dialog-actions"><button id="value-cancel" type="button">Cancel</button><button type="submit">Insert</button></div></form></dialog>
+<dialog id="effect-menu" class="insert-menu" aria-labelledby="effect-menu-title"><form method="dialog"><h2 id="effect-menu-title">Insert effect</h2><p>Choose an effect, then insert its name or its full description.</p>          <label>Effect <select id="effect-select"></select></label><button id="effect-inline" type="button">Inline effect</button><button id="effect-block" type="button">Effect description</button>
+<div class="dialog-actions"><button value="cancel">Cancel</button></div></form></dialog>
+<dialog id="token-menu" class="insert-menu" aria-labelledby="token-menu-title"><form method="dialog"><h2 id="token-menu-title">Insert character token</h2><p>Names and pronouns update automatically for the selected character.</p><div class="token-field-grid">          <label>Token <select id="token"><option value="nickname">Nickname</option><option value="subject">he / she / they</option><option value="Subject">He / She / They</option><option value="object">him / her / them</option><option value="Object">Him / Her / Them</option><option value="possessive">his / her / their</option><option value="Possessive">His / Her / Their</option><option value="possessive_pronoun">his / hers / theirs</option><option value="Possessive_pronoun">His / Hers / Theirs</option><option value="reflexive">himself / herself / themself</option><option value="Reflexive">Himself / Herself / Themself</option></select></label>
+          <label>Character <select id="token-character"><option value="">Current character</option></select></label>
+          <label id="token-variant-control" hidden>Person <select id="token-variant"></select></label>
+</div><div class="dialog-actions"><button value="cancel">Cancel</button><button id="insert-token" type="button">Insert token</button></div></form></dialog>
+<dialog id="style-menu" class="insert-menu" aria-labelledby="style-menu-title"><form method="dialog"><h2 id="style-menu-title">Text style</h2><p>Apply a style to the text you selected in a paragraph.</p>          <label>Text class <select id="text-class"><option value="">Choose color / style…</option></select></label>
+          <label>Color <input id="text-color" type="color" value="#f0ca69"></label><button id="apply-color" type="button">Apply color</button>
+<div class="dialog-actions"><button value="cancel">Cancel</button></div></form></dialog>
 </body>
 </html>
