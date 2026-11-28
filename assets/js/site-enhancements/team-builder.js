@@ -1,6 +1,6 @@
 import {maxCharacterStarLevel} from './character-build-model.js';
 import {loadPlayerSession} from '../player-data.js';
-import {emptyCharacterBuild,ownsCharacter,ownedCharacterStarLevel} from '../../../data/character-build-defaults.mjs';
+import {emptyCharacterBuild,ownsCharacter,ownedCharacterStarLevel,sharedFormBuild,formBuildUpdates} from '../../../data/character-build-defaults.mjs';
 import {teamEffects} from './team-effects.js';
 import {loadCharacterBuild,saveCharacterBuild} from './character-build-storage.js';
 import {el,link} from './core.js';
@@ -13,12 +13,14 @@ export async function setupTeamBuilder(api){
  const account=await loadPlayerSession(),accountData=account?.data||{};
  let buildMode='test';
  let profileBuilds={};
- async function readBuilds(){profileBuilds=buildMode==='account'?accountData.character_builds||{}:Object.fromEntries(await Promise.all(Object.keys(roster).filter(id=>/^c\d+$/.test(id)).map(async id=>[id,await loadCharacterBuild(id,{mode:'test'})])));}
+ async function readBuilds(){profileBuilds=buildMode==='account'?accountData.character_builds||{}:Object.fromEntries(await Promise.all(Object.keys(roster).filter(id=>/^c\d+[a-z]?$/i.test(id)).map(async id=>[id,await loadCharacterBuild(id,{mode:'test'})])));}
  await readBuilds();
  const draftKey=()=>DRAFT+':'+(buildMode==='account'?account.id:'test');
- function accountBuild(id){return ownsCharacter(accountData,id)?profileBuilds[id]||emptyCharacterBuild(accountData[id]?.star_level):{...emptyCharacterBuild(),loadout:{basic:[''],special:['',''],ultimate:[''],technical:['']}};}
+ function buildFor(id){return sharedFormBuild(profileBuilds,id,roster[id]?.base_character||id);}
+ function starLimit(id){return maxCharacterStarLevel(skillData[id]);}
+ function accountBuild(id){if(!ownsCharacter(accountData,id))return {...emptyCharacterBuild(),loadout:{basic:[''],special:['',''],ultimate:[''],technical:['']}};const initial=emptyCharacterBuild(ownedCharacterStarLevel(accountData,id)),saved=buildFor(id);return {...initial,...saved,loadout:saved.loadout||initial.loadout,gear:saved.gear||initial.gear};}
 
- let equipmentAvailable=true,storageWarning='',equipment={},technical={},loadouts={},stars={},loading=true;
+ let equipmentAvailable=true,storageWarning='',equipment={},technical={},loadouts={},stars={},formStates={},loading=true;
  const root=el('section',{class:'builder-planning','aria-label':'Team planning'}),toolbar=el('section',{class:'plan-toolbar','aria-label':'Share team'}),notice=el('p',{class:'plan-message',role:'status'}),overview=el('section',{class:'plan-section plan-overview'});
  root.append(notice,overview);document.querySelector('#abilities').after(root);document.querySelector('.builder-header').append(toolbar);
  const shareButton=el('button',{type:'button'},'Copy team link'),shareField=el('input',{id:'team-share-link',readonly:'',hidden:'','aria-label':'Team share link'});const importForm=el('form',{class:'team-link-import','aria-label':'Load shared team'}),pasteField=el('input',{type:'text',id:'paste-team-link',placeholder:'Paste team link','aria-label':'Paste team link',autocomplete:'off',spellcheck:'false'}),loadButton=el('button',{type:'submit'},'Load');
@@ -41,14 +43,31 @@ export async function setupTeamBuilder(api){
  function message(text){notice.textContent=text;}
  function safeRead(key,fallback){try{return JSON.parse(localStorage.getItem(key)||'null')||fallback;}catch{storageWarning='Your previous draft could not be loaded. You can still copy a team link.';return fallback;}}
  function saveStorage(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true;}catch{message('This browser could not save the team. Copy a team link to keep your selections.');return false;}}
- function persistBuild(id,plan){if(buildMode==='account'){if(!ownsCharacter(accountData,id))return;plan={...plan,stars:{...plan.stars,[id]:Math.min(maxCharacterStarLevel(skillData[id]),ownedCharacterStarLevel(accountData,id))}};}profileBuilds[id]={...profileBuilds[id],loadout:plan.loadouts[id],gear:plan.equipment[id],stars:plan.stars[id]};saveCharacterBuild(id,{loadout:plan.loadouts[id],gear:plan.equipment[id],stars:plan.stars[id]},{mode:buildMode}).then(message).catch(()=>message('Build could not be saved.'));}
- function state(){const current=api.getState();for(const id of [...current.team,current.support].filter(Boolean)){if(buildMode==='account'&&!loadouts[id]){const build=accountBuild(id);loadouts[id]=build.loadout;equipment[id]=build.gear;stars[id]=build.stars;}if(!loadouts[id]&&profileBuilds[id]?.loadout)loadouts[id]=profileBuilds[id].loadout;if(!equipment[id]&&profileBuilds[id]?.gear)equipment[id]=profileBuilds[id].gear;if(stars[id]===undefined&&Number.isInteger(profileBuilds[id]?.stars))stars[id]=profileBuilds[id].stars;if(buildMode==='account')stars[id]=ownedCharacterStarLevel(accountData,id);}return normalizePlan({...current,equipment,technical,loadouts,stars},roster,catalogues,skillData);}
- function apply(raw,{accountKit=false}={}){if(accountKit){raw={...raw,loadouts:{},equipment:{},stars:{}};for(const id of [...(raw.team||[]),raw.support].filter(Boolean)){const build=accountBuild(id);raw.loadouts[id]=build.loadout;raw.equipment[id]=build.gear;raw.stars[id]=build.stars;}}const defaults={loadouts:{},equipment:{},stars:{}};for(const id of [...(raw.team||[]),raw.support].filter(Boolean)){if(profileBuilds[id]?.loadout)defaults.loadouts[id]=profileBuilds[id].loadout;if(profileBuilds[id]?.gear)defaults.equipment[id]=profileBuilds[id].gear;if(Number.isInteger(profileBuilds[id]?.stars))defaults.stars[id]=profileBuilds[id].stars;}if(buildMode==='account'){raw={...raw,stars:Object.fromEntries([...(raw.team||[]),raw.support].filter(Boolean).map(id=>[id,ownedCharacterStarLevel(accountData,id)]))};}const plan=normalizePlan({...raw,loadouts:{...defaults.loadouts,...raw.loadouts},equipment:{...defaults.equipment,...raw.equipment},stars:{...defaults.stars,...raw.stars}},roster,catalogues,skillData);equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;api.setState(plan);if(location.hash.startsWith('#team='))history.replaceState(null,'',location.pathname+location.search+planHash(plan));document.querySelector('#team-select').value='';api.refresh();}
+ function persistBuild(id,plan){
+  if(buildMode==='account'&&!ownsCharacter(accountData,id))return;
+  const baseId=roster[id]?.base_character||id,star=buildMode==='account'?Math.min(starLimit(id),ownedCharacterStarLevel(accountData,id)):plan.stars[id];
+  const updates=formBuildUpdates(profileBuilds,id,baseId,{loadout:plan.loadouts[id],gear:plan.equipment[id],stars:star});
+  Object.assign(profileBuilds,updates);
+  Promise.all(Object.entries(updates).map(([key,build])=>saveCharacterBuild(key,build,{mode:buildMode}))).then(results=>message(results.at(-1))).catch(()=>message('Build could not be saved.'));
+ }
+
+ function state(){const current=api.getState();for(const id of [...current.team,current.support].filter(Boolean)){const cached=buildFor(id);const baseId=roster[id]?.base_character||id;for(const key of Object.keys(roster).filter(key=>key===baseId||roster[key]?.base_character===baseId)){if(!formStates[key]&&profileBuilds[key]?.loadout)formStates[key]={loadout:profileBuilds[key].loadout,stars:buildMode==='account'?ownedCharacterStarLevel(accountData,key):profileBuilds[key].stars||0};}if(buildMode==='account'&&!loadouts[id]){const build=accountBuild(id);loadouts[id]=build.loadout;equipment[id]=build.gear;stars[id]=build.stars;}if(!loadouts[id]&&cached.loadout)loadouts[id]=cached.loadout;if(!equipment[id]&&cached.gear)equipment[id]=cached.gear;if(stars[id]===undefined&&Number.isInteger(cached.stars))stars[id]=cached.stars;if(buildMode==='account')stars[id]=ownedCharacterStarLevel(accountData,id);}return normalizePlan({...current,equipment,technical,loadouts,stars,forms:formStates},roster,catalogues,skillData);}
+ function apply(raw,{accountKit=false}={}){if(accountKit){raw={...raw,loadouts:{},equipment:{},stars:{}};for(const id of [...(raw.team||[]),raw.support].filter(Boolean)){const build=accountBuild(id);raw.loadouts[id]=build.loadout;raw.equipment[id]=build.gear;raw.stars[id]=build.stars;}}const defaults={loadouts:{},equipment:{},stars:{}};for(const id of [...(raw.team||[]),raw.support].filter(Boolean)){const cached=buildFor(id);if(cached.loadout)defaults.loadouts[id]=cached.loadout;if(cached.gear)defaults.equipment[id]=cached.gear;if(Number.isInteger(cached.stars))defaults.stars[id]=cached.stars;}if(buildMode==='account'){raw={...raw,stars:Object.fromEntries([...(raw.team||[]),raw.support].filter(Boolean).map(id=>[id,ownedCharacterStarLevel(accountData,id)]))};}const plan=normalizePlan({...raw,loadouts:{...defaults.loadouts,...raw.loadouts},equipment:{...defaults.equipment,...raw.equipment},stars:{...defaults.stars,...raw.stars}},roster,catalogues,skillData);equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;formStates=plan.forms||{};api.setState(plan);if(location.hash.startsWith('#team='))history.replaceState(null,'',location.pathname+location.search+planHash(plan));document.querySelector('#team-select').value='';api.refresh();}
  shareButton.addEventListener('click',async()=>{const url=new URL(location.href);url.hash=planHash(state());shareField.value=url.href;shareField.hidden=false;try{await navigator.clipboard.writeText(url.href);message('Team link copied with characters, skill loadouts, equipment, support, and Resonance.');}catch{shareField.focus();shareField.select();message('Copy the selected link to share this team.');}});
  const picker=document.querySelector('#character-picker'),pickerTop=document.querySelector('.picker-top'),mini=el('div',{class:'picker-current-team','aria-label':'Current team'}),search=el('input',{type:'search',id:'team-character-search',placeholder:'Search name, element, role…','aria-label':'Search characters'});
  pickerTop.after(mini,search);search.addEventListener('input',filterPicker);
  function filterPicker(){const query=search.value.trim().toLowerCase();for(const button of document.querySelectorAll('[data-character]')){const c=roster[button.dataset.character];button.hidden=![c?.name,...(c?.affinity||[]),...(c?.role||[]),...(c?.specialty||[])].join(' ').toLowerCase().includes(query);}}
  function miniTeam(plan){mini.replaceChildren();plan.team.forEach((id,index)=>{const button=el('button',{type:'button'},(index+1)+': '+(roster[id]?.nickname||roster[id]?.name||'Empty'));button.addEventListener('click',()=>api.openPicker(index));mini.append(button);});const support=el('button',{type:'button'},'Support: '+(roster[plan.support]?.nickname||'Empty'));support.addEventListener('click',api.openSupportPicker);mini.append(support);}
+ function switchForm(id,nextId,isSupport,index){
+  const previous=state();persistBuild(id,previous);
+  const saved=previous.forms?.[nextId]||buildFor(nextId);
+  const plan={...previous,team:[...previous.team],loadouts:{...previous.loadouts},equipment:{...previous.equipment},stars:{...previous.stars}};
+  if(isSupport)plan.support=nextId;else plan.team[index]=nextId;
+  plan.loadouts[nextId]=saved?.loadout||previous.loadouts[id];plan.equipment[nextId]=previous.equipment[id];plan.stars[nextId]=saved?.stars??0;plan.forms={...previous.forms,[id]:{loadout:previous.loadouts[id],stars:previous.stars[id]}};
+  if(plan.resonance?.id===id)plan.resonance=roster[nextId]?.skills?.includes(plan.resonance.skill)?{...plan.resonance,id:nextId}:null;
+  apply(plan);persistBuild(nextId,state());
+  message('Switched to '+roster[nextId].name+'. Form and build saved.');
+ }
  function renderMember(id,index,isSupport,plan){
   const c=roster[id],card=el('article',{class:'plan-member','data-member':id}),head=el('div',{class:'plan-member-heading'}),identity=el('div',{class:'plan-member-identity'}),portrait=el('div',{class:'plan-member-portrait'+(buildMode==='account'&&!ownsCharacter(accountData,id)?' account-unowned':''),'aria-hidden':'true'}),copy=el('div');
   if(c.profile_image){const image=el('img',{src:c.profile_image,alt:'',loading:'lazy'});image.addEventListener('error',()=>image.remove(),{once:true});portrait.append(image);}
@@ -59,14 +78,14 @@ export async function setupTeamBuilder(api){
   const builds=el('details',{class:'character-builds plan-member-build','data-build-member':id});
   builds.append(el('summary',{},'Skills & equipment'));
   const starLabel=el('label',{class:'build-star-level'},'Star Level'),starSelect=el('select',{'aria-label':c.name+' Star Level'});
-  for(let level=0;level<=maxCharacterStarLevel(skillData[id]);level++)starSelect.append(el('option',{value:level},String(level)));
+  for(let level=0;level<=starLimit(id);level++)starSelect.append(el('option',{value:level},String(level)));
   const unavailable=buildMode==='account'&&!ownsCharacter(accountData,id);
   starSelect.disabled=buildMode==='account';
   if(buildMode==='account')starSelect.title='Star Level comes from your account and cannot be changed here.';
   starSelect.value=plan.stars[id];starLabel.append(starSelect);builds.append(starLabel);
   starSelect.addEventListener('change',()=>{if(buildMode==='account')return;const updated=state();updated.stars[id]=Number(starSelect.value);apply(updated);persistBuild(id,updated);});
   const chosen=plan.loadouts[id];
-  const accountSkills=buildMode==='account'?Object.fromEntries([['basic',1,'B'],['special',2,'S'],['ultimate',3,'U'],['technical',4,'T']].map(([key,group,prefix])=>[key,(accountData['c_skill'+group+'_owned']?.[Number(id.slice(1))-1]||[]).flatMap((owned,index)=>Number(owned)>0?[prefix+(index+1)]:[])])):null;
+  const accountSkills=buildMode==='account'?Object.fromEntries([['basic',1,'B'],['special',2,'S'],['ultimate',3,'U'],['technical',4,'T']].map(([key,group,prefix])=>[key,(accountData['c_skill'+group+'_owned']?.[Number(roster[id]?.id)-1]||[]).flatMap((owned,index)=>Number(owned)>0?[prefix+(index+1)]:[])])):null;
   if(accountSkills&&ownsCharacter(accountData,id)&&!accountSkills.basic.length)accountSkills.basic=['B1'];
   const selection=el('div',{class:'build-selection-layout'});
   selection.append(loadoutControls(c,skillData[id],chosen,next=>{const updated=state();updated.loadouts[id]=next;updated.technical[id]=next.technical[0]||'';apply(updated);persistBuild(id,updated);},{support:isSupport,allowedSkills:accountSkills}));
@@ -76,14 +95,30 @@ export async function setupTeamBuilder(api){
   if(context.guides[id]?.tree)builds.append(link('Explore Skill Tree','/webpages/game-c.html?char='+id+'&view=tree'));
   card.append(builds);return card;
  }
- function render(){const opened=[...overview.querySelectorAll('[data-build-member][open]')].map(node=>node.dataset.buildMember);const focused=document.activeElement?.getAttribute('aria-label');const plan=state();equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;overview.replaceChildren(el('h2',{},'Team Overview'));for(const [index,id]of plan.team.entries())if(id)overview.append(renderMember(id,index,false,plan));if(plan.support)overview.append(renderMember(plan.support,0,true,plan));if(!plan.team.some(Boolean))overview.append(el('p',{},'Select a character slot above to start planning.'));const sharedURL=new URL(location.href);sharedURL.hash=planHash(plan);shareField.value=sharedURL.href;const effectPlan=buildMode==='account'?{...plan,team:plan.team.filter(id=>ownsCharacter(accountData,id)),support:ownsCharacter(accountData,plan.support)?plan.support:'',resonance:ownsCharacter(accountData,plan.resonance?.id)?plan.resonance:null}:plan;overview.append(teamEffects(context,effectPlan,profileBuilds));miniTeam(plan);filterPicker();for(const id of opened){const details=overview.querySelector('[data-build-member="'+id+'"]');if(details)details.open=true;}if(focused){const target=[...root.querySelectorAll('[aria-label]')].find(e=>e.getAttribute('aria-label')===focused);target?.focus({preventScroll:true});}if(!loading&&equipmentAvailable)saveStorage(draftKey(),plan);}
- function resetExtras(){equipment={};technical={};loadouts={};stars={};}
+ function render(){const opened=[...overview.querySelectorAll('[data-build-member][open]')].map(node=>node.dataset.buildMember);const focused=document.activeElement?.getAttribute('aria-label');const plan=state();equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;formStates=plan.forms||{};overview.replaceChildren(el('h2',{},'Team Overview'));for(const [index,id]of plan.team.entries())if(id)overview.append(renderMember(id,index,false,plan));if(plan.support)overview.append(renderMember(plan.support,0,true,plan));if(!plan.team.some(Boolean))overview.append(el('p',{},'Select a character slot above to start planning.'));const sharedURL=new URL(location.href);sharedURL.hash=planHash(plan);shareField.value=sharedURL.href;const effectPlan=buildMode==='account'?{...plan,team:plan.team.filter(id=>ownsCharacter(accountData,id)),support:ownsCharacter(accountData,plan.support)?plan.support:'',resonance:ownsCharacter(accountData,plan.resonance?.id)?plan.resonance:null}:plan;overview.append(teamEffects(context,effectPlan,profileBuilds));miniTeam(plan);filterPicker();for(const id of opened){const details=overview.querySelector('[data-build-member="'+id+'"]');if(details)details.open=true;}if(focused){const target=[...root.querySelectorAll('[aria-label]')].find(e=>e.getAttribute('aria-label')===focused);target?.focus({preventScroll:true});}if(!loading&&equipmentAvailable)saveStorage(draftKey(),plan);}
+ function resetExtras(){equipment={};technical={};loadouts={};stars={};formStates={};}
  
  document.querySelector('#support-slot').setAttribute('aria-label','Choose support character');
  for(const slot of document.querySelectorAll('.team-slot,#support-slot')){slot.tabIndex=0;slot.setAttribute('role','button');slot.addEventListener('keydown',event=>{if(event.target===slot&&['Enter',' '].includes(event.key)){event.preventDefault();slot.click();}});}
- const originalRender=render;function accessibleRender(){originalRender();document.querySelectorAll('.team-slot').forEach((slot,index)=>slot.setAttribute('aria-label','Choose character '+(index+1)+(roster[api.getState().team[index]]?' — '+roster[api.getState().team[index]].name:'')));}
+ function addFormSwitch(slot,id,index,isSupport=false){
+  slot.querySelector('.slot-form-switch')?.remove();
+  if(!id)return;
+  const base=roster[id]?.base_character||id,forms=Object.keys(roster).filter(key=>key===base||roster[key]?.base_character===base);
+  if(forms.length<2)return;
+  const next=forms[(forms.indexOf(id)+1)%forms.length],label='Switch to '+(next===base?'Original':'Alter')+' — '+roster[next].name;
+  const toggle=el('button',{type:'button',class:'slot-form-switch',title:label,'aria-label':label,'aria-pressed':String(id!==base)});
+  toggle.append(el('img',{src:new URL('../../icons/switch-form.svg',import.meta.url).href,alt:'','aria-hidden':'true',width:'22',height:'22'}));
+  toggle.addEventListener('click',event=>{event.stopPropagation();switchForm(id,next,isSupport,index);});
+  slot.append(toggle);
+ }
+ const originalRender=render;function accessibleRender(){
+  originalRender();const current=api.getState();
+  document.querySelectorAll('.team-slot').forEach((slot,index)=>{const id=current.team[index];slot.setAttribute('aria-label','Choose character '+(index+1)+(roster[id]?' — '+roster[id].name:''));addFormSwitch(slot,id,index);});
+  addFormSwitch(document.querySelector('#support-slot'),current.support,0,true);
+ }
+
  let initial=null;try{initial=parsePlanHash(location.hash);}catch(error){message(error.message+' Your local draft was kept.');}if(!initial)initial=safeRead(draftKey(),buildMode==='test'?safeRead(DRAFT,null):null);
  if(initial)apply(initial,{accountKit:buildMode==='account'});loading=false;accessibleRender();if(storageWarning)message(storageWarning);
  window.addEventListener('hashchange',async()=>{try{const plan=parsePlanHash(location.hash);if(plan){if(buildMode==='account'){saveStorage(draftKey(),state());buildMode='test';modeToggle.checked=false;await readBuilds();}apply(plan);message('Shared team loaded.');}}catch(error){message(error.message);}});
- return {render:accessibleRender,isUnowned:id=>buildMode==='account'&&!ownsCharacter(accountData,id),loadPreset:raw=>apply(raw,{accountKit:buildMode==='account'}),resetExtras,skillData,starLevel:id=>state().stars[id]??0,abilitySkills:id=>[...(state().loadouts[id]?.technical||[]).filter(Boolean),...(roster[id]?.skills||[]).filter(key=>/^Dupes/i.test(key))]};
+ return {render:accessibleRender,isUnowned:id=>buildMode==='account'&&!ownsCharacter(accountData,id),loadPreset:raw=>apply(raw,{accountKit:buildMode==='account'}),resetExtras,skillData,starLevel:id=>state().stars[id]??0,abilitySkills:id=>[...(state().loadouts[id]?.technical||[]).filter(Boolean),...(roster[id]?.skills||[]).filter(key=>/(?:^|-)Dupes$/i.test(key)&&skillData[id]?.[key])]};
 }

@@ -1,24 +1,33 @@
-import {normalizeLoadout,maxCharacterStarLevel} from './character-build-model.js';
+import {normalizeLoadout,maxCharacterStarLevel,characterSkillDefinitions} from './character-build-model.js';
 // Validated, versioned team plans. These describe selections, not simulated combat.
 export const PLAN_VERSION=1;
 export const plain=value=>String(value||'').replace(/<[^>]*>/g,'').replace(/\{\{effect:([^}]+)\}\}/g,(_,id)=>'['+id.replaceAll('-',' ')+']');
 export function skillParagraphs(skill){return [skill?.description,...Object.entries(skill||{}).filter(([k,v])=>/^description\d+$/.test(k)&&typeof v==='string').map(([,v])=>v),...(skill?.additional||[]).map(a=>a.text||a.description)].filter(Boolean);}
 export function canEquip(character,item){if(!character||!item)return false;if(item.weapon_type&&!character.weapon_type?.includes(item.weapon_type))return false;if(item.restriction&&/angelor/i.test(item.restriction)&&!character.species?.includes('Angelor'))return false;return true;}
 export function normalizePlan(raw,roster,catalogues,skillData={}){
- const used=new Set(),valid=id=>typeof id==='string'&&Object.hasOwn(roster,id)&&!used.has(id);
- const team=Array.from({length:3},(_,i)=>{const id=raw?.team?.[i];if(!valid(id))return '';used.add(id);return id;});
- const support=valid(raw?.support)?raw.support:'';if(support)used.add(support);
+ const used=new Set(),families=new Set(),family=id=>roster[id]?.base_character||id,valid=id=>typeof id==='string'&&Object.hasOwn(roster,id)&&!families.has(family(id));
+ const team=Array.from({length:3},(_,i)=>{const id=raw?.team?.[i];if(!valid(id))return '';used.add(id);families.add(family(id));return id;});
+ const support=valid(raw?.support)?raw.support:'';if(support){used.add(support);families.add(family(support));}
  let resonance=null;const r=raw?.resonance;
  if(r&&Object.hasOwn(roster,r.id)&&roster[r.id].skills?.includes(r.skill)&&/^T\d+$/.test(r.skill))resonance={id:r.id,skill:r.skill};
- const equipment={},technical={},loadouts={},stars={};
- for(const id of used){const input=raw?.equipment?.[id]||{},gear={weapon:'',accessory:'',artifacts:['','','',''],artifactRarity:'SSR'};
-  for(const [key,kind]of [['weapon','weapons'],['accessory','accessories']])if(Object.hasOwn(catalogues[kind]||{},input[key])&&canEquip(roster[id],catalogues[kind][input[key]]))gear[key]=input[key];
+ const equipment={},technical={},loadouts={},stars={},forms={};
+ for(const id of used){const character={...(roster[roster[id]?.base_character]||{}),...roster[id]},definitions=characterSkillDefinitions(skillData[id]||skillData[roster[id]?.base_character]||{},character);const input=raw?.equipment?.[id]||{},gear={weapon:'',accessory:'',artifacts:['','','',''],artifactRarity:'SSR'};
+  for(const [key,kind]of [['weapon','weapons'],['accessory','accessories']])if(Object.hasOwn(catalogues[kind]||{},input[key])&&canEquip(character,catalogues[kind][input[key]]))gear[key]=input[key];
   gear.artifacts=Array.from({length:4},(_,i)=>Object.hasOwn(catalogues.artifacts||{},input.artifacts?.[i])?input.artifacts[i]:'');equipment[id]=gear;
-  loadouts[id]=normalizeLoadout(raw?.loadouts?.[id],roster[id],skillData[id]||{},raw?.technical?.[id]);
+  loadouts[id]=normalizeLoadout(raw?.loadouts?.[id],character,definitions,raw?.technical?.[id]);
   technical[id]=loadouts[id].technical[0]||'';
-  const star=raw?.stars?.[id];stars[id]=Number.isInteger(star)?Math.min(maxCharacterStarLevel(skillData[id]),Math.max(0,star)):0;
+  const star=raw?.stars?.[id];stars[id]=Number.isInteger(star)?Math.min(maxCharacterStarLevel(definitions),Math.max(0,star)):0;
  }
- return {version:PLAN_VERSION,team,support,resonance,equipment,technical,loadouts,stars};
+ for(const id of used){
+  const base=family(id),members=Object.keys(roster).filter(key=>key===base||roster[key]?.base_character===base);
+  if(members.length<2)continue;
+  for(const formId of members){
+   if(formId===id)continue;const input=raw?.forms?.[formId];if(!input)continue;
+   const character={...(roster[base]||{}),...roster[formId]},definitions=characterSkillDefinitions(skillData[formId]||skillData[base]||{},character);
+   forms[formId]={loadout:normalizeLoadout(input.loadout,character,definitions),stars:Number.isInteger(input.stars)?Math.min(maxCharacterStarLevel(definitions),Math.max(0,input.stars)):0};
+  }
+ }
+ return {version:PLAN_VERSION,team,support,resonance,equipment,technical,loadouts,stars,...(Object.keys(forms).length?{forms}:{})};
 }
 export function planHash(plan){return '#team='+encodeURIComponent(JSON.stringify(plan));}
 export function parsePlanHash(hash){if(!hash.startsWith('#team='))return null;if(hash.length>30000)throw Error('The team link is too large.');const value=JSON.parse(decodeURIComponent(hash.slice(6)));if(value.version!==PLAN_VERSION||!Array.isArray(value.team))throw Error('This team link uses an unsupported format.');return value;}

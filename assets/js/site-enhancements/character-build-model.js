@@ -34,8 +34,14 @@ export function normalizeLoadout(input, character, definitions = {}, legacyTechn
   }
   return result;
 }
+export const isStarSkill=key=>/(?:^|-)Dupes$/i.test(key);
+export function characterSkillDefinitions(definitions,character){
+ if(!Array.isArray(character?.skills)||Number(character.id)===4)return definitions;
+ const allowed=new Set([...character.skills,...(character.skill_variants||[]).flatMap(variant=>Object.values(variant.skill_overrides||{}))]);
+ return Object.fromEntries(Object.entries(definitions).filter(([key])=>allowed.has(key)));
+}
 export function maxCharacterStarLevel(definitions = {}) {
-  return Math.max(0,...Object.entries(definitions).filter(([key])=>/^Dupes/i.test(key)).flatMap(([,skill])=>(skill.additional||[]).map(entry=>Number(entry?.level)).filter(level=>Number.isInteger(level)&&level>0)));
+  return Math.max(0,...Object.entries(definitions).filter(([key])=>isStarSkill(key)).flatMap(([,skill])=>(skill.additional||[]).map(entry=>Number(entry?.level)).filter(level=>Number.isInteger(level)&&level>0)));
 }
 export function selectedSkills(loadout) { return skillGroups.flatMap(group => loadout?.[group.key] || []).filter(Boolean); }
 export function skillParagraphsWithStars(skill) {
@@ -96,13 +102,13 @@ export function inferEffectTargets(text, effect, character = {}) {
 
 export function effectReferences(character, definitions, effects, loadout, stars = 16, allSkills = false) {
   const aliases = new Map(Object.entries(effects).map(([id, effect]) => [nameKey(effect.name || id), id]));
-  const keys = allSkills ? Object.keys(definitions) : [...selectedSkills(loadout), ...Object.keys(definitions).filter(key => /^Dupes/i.test(key))];
+  const keys = allSkills ? Object.keys(definitions) : [...selectedSkills(loadout), ...Object.keys(characterSkillDefinitions(definitions,character)).filter(isStarSkill)];
   const found = new Map();
   for (const key of [...new Set(keys)]) {
     const skill = definitions[key];
     if (!skill) continue;
     for (const row of skillParagraphsWithStars(skill)) {
-      if (/^Dupes/i.test(key) && row.star > stars) continue;
+      if (isStarSkill(key) && row.star > stars) continue;
       const ids = new Set();
       for (const match of row.text.matchAll(/\{\{effect:([^}]+)\}\}/g)) if (Object.hasOwn(effects, match[1])) ids.add(match[1]);
       for (const match of textOnly(row.text).matchAll(/\[([^\]]+)\]/g)) { const id = aliases.get(nameKey(match[1])); if (id) ids.add(id); }

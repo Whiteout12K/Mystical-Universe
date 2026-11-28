@@ -34,3 +34,8 @@ test('test kit mode uses cookies even when signed in and leaves the account prof
  assert.equal((await r.context.loadCharacterBuild('c1',{mode:'test'})).stars,9);
  assert.equal(r.record().data.character_builds.c1,undefined);assert.equal(r.sent(),undefined);assert.equal(r.cookies.size,1);
 });
+
+test('original and alter skill selections and Star Levels save independently in test cookies',async()=>{
+ const r=runtime();await r.context.saveCharacterBuild('c1',{loadout:{basic:['B1']},stars:5},{mode:'test'});await r.context.saveCharacterBuild('c1b',{loadout:{basic:['B2']},stars:2},{mode:'test'});
+ assert.equal((await r.context.loadCharacterBuild('c1',{mode:'test'})).loadout.basic[0],'B1');assert.equal((await r.context.loadCharacterBuild('c1b',{mode:'test'})).loadout.basic[0],'B2');assert.equal((await r.context.loadCharacterBuild('c1b',{mode:'test'})).stars,2);assert.equal(r.cookies.size,2);
+});

@@ -1,6 +1,9 @@
 export const CHARACTER_BUILD_DEFAULTS_VERSION=1;
 export function emptyCharacterBuild(stars=0){return {loadout:{basic:['B1'],special:['',''],ultimate:[''],technical:['']},gear:{weapon:'',accessory:'',artifacts:['','','',''],artifactRarity:'SSR'},stars:Number.isInteger(stars)?Math.min(16,Math.max(0,stars)):0};}
-export function ownsCharacter(data,id){return Number(data?.c_owned?.[Number(String(id).slice(1))-1])>0;}
+export function ownsCharacter(data,id){
+ if(/^c\d+[a-z]$/i.test(String(id)))return Number(data?.c_alter_owned?.[id]??data?.[id]?.owned??0)>0;
+ return Number(data?.c_owned?.[Number(String(id).match(/^c(\d+)/)?.[1])-1])>0;
+}
 export function ownedCharacterStarLevel(data,id){
  if(!ownsCharacter(data,id))return 0;
  const value=Number(data[id]?.star_level);
@@ -30,4 +33,14 @@ export function initializeOwnedCharacterBuilds(input){
  }
  data.character_build_defaults_version=CHARACTER_BUILD_DEFAULTS_VERSION;
  return data;
+}
+
+export function sharedFormBuild(builds,id,baseId=id){
+ const base=builds[baseId]||{},form=builds[id]||{};
+ return id===baseId?base:{...base,...form,loadout:form.loadout,stars:form.stars??0,gear:base.gear||form.gear};
+}
+export function formBuildUpdates(builds,id,baseId,changes){
+ if(id===baseId)return {[id]:{...builds[id],...changes}};
+ const {loadout,stars,...shared}=changes;
+ return {[baseId]:{...builds[baseId],...shared},[id]:{...builds[id],loadout:loadout||builds[id]?.loadout,stars:stars??builds[id]?.stars??0}};
 }

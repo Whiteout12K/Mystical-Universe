@@ -62,3 +62,12 @@ test('editable JSON presets preserve their skills, equipment, and star levels wh
   assert.deepEqual(normalizePlan(parsePlanHash(planHash(plan)),roster,catalogues,data),plan,name);
  }
 });
+
+test('alter forms share a character slot, inherit equipment rules, and survive full team links',()=>{
+ const raw=read('images/mlg-assets/data-character.json'),forms={...roster,c1b:raw.c1b};
+ const definitions={...data,c1b:{...data.c1,'Alter-Dupes':{additional:[{level:4,text:'Alter bonus'}]}}};
+ const plan=normalizePlan({team:['c1b','c1','c2'],support:'c1',forms:{c1:{loadout:{basic:['B2'],special:['S3','S2'],ultimate:['U2'],technical:['T1']},stars:5}},stars:{c1b:16},equipment:{c1b:{weapon:'w1'}},loadouts:{c1b:{basic:['B1'],special:['S1b','S2'],ultimate:['U1'],technical:['T2']}}},forms,catalogues,definitions);
+ assert.deepEqual(plan.team,['c1b','','c2']);assert.equal(plan.support,'');assert.equal(plan.equipment.c1b.weapon,'w1');assert.equal(plan.stars.c1b,4);
+ assert.equal(plan.loadouts.c1b.technical[0],'T2');assert.equal(plan.forms.c1.stars,5);assert.equal(plan.forms.c1.loadout.basic[0],'B2');
+ assert.deepEqual(normalizePlan(parsePlanHash(planHash(plan)),forms,catalogues,definitions),plan);
+});

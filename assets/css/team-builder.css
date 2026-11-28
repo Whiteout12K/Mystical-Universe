@@ -43,3 +43,9 @@
 @media(max-width:600px){.team-link-import #paste-team-link{flex-basis:100%}.team-link-import .team-build-mode{margin-left:4px}}
 .pick-character.account-unowned,.pick-character.account-unowned:hover{opacity:.25;filter:grayscale(.8)}
 .team-slot.account-unowned,.support-slot.account-unowned,.plan-member-portrait.account-unowned,.rb-character-group.account-unowned{opacity:.35;filter:grayscale(.8)}
+
+
+.slot-form-switch{position:absolute;top:40px;left:8px;z-index:10;display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;cursor:pointer}
+.slot-form-switch img{display:block;width:22px;height:22px;object-fit:contain;pointer-events:none}.slot-form-switch:hover img{filter:brightness(1.25)}.slot-form-switch:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.support-slot .slot-form-switch{top:7px;left:7px}
+@media(max-width:700px){.slot-form-switch{top:36px;left:7px;width:30px;height:30px}}

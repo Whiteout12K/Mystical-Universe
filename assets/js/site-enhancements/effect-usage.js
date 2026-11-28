@@ -19,7 +19,7 @@ export function usedBy(effectId) {
         const references=effectReferences(character,context.skills(id),context.effects,null,16,true).filter(record=>record.id===effectId);
         const sources=new Map(references.flatMap(record=>record.sources).map(source=>[source.skill+':'+source.star,source]));
         for(const source of sources.values()){
-          const sourceLabel=/^Dupes/i.test(source.skill)?'Star Level '+source.star:source.name;
+          const sourceLabel=/(?:^|-)Dupes$/i.test(source.skill)?'Star Level '+source.star:source.name;
           const characterLink=link((character.nickname||character.name)+' · '+sourceLabel,gameSkillURL(id,source.skill));
           characterLink.title=character.name+' · '+sourceLabel;
           body.append(characterLink);

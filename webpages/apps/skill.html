@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
   const skillParam=params.get("skill")||"B1";
   const skill=skillParam.toLowerCase()==="dupes"?"Dupes":skillParam.toUpperCase();
   const isTechnical=/^T\d+$/i.test(skill);
-  const isDupe=/^Dupes\d*$/i.test(skill);
+  const isDupe=/(?:^|-)Dupes\d*$/i.test(skill);
 
   let level=parseInt(params.get("id"),10);
   level=Number.isFinite(level)?level:(isDupe?MAX_DUPE_LEVEL:1);
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
           const message=event.data;
           const data=fillNicknames(message.skills?.[message.skill]);
           if(!data)throw Error("Choose a skill to preview.");
-          const dupe=/^Dupes/i.test(message.skill);
+          const dupe=/(?:^|-)Dupes\d*$/i.test(message.skill);
           const maximum=dupe?MAX_DUPE_LEVEL:(data.max_level||10);
           const selectedLevel=Math.min(maximum,Math.max(1,Math.trunc(Number(message.level))||1));
           document.getElementById("level-display").style.display=dupe||/^T\d+/i.test(message.skill)?"none":"block";

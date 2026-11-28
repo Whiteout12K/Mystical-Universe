@@ -7,7 +7,7 @@ function skillIconButton(character, definitions, key, caption) {
         const title = key ? (definitions[key] ? definitions[key].name || key : key + ' · Details pending') : 'Unselected';
         const button = el('button', {type: 'button', class: 'build-skill-choice', title, 'aria-label': caption || title});
         if (key && character.skills_path) {
-          const image = el('img', {src: /^Dupes/i.test(key) ? '/images/mlg-assets/Stars/dupe.svg' : character.skills_path + '/skill_b/' + key.split('-')[0].toLowerCase() + '.svg', alt: '', loading: 'lazy'});
+          const image = el('img', {src: /(?:^|-)Dupes$/i.test(key) ? '/images/mlg-assets/Stars/dupe.svg' : character.skills_path + '/skill_b/' + key.split('-')[0].toLowerCase() + '.svg', alt: '', loading: 'lazy'});
           image.addEventListener('error', () => { image.remove(); button.append(el('span', {}, key)); }, {once: true});
           button.append(image);
         } else button.append(el('span', {}, key || '+'));

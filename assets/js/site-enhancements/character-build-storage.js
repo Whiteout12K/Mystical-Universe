@@ -11,7 +11,7 @@ export async function loadCharacterBuild(id, {mode='account'} = {}) {
 }
 export function saveCharacterBuild(id, changes, {mode='account'} = {}) {
   const task = queue.catch(() => {}).then(async () => {
-    if (!/^c\d+$/.test(id)) throw new Error('Invalid character.');
+    if (!/^c\d+[a-z]?$/i.test(id)) throw new Error('Invalid character.');
     const account = mode==='test'?null:await loadPlayerSession(), store = globalThis.PlayerStore;
     if (!account) {
       const value = {...await loadCharacterBuild(id,{mode}), ...changes};

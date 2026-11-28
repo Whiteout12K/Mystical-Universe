@@ -1,3 +1,4 @@
+import {characterSkillDefinitions} from './character-build-model.js';
 import {json, resolveCharacter} from './core.js';
 let pending;
 export function buildCatalog() {
@@ -7,7 +8,7 @@ export function buildCatalog() {
   ]).then(([roster, catalog, effects, weapons, accessories, artifacts, guides]) => ({
     roster, effects, catalogs: {weapons, accessories, artifacts}, guides,
     character: id => { const character=resolveCharacter(roster,id); return character ? {...character,effect_targets:guides[id]?.effect_targets||character.effect_targets} : null; },
-    skills: id => catalog.sources[roster[id]?.base_character || id] || {}
+    skills: id => characterSkillDefinitions(catalog.sources[roster[id]?.base_character || id] || {},resolveCharacter(roster,id))
   })).catch(error => { pending = null; throw error; });
   return pending;
 }
@@ -27,7 +28,7 @@ export function refreshBuildSkills(context) {
     return [id,id==='c4'?Object.fromEntries(Object.entries(data.nodes||{}).map(([key,node])=>['tree-'+key,node])):data];
   })).then(entries=>{
     const live=Object.fromEntries(entries);
-    return {...context,skills:id=>live[context.roster[id]?.base_character||id]||{}};
+    return {...context,skills:id=>characterSkillDefinitions(live[context.roster[id]?.base_character||id]||{},context.character(id))};
   }).finally(()=>{refreshingSkills=null;});
   return refreshingSkills;
 }

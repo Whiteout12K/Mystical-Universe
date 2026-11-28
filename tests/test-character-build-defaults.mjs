@@ -28,3 +28,20 @@ test('account Star Level comes from owned character progression, never the saved
  data.c1.star_level=99;assert.equal(ownedCharacterStarLevel(data,'c1'),16);
  data.c1.star_level=-2;assert.equal(ownedCharacterStarLevel(data,'c1'),0);
 });
+
+test('alter forms have separate ownership and Star Levels',async()=>{
+ const {ownsCharacter,ownedCharacterStarLevel}=await import('../data/character-build-defaults.mjs');
+ const data={c_owned:[1],c1:{star_level:3}};
+ assert.equal(ownsCharacter(data,'c1b'),false);assert.equal(ownedCharacterStarLevel(data,'c1b'),0);
+ data.c_alter_owned={c1b:1};data.c1b={star_level:2};assert.equal(ownsCharacter(data,'c1b'),true);assert.equal(ownedCharacterStarLevel(data,'c1b'),2);assert.equal(ownedCharacterStarLevel(data,'c1'),3);
+ assert.equal(ownsCharacter(data,'c2b'),false);
+});
+
+test('forms share equipment while keeping separate skills and Star Levels',async()=>{
+ const {sharedFormBuild,formBuildUpdates}=await import('../data/character-build-defaults.mjs');
+ const builds={c1:{gear:{weapon:'w1'},loadout:{basic:['B1']},stars:5},c1b:{loadout:{basic:['B2']},stars:2}};
+ const alter=sharedFormBuild(builds,'c1b','c1');assert.equal(alter.gear.weapon,'w1');assert.equal(alter.stars,2);assert.deepEqual(alter.loadout.basic,['B2']);
+ Object.assign(builds,formBuildUpdates(builds,'c1b','c1',{gear:{weapon:'w3'},loadout:{basic:['B1']},stars:3}));
+ assert.equal(builds.c1.gear.weapon,'w3');assert.equal(builds.c1.stars,5);assert.equal(builds.c1b.stars,3);assert.deepEqual(builds.c1.loadout.basic,['B1']);
+ assert.equal(sharedFormBuild(builds,'c1b','c1').gear.weapon,'w3');
+});

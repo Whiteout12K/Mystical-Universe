@@ -280,17 +280,18 @@ const rarityClass=r=>{r=String(r||"c").toLowerCase();return rarityColors[r]?r:"c
 const rarityColor=r=>rarityColors[rarityClass(r)];
 const skills=c=>Array.isArray(c?.skills)?c.skills:[];
 const technicalSkills=c=>skills(c).filter(s=>/^T\d+$/i.test(s));
-const dupeSkills=c=>skills(c).filter(s=>String(s).toLowerCase()==="dupes");
-const abilitySkills=c=>skills(c).filter(s=>/^T\d+$/i.test(s)||String(s).toLowerCase()==="dupes");
+const dupeSkills=c=>skills(c).filter(s=>/(?:^|-)Dupes$/i.test(String(s)));
+const abilitySkills=c=>skills(c).filter(s=>/^T\d+$/i.test(s)||/(?:^|-)Dupes$/i.test(String(s)));
 const activeIds=()=>[...team,support].filter(Boolean);
-const getCharacters=d=>Object.fromEntries(Object.entries(d||{}).filter(([id,c])=>/^c\d+$/i.test(id)&&c?.id));
+const getCharacters=d=>Object.fromEntries(Object.entries(d||{}).filter(([id,c])=>/^c\d+[a-z]?$/i.test(id)&&c?.id).map(([id,c])=>[id,{...(d[c.base_character]||{}),...c,character_synergies:Array.isArray(c.character_synergies)?c.character_synergies:[]}]));
+const characterFamily=id=>characters[id]?.base_character||id;
 
 function cleanRoster(main=[],sup=""){
  const used=new Set(),t=main.slice(0,3).map(id=>{
-  if(!id||used.has(id)||!characters[id])return"";
-  used.add(id);return id;
+  if(!id||used.has(characterFamily(id))||!characters[id])return"";
+  used.add(characterFamily(id));return id;
  });
- return{team:[...t,"",""].slice(0,3),support:sup&&characters[sup]&&!used.has(sup)?sup:""};
+ return{team:[...t,"",""].slice(0,3),support:sup&&characters[sup]&&!used.has(characterFamily(sup))?sup:""};
 }
 
 /* PRESETS */
@@ -339,7 +340,7 @@ function renderCharacterSlot(slot,i,c){
   return;
  }
  const r=rarityClass(c.rarity);
- slot.className=`team-slot rarity-${r}${enhancements?.isUnowned('c'+c.id)?' account-unowned':''}`;
+ slot.className=`team-slot rarity-${r}${enhancements?.isUnowned(team[i])?' account-unowned':''}`;
  slot.style.setProperty("--rarity-glow",`${rarityColor(r)}66`);
  slot.innerHTML=`<span class="slot-number">${i+1}</span>${characterMarkup(c,i)}`;
 }
@@ -367,7 +368,7 @@ function renderTeam(){
 
 /* PICKER */
 function renderCharacters(){
- const list=$("#character-list"),used=new Set(activeIds()),entries=Object.entries(characters);
+ const list=$("#character-list"),used=new Set(activeIds().map(characterFamily)),entries=Object.entries(characters).filter(([,c])=>!c.base_character);
 
  if(!entries.length){
   list.innerHTML=`<div class="no-characters">No playable characters found.</div>`;
@@ -375,7 +376,7 @@ function renderCharacters(){
  }
 
  list.innerHTML=entries.map(([id,c])=>{
-  const selected=used.has(id),r=rarityClass(c.rarity);
+  const selected=used.has(characterFamily(id)),r=rarityClass(c.rarity);
   return `<button class="pick-character rarity-${r}${selected?" selected":""}${enhancements?.isUnowned(id)?" account-unowned":""}" type="button"
    data-character="${esc(id)}" ${selected?"disabled":""} title="${esc(selected?`${c.name} is already active`:enhancements?.isUnowned(id)?`${c.name} — Not owned`:c.name)}">
    ${c.profile_image?`<img src="${esc(c.profile_image)}" alt="${esc(c.name)}" loading="lazy" draggable="false">`:""}
@@ -385,9 +386,9 @@ function renderCharacters(){
 }
 
 /* SKILLS */
-const skillIcon=(s,p)=>String(s).toLowerCase()==="dupes"?"/images/mlg-assets/Stars/dupe.svg":`${p}/skill_b/${String(s).toLowerCase()}.svg`;
-const skillUrl=(s,id)=>`${SKILL_VIEW_PATH}?char=${encodeURIComponent(id)}&skill=${encodeURIComponent(s)}&id=${String(s).toLowerCase()==="dupes"?(enhancements?.starLevel(id)??0):1}`;
-const skillLabel=s=>String(s).toLowerCase()==="dupes"?"Star Level":`Technical Skill ${String(s).replace(/^T/i,"")}`;
+const skillIcon=(s,p)=>/(?:^|-)Dupes$/i.test(String(s))?"/images/mlg-assets/Stars/dupe.svg":`${p}/skill_b/${String(s).toLowerCase()}.svg`;
+const skillUrl=(s,id)=>`${SKILL_VIEW_PATH}?char=${encodeURIComponent(characterFamily(id))}&form=${encodeURIComponent(id)}&skill=${encodeURIComponent(s)}&id=${/(?:^|-)Dupes$/i.test(String(s))?(enhancements?.starLevel(id)??0):1}`;
+const skillLabel=s=>/(?:^|-)Dupes$/i.test(String(s))?"Star Level":`Technical Skill ${String(s).replace(/^T/i,"")}`;
 
 function abilitySkill(s,id,c){
  const label=skillLabel(s);
@@ -707,7 +708,7 @@ function closePicker(){
 }
 
 function selectCharacter(id){
- if(!characters[id]||activeIds().includes(id))return;
+ if(!characters[id]||activeIds().some(active=>characterFamily(active)===characterFamily(id)))return;
 
  activeTarget==="support"?support=id:team[activeSlot]=id;
  ({team,support}=cleanRoster(team,support));

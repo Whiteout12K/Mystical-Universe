@@ -122,6 +122,7 @@
     "formatted_name": "<div style=\"font-size:12px\"><b>Caela Obtainia</b> <span class=\"alter\">Alter</span></div>",
     "character-event": "",
 
+    "character_synergies": [],
     "base_character": "c1",
     "skills": ["B1", "B2", "S1b", "S1", "S2", "U1", "T2", "Alter", "Alter-Dupes"],
     "skills_path": "/images/mlg-assets/Characters/C1"

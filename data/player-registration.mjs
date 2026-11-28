@@ -55,6 +55,8 @@ export function createInitialData() {
         ], // Characters Owned
         // Each item is in order of character ID, where 0 is not owned, and 1 is owned.
 
+        c_alter_owned: {}, // Separate ownership by alter ID, e.g. {c1b: 1}.
+
         c_equipped_skills: [], // Characters' Equipped Skills
         // Each item, in order of character ID, contains a sublist of length 6 for their
         // 1 Basic Skill, 2 Special Skills, 1 Ultimate Skill, and 2 Technical Skills.
