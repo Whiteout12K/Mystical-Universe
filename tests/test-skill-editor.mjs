@@ -82,3 +82,15 @@ test('editor JSON uses the compact authored C5–C11 layout for styles, paragrap
   assert.deepEqual(parseDocument(serializeDocument(original)),original,id);
  }
 });
+
+test('splitting and indenting writing lines preserves styles, unknown fields and Star Level boundaries',async()=>{
+ const {splitSkillParagraph,indentSkillParagraph}=await import('../assets/js/skill-editor-model.js');
+ const original={level:2,text:'Before after',style:{paddingLeft:15,paddingTop:5,fontSize:7},custom:true};
+ const [before,after]=splitSkillParagraph(original,'Before','after');
+ assert.equal(before.level,2);assert.equal(after.level,undefined);assert.equal(after.text,'after');
+ assert.deepEqual(after.style,original.style);assert.equal(after.custom,true);assert.equal(original.text,'Before after');
+ assert.equal(indentSkillParagraph(after,15).style.paddingLeft,30);
+ assert.equal(indentSkillParagraph(after,-30).style.paddingLeft,0);
+ assert.deepEqual(splitSkillParagraph('text','one','two'),['one','two']);
+ assert.deepEqual(indentSkillParagraph('text',15),{text:'text',style:{paddingLeft:15}});
+});

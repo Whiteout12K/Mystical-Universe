@@ -12,7 +12,7 @@
 </head>
 <body>
 <header class="app-header">
-  <button id="toggle-characters" type="button" aria-controls="characters-panel" aria-expanded="true">Characters</button>
+  <a class="back-home" href="/">← Back to Home</a>
   <h1>Skill Editor</h1><a href="#live-preview">Preview ↓</a>
   <span id="change-state">Choose a character</span>
   <div class="file-actions">
@@ -52,7 +52,7 @@
         </div>
         <div id="skill-fields"></div>
       </section>
-      <details class="help"><summary>Formatting and JSON reference</summary><p>Bracketed terms such as [Water] and [Freeze] automatically receive their matching font-color classes from mlg.css. Select text in a paragraph to apply a custom color or text class. Insert a dynamic value for a number that scales with skill level. Keep durations and cooldowns as ordinary text. Small metadata uses the same plain formatting as the skill viewer.</p><p>Effect descriptions use <code>{{effect:freeze}}</code>. Inline names use <code>&lt;b class="freeze"&gt;[Freeze]&lt;/b&gt;</code>. Character tokens can refer to another ID, for example <code>{{nickname:c2}}</code>. A star level starts a new group in Dupes, and the following paragraphs continue that group until the next numbered entry.</p><p>Open the <code>images/mlg-assets/Characters</code> folder once to save directly. The editor remembers it for future visits, so use Save JSON for later changes. You can also copy/download the JSON into the displayed file. Local drafts are kept per character file in this browser. Changes to the skill list in <code>data-character.json</code> are made separately.</p></details>
+      <details class="help"><summary>Formatting and JSON reference</summary><p>Write sections as continuous lines: Enter creates a paragraph, Shift+Enter adds a soft line break, and Tab / Shift+Tab adjusts the current line’s indent. Each line keeps its own styling; use its ⋯ menu for settings. Names and pronouns are ordinary editable text in the visual editor. The JSON automatically stores the corresponding character tokens. Pasting converts the current character’s name and gendered pronouns to tokens automatically; neutral and plural pronouns stay as written.</p><p>Bracketed terms such as [Water] and [Freeze] automatically receive their matching font-color classes from mlg.css. Select text in a paragraph to apply a custom color or text class. Type [dmg1] for a dynamic value or [dmg1%] to include a percentage. Existing value keys such as [heal%] work too. Set each base value in Level scaling &amp; advanced settings. Keep durations and cooldowns as ordinary text. Small metadata uses the same plain formatting as the skill viewer.</p><p>Effect descriptions use <code>{{effect:freeze}}</code>. Inline names use <code>&lt;b class="freeze"&gt;[Freeze]&lt;/b&gt;</code>. Character tokens can refer to another ID, for example <code>{{nickname:c2}}</code>. A star level starts a new group in Dupes, and the following paragraphs continue that group until the next numbered entry.</p><p>Open the <code>images/mlg-assets/Characters</code> folder once to save directly. The editor remembers it for future visits, so use Save JSON for later changes. You can also copy/download the JSON into the displayed file. Local drafts are kept per character file in this browser. Changes to the skill list in <code>data-character.json</code> are made separately.</p></details>
       <ul id="warnings" class="warnings" aria-label="Skill warnings"></ul>
     </div>
   </main>

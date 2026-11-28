@@ -1,4 +1,6 @@
-import {clone, isObject, parseDocument, serializeDocument, validateDocument, skillWarnings, groupSkillParagraphs} from './skill-editor-model.js';
+import {dynamicValueParts} from './skill-editor-values.js';
+import {tokenizeCharacterText,editableTokenPattern,tokenDisplayText} from './skill-editor-tokens.js';
+import {clone, isObject, parseDocument, serializeDocument, validateDocument, skillWarnings, groupSkillParagraphs, splitSkillParagraph, indentSkillParagraph} from './skill-editor-model.js';
 
 import {createBracketColorizer, colorSkillDocument, bracketClassMap, resolveBracketClass} from './skill-editor-colors.js';
 let colorHTML = html => html;
@@ -241,6 +243,27 @@ function cleanHTML(html) {
   }
   return template.innerHTML;
 }
+function tokenizePastedHTML(html){
+  const holder=el('div');holder.innerHTML=cleanHTML(html);
+  const base=roster[currentId]||{},character={...base,...base.skill_variants?.[Number($('variant-select').value||0)]},walker=document.createTreeWalker(holder,NodeFilter.SHOW_TEXT),texts=[];
+  while(walker.nextNode())texts.push(walker.currentNode);
+  for(const text of texts)text.textContent=tokenizeCharacterText(text.textContent,character);
+  return holder.innerHTML;
+}
+function dynamicSourceHTML(html){
+  const holder=el('div');holder.innerHTML=html;
+  const walker=document.createTreeWalker(holder,NodeFilter.SHOW_TEXT),texts=[];
+  while(walker.nextNode())texts.push(walker.currentNode);
+  for(const text of texts){
+    if(text.parentElement.closest('[data-dmg]'))continue;
+    const parts=dynamicValueParts(text.textContent,skill()?.base_damage||{});
+    if(!parts.some(part=>part.key))continue;
+    const fragment=document.createDocumentFragment();
+    for(const part of parts){if(part.key){const value=el('span');value.dataset.dmg=part.key;fragment.append(value);if(part.percent)fragment.append('%');}else fragment.append(document.createTextNode(part.text));}
+    text.replaceWith(fragment);
+  }
+  return holder.innerHTML;
+}
 function visualHTML(html) {
   const holder = el('div');
   holder.innerHTML = cleanHTML(html);
@@ -249,26 +272,35 @@ function visualHTML(html) {
     if (term && node.childNodes.length === 1 && !node.style.color && node.classList.contains(resolveBracketClass(term[1], bracketNames))) node.dataset.editorBracket = node.textContent;
   });
   holder.querySelectorAll('[data-dmg]').forEach(node => {
-    node.dataset.editorFallback = node.textContent;
-    node.textContent = '⟦' + node.dataset.dmg + '⟧';
-    node.contentEditable = 'false';
+    let next=node;
+    while(next&&!next.nextSibling&&next.parentNode!==holder)next=next.parentNode;
+    next=next?.nextSibling;
+    const suffix=next?.nodeType===Node.TEXT_NODE?next.textContent.match(/^\s*%/):null;
+    if(suffix)next.textContent=next.textContent.slice(suffix[0].length);
+    node.replaceWith(document.createTextNode('['+node.dataset.dmg+(suffix?'%':'')+']'));
   });
+  const walker=document.createTreeWalker(holder,NodeFilter.SHOW_TEXT),texts=[];
+  while(walker.nextNode())texts.push(walker.currentNode);
+  for(const text of texts){
+    const fragment=document.createDocumentFragment();let last=0;
+    for(const match of text.textContent.matchAll(editableTokenPattern)){
+      fragment.append(document.createTextNode(text.textContent.slice(last,match.index)));
+      const field=el('span',tokenDisplayText(match[1],roster,currentId,$('variant-select').value||0));field.dataset.editorToken=match[1];field.dataset.editorDisplay=field.textContent;fragment.append(field);last=match.index+match[0].length;
+    }
+    if(last){fragment.append(document.createTextNode(text.textContent.slice(last)));text.replaceWith(fragment);}
+  }
   return holder.innerHTML;
 }
 function sourceHTML(editor) {
   const holder = editor.cloneNode(true);
+  holder.querySelectorAll('[data-editor-token]').forEach(node=>node.replaceWith(document.createTextNode(node.textContent===node.dataset.editorDisplay?'{{'+node.dataset.editorToken+'}}':node.textContent)));
   // Browsers may extend the last bold/color span as typing continues after ].
   // Recolor only its bracketed terms so the following sentence stays plain.
   holder.querySelectorAll('[data-editor-bracket]').forEach(node => {
     if (node.textContent !== node.dataset.editorBracket) node.replaceWith(...node.childNodes);
     else node.removeAttribute('data-editor-bracket');
   });
-  holder.querySelectorAll('[data-dmg]').forEach(node => {
-    node.textContent = node.dataset.editorFallback || '';
-    node.removeAttribute('data-editor-fallback');
-    node.removeAttribute('contenteditable');
-  });
-  return cleanHTML(holder.innerHTML);
+  return dynamicSourceHTML(tokenizePastedHTML(cleanHTML(holder.innerHTML)));
 }
 function rememberSelection() {
   const selection = window.getSelection();
@@ -336,8 +368,24 @@ function button(text, action, label) {
   return node;
 }
 const styleFields = ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'fontSize', 'lineHeight', 'width', 'textAlign'];
+function applyWritingStyle(editor,entry){
+ const style={...(entry?.style||{}),...Object.fromEntries(styleFields.filter(key=>entry?.[key]!==undefined).map(key=>[key,entry[key]]))};
+ editor.style.paddingLeft=Math.max(8,Math.min(128,8+(Number(style.paddingLeft)||0)))+'px';
+ editor.style.marginTop=Math.max(0,Math.min(24,Number(style.paddingTop)||0))+'px';
+ editor.style.textAlign=style.textAlign||'';
+ editor.style.fontSize=style.fontSize?Math.max(12,Math.min(28,Number(style.fontSize)*2))+'px':'';
+ editor.style.lineHeight=style.lineHeight?String(style.lineHeight):'';
+}
+function splitWritingLine(editor){
+ const selection=window.getSelection();
+ if(!selection.rangeCount)return null;
+ const range=selection.getRangeAt(0);if(!editor.contains(range.commonAncestorContainer))return null;
+ const before=range.cloneRange(),after=range.cloneRange();before.selectNodeContents(editor);before.setEnd(range.startContainer,range.startOffset);after.selectNodeContents(editor);after.setStart(range.endContainer,range.endOffset);
+ const left=el('div'),right=el('div');left.append(before.cloneContents());right.append(after.cloneContents());
+ return [sourceHTML(left),sourceHTML(right)];
+}
 function renderBlock(host, label, get, set, options = {}) {
-  const box = el('section', undefined, 'block');
+  const box = el('section', undefined, options.connected?'writing-line':'block');
   const head = el('div', undefined, 'block-head');
   head.append(el('strong', label));
   const initial = get();
@@ -363,8 +411,9 @@ function renderBlock(host, label, get, set, options = {}) {
       move.disabled = delta < 0 ? options.first : options.last;
       head.append(move);
     }
-    const actions=el('details',undefined,'action-menu block-actions');actions.append(el('summary','More'));
-    const menu=el('div',undefined,'action-menu-panel');menu.append(button('Duplicate',options.duplicate),button('Remove',options.remove));actions.append(menu);head.append(actions);
+    if(options.connected)head.append(button('Duplicate',options.duplicate),button('Remove',options.remove));
+    else{const actions=el('details',undefined,'action-menu block-actions');actions.append(el('summary','More'));
+    const menu=el('div',undefined,'action-menu-panel');menu.append(button('Duplicate',options.duplicate),button('Remove',options.remove));actions.append(menu);head.append(actions);}
   }
   const editor = el('div', undefined, 'rich-text');
   editor.contentEditable = 'true';
@@ -373,6 +422,7 @@ function renderBlock(host, label, get, set, options = {}) {
   editor.setAttribute('aria-label', label + ' text');
   const text = typeof initial === 'string' ? initial : initial.text ?? initial.description ?? '';
   editor.innerHTML = visualHTML(text);
+  if(options.connected)applyWritingStyle(editor,initial);
   const htmlDetails = el('details');
   htmlDetails.append(el('summary', 'HTML / tokens'));
   const html = el('textarea', undefined, 'html-source');
@@ -380,10 +430,14 @@ function renderBlock(host, label, get, set, options = {}) {
   html.value = text;
   html.spellcheck = false;
   const updateText = value => change(() => {
-    value = colorHTML(value);
+    value = colorHTML(dynamicSourceHTML(value));
     const entry = get();
     if (typeof entry === 'string') set(value);
     else set({...entry, [Object.hasOwn(entry, 'description') && !Object.hasOwn(entry, 'text') ? 'description' : 'text']: value});
+  });
+  if(options.newLine)editor.addEventListener('keydown',event=>{
+    if(event.key==='Enter'&&!event.shiftKey&&!event.isComposing){const parts=splitWritingLine(editor);if(parts){event.preventDefault();options.newLine(parts);}}
+    if(event.key==='Tab'&&!event.ctrlKey&&!event.metaKey&&!event.altKey){event.preventDefault();change(()=>set(indentSkillParagraph(get(),event.shiftKey?-15:15)));applyWritingStyle(editor,get());}
   });
   editor.addEventListener('focus', () => { activeEditor = editor; });
   editor.addEventListener('input', () => {
@@ -422,10 +476,12 @@ function renderBlock(host, label, get, set, options = {}) {
   editor.addEventListener('paste', event => {
     event.preventDefault();
     const markup = event.clipboardData.getData('text/html');
-    if (markup) document.execCommand('insertHTML', false, cleanHTML(markup));
-    else document.execCommand('insertText', false, event.clipboardData.getData('text/plain'));
+    const plain=el('div');plain.textContent=event.clipboardData.getData('text/plain');
+    const incoming=markup||plain.innerHTML.replace(/\n/g,'<br>');
+    document.execCommand('insertHTML',false,visualHTML(tokenizePastedHTML(incoming)));
     editor.dispatchEvent(new Event('input', {bubbles: true}));
   });
+  html.addEventListener('paste',event=>{event.preventDefault();const text=tokenizePastedHTML(event.clipboardData.getData('text/plain'));html.setRangeText(text,html.selectionStart,html.selectionEnd,'end');html.dispatchEvent(new Event('input',{bubbles:true}));});
   html.addEventListener('input', () => { updateText(html.value); editor.innerHTML = visualHTML(colorHTML(html.value)); });
   htmlDetails.append(html);
   const styles = el('details');
@@ -439,11 +495,18 @@ function renderBlock(host, label, get, set, options = {}) {
       if (next === '') delete target[property];
       else target[property] = /^-?\d+(\.\d+)?$/.test(next) ? Number(next) : next;
       set(entry);
+      if(options.connected)applyWritingStyle(editor,entry);
     })));
   }
   styles.append(grid);
   const advanced=el('details',undefined,'block-advanced');advanced.append(el('summary','Paragraph options'),htmlDetails,styles);if(starOptions)advanced.append(starOptions);
-  box.append(head, editor, advanced);
+  if(options.connected){
+    const menu=el('details',undefined,'action-menu writing-line-options'),summary=el('summary','⋯');summary.title=label+' options';summary.setAttribute('aria-label',label+' options');
+    const panel=el('div',undefined,'action-menu-panel writing-options-panel');panel.append(head,advanced);menu.append(summary,panel);
+    if(options.stage)box.append(el('span',initial.name||label,'writing-stage-name'));
+    box.append(editor,menu);
+  }else box.append(head,editor,advanced);
+  if(options.index!==undefined){box.dataset.list=options.list;box.dataset.index=options.index;}
   host.append(box);
 }
 function renderList(host, key, heading) {
@@ -471,8 +534,11 @@ function renderList(host, key, heading) {
       section.append(el('summary',group.level===null?'Base passive':'Star Level '+group.level));
       target=el('div',undefined,'star-level-body');section.append(target);host.append(section);
     }
+    const surface=el('div',undefined,'writing-surface');target.append(surface);
     for(const {entry,index}of group.entries){
-      renderBlock(target,key==='stages'?`Stage ${index+1}`:`Paragraph ${index+1}`,()=>skill()[key][index],value=>{skill()[key][index]=value;},{
+      renderBlock(surface,key==='stages'?`Stage ${index+1}`:`Paragraph ${index+1}`,()=>skill()[key][index],value=>{skill()[key][index]=value;},{
+        connected:true,index,list:key,
+        newLine:([before,after])=>{change(()=>{const items=skill()[key],entries=splitSkillParagraph(items[index],before,after);if(key==='stages')entries[1].name='Stage '+(index+2);items.splice(index,1,...entries);if(key==='stages')items.forEach((item,position)=>{if(/^Stage \d+$/.test(item.name||''))item.name='Stage '+(position+1);});},true);const next=$('skill-fields').querySelector('[data-list="'+key+'"][data-index="'+(index+1)+'"] .rich-text');if(next){next.focus();const caret=document.createRange();caret.selectNodeContents(next);caret.collapse(true);const selection=window.getSelection();selection.removeAllRanges();selection.addRange(caret);}},
         stage:key==='stages',dupe:starMode,first:index===0,last:index===list.length-1,
         move:delta=>change(()=>{const items=skill()[key];[items[index],items[index+delta]]=[items[index+delta],items[index]];},true),
         duplicate:()=>change(()=>{skill()[key].splice(index+1,0,clone(skill()[key][index]));},true),
@@ -640,10 +706,9 @@ $('apply-source').onclick = applySource;
 $('undo').onclick = () => history('undo');
 $('redo').onclick = () => history('redo');
 $('character-search').oninput = renderCharacters;
-$('toggle-characters').onclick = () => { const closed = document.body.classList.toggle('sidebar-closed'); $('toggle-characters').setAttribute('aria-expanded', String(!closed)); };
 $('preview-level').oninput = () => { updatePreview(); renderValueOutputs(); };
 $('preview-max').onclick = () => { $('preview-level').value = /^Dupes/i.test(selectedSkill) ? 16 : skill()?.max_level || 10; updatePreview(); renderValueOutputs(); };
-$('variant-select').onchange = updatePreview;
+$('variant-select').onchange = ()=>{for(const field of $('skill-fields').querySelectorAll('[data-editor-token]')){if(field.textContent===field.dataset.editorDisplay){field.textContent=tokenDisplayText(field.dataset.editorToken,roster,currentId,$('variant-select').value||0);field.dataset.editorDisplay=field.textContent;}}updatePreview();};
 for (const node of document.querySelectorAll('[data-command]')) {
   node.addEventListener('mousedown', event => event.preventDefault());
   node.onclick = () => { if (restoreSelection()) { document.execCommand(node.dataset.command); activeEditor.dispatchEvent(new Event('input', {bubbles: true})); } };
@@ -672,7 +737,8 @@ $('insert-token').onclick = () => {
   closeInsertMenu('token');
   const person = $('token-character').value;
   const variant = person && !$('token-variant-control').hidden ? $('token-variant').value : '';
-  insertHTML('{{' + $('token').value + (person ? ':' + person + (variant !== '' ? ':' + variant : '') : '') + '}}');
+  const raw='{{' + $('token').value + (person ? ':' + person + (variant !== '' ? ':' + variant : '') : '') + '}}';
+  insertHTML(visualHTML(raw));
 };
 $('effect-inline').onclick = () => {
   closeInsertMenu('effect');

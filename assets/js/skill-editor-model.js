@@ -93,3 +93,17 @@ export function groupSkillParagraphs(entries = []) {
   }
   return groups;
 }
+
+export function splitSkillParagraph(entry,before,after){
+ if(typeof entry==='string')return [before,after];
+ const field=Object.hasOwn(entry,'description')&&!Object.hasOwn(entry,'text')?'description':'text';
+ const first={...clone(entry),[field]:before},next={...clone(entry),[field]:after};
+ delete next.level;
+ return [first,next];
+}
+export function indentSkillParagraph(entry,delta){
+ const next=typeof entry==='string'?{text:entry}:clone(entry);
+ const target=Object.hasOwn(next,'paddingLeft')?next:(next.style||={});
+ target.paddingLeft=Math.max(0,Math.min(120,(Number(target.paddingLeft)||0)+delta));
+ return next;
+}

@@ -97,9 +97,9 @@
 
   },
 
-  "#c1b": {
+  "c1b": {
     "id": 1,
-    "profile_image": "",
+    "profile_image": "/images/character_art/Character_Heads/lux_luces_head.png",
 
     "splash_image": "/images/character_art/lux_luces_formal.png",
     "splash_color": "drop-shadow(0 0 18px rgba(255, 69, 69, 0.725))",
@@ -112,9 +112,9 @@
     "rarity_img": "/images/mlg-assets/Characters/c-roles/c1b_role.svg",
 
     "species": ["Angelor"],
-    "specialty": ["Support", "Crowd Controlling", "Defense", "Healing", "Single-Target Damage", "Modulator", "Resonator"],
+    "specialty": ["DPS", "Support", "Crowd Controlling", "Debuffer"],
     "affinity": ["Light"],
-    "role": ["Defense", "Healer"],
+    "role": ["Fighter"],
 
     "affiliation": ["Magni"],
     "attributes": ["Flight"],

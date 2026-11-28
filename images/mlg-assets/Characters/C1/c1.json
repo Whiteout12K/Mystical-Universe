@@ -3,7 +3,7 @@
   "B1": {
     "name": "Light Sword",
     "type": "Basic Skill",
-    "description": "{{nickname}} conjures a compressed light sword and does melee <b class=\"light\">[Light]</b> attacks.",
+    "description": "{{nickname}}&nbsp;conjures a compressed light sword and does melee <b class=\"light\">[Light]</b> attacks.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
@@ -13,7 +13,7 @@
         "text": "Slash in a line ahead, dealing AoE damage equal to <b><span data-dmg=\"dmg2\"></span>%</b> of attack. Inflict <b class=\"knockback\">[Knockback]</b> on hit opponents.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 3",
-        "text": "Slam into the ground, dealing AoE damage in a 1-meter radius equal to <b><span data-dmg=\"dmg3\"></span>%</b> of attack.",
+        "text": "Slam into the ground, dealing AoE damage in a 1-meter radius equal to <b><span data-dmg=\"dmg3\"></span>%</b>&nbsp;of attack.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
     ],
     "additional": [
@@ -32,17 +32,17 @@
   "B2": {
     "name": "Light Discharge",
     "type": "Basic Skill",
-    "description": "{{nickname}} discharges light and bends it around {{object}} in a myriad of ways, dealing <b class=\"light\">[Light]</b> damage.",
+    "description": "{{nickname}} discharges light, bending it around {{object}} in myriad ways, dealing <b class=\"light\">[Light]</b> damage.",
     "description_style": {"paddingTop": 7},
     "stages": [
       {"name": "Stage 1",
-        "text": "Launches a beam of light, dealing damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of health. Applies <b class=\"blind\">[Blind]</b> on hit opponents.",
+        "text": "Launches a beam of light, dealing damage equal to <b><span data-dmg=\"dmg1\"></span>%</b> of health. Applies <b class=\"blind\">[Blind]</b> to hit opponents.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 2",
         "text": "Slashes in two arcs in separate directions, dealing <b><span data-dmg=\"dmg2\"></span>%</b> of health as damage.",
         "style": {"paddingLeft": 15, "paddingTop": 7}},
       {"name": "Stage 3",
-        "text": "Charges up a ball of light and thrusts it at opponents, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of health as damage and inflicting <b class=\"burn\">[Burn]</b>. If opponent already has the debuff upon attacking, deal an immediate instance of <b class=\"burn\">[Burn]</b> but with self’s crit stats added.",
+        "text": "Charges up a ball of light and thrusts it at opponents, dealing <b><span data-dmg=\"dmg3\"></span>%</b> of health as damage and inflicting <b class=\"burn\">[Burn]</b>.&nbsp;<span>If the opponent already has the debuff when attacked, deal an immediate instance of&nbsp;<strong class=\"burn\">[Burn]</strong>, but with the self’s crit stats added.</span>",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
     ],
     "additional": [
@@ -63,12 +63,12 @@
   "S1": {
     "name": "Light Searching Spheres",
     "type": "Special Skill",
-    "description": "{{nickname}} shoots 10 light orbs that follow and implode on contact with enemies dealing <b><span data-dmg=\"dmg1\"></span>%</b> of {{possessive}} attack as <b class=\"light\">[Light]</b> AoE ranged damage in a 1 meter radius, applying <b class=\"blind\">[Blind]</b>. Projectiles will hone in on closest opponents.",
+    "description": "<span>{{nickname}} shoots 10 light orbs that follow&nbsp;</span><span>enemies and implode on contact, dealing&nbsp;<strong><span data-dmg=\"dmg1\"></span>%</strong>&nbsp;of {{possessive}} attack as&nbsp;<strong class=\"light\">[Light]</strong>&nbsp;AoE ranged damage in a 1-meter radius and</span><span>&nbsp;applying&nbsp;<strong class=\"blind\">[Blind]</strong>.</span>&nbsp;Projectiles will hone in on the closest opponents.",
     "description_style": {"paddingTop": 7},
     "additional": [
-      {"text": "Hold skill to launch projectiles in aimed direction at succession, one at a time.",
+      {"text": "Hold the skill to launch projectiles in the aimed direction, one at a time.",
         "style": {"paddingTop": 7}},
-      {"text": "If projectiles don’t find targets, they return and the active character gains <b><span data-dmg=\"dmg2\"></span></b> MP back for each sphere at the cost of 3% of {{nickname}}’s <b class=\"shield\">[Shield]</b> where each percentage is based on max health. If {{nickname}} is off-field, {{subject}} also gets <b><span data-dmg=\"dmg3\"></span>%</b> of the MP as well.",
+      {"text": "<span>If projectiles don’t&nbsp;</span><span>hit targets, they return, and the active character gains&nbsp;<strong><span data-dmg=\"dmg2\"></span></strong>&nbsp;MP back for each sphere, at the cost of 3% of {{nickname}}’s&nbsp;<strong class=\"shield\">[Shield]</strong>, with each percentage&nbsp;</span><span>based on max health.</span>&nbsp;If {{nickname}} is off-field, {{subject}} also&nbsp;<span>gains&nbsp;<strong><span data-dmg=\"dmg3\"></span>%</strong>&nbsp;of the MP</span>.",
         "style": {"paddingTop": 7}},
       {"text": "{{effect:blind}}",
         "style": {"paddingLeft": 15, "paddingTop": 4}},
@@ -96,7 +96,7 @@
     "additional": [
       {"text": "Applies a <b class=\"shield\">[Shield]</b> to all allies equal to <b><span data-dmg=\"shield1\"></span>%</b> of max health a single time. For {{nickname}}, {{subject}} instead gains <b class=\"shield\">[Shield]</b> equal to <b><span data-dmg=\"shield2\"></span>%</b> of {{possessive}} health every second while the field is active. This can also trigger when {{subject}} is off-field.",
         "style": {"paddingTop": 7}},
-      {"text": "Deals <b><span data-dmg=\"dmg1\"></span>%</b> of attack as <b class=\"light\">[Light]</b> damage to all opponents within the circle per second. Reduce their movement speed by -25%. Each successful hit will fill self and allies’ energy gauge by <b>+<span data-dmg=\"energy1\"></span>%</b>.&nbsp;",
+      {"text": "<span>Deal&nbsp;<b><span data-dmg=\"dmg1\"></span>%</b>&nbsp;of attack as&nbsp;<strong class=\"light\">[Light]</strong>&nbsp;damage to all opponents within the circle per second.</span>&nbsp;Reduces their movement speed by -25%. Each successful hit will fill self and allies’ energy gauges by <b>+<span data-dmg=\"energy1\"></span>%</b>.",
         "style": {"paddingTop": 7}},
       {"text": "Hold skill to decrease the field’s size, increase its damage, and extend duration.",
         "style": {"paddingTop": 7}},
@@ -311,7 +311,7 @@
     "additional": [
       {"text": "Upon dashing, pressing any Special Skill will allow {{nickname}} to enter Flight Mode, gradually losing stamina, which will greatly enhance {{possessive}} speed by +25%, height and damage reduction by +50%, and ranged damage by +10%, until stamina is empty or the Dash Skill is used again. Remaining idle does not consume stamina.",
         "style": {"paddingTop": 7}},
-      {"text": "<b>Guiding Light</b>: At night or in a dark environment, {{nickname}} emits a glow around {{object}} to light the surroundings. {{Subject}} also reveals hidden treasures.",
+      {"text": "<b>Guiding Light</b>: At night or in dark environments, {{nickname}} emits a glow to light {{possessive}}&nbsp;surroundings. {{Subject}} also reveals hidden treasures.",
         "style": {"paddingTop": 7}},
       {"text": "<u>Alter Exclusive Rule</u>: {{nickname:c1b}}’s Star Levels (except base) are deactivated while as {{nickname}}.",
         "style": {"paddingTop": 7}},
@@ -345,7 +345,7 @@
         "style": {"paddingTop": 5}},
       {"text": "10% of max health will also be added as additional basic damage numbers to all of Avery’s skills that inflict damage (Basic, Special, Ultimate, and Technical, including summons).",
         "style": {"paddingTop": 5}},
-      {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - {{nickname}} summons a concentration of light that blasts in a flower-like arch in front of {{object}}, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of attack as damage, applying <b class=\"blind\">[Blind]</b>, and <span class=\"undim\">gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for self and allies</span>. Special Skill cooldowns for self are reduced by 3 seconds, and 50 MP is instantly restored&nbsp;<span class=\"undim\">for self and allies</span>. Damage scales up by +10% for each level of the equipped Basic Skill.",
+      {"text": "<u>Basic Skill: Lost Lotus Light Beam</u> - {{nickname}} summons a concentration of light that blasts in a flower-like arc in front of {{object}}, blowing opponents away with <b class=\"knockback\">[Knockback]</b>, dealing 230% of {{possessive}} Attack as damage, applying <b class=\"blind\">[Blind]</b>, and <span class=\"undim\">gaining five stacks of <b class=\"goddess-blessing\">[Goddess' Blessing]</b> for {{reflexive}} and allies</span>. Special Skill cooldowns for self are reduced by 3 seconds, and self and allies instantly restore 50 MP. Damage increases by +10% for each level of {{possessive}} equipped Basic Skill.",
         "style": {"paddingLeft": 15, "paddingTop": 7}}
     ]
   }
