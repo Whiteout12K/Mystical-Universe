@@ -2,14 +2,15 @@ import {maxCharacterStarLevel} from './character-build-model.js';
 import {loadPlayerSession} from '../player-data.js';
 import {emptyCharacterBuild,ownsCharacter,ownedCharacterStarLevel,sharedFormBuild,formBuildUpdates} from '../../../data/character-build-defaults.mjs';
 import {teamEffects} from './team-effects.js';
+import {teamCoverage} from './team-coverage.js';
 import {loadCharacterBuild,saveCharacterBuild} from './character-build-storage.js';
 import {el,link} from './core.js';
 import {normalizePlan,planHash,parsePlanHash,parseTeamLink} from './team-builder-model.js';
-import {buildCatalog} from './build-catalog.js';
+import {buildCatalog,refreshBuildSkills} from './build-catalog.js';
 import {loadoutControls,equipmentControls} from './character-build-ui.js';
 const DRAFT='ml-team-draft-v1';
 export async function setupTeamBuilder(api){
- const roster=api.roster,context=await buildCatalog(),catalogues=context.catalogs,skillData=Object.fromEntries(Object.keys(roster).map(id=>[id,context.skills(id)]));
+ const roster=api.roster,context=await refreshBuildSkills(await buildCatalog()),catalogues=context.catalogs,skillData=Object.fromEntries(Object.keys(roster).map(id=>[id,context.skills(id)]));
  const account=await loadPlayerSession(),accountData=account?.data||{};
  let buildMode='test';
  let profileBuilds={};
@@ -23,8 +24,8 @@ export async function setupTeamBuilder(api){
  let equipmentAvailable=true,storageWarning='',equipment={},technical={},loadouts={},stars={},formStates={},loading=true;
  const root=el('section',{class:'builder-planning','aria-label':'Team planning'}),toolbar=el('section',{class:'plan-toolbar','aria-label':'Share team'}),notice=el('p',{class:'plan-message',role:'status'}),overview=el('section',{class:'plan-section plan-overview'});
  root.append(notice,overview);document.querySelector('#abilities').after(root);document.querySelector('.builder-header').append(toolbar);
- const shareButton=el('button',{type:'button'},'Copy team link'),shareField=el('input',{id:'team-share-link',readonly:'',hidden:'','aria-label':'Team share link'});const importForm=el('form',{class:'team-link-import','aria-label':'Load shared team'}),pasteField=el('input',{type:'text',id:'paste-team-link',placeholder:'Paste team link','aria-label':'Paste team link',autocomplete:'off',spellcheck:'false'}),loadButton=el('button',{type:'submit'},'Load');
- const modeLabel=el('label',{class:'team-build-mode'}),modeToggle=el('input',{type:'checkbox','aria-label':'Use account builds'});modeToggle.checked=buildMode==='account';modeToggle.disabled=!account;modeLabel.append(modeToggle,'Use account builds');if(!account)modeLabel.title='Sign in to use saved account builds.';
+ const shareButton=el('button',{type:'button'},'Copy Team Link'),shareField=el('input',{id:'team-share-link',readonly:'',hidden:'','aria-label':'Team share link'});const importForm=el('form',{class:'team-link-import','aria-label':'Load shared team'}),pasteField=el('input',{type:'text',id:'paste-team-link',placeholder:'Paste Team Link','aria-label':'Paste Team Link',autocomplete:'off',spellcheck:'false'}),loadButton=el('button',{type:'submit'},'Load');
+ const modeLabel=el('label',{class:'team-build-mode'}),modeToggle=el('input',{type:'checkbox','aria-label':'Use Account Builds'});modeToggle.checked=buildMode==='account';modeToggle.disabled=!account;modeLabel.append(modeToggle,'Use Account Builds');if(!account)modeLabel.title='Sign in to use saved account builds.';
  importForm.append(pasteField,loadButton,modeLabel);toolbar.append(shareButton,importForm,shareField);shareButton.disabled=!equipmentAvailable;
  importForm.addEventListener('submit',async event=>{event.preventDefault();try{const plan=parseTeamLink(pasteField.value);if(buildMode==='account'){saveStorage(draftKey(),state());buildMode='test';modeToggle.checked=false;await readBuilds();}apply(plan);pasteField.value='';pasteField.removeAttribute('aria-invalid');message('Team loaded with selected skills and equipment.');}catch(error){pasteField.setAttribute('aria-invalid','true');message(error.message);}});
 
@@ -76,7 +77,7 @@ export async function setupTeamBuilder(api){
   const replace=el('button',{type:'button','aria-label':'Replace '+c.name},'Swap');replace.addEventListener('click',()=>isSupport?api.openSupportPicker():api.openPicker(index));actions.append(replace);head.append(actions);card.append(head);
   const contributions=[...new Set(c.specialty||[])],tags=el('div',{class:'plan-contribution-tags','aria-label':c.name+' specialties'});for(const tag of contributions)tags.append(el('span',{},tag));card.append(tags);
   const builds=el('details',{class:'character-builds plan-member-build','data-build-member':id});
-  builds.append(el('summary',{},'Skills & equipment'));
+  builds.append(el('summary',{},'Skills & Equipment'));
   const starLabel=el('label',{class:'build-star-level'},'Star Level'),starSelect=el('select',{'aria-label':c.name+' Star Level'});
   for(let level=0;level<=starLimit(id);level++)starSelect.append(el('option',{value:level},String(level)));
   const unavailable=buildMode==='account'&&!ownsCharacter(accountData,id);
@@ -95,7 +96,7 @@ export async function setupTeamBuilder(api){
   if(context.guides[id]?.tree)builds.append(link('Explore Skill Tree','/webpages/game-c.html?char='+id+'&view=tree'));
   card.append(builds);return card;
  }
- function render(){const opened=[...overview.querySelectorAll('[data-build-member][open]')].map(node=>node.dataset.buildMember);const focused=document.activeElement?.getAttribute('aria-label');const plan=state();equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;formStates=plan.forms||{};overview.replaceChildren(el('h2',{},'Team Overview'));for(const [index,id]of plan.team.entries())if(id)overview.append(renderMember(id,index,false,plan));if(plan.support)overview.append(renderMember(plan.support,0,true,plan));if(!plan.team.some(Boolean))overview.append(el('p',{},'Select a character slot above to start planning.'));const sharedURL=new URL(location.href);sharedURL.hash=planHash(plan);shareField.value=sharedURL.href;const effectPlan=buildMode==='account'?{...plan,team:plan.team.filter(id=>ownsCharacter(accountData,id)),support:ownsCharacter(accountData,plan.support)?plan.support:'',resonance:ownsCharacter(accountData,plan.resonance?.id)?plan.resonance:null}:plan;overview.append(teamEffects(context,effectPlan,profileBuilds));miniTeam(plan);filterPicker();for(const id of opened){const details=overview.querySelector('[data-build-member="'+id+'"]');if(details)details.open=true;}if(focused){const target=[...root.querySelectorAll('[aria-label]')].find(e=>e.getAttribute('aria-label')===focused);target?.focus({preventScroll:true});}if(!loading&&equipmentAvailable)saveStorage(draftKey(),plan);}
+ function render(){const opened=[...overview.querySelectorAll('[data-build-member][open]')].map(node=>node.dataset.buildMember);const focused=document.activeElement?.getAttribute('aria-label');const plan=state();equipment=plan.equipment;technical=plan.technical;loadouts=plan.loadouts;stars=plan.stars;formStates=plan.forms||{};overview.replaceChildren(el('h2',{},'Team Overview'));for(const [index,id]of plan.team.entries())if(id)overview.append(renderMember(id,index,false,plan));if(plan.support)overview.append(renderMember(plan.support,0,true,plan));if(!plan.team.some(Boolean))overview.append(el('p',{},'Select a character slot above to start planning.'));const sharedURL=new URL(location.href);sharedURL.hash=planHash(plan);shareField.value=sharedURL.href;const effectPlan=buildMode==='account'?{...plan,team:plan.team.filter(id=>ownsCharacter(accountData,id)),support:ownsCharacter(accountData,plan.support)?plan.support:'',resonance:ownsCharacter(accountData,plan.resonance?.id)?plan.resonance:null}:plan;overview.append(teamCoverage(context,effectPlan,profileBuilds),teamEffects(context,effectPlan,profileBuilds));miniTeam(plan);filterPicker();for(const id of opened){const details=overview.querySelector('[data-build-member="'+id+'"]');if(details)details.open=true;}if(focused){const target=[...root.querySelectorAll('[aria-label]')].find(e=>e.getAttribute('aria-label')===focused);target?.focus({preventScroll:true});}if(!loading&&equipmentAvailable)saveStorage(draftKey(),plan);}
  function resetExtras(){equipment={};technical={};loadouts={};stars={};formStates={};}
  
  document.querySelector('#support-slot').setAttribute('aria-label','Choose support character');

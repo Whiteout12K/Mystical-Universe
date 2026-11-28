@@ -1,7 +1,8 @@
 import {characterSkillDefinitions} from './character-build-model.js';
 import {json, resolveCharacter} from './core.js';
 let pending;
-export function buildCatalog() {
+export function buildCatalog({refresh=false}={}) {
+  if(refresh)pending=null;
   if (!pending) pending = Promise.all([
     json('/images/mlg-assets/data-character.json'), json('/data/skill-catalog.json'), json('/images/mlg-assets/data-effects.json'),
     json('/images/mlg-assets/data-weapon.json'), json('/images/mlg-assets/data-accessory.json'), json('/images/mlg-assets/data-artifact.json'), json('/data/character-build-rules.json')
@@ -18,7 +19,7 @@ export function buildCatalog() {
 let refreshingSkills;
 export function refreshBuildSkills(context) {
   if(refreshingSkills)return refreshingSkills;
-  const sources=[...new Set(Object.keys(context.roster).filter(id=>!id.startsWith('#')&&Object.keys(context.skills(id)).length).map(id=>context.roster[id]?.base_character||id))];
+  const sources=[...new Set(Object.keys(context.roster).filter(id=>/^c\d+[a-z]*$/i.test(id)&&(context.character(id)?.skills?.length||Number(context.character(id)?.id)===4||Object.keys(context.skills(id)).length)).map(id=>context.roster[id]?.base_character||id))];
   refreshingSkills=Promise.all(sources.map(async id=>{
     const path=context.character(id)?.skills_path||'/images/mlg-assets/Characters/'+id.toUpperCase();
     const response=await fetch(path+(id==='c4'?'/skill-tree.json':'/'+id+'.json'),{cache:'no-cache'});

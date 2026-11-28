@@ -49,3 +49,14 @@
 .slot-form-switch img{display:block;width:22px;height:22px;object-fit:contain;pointer-events:none}.slot-form-switch:hover img{filter:brightness(1.25)}.slot-form-switch:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
 .support-slot .slot-form-switch{top:7px;left:7px}
 @media(max-width:700px){.slot-form-switch{top:36px;left:7px;width:30px;height:30px}}
+
+/* Compact capability summary: sources stay visible without additional controls. */
+.team-coverage{padding-top:24px}
+.coverage-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
+.coverage-heading h2{margin:0}.coverage-count{font-size:.72rem;color:#c7b991;white-space:nowrap;font-variant-numeric:tabular-nums}
+.coverage-list{margin:0}.coverage-row{display:grid;grid-template-columns:125px minmax(0,1fr);gap:12px;padding:8px 0;border-bottom:1px solid #ffffff0d}
+.coverage-row dt{font-size:.8rem;font-weight:400;color:#e3c780}.coverage-row dd{margin:0;min-width:0;font-size:.77rem;line-height:1.55;color:#b9b1a5;overflow-wrap:anywhere}
+.coverage-provider{display:block}.coverage-owner{color:#e0d6c5}.coverage-sources{color:#aaa397}
+.coverage-gaps{margin:10px 0 0;font-size:.75rem;color:#a59b8c;line-height:1.6}.coverage-gaps>span{color:#c4b8a4}
+.coverage-note{margin:8px 0 0;font-size:.69rem;color:#918a7f;line-height:1.5}
+@media(max-width:480px){.coverage-row{grid-template-columns:94px minmax(0,1fr);gap:8px}.coverage-row dt{font-size:.75rem}}

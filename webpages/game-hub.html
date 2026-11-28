@@ -369,7 +369,7 @@ function renderCharacters(){
     return match?[match]:[];
   });
 
-  grid.innerHTML=filtered.map(character=>{
+  const markup=filtered.map(character=>{
     const rarity=rarityClass(character.rarity||"c");
     const event=getCharacterEvent(character);
     const laterRelease=/\blater\s+release\b/i.test(event);
@@ -403,17 +403,43 @@ function renderCharacters(){
     `;
   }).join("");
 
+  const template=document.createElement('template');
+  template.innerHTML=markup;
+  const existing=new Map([...grid.querySelectorAll('.character-card')].map(card=>[card.dataset.character,card]));
+  let cursor=grid.firstElementChild;
+  for(const fresh of [...template.content.children]){
+    const card=existing.get(fresh.dataset.character)||fresh;
+    if(card===cursor)cursor=cursor.nextElementSibling;
+    else grid.insertBefore(card,cursor);
+  }
+  const visible=new Set(filtered.map(character=>character.character_id));
+  for(const card of [...grid.children])if(!visible.has(card.dataset.character))card.remove();
+
   resultCount.textContent=`${filtered.length} Character${filtered.length===1?"":"s"}`;
   noResults.classList.toggle("show",filtered.length===0);
 
   grid.querySelectorAll(".character-card").forEach(card=>{
+    if(card.dataset.bound)return;
+    card.dataset.bound="true";
     const link=card.dataset.link;
-    card.querySelector('.character-form-switch')?.addEventListener('click',event=>{
+    card.querySelector('.character-form-switch')?.addEventListener('click',async event=>{
       event.stopPropagation();
       const id=card.dataset.character,base=characterData[id]?.base_character||id;
       const forms=characters.filter(character=>character.character_id===base||character.base_character===base);
-      selectedForms[base]=forms[(forms.findIndex(character=>character.character_id===id)+1)%forms.length].character_id;
-      renderCharacters();
+      const next=forms[(forms.findIndex(character=>character.character_id===id)+1)%forms.length];
+      const button=event.currentTarget;
+      if(button.disabled)return;
+      button.disabled=true;
+      try{
+        await Promise.all([next.profile_image,next.rarity_img,next.affinity_img].filter(hasPath).map(src=>new Promise(resolve=>{
+          const image=new Image();
+          image.onload=image.onerror=resolve;
+          image.src=src.trim();
+          if(image.complete)resolve();
+        })));
+        selectedForms[base]=next.character_id;
+        renderCharacters();
+      }finally{button.disabled=false;}
     });
 
     if(!link){
