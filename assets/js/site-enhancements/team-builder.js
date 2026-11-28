@@ -32,7 +32,7 @@ export async function setupTeamBuilder(api){
   modeToggle.disabled=true;
   const previous=state();saveStorage(draftKey(),previous);
   buildMode=modeToggle.checked?'account':'test';
-  try{await readBuilds();const draft=safeRead(draftKey(),null);apply(draft||{team:previous.team,support:previous.support,resonance:previous.resonance},{accountKit:buildMode==='account'});message(buildMode==='account'?'Using your owned account builds.':'Test kit mode — account builds are unchanged.');}
+  try{await readBuilds();const draft=safeRead(draftKey(),null);apply({...draft,team:previous.team,support:previous.support,resonance:previous.resonance},{accountKit:buildMode==='account'});message(buildMode==='account'?'Using your owned account builds.':'Test kit mode — account builds are unchanged.');}
   catch{message('Build mode could not load. Reload to retry.');}
   finally{modeToggle.disabled=!account;}
  });

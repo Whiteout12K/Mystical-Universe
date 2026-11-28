@@ -259,6 +259,7 @@ const characterLinks={
 
 let characterData={};
 let characters=[];
+const selectedForms={};
 
 const selectedFilters={
   affinity:new Set(),
@@ -334,7 +335,7 @@ function characterMatchesFilter(character,type){
 function renderCharacters(){
   const query=normalize(searchInput.value);
 
-  const filtered=characters.filter(character=>{
+  const matches=character=>{
     if(query){
       const searchable=[
         character.name,
@@ -360,6 +361,12 @@ function renderCharacters(){
     if(!characterMatchesFilter(character,"specialty"))return false;
 
     return true;
+  };
+  const filtered=characters.filter(character=>!character.base_character).flatMap(original=>{
+    const forms=characters.filter(character=>character.character_id===original.character_id||character.base_character===original.character_id);
+    const selected=forms.find(character=>character.character_id===selectedForms[original.character_id])||original;
+    const match=matches(selected)?selected:forms.find(matches);
+    return match?[match]:[];
   });
 
   grid.innerHTML=filtered.map(character=>{
@@ -387,6 +394,7 @@ function renderCharacters(){
     return `
       <div class="character-card rarity-${rarity}${laterRelease?' character-later-release':''}" data-character="${escapeHTML(id)}" data-link="${escapeHTML(link)}">
         ${profileImage}
+        ${characters.some(candidate=>candidate.base_character===(character.base_character||id))?`<button type="button" class="character-form-switch" aria-label="Switch ${escapeHTML(character.nickname||character.name)} form" title="Switch Original / Alter"><img src="/assets/icons/switch-form.svg" alt="" width="22" height="22"></button>`:''}
         ${roleImage}
         ${affinityImage}
         <div class="character-name name-${rarity}">${getFormattedName(character)}</div>
@@ -400,6 +408,13 @@ function renderCharacters(){
 
   grid.querySelectorAll(".character-card").forEach(card=>{
     const link=card.dataset.link;
+    card.querySelector('.character-form-switch')?.addEventListener('click',event=>{
+      event.stopPropagation();
+      const id=card.dataset.character,base=characterData[id]?.base_character||id;
+      const forms=characters.filter(character=>character.character_id===base||character.base_character===base);
+      selectedForms[base]=forms[(forms.findIndex(character=>character.character_id===id)+1)%forms.length].character_id;
+      renderCharacters();
+    });
 
     if(!link){
       card.classList.add("character-card-disabled");
@@ -750,6 +765,7 @@ async function loadCharacters(){
         typeof data==="object"
       )
       .map(([character_id,data])=>({
+        ...(characterData[data.base_character]||{}),
         character_id,
         ...data
       }))

@@ -30,7 +30,8 @@
       "images/menu/BG1-3.svg"
     ],
     "[\"costume\",\"Logo\"]": [
-      "/images/mlg-assets/mlg-logo.png"
+      "/images/mlg-assets/mlg-logo.png",
+      "images/menu/mlg-logo.png"
     ],
     "[\"costume\",\"Overlay\"]": [
       "images/menu/BG1-2.svg"
@@ -51,7 +52,8 @@
       "images/menu/torch_full.png"
     ],
     "[\"costume\",\"Player\"]": [
-      "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif"
+      "/images/character_art/pixel_art/c1_costume/costume1_idle1.gif",
+      "images/world/costume1_idle1.gif"
     ],
     "[\"spriteVar\",\"Player\"]": [
       "Input X",

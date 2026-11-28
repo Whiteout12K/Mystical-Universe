@@ -1160,3 +1160,7 @@
 }
 [data-ornamented="true"]{overflow:visible}
 .news-card-image{overflow:hidden;border-radius:11px 11px 0 0}
+
+.character-form-switch{position:absolute;top:5px;left:5px;z-index:5;display:flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:0;background:transparent;box-shadow:none;cursor:pointer}
+.character-form-switch img{display:block;width:22px;height:22px;object-fit:contain;pointer-events:none}
+.character-form-switch:focus-visible{outline:2px solid #e8c878;outline-offset:2px}

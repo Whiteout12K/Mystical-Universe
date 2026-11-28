@@ -814,3 +814,46 @@ test('add field stages locally and waits for saveToD1 alongside other changes',a
     }}]);
     assert.equal(e.run('PlayerStore.record(PLAYER.account).dirty'),false);
 });
+
+test('hide all sprites hides ordinary sprites, clones and UI and allows individual sprites to show again',async()=>{
+    const e=engine();
+    await e.settle(e.run(`executeBlocks([createSprite('Actor'),uiBox('HUD'),makeClone('Actor')],createScriptContext())`));
+    e.run(`ENGINE.sprites.Actor.visible=true;ENGINE.sprites.HUD.visible=true;ENGINE.clones[0].visible=true;`);
+    await e.settle(e.run(`executeBlocks([repeat(2,hideAllSprites()),spriteShow('Actor')],createScriptContext())`));
+    assert.equal(e.run('ENGINE.sprites.Actor.visible'),true);
+    assert.equal(e.run('ENGINE.sprites.HUD.visible'),false);
+    assert.equal(e.run('ENGINE.clones[0].visible'),false);
+    assert.equal(e.run('getAllSprites().length'),3);
+    assert.equal(e.run('ENGINE.errors.length'),0);
+});
+
+test('new sprite setup cannot flash during scheduler budget yields and costumes preserve hiding',async()=>{
+    const e=engine();
+    e.run(`ENGINE.budgetLimit=1;createSprite('Flash');spriteCostume('Flash','test.png',1);spriteHide('Flash');`);
+    const task=e.run('startRuntime()');
+    await e.flush();
+    for(let i=0;i<6;i++){
+        if(e.run('Boolean(ENGINE.sprites.Flash)')){
+            const visible=e.run('ENGINE.sprites.Flash.visible');
+            if(visible)assert.equal(e.run('Boolean(ENGINE.sprites.Flash.pendingPresentation)'),true);
+            const draws=e.stats.draws;e.run('render()');assert.equal(e.stats.draws,draws);
+        }
+        await e.tick();
+    }
+    await e.settle(task);
+    assert.equal(e.run('ENGINE.sprites.Flash.visible'),false);
+    await e.settle(e.run(`executeBlock(spriteCostume('Flash','other.png',1),createScriptContext())`));
+    assert.equal(e.run('ENGINE.sprites.Flash.visible'),false);
+    await e.settle(e.run(`executeBlock(spriteShow('Flash'),createScriptContext())`));
+    assert.equal(e.run('ENGINE.sprites.Flash.visible'),true);
+});
+
+test('an intentional wait publishes a newly prepared sprite before the script ends',async()=>{
+    const e=engine();
+    e.run(`createSprite('Ready');spriteCostume('Ready','test.png',1);wait(.1);spriteHide('Ready');`);
+    const task=e.run('startRuntime()');await e.flush();
+    assert.equal(e.run('Boolean(ENGINE.sprites.Ready.pendingPresentation)'),false);
+    assert.equal(e.run('ENGINE.sprites.Ready.visible'),true);
+    await e.settle(task);
+    assert.equal(e.run('ENGINE.sprites.Ready.visible'),false);
+});

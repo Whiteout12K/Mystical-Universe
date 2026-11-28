@@ -443,6 +443,11 @@ class Sprite{
             cloneIdName:clone?`${name}#${cloneId}`:"",cloneOf:clone?name:null,
             cloneContext:null,deleted:false
         });
+        const context=ENGINE.spriteSetupContext;
+        if(context){
+            this.pendingPresentation=context;
+            (context.pendingSprites??=new Set()).add(this);
+        }
     }
 
     setCostume(path,scale=1){
@@ -521,7 +526,7 @@ class Sprite{
 
     draw(){
         this.prepareFrame?.();
-        if(this.deleted||!this.visible||!this.image||this.opacity<=0||this.effects.ghost>=100)return;
+        if(this.pendingPresentation||this.deleted||!this.visible||!this.image||this.opacity<=0||this.effects.ghost>=100)return;
 
         if(!this.loaded&&this.image.naturalWidth>0){
             this.loaded=true;
@@ -712,12 +717,18 @@ async function executeBlocks(blocks,context=createScriptContext()){
                 const handler=ENGINE.blocks[block.type]?.execute;
                 if(!handler)throw new Error("Unknown block type: "+block.type);
                 const inCommand=context.inCommand;context.inCommand=true;
-                try{await handler(block,context);}finally{context.inCommand=inCommand;}
+                const previousSetup=ENGINE.spriteSetupContext;
+                let result;
+                try{
+                    ENGINE.spriteSetupContext=context;
+                    result=handler(block,context);
+                }finally{ENGINE.spriteSetupContext=previousSetup;}
+                try{await result;}finally{context.inCommand=inCommand;}
             }
             if(!container){context.stepping=false;context.debugClock=0;}
         }
     }catch(error){reportRuntimeError(error,block,context);context.ended=true;}
-    finally{context.stepping=false;context.stack=previousStack;context.functionScope=previousScope;}
+    finally{if(!previousStack)publishPreparedSprites(context);context.stepping=false;context.stack=previousStack;context.functionScope=previousScope;}
 }
 
 
@@ -937,8 +948,15 @@ function runtimeClock(c){return ENGINE.paused?Math.max(ENGINE.clock,c?.debugCloc
 function releaseInactiveWaiters(){
     for(const waiter of ENGINE.waiters)if(!contextActive(waiter.c)){ENGINE.waiters.delete(waiter);waiter.resolve();}
 }
-function runtimeWait(ms,c,nextFrame=false){
+function publishPreparedSprites(context){
+    for(const sprite of context?.pendingSprites??[]){
+        if(sprite.pendingPresentation===context)sprite.pendingPresentation=null;
+    }
+    context?.pendingSprites?.clear();
+}
+function runtimeWait(ms,c,nextFrame=false,budgetYield=false){
     if(!contextActive(c))return Promise.resolve();
+    if(!budgetYield)publishPreparedSprites(c);
     if(c?.stepping){c.debugClock=runtimeClock(c)+Math.max(0,ms);return Promise.resolve();}
     return new Promise(resolve=>ENGINE.waiters.add({resolve,c,deadline:runtimeClock(c)+Math.max(0,ms),frame:ENGINE.frameNumber+(nextFrame?1:0),gate:false,command:!!c?.inCommand}));
 }
@@ -953,7 +971,7 @@ async function executionTurn(c){
             ENGINE.budgetBlocks++;return;
         }
         // Recheck after waking: thousands of ready scripts must share the next budget.
-        await runtimeWait(0,c,true);
+        await runtimeWait(0,c,true,true);
     }
 }
 // Fetch and JSON decoding share one abortable deadline; Stop cancels in-flight work.

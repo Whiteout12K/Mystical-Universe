@@ -1,4 +1,126 @@
 {
   "version": 1,
-  "files": {}
+  "files": {
+    "begin.js": {
+      "positions": [
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"Main Menu\"",
+          "fingerprint": "10160:76526354:a30670c0",
+          "index": 0,
+          "x": 1934,
+          "y": 32
+        },
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"Main Menu\"",
+          "fingerprint": "3559:77d62e5c:dd15d25c",
+          "index": 1,
+          "x": 60,
+          "y": 996
+        },
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"Main Menu\"",
+          "fingerprint": "4039:648ea57:37d3759d",
+          "index": 2,
+          "x": 928,
+          "y": 48
+        },
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"Leave Main Menu\"",
+          "fingerprint": "1570:770e05b3:94ac5b43",
+          "index": 3,
+          "x": -447,
+          "y": 355
+        },
+        {
+          "type": "js_whenClone",
+          "identity": "\"Line\"",
+          "fingerprint": "7218:ceeb534e:ab65ae0",
+          "index": 4,
+          "x": 3370,
+          "y": 35
+        },
+        {
+          "type": "js_whenStart",
+          "identity": "",
+          "fingerprint": "2806:fcd42aba:e9ad0492",
+          "index": 5,
+          "x": 48,
+          "y": 48
+        }
+      ],
+      "view": {
+        "scale": 0.498,
+        "scrollX": -610,
+        "scrollY": 255
+      }
+    },
+    "world.js": {
+      "positions": [
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"World\"",
+          "fingerprint": null,
+          "index": 0,
+          "x": 48,
+          "y": 48
+        }
+      ]
+    },
+    "sample.js": {
+      "positions": [
+        {
+          "type": "js_canvasColor",
+          "identity": "\"#686565\"",
+          "fingerprint": null,
+          "index": 0,
+          "x": 452,
+          "y": 48
+        },
+        {
+          "type": "js_whenBroadcast",
+          "identity": "\"Start Menu\"",
+          "fingerprint": null,
+          "index": 1,
+          "x": 1182,
+          "y": 48
+        },
+        {
+          "type": "js_stopScripts",
+          "identity": "\"Start Menu\"",
+          "fingerprint": null,
+          "index": 2,
+          "x": 1555,
+          "y": 48
+        },
+        {
+          "type": "js_whenClone",
+          "identity": "\"Player1\"",
+          "fingerprint": null,
+          "index": 3,
+          "x": 1909,
+          "y": 48
+        },
+        {
+          "type": "js_deleteClone",
+          "identity": "",
+          "fingerprint": null,
+          "index": 4,
+          "x": 2278,
+          "y": 48
+        },
+        {
+          "type": "js_whenStart",
+          "identity": "",
+          "fingerprint": null,
+          "index": 5,
+          "x": 48,
+          "y": 48
+        }
+      ]
+    }
+  }
 }

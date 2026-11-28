@@ -32,3 +32,7 @@ defineJScratchBlock({name:"addField",kind:"command",label:"add field",category:"
     const path=String(resolveValue(b.path,c)).trim(),value=parseDataValue(resolveValue(b.value,c));
     return queuePlayerWrite(c,()=>addPlayerDataField(path,value));
 });
+
+defineJScratchBlock({name:"hideAllSprites",kind:"command",label:"hide all sprites",category:"sprite",params:[]},()=>{
+    for(const sprite of getAllSprites())sprite.visible=false;
+});

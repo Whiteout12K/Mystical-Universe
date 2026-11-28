@@ -46,6 +46,8 @@ spriteShow("Player1"); // Shows the sprite
 
 spriteHide("Player1"); // Hides the sprite
 
+hideAllSprites(); // Hides every current sprite, clone, and UI sprite.
+
 spriteLayer("Player1", 1); // Moves the sprite to layer. Parameter: sprite_name, layer_num
 goFront("Player1"); // Moves to front layer
 goBack("Player1"); // Moves to back layer

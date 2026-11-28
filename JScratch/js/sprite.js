@@ -33,7 +33,6 @@ registerBlock("spriteCostume",async(block,c)=>{
     const scale=num(block.scale,1,c);
 
     s.setCostume(path,scale);
-    s.visible=!!path;
     s.touchable=!!path;
     ENGINE.spriteOrderDirty=true;
 });
